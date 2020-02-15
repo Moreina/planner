@@ -1,0 +1,97 @@
+
+var equipped = { helm:{name:"none"}, armor:{name:"none"}, gloves:{name:"none"}, boots:{name:"none"}, belt:{name:"none"}, amulet:{name:"none"}, ring1:{name:"none"}, ring2:{name:"none"}, weapon:{name:"none"}, offhand:{name:"none"} }
+var unequipped = { name:"none", strength:0, dexterity:0, vitality:0, energy:0, life:0, mana:0, defense:0, ar:0, fRes:0, cRes:0, lRes:0, pRes:0, mRes:0, mf:0, gf:0, cdr:0, fcr:0, fbr:0, fhr:0, frw:0, ias:0, pierce:0, cblow:0, dstrike:0, cstrike:0, owounds:0, fDamage:0, cDamage:0, lDamage:0, pDamage:0, fPierce:0, cPierce:0, lPierce:0, pPierce:0, life_leech:0, mana_leech:0, life_per_hit:0, mana_per_hit:0, pdr:0, fAbsorb:0, cAbsorb:0, lAbsorb:0, pAbsorb:0, mAbsorb:0, 
+			all_skills:0, life_per_level:0, mana_per_level:0, all_attributes:0, skills_javelins:0, skills_passives:0, skills_bows:0, skills_martial:0, skills_shadow:0, skills_traps:0, skills_warcries:0, skills_masteries:0, skills_combat_barbarian:0, skills_elemental:0, skills_shapeshifting:0, skills_summoning_druid:0, skills_summoning_necromancer:0, skills_poisonBone:0, skills_curses:0, skills_offensive:0, skills_defensive:0, skills_combat_paladin:0, 
+			skills_cold:0, skills_lightning:0, skills_fire:0, life_regen:0, max_mana:0, all_res:0, defense_per_level:0, ibc:0, mana_regen:0, itd:0, knockback:0, fRes_max:0, cRes_max:0, lRes_max:0, pRes_max:0, missile_defense:0, mana_per_kill:0, damage_min:0, damage_max:0, thorns:0, slower_stam_drain:0, dstrike_per_level:0, damage_to_mana:0, heal_stam:0, light_radius:0, mDamage_reduced:0, thorns_per_level:0, 
+			fAbsorb_flat:0, cAbsorb_flat:0, lAbsorb_flat:0, mAbsorb_flat:0, slow_target:0, life_per_kill:0, damage_vs_demons:0, strength_per_level:0, mf_per_level:0, pdr_flat:0, life_per_ranged_hit:0, mana_per_ranged_hit:0, peace:0}
+
+var equipment = {
+    helm: [
+{name:"Helm"},
+{name:"Vampire Gaze", req_strength:58, req_level:41, defense:252, life_leech:8, mana_leech:8, pdr:20, slower_stam_drain:15, cDamage_min:6, cDamage_max:22, mDamage_reduced:15},
+{name:"Harlequin Crest (Shako)", req_strength:50, req_level:62, defense:141, mf:50, all_skills:2, life_per_level:1.5, mana_per_level:1.5, pdr:10, all_attributes:2},
+{name:"Andariel's Visage", req_strength:102, req_level:83, defense:387, all_skills:2, ias:20, life_leech:10, strength:30, fRes:-30, pRes:70, pRes_max:10 },
+{name:"Nightwing's Veil", req_strength:96, req_level:67, defense:352, all_skills:2, cDamage:15, dexterity:20, cAbsorb_flat:9},
+	],
+    armor: [
+{name:"Armor"},
+{name:"Skin of the Vipermagi", req_strength:43, req_level:29, defense:279, all_skills:1, fcr:30, mDamage_reduced:13, all_res:35},
+{name:"Shaftstop", req_strength:92, req_level:38, defense:684, pdr:30, missile_defense:250, life:60},
+{name:"Tyrael's Might", req_level:84, defense:1502, frw:20, damage_vs_demons:100, strength:30, all_res:30, cbf:1, cdr:10, peace:1},
+{name:"Naj's Light Plate", req_strength:79, req_level:71, defense:830, all_skills:1, damage_to_mana:45, all_res:25, life:65},
+{name:"Tal Rasha's Guardianship", req_strength:84, req_level:71, defense:941, mDamage_reduced:15, cRes:40, lRes:40, fRes:40, mf:88},
+{name:"Enigma Archon Plate", req_strength:103, req_level:65, defense:1299, all_skills:2, frw:45, strength_per_level:0.75, max_life:5, pdr:8, life_per_kill:14, damage_to_mana:15, mf_per_level:1},
+	],
+    gloves: [
+{name:"Gloves"},
+{name:"Chance Guards", req_strength:25, req_level:15, defense:28, ar:25, mf:40, gf:200, light_radius:2},
+{name:"Magefist", req_strength:45, req_level:23, defense:25, skills_fire:1, fcr:20, mana_regen:25, fDamage_min:1, fDamage_max:6},
+{name:"Frostburn", req_strength:60, req_level:29, defense:49, max_mana:35, ed:5, cDamage_min:1, cDamage_max:6},
+{name:"Dracul's Grasp", req_strength:50, req_level:76, defense:145, strength:15, life_per_kill:10, owounds:25, life_leech:10},
+{name:"Laying of Hands", req_strength:50, req_level:63, defense:87, ias:20, fRes:50, damage_vs_demons:250},
+{name:"Trang-Oul's Claws", req_strength:58, req_level:45, defense:74, skills_curses:2, fcr:20, cRes:30, pDamage:25},
+	],
+    boots: [
+{name:"Boots"},
+{name:"Waterwalk", req_strength:47, req_level:32, defense:124, frw:20, dexterity:15, fRes_max:5, stamina:40, life:65, missile_defense:100, heal_stam:50},
+{name:"Silkweave", req_strength:65, req_level:36, defense:130, frw:30, mana_per_kill:5, max_mana:10, missile_defense:200},
+{name:"War Traveler", req_strength:95, req_level:42, defense:139, frw:25, vitality:10, strength:10, mf:50, damage_min:15, damage_max:25, thorns:10, slower_stam_drain:40},
+{name:"Gore Rider", req_strength:94, req_level:47, defense:162, frw:30, owounds:10, cblow:15, dstrike:15, stamina:20},
+{name:"Shadow Dancer", req_strength:167, req_level:71, defense:144, skills_shadow:2, frw:30, fhr:30, dexterity:25},
+{name:"Aldur's Advance", req_strength:95, req_level:45, defense:47, frw:40, stamina:180, damage_to_mana:10, heal_stam:32, life:50, fRes:50},
+{name:"debug +19", defense:3000, all_skills:19, mana:600, life:600, all_res:100, fcr:100, frw:30},
+	],
+    belt: [
+{name:"Belt"},
+{name:"Goldwrap", req_strength:45, req_level:27, defense:36, ias:10, mf:30, gf:80, light_radius:2},
+{name:"String of Ears", req_strength:20, req_level:29, defense:113, life_leech:8, pdr:15, mDamage_reduced:15},
+{name:"Razortail", req_strength:20, req_level:32, defense:107, damage_max:10, pierce:33, dexterity:15, thorns_per_level:1},
+{name:"Snowclash", req_strength:88, req_level:42, defense:116, skills_cold:1, cAbsorb_flat:15, skill_glacial_spike:3, cRes_max:5},
+{name:"Thundergod's Vigor", req_strength:110, req_level:47, defense:159, lAbsorb_flat:20, lRes_max:10, strength:20, vitality:20, skill_lightning_fury:3, skill_lightning_strike:3, lDamage_min:1, lDamage_max:50},
+{name:"Arachnid Mesh", req_strength:50, req_level:80, defense:138, all_skills:1, fcr:20, max_mana:5, slow_target:10},
+	],
+    amulet: [
+{name:"Amulet"},
+{name:"Mara's Kaleidoscope", req_level:67, all_skills:2, all_res:30, all_attributes:5},
+{name:"Highlord's Wrath", req_level:65, all_skills:1, ias:20, dstrike_per_level:0.375, lRes:35, lDamage_min:1, lDamage_max:30, thorns:15},
+{name:"Seraph's Hymn", req_level:65, all_skills:2, skills_defensive:2, damage_vs_demons:50, damage_vs_undead:50, ar_vs_demons:250, ar_vs_undead:250, light_radius:2},
+{name:"The Cat's Eye", req_level:50, frw:30, ias:20, defense:100, dexterity:25, missile_defense:100},
+	],
+    ring1: [
+{name:"Ring"},
+{name:"Dwarf Star", req_level:45, fAbsorb:15, stamina:40, life:40, gf:100, mDamage_reduced:15, cDamage_min:15, cDamage_max:45},
+{name:"Raven Frost", req_level:45, ar:250, cbf:1, dexterity:20, mana:40, cAbsorb:20},
+{name:"The Stone of Jordan", req_level:29, all_skills:1, mana:20, max_mana:25, lDamage_min:1, lDamage_max:12},
+{name:"Bul-Kathos' Wedding Band", req_level:58, all_skills:1, life_per_level:0.5, life_leech:5, stamina:50},
+{name:"Wisp Projector", req_level:76, lAbsorb:12, mf:20, frw:8, fDamage:10, cDamage:10, lDamage:10, pDamage:10},
+	],
+    ring2: [
+{name:"Ring"},
+{name:"Dwarf Star", req_level:45, fAbsorb:15, stamina:40, life:40, gf:100, mDamage_reduced:15, cDamage_min:15, cDamage_max:45},
+{name:"Raven Frost", req_level:45, ar:250, cbf:1, dexterity:20, mana:40, cAbsorb:20},
+{name:"The Stone of Jordan", req_level:29, all_skills:1, mana:20, max_mana:25, lDamage_min:1, lDamage_max:12},
+{name:"Bul-Kathos' Wedding Band", req_level:58, all_skills:1, life_per_level:0.5, life_leech:5, stamina:50},
+{name:"Wisp Projector", req_level:76, lAbsorb:12, mf:20, frw:8, fDamage:10, cDamage:10, lDamage:10, pDamage:10},
+	],
+    weapon: [
+{name:"Weapon"},
+{name:"Heart of the Oak", req_dexterity:35, req_strength:41, req_level:55, all_skills:3, fcr:40, mana_leech:7, dexterity:10, life_regen:20, max_mana:15, all_res:40},
+{name:"Lightsabre", req_dexterity:136, req_strength:25, req_level:58, mana_leech:7, ias:20, itd:1, lAbsorb:15, light_radius:7, damage_min:103, damage_max:135, mDamage_min:60, mDamage_max:120, lDamage_min:1, lDamage_max:200},
+{name:"The Cranium Basher", req_strength:253, req_level:87, cBlow:75, ias:20, all_res:25, strength:25, damage_min:132, damage_max:652, damage_vs_undead:50},
+{name:"Windforce", req_dexterity:167, req_strength:134, req_level:73, ias:20, mana_leech:8, strength:10, dexterity:5, knockback:1, damage_min:35, damage_max:241, damage_max_per_level:3.125, heal_stam:30},
+	],
+    offhand: [
+{name:"Offhand"},
+{name:"Stormshield", req_strength:156, req_level:73, defense:148, pdr:30, fbr:35, cRes:60, lRes:25, strength:30, defense_per_level:3.75, ibc:25, thorns:10},
+{name:"Spirit Monarch", req_strength:156, req_level:54, defense:148, all_skills:2, fcr:35, fhr:55, vitality:22, mana:112, cRes:35, lRes:35, pRes:35, missile_defense:250, thorns:14, mAbsorb_flat:8},
+	],
+    charms: [
+{name:"Charms"},
+{name:"Annihilus", req_level:80, all_skills:1, all_res:20, all_attributes:20},
+{name:"Hellfire Torch", req_level:75, all_skills:3, all_res:20, all_attributes:20, light_radius:8},
+{name:"Gheed's Fortune", req_level:62, gf:160, mf:40},
+{name:"Cold GC", req_level:42, skills_cold:1},
+{name:"Lightning GC", req_level:42, skills_lightning:1},
+{name:"Fire GC", req_level:42, skills_fire:1},
+	]
+}

@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Path of Diablo Planner</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<link rel="stylesheet" type="text/css" href="./data/all.css">
+<script type="text/javascript" src="./data/all_equipment.js"></script>
+<script type="text/javascript" src="./data/all.js"></script>
+<!--
+<style type="text/css">
+</style>
+-->
+<link rel="shortcut icon" href="./images/favicon.ico" type="image/x-icon">
+
+</head>
+<body class="background" onload="initial_load()">
+
+<div id="main">
+
+<div id="interface" style="width: 869px;">
+
+<div id="gui" class="no-selection" oncontextmenu="return false">
+
+<div id="gui_stats" style="position: relative; width: 175px; height: 434px; float: left;">
+<img usemap="#statmap" src="./images/statbar_all.png">
+<map id="statmap" name="statmap">
+<area coords="127,107,163,143" id="btn_strength">
+<area coords="127,169,163,203" id="btn_dexterity">
+<area coords="127,231,163,267" id="btn_vitality">
+<area coords="127,293,163,329" id="btn_energy">
+</map>
+<p class="point" style="left: 23px; top: 12px;" id="level"></p>
+<p class="text" style="left: 67px; top: 12px;" id="class_name"></p>
+<p class="point" style="left: 100px; top: 45px;" id="remainingskills"></p>
+<p class="point" style="left: 100px; top: 338px;" id="remainingstats"></p>
+<p class="point" style="left: 85px; top: 100px;" id="strength"></p>
+<p class="point" style="left: 85px; top: 161px;" id="dexterity"></p>
+<p class="point" style="left: 85px; top: 224px;" id="vitality"></p>
+<p class="point" style="left: 85px; top: 286px;" id="energy"></p>
+
+<img id="hide_skillpoints" src="./images/skills_hidden.png" style="position: absolute; display: block; left: 7px; top: 54px;">
+<img id="hide_statpoints" src="./images/stats_hidden.png" style="position: absolute; display: block; left: 7px; top: 344px;">
+<img id="hide_stats" src="./images/stats_hidden_extra.png" style="position: absolute; display: block; left: 120px; top: 98px;">
+
+</div>		<!--	gui stats	-->
+
+<div id="gui_skills" style="position: relative; width: 694px; height: 434px; float: left;">
+<img usemap="#skillmap" id="skill_tree" src="">
+<map id="skillmap" name="skillmap">
+<area coords="14,16,62,64" id="st1r1c1"><area coords="83,16,131,64" id="st1r1c2"><area coords="152,16,200,64" id="st1r1c3">
+<area coords="14,84,62,132" id="st1r2c1"><area coords="83,84,131,132" id="st1r2c2"><area coords="152,84,200,132" id="st1r2c3">
+<area coords="14,152,62,200" id="st1r3c1"><area coords="83,152,131,200" id="st1r3c2"><area coords="152,152,200,200" id="st1r3c3">
+<area coords="14,220,62,268" id="st1r4c1"><area coords="83,220,131,268" id="st1r4c2"><area coords="152,220,200,268" id="st1r4c3">
+<area coords="14,289,62,337" id="st1r5c1"><area coords="83,289,131,337" id="st1r5c2"><area coords="152,289,200,337" id="st1r5c3">
+<area coords="14,357,62,405" id="st1r6c1"><area coords="83,357,131,405" id="st1r6c2"><area coords="152,357,200,405" id="st1r6c3">
+
+<area coords="245,16,293,62" id="st2r1c1"><area coords="314,16,362,62" id="st2r1c2"><area coords="383,16,434,62" id="st2r1c3">
+<area coords="245,84,293,132" id="st2r2c1"><area coords="314,84,362,132" id="st2r2c2"><area coords="383,84,434,132" id="st2r2c3">
+<area coords="245,152,293,200" id="st2r3c1"><area coords="314,152,362,200" id="st2r3c2"><area coords="383,152,434,200" id="st2r3c3">
+<area coords="245,220,293,268" id="st2r4c1"><area coords="314,220,362,268" id="st2r4c2"><area coords="383,220,434,268" id="st2r4c3">
+<area coords="245,289,293,337" id="st2r5c1"><area coords="314,289,362,337" id="st2r5c2"><area coords="383,289,434,337" id="st2r5c3">
+<area coords="245,357,293,405" id="st2r6c1"><area coords="314,357,362,405" id="st2r6c2"><area coords="383,357,434,405" id="st2r6c3">
+
+<area coords="476,16,524,62" id="st3r1c1"><area coords="545,16,593,62" id="st3r1c2"><area coords="614,16,662,62" id="st3r1c3">
+<area coords="476,84,524,132" id="st3r2c1"><area coords="545,84,593,132" id="st3r2c2"><area coords="614,84,662,132" id="st3r2c3">
+<area coords="476,152,524,200" id="st3r3c1"><area coords="545,152,593,200" id="st3r3c2"><area coords="614,152,662,200" id="st3r3c3">
+<area coords="476,220,524,268" id="st3r4c1"><area coords="545,220,593,268" id="st3r4c2"><area coords="614,220,662,268" id="st3r4c3">
+<area coords="476,289,524,337" id="st3r5c1"><area coords="545,289,593,337" id="st3r5c2"><area coords="614,289,662,337" id="st3r5c3">
+<area coords="476,357,524,405" id="st3r6c1"><area coords="545,357,593,405" id="st3r6c2"><area coords="614,357,662,405" id="st3r6c3">
+</map>
+<p class="point" id="pt1r1c1" style="left: 51px; top: 44px;"></p><p class="point" id="pt1r1c2" style="left: 120px; top: 44px;"></p><p class="point" id="pt1r1c3" style="left: 189px; top: 44px;"></p>
+<p class="point" id="pt1r2c1" style="left: 51px; top: 112px;"></p><p class="point" id="pt1r2c2" style="left: 120px; top: 112px;"></p><p class="point" id="pt1r2c3" style="left: 189px; top: 112px;"></p>
+<p class="point" id="pt1r3c1" style="left: 51px; top: 180px;"></p><p class="point" id="pt1r3c2" style="left: 120px; top: 180px;"></p><p class="point" id="pt1r3c3" style="left: 189px; top: 180px;"></p>
+<p class="point" id="pt1r4c1" style="left: 51px; top: 248px;"></p><p class="point" id="pt1r4c2" style="left: 120px; top: 248px;"></p><p class="point" id="pt1r4c3" style="left: 189px; top: 248px;"></p>
+<p class="point" id="pt1r5c1" style="left: 51px; top: 317px;"></p><p class="point" id="pt1r5c2" style="left: 120px; top: 317px;"></p><p class="point" id="pt1r5c3" style="left: 189px; top: 317px;"></p>
+<p class="point" id="pt1r6c1" style="left: 51px; top: 385px;"></p><p class="point" id="pt1r6c2" style="left: 120px; top: 385px;"></p><p class="point" id="pt1r6c3" style="left: 189px; top: 385px;"></p>
+
+<p class="point" id="pt2r1c1" style="left: 283px; top: 44px;"></p><p class="point" id="pt2r1c2" style="left: 351px; top: 44px;"></p><p class="point" id="pt2r1c3" style="left: 420px; top: 44px;"></p>
+<p class="point" id="pt2r2c1" style="left: 283px; top: 112px;"></p><p class="point" id="pt2r2c2" style="left: 351px; top: 112px;"></p><p class="point" id="pt2r2c3" style="left: 420px; top: 112px;"></p>
+<p class="point" id="pt2r3c1" style="left: 283px; top: 180px;"></p><p class="point" id="pt2r3c2" style="left: 351px; top: 180px;"></p><p class="point" id="pt2r3c3" style="left: 420px; top: 180px;"></p>
+<p class="point" id="pt2r4c1" style="left: 283px; top: 248px;"></p><p class="point" id="pt2r4c2" style="left: 351px; top: 247px;"></p><p class="point" id="pt2r4c3" style="left: 420px; top: 248px;"></p>
+<p class="point" id="pt2r5c1" style="left: 283px; top: 317px;"></p><p class="point" id="pt2r5c2" style="left: 351px; top: 317px;"></p><p class="point" id="pt2r5c3" style="left: 420px; top: 317px;"></p>
+<p class="point" id="pt2r6c1" style="left: 283px; top: 385px;"></p><p class="point" id="pt2r6c2" style="left: 351px; top: 385px;"></p><p class="point" id="pt2r6c3" style="left: 420px; top: 385px;"></p>
+
+<p class="point" id="pt3r1c1" style="left: 513px; top: 44px;"></p><p class="point" id="pt3r1c2" style="left: 582px; top: 44px;"></p><p class="point" id="pt3r1c3" style="left: 651px; top: 44px;"></p>
+<p class="point" id="pt3r2c1" style="left: 513px; top: 112px;"></p><p class="point" id="pt3r2c2" style="left: 582px; top: 112px;"></p><p class="point" id="pt3r2c3" style="left: 651px; top: 112px;"></p>
+<p class="point" id="pt3r3c1" style="left: 513px; top: 180px;"></p><p class="point" id="pt3r3c2" style="left: 582px; top: 180px;"></p><p class="point" id="pt3r3c3" style="left: 651px; top: 180px;"></p>
+<p class="point" id="pt3r4c1" style="left: 513px; top: 248px;"></p><p class="point" id="pt3r4c2" style="left: 582px; top: 248px;"></p><p class="point" id="pt3r4c3" style="left: 651px; top: 248px;"></p>
+<p class="point" id="pt3r5c1" style="left: 513px; top: 317px;"></p><p class="point" id="pt3r5c2" style="left: 582px; top: 317px;"></p><p class="point" id="pt3r5c3" style="left: 651px; top: 317px;"></p>
+<p class="point" id="pt3r6c1" style="left: 513px; top: 385px;"></p><p class="point" id="pt3r6c2" style="left: 582px; top: 385px;"></p><p class="point" id="pt3r6c3" style="left: 651px; top: 385px;"></p>
+
+<div id="equipment" style="display: block; float: right; width: 200px; height: 500px; position: relative;">
+<select class="dropdown" id="dropdown_helm" onChange="equip('helm', this.value)"></select>
+<select class="dropdown" id="dropdown_armor" onChange="equip('armor', this.value)"></select>
+<select class="dropdown" id="dropdown_gloves" onChange="equip('gloves', this.value)"></select>
+<select class="dropdown" id="dropdown_boots" onChange="equip('boots', this.value)"></select>
+<select class="dropdown" id="dropdown_belt" onChange="equip('belt', this.value)"></select>
+<select class="dropdown" id="dropdown_amulet" onChange="equip('amulet', this.value)"></select>
+<select class="dropdown" id="dropdown_ring1" onChange="equip('ring1', this.value)"></select>
+<select class="dropdown" id="dropdown_ring2" onChange="equip('ring2', this.value)"></select>
+<select class="dropdown" id="dropdown_weapon" onChange="equip('weapon', this.value)"></select>	<!--onChange="checkTwoHanders(this.value)"-->
+<select class="dropdown" id="dropdown_offhand" onChange="equip('offhand', this.value)"></select>
+</div>
+
+<div class="hover" style="display: none;" id="tooltip">
+	<a id="title" class="green"></a><br>
+	<a id="description"></a>
+	<a id="graytext" class="gray"></a>
+	<a id="pretext"></a>
+	<a id="current"></a>
+	<a id="next_level_text">Next Level</a><br>
+	<a id="next"></a><br>
+	<a id="syn_title" class="green"></a>
+	<a id="syn_text"></a>
+</div>
+
+</div>		<!--	gui skills	-->
+
+<div style="padding: 12px;">
+<input id="quests" type="checkbox" name="quests" value="1" onclick="return toggleQuests();">
+<label style="color: #aaa;" for="quests">Quests Completed</label>
+</div>
+
+<div style="color: #aaa; float: left; padding: 6px; margin-bottom: 12px; margin-right: 16px;">Difficulty:</div>
+<div style="color: #aaa; float: left; padding: 6px; margin-bottom: 12px; margin-right: 16px;">
+<input id="difficulty1" type="radio" name="difficulty" value="0" onclick="return changeDifficulty(1);">
+<label style="color: #aaa;" for="difficulty">Normal</label>
+<input id="difficulty2" type="radio" name="difficulty" value="0" onclick="return changeDifficulty(2);">
+<label style="color: #aaa;" for="difficulty">Nightmare</label>
+<input id="difficulty3" type="radio" name="difficulty" value="1" onclick="return changeDifficulty(3);" checked>
+<label style="color: #aaa;" for="difficulty">Hell</label>
+</div>
+
+<select class="dropdown" style="float: left; padding: 6px; margin-left: 70px; margin-right: 30px;" id="dropdown_class" onChange="reset(this.value)">
+<option class="gray" disabled selected>Choose Class</option>
+<option>Amazon</option>
+<option>Assassin</option>
+<option>Barbarian</option>
+<option>Druid</option>
+<option>Necromancer</option>
+<option>Paladin</option>
+<option>Sorceress</option></select
+
+</div>		<!--	gui	-->
+
+<img src="./images/inventory.png" style="opacity: 0; height: 40px;">
+
+<div class="gray" style="display: block;" id="stats">
+	<a>Attack Rating: </a><a id="ar"></a><br>
+	<a>Defense: </a><a id="defense"></a><br>
+	<a>Stamina: </a><a id="stamina"></a><br>
+	<a>Life: </a><a id="life"></a><br>
+	<a>Mana: </a><a id="mana"></a><br>
+</div><br>
+<div style="position: absolute;">
+<div class="gray" style="position: relative; display: block; float: left; width: 170px;" id="stats2">
+	<font size="2">Fire Resistance: </font><font size="2" id="fres"></font><br>
+	<font size="2">Cold Resistance: </font><font size="2" id="cres"></font><br>
+	<font size="2">Lightning Resistance: </font><font size="2" id="lres"></font><br>
+	<font size="2">Poison Resistance: </font><font size="2" id="pres"></font><br>
+	<font size="2">Magic Resistance: </font><font size="2" id="mres"></font><br>
+	<font size="2">Damage Reduction: </font><font size="2" id="pdr"></font><br><br>
+	<font size="2">Cooldown Reduction: </font><font size="2" id="cdr"></font><br>
+	<font size="2">Faster Cast Rate: </font><font size="2" id="fcr"></font><br>
+	<font size="2">Faster Block Rate: </font><font size="2" id="fbr"></font><br>
+	<font size="2">Faster Hit Recovery: </font><font size="2" id="fhr"></font><br>
+	<font size="2">Faster Run/Walk: </font><font size="2" id="frw"></font><br>
+	<font size="2">Increased Attack Speed: </font><font size="2" id="ias"></font><br><br>
+	<font size="2">Life Leech: </font><font size="2" id="life_leech"></font><br>
+	<font size="2">Mana Leech: </font><font size="2" id="mana_leech"></font><br><br>
+	<font size="2">+ Fire Damage </font><font size="2" id="fdamage"></font><br>
+	<font size="2">+ Cold Damage: </font><font size="2" id="cdamage"></font><br>
+	<font size="2">+ Lightning Damage: </font><font size="2" id="ldamage"></font><br>
+	<font size="2">+ Poison Damage: </font><font size="2" id="pdamage"></font><br><br>
+	<font size="2">Magic Find: </font><font size="2" id="mf"></font><br>
+</div>
+<div class="gray" style="position: relative; display: block; float: left;" id="stats3">
+	<font size="2">Fire Absorb: </font><font size="2" id="fabsorb"></font><br>
+	<font size="2">Cold Absorb: </font><font size="2" id="cabsorb"></font><br>
+	<font size="2">Lightning Absorb: </font><font size="2" id="labsorb"></font><br><br>
+	<font size="2">Magic Absorb: </font><font size="2" id="mabsorb"></font><br><br><br>
+	<font size="2">Pierce: </font><font size="2" id="pierce"></font><br>
+	<font size="2">Crushing Blow: </font><font size="2" id="cblow"></font><br>
+	<font size="2">Deadly Strike: </font><font size="2" id="dstrike"></font><br>
+	<font size="2">Critical Strike: </font><font size="2" id="cstrike"></font><br>
+	<font size="2">Open Wounds: </font><font size="2" id="owounds"></font><br><br><br>
+	<font size="2">Life per Hit: </font><font size="2" id="life_per_hit"></font><br>
+	<font size="2">Mana per Hit: </font><font size="2" id="mana_per_hit"></font><br><br>
+	<font size="2">Fire Pierce: </font><font size="2" id="fpierce"></font><br>
+	<font size="2">Cold Pierce: </font><font size="2" id="cpierce"></font><br>
+	<font size="2">Lightning Pierce: </font><font size="2" id="lpierce"></font><br>
+	<font size="2">Poison Pierce: </font><font size="2" id="ppierce"></font><br><br>
+	<font size="2">Gold Find: </font><font size="2" id="gf"></font><br>
+</div>
+</div>
+
+<img src="./images/stats2.png" style="opacity: 0;">
+
+</div>		<!--	interface	-->
+
+</div>		<!--	main	-->
+
+</body>
+
+</html>
+
+<script type="text/javascript" src="./data/amazon.js"></script>
+<script type="text/javascript" src="./data/assassin.js"></script>
+<script type="text/javascript" src="./data/necromancer.js"></script>
+<script type="text/javascript" src="./data/barbarian.js"></script>
+<script type="text/javascript" src="./data/paladin.js"></script>
+<script type="text/javascript" src="./data/sorceress.js"></script>
+<script type="text/javascript" src="./data/druid.js"></script>
+
+<script>
+
+function initial_load() {
+	loadEquipment()
+	
+	skills_all = {amazon:skills_amazon, assassin:skills_assassin, barbarian:skills_barbarian, druid:skills_druid, necromancer:skills_necromancer, paladin:skills_paladin, sorceress:skills_sorceress}
+	character_all = {amazon:character_amazon, assassin:character_assassin, barbarian:character_barbarian, druid:character_druid, necromancer:character_necromancer, paladin:character_paladin, sorceress:character_sorceress}
+	
+	// select random class
+	var random = Math.floor(Math.random() * 7);
+	var classes = ["amazon","assassin","barbarian","druid","necromancer","paladin","sorceress"]
+	var initial_class = classes[random];
+	skills = skills_all[initial_class]
+	character_setup = character_all[initial_class]
+	
+	startup(initial_class)
+}
+
+</script>

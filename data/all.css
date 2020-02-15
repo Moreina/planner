@@ -1,0 +1,78 @@
+.no-selection {
+-webkit-user-select: none; /* for safari & chrome browsers */
+-moz-user-select: none; /* for mozilla browsers */
+-ms-user-select: none; /* for IE10+ */
+  background-color: black;
+}
+.container {
+  position: absolute;
+  text-align: center;
+}
+.hover {
+  position: absolute;
+  text-align: center;
+  color: white;
+  background-color: black;
+  opacity: 0.85;
+  padding: 5px;
+}
+.point {
+  position: absolute;
+  text-align: center;
+  color: white;
+  width: 30px;
+}
+.redpoint {
+  position: absolute;
+  text-align: center;
+  color: red;
+  width: 30px;
+}
+.text {
+  position: absolute;
+  text-align: center;
+  color: white;
+  width: 100px;
+}
+.green {
+  text-align: center;
+  color: #00f000;
+}
+.gray {
+  color: gray;
+}
+.background {
+  background-color: black;
+}
+.dropdown {
+  color: #ddd;
+  background-color: black;
+  padding: 5px;
+  width: 200px;
+  border-color: #333;
+}
+.dropdown:hover, .dropdown:focus {
+  background-color: #222;
+}
+
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: black;
+}
+li {
+  float: left;
+}
+li a {
+  display: inline-block;
+  color: white;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+li a:hover {
+  background-color: #222;
+}
+.show {display: block;}
