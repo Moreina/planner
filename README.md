@@ -1,4 +1,26 @@
 # [Planner](https://moreina.github.io/planner/)
-Character Skill Planner for Diablo 2
+Character Skill Planner for Diablo 2: Path of Diablo
 
-So far includes all skills up to level 20, many up to level 60, stat tracking, and an equipment section with a few example uniques.
+### Features So Far:
+* all skill info for levels 1-20 (some info up to level 60)
+* synergy calculation for all skills
+* stat display with:
+   * class-specific differences
+   * stats gained from quests
+   * difficulty differences (character resistances, summon skills)
+   * stats gained from items
+* equipment selection (not many items yet)
+
+### Upcoming Plans:
+* all skill info for levels 21-60
+* charm inventory
+* large selection of equipment items
+* tracking of non-stat effects (buffs, auras)
+* item creation
+* interface niceties
+
+### Stretch Goals:
+* character saving/sharing
+* custom itempool saving
+* character comparison
+* comparison of skill effectiveness per level
