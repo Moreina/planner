@@ -16,13 +16,16 @@ Character Skill Planner for Diablo 2: Path of Diablo
 * all skill info for levels 21-60
 * more items (all uniques, etc)
 * tracking of non-stat effects (buffs, debuffs, auras)
+* breakpoints
 * mercenary info
 * custom item creation & modification
+* item description tooltips
 * interface niceties
 
 ### Stretch Goals:
 * monster stat calculations
 * character saving/sharing
+* character importing
 * custom item-pool saving
 * pvp info
 * character comparison tool
