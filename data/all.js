@@ -5,12 +5,13 @@ character = {class_name:"", strength:0, dexterity:0, vitality:0, energy:0, level
 				all_skills:0, all_attributes:0, life_per_level:0, mana_per_level:0, life_regen:0, max_mana:0, all_res:0, defense_per_level:0, ibc:0, mana_regen:0, itd:0, knockback:0, missile_defense:0, mana_per_kill:0, damage_min:0, damage_max:0, thorns:0, slower_stam_drain:0, dstrike_per_level:0, damage_to_mana:0, heal_stam:0, light_radius:0, mDamage_reduced:0, thorns_per_level:0,
 				skills_javelins:0, skills_passives:0, skills_bows:0, skills_martial:0, skills_shadow:0, skills_traps:0, skills_warcries:0, skills_masteries:0, skills_combat_barbarian:0, skills_elemental:0, skills_shapeshifting:0, skills_summoning_druid:0, skills_summoning_necromancer:0, skills_poisonBone:0, skills_curses:0, skills_offensive:0, skills_defensive:0, skills_combat_paladin:0, skills_cold:0, skills_lightning:0, skills_fire:0,
 				fAbsorb_flat:0, cAbsorb_flat:0, lAbsorb_flat:0, mAbsorb_flat:0, pdr_flat:0, slow_target:0, life_per_kill:0, damage_vs_demons:0, damage_vs_undead:0, strength_per_level:0, mf_per_level:0, life_per_ranged_hit:0, mana_per_ranged_hit:0,
-				skill_lightning_fury:0, skill_lightning_strike:0,
+				skill_lightning_fury:0, skill_lightning_strike:0, skill_glacial_spike:0, type:0, req_level:0, req_strength:0, req_dexterity:0,
 	updateSkill : function(skill, level, elem) {
 	var result = skill.data.values[elem][level]
 	return result
 	}
 };
+gear = {req_level:0, req_strength:0, req_dexterity:0}
 var MAX = 20;
 
 //
@@ -60,21 +61,76 @@ function selectItem() {
 
 //
 // ---------------------------------
+function levelup(input) {
+	var levels = 1
+	if (event.shiftKey) { levels = 10 }
+	if (event.ctrlKey) { levels = 100 }
+	levels *= input
+	var maxup = 99 - character.level
+	if (levels > maxup) { levels = maxup }
+	if (levels > 0) {
+		character.level += levels
+		character.skillpoints += levels
+		character.statpoints += 5*levels
+		character.stamina += character.levelup_stamina*levels
+		character.life += character.levelup_life*levels
+		character.mana += character.levelup_mana*levels
+	}
+	if (input < 0) {
+		if (levels < 1-character.level) { levels = 1-character.level }
+		if (levels < 0-character.skillpoints) { levels = -1*character.skillpoints }
+		if (levels < 0-character.statpoints/5) { levels = -1*Math.floor(character.skillpoints/5) }
+		if (levels < 0) {
+			character.level += levels
+			character.skillpoints += levels
+			character.statpoints += 5*levels
+			character.stamina += character.levelup_stamina*levels
+			character.life += character.levelup_life*levels
+			character.mana += character.levelup_mana*levels
+			updateStats()
+		}
+	}
+	updateStats()
+}
+
+//
+// ---------------------------------
+function updateSkillIcons() {
+
+	for (let s = 0, len = skills.length; s < len; s++) {
+		// TODO: update "highlighted" skill icons based on which skills are available
+		// Highlight:
+		//	any skills with points in them
+		//	any prerequisites for those skills
+		//	any skill with all prerequisites met (including character level)
+	}
+	
+//		document.getElementById("si111").src = "./images/si111.png"
+/*	
+	if (character.skillpoints == 0) {
+		document.getElementById("si111").style.visibility = "visible"
+		document.getElementById("si222").style.visibility = "visible"
+		document.getElementById("si333").style.visibility = "visible"
+	} else {
+		document.getElementById("si333").style.visibility = "hidden"
+		document.getElementById("si111").style.visibility = "hidden"
+		document.getElementById("si222").style.visibility = "hidden"
+	}
+*/
+}
+
+//
+// ---------------------------------
 function loadItems(type, dropdown) {
 	if (type.length == 0) document.getElementById(dropdown).innerHTML = "<option></option>"
 	else {
 		var choices = "";
-		var empty = 1;
 		for (item in equipment[type]) {
 			if (item > 0) {
 				choices += "<option>" + equipment[type][item].name + "</option>"
 			} else {
 				choices += "<option selected>" + "­ ­ ­ ­ " + equipment[type][item].name + "</option>"
 			}
-			if (empty) {
-		//		choices += "<option>" + "" + "</option>"
-				empty = 0
-			} 
 		}
 		document.getElementById(dropdown).innerHTML = choices
 	}
@@ -106,11 +162,90 @@ function equip(type, val) {
 	}
 }
 
+var charm_img = {prefix:"./images/items/", small:["charm1_paw.png","charm1_disc.png","charm1_coin.png"], large:["charm2_page.png","charm2_horn.png","charm2_lantern.png"], grand:["charm3_lace.png","charm3_eye.png","charm3_monster.png"]}
+
+//
+// ---------------------------------
+function addCharm(val) {
+	
+	var charmImage = "";
+	var charmHeight = "";
+	var charmWidth = "29";
+	var type = "";
+	var charm_y = 1;
+	var nameVal = val;
+	for (item in equipment["charms"]) {
+		if (equipment["charms"][item].name == val) {
+			type = equipment["charms"][item].type
+		}
+	}
+	var r = Math.floor((Math.random() * 3));
+	if (type == "grand") { charmHeight = "88"; charmImage = charm_img.prefix+charm_img.grand[r]; charm_y = 3; }
+	if (type == "large") { charmHeight = "59"; charmImage = charm_img.prefix+charm_img.large[r]; charm_y = 2; }
+	if (type == "small") { charmHeight = "29"; charmImage = charm_img.prefix+charm_img.small[r]; charm_y = 1; }
+	
+	var allow = 1;
+	for (let c = 1; c <= inv[0].in.length; c++) {
+		if (inv[0].in[c] == val) {
+			if (val == "Annihilus" || val == "Hellfire Torch" || val == "Gheed's Fortune") { allow = 0 } }
+	}
+	if (allow == 1) {
+		if (val != "Annihilus" && val != "Hellfire Torch" && val != "Gheed's Fortune") {
+			var append = "" + Math.floor((Math.random() * 999) + 1);
+			val = val + "_" + append
+		}
+		if (nameVal == "Annihilus") { charmImage = "./images/items/charm1u.png"; }
+		if (nameVal == "Hellfire Torch") { charmImage = "./images/items/charm2u.png"; }
+		if (nameVal == "Gheed's Fortune") { charmImage = "./images/items/charm3u.png"; }
+		var charmHTML = '<img id="' + val + '" src="' + charmImage + '" draggable="true" ondragstart="drag(event)" width="' + charmWidth + '" height="' + charmHeight + '" oncontextmenu="trash(event)" onmouseover="itemHover(event, this.value)" onmouseout="itemOut()">';
+		var insertion = "h01";
+		var space_found = 0;
+		var empty = 1;
+		var i = 0;
+		for (let x = 1; x <= 10; x++) {
+			for (let y = 0; y < 4; y++) {
+				i = y*10 + x
+				empty = 1
+				if (space_found == 0 && charm_y + inv[i].y <= 5) {
+					if (inv[i].empty == 0) { empty = 0 }
+					if (charm_y > 1 && inv[i+10].empty == 0) { empty = 0 }
+					if (charm_y > 2 && inv[i+20].empty == 0) { empty = 0 }
+				} else { empty = 0 }
+				if (empty == 1) { space_found = i }
+			}
+		}
+		if (space_found > 0) {
+			var i = space_found;
+			insertion = inv[i].id;
+			inv[i].empty = 0
+			inv[0].in[i] = val
+			if (charm_y > 1) { inv[i+10].empty = 0; inv[0].in[i+10] = val; }
+			if (charm_y > 2) { inv[i+20].empty = 0; inv[0].in[i+20] = val; }
+			document.getElementById(insertion).innerHTML += charmHTML;
+			var ch = "charms";
+			equipped[ch][val] = {}
+			for (item in equipment[ch]) {
+				if (equipment[ch][item].name == nameVal) {
+					for (affix in equipment[ch][item]) {
+						character[affix] += equipment[ch][item][affix]
+						equipped[ch][val][affix] = equipment[ch][item][affix]
+					}
+				}
+			}
+			updateSkillAmounts()
+			updateStats()
+			updateSecondaryStats()
+		}
+	}
+	document.getElementById("dropdown_charms").selectedIndex = 0
+}
+
+
 //
 // ---------------------------------
 function resetEquipment() {
-	var equipmentTypes = ["helm", "armor", "gloves", "boots", "belt", "amulet", "ring1", "ring2", "weapon", "offhand"];
-	var equipmentDropdowns = ["dropdown_helm", "dropdown_armor", "dropdown_gloves", "dropdown_boots", "dropdown_belt", "dropdown_amulet", "dropdown_ring1", "dropdown_ring2", "dropdown_weapon", "dropdown_offhand"]
+	var equipmentTypes = ["helm", "armor", "gloves", "boots", "belt", "amulet", "ring1", "ring2", "weapon", "offhand", "charms"];
+	var equipmentDropdowns = ["dropdown_helm", "dropdown_armor", "dropdown_gloves", "dropdown_boots", "dropdown_belt", "dropdown_amulet", "dropdown_ring1", "dropdown_ring2", "dropdown_weapon", "dropdown_offhand", "dropdown_charms"]
 	for (let e = 0; e < equipmentTypes.length; e++) {
 		equip(equipmentTypes[e], "")
 		document.getElementById(equipmentDropdowns[e]).selectedIndex = 0
@@ -133,8 +268,8 @@ function resetSkills() {
 // ---------------------------------
 function loadEquipment() {
 
-var equipmentTypes = ["helm", "armor", "gloves", "boots", "belt", "amulet", "ring1", "ring2", "weapon", "offhand"];
-	var equipmentDropdowns = ["dropdown_helm", "dropdown_armor", "dropdown_gloves", "dropdown_boots", "dropdown_belt", "dropdown_amulet", "dropdown_ring1", "dropdown_ring2", "dropdown_weapon", "dropdown_offhand"]
+var equipmentTypes = ["helm", "armor", "gloves", "boots", "belt", "amulet", "ring1", "ring2", "weapon", "offhand", "charms"];
+	var equipmentDropdowns = ["dropdown_helm", "dropdown_armor", "dropdown_gloves", "dropdown_boots", "dropdown_belt", "dropdown_amulet", "dropdown_ring1", "dropdown_ring2", "dropdown_weapon", "dropdown_offhand", "dropdown_charms"]
 	for (let i = 0; i < equipmentTypes.length; i++) {
 		loadItems(equipmentTypes[i], equipmentDropdowns[i])
 	}
@@ -226,6 +361,7 @@ function updateStats() {
 	} else {
 		document.getElementById("hide_stats").style.visibility = "hidden"
 	}
+	checkRequirements()
 }
 
 //
@@ -296,6 +432,7 @@ function updateSkillAmounts() {
 			} else { skills[s].extra_levels = character.skills_offensive }
 		} else if (character.class_name == "Sorceress") {
 			if (s < 11) { skills[s].extra_levels = character.skills_cold
+				if (s == 5) {skills[s].extra_levels += character.skill_glacial_spike }
 			} else if (s > 21) { skills[s].extra_levels = character.skills_fire
 			} else { skills[s].extra_levels = character.skills_lightning }
 		}
@@ -310,41 +447,57 @@ function updateSkillAmounts() {
 
 //
 // ---------------------------------
+function checkRequirements() {
+	highest_level = 1;
+	highest_str = 1;
+	highest_dex = 1;
+	for (type in equipped) {
+		if (equipped[type].req_level > highest_level) { highest_level = equipped[type].req_level }
+		if (equipped[type].req_strength > highest_str) { highest_str = equipped[type].req_strength }
+		if (equipped[type].req_dexterity > highest_dex) { highest_dex = equipped[type].req_dexterity }
+	}
+	character.req_level = highest_level
+	character.req_strength = highest_str
+	character.req_dexterity = highest_dex
+	if (character.req_level > character.level) { document.getElementById("level").style = "position: absolute; text-align: center; color: #af625c; width: 30px; left: 23px; top: 12px;" } else { document.getElementById("level").style = "position: absolute; text-align: center; color: white; width: 30px; left: 23px; top: 12px;" }
+	if (character.req_strength > character.strength) { document.getElementById("strength").style = "position: absolute; text-align: center; color: #af625c; width: 30px; left: 85px; top: 100px;" } else { document.getElementById("strength").style = "position: absolute; text-align: center; color: white; width: 30px; left: 85px; top: 100px;" }
+	if (character.req_dexterity > character.dexterity) { document.getElementById("dexterity").style = "position: absolute; text-align: center; color: #af625c; width: 30px; left: 85px; top: 161px;" } else { document.getElementById("dexterity").style = "position: absolute; text-align: center; color: white; width: 30px; left: 85px; top: 161px;" }
+}
+
+//
+// ---------------------------------
 function click(event, skill) {
 	var display = 0
 	var old_level = skill.level;
 	var levels = 1;
-	if (event.shiftKey) {
-		levels = 10
-	}
-	if (event.ctrlKey) {
-		levels = 100
-	}
-	if (old_level <= (MAX-levels)) {
+	if (event.shiftKey) { levels = 10 }
+	if (event.ctrlKey) { levels = 100 }
+	if (old_level+levels > MAX) { levels = MAX-old_level }
+	if (levels > (99-character.level) + character.skillpoints) { levels = (99-(character.level) + character.skillpoints) }
+	if (character.level <= 99-levels || character.skillpoints >= levels) {
 		skill.level += levels
 		display += skill.level
 		display += skill.extra_levels
-	//	display += character.all_skills
-		document.getElementById(skill.data.point).innerHTML = display
+		if (skill.level > 0) { document.getElementById(skill.data.point).innerHTML = display }
 		mouseOver(skill)
-	} else if ((MAX-old_level) > 0) {
-		levels = (MAX-old_level)
-		skill.level += levels
-		display += skill.level
-		display += skill.extra_levels
-	//	display += character.all_skills
-		document.getElementById(skill.data.point).innerHTML = display
-		mouseOver(skill)
+		if (skill.level > old_level) {
+			if (levels <= character.skillpoints) {
+				character.skillpoints -= levels
+				levels = 0
+			} else {
+				levels -= character.skillpoints
+				character.skillpoints = 0
+			}
+			if (levels > 0) {
+				character.level += levels
+				character.statpoints += (5*levels)
+				character.life += (character.levelup_life*levels)
+				character.stamina += (character.levelup_stamina*levels)
+				character.mana += (character.levelup_mana*levels)
+			}
+			updateStats()
+		}
 	}
-	if (skill.level > old_level) {
-		character.level += levels
-		character.statpoints += (5*levels)
-		character.life += (character.levelup_life*levels)
-		character.stamina += (character.levelup_stamina*levels)
-		character.mana += (character.levelup_mana*levels)
-		updateStats()
-	}
-	//if (character.level > 99) { document.getElementById("level").class="redpoint" }
 }
 
 //
@@ -434,45 +587,27 @@ function clickRight(event, skill) {
 	var old_level = skill.level
 	var levels = 1
 	var display = 0
-	if (event.shiftKey) {
-		levels = 10
-	}
-	if (event.ctrlKey) {
-		levels = 100
-	}
-	if (old_level >= levels && (character.statpoints >= (5*levels))) {
+	if (event.shiftKey) { levels = 10 }
+	if (event.ctrlKey) { levels = 100 }
+	if (old_level-levels < 0) { levels = old_level }
+	if (character.level > levels && character.statpoints >= 5*levels) {
 		skill.level -= levels
 		display += skill.level
 		display += skill.extra_levels
-	//	display += character.all_skills
 		if (skill.level == 0) {
 			document.getElementById(skill.data.point).innerHTML = ""
 		} else {
 			document.getElementById(skill.data.point).innerHTML = display
 		}
 		mouseOver(skill)
-	} else if ((old_level < levels) && (old_level > 0)) {
-		levels = old_level
-		if (character.statpoints >= (5*levels)) {
-			skill.level -= levels
-			display += skill.level
-			display += skill.extra_levels
-	//		display += character.all_skills
-			if (skill.level == 0) {
-				document.getElementById(skill.data.point).innerHTML = ""
-			} else {
-				document.getElementById(skill.data.point).innerHTML = display
-			}
-			mouseOver(skill)
+		if (skill.level < old_level) {
+			character.level -= levels
+			character.statpoints -= 5*levels
+			character.life -= (character.levelup_life*levels)
+			character.stamina -= (character.levelup_stamina*levels)
+			character.mana -= (character.levelup_mana*levels)
+			updateStats()
 		}
-	}
-	if (skill.level < old_level) {
-		character.level -= levels
-		character.statpoints -= (5*levels)
-		character.life -= (character.levelup_life*levels)
-		character.stamina -= (character.levelup_stamina*levels)
-		character.mana -= (character.levelup_mana*levels)
-		updateStats()
 	}
 }
 
@@ -564,3 +699,134 @@ function round(num) {
 function mouseOut() {
 	document.getElementById("tooltip").style.display="none"
 }
+
+//
+// ---------------------------------
+function itemOut() {
+	document.getElementById("item_tooltip").style.display="none"
+}
+
+//
+// ---------------------------------
+function itemHover(ev, id) {
+//	display = ""
+//	for (affix in equipped["charms"][id]) {
+//		display += equipped["charms"][id][affix] + "<br>"
+//	}
+//	document.getElementById("item_stats").innerHTML = display
+//	document.getElementById("item_stats").style = "display: block;"
+}
+
+//
+// ---------------------------------
+function allowDrop(ev, cell, y) {
+	if (inv[0].pickup_y + y <= 5) {
+		var allow = 1
+		if (inv[cell].empty == 0) { allow = 0 
+			if (inv[0].in[cell] == inv[0].onpickup) { allow = 1 } }
+		if (inv[0].pickup_y > 1 && inv[cell+10].empty == 0) { allow = 0 //}
+			if (inv[0].in[cell+10] == inv[0].onpickup) { allow = 1 } }
+		if (inv[0].pickup_y > 2 && inv[cell+20].empty == 0) { allow = 0 //}
+			if (inv[0].in[cell+20] == inv[0].onpickup) { allow = 1 } }
+		if (allow == 1) {
+			ev.preventDefault();
+		}
+	}
+}
+
+//
+// ---------------------------------
+function drag(ev) {
+	ev.dataTransfer.setData("text", ev.target.id);
+	inv[0].onpickup = ev.target.id
+	var height = document.getElementById(inv[0].onpickup).height;
+	if (height > 80) { inv[0].pickup_y = 3 }
+	else if (height > 50) { inv[0].pickup_y = 2 }
+	else { inv[0].pickup_y = 1 }
+}
+
+//
+// ---------------------------------
+function drop(ev,cell) {
+	var data = ev.dataTransfer.getData("text");
+	ev.target.appendChild(document.getElementById(data));
+	for (s = 1; s <= inv[0].in.length; s++) {
+		if (inv[0].in[s] == inv[0].onpickup) { inv[s].empty = 1; inv[0].in[s] = ""; }
+	}
+	inv[cell].empty = 0
+	inv[0].in[cell] = inv[0].onpickup
+	if (inv[0].pickup_y > 1) { inv[cell+10].empty = 0; inv[0].in[cell+10] = inv[0].onpickup; }
+	if (inv[0].pickup_y > 2) { inv[cell+20].empty = 0; inv[0].in[cell+20] = inv[0].onpickup; }
+	inv[0].onpickup = "none"
+}
+
+//
+// ---------------------------------
+function trash(ev) {
+	var val = ev.target.id;
+	var type = "charms"
+	for (old_affix in equipped[type][val]) {
+		character[old_affix] -= equipped[type][val][old_affix]
+		equipped[type][val][old_affix] = unequipped[old_affix]
+	}
+	
+	//equipped["charms"].name = ev.target.id;
+	//equip("charms", ev.target.id);
+	for (s = 1; s <= inv[0].in.length; s++) {
+		if (inv[0].in[s] == ev.target.id) {
+			inv[s].empty = 1;
+			inv[0].in[s] = "";
+		}
+	}
+	ev.target.remove();
+	updateSkillAmounts()
+	updateStats()
+	updateSecondaryStats()
+}
+
+var inv = [
+{onpickup:"?",pickup_x:0,pickup_y:0,empty:1,stored:"",charms:[],in:["",0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},
+{x:1,y:1,empty:1,id:"h11"},
+{x:2,y:1,empty:1,id:"h21"},
+{x:3,y:1,empty:1,id:"h31"},
+{x:4,y:1,empty:1,id:"h41"},
+{x:5,y:1,empty:1,id:"h51"},
+{x:6,y:1,empty:1,id:"h61"},
+{x:7,y:1,empty:1,id:"h71"},
+{x:8,y:1,empty:1,id:"h81"},
+{x:9,y:1,empty:1,id:"h91"},
+{x:10,y:1,empty:1,id:"h01"},
+
+{x:1,y:2,empty:1,id:"h12"},
+{x:2,y:2,empty:1,id:"h22"},
+{x:3,y:2,empty:1,id:"h32"},
+{x:4,y:2,empty:1,id:"h42"},
+{x:5,y:2,empty:1,id:"h52"},
+{x:6,y:2,empty:1,id:"h62"},
+{x:7,y:2,empty:1,id:"h72"},
+{x:8,y:2,empty:1,id:"h82"},
+{x:9,y:2,empty:1,id:"h92"},
+{x:10,y:2,empty:1,id:"h02"},
+
+{x:1,y:3,empty:1,id:"h13"},
+{x:2,y:3,empty:1,id:"h23"},
+{x:3,y:3,empty:1,id:"h33"},
+{x:4,y:3,empty:1,id:"h43"},
+{x:5,y:3,empty:1,id:"h53"},
+{x:6,y:3,empty:1,id:"h63"},
+{x:7,y:3,empty:1,id:"h73"},
+{x:8,y:3,empty:1,id:"h83"},
+{x:9,y:3,empty:1,id:"h93"},
+{x:10,y:3,empty:1,id:"h03"},
+
+{x:1,y:4,empty:1,id:"h14"},
+{x:2,y:4,empty:1,id:"h24"},
+{x:3,y:4,empty:1,id:"h34"},
+{x:4,y:4,empty:1,id:"h44"},
+{x:5,y:4,empty:1,id:"h54"},
+{x:6,y:4,empty:1,id:"h64"},
+{x:7,y:4,empty:1,id:"h74"},
+{x:8,y:4,empty:1,id:"h84"},
+{x:9,y:4,empty:1,id:"h94"},
+{x:10,y:4,empty:1,id:"h04"}
+];

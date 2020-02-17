@@ -15,6 +15,7 @@
   background-color: black;
   opacity: 0.85;
   padding: 5px;
+  z-index: 5;
 }
 .point {
   position: absolute;
@@ -25,8 +26,15 @@
 .redpoint {
   position: absolute;
   text-align: center;
-  color: red;
+  color: white;
   width: 30px;
+}
+.inventory {
+  position: relative;
+  width: 323px;
+  height: 434px;
+  float: left;
+  z-index: 3;
 }
 .text {
   position: absolute;
@@ -50,11 +58,11 @@
   padding: 5px;
   width: 200px;
   border-color: #333;
+  z-index: 4;
 }
 .dropdown:hover, .dropdown:focus {
   background-color: #222;
 }
-
 ul {
   list-style-type: none;
   margin: 0;
@@ -76,3 +84,91 @@ li a:hover {
   background-color: #222;
 }
 .show {display: block;}
+
+.S {
+  position: absolute;
+  display: block;
+  pointer-events: none;
+}
+.Sa1 {left: 14px;}
+.Sa2 {left: 83px;}
+.Sa3 {left: 152px;}
+.Sb1 {left: 245px;}
+.Sb2 {left: 314px;}
+.Sb3 {left: 383px;}
+.Sc1 {left: 476px;}
+.Sc2 {left: 545px;}
+.Sc3 {left: 614px;}
+.Sy1 {top: 16px;}
+.Sy2 {top: 84px;}
+.Sy3 {top: 152px;}
+.Sy4 {top: 220px;}
+.Sy5 {top: 289px;}
+.Sy6 {top: 357px;}
+
+.P {  position: absolute;
+  text-align: center;
+  color: white;
+  width: 30px;
+}
+.Pa1 {left: 51px;}
+.Pa2 {left: 120px;}
+.Pa3 {left: 189px;}
+.Pb1 {left: 283px;}
+.Pb2 {left: 351px;}
+.Pb3 {left: 420px;}
+.Pc1 {left: 513px;}
+.Pc2 {left: 582px;}
+.Pc3 {left: 651px;}
+.Py1 {top: 44px;}
+.Py2 {top: 112px;}
+.Py3 {top: 180px;}
+.Py4 {top: 248px;}
+.Py5 {top: 317px;}
+.Py6 {top: 385px;}
+
+.cell {
+position:absolute;
+}
+
+/*	FULL INVENTORY PAGE
+.H {
+  position: absolute;
+  width: 29px;
+  height: 29px;
+}
+.Hx1 {left: 18px;}
+.Hx2 {left: 47px;}
+.Hx3 {left: 76px;}
+.Hx4 {left: 105px;}
+.Hx5 {left: 134px;}
+.Hx6 {left: 163px;}
+.Hx7 {left: 192px;}
+.Hx8 {left: 221px;}
+.Hx9 {left: 250px;}
+.Hx10 {left: 279px;}
+.Hy1 {top: 255px;}
+.Hy2 {top: 284px;}
+.Hy3 {top: 313px;}
+.Hy4 {top: 342px;}
+*/
+
+.H {
+  position: absolute;
+  width: 29px;
+  height: 29px;
+}
+.Hx1 {left: 5px;}
+.Hx2 {left: 34px;}
+.Hx3 {left: 63px;}
+.Hx4 {left: 92px;}
+.Hx5 {left: 121px;}
+.Hx6 {left: 150px;}
+.Hx7 {left: 179px;}
+.Hx8 {left: 208px;}
+.Hx9 {left: 237px;}
+.Hx10 {left: 266px;}
+.Hy1 {top: 3px;}
+.Hy2 {top: 32px;}
+.Hy3 {top: 61px;}
+.Hy4 {top: 90px;}

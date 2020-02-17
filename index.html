@@ -10,6 +10,7 @@
 <script type="text/javascript" src="./data/all.js"></script>
 <!--
 <style type="text/css">
+
 </style>
 -->
 <link rel="shortcut icon" href="./images/favicon.ico" type="image/x-icon">
@@ -30,8 +31,9 @@
 <area coords="127,169,163,203" id="btn_dexterity">
 <area coords="127,231,163,267" id="btn_vitality">
 <area coords="127,293,163,329" id="btn_energy">
+<area coords="14,15,61,52" id="btn_level" onclick="levelup(1)" oncontextmenu="levelup(-1)">
 </map>
-<p class="point" style="left: 23px; top: 12px;" id="level"></p>
+<p class="point" style="left: 23px; top: 12px;" id="level" onclick="levelup(1)" oncontextmenu="levelup(-1)"></p>
 <p class="text" style="left: 67px; top: 12px;" id="class_name"></p>
 <p class="point" style="left: 100px; top: 45px;" id="remainingskills"></p>
 <p class="point" style="left: 100px; top: 338px;" id="remainingstats"></p>
@@ -44,11 +46,12 @@
 <img id="hide_statpoints" src="./images/stats_hidden.png" style="position: absolute; display: block; left: 7px; top: 344px;">
 <img id="hide_stats" src="./images/stats_hidden_extra.png" style="position: absolute; display: block; left: 120px; top: 98px;">
 
-</div>		<!--	gui stats	-->
+</div>		<!--	/gui stats	-->
 
 <div id="gui_skills" style="position: relative; width: 694px; height: 434px; float: left;">
 <img usemap="#skillmap" id="skill_tree" src="">
 <map id="skillmap" name="skillmap">
+<!--	skill hover areas	-->
 <area coords="14,16,62,64" id="st1r1c1"><area coords="83,16,131,64" id="st1r1c2"><area coords="152,16,200,64" id="st1r1c3">
 <area coords="14,84,62,132" id="st1r2c1"><area coords="83,84,131,132" id="st1r2c2"><area coords="152,84,200,132" id="st1r2c3">
 <area coords="14,152,62,200" id="st1r3c1"><area coords="83,152,131,200" id="st1r3c2"><area coords="152,152,200,200" id="st1r3c3">
@@ -70,28 +73,52 @@
 <area coords="476,289,524,337" id="st3r5c1"><area coords="545,289,593,337" id="st3r5c2"><area coords="614,289,662,337" id="st3r5c3">
 <area coords="476,357,524,405" id="st3r6c1"><area coords="545,357,593,405" id="st3r6c2"><area coords="614,357,662,405" id="st3r6c3">
 </map>
-<p class="point" id="pt1r1c1" style="left: 51px; top: 44px;"></p><p class="point" id="pt1r1c2" style="left: 120px; top: 44px;"></p><p class="point" id="pt1r1c3" style="left: 189px; top: 44px;"></p>
-<p class="point" id="pt1r2c1" style="left: 51px; top: 112px;"></p><p class="point" id="pt1r2c2" style="left: 120px; top: 112px;"></p><p class="point" id="pt1r2c3" style="left: 189px; top: 112px;"></p>
-<p class="point" id="pt1r3c1" style="left: 51px; top: 180px;"></p><p class="point" id="pt1r3c2" style="left: 120px; top: 180px;"></p><p class="point" id="pt1r3c3" style="left: 189px; top: 180px;"></p>
-<p class="point" id="pt1r4c1" style="left: 51px; top: 248px;"></p><p class="point" id="pt1r4c2" style="left: 120px; top: 248px;"></p><p class="point" id="pt1r4c3" style="left: 189px; top: 248px;"></p>
-<p class="point" id="pt1r5c1" style="left: 51px; top: 317px;"></p><p class="point" id="pt1r5c2" style="left: 120px; top: 317px;"></p><p class="point" id="pt1r5c3" style="left: 189px; top: 317px;"></p>
-<p class="point" id="pt1r6c1" style="left: 51px; top: 385px;"></p><p class="point" id="pt1r6c2" style="left: 120px; top: 385px;"></p><p class="point" id="pt1r6c3" style="left: 189px; top: 385px;"></p>
+<!--	Skill Points	-->
+<p class="P Pa1 Py1" id="pt1r1c1"></p><p class="P Pa2 Py1" id="pt1r1c2"></p><p class="P Pa3 Py1" id="pt1r1c3"></p>
+<p class="P Pa1 Py2" id="pt1r2c1"></p><p class="P Pa2 Py2" id="pt1r2c2"></p><p class="P Pa3 Py2" id="pt1r2c3"></p>
+<p class="P Pa1 Py3" id="pt1r3c1"></p><p class="P Pa2 Py3" id="pt1r3c2"></p><p class="P Pa3 Py3" id="pt1r3c3"></p>
+<p class="P Pa1 Py4" id="pt1r4c1"></p><p class="P Pa2 Py4" id="pt1r4c2"></p><p class="P Pa3 Py4" id="pt1r4c3"></p>
+<p class="P Pa1 Py5" id="pt1r5c1"></p><p class="P Pa2 Py5" id="pt1r5c2"></p><p class="P Pa3 Py5" id="pt1r5c3"></p>
+<p class="P Pa1 Py6" id="pt1r6c1"></p><p class="P Pa2 Py6" id="pt1r6c2"></p><p class="P Pa3 Py6" id="pt1r6c3"></p>
 
-<p class="point" id="pt2r1c1" style="left: 283px; top: 44px;"></p><p class="point" id="pt2r1c2" style="left: 351px; top: 44px;"></p><p class="point" id="pt2r1c3" style="left: 420px; top: 44px;"></p>
-<p class="point" id="pt2r2c1" style="left: 283px; top: 112px;"></p><p class="point" id="pt2r2c2" style="left: 351px; top: 112px;"></p><p class="point" id="pt2r2c3" style="left: 420px; top: 112px;"></p>
-<p class="point" id="pt2r3c1" style="left: 283px; top: 180px;"></p><p class="point" id="pt2r3c2" style="left: 351px; top: 180px;"></p><p class="point" id="pt2r3c3" style="left: 420px; top: 180px;"></p>
-<p class="point" id="pt2r4c1" style="left: 283px; top: 248px;"></p><p class="point" id="pt2r4c2" style="left: 351px; top: 247px;"></p><p class="point" id="pt2r4c3" style="left: 420px; top: 248px;"></p>
-<p class="point" id="pt2r5c1" style="left: 283px; top: 317px;"></p><p class="point" id="pt2r5c2" style="left: 351px; top: 317px;"></p><p class="point" id="pt2r5c3" style="left: 420px; top: 317px;"></p>
-<p class="point" id="pt2r6c1" style="left: 283px; top: 385px;"></p><p class="point" id="pt2r6c2" style="left: 351px; top: 385px;"></p><p class="point" id="pt2r6c3" style="left: 420px; top: 385px;"></p>
+<p class="P Pb1 Py1" id="pt2r1c1"></p><p class="P Pb2 Py1" id="pt2r1c2"></p><p class="P Pb3 Py1" id="pt2r1c3"></p>
+<p class="P Pb1 Py2" id="pt2r2c1"></p><p class="P Pb2 Py2" id="pt2r2c2"></p><p class="P Pb3 Py2" id="pt2r2c3"></p>
+<p class="P Pb1 Py3" id="pt2r3c1"></p><p class="P Pb2 Py3" id="pt2r3c2"></p><p class="P Pb3 Py3" id="pt2r3c3"></p>
+<p class="P Pb1 Py4" id="pt2r4c1"></p><p class="P Pb2 Py4" id="pt2r4c2"></p><p class="P Pb3 Py4" id="pt2r4c3"></p>
+<p class="P Pb1 Py5" id="pt2r5c1"></p><p class="P Pb2 Py5" id="pt2r5c2"></p><p class="P Pb3 Py5" id="pt2r5c3"></p>
+<p class="P Pb1 Py6" id="pt2r6c1"></p><p class="P Pb2 Py6" id="pt2r6c2"></p><p class="P Pb3 Py6" id="pt2r6c3"></p>
 
-<p class="point" id="pt3r1c1" style="left: 513px; top: 44px;"></p><p class="point" id="pt3r1c2" style="left: 582px; top: 44px;"></p><p class="point" id="pt3r1c3" style="left: 651px; top: 44px;"></p>
-<p class="point" id="pt3r2c1" style="left: 513px; top: 112px;"></p><p class="point" id="pt3r2c2" style="left: 582px; top: 112px;"></p><p class="point" id="pt3r2c3" style="left: 651px; top: 112px;"></p>
-<p class="point" id="pt3r3c1" style="left: 513px; top: 180px;"></p><p class="point" id="pt3r3c2" style="left: 582px; top: 180px;"></p><p class="point" id="pt3r3c3" style="left: 651px; top: 180px;"></p>
-<p class="point" id="pt3r4c1" style="left: 513px; top: 248px;"></p><p class="point" id="pt3r4c2" style="left: 582px; top: 248px;"></p><p class="point" id="pt3r4c3" style="left: 651px; top: 248px;"></p>
-<p class="point" id="pt3r5c1" style="left: 513px; top: 317px;"></p><p class="point" id="pt3r5c2" style="left: 582px; top: 317px;"></p><p class="point" id="pt3r5c3" style="left: 651px; top: 317px;"></p>
-<p class="point" id="pt3r6c1" style="left: 513px; top: 385px;"></p><p class="point" id="pt3r6c2" style="left: 582px; top: 385px;"></p><p class="point" id="pt3r6c3" style="left: 651px; top: 385px;"></p>
+<p class="P Pc1 Py1" id="pt3r1c1"></p><p class="P Pc2 Py1" id="pt3r1c2"></p><p class="P Pc3 Py1" id="pt3r1c3"></p>
+<p class="P Pc1 Py2" id="pt3r2c1"></p><p class="P Pc2 Py2" id="pt3r2c2"></p><p class="P Pc3 Py2" id="pt3r2c3"></p>
+<p class="P Pc1 Py3" id="pt3r3c1"></p><p class="P Pc2 Py3" id="pt3r3c2"></p><p class="P Pc3 Py3" id="pt3r3c3"></p>
+<p class="P Pc1 Py4" id="pt3r4c1"></p><p class="P Pc2 Py4" id="pt3r4c2"></p><p class="P Pc3 Py4" id="pt3r4c3"></p>
+<p class="P Pc1 Py5" id="pt3r5c1"></p><p class="P Pc2 Py5" id="pt3r5c2"></p><p class="P Pc3 Py5" id="pt3r5c3"></p>
+<p class="P Pc1 Py6" id="pt3r6c1"></p><p class="P Pc2 Py6" id="pt3r6c2"></p><p class="P Pc3 Py6" id="pt3r6c3"></p>
 
-<div id="equipment" style="display: block; float: right; width: 200px; height: 500px; position: relative;">
+<!--	Skill Icons	-->
+<img class="S Sa1 Sy1" id="s111"></p><img class="S Sa2 Sy1" id="s112"></p><img class="S Sa3 Sy1" id="s113"></p>
+<img class="S Sa1 Sy2" id="s121"></p><img class="S Sa2 Sy2" id="s122"></p><img class="S Sa3 Sy2" id="s123"></p>
+<img class="S Sa1 Sy3" id="s131"></p><img class="S Sa2 Sy3" id="s132"></p><img class="S Sa3 Sy3" id="s133"></p>
+<img class="S Sa1 Sy4" id="s141"></p><img class="S Sa2 Sy4" id="s142"></p><img class="S Sa3 Sy4" id="s143"></p>
+<img class="S Sa1 Sy5" id="s151"></p><img class="S Sa2 Sy5" id="s152"></p><img class="S Sa3 Sy5" id="s153"></p>
+<img class="S Sa1 Sy6" id="s161"></p><img class="S Sa2 Sy6" id="s162"></p><img class="S Sa3 Sy6" id="s163"></p>
+
+<img class="S Sb1 Sy1" id="s211"></p><img class="S Sb2 Sy1" id="s212"></p><img class="S Sb3 Sy1" id="s213"></p>
+<img class="S Sb1 Sy2" id="s221"></p><img class="S Sb2 Sy2" id="s222"></p><img class="S Sb3 Sy2" id="s223"></p>
+<img class="S Sb1 Sy3" id="s231"></p><img class="S Sb2 Sy3" id="s232"></p><img class="S Sb3 Sy3" id="s233"></p>
+<img class="S Sb1 Sy4" id="s241"></p><img class="S Sb2 Sy4" id="s242"></p><img class="S Sb3 Sy4" id="s243"></p>
+<img class="S Sb1 Sy5" id="s251"></p><img class="S Sb2 Sy5" id="s252"></p><img class="S Sb3 Sy5" id="s253"></p>
+<img class="S Sb1 Sy6" id="s261"></p><img class="S Sb2 Sy6" id="s262"></p><img class="S Sb3 Sy6" id="s263"></p>
+
+<img class="S Sc1 Sy1" id="s311"></p><img class="S Sc2 Sy1" id="s312"></p><img class="S Sc3 Sy1" id="s313"></p>
+<img class="S Sc1 Sy2" id="s321"></p><img class="S Sc2 Sy2" id="s322"></p><img class="S Sc3 Sy2" id="s323"></p>
+<img class="S Sc1 Sy3" id="s331"></p><img class="S Sc2 Sy3" id="s332"></p><img class="S Sc3 Sy3" id="s333"></p>
+<img class="S Sc1 Sy4" id="s341"></p><img class="S Sc2 Sy4" id="s342"></p><img class="S Sc3 Sy4" id="s343"></p>
+<img class="S Sc1 Sy5" id="s351"></p><img class="S Sc2 Sy5" id="s352"></p><img class="S Sc3 Sy5" id="s353"></p>
+<img class="S Sc1 Sy6" id="s361"></p><img class="S Sc2 Sy6" id="s362"></p><img class="S Sc3 Sy6" id="s363"></p>
+
+<!--	Equipment Menus 	-->
+<div id="equipment" style="display: block; float: right; width: 200px; height: 300px; position: relative;">
 <select class="dropdown" id="dropdown_helm" onChange="equip('helm', this.value)"></select>
 <select class="dropdown" id="dropdown_armor" onChange="equip('armor', this.value)"></select>
 <select class="dropdown" id="dropdown_gloves" onChange="equip('gloves', this.value)"></select>
@@ -102,8 +129,10 @@
 <select class="dropdown" id="dropdown_ring2" onChange="equip('ring2', this.value)"></select>
 <select class="dropdown" id="dropdown_weapon" onChange="equip('weapon', this.value)"></select>	<!--onChange="checkTwoHanders(this.value)"-->
 <select class="dropdown" id="dropdown_offhand" onChange="equip('offhand', this.value)"></select>
+<select class="dropdown" id="dropdown_charms" onChange="addCharm(this.value)"></select>
 </div>
 
+<!--	skill hover text	-->
 <div class="hover" style="display: none;" id="tooltip">
 	<a id="title" class="green"></a><br>
 	<a id="description"></a>
@@ -116,13 +145,14 @@
 	<a id="syn_text"></a>
 </div>
 
-</div>		<!--	gui skills	-->
+</div>		<!--	/gui skills	-->
 
 <div style="padding: 12px;">
 <input id="quests" type="checkbox" name="quests" value="1" onclick="return toggleQuests();">
 <label style="color: #aaa;" for="quests">Quests Completed</label>
 </div>
 
+<!--	difficulty radio-buttons	-->
 <div style="color: #aaa; float: left; padding: 6px; margin-bottom: 12px; margin-right: 16px;">Difficulty:</div>
 <div style="color: #aaa; float: left; padding: 6px; margin-bottom: 12px; margin-right: 16px;">
 <input id="difficulty1" type="radio" name="difficulty" value="0" onclick="return changeDifficulty(1);">
@@ -133,6 +163,7 @@
 <label style="color: #aaa;" for="difficulty">Hell</label>
 </div>
 
+<!--	class selection 	-->
 <select class="dropdown" style="float: left; padding: 6px; margin-left: 70px; margin-right: 30px;" id="dropdown_class" onChange="reset(this.value)">
 <option class="gray" disabled selected>Choose Class</option>
 <option>Amazon</option>
@@ -143,9 +174,9 @@
 <option>Paladin</option>
 <option>Sorceress</option></select
 
-</div>		<!--	gui	-->
+</div>		<!--	/gui	-->
 
-<img src="./images/inventory.png" style="opacity: 0; height: 40px;">
+<img src="./images/inventory.png" style="opacity: 0; height: 40px; position: relative; pointer-events: none;">
 
 <div class="gray" style="display: block;" id="stats">
 	<a>Attack Rating: </a><a id="ar"></a><br>
@@ -154,6 +185,10 @@
 	<a>Life: </a><a id="life"></a><br>
 	<a>Mana: </a><a id="mana"></a><br>
 </div><br>
+
+
+<--<img src="./images/stats2.png" style="opacity: 0; float: left; pointer-events: none;">-->
+
 <div style="position: absolute;">
 <div class="gray" style="position: relative; display: block; float: left; width: 170px;" id="stats2">
 	<font size="2">Fire Resistance: </font><font size="2" id="fres"></font><br>
@@ -196,11 +231,70 @@
 </div>
 </div>
 
-<img src="./images/stats2.png" style="opacity: 0;">
+<!--<img src="./images/inventory.png" style="opacity: 0.0; height: 40px; width: 869px;">-->
 
-</div>		<!--	interface	-->
+<!--	charm inventory 	-->
+<div id="gui_charms" class="inventory">
+<img usemap="#charmmap" id="charm_grid" src="./images/charm_inventory.png">
+<map id="charmmap" name="charmmap">
+<div id="h11" ondrop="drop(event,1)" ondragover="allowDrop(event,1,1)" class="H Hx1 Hy1" onmouseover="itemHover(event, 'Annihilus')" onmouseout="itemOut()"></div>
+<div id="h21" ondrop="drop(event,2)" ondragover="allowDrop(event,2,1)" class="H Hx2 Hy1"></div>
+<div id="h31" ondrop="drop(event,3)" ondragover="allowDrop(event,3,1)" class="H Hx3 Hy1"></div>
+<div id="h41" ondrop="drop(event,4)" ondragover="allowDrop(event,4,1)" class="H Hx4 Hy1"></div>
+<div id="h51" ondrop="drop(event,5)" ondragover="allowDrop(event,5,1)" class="H Hx5 Hy1"></div>
+<div id="h61" ondrop="drop(event,6)" ondragover="allowDrop(event,6,1)" class="H Hx6 Hy1"></div>
+<div id="h71" ondrop="drop(event,7)" ondragover="allowDrop(event,7,1)" class="H Hx7 Hy1"></div>
+<div id="h81" ondrop="drop(event,8)" ondragover="allowDrop(event,8,1)" class="H Hx8 Hy1"></div>
+<div id="h91" ondrop="drop(event,9)" ondragover="allowDrop(event,9,1)" class="H Hx9 Hy1"></div>
+<div id="h01" ondrop="drop(event,10)" ondragover="allowDrop(event,10,1)" class="H Hx10 Hy1"></div>
 
-</div>		<!--	main	-->
+<div id="h12" ondrop="drop(event,11)" ondragover="allowDrop(event,11,2)" class="H Hx1 Hy2"></div>
+<div id="h22" ondrop="drop(event,12)" ondragover="allowDrop(event,12,2)" class="H Hx2 Hy2"></div>
+<div id="h32" ondrop="drop(event,13)" ondragover="allowDrop(event,13,2)" class="H Hx3 Hy2"></div>
+<div id="h42" ondrop="drop(event,14)" ondragover="allowDrop(event,14,2)" class="H Hx4 Hy2"></div>
+<div id="h52" ondrop="drop(event,15)" ondragover="allowDrop(event,15,2)" class="H Hx5 Hy2"></div>
+<div id="h62" ondrop="drop(event,16)" ondragover="allowDrop(event,16,2)" class="H Hx6 Hy2"></div>
+<div id="h72" ondrop="drop(event,17)" ondragover="allowDrop(event,17,2)" class="H Hx7 Hy2"></div>
+<div id="h82" ondrop="drop(event,18)" ondragover="allowDrop(event,18,2)" class="H Hx8 Hy2"></div>
+<div id="h92" ondrop="drop(event,19)" ondragover="allowDrop(event,19,2)" class="H Hx9 Hy2"></div>
+<div id="h02" ondrop="drop(event,20)" ondragover="allowDrop(event,20,2)" class="H Hx10 Hy2"></div>
+
+<div id="h13" ondrop="drop(event,21)" ondragover="allowDrop(event,21,3)" class="H Hx1 Hy3"></div>
+<div id="h23" ondrop="drop(event,22)" ondragover="allowDrop(event,22,3)" class="H Hx2 Hy3"></div>
+<div id="h33" ondrop="drop(event,23)" ondragover="allowDrop(event,23,3)" class="H Hx3 Hy3"></div>
+<div id="h43" ondrop="drop(event,24)" ondragover="allowDrop(event,24,3)" class="H Hx4 Hy3"></div>
+<div id="h53" ondrop="drop(event,25)" ondragover="allowDrop(event,25,3)" class="H Hx5 Hy3"></div>
+<div id="h63" ondrop="drop(event,26)" ondragover="allowDrop(event,26,3)" class="H Hx6 Hy3"></div>
+<div id="h73" ondrop="drop(event,27)" ondragover="allowDrop(event,27,3)" class="H Hx7 Hy3"></div>
+<div id="h83" ondrop="drop(event,28)" ondragover="allowDrop(event,28,3)" class="H Hx8 Hy3"></div>
+<div id="h93" ondrop="drop(event,29)" ondragover="allowDrop(event,29,3)" class="H Hx9 Hy3"></div>
+<div id="h03" ondrop="drop(event,30)" ondragover="allowDrop(event,30,3)" class="H Hx10 Hy3"></div>
+
+<div id="h14" ondrop="drop(event,31)" ondragover="allowDrop(event,31,4)" class="H Hx1 Hy4"></div>
+<div id="h24" ondrop="drop(event,32)" ondragover="allowDrop(event,32,4)" class="H Hx2 Hy4"></div>
+<div id="h34" ondrop="drop(event,33)" ondragover="allowDrop(event,33,4)" class="H Hx3 Hy4"></div>
+<div id="h44" ondrop="drop(event,34)" ondragover="allowDrop(event,34,4)" class="H Hx4 Hy4"></div>
+<div id="h54" ondrop="drop(event,35)" ondragover="allowDrop(event,35,4)" class="H Hx5 Hy4"></div>
+<div id="h64" ondrop="drop(event,36)" ondragover="allowDrop(event,36,4)" class="H Hx6 Hy4"></div>
+<div id="h74" ondrop="drop(event,37)" ondragover="allowDrop(event,37,4)" class="H Hx7 Hy4"></div>
+<div id="h84" ondrop="drop(event,38)" ondragover="allowDrop(event,38,4)" class="H Hx8 Hy4"></div>
+<div id="h94" ondrop="drop(event,39)" ondragover="allowDrop(event,39,4)" class="H Hx9 Hy4"></div>
+<div id="h04" ondrop="drop(event,40)" ondragover="allowDrop(event,40,4)" class="H Hx10 Hy4"></div>
+</map>
+
+<!--	item hover text	-->
+<div class="hover" style="display: none;" id="item_stats">
+	<a id="item_name" class="green">ITEM</a><br>
+	<a id="item_stats">item values</a>
+</div>
+
+</div>
+
+<div id="charm_loader"></div>
+
+</div>		<!--	/interface	-->
+
+</div>		<!--	/main	-->
 
 </body>
 
@@ -216,6 +310,10 @@
 
 <script>
 
+
+
+//
+// ---------------------------------
 function initial_load() {
 	loadEquipment()
 	
