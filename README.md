@@ -11,11 +11,12 @@ Character Skill Planner for Diablo 2: Path of Diablo
   * stats gained from items
 * equipment selection
 * charm inventory
+* character validation
 
 ### Upcoming Plans:
 * all skill info for levels 21-60
 * more items (all uniques, etc)
-* tracking of non-stat effects (buffs, debuffs, auras)
+* tracking of miscellaneous effects (buffs, debuffs, auras, shrines)
 * breakpoints
 * mercenary info
 * custom item creation & modification
