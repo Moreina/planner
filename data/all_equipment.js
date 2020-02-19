@@ -3,7 +3,7 @@ var equipped = { helm:{name:"none"}, armor:{name:"none"}, gloves:{name:"none"}, 
 var unequipped = { name:"none", strength:0, dexterity:0, vitality:0, energy:0, life:0, mana:0, defense:0, ar:0, fRes:0, cRes:0, lRes:0, pRes:0, mRes:0, mf:0, gf:0, cdr:0, fcr:0, fbr:0, fhr:0, frw:0, ias:0, pierce:0, cblow:0, dstrike:0, cstrike:0, owounds:0, fDamage:0, cDamage:0, lDamage:0, pDamage:0, fPierce:0, cPierce:0, lPierce:0, pPierce:0, life_leech:0, mana_leech:0, life_per_hit:0, mana_per_hit:0, pdr:0, fAbsorb:0, cAbsorb:0, lAbsorb:0, pAbsorb:0, mAbsorb:0, 
 			all_skills:0, life_per_level:0, mana_per_level:0, all_attributes:0, skills_javelins:0, skills_passives:0, skills_bows:0, skills_martial:0, skills_shadow:0, skills_traps:0, skills_warcries:0, skills_masteries:0, skills_combat_barbarian:0, skills_elemental:0, skills_shapeshifting:0, skills_summoning_druid:0, skills_summoning_necromancer:0, skills_poisonBone:0, skills_curses:0, skills_offensive:0, skills_defensive:0, skills_combat_paladin:0, 
 			skills_cold:0, skills_lightning:0, skills_fire:0, life_regen:0, max_mana:0, all_res:0, defense_per_level:0, ibc:0, mana_regen:0, itd:0, knockback:0, fRes_max:0, cRes_max:0, lRes_max:0, pRes_max:0, missile_defense:0, mana_per_kill:0, damage_min:0, damage_max:0, thorns:0, slower_stam_drain:0, dstrike_per_level:0, damage_to_mana:0, heal_stam:0, light_radius:0, mDamage_reduced:0, thorns_per_level:0, 
-			fAbsorb_flat:0, cAbsorb_flat:0, lAbsorb_flat:0, mAbsorb_flat:0, slow_target:0, life_per_kill:0, damage_vs_demons:0, strength_per_level:0, mf_per_level:0, pdr_flat:0, life_per_ranged_hit:0, mana_per_ranged_hit:0, peace:0, skill_glacial_strike:0, skill_lightning_fury:0, skill_lightning_spike:0}
+			fAbsorb_flat:0, cAbsorb_flat:0, lAbsorb_flat:0, mAbsorb_flat:0, slow_target:0, life_per_kill:0, damage_vs_demons:0, strength_per_level:0, mf_per_level:0, pdr_flat:0, life_per_ranged_hit:0, mana_per_ranged_hit:0, peace:0, skill_glacial_strike:0, skill_lightning_fury:0, skill_lightning_spike:0, fcr_per_level:0, stamina_bonus:0, speed_bonus:0, defense_bonus:0, resistance_bonus:0, cstrike_bonus:0, penetrate_bonus:0, pierce_bonus:0}
 
 var equipment = {
     helm: [
@@ -75,6 +75,7 @@ var equipment = {
 	],
     weapon: [
 {name:"Weapon"},
+{name:"Spirit Crystal Sword", req_strength:43, req_level:25, all_skills:2, fcr_per_level:0.375, fhr:55, life_leech:7, mana_per_level:1, missile_defense:75, mAbsorb_flat:8, poison_damage:75, lightning_min:1, lightning_max:50, cold_min:3, cold_max:14},
 {name:"Heart of the Oak", req_dexterity:35, req_strength:41, req_level:55, all_skills:3, fcr:40, mana_leech:7, dexterity:10, life_regen:20, max_mana:15, all_res:40},
 {name:"Lightsabre", req_dexterity:136, req_strength:25, req_level:58, mana_leech:7, ias:20, itd:1, lAbsorb:15, light_radius:7, damage_min:103, damage_max:135, mDamage_min:60, mDamage_max:120, lDamage_min:1, lDamage_max:200},
 {name:"The Cranium Basher", req_strength:253, req_level:87, cBlow:75, ias:20, all_res:25, strength:25, damage_min:132, damage_max:652, damage_vs_undead:50},
@@ -90,13 +91,13 @@ var equipment = {
 {name:"Annihilus", type:"small", req_level:80, all_skills:1, all_res:20, all_attributes:20},
 {name:"Hellfire Torch", type:"large", req_level:75, all_skills:3, all_res:20, all_attributes:20, light_radius:8},
 {name:"Gheed's Fortune", type:"grand", req_level:62, gf:160, mf:40},
-{name:"Skill GC #1", type:"grand", req_level:42, skills_javelins:1, skills_martial:1, skills_warcries:1, skills_elemental:1, skills_summoning_necromancer:1, skills_defensive:1, skills_cold:1},
-{name:"Skill GC #2", type:"grand", req_level:42, skills_passives:1, skills_shadow:1, skills_masteries:1, skills_shapeshifting:1, skills_poisonBone:1, skills_offensive:1, skills_lightning:1},
-{name:"Skill GC #3", type:"grand", req_level:42, skills_bows:1, skills_traps:1, skills_combat_barbarian:1, skills_summoning_druid:1, skills_curses:1, skills_combat_paladin:1, skills_fire:1},
-{name:"Life/Mana SC", type:"small", req_level:1, life:20, mana:17},
-{name:"Res/MF SC", type:"small", req_level:1, all_res:5, mf:7},
-{name:"Life/AR/Damage SC", type:"small", req_level:1, life:20, ar:20, damage_max:3},
-{name:"Life/AR/Damage LC", type:"large", req_level:1, life:35, ar:48, damage_max:6},
-{name:"Life/AR/Damage GC", type:"large", req_level:1, life:45, ar:76, damage_max:10},
+{name:"Skill Grand Charm #1", type:"grand", req_level:42, skills_javelins:1, skills_martial:1, skills_warcries:1, skills_elemental:1, skills_summoning_necromancer:1, skills_defensive:1, skills_cold:1},
+{name:"Skill Grand Charm #2", type:"grand", req_level:42, skills_passives:1, skills_shadow:1, skills_masteries:1, skills_shapeshifting:1, skills_poisonBone:1, skills_offensive:1, skills_lightning:1},
+{name:"Skill Grand Charm #3", type:"grand", req_level:42, skills_bows:1, skills_traps:1, skills_combat_barbarian:1, skills_summoning_druid:1, skills_curses:1, skills_combat_paladin:1, skills_fire:1},
+{name:"Life/Mana Small Charm", type:"small", req_level:47, life:20, mana:17},
+{name:"Res/MF Small Charm", type:"small", req_level:47, all_res:5, mf:7},
+{name:"Life/AR/Damage Small Charm", type:"small", req_level:47, life:20, ar:20, damage_max:3},
+{name:"Life/AR/Damage Large Charm", type:"large", req_level:74, life:35, ar:48, damage_max:6},
+{name:"Life/AR/Damage Grand Charm", type:"grand", req_level:91, life:45, ar:76, damage_max:10},
 	]
 }
