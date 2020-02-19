@@ -94,10 +94,10 @@ var equipment = {
 {name:"Skill Grand Charm #1", type:"grand", req_level:42, skills_javelins:1, skills_martial:1, skills_warcries:1, skills_elemental:1, skills_summoning_necromancer:1, skills_defensive:1, skills_cold:1},
 {name:"Skill Grand Charm #2", type:"grand", req_level:42, skills_passives:1, skills_shadow:1, skills_masteries:1, skills_shapeshifting:1, skills_poisonBone:1, skills_offensive:1, skills_lightning:1},
 {name:"Skill Grand Charm #3", type:"grand", req_level:42, skills_bows:1, skills_traps:1, skills_combat_barbarian:1, skills_summoning_druid:1, skills_curses:1, skills_combat_paladin:1, skills_fire:1},
-{name:"Life/Mana Small Charm", type:"small", req_level:47, life:20, mana:17},
-{name:"Res/MF Small Charm", type:"small", req_level:47, all_res:5, mf:7},
-{name:"Life/AR/Damage Small Charm", type:"small", req_level:47, life:20, ar:20, damage_max:3},
-{name:"Life/AR/Damage Large Charm", type:"large", req_level:74, life:35, ar:48, damage_max:6},
-{name:"Life/AR/Damage Grand Charm", type:"grand", req_level:91, life:45, ar:76, damage_max:10},
+{name:"Life/Mana Small Charm", type:"small", req_level:40, life:20, mana:17},
+{name:"Res/MF Small Charm", type:"small", req_level:33, all_res:5, mf:7},
+{name:"Life/AR/Damage Small Charm", type:"small", req_level:39, life:20, ar:20, damage_max:3},
+{name:"Life/AR/Damage Large Charm", type:"large", req_level:66, life:35, ar:48, damage_max:6},
+{name:"Life/AR/Damage Grand Charm", type:"grand", req_level:83, life:45, ar:76, damage_max:10},
 	]
 }

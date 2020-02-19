@@ -38,7 +38,6 @@ function startup(choice) {
 	character.vitality_added = 0
 	character.energy_added = 0
 	
-	
 	skills = skills_all[choice]
 	character_setup = character_all[choice]
 	for (stat in character_setup) {
@@ -55,6 +54,10 @@ function startup(choice) {
 	init()
 }
 
+//
+// ---------------------------------
+function reset(name) { startup(name.toLowerCase()) }
+
 // init - initiates mouse functions
 // ---------------------------------
 function init() {
@@ -62,9 +65,9 @@ function init() {
 	var stats = ["btn_strength", "btn_dexterity", "btn_vitality", "btn_energy"];
 	document.getElementById("skillmap").onmouseout = function() {mouseOut()};
 	for (let s = 0, len = skills.length; s < len; s++) {
-		document.getElementById(skills[s].data.icon).onmouseover = function() {mouseOver(skills[s])};
-		document.getElementById(skills[s].data.icon).onclick = function() {click(event, skills[s])};
-		document.getElementById(skills[s].data.icon).oncontextmenu = function() {clickRight(event, skills[s])};
+		document.getElementById("s"+skills[s].key).onmouseover = function() {mouseOver(skills[s])};
+		document.getElementById("s"+skills[s].key).onclick = function() {click(event, skills[s])};
+		document.getElementById("s"+skills[s].key).oncontextmenu = function() {clickRight(event, skills[s])};
 	}
 	for (let t = 0; t < stats.length; t++) {
 		document.getElementById(stats[t]).onclick = function() {addStat(event, stats[t])};
@@ -110,7 +113,7 @@ function levelup(input) {
 // ---------------------------------
 function updateSkillIcons() {
 	for (let s = 0; s < skills.length; s++) {
-		var iconId = "s"+skills[s].key;
+		var iconId = "i"+skills[s].key;
 		var show = 1;
 		if (skills[s].req.length > 0) { for (let i = 0; i < skills[s].req.length; i++) {
 			if (skills[skills[s].req[i]].level == 0) { show = 0; }
@@ -126,7 +129,7 @@ function updateSkillIcons() {
 function setIconSources(className) {
 	var prefix = "./images/skills/"+className+"/";
 	for (let s = 0, len = skills.length; s < len; s++) {
-			var iconId = "s"+skills[s].key;
+			var iconId = "i"+skills[s].key;
 			document.getElementById(iconId).src = prefix+skills[s].name+".png"
 		}
 }
@@ -135,7 +138,7 @@ function setIconSources(className) {
 // ---------------------------------
 function clearIconSources() {
 	for (let s = 0; s < skills.length; s++) {
-		var iconId = "s"+skills[s].key
+		var iconId = "i"+skills[s].key
 		document.getElementById(iconId).src = "./images/skills/none.png"
 		document.getElementById(iconId).style.visibility = "hidden"
 	}
@@ -161,9 +164,7 @@ function loadItems(type, dropdown) {
 //
 // ---------------------------------
 function equip(type, val) {
-	if (equipped[type].name == val) {
-		// same item?  TODO: add full comparison
-	} else {
+	if (equipped[type].name != val) {
 		if (equipped[type].name != "none") {
 			for (old_affix in equipped[type]) {
 				if (old_affix == "all_attributes" || old_affix == "strength" || old_affix == "dexterity" || old_affix == "vitality" || old_affix == "energy") { adjustAttributes(old_affix, equipped[type][old_affix], -1) }
@@ -223,7 +224,7 @@ function addCharm(val) {
 		if (nameVal == "Hellfire Torch") { charmImage = "./images/items/charm2u.png"; }
 		if (nameVal == "Gheed's Fortune") { charmImage = "./images/items/charm3u.png"; }
 		var charmHTML = '<img id="' + val + '" src="' + charmImage + '" draggable="true" ondragstart="drag(event)" width="' + charmWidth + '" height="' + charmHeight + '" oncontextmenu="trash(event)" onmouseover="itemHover(event, this.value)" onmouseout="itemOut()">';
-		var insertion = "h01";
+		var insertion = "";
 		var space_found = 0;
 		var empty = 1;
 		var i = 0;
@@ -302,10 +303,10 @@ function resetCharms() {
 function resetSkills() {
 	for (s = 0, len = skills.length; s < len; s++) {
 		skills[s].level = 0
-		document.getElementById(skills[s].data.point).innerHTML = ""
-		document.getElementById(skills[s].data.icon).onmouseover = function() {mouseOut};
-		document.getElementById(skills[s].data.icon).onclick = function() {mouseOut};
-		document.getElementById(skills[s].data.icon).oncontextmenu = function() {mouseOut};
+		document.getElementById("p"+skills[s].key).innerHTML = ""
+		document.getElementById("s"+skills[s].key).onmouseover = function() {mouseOut};
+		document.getElementById("s"+skills[s].key).onclick = function() {mouseOut};
+		document.getElementById("s"+skills[s].key).oncontextmenu = function() {mouseOut};
 	}
 }
 
@@ -322,10 +323,6 @@ var equipmentTypes = ["helm", "armor", "gloves", "boots", "belt", "amulet", "rin
 
 //
 // ---------------------------------
-function reset(name) { startup(name.toLowerCase()) }
-
-//
-// ---------------------------------
 function changeDifficulty(diff) {
 	character.difficulty = diff
 	var penalties = ["fRes_penalty", "cRes_penalty", "lRes_penalty", "pRes_penalty", "mRes_penalty"]
@@ -335,12 +332,6 @@ function changeDifficulty(diff) {
 		else if (diff == 3) { character[penalties[p]] = 100 }
 	}
 	updateStats()	
-}
-
-//
-// ---------------------------------
-function checkTwoHanders(value) {
-	// TODO: disable offhand dropdown, or otherwise make sure equipment is valid
 }
 
 //
@@ -508,7 +499,7 @@ function updateSkillAmounts() {
 		skills[s].extra_levels += character.all_skills
 		display += skills[s].extra_levels
 		if (skills[s].level > 0) {
-			document.getElementById(skills[s].data.point).innerHTML = display
+			document.getElementById("p"+skills[s].key).innerHTML = display
 		}
 	}
 }
@@ -516,10 +507,13 @@ function updateSkillAmounts() {
 //
 // ---------------------------------
 function checkRequirements() {
-	var highest_level = 1;
-	var highest_str = 1;
-	var highest_dex = 1;
+	var highest_level = 1; var highest_str = 1; var highest_dex = 1;
 	for (type in equipped) {
+		if (type == "charms") { for (item in equipped[type]) {}
+			if (equipped[type][item].req_level > highest_level) { highest_level = equipped[type][item].req_level }
+			if (equipped[type][item].req_strength > highest_str) { highest_str = equipped[type][item].req_strength }
+			if (equipped[type][item].req_dexterity > highest_dex) { highest_dex = equipped[type][item].req_dexterity }
+		}
 		if (equipped[type].req_level > highest_level) { highest_level = equipped[type].req_level }
 		if (equipped[type].req_strength > highest_str) { highest_str = equipped[type].req_strength }
 		if (equipped[type].req_dexterity > highest_dex) { highest_dex = equipped[type].req_dexterity }
@@ -527,9 +521,15 @@ function checkRequirements() {
 	character.req_level = highest_level
 	character.req_strength = highest_str
 	character.req_dexterity = highest_dex
-	if (character.req_level > character.level) { document.getElementById("level").style = "position: absolute; text-align: center; color: #ff8080; width: 30px; left: 23px; top: 12px;" } else { document.getElementById("level").style = "position: absolute; text-align: center; color: white; width: 30px; left: 23px; top: 12px;" }
-	if (character.req_strength > (character.strength+character.all_attributes)) { document.getElementById("strength").style = "position: absolute; text-align: center; color: #ff8080; width: 30px; left: 85px; top: 100px;" } else { document.getElementById("strength").style = "position: absolute; text-align: center; color: white; width: 30px; left: 85px; top: 100px;" }
-	if (character.req_dexterity > (character.dexterity+character.all_attributes)) { document.getElementById("dexterity").style = "position: absolute; text-align: center; color: #ff8080; width: 30px; left: 85px; top: 161px;" } else { document.getElementById("dexterity").style = "position: absolute; text-align: center; color: white; width: 30px; left: 85px; top: 161px;" }
+	if (character.req_level > character.level) {
+		document.getElementById("level").style.color = "#ff8080" }
+	else { document.getElementById("level").style.color = "white" }
+	if (character.req_strength > (character.strength+character.all_attributes+(character.level*character.strength_per_level))) {
+		document.getElementById("strength").style.color = "#ff8080" }
+	else { document.getElementById("strength").style.color = "white" }
+	if (character.req_dexterity > (character.dexterity+character.all_attributes)) {
+		document.getElementById("dexterity").style.color = "#ff8080" }
+	else { document.getElementById("dexterity").style.color = "white" }
 	for (let s = 0; s < skills.length; s++) {
 		var req_met = 1;
 		if (skills[s].reqlvl > character.level) { req_met = 0 }
@@ -537,10 +537,11 @@ function checkRequirements() {
 			if (skills[skills[s].req[r]].level == 0) { req_met = 0 }
 		} }
 		if (req_met == 0) {
-			document.getElementById(skills[s].data.point).style = "color: #ff8080";
-		} else {
-			document.getElementById(skills[s].data.point).style = "color: white";
-		}
+			document.getElementById("p"+skills[s].key).style.color = "#ff8080"; }
+		else if (skills[s].extra_levels > 0) {
+			document.getElementById("p"+skills[s].key).style.color = "#8080ff"; }
+		else { document.getElementById("p"+skills[s].key).style.color = "white"; }
+		if (skills[s].level > 0) { document.getElementById("p"+skills[s].key).innerHTML = (skills[s].level + skills[s].extra_levels); }
 	}
 }
 
@@ -558,7 +559,7 @@ function click(event, skill) {
 		skill.level += levels
 		display += skill.level
 		display += skill.extra_levels
-		if (skill.level > 0) { document.getElementById(skill.data.point).innerHTML = display }
+		if (skill.level > 0) { document.getElementById("p"+skill.key).innerHTML = display }
 		mouseOver(skill)
 		if (skill.level > old_level) {
 			if (levels <= character.skillpoints) {
@@ -579,6 +580,7 @@ function click(event, skill) {
 			updateSecondaryStats()
 		}
 	}
+	showBaseLevels(skill)
 }
 
 //
@@ -678,9 +680,9 @@ function clickRight(event, skill) {
 		display += skill.level
 		display += skill.extra_levels
 		if (skill.level == 0) {
-			document.getElementById(skill.data.point).innerHTML = ""
+			document.getElementById("p"+skill.key).innerHTML = ""
 		} else {
-			document.getElementById(skill.data.point).innerHTML = display
+			document.getElementById("p"+skill.key).innerHTML = display
 		}
 		mouseOver(skill)
 		if (skill.level < old_level) {
@@ -693,6 +695,7 @@ function clickRight(event, skill) {
 			updateSecondaryStats()
 		}
 	}
+	showBaseLevels(skill)
 }
 
 //
@@ -757,6 +760,16 @@ function mouseOver(skill) {
 	if (skill.level == 0 || (skill.level > 0 && skill.data.index[0] > 0)) {
 		document.getElementById("description").innerHTML = skill.description + "<br>"
 	}
+	showBaseLevels(skill)
+}
+
+//
+// ---------------------------------
+function showBaseLevels (skill) {
+	if (skill.extra_levels > 0 && skill.level > 0) {
+		document.getElementById("p"+skill.key).style.color = "#999999";
+		document.getElementById("p"+skill.key).innerHTML = skill.level;
+	}
 }
 
 //
@@ -782,6 +795,7 @@ function round(num) {
 // ---------------------------------
 function mouseOut() {
 	document.getElementById("tooltip").style.display="none"
+	checkRequirements()
 }
 
 //
@@ -878,6 +892,7 @@ function trash(ev) {
 	updateSecondaryStats()
 }
 
+// charm inventory
 var inv = [
 {onpickup:"?",pickup_x:0,pickup_y:0,empty:1,stored:"",charms:[],in:["",0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},
 {x:1,y:1,empty:1,id:"h11"},
