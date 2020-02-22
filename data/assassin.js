@@ -26,6 +26,7 @@ var character_assassin = {class_name:"Assassin", strength:20, dexterity:20, vita
 	if (skill.name == "Death Sentry" && elem == 0) { result = 5 + Math.floor(skills[20].level / 3) }
 	if (skill.name == "Death Sentry" && elem < 4 && elem > 1) { result = ((1 + (0.15*skills[26].level)) * skill.data.values[elem][lvl]) }
 	if (skill.name == "Blade Shield" && elem < 4 && elem > 1) { result = ((1 + (0.05*skills[22].level + 0.05*skills[25].level)) * skill.data.values[elem][lvl]) }
+	
 	return result
 	}
 };

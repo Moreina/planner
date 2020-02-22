@@ -157,8 +157,12 @@
 
 </div>		<!--	/gui skills	-->
 
-
 <!--	selection options	-->
+<div style="width: 869px;">
+<div style="margin-right: 240px; width: 160px; float: right;">
+<input id="coupling" type="checkbox" name="coupling" value="1" onclick="return toggleCoupling();" checked>
+<label style="color: #aaa;" for="coupling">Skill-Level Coupling</label>
+</div>
 <div style="width: 350px; margin-bottom: 32px">
 <div style="margin-left: 12px; margin-bottom: 1px; width: 200px">
 <input id="quests" type="checkbox" name="quests" onclick="return toggleQuests();">
@@ -176,6 +180,8 @@
 <label style="color: #aaa;" for="difficulty">Nightmare</label>
 <input id="difficulty3" type="radio" name="difficulty" onclick="return changeDifficulty(3);" checked>
 <label style="color: #aaa;" for="difficulty">Hell</label>
+</div>
+</div>
 </div>
 
 </div>		<!--	/gui	-->

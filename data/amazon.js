@@ -7,14 +7,6 @@ var character_amazon = {class_name:"Amazon", strength:20, dexterity:25, vitality
 	if (skill.name == "Plague Javelin" && elem > 0 && elem < 3) { result = ((1 + (0.22*skills[2].level)) * (1+character.pDamage/100) * skill.data.values[elem][lvl]) }
 	if (skill.name == "Decoy" && elem == 0) { result = Math.max(1, skills[22].level) }
 	if (skill.name == "Decoy" && elem < 3 && elem > 0) { result = 1 }
-	// passive effects
-	if (skill.name == "Lethal Strike") { if (skill.level > 0) {character.cstrike_bonus = skill.data.values[0][skill.level+skill.extra_levels]} else {character.cstrike_bonus = 0} }
-	if (skill.name == "Penetrate") { if (skill.level > 0) {character.penetrate_bonus = skill.data.values[0][skill.level+skill.extra_levels]} else {character.penetrate_bonus = 0} }
-	if (skill.name == "Pierce") { if (skill.level > 0) {character.pierce_bonus = skill.data.values[0][skill.level+skill.extra_levels]} else {character.pierce_bonus = 0} }
-	// is character moving?
-	//if (skill.name == "Dodge") {character.dodge_bonus = skill.data.values[0][skill.level+skill.extra_levels]}
-	//if (skill.name == "Avoid") {character.avoid_bonus = skill.data.values[0][skill.level+skill.extra_levels]}
-	//if (skill.name == "Evade") {character.evade_bonus = skill.data.values[0][skill.level+skill.extra_levels]}
 	
 	if (skill.name == "Cold Arrow" && elem > 0 && elem < 3) { result = ((1 + (0.12*skills[24].level)) * (1+character.cDamage/100) * skill.data.values[elem][lvl]) }
 	if (skill.name == "Ice Arrow" && elem < 2) { result = ((1 + (0.10*skills[20].level)) * (1+character.cDamage/100) * skill.data.values[elem][lvl]) }

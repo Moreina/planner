@@ -17,11 +17,7 @@ var character_barbarian = {class_name:"Barbarian", strength:30, dexterity:20, vi
 	if (skill.name == "Bash" && elem == 3) { result = ((1 + (0.10*skills[21].level)) * skill.data.values[elem][lvl]) }
 	if (skill.name == "Leap Attack" && elem == 0) { result = (20*skills[22].level + skill.data.values[elem][lvl]) }
 	if (skill.name == "Ethereal Throw" && elem < 2) { result = ((1 + (0.04*skills[23].level + 0.04*skills[24].level)) * skill.data.values[elem][lvl]) }
-	// passive effects
-	if (skill.name == "Increased Stamina") { if (skill.level > 0) {character.stamina_bonus = skill.data.values[0][skill.level+skill.extra_levels]} else {character.stamina_bonus = 0} }
-	if (skill.name == "Increased Speed") { if (skill.level > 0) {character.speed_bonus = skill.data.values[0][skill.level+skill.extra_levels]} else {character.speed_bonus = 0} }
-	if (skill.name == "Iron Skin") { if (skill.level > 0) {character.defense_bonus = skill.data.values[0][skill.level+skill.extra_levels]} else {character.defense_bonus = 0} }
-	if (skill.name == "Natural Resistance") { if (skill.level > 0) {character.resistance_bonus = skill.data.values[0][skill.level+skill.extra_levels]} else {character.resistance_bonus = 0} }
+
 	return result
 	}
 };

@@ -50,7 +50,6 @@ var equipment = {
 {name:"Gore Rider", req_strength:94, req_level:47, defense:162, frw:30, owounds:10, cblow:15, dstrike:15, stamina:20},
 {name:"Shadow Dancer", req_strength:167, req_level:71, defense:144, skills_shadow:2, frw:30, fhr:30, dexterity:25},
 {name:"Aldur's Advance", req_strength:95, req_level:45, defense:47, frw:40, stamina:180, damage_to_mana:10, heal_stam:32, life:50, fRes:50},
-//{name:"debug +19", defense:3000, all_skills:19, mana:600, life:600, all_res:100, fcr:100, frw:30},
 	],
     belt: [
 {name:"Belt"},
@@ -104,8 +103,8 @@ var equipment = {
 {name:"Heart of the Oak Flail", req_dexterity:35, req_strength:41, req_level:55, type:"mace", all_skills:3, fcr:40, mana_leech:7, dexterity:10, life_regen:20, max_mana:15, all_res:40, max_life:8, damage_min:1, damage_max:24, cDamage_min:3, cDamage_max:14},
 {name:"Lightsabre", req_dexterity:136, req_strength:25, req_level:58, type:"sword", mana_leech:7, ias:20, itd:1, lAbsorb:15, light_radius:7, damage_min:103, damage_max:135, mDamage_min:60, mDamage_max:120, lDamage_min:1, lDamage_max:200},
 {name:"Grief Phase Blade", req_dexterity:136, req_strength:25, req_level:59, type:"sword", ias:40, itd:1, target_defense:-25, enemy_pRes:-25, dstrike:20, pmh:1, mana_per_kill:2, life_per_kill:15, fDamage_min:5, fDamage_max:30, min_damage_per_level:3.375, max_damage_per_level:3.625},
-//{name:"The Cranium Basher", req_strength:253, req_level:87, cblow:75, ias:20, all_res:25, strength:25, damage_min:132, damage_max:652, damage_vs_undead:50},
-//{name:"Windforce", req_dexterity:167, req_strength:134, req_level:73, ias:20, mana_leech:8, strength:10, dexterity:5, knockback:1, damage_min:35, damage_max:241, damage_max_per_level:3.125, heal_stam:30},
+//{name:"The Cranium Basher", req_strength:253, req_level:87, type:"mace", cblow:75, ias:20, all_res:25, strength:25, damage_min:132, damage_max:652, damage_vs_undead:50},
+//{name:"Windforce", req_dexterity:167, req_strength:134, req_level:73, type:"bow", ias:20, mana_leech:8, strength:10, dexterity:5, knockback:1, damage_min:35, damage_max:241, damage_max_per_level:3.125, heal_stam:30},
 	],
     offhand: [
 {name:"Offhand"},
@@ -128,5 +127,6 @@ var equipment = {
 {name:"Life/AR/Damage Small Charm", type:"small", req_level:39, life:20, ar:20, damage_max:3},
 {name:"Life/AR/Damage Large Charm", type:"large", req_level:66, life:35, ar:48, damage_max:6},
 {name:"Life/AR/Damage Grand Charm", type:"grand", req_level:83, life:45, ar:76, damage_max:10},
+{name:"+20 skills", req_level:100, all_skills:20},
 	]
 }

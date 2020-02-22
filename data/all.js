@@ -4,7 +4,7 @@ character = {class_name:"", strength:0, dexterity:0, vitality:0, energy:0, life:
 /* main stats		*/	level:1, skillpoints:0, statpoints:0, quests_completed:-1, running:-1, difficulty:3, fRes_max:75, cRes_max:75, lRes_max:75, pRes_max:75, mRes_max:75, fRes_penalty:100, cRes_penalty:100, lRes_penalty:100, pRes_penalty:100, mRes_penalty:100, fRes:0, cRes:0, lRes:0, pRes:0, mRes:0, strength_added:0, dexterity_added:0, vitality_added:0, energy_added:0,
 /* skill tabs		*/	skills_javelins:0, skills_passives:0, skills_bows:0, skills_martial:0, skills_shadow:0, skills_traps:0, skills_warcries:0, skills_masteries:0, skills_combat_barbarian:0, skills_elemental:0, skills_shapeshifting:0, skills_summoning_druid:0, skills_summoning_necromancer:0, skills_poisonBone:0, skills_curses:0, skills_offensive:0, skills_defensive:0, skills_combat_paladin:0, skills_cold:0, skills_lightning:0, skills_fire:0,
 /* skills		*/	skill_lightning_fury:0, skill_lightning_strike:0, skill_glacial_spike:0,
-/* skill bonuses	*/	stamina_bonus:0, speed_bonus:0, defense_bonus:0, resistance_bonus:0, cstrike_bonus:0, penetrate_bonus:0, pierce_bonus:0, damage_bonus:0, fRes_bonus:0, cRes_bonus:0, lRes_bonus:0,
+/* skill bonuses	*/	stamina_bonus:0, speed_bonus:0, defense_bonus:0, resistance_bonus:0, attack_bonus:0, cstrike_bonus:0, ar_bonus:0, pierce_bonus:0, damage_bonus:0, fRes_bonus:0, cRes_bonus:0, lRes_bonus:0, edged_bonus:[0,0,0], pole_bonus:[0,0,0], blunt_bonus:[0,0,0], thrown_bonus:[0,0,0], claw_bonus:[0,0,0], mana_regen_bonus:0, cPierce_bonus:0, lPierce_bonus:0, fPierce_bonus:0, cDamage_bonus:0, lDamage_bonus:0, fDamage_bonus:0,
 /* stats		*/	cdr:0, fcr:0, fbr:0, fhr:0, frw:0, ias:0, pierce:0, cblow:0, dstrike:0, cstrike:0, owounds:0, fDamage:0, cDamage:0, lDamage:0, pDamage:0, fPierce:0, cPierce:0, lPierce:0, pPierce:0, pdr:0, damage_reduced:0, mDamage_reduced:0, mf:0, gf:0, life_leech:0, mana_leech:0, life_per_hit:0, mana_per_hit:0, life_per_ranged_hit:0, mana_per_ranged_hit:0, fAbsorb:0, cAbsorb:0, lAbsorb:0, pAbsorb:0, mAbsorb:0, fAbsorb_flat:0, cAbsorb_flat:0, lAbsorb_flat:0, mAbsorb_flat:0, 
 /* stats (indirect)	*/	all_skills:0, all_attributes:0, all_res:0, velocity:0, damage_bonus:0, max_life:0, max_mana:0, life_per_level:0, mana_per_level:0, defense_per_level:0, strength_per_level:0, mf_per_level:0, fAbsorb_per_level:0, fcr_per_level:0, dstrike_per_level:0,
 /* attack damage	*/	damage_min:0, damage_max:0, fDamage_min:0, fDamage_max:0, cDamage_min:0, cDamage_max:0, lDamage_min:0, lDamage_max:0, pDamage_min:0, pDamage_max:0, mDamage_min:0, mDamage_max:0, min_damage_per_level:0, max_damage_per_level:0,
@@ -16,9 +16,9 @@ character = {class_name:"", strength:0, dexterity:0, vitality:0, energy:0, life:
 	}
 };
 
-gear = {req_level:0, req_strength:0, req_dexterity:0}
+var settings = {coupling:1}
+var gear = {req_level:0, req_strength:0, req_dexterity:0};
 var MAX = 20;	// Skill Hardpoints
-var charm_img = {prefix:"./images/items/", small:["charm1_paw.png","charm1_disc.png","charm1_coin.png"], large:["charm2_page.png","charm2_horn.png","charm2_lantern.png"], grand:["charm3_lace.png","charm3_eye.png","charm3_monster.png"]}
 
 // Charm Inventory
 var inv = [
@@ -50,22 +50,12 @@ function startup(choice) {
 	character.dexterity_added = 0
 	character.vitality_added = 0
 	character.energy_added = 0
-	character.cstrike_bonus = 0
-	character.penetrate_bonus = 0
-	character.pierce_bonus = 0
-	character.fRes_bonus = 0
-	character.cRes_bonus = 0
-	character.lRes_bonus = 0
-	character.stamina_bonus = 0
-	character.speed_bonus = 0
-	character.defense_bonus = 0
 	character.resistance_bonus = 0
 	
 	skills = skills_all[choice]
 	character_setup = character_all[choice]
 	for (stat in character_setup) {
-		character[stat] = character_setup[stat]
-	}
+	for (stat in character_setup) { character[stat] = character_setup[stat] }
 	setIconSources(choice)
 	updateSkillIcons()
 	character.skillpoints = 0
@@ -258,6 +248,7 @@ function resetCharms() {
 // val: the name of the charm
 // ---------------------------------
 function addCharm(val) {
+	var charm_img = {prefix:"./images/items/", small:["charm1_paw.png","charm1_disc.png","charm1_coin.png"], large:["charm2_page.png","charm2_horn.png","charm2_lantern.png"], grand:["charm3_lace.png","charm3_eye.png","charm3_monster.png"]};
 	var charmImage = "";
 	var charmHeight = "";
 	var charmWidth = "29";
@@ -271,9 +262,7 @@ function addCharm(val) {
 	}
 	var r = Math.floor((Math.random() * 3));
 	if (type == "grand") { charmHeight = "88"; charmImage = charm_img.prefix+charm_img.grand[r]; charm_y = 3; }
-	if (type == "large") { charmHeight = "59"; charmImage = charm_img.prefix+charm_img.large[r]; charm_y = 2; }
-	if (type == "small") { charmHeight = "29"; charmImage = charm_img.prefix+charm_img.small[r]; charm_y = 1; }
-	
+	else if (type == "large") { charmHeight = "59"; charmImage = charm_img.prefix+charm_img.large[r]; charm_y = 2; }
 	var allow = 1;
 	for (let c = 1; c <= inv[0].in.length; c++) {
 		if (inv[0].in[c] == val) {
@@ -400,7 +389,7 @@ function changeDifficulty(diff) {
 function adjustAttributes(attribute, value, input) {
 	var points = value*input
 	if (attribute == "strength" || attribute == "all_attributes") {
-		// TODO: add to melee attack damage
+		// ?
 	}
 	if (attribute == "dexterity" || attribute == "all_attributes") {
 		character.ar += (points*character.gain_dexterity[0])
@@ -418,17 +407,46 @@ function adjustAttributes(attribute, value, input) {
 // Updates stats shown the default (original D2) stat page
 // ---------------------------------
 function updateStats() {
-	var phys_min = Math.round((1+((character.strength+character.all_attributes+character.level*character.strength_per_level)/100))*(character.level*character.min_damage_per_level+character.damage_min),0);
-	var phys_max = Math.round((1+((character.strength+character.all_attributes+character.level*character.strength_per_level)/100))*(character.level*character.max_damage_per_level+character.damage_max),0);
+	var phys_min = ((1+((character.strength+character.all_attributes+character.level*character.strength_per_level)/100))*(character.level*character.min_damage_per_level+character.damage_min));
+	var phys_max = ((1+((character.strength+character.all_attributes+character.level*character.strength_per_level)/100))*(character.level*character.max_damage_per_level+character.damage_max));
+	var weapon_bonus = 0;
+	if (character.class_name == "Barbarian" || character.class_name == "Assassin") {
+		if (equipped.weapon.type == "sword" || equipped.weapon.type == "axe" || equipped.weapon.type == "dagger") {
+			weapon_bonus = character.edged_bonus[0]
+			character.ar_bonus = character.edged_bonus[1]
+			character.cstrike_bonus = character.edged_bonus[2]
+		} else if (equipped.weapon.type == "polearm" || equipped.weapon.type == "spear") {
+			weapon_bonus = character.pole_bonus[0]
+			character.ar_bonus = character.pole_bonus[1]
+			character.cstrike_bonus = character.pole_bonus[2]
+		} else if (equipped.weapon.type == "mace" || equipped.weapon.type == "scepter" || equipped.weapon.type == "staff") {
+			weapon_bonus = character.blunt_bonus[0]
+			character.ar_bonus = character.blunt_bonus[1]
+			character.cstrike_bonus = character.blunt_bonus[2]
+		} else if (equipped.weapon.type == "thrown") {
+			weapon_bonus = character.thrown_bonus[0]
+			character.ar_bonus = character.thrown_bonus[1]
+			character.pierce_bonus = character.thrown_bonus[2]
+		} else if (equipped.weapon.type == "claw") {
+			weapon_bonus = character.claw_bonus[0]
+			character.ar_bonus = character.claw_bonus[1]
+			character.cstrike_bonus = character.claw_bonus[2]
+		} else {
+			weapon_bonus = 0
+			character.ar_bonus = 0
+			character.cstrike_bonus = 0
+			character.pierce_bonus = 0
+		}
+	}
 	
-	document.getElementById("basic_attack").innerHTML = (phys_min + character.fDamage_min + character.cDamage_min + character.lDamage_min + character.pDamage_min + character.mDamage_min) + "-" + (phys_max + character.fDamage_max + character.cDamage_max + character.lDamage_max + character.pDamage_max + character.mDamage_max);
+	document.getElementById("basic_attack").innerHTML = Math.floor((1+character.damage_bonus/100)*(1+weapon_bonus/100)*(phys_min + character.fDamage_min + character.cDamage_min + character.lDamage_min + character.pDamage_min + character.mDamage_min)) + "-" + Math.floor((1+character.damage_bonus/100)*(1+weapon_bonus/100)*(phys_max + character.fDamage_max + character.cDamage_max + character.lDamage_max + character.pDamage_max + character.mDamage_max));
 	document.getElementById("strength").innerHTML = character.strength + character.all_attributes + Math.floor(character.level*character.strength_per_level)
 	document.getElementById("dexterity").innerHTML = character.dexterity + character.all_attributes
 	document.getElementById("vitality").innerHTML = character.vitality + character.all_attributes
 	document.getElementById("energy").innerHTML = character.energy + character.all_attributes
 	if (character.running > 0) { document.getElementById("defense").innerHTML = "N/A" }
 	else { document.getElementById("defense").innerHTML = Math.floor((character.defense + character.level*character.defense_per_level) * (1 + character.defense_bonus/100)) }
-	document.getElementById("ar").innerHTML = Math.floor(character.ar * (1 + character.penetrate_bonus/100))
+	document.getElementById("ar").innerHTML = Math.floor(character.ar * (1 + character.ar_bonus/100))
 	document.getElementById("stamina").innerHTML = Math.floor(character.stamina * (1+character.stamina_bonus/100))
 	document.getElementById("life").innerHTML = Math.floor((character.life + character.level*character.life_per_level) * (1 + character.max_life/100))
 	document.getElementById("mana").innerHTML = Math.floor((character.mana + character.level*character.mana_per_level) * (1 + character.max_mana/100))
@@ -475,7 +493,7 @@ function updateSecondaryStats() {
 	document.getElementById("fcr").innerHTML = character.fcr + Math.floor(character.level*character.fcr_per_level)
 	document.getElementById("fbr").innerHTML = character.fbr
 	document.getElementById("fhr").innerHTML = character.fhr
-	document.getElementById("frw").innerHTML = Math.round((character.frw + character.speed_bonus) * (1+character.velocity/100),0)
+	document.getElementById("frw").innerHTML = Math.floor((character.frw + character.speed_bonus) * (1+character.velocity/100))
 	document.getElementById("ias").innerHTML = character.ias
 	
 	document.getElementById("life_leech").innerHTML = character.life_leech
@@ -483,13 +501,13 @@ function updateSecondaryStats() {
 	document.getElementById("life_per_hit").innerHTML = character.life_per_hit + "m , " + character.life_per_ranged_hit + "r"
 	document.getElementById("mana_per_hit").innerHTML = character.mana_per_hit + "m , " + character.mana_per_ranged_hit + "r"
 	
-	document.getElementById("fdamage").innerHTML = character.fDamage
-	document.getElementById("cdamage").innerHTML = character.cDamage
-	document.getElementById("ldamage").innerHTML = character.lDamage
+	document.getElementById("fdamage").innerHTML = character.fDamage + character.fDamage_bonus
+	document.getElementById("cdamage").innerHTML = character.cDamage + character.cDamage_bonus
+	document.getElementById("ldamage").innerHTML = character.lDamage + character.lDamage_bonus
 	document.getElementById("pdamage").innerHTML = character.pDamage
-	document.getElementById("fpierce").innerHTML = character.fPierce
-	document.getElementById("cpierce").innerHTML = character.cPierce
-	document.getElementById("lpierce").innerHTML = character.lPierce
+	document.getElementById("fpierce").innerHTML = character.fPierce + character.fPierce_bonus
+	document.getElementById("cpierce").innerHTML = character.cPierce + character.cPierce_bonus
+	document.getElementById("lpierce").innerHTML = character.lPierce + character.lPierce_bonus
 	document.getElementById("ppierce").innerHTML = character.pPierce
 	
 	document.getElementById("pierce").innerHTML = character.pierce + character.pierce_bonus
@@ -509,7 +527,7 @@ function updateSecondaryStats() {
 	document.getElementById("life_per_kill").innerHTML = character.life_per_kill
 	document.getElementById("mana_per_kill").innerHTML = character.mana_per_kill
 	document.getElementById("life_regen").innerHTML = character.life_regen
-	document.getElementById("mana_regen").innerHTML = character.mana_regen
+	document.getElementById("mana_regen").innerHTML = character.mana_regen + character.mana_regen_bonus
 	
 	document.getElementById("damage_to_mana").innerHTML = character.damage_to_mana
 	if (character.running > 0) { document.getElementById("missile_defense").innerHTML = "N/A" }
@@ -527,6 +545,8 @@ function updateSecondaryStats() {
 	document.getElementById("slower_stam_drain").innerHTML = character.slower_stam_drain
 	document.getElementById("heal_stam").innerHTML = character.heal_stam
 	document.getElementById("ibc").innerHTML = character.ibc	*/
+	//updateSkillIcons()
+	//checkRequirements()
 }
 
 // Updates skill levels
@@ -571,6 +591,67 @@ function updateSkillAmounts() {
 		if (skills[s].level > 0) {
 			document.getElementById("p"+skills[s].key).innerHTML = display
 		}
+	}
+	updateSkillPassives(character.class_name)
+}
+
+// Updates passive skills
+// className: the character class
+// ---------------------------------
+function updateSkillPassives(className) {
+	if (className == "Amazon") {
+		if (skills[11].level > 0) { character.cstrike_bonus = ~~skills[11].data.values[0][skills[11].level+skills[11].extra_levels]; } else { character.cstrike_bonus = 0 }
+		if (skills[15].level > 0) { character.ar_bonus = ~~skills[15].data.values[0][skills[15].level+skills[15].extra_levels]; } else { character.ar_bonus = 0 }
+		if (skills[19].level > 0) { character.pierce_bonus = ~~skills[19].data.values[0][skills[19].level+skills[19].extra_levels]; } else { character.pierce_bonus = 0 }
+		//if (skills[13].level > 0) { character.dodge_bonus = ~~skills[13].data.values[0][skills[13].level+skills[13].extra_levels]; } else { character.dodge_bonus = 0 }
+		//if (skills[14].level > 0) { character.avoid_bonus = ~~skills[14].data.values[0][skills[14].level+skills[14].extra_levels]; } else { character.avoid_bonus = 0 }
+		//if (skills[16].level > 0) { character.evade_bonus = ~~skills[16].data.values[0][skills[16].level+skills[16].extra_levels]; } else { character.evade_bonus = 0 }
+	} else if (className == "Assassin") {
+		if (skills[9].level > 0) {
+			character.claw_bonus[0] = ~~skills[9].data.values[0][skills[9].level+skills[9].extra_levels];
+			character.claw_bonus[1] = ~~skills[9].data.values[1][skills[9].level+skills[9].extra_levels];
+			character.claw_bonus[2] = ~~skills[9].data.values[2][skills[9].level+skills[9].extra_levels];
+		} else { character.claw_bonus = [0,0,0] }
+	} else if (className == "Barbarian") {
+		if (skills[10].level > 0) {
+			character.edged_bonus[0] = ~~skills[10].data.values[0][skills[10].level+skills[10].extra_levels];
+			character.edged_bonus[1] = ~~skills[10].data.values[1][skills[10].level+skills[10].extra_levels];
+			character.edged_bonus[2] = ~~skills[10].data.values[2][skills[10].level+skills[10].extra_levels];
+		} else { character.edged_bonus = [0,0,0] }
+		if (skills[11].level > 0) {
+			character.pole_bonus[0] = ~~skills[11].data.values[0][skills[11].level+skills[11].extra_levels];
+			character.pole_bonus[1] = ~~skills[11].data.values[1][skills[11].level+skills[11].extra_levels];
+			character.pole_bonus[2] = ~~skills[11].data.values[2][skills[11].level+skills[11].extra_levels];
+		} else { character.pole_bonus = [0,0,0] }
+		if (skills[12].level > 0) {
+			character.blunt_bonus[0] = ~~skills[12].data.values[0][skills[12].level+skills[12].extra_levels];
+			character.blunt_bonus[1] = ~~skills[12].data.values[1][skills[12].level+skills[12].extra_levels];
+			character.blunt_bonus[2] = ~~skills[12].data.values[2][skills[12].level+skills[12].extra_levels];
+		} else { character.blunt_bonus = [0,0,0] }
+		if (skills[13].level > 0) {
+			character.thrown_bonus[0] = ~~skills[13].data.values[0][skills[13].level+skills[13].extra_levels];
+			character.thrown_bonus[1] = ~~skills[13].data.values[1][skills[13].level+skills[13].extra_levels];
+			character.thrown_bonus[2] = ~~skills[13].data.values[2][skills[13].level+skills[13].extra_levels];
+		} else { character.thrown_bonus = [0,0,0] }
+		if (skills[14].level > 0) { character.stamina_bonus = ~~skills[14].data.values[0][skills[14].level+skills[14].extra_levels]; } else { character.stamina_bonus = 0 }
+		if (skills[15].level > 0) { character.defense_bonus = ~~skills[15].data.values[0][skills[15].level+skills[15].extra_levels]; } else { character.defense_bonus = 0 }
+		if (skills[16].level > 0) { character.speed_bonus = ~~skills[16].data.values[0][skills[16].level+skills[16].extra_levels]; } else { character.speed_bonus = 0 }
+		if (skills[17].level > 0) { character.resistance_bonus = ~~skills[17].data.values[0][skills[17].level+skills[17].extra_levels]; } else { character.resistance_bonus = 0 }
+	} else if (className == "Sorceress") {
+		if (skills[23].level > 0 || skills[28].level > 0) { character.ar_bonus = ~~skills[23].data.values[0][skills[23].level+skills[23].extra_levels] + ~~skills[28].data.values[3][skills[28].level+skills[28].extra_levels]; } else { character.ar_bonus = 0; }
+		if (skills[13].level > 0) { character.mana_regen_bonus = ~~skill.data.values[1][skills[23].level+skills[23].extra_levels]; } else { character.mana_regen_bonus = 0; }
+		if (skills[10].level > 0) {
+			character.cPierce_bonus = ~~skill.data.values[0][skills[10].level+skills[10].extra_levels];
+			character.cDamage_bonus = ~~skill.data.values[1][skills[10].level+skills[10].extra_levels];
+		} else { character.cPierce_bonus = 0; character.cDamage_bonus = 0; }
+		if (skills[20].level > 0) {
+			character.lPierce_bonus = ~~skill.data.values[0][skills[20].level+skills[20].extra_levels];
+			character.lDamage_bonus = ~~skill.data.values[1][skills[20].level+skills[20].extra_levels];
+		} else { character.lPierce_bonus = 0; character.lDamage_bonus = 0; }
+		if (skills[30].level > 0) {
+			character.fPierce_bonus = ~~skill.data.values[0][skills[30].level+skills[30].extra_levels];
+			character.fDamage_bonus = ~~skill.data.values[1][skills[30].level+skills[30].extra_levels];
+		} else { character.fPierce_bonus = 0; character.fDamage_bonus = 0; }
 	}
 }
 
@@ -698,6 +779,7 @@ function skillUp(event, skill) {
 	if (event.ctrlKey) { levels = 20 }
 	if (old_level+levels > MAX) { levels = MAX-old_level }
 	if (levels > (99-character.level) + character.skillpoints) { levels = (99-(character.level) + character.skillpoints) }
+	if (settings.coupling == 0 && levels > character.skillpoints) { levels = character.skillpoints }
 	if (character.level <= 99-levels || character.skillpoints >= levels) {
 		skill.level += levels
 		display += skill.level
@@ -743,32 +825,37 @@ function skillDown(event, skill) {
 	if (levels > maxdown) { levels = maxdown }
 	if (character.quests_completed < 0 && levels > character.statpoints/5) { levels = Math.floor(character.statpoints/5) }
 	if (character.quests_completed > 0 && levels > maxstatdown/5) { levels = Math.floor(maxstatdown/5) }
-	if (levels <= maxdown && 5*levels <= maxstatdown) {
-		if (character.quests_completed > 0 && character.skillpoints < 12) {
-			if (levels_temp > levels) { levels_temp = levels }
-			skill.level -= levels_temp
-			character.skillpoints += levels_temp
-			levels -= levels_temp
+	if (settings.coupling == 1) {
+		if (levels <= maxdown && 5*levels <= maxstatdown) {
+			if (character.quests_completed > 0 && character.skillpoints < 12) {
+				if (levels_temp > levels) { levels_temp = levels }
+				skill.level -= levels_temp
+				character.skillpoints += levels_temp
+				levels -= levels_temp
+			}
+			skill.level -= levels
+			if (skill.level < old_level) {
+				character.level -= levels
+				character.statpoints -= 5*levels
+				character.life -= (character.levelup_life*levels)
+				character.stamina -= (character.levelup_stamina*levels)
+				character.mana -= (character.levelup_mana*levels)
+			}
 		}
+	} else {
 		skill.level -= levels
-		display += skill.level
-		display += skill.extra_levels
-		if (skill.level == 0) {
-			document.getElementById("p"+skill.key).innerHTML = ""
-		} else {
-			document.getElementById("p"+skill.key).innerHTML = display
-		}
-		skillHover(skill)
-		if (skill.level < old_level) {
-			character.level -= levels
-			character.statpoints -= 5*levels
-			character.life -= (character.levelup_life*levels)
-			character.stamina -= (character.levelup_stamina*levels)
-			character.mana -= (character.levelup_mana*levels)
-			updateStats()
-			updateSecondaryStats()
-		}
+		character.skillpoints += levels
 	}
+	display += skill.level
+	display += skill.extra_levels
+	if (skill.level == 0) {
+		document.getElementById("p"+skill.key).innerHTML = ""
+	} else {
+		document.getElementById("p"+skill.key).innerHTML = display
+	}
+	updateStats()
+	updateSecondaryStats()
+	skillHover(skill)
 	showBaseLevels(skill)
 }
 
@@ -782,6 +869,7 @@ function skillHover(skill) {
 	document.getElementById("syn_title").innerHTML = skill.syn_title
 	document.getElementById("syn_text").innerHTML = skill.syn_text
 	document.getElementById("tooltip").style = skill.style
+	var levels = 0;
 	var next_display = "";
 	var current_display = "";
 	var pre_display = "";
@@ -805,8 +893,10 @@ function skillHover(skill) {
 		next_display += next_value
 		
 		current_display += skill.text[i]
-		current_value = mod_synergy * skill.data.values[i][(skill.level+skill.extra_levels)]
-		if (mod_synergy == 1) { current_value = character.updateSkill(skill, (skill.level+skill.extra_levels), i) }
+		//if (skill.level+skill.extra_levels <= 60) { levels = skill.level+skill.extra_levels } else { levels = 60 }
+		levels = skill.level+skill.extra_levels
+		current_value = mod_synergy * skill.data.values[i][levels]
+		if (mod_synergy == 1) { current_value = character.updateSkill(skill, (levels), i) }
 		current_value = round(current_value)
 		current_display += current_value
 		
@@ -820,14 +910,14 @@ function skillHover(skill) {
 	if (skill.level > 0) {
 		document.getElementById("next_level_text").innerHTML = "<br>Next Level"
 		current_display += skill.text[skill.data.values.length] + "<br>"
-		pre_display += "<br><br>Current Skill Level: " + (skill.level+skill.extra_levels) + "<br>"
+		pre_display += "<br><br>Current Skill Level: " + (levels) + "<br>"
 		if (skill.data.index[0] > 0) { pre_display = "<br>" + pre_display }
 	} else {
 		document.getElementById("next_level_text").innerHTML = "<br>First Level"
 		current_display = ""
 		if (skill.data.index[0] > 0) { pre_display = "<br>" + pre_display + "<br>" }
 	}
-	if (skill.level < MAX) { next_display += skill.text[skill.data.values.length] } else { next_display = "(maximum level reached)" }
+	if (skill.level < MAX && (skill.level+skill.extra_levels < 60)) { next_display += skill.text[skill.data.values.length] } else { next_display = "(maximum level reached)" }
 	document.getElementById("next").innerHTML = next_display
 	document.getElementById("current").innerHTML = current_display
 	document.getElementById("pretext").innerHTML = pre_display
@@ -835,6 +925,9 @@ function skillHover(skill) {
 	if (skill.level == 0 || (skill.level > 0 && skill.data.index[0] > 0)) {
 		document.getElementById("description").innerHTML = skill.description + "<br>"
 	}
+	updateSkillAmounts(character.class_name)
+	updateStats()
+	updateSecondaryStats()
 	showBaseLevels(skill)
 }
 
@@ -900,6 +993,7 @@ function itemHover(ev, id) {
 	if (name == "Skill Grand Charm #1") { display = "+1 Grand Charm ("+character.tab1+")" }
 	if (name == "Skill Grand Charm #2") { display = "+1 Grand Charm ("+character.tab2+")" }
 	if (name == "Skill Grand Charm #3") { display = "+1 Grand Charm ("+character.tab3+")" }
+	if (equipped["charms"][val].type != "small" && equipped["charms"][val].type != "large" && equipped["charms"][val].type != "grand") { style = "display: block; color: #ff8080;" }
 	document.getElementById("item_stats").innerHTML = display
 	document.getElementById("item_stats").style = style
 }
