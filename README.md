@@ -14,20 +14,22 @@ Character Skill Planner for Diablo 2: Path of Diablo
 * character validation
 
 ### Upcoming Plans:
+* display section for active skill(s)
 * more items (all uniques, etc)
 * tracking of miscellaneous effects (buffs, debuffs, auras, shrines)
 * breakpoints
 * mercenary info
 * custom item creation & modification
 * item description tooltips
+* full GUI inventory/stash
 * interface niceties
 
 ### Stretch Goals:
-* monster stat calculations
 * character saving/sharing
 * character importing
 * custom item-pool saving
+* monster stat calculations
 * pvp info
 * character comparison tool
-* comparison of skill effectiveness per level
+* comparison of skill effectiveness per level/class
 * dynamic item/skill recommendations
