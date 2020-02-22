@@ -50,11 +50,9 @@ function startup(choice) {
 	character.dexterity_added = 0
 	character.vitality_added = 0
 	character.energy_added = 0
-	character.resistance_bonus = 0
 	
 	skills = skills_all[choice]
 	character_setup = character_all[choice]
-	for (stat in character_setup) {
 	for (stat in character_setup) { character[stat] = character_setup[stat] }
 	setIconSources(choice)
 	updateSkillIcons()
@@ -263,6 +261,9 @@ function addCharm(val) {
 	var r = Math.floor((Math.random() * 3));
 	if (type == "grand") { charmHeight = "88"; charmImage = charm_img.prefix+charm_img.grand[r]; charm_y = 3; }
 	else if (type == "large") { charmHeight = "59"; charmImage = charm_img.prefix+charm_img.large[r]; charm_y = 2; }
+	else if (type == "small") { charmHeight = "29"; charmImage = charm_img.prefix+charm_img.small[r]; charm_y = 1; }
+	else { charmHeight = "29"; charmImage = charm_img.prefix+"debug.png"; charm_y = 1; }
+		
 	var allow = 1;
 	for (let c = 1; c <= inv[0].in.length; c++) {
 		if (inv[0].in[c] == val) {
@@ -323,6 +324,8 @@ function addCharm(val) {
 // Resets functionality for skills
 // ---------------------------------
 function resetSkills() {
+	var skill_bonuses = {stamina_bonus:0, speed_bonus:0, defense_bonus:0, resistance_bonus:0, attack_bonus:0, cstrike_bonus:0, ar_bonus:0, pierce_bonus:0, damage_bonus:0, fRes_bonus:0, cRes_bonus:0, lRes_bonus:0, edged_bonus:[0,0,0], pole_bonus:[0,0,0], blunt_bonus:[0,0,0], thrown_bonus:[0,0,0], claw_bonus:[0,0,0], mana_regen_bonus:0, cPierce_bonus:0, lPierce_bonus:0, fPierce_bonus:0, cDamage_bonus:0, lDamage_bonus:0, fDamage_bonus:0};
+	for (bonus in skill_bonuses) { character[bonus] = skill_bonuses[bonus] }
 	for (s = 0, len = skills.length; s < len; s++) {
 		skills[s].level = 0
 		document.getElementById("p"+skills[s].key).innerHTML = ""
@@ -379,6 +382,14 @@ function changeDifficulty(diff) {
 		else if (diff == 3) { character[penalties[p]] = 100 }
 	}
 	updateStats()
+}
+
+// Changes whether adding/removing skill points can affect character level
+// ---------------------------------
+function toggleCoupling() {
+	if (document.getElementById("coupling").checked) {
+		settings.coupling = 1
+	} else { settings.coupling = 0 }
 }
 
 // Adjusts stats that depend on a modified main stat
