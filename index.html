@@ -46,6 +46,16 @@
 <img id="hide_statpoints" src="./images/stats_hidden.png" style="position: absolute; display: block; left: 7px; top: 344px;">
 <img id="hide_stats" src="./images/stats_hidden_extra.png" style="position: absolute; display: block; left: 120px; top: 98px;">
 
+<!--	class selection 	-->
+<select class="dropdown_character" id="dropdown_class" onChange="reset(this.value)">
+<option class="gray" disabled selected>Choose Class</option>
+<option>Amazon</option>
+<option>Assassin</option>
+<option>Barbarian</option>
+<option>Druid</option>
+<option>Necromancer</option>
+<option>Paladin</option>
+<option>Sorceress</option></select>
 </div>		<!--	/gui stats	-->
 
 <div id="gui_skills" style="position: relative; width: 694px; height: 434px; float: left;">
@@ -96,26 +106,26 @@
 <p class="P Pc1 Py6" id="p361"></p><p class="P Pc2 Py6" id="p362"></p><p class="P Pc3 Py6" id="p363"></p>
 
 <!--	Skill Icons	-->
-<img class="I Ia1 Iy1" id="i111"></p><img class="I Ia2 Iy1" id="i112"></p><img class="I Ia3 Iy1" id="i113"></p>
-<img class="I Ia1 Iy2" id="i121"></p><img class="I Ia2 Iy2" id="i122"></p><img class="I Ia3 Iy2" id="i123"></p>
-<img class="I Ia1 Iy3" id="i131"></p><img class="I Ia2 Iy3" id="i132"></p><img class="I Ia3 Iy3" id="i133"></p>
-<img class="I Ia1 Iy4" id="i141"></p><img class="I Ia2 Iy4" id="i142"></p><img class="I Ia3 Iy4" id="i143"></p>
-<img class="I Ia1 Iy5" id="i151"></p><img class="I Ia2 Iy5" id="i152"></p><img class="I Ia3 Iy5" id="i153"></p>
-<img class="I Ia1 Iy6" id="i161"></p><img class="I Ia2 Iy6" id="i162"></p><img class="I Ia3 Iy6" id="i163"></p>
+<img class="I Ia1 Iy1" id="i111"><img class="I Ia2 Iy1" id="i112"><img class="I Ia3 Iy1" id="i113">
+<img class="I Ia1 Iy2" id="i121"><img class="I Ia2 Iy2" id="i122"><img class="I Ia3 Iy2" id="i123">
+<img class="I Ia1 Iy3" id="i131"><img class="I Ia2 Iy3" id="i132"><img class="I Ia3 Iy3" id="i133">
+<img class="I Ia1 Iy4" id="i141"><img class="I Ia2 Iy4" id="i142"><img class="I Ia3 Iy4" id="i143">
+<img class="I Ia1 Iy5" id="i151"><img class="I Ia2 Iy5" id="i152"><img class="I Ia3 Iy5" id="i153">
+<img class="I Ia1 Iy6" id="i161"><img class="I Ia2 Iy6" id="i162"><img class="I Ia3 Iy6" id="i163">
 
-<img class="I Ib1 Iy1" id="i211"></p><img class="I Ib2 Iy1" id="i212"></p><img class="I Ib3 Iy1" id="i213"></p>
-<img class="I Ib1 Iy2" id="i221"></p><img class="I Ib2 Iy2" id="i222"></p><img class="I Ib3 Iy2" id="i223"></p>
-<img class="I Ib1 Iy3" id="i231"></p><img class="I Ib2 Iy3" id="i232"></p><img class="I Ib3 Iy3" id="i233"></p>
-<img class="I Ib1 Iy4" id="i241"></p><img class="I Ib2 Iy4" id="i242"></p><img class="I Ib3 Iy4" id="i243"></p>
-<img class="I Ib1 Iy5" id="i251"></p><img class="I Ib2 Iy5" id="i252"></p><img class="I Ib3 Iy5" id="i253"></p>
-<img class="I Ib1 Iy6" id="i261"></p><img class="I Ib2 Iy6" id="i262"></p><img class="I Ib3 Iy6" id="i263"></p>
+<img class="I Ib1 Iy1" id="i211"><img class="I Ib2 Iy1" id="i212"><img class="I Ib3 Iy1" id="i213">
+<img class="I Ib1 Iy2" id="i221"><img class="I Ib2 Iy2" id="i222"><img class="I Ib3 Iy2" id="i223">
+<img class="I Ib1 Iy3" id="i231"><img class="I Ib2 Iy3" id="i232"><img class="I Ib3 Iy3" id="i233">
+<img class="I Ib1 Iy4" id="i241"><img class="I Ib2 Iy4" id="i242"><img class="I Ib3 Iy4" id="i243">
+<img class="I Ib1 Iy5" id="i251"><img class="I Ib2 Iy5" id="i252"><img class="I Ib3 Iy5" id="i253">
+<img class="I Ib1 Iy6" id="i261"><img class="I Ib2 Iy6" id="i262"><img class="I Ib3 Iy6" id="i263">
 
-<img class="I Ic1 Iy1" id="i311"></p><img class="I Ic2 Iy1" id="i312"></p><img class="I Ic3 Iy1" id="i313"></p>
-<img class="I Ic1 Iy2" id="i321"></p><img class="I Ic2 Iy2" id="i322"></p><img class="I Ic3 Iy2" id="i323"></p>
-<img class="I Ic1 Iy3" id="i331"></p><img class="I Ic2 Iy3" id="i332"></p><img class="I Ic3 Iy3" id="i333"></p>
-<img class="I Ic1 Iy4" id="i341"></p><img class="I Ic2 Iy4" id="i342"></p><img class="I Ic3 Iy4" id="i343"></p>
-<img class="I Ic1 Iy5" id="i351"></p><img class="I Ic2 Iy5" id="i352"></p><img class="I Ic3 Iy5" id="i353"></p>
-<img class="I Ic1 Iy6" id="i361"></p><img class="I Ic2 Iy6" id="i362"></p><img class="I Ic3 Iy6" id="i363"></p>
+<img class="I Ic1 Iy1" id="i311"><img class="I Ic2 Iy1" id="i312"><img class="I Ic3 Iy1" id="i313">
+<img class="I Ic1 Iy2" id="i321"><img class="I Ic2 Iy2" id="i322"><img class="I Ic3 Iy2" id="i323">
+<img class="I Ic1 Iy3" id="i331"><img class="I Ic2 Iy3" id="i332"><img class="I Ic3 Iy3" id="i333">
+<img class="I Ic1 Iy4" id="i341"><img class="I Ic2 Iy4" id="i342"><img class="I Ic3 Iy4" id="i343">
+<img class="I Ic1 Iy5" id="i351"><img class="I Ic2 Iy5" id="i352"><img class="I Ic3 Iy5" id="i353">
+<img class="I Ic1 Iy6" id="i361"><img class="I Ic2 Iy6" id="i362"><img class="I Ic3 Iy6" id="i363">
 
 <!--	Equipment Menus 	-->
 <div id="equipment" style="display: block; float: right; width: 200px; height: 300px; position: relative;">
@@ -147,50 +157,42 @@
 
 </div>		<!--	/gui skills	-->
 
-<div style="padding: 12px;">
-<input id="quests" type="checkbox" name="quests" value="1" onclick="return toggleQuests();">
+
+<!--	selection options	-->
+<div style="width: 350px; margin-bottom: 32px">
+<div style="margin-left: 12px; margin-bottom: 1px; width: 200px">
+<input id="quests" type="checkbox" name="quests" onclick="return toggleQuests();">
 <label style="color: #aaa;" for="quests">Quests Completed</label>
 </div>
-
-<!--	difficulty radio-buttons	-->
-<div style="color: #aaa; float: left; padding: 6px; margin-bottom: 12px; margin-right: 16px;">Difficulty:</div>
-<div style="color: #aaa; float: left; padding: 6px; margin-bottom: 12px; margin-right: 16px;">
-<input id="difficulty1" type="radio" name="difficulty" value="0" onclick="return changeDifficulty(1);">
+<div style="margin-left: 12px; margin-bottom: 3px; width: 180px;">
+<input id="running" type="checkbox" name="running" onclick="return changeMovement();">
+<label style="color: #aaa;" for="running">Running</label>
+</div>
+<div style="color: #aaa; float: left; margin-right: 5px; margin-left: 12px;">Difficulty: </div>
+<div style="position: relative; color: #aaa; float: left;">
+<input id="difficulty1" type="radio" name="difficulty" onclick="return changeDifficulty(1);">
 <label style="color: #aaa;" for="difficulty">Normal</label>
-<input id="difficulty2" type="radio" name="difficulty" value="0" onclick="return changeDifficulty(2);">
+<input id="difficulty2" type="radio" name="difficulty" onclick="return changeDifficulty(2);">
 <label style="color: #aaa;" for="difficulty">Nightmare</label>
-<input id="difficulty3" type="radio" name="difficulty" value="1" onclick="return changeDifficulty(3);" checked>
+<input id="difficulty3" type="radio" name="difficulty" onclick="return changeDifficulty(3);" checked>
 <label style="color: #aaa;" for="difficulty">Hell</label>
 </div>
 
-<!--	class selection 	-->
-<select class="dropdown" style="float: left; padding: 6px; margin-left: 70px; margin-right: 30px;" id="dropdown_class" onChange="reset(this.value)">
-<option class="gray" disabled selected>Choose Class</option>
-<option>Amazon</option>
-<option>Assassin</option>
-<option>Barbarian</option>
-<option>Druid</option>
-<option>Necromancer</option>
-<option>Paladin</option>
-<option>Sorceress</option></select
-
 </div>		<!--	/gui	-->
 
-<img src="./images/inventory.png" style="opacity: 0; height: 40px; position: relative; pointer-events: none;">
-
-<div class="gray" style="display: block;" id="stats">
+<div class="gray" style="display: block; width: 250px;" id="stats">
+	<a>Basic Attack: </a><a id="basic_attack"></a><br>
 	<a>Attack Rating: </a><a id="ar"></a><br>
 	<a>Defense: </a><a id="defense"></a><br>
 	<a>Stamina: </a><a id="stamina"></a><br>
 	<a>Life: </a><a id="life"></a><br>
-	<a>Mana: </a><a id="mana"></a><br>
+	<a>Mana: </a><a id="mana"></a>
 </div><br>
 
+<img src="./images/stats2.png" style="opacity: 0; float: left; pointer-events: none;">
 
-<--<img src="./images/stats2.png" style="opacity: 0; float: left; pointer-events: none;">-->
-
-<div style="position: absolute;">
-<div class="gray" style="position: relative; display: block; float: left; width: 170px;" id="stats2">
+<div style="position: absolute; float: left;" class="no-selection">
+<div class="gray" style="position: relative; display: block; float: left; width: 170px;" id="stats2a">
 	<font size="2">Fire Resistance: </font><font size="2" id="fres"></font><br>
 	<font size="2">Cold Resistance: </font><font size="2" id="cres"></font><br>
 	<font size="2">Lightning Resistance: </font><font size="2" id="lres"></font><br>
@@ -211,7 +213,7 @@
 	<font size="2">+ Poison Damage: </font><font size="2" id="pdamage"></font><br><br>
 	<font size="2">Magic Find: </font><font size="2" id="mf"></font><br>
 </div>
-<div class="gray" style="position: relative; display: block; float: left;" id="stats3">
+<div class="gray" style="position: relative; display: block; float: left;" id="stats2b">
 	<font size="2">Fire Absorb: </font><font size="2" id="fabsorb"></font><br>
 	<font size="2">Cold Absorb: </font><font size="2" id="cabsorb"></font><br>
 	<font size="2">Lightning Absorb: </font><font size="2" id="labsorb"></font><br><br>
@@ -232,7 +234,7 @@
 </div>
 
 <!--	charm inventory 	-->
-<div id="gui_charms" class="inventory">
+<div id="gui_charms" class="inventory no-selection" oncontextmenu="return false">
 <img usemap="#charmmap" id="charm_grid" src="./images/charm_inventory.png">
 <map id="charmmap" name="charmmap">
 <div id="h11" ondrop="drop(event,1)" ondragover="allowDrop(event,1,1)" class="H Hx1 Hy1" onmouseover="itemHover(event, 'h11')" onmouseout="itemOut()"></div>
@@ -284,6 +286,35 @@
 <div class="hover" style="display: none;" id="item_stats">
 	<a id="item_name" class="green">ITEM</a><br>
 	<a id="item_stats">item values</a>
+</div>
+
+
+<div style="position: absolute; float: left; width: 500px; padding: 14px;"><br>
+<div class="gray" style="position: relative; display: block; float: left; width: 190px;" id="stats3a">
+	<font size="2">Damage vs Demons: </font><font size="2" id="damage_vs_demons"></font><br>
+	<font size="2">Damage vs Undead: </font><font size="2" id="damage_vs_undead"></font><br><br>
+	<font size="2">Damage Taken goes to Mana: </font><font size="2" id="damage_to_mana"></font><br><br>
+	<font size="2">Life per Kill: </font><font size="2" id="life_per_kill"></font><br>
+	<font size="2">Mana per Kill: </font><font size="2" id="mana_per_kill"></font><br><br>
+	<font size="2">Enemy Fire Resistance: </font><font size="2" id="enemy_fres"></font><br>
+	<font size="2">Enemy Cold Resistance: </font><font size="2" id="enemy_cres"></font><br>
+	<font size="2">Enemy Lightning Resistance: </font><font size="2" id="enemy_lres"></font><br>
+	<font size="2">Enemy Poison Resistance: </font><font size="2" id="enemy_pres"></font><br>
+</div>
+<div class="gray" style="position: relative; display: block; float: left; width: 200px;" id="stats3b">
+	<font size="2">Attack Rating vs Demons: </font><font size="2" id="ar_vs_demons"></font><br>
+	<font size="2">Attack Rating vs Undead: </font><font size="2" id="ar_vs_undead"></font><br><br>
+	<font size="2">Defense vs Missiles: </font><font size="2" id="missile_defense"></font><br><br>
+	<font size="2">Life Regen: </font><font size="2" id="life_regen"></font><br>
+	<font size="2">Mana Regen: </font><font size="2" id="mana_regen"></font><br><br>
+	<!--<font size="2">Target Defense: </font><font size="2" id="target_defense"></font><br>
+	<font size="2">Slow Target: </font><font size="2" id="slow_target"></font><br>
+	<font size="2">Attacker takes Damage: </font><font size="2" id="thorns"></font><br>
+	<font size="2">Light Radius: </font><font size="2" id="light_radius"></font><br>
+	<font size="2">Increased Block Chance: </font><font size="2" id="ibc"></font><br>
+	<font size="2">Slower Stamina Drain: </font><font size="2" id="slower_stam_drain"></font><br>
+	<font size="2">Heal Stamina: </font><font size="2" id="heal_stam"></font><br>-->
+</div>
 </div>
 
 </div>

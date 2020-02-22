@@ -1,31 +1,31 @@
 
 
 var character_assassin = {class_name:"Assassin", strength:20, dexterity:20, vitality:20, energy:25, life:50, mana:25, defense:5, ar:80, stamina:195, levelup_life:2, levelup_stamina:1.25, levelup_mana:1.5, gain_dexterity:[5,0.25], gain_vitality:[3,1.25], gain_energy:1.75, starting_strength:20, starting_dexterity:20, starting_vitality:20, starting_energy:25, skill_layout:"./images/assassin.png", tab1:"Martial Arts", tab2:"Shadow Disciplines", tab3:"Traps",
-	updateSkill : function(skill, level, elem) {
-	var result = skill.data.values[elem][level]
-	if (skill.name == "Dual Strike" && elem == 0) { result = (5*skills[9].level + 5*skills[13].level + skill.data.values[elem][level]) }
-	if (skill.name == "Static Strike" && elem < 2) { result = ((1 + (0.08*skills[21].level)) * skill.data.values[elem][level]) }
-	if (skill.name == "Ember Storm" && elem < 2) { result = ((1 + (0.18*skills[20].level)) * skill.data.values[elem][level]) }
+	updateSkill : function(skill, lvl, elem) {
+	var result = skill.data.values[elem][lvl]
+	if (skill.name == "Dual Strike" && elem == 0) { result = (5*skills[9].level + 5*skills[13].level + skill.data.values[elem][lvl]) }
+	if (skill.name == "Static Strike" && elem < 2) { result = ((1 + (0.08*skills[21].level)) * skill.data.values[elem][lvl]) }
+	if (skill.name == "Ember Storm" && elem < 2) { result = ((1 + (0.18*skills[20].level)) * skill.data.values[elem][lvl]) }
 	if (skill.name == "Dragon Talon" && elem < 2) { result = 0 }	// TODO: Damage from footwear
-	if (skill.name == "Dragon Talon" && elem == 3) { result = (15*skills[7].level + skill.data.values[elem][level]) }
+	if (skill.name == "Dragon Talon" && elem == 3) { result = (15*skills[7].level + skill.data.values[elem][lvl]) }
 	if (skill.name == "Dragon Flight" && elem < 2) { result = 0 }	// TODO: Damage from footwear
-	if (skill.name == "Psychic Hammer" && elem < 4) { result = ((1 + (0.25*skills[12].level + 0.25*skills[17].level)) * skill.data.values[elem][level]) }
-	if (skill.name == "Mind Blast" && elem < 2) { result = ((1 + (0.21*skills[10].level + 0.21*skills[12].level)) * skill.data.values[elem][level]) }
+	if (skill.name == "Psychic Hammer" && elem < 4) { result = ((1 + (0.25*skills[12].level + 0.25*skills[17].level)) * skill.data.values[elem][lvl]) }
+	if (skill.name == "Mind Blast" && elem > 0 && elem < 3) { result = ((1 + (0.21*skills[10].level + 0.21*skills[12].level)) * skill.data.values[elem][lvl]) }
 	if (skill.name == "Mind Blast" && elem == 0) { result = 2.6 + (0.7 * Math.floor(skills[14].level / 5)) }
-	if (skill.name == "Fire Blast" && elem < 2) { result = ((1 + (0.12*skills[21].level + 0.12*skills[23].level + 0.12*skills[24].level + 0.12*skills[27].level + 0.12*skills[28].level)) * skill.data.values[elem][level]) }
-	if (skill.name == "Shock Web" && elem == 0) { if (skill.level > 0) { result = Math.max(6, (skill.data.values[elem][skill.level] + Math.floor(skills[20].level / 3))) } else { result = 6 } }
-	if (skill.name == "Shock Web" && elem < 3 && elem > 0) { result = ((1 + (0.20*skills[21].level + 0.20*skills[26].level + 0.20*skills[28].level)) * skill.data.values[elem][level]) }
-	if (skill.name == "Blade Throw" && elem < 3 && elem > 0) { result = ((1 + (0.16*skills[25].level + 0.16*skills[29].level)) * skill.data.values[elem][level]) }
+	if (skill.name == "Fire Blast" && elem < 2) { result = ((1 + (0.12*skills[21].level + 0.12*skills[23].level + 0.12*skills[24].level + 0.12*skills[27].level + 0.12*skills[28].level)) * skill.data.values[elem][lvl]) }
+	if (skill.name == "Shock Web" && elem == 0) { result = Math.max(6, (skill.data.values[elem][lvl] + Math.floor(skills[20].level / 3))) }
+	if (skill.name == "Shock Web" && elem < 3 && elem > 0) { result = ((1 + (0.20*skills[21].level + 0.20*skills[26].level + 0.20*skills[28].level)) * skill.data.values[elem][lvl]) }
+	if (skill.name == "Blade Throw" && elem < 3 && elem > 0) { result = ((1 + (0.16*skills[25].level + 0.16*skills[29].level)) * skill.data.values[elem][lvl]) }
 	if (skill.name == "Charged Bolt Sentry" && elem == 0) { result = 5 + Math.floor(skills[26].level / 4) }
 	if (skill.name == "Charged Bolt Sentry" && elem == 1) { result = 5 + Math.floor(skills[21].level / 3) }
-	if (skill.name == "Charged Bolt Sentry" && elem < 4 && elem > 1) { result = ((1 + (0.20*skills[20].level + 0.20*skills[26].level + 0.20*skills[28].level)) * skill.data.values[elem][level]) }
-	if (skill.name == "Wake of Fire" && elem < 2) { result = ((1 + (0.20*skills[20].level + 0.20*skills[27].level)) * skill.data.values[elem][level]) }
-	if (skill.name == "Lightning Sentry" && elem < 2) { result = ((1 + (0.21*skills[21].level + 0.21*skills[23].level + 0.21*skills[28].level)) * skill.data.values[elem][level]) }
+	if (skill.name == "Charged Bolt Sentry" && elem < 4 && elem > 1) { result = ((1 + (0.20*skills[20].level + 0.20*skills[26].level + 0.20*skills[28].level)) * skill.data.values[elem][lvl]) }
+	if (skill.name == "Wake of Fire" && elem < 2) { result = ((1 + (0.20*skills[20].level + 0.20*skills[27].level)) * skill.data.values[elem][lvl]) }
+	if (skill.name == "Lightning Sentry" && elem < 2) { result = ((1 + (0.21*skills[21].level + 0.21*skills[23].level + 0.21*skills[28].level)) * skill.data.values[elem][lvl]) }
 	if (skill.name == "Wake of Inferno" && elem == 0) { result = 1 + (0.04 * skills[24].level) }
-	if (skill.name == "Wake of Inferno" && elem < 3 && elem > 0) { result = ((1 + (0.13*skills[21].level + 0.13*skills[28].level + 0.20*skills[24].level)) * skill.data.values[elem][level]) }
+	if (skill.name == "Wake of Inferno" && elem < 3 && elem > 0) { result = ((1 + (0.13*skills[21].level + 0.13*skills[28].level + 0.20*skills[24].level)) * skill.data.values[elem][lvl]) }
 	if (skill.name == "Death Sentry" && elem == 0) { result = 5 + Math.floor(skills[20].level / 3) }
-	if (skill.name == "Death Sentry" && elem < 4 && elem > 1) { result = ((1 + (0.15*skills[26].level)) * skill.data.values[elem][level]) }
-	if (skill.name == "Blade Shield" && elem < 4 && elem > 1) { result = ((1 + (0.05*skills[22].level + 0.05*skills[25].level)) * skill.data.values[elem][level]) }
+	if (skill.name == "Death Sentry" && elem < 4 && elem > 1) { result = ((1 + (0.15*skills[26].level)) * skill.data.values[elem][lvl]) }
+	if (skill.name == "Blade Shield" && elem < 4 && elem > 1) { result = ((1 + (0.05*skills[22].level + 0.05*skills[25].level)) * skill.data.values[elem][lvl]) }
 	return result
 	}
 };
@@ -77,7 +77,7 @@ var skills_assassin = [
 {data:d163, key:"163", name:"Blades of Ice", req:[3,0], reqlvl:30, level:0, extra_levels:0, style:"display: block; top: 422px; left: 142px;", description:"Create a flurry of ice shards which<br>seek out nearby enemies<br>[Requires Claw or Dagger Class Weapons]<br><br>Deals 50% of Weapon Damage<br>60% of Physical Damage converted to Cold", syn_title:"<br>Blades of Ice Receives Bonuses From:<br>", syn_text:"+20% Cold Damage per Ice Charge", graytext:"", text:["Attack Rating: +"," percent<br>Cold Damage: ","-","<br>Mana Cost: ",""]},
 
 {data:d212, key:"212", name:"Claw Mastery", req:[], reqlvl:1, level:0, extra_levels:0, style:"display: block; top: 82px; left: 234px;", description:"Passive - Improves your skill<br>with claw-class weapons", syn_title:"", syn_text:"", graytext:"", text:["Damage: +"," percent<br>Attack Rating: +"," percent<br>"," percent chance of Critical Strike",""]},
-{data:d213, key:"213", name:"Psychic Hammer", req:[], reqlvl:1, level:0, extra_levels:0, style:"display: block; top: 82px; left: 234px;", description:"Use the power of your mind<br>to create a psychic blast<br>to cruch and knock back your enemies", syn_title:"<br>Psychic Hammer Receives Bonuses From:<br>", syn_text:"Mind Blast: +25% Damage per Level<br>Mind Barrier: +25% Damage per Level<br>Mind Barrier: +25% Magic Damage per Level<br>Mind Blast: +25% Magic Damage per Level", graytext:"", text:["Damage: ","-","<br>Magic damage: ","-","<br>Mana Cost: ",""]},
+{data:d213, key:"213", name:"Psychic Hammer", req:[], reqlvl:1, level:0, extra_levels:0, style:"display: block; top: 82px; left: 234px;", description:"Use the power of your mind<br>to create a psychic blast<br>to crush and knock back your enemies", syn_title:"<br>Psychic Hammer Receives Bonuses From:<br>", syn_text:"Mind Blast: +25% Damage per Level<br>Mind Barrier: +25% Damage per Level<br>Mind Barrier: +25% Magic Damage per Level<br>Mind Blast: +25% Magic Damage per Level", graytext:"", text:["Damage: ","-","<br>Magic damage: ","-","<br>Mana Cost: ",""]},
 {data:d221, key:"221", name:"Burst of Speed", req:[9], reqlvl:6, level:0, extra_levels:0, style:"display: block; top: 150px; left: 194px;", description:"Increases attack and movement speed<br>for a period of time", syn_title:"", syn_text:"", graytext:"", text:["Attack Speed: +"," percent<br>Walk/Run Speed: +"," percent<br>Duration: "," seconds<br>Mana Cost: 10",""]},
 {data:d223, key:"223", name:"Mind Barrier", req:[10], reqlvl:6, level:0, extra_levels:0, style:"display: block; top: 150px; left: 234px;", description:"Create a mental barrier around yourself<br>that disarms enemies", syn_title:"", syn_text:"", graytext:"", text:["Chance to stun in retaliation: ","%<br>Chance to retaliate with Psychic Hammer: ","%<br>Chance to stun on hit with attacks: ","%<br>Stun Length: "," seconds",""]},
 {data:d232, key:"232", name:"Weapon Block", req:[9], reqlvl:12, level:0, extra_levels:0, style:"display: block; top: 218px; left: 204px;", description:"Passive - Chance to block when<br>you are using dual claw-class weapons", syn_title:"", syn_text:"", graytext:"", text:[""," percent chance",""]},

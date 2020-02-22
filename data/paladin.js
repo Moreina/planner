@@ -1,24 +1,24 @@
 
 
 var character_paladin = {class_name:"Paladin", strength:25, dexterity:20, vitality:25, energy:15, life:55, mana:15, defense:5, ar:85, stamina:189, levelup_life:2.5, levelup_stamina:1, levelup_mana:1.5, gain_dexterity:[5,0.25], gain_vitality:[3,1], gain_energy:1.5, starting_strength:25, starting_dexterity:20, starting_vitality:25, starting_energy:15, skill_layout:"./images/paladin.png", tab1:"Defensive Auras", tab2:"Offensive Auras", tab3:"Combat",
-	updateSkill : function(skill, level, elem) {
-	var result = skill.data.values[elem][level]
-	if (skill.name == "Resist Fire" && elem == 0) { result = Math.floor(skill.level/4) }
-	if (skill.name == "Resist Cold" && elem == 0) { result = Math.floor(skill.level/4) }
-	if (skill.name == "Resist Lightning" && elem == 0) { result = Math.floor(skill.level/4) }
+	updateSkill : function(skill, lvl, elem) {
+	var result = skill.data.values[elem][lvl]
+	if (skill.name == "Resist Fire" && elem == 0) { result = Math.floor(skill.level/4); character.fRes_bonus = result; }
+	if (skill.name == "Resist Cold" && elem == 0) { result = Math.floor(skill.level/4); character.cRes_bonus = result; }
+	if (skill.name == "Resist Lightning" && elem == 0) { result = Math.floor(skill.level/4); character.lRes_bonus = result; }
 	if (skill.name == "Prayer" && elem == 1) { result = ((character.life+character.level*character.life_per_level)*0.01 + skill.data.values[0][level]) }
 	if ((skill.name == "Cleansing" || skill.name == "Meditation") && elem == 0) { 
 		if (skills[0].level > 0) { result = skills[0].data.values[0][skills[0].level]
 	} 	else { result = 0 } }
-	if (skill.name == "Sacrifice" && elem == 1) { result = (skill.data.values[elem][level] + 10*skills[8].level + 5*skills[18].level) }
-	if (skill.name == "Smite" && elem == 0) { result = (skill.data.values[elem][level] + 8*skills[2].level) }
-	if (skill.name == "Zeal" && elem == 1) { result = (skill.data.values[elem][level] + 10*skills[20].level) }
-	if (skill.name == "Charge" && elem == 0) { result = (skill.data.values[elem][level] + 26*skills[6].level + 26*skills[10].level) }
+	if (skill.name == "Sacrifice" && elem == 1) { result = (skill.data.values[elem][lvl] + 10*skills[8].level + 5*skills[18].level) }
+	if (skill.name == "Smite" && elem == 0) { result = (skill.data.values[elem][lvl] + 8*skills[2].level) }
+	if (skill.name == "Zeal" && elem == 1) { result = (skill.data.values[elem][lvl] + 10*skills[20].level) }
+	if (skill.name == "Charge" && elem == 0) { result = (skill.data.values[elem][lvl] + 26*skills[6].level + 26*skills[10].level) }
 	if (skill.name == "Vengeance" && elem < 8) { result = 0 }
-	if (skill.name == "Vengeance" && elem == 8) { result = (skill.data.values[elem][level] + 12*skills[1].level + 2*skills[9].level) }
-	if (skill.name == "Vengeance" && elem == 9) { result = (skill.data.values[elem][level] + 12*skills[3].level + 2*skills[9].level) }
-	if (skill.name == "Vengeance" && elem == 10) { result = (skill.data.values[elem][level] + 12*skills[5].level + 2*skills[9].level) }
-	if (skill.name == "Holy Shield" && elem == 3) { result = (skill.data.values[elem][level] + 15*skills[2].level) }
+	if (skill.name == "Vengeance" && elem == 8) { result = (skill.data.values[elem][lvl] + 12*skills[1].level + 2*skills[9].level) }
+	if (skill.name == "Vengeance" && elem == 9) { result = (skill.data.values[elem][lvl] + 12*skills[3].level + 2*skills[9].level) }
+	if (skill.name == "Vengeance" && elem == 10) { result = (skill.data.values[elem][lvl] + 12*skills[5].level + 2*skills[9].level) }
+	if (skill.name == "Holy Shield" && elem == 3) { result = (skill.data.values[elem][lvl] + 15*skills[2].level) }
 	return result
 	}
 };

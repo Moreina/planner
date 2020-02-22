@@ -3,23 +3,23 @@
 var character_sorceress = {class_name:"Sorceress", strength:10, dexterity:25, vitality:10, energy:35, life:40, mana:35, defense:6, ar:75, stamina:174, levelup_life:1.5, levelup_stamina:1, levelup_mana:2, gain_dexterity:[5,0.25], gain_vitality:[2,1], gain_energy:2, starting_strength:10, starting_dexterity:25, starting_vitality:10, starting_energy:35, skill_layout:"./images/sorceress.png", tab1:"Cold", tab2:"Lightning", tab3:"Fire",
 	updateSkill : function(skill, lvl, elem) {
 	var result = skill.data.values[elem][lvl]
-	if (skill.name == "Ice Bolt" && elem < 2) { result = ((1 + (0.25*skills[1].level + 0.25*skills[2].level + 0.25*skills[4].level)) * (1 + skills[10].data.values[1][skills[10].level]/100) * skill.data.values[elem][lvl]) }
+	if (skill.name == "Ice Bolt" && elem < 2) { result = ((1 + (0.25*skills[1].level + 0.25*skills[2].level + 0.25*skills[4].level)) * (1 + skills[10].data.values[1][skills[10].level]/100) * (1+cDamage/100) * skill.data.values[elem][lvl]) }
 	if (skill.name == "Frigerate" && elem < 2) { result = ((1 + (0.15*skills[4].level)) * (1 + skills[10].data.values[1][skills[10].level]/100) * skill.data.values[elem][lvl]) }
-	if (skill.name == "Frost Nova" && elem < 2) { result = ((1 + (0.15*skills[3].level + 0.15*skills[4].level)) * (1 + skills[10].data.values[1][skills[10].level]) * skill.data.values[elem][lvl]) }
-	if (skill.name == "Ice Blast" && elem < 2) { result = ((1 + (0.12*skills[0].level + 0.12*skills[5].level + 0.12*skills[6].level)) * (1 + skills[10].data.values[1][skills[10].level]/100) * skill.data.values[elem][lvl]) }
+	if (skill.name == "Frost Nova" && elem < 2) { result = ((1 + (0.15*skills[3].level + 0.15*skills[4].level)) * (1 + skills[10].data.values[1][skills[10].level]) * (1+cDamage/100) * skill.data.values[elem][lvl]) }
+	if (skill.name == "Ice Blast" && elem < 2) { result = ((1 + (0.12*skills[0].level + 0.12*skills[5].level + 0.12*skills[6].level)) * (1 + skills[10].data.values[1][skills[10].level]/100) * (1+cDamage/100) * skill.data.values[elem][lvl]) }
 	if (skill.name == "Ice Blast" && elem == 2) { result = ((1 + (0.10*skills[5].level)) * skill.data.values[elem][lvl]) }
-	if (skill.name == "Shiver Armor" && elem < 4 && elem > 1) { result = ((1 + (0.18*skills[1].level)) * (1 + skills[10].data.values[1][skills[10].level]/100) * skill.data.values[elem][lvl]) }
-	if (skill.name == "Glacial Spike" && elem < 2) { result = ((1 + (0.08*skills[0].level + 0.08*skills[3].level + 0.08*skills[5].level + 0.08*skills[7].level)) * (1 + skills[10].data.values[1][skills[10].level]/100) * skill.data.values[elem][lvl]) }
-	if (skill.name == "Glacial Spike" && elem < 2) { result = ((1 + (0.03*skills[6].level)) * skill.data.values[elem][lvl]) }
-	if (skill.name == "Blizzard" && elem == 2) { result = ((1 + (0.09*skills[3].level + 0.09*skills[5].level)) * (1 + skills[10].data.values[1][skills[10].level]/100) * skill.data.values[elem][lvl]) }
-	if (skill.name == "Freezing Pulse" && elem < 3 && elem > 0) { result = ((1 + (0.05*skills[0].level + 0.05*skills[3].level + 0.05*skills[5].level)) * (1 + skills[10].data.values[1][skills[10].level]/100) * skill.data.values[elem][lvl]) }
-	if (skill.name == "Chilling Armor" && elem < 4 && elem > 1) { result = ((1 + (0.18*skills[0].level)) * (1 + skills[10].data.values[1][skills[10].level]/100) * skill.data.values[elem][lvl]) }
-	if (skill.name == "Frozen Orb" && elem < 2) { result = ((1 + (0.02*skills[0].level)) * (1 + skills[10].data.values[1][skills[10].level]/100) * skill.data.values[elem][lvl]) }
+	if (skill.name == "Shiver Armor" && elem < 4 && elem > 1) { result = ((1 + (0.18*skills[1].level)) * (1 + skills[10].data.values[1][skills[10].level]/100) * (1+cDamage/100) * skill.data.values[elem][lvl]) }
+	if (skill.name == "Glacial Spike" && elem < 2) { result = ((1 + (0.08*skills[0].level + 0.08*skills[3].level + 0.08*skills[7].level + 0.08*skills[9].level)) * (1 + skills[10].data.values[1][skills[10].level]/100) * (1+cDamage/100) * skill.data.values[elem][lvl]) }
+	if (skill.name == "Glacial Spike" && elem == 2) { result = ((1 + (0.03*skills[6].level)) * skill.data.values[elem][lvl]) }
+	if (skill.name == "Blizzard" && elem < 2) { result = ((1 + (0.09*skills[3].level + 0.09*skills[5].level)) * (1 + skills[10].data.values[1][skills[10].level]/100) * (1+cDamage/100) * skill.data.values[elem][lvl]) }
+	if (skill.name == "Freezing Pulse" && elem < 3 && elem > 0) { result = ((1 + (0.05*skills[0].level + 0.05*skills[3].level + 0.05*skills[5].level)) * (1 + skills[10].data.values[1][skills[10].level]/100) * (1+cDamage/100) * skill.data.values[elem][lvl]) }
+	if (skill.name == "Chilling Armor" && elem < 4 && elem > 1) { result = ((1 + (0.18*skills[0].level)) * (1 + skills[10].data.values[1][skills[10].level]/100) * (1+cDamage/100) * skill.data.values[elem][lvl]) }
+	if (skill.name == "Frozen Orb" && elem < 2) { result = ((1 + (0.02*skills[0].level)) * (1 + skills[10].data.values[1][skills[10].level]/100) * (1+cDamage/100) * skill.data.values[elem][lvl]) }
 	if (skill.name == "Charged Bolt" && elem < 3 && elem > 0) { result = ((1 + (0.25*skills[15].level + 0.25*skills[16].level)) * (1 + skills[20].data.values[1][skills[20].level]/100) * skill.data.values[elem][lvl]) }
 	if (skill.name == "Telekinesis" && elem < 2) { result = ((1 + skills[20].data.values[1][skills[20].level]/100) * skill.data.values[elem][lvl]) }
 	if (skill.name == "Nova" && elem < 2) { result = ((1 + (0.03*skills[18].level)) * (1 + skills[20].data.values[1][skills[20].level]/100) * skill.data.values[elem][lvl]) }
 	if (skill.name == "Lightning Surge" && elem < 2) { result = ((1 + (0.05*skills[11].level + 0.05*skills[16].level)) * (1 + skills[20].data.values[1][skills[20].level]/100) * skill.data.values[elem][lvl]) }
-	if (skill.name == "Chain Lightning" && elem < 3 && elem > 0) { result = ((1 + (0.03*skills[11].level + 0.03*skills[11].level)) * (1 + skills[20].data.values[1][skills[20].level]/100) * skill.data.values[elem][lvl]) }
+	if (skill.name == "Chain Lightning" && elem < 3 && elem > 0) { result = ((1 + (0.03*skills[11].level + 0.03*skills[15].level)) * (1 + skills[20].data.values[1][skills[20].level]/100) * skill.data.values[elem][lvl]) }
 	if (skill.name == "Teleport" && elem < 1) { result = Math.max(12, (0.05*((character.mana+character.level*character.mana_per_level)*(1+character.max_mana/100)) - skill.data.values[elem][lvl])) }
 	if (skill.name == "Discharge" && elem < 3 && elem > 0) { result = ((1 + (0.03*skills[12].level + 0.03*skills[14].level)) * (1 + 0.01*Math.floor(character.energy/2)) * (1 + skills[20].data.values[1][skills[20].level]/100) * skill.data.values[elem][lvl]) }
 	if (skill.name == "Energy Shield" && elem == 0) { result = (4*skills[13].level + 6) }

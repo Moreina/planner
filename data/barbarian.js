@@ -1,22 +1,22 @@
 
 
 var character_barbarian = {class_name:"Barbarian", strength:30, dexterity:20, vitality:25, energy:10, life:55, mana:10, defense:5, ar:85, stamina:192, levelup_life:2, levelup_stamina:1, levelup_mana:1, gain_dexterity:[5,0.25], gain_vitality:[4,1], gain_energy:1, starting_strength:30, starting_dexterity:20, starting_vitality:25, starting_energy:10, skill_layout:"./images/barbarian.png", tab1:"Warcries", tab2:"Masteries", tab3:"Combat",
-	updateSkill : function(skill, level, elem) {
-	var result = skill.data.values[elem][level]
-	if (skill.name == "War Cry" && elem < 2) { result = ((1 + (0.16*skills[2].level + 0.16*skills[8].level)) * skill.data.values[elem][level]) }
-	if (skill.name == "Battle Command" && elem == 0) { result = Math.floor(1+(skill.level / 10)) }
+	updateSkill : function(skill, lvl, elem) {
+	var result = skill.data.values[elem][lvl]
+	if (skill.name == "War Cry" && elem < 2) { result = ((1 + (0.16*skills[2].level + 0.16*skills[8].level)) * skill.data.values[elem][lvl]) }
+	if (skill.name == "Battle Command" && elem == 0) { result = Math.floor(1+(lvl / 10)) }
 	if (skill.name == "Frenzy" && elem == 0) { result = skills[24].level }
-	if (skill.name == "Frenzy" && elem == 1) { result = (skill.data.values[elem][level] + 10*skills[20].level) }
-	if (skill.name == "Frenzy" && elem == 2) { result = (skill.data.values[elem][level] + 8*skills[19].level) }
-	if (skill.name == "Concentrate" && elem == 2) { result = (5*skills[24].level + 10*skills[2].level + 10*skills[6].level + skill.data.values[elem][level]) }
-	if (skill.name == "Cleave" && elem < 2) { result = ((1 + (0.15*skills[18].level)) * skill.data.values[elem][level]) }
+	if (skill.name == "Frenzy" && elem == 1) { result = (skill.data.values[elem][lvl] + 10*skills[20].level) }
+	if (skill.name == "Frenzy" && elem == 2) { result = (skill.data.values[elem][lvl] + 8*skills[19].level) }
+	if (skill.name == "Concentrate" && elem == 2) { result = (5*skills[24].level + 10*skills[2].level + 10*skills[6].level + skill.data.values[elem][lvl]) }
+	if (skill.name == "Cleave" && elem < 2) { result = ((1 + (0.15*skills[18].level)) * skill.data.values[elem][lvl]) }
 	if (skill.name == "Stun" && elem == 0) { result = 10*skills[24].level }
-	if (skill.name == "Stun" && elem == 1) { result = (skill.data.values[elem][level] + 5*skills[19].level) }
-	if (skill.name == "Stun" && elem == 2) { result = (skill.data.values[elem][level] + 5*skills[8].level) }
-	if (skill.name == "Bash" && elem == 2) { result = (skill.data.values[elem][level] + 5*skills[19].level) }
-	if (skill.name == "Bash" && elem == 3) { result = ((1 + (0.10*skills[21].level)) * skill.data.values[elem][level]) }
-	if (skill.name == "Leap Attack" && elem == 0) { result = (20*skills[22].level + skill.data.values[elem][level]) }
-	if (skill.name == "Ethereal Throw" && elem < 2) { result = ((1 + (0.04*skills[23].level + 0.04*skills[24].level)) * skill.data.values[elem][level]) }
+	if (skill.name == "Stun" && elem == 1) { result = (skill.data.values[elem][lvl] + 5*skills[19].level) }
+	if (skill.name == "Stun" && elem == 2) { result = (skill.data.values[elem][lvl] + 5*skills[8].level) }
+	if (skill.name == "Bash" && elem == 2) { result = (skill.data.values[elem][lvl] + 5*skills[19].level) }
+	if (skill.name == "Bash" && elem == 3) { result = ((1 + (0.10*skills[21].level)) * skill.data.values[elem][lvl]) }
+	if (skill.name == "Leap Attack" && elem == 0) { result = (20*skills[22].level + skill.data.values[elem][lvl]) }
+	if (skill.name == "Ethereal Throw" && elem < 2) { result = ((1 + (0.04*skills[23].level + 0.04*skills[24].level)) * skill.data.values[elem][lvl]) }
 	// passive effects
 	if (skill.name == "Increased Stamina") { if (skill.level > 0) {character.stamina_bonus = skill.data.values[0][skill.level+skill.extra_levels]} else {character.stamina_bonus = 0} }
 	if (skill.name == "Increased Speed") { if (skill.level > 0) {character.speed_bonus = skill.data.values[0][skill.level+skill.extra_levels]} else {character.speed_bonus = 0} }

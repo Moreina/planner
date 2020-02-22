@@ -43,13 +43,26 @@
 .green_name {
   text-align: center;
   color: #00f000;
-  font-weight: bold;
+/*  font-weight: bold;	*/
 }
 .gray {
   color: gray;
 }
 .background {
   background-color: black;
+}
+.dropdown_character {
+  color: #ddd;
+  position:absolute;
+  left: 68px;
+  top: 14px;
+  opacity: 0;
+  border-color: black;
+  background-color: black;
+  padding: 0px;
+  width: 97px;
+  height: 38px;
+  z-index: 4;
 }
 .dropdown {
   color: #ddd;
