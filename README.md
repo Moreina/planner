@@ -37,4 +37,4 @@ Character Skill Planner for Diablo 2: Path of Diablo
 ### Links:
 [Reddit Thread](https://www.reddit.com/r/pathofdiablo/comments/f81e5u/character_skill_calculator_with_skill_info_up_to/)
 
-[Github Wiki](https://github.com/Moreina/planner/wiki/Home/_edit) (report bugs or add suggestions)
+[Github Wiki](https://github.com/Moreina/planner/wiki) (report bugs or add suggestions)
