@@ -650,18 +650,18 @@ function updateSkillPassives(className) {
 		if (skills[17].level > 0) { character.resistance_bonus = ~~skills[17].data.values[0][skills[17].level+skills[17].extra_levels]; } else { character.resistance_bonus = 0 }
 	} else if (className == "Sorceress") {
 		if (skills[23].level > 0 || skills[28].level > 0) { character.ar_bonus = ~~skills[23].data.values[0][skills[23].level+skills[23].extra_levels] + ~~skills[28].data.values[3][skills[28].level+skills[28].extra_levels]; } else { character.ar_bonus = 0; }
-		if (skills[13].level > 0) { character.mana_regen_bonus = ~~skill.data.values[1][skills[23].level+skills[23].extra_levels]; } else { character.mana_regen_bonus = 0; }
+		if (skills[13].level > 0) { character.mana_regen_bonus = ~~skills[23].data.values[1][skills[23].level+skills[23].extra_levels]; } else { character.mana_regen_bonus = 0; }
 		if (skills[10].level > 0) {
-			character.cPierce_bonus = ~~skill.data.values[0][skills[10].level+skills[10].extra_levels];
-			character.cDamage_bonus = ~~skill.data.values[1][skills[10].level+skills[10].extra_levels];
+			character.cPierce_bonus = ~~skills[10].data.values[0][skills[10].level+skills[10].extra_levels];
+			character.cDamage_bonus = ~~skills[10].data.values[1][skills[10].level+skills[10].extra_levels];
 		} else { character.cPierce_bonus = 0; character.cDamage_bonus = 0; }
 		if (skills[20].level > 0) {
-			character.lPierce_bonus = ~~skill.data.values[0][skills[20].level+skills[20].extra_levels];
-			character.lDamage_bonus = ~~skill.data.values[1][skills[20].level+skills[20].extra_levels];
+			character.lPierce_bonus = ~~skills[20].data.values[0][skills[20].level+skills[20].extra_levels];
+			character.lDamage_bonus = ~~skills[20].data.values[1][skills[20].level+skills[20].extra_levels];
 		} else { character.lPierce_bonus = 0; character.lDamage_bonus = 0; }
 		if (skills[30].level > 0) {
-			character.fPierce_bonus = ~~skill.data.values[0][skills[30].level+skills[30].extra_levels];
-			character.fDamage_bonus = ~~skill.data.values[1][skills[30].level+skills[30].extra_levels];
+			character.fPierce_bonus = ~~skills[30].data.values[0][skills[30].level+skills[30].extra_levels];
+			character.fDamage_bonus = ~~skills[30].data.values[1][skills[30].level+skills[30].extra_levels];
 		} else { character.fPierce_bonus = 0; character.fDamage_bonus = 0; }
 	}
 }
