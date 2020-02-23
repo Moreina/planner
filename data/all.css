@@ -64,13 +64,25 @@
   height: 38px;
   z-index: 4;
 }
-.dropdown {
+.dropdown-main {
   color: #ddd;
   background-color: black;
-  padding: 5px;
   width: 200px;
+  height: 300px;
+  border-color: #333;
+  z-index: 3;
+}
+.dropdown select {
+  color: #ddd;
+  background-color: black;
+  padding: 3px 3px;
+  width: 200px;
+  height: 29px;
   border-color: #333;
   z-index: 4;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
 }
 .dropdown:hover, .dropdown:focus {
   background-color: #222;
