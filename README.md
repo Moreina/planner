@@ -31,6 +31,7 @@ Character Skill Planner for Diablo 2: Path of Diablo
 * monster stat calculations
 * pvp info
 * character comparison tool
+* comparison to original D2 skills/stats
 * comparison of skill effectiveness per level/class
 * dynamic item/skill recommendations
 
