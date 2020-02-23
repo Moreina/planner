@@ -1042,6 +1042,7 @@ function drag(ev) {
 // cell: 1-40 (upper left position of item in 10x4 inventory)
 // ---------------------------------
 function drop(ev,cell) {
+	ev.preventDefault();
 	var data = ev.dataTransfer.getData("text");
 	ev.target.appendChild(document.getElementById(data));
 	for (s = 1; s <= inv[0].in.length; s++) {
