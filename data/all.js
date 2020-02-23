@@ -202,7 +202,7 @@ function loadItems(type, dropdown) {
 		var choices = "";
 		for (item in equipment[type]) {
 			if (item > 0) {
-				choices += "<option>" + equipment[type][item].name + "</option>"
+				choices += "<option class='dd'>" + equipment[type][item].name + "</option>"
 			} else {
 				choices += "<option selected>" + "­ ­ ­ ­ " + equipment[type][item].name + "</option>"
 			}
