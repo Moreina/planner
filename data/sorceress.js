@@ -15,7 +15,7 @@ var character_sorceress = {class_name:"Sorceress", strength:10, dexterity:25, vi
 	if (skill.name == "Freezing Pulse" && elem < 3 && elem > 0) { result = ((1 + (0.05*skills[0].level + 0.05*skills[3].level + 0.05*skills[5].level)) * (1 + (character.cDamage+character.cDamage_bonus)/100) * skill.data.values[elem][lvl]) }
 	if (skill.name == "Chilling Armor" && elem < 4 && elem > 1) { result = ((1 + (0.18*skills[0].level)) * (1 + (character.cDamage+character.cDamage_bonus)/100) * skill.data.values[elem][lvl]) }
 	if (skill.name == "Frozen Orb" && elem < 2) { result = ((1 + (0.02*skills[0].level)) * (1 + (character.cDamage+character.cDamage_bonus)/100) * skill.data.values[elem][lvl]) }
-	if (skill.name == "Charged Bolt" && elem < 3 && elem > 0) { result = ((1 + (0.25*skills[15].level + 0.25*skills[16].level)) * (1 + (character.lDamage+character.lDamage_bonus)/100) * skill.data.values[elem][lvl]) }
+	if (skill.name == "Charged Bolt" && elem < 3 && elem > 0) { result = ((1 + (0.08*skills[15].level + 0.08*skills[16].level)) * (1 + (character.lDamage+character.lDamage_bonus)/100) * skill.data.values[elem][lvl]) }
 	if (skill.name == "Telekinesis" && elem < 2) { result = ((1 + (character.lDamage+character.lDamage_bonus)/100) * skill.data.values[elem][lvl]) }
 	if (skill.name == "Nova" && elem < 2) { result = ((1 + (0.03*skills[18].level)) * (1 + (character.lDamage+character.lDamage_bonus)/100) * skill.data.values[elem][lvl]) }
 	if (skill.name == "Lightning Surge" && elem < 2) { result = ((1 + (0.05*skills[11].level + 0.05*skills[16].level)) * (1 + (character.lDamage+character.lDamage_bonus)/100) * skill.data.values[elem][lvl]) }

@@ -6,9 +6,9 @@ character = {class_name:"", strength:0, dexterity:0, vitality:0, energy:0, life:
 /* skills		*/	skill_lightning_fury:0, skill_lightning_strike:0, skill_glacial_spike:0,
 /* skill bonuses	*/	stamina_bonus:0, speed_bonus:0, defense_bonus:0, resistance_bonus:0, attack_bonus:0, cstrike_bonus:0, ar_bonus:0, pierce_bonus:0, damage_bonus:0, fRes_bonus:0, cRes_bonus:0, lRes_bonus:0, edged_bonus:[0,0,0], pole_bonus:[0,0,0], blunt_bonus:[0,0,0], thrown_bonus:[0,0,0], claw_bonus:[0,0,0], mana_regen_bonus:0, cPierce_bonus:0, lPierce_bonus:0, fPierce_bonus:0, cDamage_bonus:0, lDamage_bonus:0, fDamage_bonus:0,
 /* stats		*/	cdr:0, fcr:0, fbr:0, fhr:0, frw:0, ias:0, pierce:0, cblow:0, dstrike:0, cstrike:0, owounds:0, fDamage:0, cDamage:0, lDamage:0, pDamage:0, fPierce:0, cPierce:0, lPierce:0, pPierce:0, pdr:0, damage_reduced:0, mDamage_reduced:0, mf:0, gf:0, life_leech:0, mana_leech:0, life_per_hit:0, mana_per_hit:0, life_per_ranged_hit:0, mana_per_ranged_hit:0, fAbsorb:0, cAbsorb:0, lAbsorb:0, pAbsorb:0, mAbsorb:0, fAbsorb_flat:0, cAbsorb_flat:0, lAbsorb_flat:0, mAbsorb_flat:0, 
-/* stats (indirect)	*/	all_skills:0, all_attributes:0, all_res:0, velocity:0, damage_bonus:0, max_life:0, max_mana:0, life_per_level:0, mana_per_level:0, defense_per_level:0, strength_per_level:0, mf_per_level:0, fAbsorb_per_level:0, fcr_per_level:0, dstrike_per_level:0,
+/* stats (indirect)	*/	all_skills:0, all_attributes:0, all_res:0, velocity:0, damage_bonus:0, max_life:0, max_mana:0, life_per_level:0, mana_per_level:0, defense_per_level:0, strength_per_level:0, mf_per_level:0, fAbsorb_per_level:0, fcr_per_level:0, dstrike_per_level:0, stamina_per_level:0,
 /* attack damage	*/	damage_min:0, damage_max:0, fDamage_min:0, fDamage_max:0, cDamage_min:0, cDamage_max:0, lDamage_min:0, lDamage_max:0, pDamage_min:0, pDamage_max:0, mDamage_min:0, mDamage_max:0, min_damage_per_level:0, max_damage_per_level:0,
-/* not displayed	*/	ibc:0, itd:0, pmh:0, cbf:0, peace:0, life_per_kill:0, mana_per_kill:0, damage_vs_demons:0, damage_vs_undead:0, ar_vs_demons:0, ar_vs_undead:0, damage_to_mana:0, slow_target:0, light_radius:0, thorns:0, thorns_per_level:0, slower_stam_drain:0, heal_stam:0, life_regen:0, mana_regen:0, knockback:0, missile_defense:0, target_defense:0, enemy_fRes:0, enemy_cRes:0, enemy_lRes:0, enemy_pRes:0, 
+/* not displayed	*/	ibc:0, itd:0, pmh:0, cbf:0, peace:0, life_per_kill:0, mana_per_kill:0, damage_vs_demons:0, damage_vs_undead:0, ar_vs_demons:0, ar_vs_undead:0, damage_to_mana:0, slow_target:0, light_radius:0, thorns:0, thorns_per_level:0, slower_stam_drain:0, heal_stam:0, life_regen:0, mana_regen:0, knockback:0, missile_defense:0, target_defense:0, enemy_fRes:0, enemy_cRes:0, enemy_lRes:0, enemy_pRes:0, ar_vs_undead_per_level:0, damage_vs_undead_per_level:0,
 /* charges		*/	charges_poison_creeper:0, charges_oak_sage:0, charges_iron_maiden:0, charges_iron_golem:0, 
 	updateSkill : function(skill, level, elem) {
 	var result = skill.data.values[elem][level]
@@ -458,7 +458,7 @@ function updateStats() {
 	if (character.running > 0) { document.getElementById("defense").innerHTML = "N/A" }
 	else { document.getElementById("defense").innerHTML = Math.floor((character.defense + character.level*character.defense_per_level) * (1 + character.defense_bonus/100)) }
 	document.getElementById("ar").innerHTML = Math.floor(character.ar * (1 + character.ar_bonus/100))
-	document.getElementById("stamina").innerHTML = Math.floor(character.stamina * (1+character.stamina_bonus/100))
+	document.getElementById("stamina").innerHTML = Math.floor((character.stamina + character.level*character.stamina_per_level) * (1+character.stamina_bonus/100))
 	document.getElementById("life").innerHTML = Math.floor((character.life + character.level*character.life_per_level) * (1 + character.max_life/100))
 	document.getElementById("mana").innerHTML = Math.floor((character.mana + character.level*character.mana_per_level) * (1 + character.max_mana/100))
 	document.getElementById("level").innerHTML = character.level
@@ -531,9 +531,9 @@ function updateSecondaryStats() {
 	document.getElementById("gf").innerHTML = character.gf
 	
 	document.getElementById("damage_vs_demons").innerHTML = character.damage_vs_demons
-	document.getElementById("damage_vs_undead").innerHTML = character.damage_vs_undead
+	document.getElementById("damage_vs_undead").innerHTML = Math.floor(character.damage_vs_undead + character.level*character.damage_vs_undead_per_level)
 	document.getElementById("ar_vs_demons").innerHTML = character.ar_vs_demons
-	document.getElementById("ar_vs_undead").innerHTML = character.ar_vs_undead
+	document.getElementById("ar_vs_undead").innerHTML = Math.floor(character.ar_vs_undead + character.level*character.ar_vs_undead_per_level)
 	
 	document.getElementById("life_per_kill").innerHTML = character.life_per_kill
 	document.getElementById("mana_per_kill").innerHTML = character.mana_per_kill
@@ -650,7 +650,7 @@ function updateSkillPassives(className) {
 		if (skills[17].level > 0) { character.resistance_bonus = ~~skills[17].data.values[0][skills[17].level+skills[17].extra_levels]; } else { character.resistance_bonus = 0 }
 	} else if (className == "Sorceress") {
 		if (skills[23].level > 0 || skills[28].level > 0) { character.ar_bonus = ~~skills[23].data.values[0][skills[23].level+skills[23].extra_levels] + ~~skills[28].data.values[3][skills[28].level+skills[28].extra_levels]; } else { character.ar_bonus = 0; }
-		if (skills[13].level > 0) { character.mana_regen_bonus = ~~skills[23].data.values[1][skills[23].level+skills[23].extra_levels]; } else { character.mana_regen_bonus = 0; }
+		if (skills[23].level > 0) { character.mana_regen_bonus = ~~skills[23].data.values[1][skills[23].level+skills[23].extra_levels]; } else { character.mana_regen_bonus = 0; }
 		if (skills[10].level > 0) {
 			character.cPierce_bonus = ~~skills[10].data.values[0][skills[10].level+skills[10].extra_levels];
 			character.cDamage_bonus = ~~skills[10].data.values[1][skills[10].level+skills[10].extra_levels];
