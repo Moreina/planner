@@ -278,8 +278,7 @@ function addCharm(val) {
 		if (nameVal == "Annihilus") { charmImage = "./images/items/charm1u.png"; }
 		if (nameVal == "Hellfire Torch") { charmImage = "./images/items/charm2u.png"; }
 		if (nameVal == "Gheed's Fortune") { charmImage = "./images/items/charm3u.png"; }
-		var charmHTML = '<img id="' + val + '" src="' + charmImage + '" draggable="true" ondragstart="drag(event)" width="' + charmWidth + '" height="' + charmHeight + '" oncontextmenu="trash(event)" onmouseover="itemHover(event, this.value)" onmouseout="itemOut()">';
-	//	var charmHTML = '<img id="' + val + '" src="' + charmImage + '" draggable="true" ondragstart="drag(event)" width="' + charmWidth + '" height="' + charmHeight + ' onmouseover="itemHover(event, this.value)" onmouseout="itemOut()">';
+		var charmHTML = '<img style="width: ' + charmWidth + '; height: ' + charmHeight + '; pointer-events: auto;" id="' + val + '" src="' + charmImage + '" draggable="true" ondragstart="drag(event)" width="' + charmWidth + '" height="' + charmHeight + '" oncontextmenu="trash(event)" onmouseover="itemHover(event, this.value)" onmouseout="itemOut()">';
 		var insertion = "";
 		var space_found = 0;
 		var empty = 1;
@@ -301,8 +300,10 @@ function addCharm(val) {
 			insertion = inv[i].id;
 			inv[i].empty = 0
 			inv[0].in[i] = val
-			if (charm_y > 1) { inv[i+10].empty = 0; inv[0].in[i+10] = val; }
-			if (charm_y > 2) { inv[i+20].empty = 0; inv[0].in[i+20] = val; }
+			if (charm_y > 1) { inv[i+10].empty = 0; inv[0].in[i+10] = val; 
+				document.getElementById(inv[i].id).style = "position: absolute; width: 29px; height: 58px;"; }
+			if (charm_y > 2) { inv[i+20].empty = 0; inv[0].in[i+20] = val; 
+				document.getElementById(inv[i].id).style = "position: absolute; width: 29px; height: 87px;"; }
 			document.getElementById(insertion).innerHTML += charmHTML;
 			var ch = "charms";
 			equipped[ch][val] = {}
@@ -1021,13 +1022,11 @@ function itemHover(ev, id) {
 function allowDrop(ev, cell, y) {
 	if (inv[0].pickup_y + y <= 5) {
 		var allow = 1
-		if (inv[cell].empty == 0) { allow = 0 }
-		if (inv[0].pickup_y > 1 && inv[cell+10].empty == 0) { allow = 0
-			if (inv[0].in[cell+10] == inv[0].onpickup) { allow = 1 } }
-		if (inv[0].pickup_y > 2 && inv[cell+20].empty == 0) { allow = 0
-			if (inv[0].in[cell+20] == inv[0].onpickup) { allow = 1 } }
+		if (inv[cell].empty == 0 && inv[0].in[cell] != inv[0].onpickup) { allow = 0 }
+		if (inv[0].pickup_y > 1 && inv[cell+10].empty == 0 && inv[0].in[cell+10] != inv[0].onpickup) { allow = 0 }
+		if (inv[0].pickup_y > 2 && inv[cell+20].empty == 0 && inv[0].in[cell+20] != inv[0].onpickup) { allow = 0 }
 		if (allow == 1) {
-			ev.preventDefault();
+		ev.preventDefault();
 		}
 	}
 }
@@ -1041,6 +1040,8 @@ function drag(ev) {
 	if (height > 80) { inv[0].pickup_y = 3 }
 	else if (height > 50) { inv[0].pickup_y = 2 }
 	else { inv[0].pickup_y = 1 }
+	for (s = 1; s <= inv[0].in.length; s++) {
+	}
 }
 
 // Handles item dropping for Charm Inventory
@@ -1048,15 +1049,22 @@ function drag(ev) {
 // ---------------------------------
 function drop(ev,cell) {
 	ev.preventDefault();
+	
 	var data = ev.dataTransfer.getData("text");
 	ev.target.appendChild(document.getElementById(data));
 	for (s = 1; s <= inv[0].in.length; s++) {
-		if (inv[0].in[s] == inv[0].onpickup) { inv[s].empty = 1; inv[0].in[s] = ""; }
+		if (inv[0].in[s] == inv[0].onpickup) { inv[s].empty = 1; inv[0].in[s] = ""; 
+			document.getElementById(inv[s].id).style = "position: absolute; width: 29px; height: 29px;";
+		}
 	}
 	inv[cell].empty = 0
 	inv[0].in[cell] = inv[0].onpickup
-	if (inv[0].pickup_y > 1) { inv[cell+10].empty = 0; inv[0].in[cell+10] = inv[0].onpickup; }
-	if (inv[0].pickup_y > 2) { inv[cell+20].empty = 0; inv[0].in[cell+20] = inv[0].onpickup; }
+	if (inv[0].pickup_y > 1) { inv[cell+10].empty = 0; inv[0].in[cell+10] = inv[0].onpickup; 
+		document.getElementById(inv[cell].id).style = "position: absolute; width: 29px; height: 58px;";
+	}
+	if (inv[0].pickup_y > 2) { inv[cell+20].empty = 0; inv[0].in[cell+20] = inv[0].onpickup; 
+		document.getElementById(inv[cell].id).style = "position: absolute; width: 29px; height: 87px;";
+	}
 	inv[0].onpickup = "none"
 }
 
@@ -1082,26 +1090,23 @@ function trash(ev) {
 	updateSecondaryStats()
 }
 
-/*
 // 
 // ---------------------------------
 function itemDrag(ev, x, y) {
-	var cell = (y-1)*10+x
+/*	var cell = (y-1)*10+x
 	var id = inv[0].in[cell]
 	ev_new = document.getElementById(id)
-	drag(ev)
 	drag(ev_new)
-	
+*/	return;	
 }
-*/
-/*
+
 // 
 // ---------------------------------
 function itemRemove(ev, x, y) {
-	var cell = (y-1)*10+x
+/*	var cell = (y-1)*10+x
 	var id = inv[0].in[cell]
 	ev_new = document.getElementById(id)
 	trash(ev)
 	trash(ev_new)
+*/	return;
 }
-*/

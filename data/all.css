@@ -183,7 +183,7 @@ position:absolute;
   position: absolute;
   width: 29px;
   height: 29px;
-}
+  }
 .Hx1 {left: 5px;}
 .Hx2 {left: 34px;}
 .Hx3 {left: 63px;}
@@ -198,3 +198,8 @@ position:absolute;
 .Hy2 {top: 32px;}
 .Hy3 {top: 61px;}
 .Hy4 {top: 90px;}
+
+.inventory {
+  width: 29px;
+  pointer-events: auto;	
+}
