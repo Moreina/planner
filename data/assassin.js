@@ -6,9 +6,11 @@ var character_assassin = {class_name:"Assassin", strength:20, dexterity:20, vita
 	if (skill.name == "Dual Strike" && elem == 0) { result = (5*skills[9].level + 5*skills[13].level + skill.data.values[elem][lvl]) }
 	if (skill.name == "Static Strike" && elem < 2) { result = ((1 + (0.08*skills[21].level)) * skill.data.values[elem][lvl]) }
 	if (skill.name == "Ember Storm" && elem < 2) { result = ((1 + (0.18*skills[20].level)) * skill.data.values[elem][lvl]) }
-	if (skill.name == "Dragon Talon" && elem < 2) { result = 0 }	// TODO: Damage from footwear
+	if (skill.name == "Dragon Talon" && elem == 0) { result = character.kick_min }
+	if (skill.name == "Dragon Talon" && elem == 1) { result = Math.floor(1.5*character.kick_min) }
 	if (skill.name == "Dragon Talon" && elem == 3) { result = (15*skills[7].level + skill.data.values[elem][lvl]) }
-	if (skill.name == "Dragon Flight" && elem < 2) { result = 0 }	// TODO: Damage from footwear
+	if (skill.name == "Dragon Flight" && elem == 0) { result = character.kick_min }
+	if (skill.name == "Dragon Flight" && elem == 1) { result = Math.floor(1.5*character.kick_min) }
 	if (skill.name == "Psychic Hammer" && elem < 4) { result = ((1 + (0.25*skills[12].level + 0.25*skills[17].level)) * skill.data.values[elem][lvl]) }
 	if (skill.name == "Mind Blast" && elem > 0 && elem < 3) { result = ((1 + (0.21*skills[10].level + 0.21*skills[12].level)) * skill.data.values[elem][lvl]) }
 	if (skill.name == "Mind Blast" && elem == 0) { result = 2.6 + (0.7 * Math.floor(skills[14].level / 5)) }

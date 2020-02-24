@@ -13,7 +13,7 @@
 
 </style>
 -->
-<link rel="shortcut icon" href="./images/favicon.ico" type="image/x-icon">
+<link rel="shortcut icon" href="./images/tab_icon.png" type="image/x-icon">
 
 </head>
 <body class="background" onload="initial_load()">
@@ -25,7 +25,7 @@
 <div id="gui" class="no-selection" oncontextmenu="return false">
 
 <div id="gui_stats" style="position: relative; width: 175px; height: 434px; float: left;">
-<img usemap="#statmap" src="./images/statbar_all.png">
+<img usemap="#statmap" src="./images/statbar.png">
 <map id="statmap" name="statmap">
 <area coords="127,107,163,143" id="btn_strength">
 <area coords="127,169,163,203" id="btn_dexterity">
@@ -42,9 +42,9 @@
 <p class="point" style="left: 85px; top: 224px;" id="vitality"></p>
 <p class="point" style="left: 85px; top: 286px;" id="energy"></p>
 
-<img id="hide_skillpoints" src="./images/skills_hidden.png" style="position: absolute; display: block; left: 7px; top: 54px;">
-<img id="hide_statpoints" src="./images/stats_hidden.png" style="position: absolute; display: block; left: 7px; top: 344px;">
-<img id="hide_stats" src="./images/stats_hidden_extra.png" style="position: absolute; display: block; left: 120px; top: 98px;">
+<img id="hide_skillpoints" src="./images/statbar_hidden_skills.png" style="position: absolute; display: block; left: 7px; top: 54px;">
+<img id="hide_statpoints" src="./images/statbar_hidden_stats.png" style="position: absolute; display: block; left: 7px; top: 344px;">
+<img id="hide_stats" src="./images/statbar_hidden_buttons.png" style="position: absolute; display: block; left: 120px; top: 98px;">
 
 <!--	class selection 	-->
 <select class="dropdown_character" id="dropdown_class" onChange="reset(this.value)">
@@ -186,7 +186,7 @@
 
 </div>		<!--	/gui	-->
 
-<div class="gray" style="display: block; width: 250px;" id="stats">
+<div class="gray no-selection" style="display: block; width: 250px;" id="stats">
 	<a>Basic Attack: </a><a id="basic_attack"></a><br>
 	<a>Attack Rating: </a><a id="ar"></a><br>
 	<a>Defense: </a><a id="defense"></a><br>
@@ -195,8 +195,7 @@
 	<a>Mana: </a><a id="mana"></a>
 </div><br>
 
-<img src="./images/stats2.png" style="opacity: 0; float: left; pointer-events: none;">
-
+<div style="float: left; position: relative; width: 321px; height: 434px;">
 <div style="position: absolute; float: left;" class="no-selection">
 <div class="gray" style="position: relative; display: block; float: left; width: 170px;" id="stats2a">
 	<font size="2">Fire Resistance: </font><font size="2" id="fres"></font><br>
@@ -238,13 +237,14 @@
 	<font size="2">Gold Find: </font><font size="2" id="gf"></font><br>
 </div>
 </div>
+</div>
 
 <!--	charm inventory 	-->
 <div id="gui_charms" class="inventory no-selection" oncontextmenu="return false">
 <img usemap="#charmmap" id="charm_grid" src="./images/charm_inventory.png">
 <map id="charmmap" name="charmmap">
-<div id="h11" ondrop="drop(event,1)" ondragover="allowDrop(event,1,1)" class="H Hx1 Hy1" onmouseover="itemHover(event, 'h11')" onmouseout="itemOut()"></div>
-<div id="h21" ondrop="drop(event,2)" ondragover="allowDrop(event,2,1)" class="H Hx2 Hy1" onmouseover="itemHover(event, 'h21')" onmouseout="itemOut()"></div>
+<div id="h11" ondrop="drop(event,1)" ondragover="allowDrop(event,1,1)" class="H Hx1 Hy1" onmouseover="itemHover(event, 'h11')" onmouseout="itemOut()"></div> <!-- onmousedown="itemDrag(event,1,1)" oncontextmenu="itemRemove(event,1,1)"></div>-->
+<div id="h21" ondrop="drop(event,2)" ondragover="allowDrop(event,2,1)" class="H Hx2 Hy1" onmouseover="itemHover(event, 'h21')" onmouseout="itemOut()"></div> <!-- onmousedown="itemDrag(event,2,1)" oncontextmenu="itemRemove(event,2,1)"></div>-->
 <div id="h31" ondrop="drop(event,3)" ondragover="allowDrop(event,3,1)" class="H Hx3 Hy1" onmouseover="itemHover(event, 'h31')" onmouseout="itemOut()"></div>
 <div id="h41" ondrop="drop(event,4)" ondragover="allowDrop(event,4,1)" class="H Hx4 Hy1" onmouseover="itemHover(event, 'h41')" onmouseout="itemOut()"></div>
 <div id="h51" ondrop="drop(event,5)" ondragover="allowDrop(event,5,1)" class="H Hx5 Hy1" onmouseover="itemHover(event, 'h51')" onmouseout="itemOut()"></div>
@@ -254,8 +254,8 @@
 <div id="h91" ondrop="drop(event,9)" ondragover="allowDrop(event,9,1)" class="H Hx9 Hy1" onmouseover="itemHover(event, 'h91')" onmouseout="itemOut()"></div>
 <div id="h01" ondrop="drop(event,10)" ondragover="allowDrop(event,10,1)" class="H Hx10 Hy1" onmouseover="itemHover(event, 'h01')" onmouseout="itemOut()"></div>
 
-<div id="h12" ondrop="drop(event,11)" ondragover="allowDrop(event,11,2)" class="H Hx1 Hy2" onmouseover="itemHover(event, 'h12')" onmouseout="itemOut()"></div>
-<div id="h22" ondrop="drop(event,12)" ondragover="allowDrop(event,12,2)" class="H Hx2 Hy2" onmouseover="itemHover(event, 'h22')" onmouseout="itemOut()"></div>
+<div id="h12" ondrop="drop(event,11)" ondragover="allowDrop(event,11,2)" class="H Hx1 Hy2" onmouseover="itemHover(event, 'h12')" onmouseout="itemOut()"></div> <!-- onmousedown="itemDrag(event,1,2)" oncontextmenu="itemRemove(event,1,2)"></div>-->
+<div id="h22" ondrop="drop(event,12)" ondragover="allowDrop(event,12,2)" class="H Hx2 Hy2" onmouseover="itemHover(event, 'h22')" onmouseout="itemOut()"></div> <!-- onmousedown="itemDrag(event,2,2)" oncontextmenu="itemRemove(event,2,2)"></div>-->
 <div id="h32" ondrop="drop(event,13)" ondragover="allowDrop(event,13,2)" class="H Hx3 Hy2" onmouseover="itemHover(event, 'h32')" onmouseout="itemOut()"></div>
 <div id="h42" ondrop="drop(event,14)" ondragover="allowDrop(event,14,2)" class="H Hx4 Hy2" onmouseover="itemHover(event, 'h42')" onmouseout="itemOut()"></div>
 <div id="h52" ondrop="drop(event,15)" ondragover="allowDrop(event,15,2)" class="H Hx5 Hy2" onmouseover="itemHover(event, 'h52')" onmouseout="itemOut()"></div>
@@ -265,8 +265,8 @@
 <div id="h92" ondrop="drop(event,19)" ondragover="allowDrop(event,19,2)" class="H Hx9 Hy2" onmouseover="itemHover(event, 'h92')" onmouseout="itemOut()"></div>
 <div id="h02" ondrop="drop(event,20)" ondragover="allowDrop(event,20,2)" class="H Hx10 Hy2" onmouseover="itemHover(event, 'h02')" onmouseout="itemOut()"></div>
 
-<div id="h13" ondrop="drop(event,21)" ondragover="allowDrop(event,21,3)" class="H Hx1 Hy3" onmouseover="itemHover(event, 'h13')" onmouseout="itemOut()"></div>
-<div id="h23" ondrop="drop(event,22)" ondragover="allowDrop(event,22,3)" class="H Hx2 Hy3" onmouseover="itemHover(event, 'h23')" onmouseout="itemOut()"></div>
+<div id="h13" ondrop="drop(event,21)" ondragover="allowDrop(event,21,3)" class="H Hx1 Hy3" onmouseover="itemHover(event, 'h13')" onmouseout="itemOut()"></div> <!-- onmousedown="itemDrag(event,1,3)" oncontextmenu="itemRemove(event,1,3)"></div>-->
+<div id="h23" ondrop="drop(event,22)" ondragover="allowDrop(event,22,3)" class="H Hx2 Hy3" onmouseover="itemHover(event, 'h23')" onmouseout="itemOut()"></div> <!-- onmousedown="itemDrag(event,2,3)" oncontextmenu="itemRemove(event,2,3)"></div>-->
 <div id="h33" ondrop="drop(event,23)" ondragover="allowDrop(event,23,3)" class="H Hx3 Hy3" onmouseover="itemHover(event, 'h33')" onmouseout="itemOut()"></div>
 <div id="h43" ondrop="drop(event,24)" ondragover="allowDrop(event,24,3)" class="H Hx4 Hy3" onmouseover="itemHover(event, 'h43')" onmouseout="itemOut()"></div>
 <div id="h53" ondrop="drop(event,25)" ondragover="allowDrop(event,25,3)" class="H Hx5 Hy3" onmouseover="itemHover(event, 'h53')" onmouseout="itemOut()"></div>
@@ -276,8 +276,8 @@
 <div id="h93" ondrop="drop(event,29)" ondragover="allowDrop(event,29,3)" class="H Hx9 Hy3" onmouseover="itemHover(event, 'h93')" onmouseout="itemOut()"></div>
 <div id="h03" ondrop="drop(event,30)" ondragover="allowDrop(event,30,3)" class="H Hx10 Hy3" onmouseover="itemHover(event, 'h03')" onmouseout="itemOut()"></div>
 
-<div id="h14" ondrop="drop(event,31)" ondragover="allowDrop(event,31,4)" class="H Hx1 Hy4" onmouseover="itemHover(event, 'h14')" onmouseout="itemOut()"></div>
-<div id="h24" ondrop="drop(event,32)" ondragover="allowDrop(event,32,4)" class="H Hx2 Hy4" onmouseover="itemHover(event, 'h24')" onmouseout="itemOut()"></div>
+<div id="h14" ondrop="drop(event,31)" ondragover="allowDrop(event,31,4)" class="H Hx1 Hy4" onmouseover="itemHover(event, 'h14')" onmouseout="itemOut()"></div> <!-- onmousedown="itemDrag(event,1,4)" oncontextmenu="itemRemove(event,1,3)"></div>-->
+<div id="h24" ondrop="drop(event,32)" ondragover="allowDrop(event,32,4)" class="H Hx2 Hy4" onmouseover="itemHover(event, 'h24')" onmouseout="itemOut()"></div> <!-- onmousedown="itemDrag(event,2,4)" oncontextmenu="itemRemove(event,2,3)"></div>-->
 <div id="h34" ondrop="drop(event,33)" ondragover="allowDrop(event,33,4)" class="H Hx3 Hy4" onmouseover="itemHover(event, 'h34')" onmouseout="itemOut()"></div>
 <div id="h44" ondrop="drop(event,34)" ondragover="allowDrop(event,34,4)" class="H Hx4 Hy4" onmouseover="itemHover(event, 'h44')" onmouseout="itemOut()"></div>
 <div id="h54" ondrop="drop(event,35)" ondragover="allowDrop(event,35,4)" class="H Hx5 Hy4" onmouseover="itemHover(event, 'h54')" onmouseout="itemOut()"></div>
@@ -344,8 +344,6 @@
 <script type="text/javascript" src="./data/druid.js"></script>
 
 <script>
-
-
 
 //
 // ---------------------------------

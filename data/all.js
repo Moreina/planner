@@ -2,12 +2,12 @@
 
 character = {class_name:"", strength:0, dexterity:0, vitality:0, energy:0, life:0, mana:0, defense:0, ar:0, stamina:0, levelup_life:0, levelup_stamina:0, levelup_mana:0, gain_dexterity:[0,0], gain_vitality:[0,0], gain_energy:0, starting_strength:0, starting_dexterity:0, starting_vitality:0, starting_energy:0, tab1:"", tab2:"", tab3:"",
 /* main stats		*/	level:1, skillpoints:0, statpoints:0, quests_completed:-1, running:-1, difficulty:3, fRes_max:75, cRes_max:75, lRes_max:75, pRes_max:75, mRes_max:75, fRes_penalty:100, cRes_penalty:100, lRes_penalty:100, pRes_penalty:100, mRes_penalty:100, fRes:0, cRes:0, lRes:0, pRes:0, mRes:0, strength_added:0, dexterity_added:0, vitality_added:0, energy_added:0,
-/* skill tabs		*/	skills_javelins:0, skills_passives:0, skills_bows:0, skills_martial:0, skills_shadow:0, skills_traps:0, skills_warcries:0, skills_masteries:0, skills_combat_barbarian:0, skills_elemental:0, skills_shapeshifting:0, skills_summoning_druid:0, skills_summoning_necromancer:0, skills_poisonBone:0, skills_curses:0, skills_offensive:0, skills_defensive:0, skills_combat_paladin:0, skills_cold:0, skills_lightning:0, skills_fire:0,
+/* skill tabs		*/	skills_javelins:0, skills_passives:0, skills_bows:0, skills_martial:0, skills_shadow:0, skills_traps:0, skills_warcries:0, skills_masteries:0, skills_combat_barbarian:0, skills_elemental:0, skills_shapeshifting:0, skills_summoning_druid:0, skills_summoning_necromancer:0, skills_poisonBone:0, skills_curses:0, skills_offensive:0, skills_defensive:0, skills_combat_paladin:0, skills_cold:0, skills_lightning:0, skills_fire:0, skills_amazon:0, skills_assassin:0, skills_barbarian:0, skills_druid:0, skills_necromancer:0, skills_paladin:0, skills_sorceress:0,
 /* skills		*/	skill_lightning_fury:0, skill_lightning_strike:0, skill_glacial_spike:0,
 /* skill bonuses	*/	stamina_bonus:0, speed_bonus:0, defense_bonus:0, resistance_bonus:0, attack_bonus:0, cstrike_bonus:0, ar_bonus:0, pierce_bonus:0, damage_bonus:0, fRes_bonus:0, cRes_bonus:0, lRes_bonus:0, edged_bonus:[0,0,0], pole_bonus:[0,0,0], blunt_bonus:[0,0,0], thrown_bonus:[0,0,0], claw_bonus:[0,0,0], mana_regen_bonus:0, cPierce_bonus:0, lPierce_bonus:0, fPierce_bonus:0, cDamage_bonus:0, lDamage_bonus:0, fDamage_bonus:0,
 /* stats		*/	cdr:0, fcr:0, fbr:0, fhr:0, frw:0, ias:0, pierce:0, cblow:0, dstrike:0, cstrike:0, owounds:0, fDamage:0, cDamage:0, lDamage:0, pDamage:0, fPierce:0, cPierce:0, lPierce:0, pPierce:0, pdr:0, damage_reduced:0, mDamage_reduced:0, mf:0, gf:0, life_leech:0, mana_leech:0, life_per_hit:0, mana_per_hit:0, life_per_ranged_hit:0, mana_per_ranged_hit:0, fAbsorb:0, cAbsorb:0, lAbsorb:0, pAbsorb:0, mAbsorb:0, fAbsorb_flat:0, cAbsorb_flat:0, lAbsorb_flat:0, mAbsorb_flat:0, 
-/* stats (indirect)	*/	all_skills:0, all_attributes:0, all_res:0, velocity:0, damage_bonus:0, max_life:0, max_mana:0, life_per_level:0, mana_per_level:0, defense_per_level:0, strength_per_level:0, mf_per_level:0, fAbsorb_per_level:0, fcr_per_level:0, dstrike_per_level:0, stamina_per_level:0,
-/* attack damage	*/	damage_min:0, damage_max:0, fDamage_min:0, fDamage_max:0, cDamage_min:0, cDamage_max:0, lDamage_min:0, lDamage_max:0, pDamage_min:0, pDamage_max:0, mDamage_min:0, mDamage_max:0, min_damage_per_level:0, max_damage_per_level:0,
+/* stats (indirect)	*/	all_skills:0, all_attributes:0, all_res:0, velocity:0, damage_bonus:0, max_life:0, max_mana:0, life_per_level:0, mana_per_level:0, defense_per_level:0, strength_per_level:0, mf_per_level:0, fAbsorb_per_level:0, fcr_per_level:0, dstrike_per_level:0, stamina_per_level:0, vitality_per_level:0,
+/* attack damage	*/	damage_min:0, damage_max:0, fDamage_min:0, fDamage_max:0, cDamage_min:0, cDamage_max:0, lDamage_min:0, lDamage_max:0, pDamage_min:0, pDamage_max:0, mDamage_min:0, mDamage_max:0, min_damage_per_level:0, max_damage_per_level:0, kick_min:0,
 /* not displayed	*/	ibc:0, itd:0, pmh:0, cbf:0, peace:0, life_per_kill:0, mana_per_kill:0, damage_vs_demons:0, damage_vs_undead:0, ar_vs_demons:0, ar_vs_undead:0, damage_to_mana:0, slow_target:0, light_radius:0, thorns:0, thorns_per_level:0, slower_stam_drain:0, heal_stam:0, life_regen:0, mana_regen:0, knockback:0, missile_defense:0, target_defense:0, enemy_fRes:0, enemy_cRes:0, enemy_lRes:0, enemy_pRes:0, ar_vs_undead_per_level:0, damage_vs_undead_per_level:0,
 /* charges		*/	charges_poison_creeper:0, charges_oak_sage:0, charges_iron_maiden:0, charges_iron_golem:0, 
 	updateSkill : function(skill, level, elem) {
@@ -19,6 +19,7 @@ character = {class_name:"", strength:0, dexterity:0, vitality:0, energy:0, life:
 var settings = {coupling:1}
 var gear = {req_level:0, req_strength:0, req_dexterity:0};
 var MAX = 20;	// Skill Hardpoints
+var LIMIT = 60; // Highest Skill Data
 
 // Charm Inventory
 var inv = [
@@ -278,6 +279,7 @@ function addCharm(val) {
 		if (nameVal == "Hellfire Torch") { charmImage = "./images/items/charm2u.png"; }
 		if (nameVal == "Gheed's Fortune") { charmImage = "./images/items/charm3u.png"; }
 		var charmHTML = '<img id="' + val + '" src="' + charmImage + '" draggable="true" ondragstart="drag(event)" width="' + charmWidth + '" height="' + charmHeight + '" oncontextmenu="trash(event)" onmouseover="itemHover(event, this.value)" onmouseout="itemOut()">';
+	//	var charmHTML = '<img id="' + val + '" src="' + charmImage + '" draggable="true" ondragstart="drag(event)" width="' + charmWidth + '" height="' + charmHeight + ' onmouseover="itemHover(event, this.value)" onmouseout="itemOut()">';
 		var insertion = "";
 		var space_found = 0;
 		var empty = 1;
@@ -777,6 +779,8 @@ function removeStat(event, stat) {
 	} else { points = 0 }
 	character.statpoints += points
 	updateStats()
+	//event.preventDefault();
+	//return false;
 }
 
 // Raises the skill level
@@ -868,6 +872,8 @@ function skillDown(event, skill) {
 	updateSecondaryStats()
 	skillHover(skill)
 	showBaseLevels(skill)
+	//event.preventDefault();
+	//return false;
 }
 
 // Shows skill description tooltip on mouse-over
@@ -904,7 +910,7 @@ function skillHover(skill) {
 		next_display += next_value
 		
 		current_display += skill.text[i]
-		//if (skill.level+skill.extra_levels <= 60) { levels = skill.level+skill.extra_levels } else { levels = 60 }
+		//if (skill.level+skill.extra_levels <= LIMIT) { levels = skill.level+skill.extra_levels } else { levels = LIMIT }
 		levels = skill.level+skill.extra_levels
 		current_value = mod_synergy * skill.data.values[i][levels]
 		if (mod_synergy == 1) { current_value = character.updateSkill(skill, (levels), i) }
@@ -928,7 +934,7 @@ function skillHover(skill) {
 		current_display = ""
 		if (skill.data.index[0] > 0) { pre_display = "<br>" + pre_display + "<br>" }
 	}
-	if (skill.level < MAX && (skill.level+skill.extra_levels < 60)) { next_display += skill.text[skill.data.values.length] } else { next_display = "(maximum level reached)" }
+	if (skill.level < MAX && (skill.level+skill.extra_levels < LIMIT)) { next_display += skill.text[skill.data.values.length] } else { next_display = "(maximum level reached)" }
 	document.getElementById("next").innerHTML = next_display
 	document.getElementById("current").innerHTML = current_display
 	document.getElementById("pretext").innerHTML = pre_display
@@ -1015,8 +1021,7 @@ function itemHover(ev, id) {
 function allowDrop(ev, cell, y) {
 	if (inv[0].pickup_y + y <= 5) {
 		var allow = 1
-		if (inv[cell].empty == 0) { allow = 0 
-			if (inv[0].in[cell] == inv[0].onpickup) { allow = 1 } }
+		if (inv[cell].empty == 0) { allow = 0 }
 		if (inv[0].pickup_y > 1 && inv[cell+10].empty == 0) { allow = 0
 			if (inv[0].in[cell+10] == inv[0].onpickup) { allow = 1 } }
 		if (inv[0].pickup_y > 2 && inv[cell+20].empty == 0) { allow = 0
@@ -1076,3 +1081,27 @@ function trash(ev) {
 	updateStats()
 	updateSecondaryStats()
 }
+
+/*
+// 
+// ---------------------------------
+function itemDrag(ev, x, y) {
+	var cell = (y-1)*10+x
+	var id = inv[0].in[cell]
+	ev_new = document.getElementById(id)
+	drag(ev)
+	drag(ev_new)
+	
+}
+*/
+/*
+// 
+// ---------------------------------
+function itemRemove(ev, x, y) {
+	var cell = (y-1)*10+x
+	var id = inv[0].in[cell]
+	ev_new = document.getElementById(id)
+	trash(ev)
+	trash(ev_new)
+}
+*/
