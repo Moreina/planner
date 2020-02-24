@@ -1,6 +1,6 @@
 
 
-var character_paladin = {class_name:"Paladin", strength:25, dexterity:20, vitality:25, energy:15, life:55, mana:15, defense:5, ar:85, stamina:189, levelup_life:2.5, levelup_stamina:1, levelup_mana:1.5, gain_dexterity:[5,0.25], gain_vitality:[3,1], gain_energy:1.5, starting_strength:25, starting_dexterity:20, starting_vitality:25, starting_energy:15, skill_layout:"./images/paladin.png", tab1:"Defensive Auras", tab2:"Offensive Auras", tab3:"Combat",
+var character_paladin = {class_name:"Paladin", strength:25, dexterity:20, vitality:25, energy:15, life:55, mana:15, defense:5, ar:85, stamina:189, levelup_life:2.5, levelup_stamina:1, levelup_mana:1.5, gain_dexterity:[5,0.25], gain_vitality:[3,1], gain_energy:1.5, skill_layout:"./images/paladin.png", tab1:"Defensive Auras", tab2:"Offensive Auras", tab3:"Combat",
 	updateSkill : function(skill, lvl, elem) {
 	var result = skill.data.values[elem][lvl]
 	if (skill.name == "Resist Fire" && elem == 0) { result = Math.floor(skill.level/4); character.fRes_bonus = result; }

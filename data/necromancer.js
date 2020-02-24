@@ -1,6 +1,6 @@
 
 
-var character_necromancer = {class_name:"Necromancer", strength:15, dexterity:25, vitality:15, energy:25, life:45, mana:25, defense:6, ar:80, stamina:179, levelup_life:2, levelup_stamina:1, levelup_mana:2, gain_dexterity:[5,0.25], gain_vitality:[2,1], gain_energy:2, starting_strength:15, starting_dexterity:25, starting_vitality:15, starting_energy:25, skill_layout:"./images/necromancer.png", tab1:"Summoning", tab2:"Poison & Bone", tab3:"Curses",
+var character_necromancer = {class_name:"Necromancer", strength:15, dexterity:25, vitality:15, energy:25, life:45, mana:25, defense:6, ar:80, stamina:179, levelup_life:2, levelup_stamina:1, levelup_mana:2, gain_dexterity:[5,0.25], gain_vitality:[2,1], gain_energy:2, skill_layout:"./images/necromancer.png", tab1:"Summoning", tab2:"Poison & Bone", tab3:"Curses",
 	updateSkill : function(skill, lvl, elem) {
 	var result = skill.data.values[elem][lvl];
 	if (skill.name == "Raise Skeleton Warrior" && elem < 2) { if (skills[0].level > 0) { result = ((1+((skills[0].data.values[4][skills[0].level+skills[0].extra_levels]) / 100)) * skill.data.values[elem][lvl]) } else { result = skill.data.values[elem][lvl] } }

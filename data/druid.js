@@ -1,6 +1,6 @@
 
 
-var character_druid = {class_name:"Druid", strength:15, dexterity:20, vitality:25, energy:20, life:55, mana:20, defense:5, ar:70, stamina:184, levelup_life:1.5, levelup_stamina:1, levelup_mana:2, gain_dexterity:[5,0.25], gain_vitality:[2,1], gain_energy:2, starting_strength:15, starting_dexterity:20, starting_vitality:25, starting_energy:20, skill_layout:"./images/druid.png", tab1:"Elemental", tab2:"Shapeshifting", tab3:"Summoning",
+var character_druid = {class_name:"Druid", strength:15, dexterity:20, vitality:25, energy:20, life:55, mana:20, defense:5, ar:70, stamina:184, levelup_life:1.5, levelup_stamina:1, levelup_mana:2, gain_dexterity:[5,0.25], gain_vitality:[2,1], gain_energy:2, skill_layout:"./images/druid.png", tab1:"Elemental", tab2:"Shapeshifting", tab3:"Summoning",
 	updateSkill : function(skill, lvl, elem) {
 	var result = skill.data.values[elem][lvl]
 	if (skill.name == "Flame Dash" && elem == 0) { result = Math.max(0.5, (8 - 0.4*skill.level)) }

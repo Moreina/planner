@@ -31,9 +31,9 @@
 <area coords="127,169,163,203" id="btn_dexterity">
 <area coords="127,231,163,267" id="btn_vitality">
 <area coords="127,293,163,329" id="btn_energy">
-<area coords="14,15,61,52" id="btn_level" onclick="levelup(1)" oncontextmenu="levelup(-1)">
+<area coords="14,15,61,52" id="btn_level" onclick="changeLevel(1)" oncontextmenu="changeLevel(-1)">
 </map>
-<p class="point" style="left: 23px; top: 12px;" id="level" onclick="levelup(1)" oncontextmenu="levelup(-1)"></p>
+<p class="point" style="left: 23px; top: 12px;" id="level" onclick="changeLevel(1)" oncontextmenu="changeLevel(-1)"></p>
 <p class="text" style="left: 67px; top: 12px;" id="class_name"></p>
 <p class="point" style="left: 100px; top: 45px;" id="remainingskills"></p>
 <p class="point" style="left: 100px; top: 338px;" id="remainingstats"></p>
@@ -158,18 +158,18 @@
 </div>		<!--	/gui skills	-->
 
 <!--	selection options	-->
-<div style="width: 869px;">
+<div style="width: 869px; margin-bottom: 40px;">
 <div style="margin-right: 240px; width: 160px; float: right;">
-<input id="coupling" type="checkbox" name="coupling" value="1" onclick="return toggleCoupling();" checked>
+<input id="coupling" type="checkbox" name="coupling" value="1" onclick="return toggleCoupling(this);" checked>
 <label style="color: #aaa;" for="coupling">Skill-Level Coupling</label>
 </div>
-<div style="width: 350px; margin-bottom: 32px">
+<div style="width: 350px;">
 <div style="margin-left: 12px; margin-bottom: 1px; width: 200px">
-<input id="quests" type="checkbox" name="quests" onclick="return toggleQuests();">
+<input id="quests" type="checkbox" name="quests" onclick="return toggleQuests(this);">
 <label style="color: #aaa;" for="quests">Quests Completed</label>
 </div>
 <div style="margin-left: 12px; margin-bottom: 3px; width: 180px;">
-<input id="running" type="checkbox" name="running" onclick="return changeMovement();">
+<input id="running" type="checkbox" name="running" onclick="return toggleRunning(this);">
 <label style="color: #aaa;" for="running">Running</label>
 </div>
 <div style="color: #aaa; float: left; margin-right: 5px; margin-left: 12px;">Difficulty: </div>
@@ -193,10 +193,11 @@
 	<a>Stamina: </a><a id="stamina"></a><br>
 	<a>Life: </a><a id="life"></a><br>
 	<a>Mana: </a><a id="mana"></a>
-</div><br>
+</div>
 
-<div style="float: left; position: relative; width: 321px; height: 434px;">
+<div style="float: left; position: relative; width: 321px; height: 434px; margin-bottom: 36px;">
 <div style="position: absolute; float: left;" class="no-selection">
+<br>
 <div class="gray" style="position: relative; display: block; float: left; width: 170px;" id="stats2a">
 	<font size="2">Fire Resistance: </font><font size="2" id="fres"></font><br>
 	<font size="2">Cold Resistance: </font><font size="2" id="cres"></font><br>
@@ -291,13 +292,13 @@
 </map>
 
 <!--	item hover text	-->
-<div class="hover" style="display: none;" id="item_stats">
-	<a id="item_name" class="green">ITEM</a><br>
-	<a id="item_stats">item values</a>
+<div class="hover-item" style="display: none;" id="item_tooltip">
+<!--	<a id="item_name">ITEM</a><br>
+	<a id="item_stats">item values</a>	-->
 </div>
 
 
-<div style="position: absolute; float: left; width: 500px; padding: 14px;"><br>
+<div style="position: absolute; float: left; width: 500px; margin-top: 29px; padding: 14px;"><br>
 <div class="gray" style="position: relative; display: block; float: left; width: 190px;" id="stats3a">
 	<font size="2">Damage vs Demons: </font><font size="2" id="damage_vs_demons"></font><br>
 	<font size="2">Damage vs Undead: </font><font size="2" id="damage_vs_undead"></font><br><br>

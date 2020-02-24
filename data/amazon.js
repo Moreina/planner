@@ -1,6 +1,6 @@
 
 
-var character_amazon = {class_name:"Amazon", strength:20, dexterity:25, vitality:20, energy:15, life:50, mana:15, defense:6, ar:100, stamina:184, levelup_life:2.5, levelup_stamina:1, levelup_mana:1.5, gain_dexterity:[5,0.25], gain_vitality:[3,1], gain_energy:1.5, starting_strength:20, starting_dexterity:25, starting_vitality:20, starting_energy:15, skill_layout:"./images/amazon.png", tab1:"Javelins & Spears", tab2:"Passives", tab3:"Bows & Crossbows",
+var character_amazon = {class_name:"Amazon", strength:20, dexterity:25, vitality:20, energy:15, life:50, mana:15, defense:6, ar:100, stamina:184, levelup_life:2.5, levelup_stamina:1, levelup_mana:1.5, gain_dexterity:[5,0.25], gain_vitality:[3,1], gain_energy:1.5, skill_layout:"./images/amazon.png", tab1:"Javelins & Spears", tab2:"Passives", tab3:"Bows & Crossbows",
 	updateSkill : function(skill, lvl, elem) {
 	var result = skill.data.values[elem][lvl]
 	if (skill.name == "Poison Javelin" && elem < 2) { result = ((1 + (0.15*skills[6].level)) * (1 + 0.02*character.dexterity) * (1+character.pDamage/100) * skill.data.values[elem][lvl]) }

@@ -1,6 +1,6 @@
 
 
-var character_barbarian = {class_name:"Barbarian", strength:30, dexterity:20, vitality:25, energy:10, life:55, mana:10, defense:5, ar:85, stamina:192, levelup_life:2, levelup_stamina:1, levelup_mana:1, gain_dexterity:[5,0.25], gain_vitality:[4,1], gain_energy:1, starting_strength:30, starting_dexterity:20, starting_vitality:25, starting_energy:10, skill_layout:"./images/barbarian.png", tab1:"Warcries", tab2:"Masteries", tab3:"Combat",
+var character_barbarian = {class_name:"Barbarian", strength:30, dexterity:20, vitality:25, energy:10, life:55, mana:10, defense:5, ar:85, stamina:192, levelup_life:2, levelup_stamina:1, levelup_mana:1, gain_dexterity:[5,0.25], gain_vitality:[4,1], gain_energy:1, skill_layout:"./images/barbarian.png", tab1:"Warcries", tab2:"Masteries", tab3:"Combat",
 	updateSkill : function(skill, lvl, elem) {
 	var result = skill.data.values[elem][lvl]
 	if (skill.name == "War Cry" && elem < 2) { result = ((1 + (0.16*skills[2].level + 0.16*skills[8].level)) * skill.data.values[elem][lvl]) }

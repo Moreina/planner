@@ -1,6 +1,6 @@
 
 
-var character_assassin = {class_name:"Assassin", strength:20, dexterity:20, vitality:20, energy:25, life:50, mana:25, defense:5, ar:80, stamina:195, levelup_life:2, levelup_stamina:1.25, levelup_mana:1.5, gain_dexterity:[5,0.25], gain_vitality:[3,1.25], gain_energy:1.75, starting_strength:20, starting_dexterity:20, starting_vitality:20, starting_energy:25, skill_layout:"./images/assassin.png", tab1:"Martial Arts", tab2:"Shadow Disciplines", tab3:"Traps",
+var character_assassin = {class_name:"Assassin", strength:20, dexterity:20, vitality:20, energy:25, life:50, mana:25, defense:5, ar:80, stamina:195, levelup_life:2, levelup_stamina:1.25, levelup_mana:1.5, gain_dexterity:[5,0.25], gain_vitality:[3,1.25], gain_energy:1.75, skill_layout:"./images/assassin.png", tab1:"Martial Arts", tab2:"Shadow Disciplines", tab3:"Traps",
 	updateSkill : function(skill, lvl, elem) {
 	var result = skill.data.values[elem][lvl]
 	if (skill.name == "Dual Strike" && elem == 0) { result = (5*skills[9].level + 5*skills[13].level + skill.data.values[elem][lvl]) }

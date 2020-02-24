@@ -1,34 +1,51 @@
 
 
-character = {class_name:"", strength:0, dexterity:0, vitality:0, energy:0, life:0, mana:0, defense:0, ar:0, stamina:0, levelup_life:0, levelup_stamina:0, levelup_mana:0, gain_dexterity:[0,0], gain_vitality:[0,0], gain_energy:0, starting_strength:0, starting_dexterity:0, starting_vitality:0, starting_energy:0, tab1:"", tab2:"", tab3:"",
-/* main stats		*/	level:1, skillpoints:0, statpoints:0, quests_completed:-1, running:-1, difficulty:3, fRes_max:75, cRes_max:75, lRes_max:75, pRes_max:75, mRes_max:75, fRes_penalty:100, cRes_penalty:100, lRes_penalty:100, pRes_penalty:100, mRes_penalty:100, fRes:0, cRes:0, lRes:0, pRes:0, mRes:0, strength_added:0, dexterity_added:0, vitality_added:0, energy_added:0,
-/* skill tabs		*/	skills_javelins:0, skills_passives:0, skills_bows:0, skills_martial:0, skills_shadow:0, skills_traps:0, skills_warcries:0, skills_masteries:0, skills_combat_barbarian:0, skills_elemental:0, skills_shapeshifting:0, skills_summoning_druid:0, skills_summoning_necromancer:0, skills_poisonBone:0, skills_curses:0, skills_offensive:0, skills_defensive:0, skills_combat_paladin:0, skills_cold:0, skills_lightning:0, skills_fire:0, skills_amazon:0, skills_assassin:0, skills_barbarian:0, skills_druid:0, skills_necromancer:0, skills_paladin:0, skills_sorceress:0,
-/* skills		*/	skill_lightning_fury:0, skill_lightning_strike:0, skill_glacial_spike:0,
-/* skill bonuses	*/	stamina_bonus:0, speed_bonus:0, defense_bonus:0, resistance_bonus:0, attack_bonus:0, cstrike_bonus:0, ar_bonus:0, pierce_bonus:0, damage_bonus:0, fRes_bonus:0, cRes_bonus:0, lRes_bonus:0, edged_bonus:[0,0,0], pole_bonus:[0,0,0], blunt_bonus:[0,0,0], thrown_bonus:[0,0,0], claw_bonus:[0,0,0], mana_regen_bonus:0, cPierce_bonus:0, lPierce_bonus:0, fPierce_bonus:0, cDamage_bonus:0, lDamage_bonus:0, fDamage_bonus:0,
-/* stats		*/	cdr:0, fcr:0, fbr:0, fhr:0, frw:0, ias:0, pierce:0, cblow:0, dstrike:0, cstrike:0, owounds:0, fDamage:0, cDamage:0, lDamage:0, pDamage:0, fPierce:0, cPierce:0, lPierce:0, pPierce:0, pdr:0, damage_reduced:0, mDamage_reduced:0, mf:0, gf:0, life_leech:0, mana_leech:0, life_per_hit:0, mana_per_hit:0, life_per_ranged_hit:0, mana_per_ranged_hit:0, fAbsorb:0, cAbsorb:0, lAbsorb:0, pAbsorb:0, mAbsorb:0, fAbsorb_flat:0, cAbsorb_flat:0, lAbsorb_flat:0, mAbsorb_flat:0, 
-/* stats (indirect)	*/	all_skills:0, all_attributes:0, all_res:0, velocity:0, damage_bonus:0, max_life:0, max_mana:0, life_per_level:0, mana_per_level:0, defense_per_level:0, strength_per_level:0, mf_per_level:0, fAbsorb_per_level:0, fcr_per_level:0, dstrike_per_level:0, stamina_per_level:0, vitality_per_level:0,
-/* attack damage	*/	damage_min:0, damage_max:0, fDamage_min:0, fDamage_max:0, cDamage_min:0, cDamage_max:0, lDamage_min:0, lDamage_max:0, pDamage_min:0, pDamage_max:0, mDamage_min:0, mDamage_max:0, min_damage_per_level:0, max_damage_per_level:0, kick_min:0,
-/* not displayed	*/	ibc:0, itd:0, pmh:0, cbf:0, peace:0, life_per_kill:0, mana_per_kill:0, damage_vs_demons:0, damage_vs_undead:0, ar_vs_demons:0, ar_vs_undead:0, damage_to_mana:0, slow_target:0, light_radius:0, thorns:0, thorns_per_level:0, slower_stam_drain:0, heal_stam:0, life_regen:0, mana_regen:0, knockback:0, missile_defense:0, target_defense:0, enemy_fRes:0, enemy_cRes:0, enemy_lRes:0, enemy_pRes:0, ar_vs_undead_per_level:0, damage_vs_undead_per_level:0,
-/* charges		*/	charges_poison_creeper:0, charges_oak_sage:0, charges_iron_maiden:0, charges_iron_golem:0, 
-	updateSkill : function(skill, level, elem) {
-	var result = skill.data.values[elem][level]
-	return result
-	}
-};
-
-var settings = {coupling:1}
+character = {};
+var skill_bonuses = {stamina_bonus:0, speed_bonus:0, defense_bonus:0, resistance_bonus:0, attack_bonus:0, cstrike_bonus:0, ar_bonus:0, pierce_bonus:0, damage_bonus:0, fRes_bonus:0, cRes_bonus:0, lRes_bonus:0, edged_bonus:[0,0,0], pole_bonus:[0,0,0], blunt_bonus:[0,0,0], thrown_bonus:[0,0,0], claw_bonus:[0,0,0], mana_regen_bonus:0, cPierce_bonus:0, lPierce_bonus:0, fPierce_bonus:0, cDamage_bonus:0, lDamage_bonus:0, fDamage_bonus:0};
+var base_stats = {level:1, skillpoints:0, statpoints:0, quests_completed:-1, running:-1, difficulty:3, fRes:0, cRes:0, lRes:0, pRes:0, mRes:0, fRes_max:295, cRes_max:295, lRes_max:295, pRes_max:295, mRes_max:295, strength_added:0, dexterity_added:0, vitality_added:0, energy_added:0, fRes_penalty:100, cRes_penalty:100, lRes_penalty:100, pRes_penalty:100, mRes_penalty:100}
 var gear = {req_level:0, req_strength:0, req_dexterity:0};
-var MAX = 20;	// Skill Hardpoints
+var settings = {coupling:1}
+var MAX = 20;	// Highest Skill Hardpoints
 var LIMIT = 60; // Highest Skill Data
 
 // Charm Inventory
 var inv = [
-{onpickup:"?",pickup_x:0,pickup_y:0,empty:1,stored:"",charms:[],in:["",0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},
-{x:1,y:1,empty:1,id:"h11"},{x:2,y:1,empty:1,id:"h21"},{x:3,y:1,empty:1,id:"h31"},{x:4,y:1,empty:1,id:"h41"},{x:5,y:1,empty:1,id:"h51"},{x:6,y:1,empty:1,id:"h61"},{x:7,y:1,empty:1,id:"h71"},{x:8,y:1,empty:1,id:"h81"},{x:9,y:1,empty:1,id:"h91"},{x:10,y:1,empty:1,id:"h01"},
-{x:1,y:2,empty:1,id:"h12"},{x:2,y:2,empty:1,id:"h22"},{x:3,y:2,empty:1,id:"h32"},{x:4,y:2,empty:1,id:"h42"},{x:5,y:2,empty:1,id:"h52"},{x:6,y:2,empty:1,id:"h62"},{x:7,y:2,empty:1,id:"h72"},{x:8,y:2,empty:1,id:"h82"},{x:9,y:2,empty:1,id:"h92"},{x:10,y:2,empty:1,id:"h02"},
-{x:1,y:3,empty:1,id:"h13"},{x:2,y:3,empty:1,id:"h23"},{x:3,y:3,empty:1,id:"h33"},{x:4,y:3,empty:1,id:"h43"},{x:5,y:3,empty:1,id:"h53"},{x:6,y:3,empty:1,id:"h63"},{x:7,y:3,empty:1,id:"h73"},{x:8,y:3,empty:1,id:"h83"},{x:9,y:3,empty:1,id:"h93"},{x:10,y:3,empty:1,id:"h03"},
-{x:1,y:4,empty:1,id:"h14"},{x:2,y:4,empty:1,id:"h24"},{x:3,y:4,empty:1,id:"h34"},{x:4,y:4,empty:1,id:"h44"},{x:5,y:4,empty:1,id:"h54"},{x:6,y:4,empty:1,id:"h64"},{x:7,y:4,empty:1,id:"h74"},{x:8,y:4,empty:1,id:"h84"},{x:9,y:4,empty:1,id:"h94"},{x:10,y:4,empty:1,id:"h04"}
+{onpickup:"?",pickup_x:0,pickup_y:0,empty:1,charms:[],in:["",0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},
+{x:1,y:1,empty:1,id:"h11"},{x:1,y:1,empty:1,id:"h21"},{x:1,y:1,empty:1,id:"h31"},{x:1,y:1,empty:1,id:"h41"},{x:1,y:1,empty:1,id:"h51"},{x:1,y:1,empty:1,id:"h61"},{x:1,y:1,empty:1,id:"h71"},{x:1,y:1,empty:1,id:"h81"},{x:1,y:1,empty:1,id:"h91"},{x:1,y:1,empty:1,id:"h01"},
+{x:1,y:1,empty:1,id:"h12"},{x:1,y:1,empty:1,id:"h22"},{x:1,y:1,empty:1,id:"h32"},{x:1,y:1,empty:1,id:"h42"},{x:1,y:1,empty:1,id:"h52"},{x:1,y:1,empty:1,id:"h62"},{x:1,y:1,empty:1,id:"h72"},{x:1,y:1,empty:1,id:"h82"},{x:1,y:1,empty:1,id:"h92"},{x:1,y:1,empty:1,id:"h02"},
+{x:1,y:1,empty:1,id:"h13"},{x:1,y:1,empty:1,id:"h23"},{x:1,y:1,empty:1,id:"h33"},{x:1,y:1,empty:1,id:"h43"},{x:1,y:1,empty:1,id:"h53"},{x:1,y:1,empty:1,id:"h63"},{x:1,y:1,empty:1,id:"h73"},{x:1,y:1,empty:1,id:"h83"},{x:1,y:1,empty:1,id:"h93"},{x:1,y:1,empty:1,id:"h03"},
+{x:1,y:1,empty:1,id:"h14"},{x:1,y:1,empty:1,id:"h24"},{x:1,y:1,empty:1,id:"h34"},{x:1,y:1,empty:1,id:"h44"},{x:1,y:1,empty:1,id:"h54"},{x:1,y:1,empty:1,id:"h64"},{x:1,y:1,empty:1,id:"h74"},{x:1,y:1,empty:1,id:"h84"},{x:1,y:1,empty:1,id:"h94"},{x:1,y:1,empty:1,id:"h04"}
 ];
+
+// Loads equipment/charm info to the appropriate dropdowns
+// ---------------------------------
+function loadEquipment() {
+	var equipmentTypes = ["helm", "armor", "gloves", "boots", "belt", "amulet", "ring1", "ring2", "weapon", "offhand", "charms"];
+	var equipmentDropdowns = ["dropdown_helm", "dropdown_armor", "dropdown_gloves", "dropdown_boots", "dropdown_belt", "dropdown_amulet", "dropdown_ring1", "dropdown_ring2", "dropdown_weapon", "dropdown_offhand", "dropdown_charms"]
+	for (let i = 0; i < equipmentTypes.length; i++) {
+		loadItems(equipmentTypes[i], equipmentDropdowns[i])
+	}
+}
+
+// Creates a dropdown menu option
+// type: equipment type (string)
+// dropdown: string name of the dropdown to edit
+// called by: loadEquipment()
+// ---------------------------------
+function loadItems(type, dropdown) {
+	if (type.length == 0) document.getElementById(dropdown).innerHTML = "<option></option>"
+	else {
+		var choices = "";
+		for (item in equipment[type]) {
+			if (item > 0) {
+				choices += "<option class='dropdown-option'>" + equipment[type][item].name + "</option>"
+			} else {
+				choices += "<option selected>" + "­ ­ ­ ­ " + equipment[type][item].name + "</option>"
+			}
+		}
+		document.getElementById(dropdown).innerHTML = choices
+	}
+}
 
 // Resets everything and starts a new character
 // choice: character class to use (string)
@@ -37,32 +54,17 @@ function startup(choice) {
 	clearIconSources()
 	resetSkills()
 	resetEquipment()
-	updateSecondaryStats()
-	changeDifficulty(3)
-	changeMovement(1)
 	document.getElementById("quests").checked = 0
-	character.quests_completed = -1
+	document.getElementById("running").checked = 0
 	document.getElementById("difficulty3").checked = 1
-	character.fRes_penalty = 100
-	character.cRes_penalty = 100
-	character.lRes_penalty = 100
-	character.pRes_penalty = 100
-	character.strength_added = 0
-	character.dexterity_added = 0
-	character.vitality_added = 0
-	character.energy_added = 0
-	
 	skills = skills_all[choice]
 	character_setup = character_all[choice]
+	for (stat in base_stats) { character[stat] = base_stats[stat] }
+	for (stat in unequipped) { character[stat] = unequipped[stat] }
 	for (stat in character_setup) { character[stat] = character_setup[stat] }
 	setIconSources(choice)
 	updateSkillIcons()
-	character.skillpoints = 0
-	character.statpoints = 0
-	character.level = 1
-	character.quests_completed = -1
-	updateStats()
-	updateSecondaryStats()
+	updateAll()
 	document.getElementById("skill_tree").src = character_setup.skill_layout
 	init()
 }
@@ -90,10 +92,46 @@ function init() {
 	document.getElementById("quests").onchange = function() {toggleQuests()};
 }
 
+// Removes all active skill icons
+// ---------------------------------
+function clearIconSources() {
+	for (let s = 0; s < skills.length; s++) {
+		var iconId = "i"+skills[s].key
+		document.getElementById(iconId).src = "./images/skills/none.png"
+		document.getElementById(iconId).style.visibility = "hidden"
+	}
+}
+
+// Sets new active skill icons based on character class
+// className: character class (string)
+// ---------------------------------
+function setIconSources(className) {
+	var prefix = "./images/skills/"+className+"/";
+	for (let s = 0, len = skills.length; s < len; s++) {
+		var iconId = "i"+skills[s].key;
+		document.getElementById(iconId).src = prefix+skills[s].name+".png"
+	}
+}
+
+// Handles whether active skill icons are hidden or shown
+// ---------------------------------
+function updateSkillIcons() {
+	for (let s = 0; s < skills.length; s++) {
+		var iconId = "i"+skills[s].key;
+		var show = 1;
+		if (skills[s].req.length > 0) { for (let i = 0; i < skills[s].req.length; i++) {
+			if (skills[skills[s].req[i]].level == 0) { show = 0; }
+		} }
+		if (character.level < skills[s].reqlvl) { show = 0; }
+		if (show == 1) { document.getElementById(iconId).style.visibility = "visible" }
+		else { document.getElementById(iconId).style.visibility = "hidden" }
+	}
+}
+
 // Modifies the character's level
 // input: positive or negative change (-1, 1)
 // ---------------------------------
-function levelup(input) {
+function changeLevel(input) {
 	var levels = 1
 	if (event.shiftKey) { levels = 10 }
 	if (event.ctrlKey) { levels = 100 }
@@ -113,47 +151,10 @@ function levelup(input) {
 		character.life += character.levelup_life*levels
 		character.mana += character.levelup_mana*levels
 	}
-	updateStats()
-	updateSecondaryStats()
+	updateAll()
 }
 
-// Handles whether active skill icons are hidden or shown
-// ---------------------------------
-function updateSkillIcons() {
-	for (let s = 0; s < skills.length; s++) {
-		var iconId = "i"+skills[s].key;
-		var show = 1;
-		if (skills[s].req.length > 0) { for (let i = 0; i < skills[s].req.length; i++) {
-			if (skills[skills[s].req[i]].level == 0) { show = 0; }
-		} }
-		if (character.level < skills[s].reqlvl) { show = 0; }
-		if (show == 1) { document.getElementById(iconId).style.visibility = "visible" }
-		else { document.getElementById(iconId).style.visibility = "hidden" }
-	}
-}
-
-// Sets new active skill icons based on character class
-// className: character class (string)
-// ---------------------------------
-function setIconSources(className) {
-	var prefix = "./images/skills/"+className+"/";
-	for (let s = 0, len = skills.length; s < len; s++) {
-			var iconId = "i"+skills[s].key;
-			document.getElementById(iconId).src = prefix+skills[s].name+".png"
-		}
-}
-
-// Removes all active skill icons
-// ---------------------------------
-function clearIconSources() {
-	for (let s = 0; s < skills.length; s++) {
-		var iconId = "i"+skills[s].key
-		document.getElementById(iconId).src = "./images/skills/none.png"
-		document.getElementById(iconId).style.visibility = "hidden"
-	}
-}
-
-// Equips an item by adding its stats to the character
+// Equips an item by adding its stats to the character, or unequips it if it's already equipped		// TODO: consider renaming... switchItem()?  ...or splitting into different functions
 // type: equipment type (string)
 // val: string name of item
 // ---------------------------------
@@ -176,39 +177,21 @@ function equip(type, val) {
 			}
 		}
 		updateSkillAmounts()
-		updateStats()
-		updateSecondaryStats()
+		updateAll()
 		checkRequirements()
 	}
 }
 
-// Loads equipment/charm info to the appropriate dropdowns
+// Resets functionality for skills
 // ---------------------------------
-function loadEquipment() {
-	var equipmentTypes = ["helm", "armor", "gloves", "boots", "belt", "amulet", "ring1", "ring2", "weapon", "offhand", "charms"];
-	var equipmentDropdowns = ["dropdown_helm", "dropdown_armor", "dropdown_gloves", "dropdown_boots", "dropdown_belt", "dropdown_amulet", "dropdown_ring1", "dropdown_ring2", "dropdown_weapon", "dropdown_offhand", "dropdown_charms"]
-	for (let i = 0; i < equipmentTypes.length; i++) {
-		loadItems(equipmentTypes[i], equipmentDropdowns[i])
-	}
-}
-
-// Creates a dropdown menu option
-// type: equipment type (string)
-// dropdown: string name of the dropdown to edit
-// called by: loadEquipment()
-// ---------------------------------
-function loadItems(type, dropdown) {
-	if (type.length == 0) document.getElementById(dropdown).innerHTML = "<option></option>"
-	else {
-		var choices = "";
-		for (item in equipment[type]) {
-			if (item > 0) {
-				choices += "<option class='dd'>" + equipment[type][item].name + "</option>"
-			} else {
-				choices += "<option selected>" + "­ ­ ­ ­ " + equipment[type][item].name + "</option>"
-			}
-		}
-		document.getElementById(dropdown).innerHTML = choices
+function resetSkills() {
+	for (bonus in skill_bonuses) { character[bonus] = skill_bonuses[bonus] }
+	for (s = 0, len = skills.length; s < len; s++) {
+		skills[s].level = 0
+		document.getElementById("p"+skills[s].key).innerHTML = ""
+		document.getElementById("s"+skills[s].key).onmouseover = function() {mouseOut};
+		document.getElementById("s"+skills[s].key).onclick = function() {mouseOut};
+		document.getElementById("s"+skills[s].key).oncontextmenu = function() {mouseOut};
 	}
 }
 
@@ -243,7 +226,7 @@ function resetCharms() {
 	}
 }
 
-// Adds a charm to the inventory
+// Adds a charm to the inventory		// TODO: Too large
 // val: the name of the charm
 // ---------------------------------
 function addCharm(val) {
@@ -287,7 +270,7 @@ function addCharm(val) {
 			for (let y = 0; y < 4; y++) {
 				i = y*10 + x
 				empty = 1
-				if (space_found == 0 && charm_y + inv[i].y <= 5) {
+				if (space_found == 0 && charm_y + (y+1) <= 5) {
 					if (inv[i].empty == 0) { empty = 0 }
 					if (charm_y > 1 && inv[i+10].empty == 0) { empty = 0 }
 					if (charm_y > 2 && inv[i+20].empty == 0) { empty = 0 }
@@ -301,9 +284,11 @@ function addCharm(val) {
 			inv[i].empty = 0
 			inv[0].in[i] = val
 			if (charm_y > 1) { inv[i+10].empty = 0; inv[0].in[i+10] = val; 
-				document.getElementById(inv[i].id).style = "position: absolute; width: 29px; height: 58px;"; }
+			//	document.getElementById(inv[i].id).style = "position: absolute; width: 29px; height: 58px;"; 
+			}
 			if (charm_y > 2) { inv[i+20].empty = 0; inv[0].in[i+20] = val; 
-				document.getElementById(inv[i].id).style = "position: absolute; width: 29px; height: 87px;"; }
+			//	document.getElementById(inv[i].id).style = "position: absolute; width: 29px; height: 87px;"; 
+			}
 			document.getElementById(insertion).innerHTML += charmHTML;
 			var ch = "charms";
 			equipped[ch][val] = {}
@@ -317,39 +302,17 @@ function addCharm(val) {
 				}
 			}
 			updateSkillAmounts()
-			updateStats()
-			updateSecondaryStats()
+			updateAll()
 		}
 	}
 	document.getElementById("dropdown_charms").selectedIndex = 0
 }
 
-// Resets functionality for skills
-// ---------------------------------
-function resetSkills() {
-	var skill_bonuses = {stamina_bonus:0, speed_bonus:0, defense_bonus:0, resistance_bonus:0, attack_bonus:0, cstrike_bonus:0, ar_bonus:0, pierce_bonus:0, damage_bonus:0, fRes_bonus:0, cRes_bonus:0, lRes_bonus:0, edged_bonus:[0,0,0], pole_bonus:[0,0,0], blunt_bonus:[0,0,0], thrown_bonus:[0,0,0], claw_bonus:[0,0,0], mana_regen_bonus:0, cPierce_bonus:0, lPierce_bonus:0, fPierce_bonus:0, cDamage_bonus:0, lDamage_bonus:0, fDamage_bonus:0};
-	for (bonus in skill_bonuses) { character[bonus] = skill_bonuses[bonus] }
-	for (s = 0, len = skills.length; s < len; s++) {
-		skills[s].level = 0
-		document.getElementById("p"+skills[s].key).innerHTML = ""
-		document.getElementById("s"+skills[s].key).onmouseover = function() {mouseOut};
-		document.getElementById("s"+skills[s].key).onclick = function() {mouseOut};
-		document.getElementById("s"+skills[s].key).oncontextmenu = function() {mouseOut};
-	}
-}
-
 // Toggles the completion of all quests and their rewards
 // ---------------------------------
-function toggleQuests() {
-	var quests = document.getElementById("quests")
-	var okay = true
-	if (quests.checked == false) {
-		if (character.skillpoints < 12 || character.statpoints < 15) {
-			okay = false
-			quests.checked = true
-		}
-	}
-	if (okay) {
+function toggleQuests(quests) {
+	if (quests.checked == false && (character.skillpoints < 12 || character.statpoints < 15)) { quests.checked = true }
+	else {
 		character.quests_completed *= -1
 		var toggle = character.quests_completed
 		character.skillpoints += (12*toggle)
@@ -363,14 +326,11 @@ function toggleQuests() {
 	}
 }
 
-// Changes whether the character is running or walking/standing
+// Toggles whether the character is running or walking/standing
 // ---------------------------------
-function changeMovement() {
-	if (document.getElementById("running").checked) {
-		character.running = 1
-	} else { character.running = 0 }
-	updateStats()
-	updateSecondaryStats()
+function toggleRunning(running) {
+	if (running.checked) { character.running = 1 } else { character.running = 0 }
+	updateAll()
 }
 
 // Changes the game difficulty
@@ -389,10 +349,8 @@ function changeDifficulty(diff) {
 
 // Changes whether adding/removing skill points can affect character level
 // ---------------------------------
-function toggleCoupling() {
-	if (document.getElementById("coupling").checked) {
-		settings.coupling = 1
-	} else { settings.coupling = 0 }
+function toggleCoupling(coupling) {
+	if (coupling.checked) { settings.coupling = 1 } else { settings.coupling = 0 }
 }
 
 // Adjusts stats that depend on a modified main stat
@@ -418,7 +376,11 @@ function adjustAttributes(attribute, value, input) {
 	}
 }
 
-// Updates stats shown the default (original D2) stat page
+// Updates all stats
+// ---------------------------------
+function updateAll() { updateStats(); updateSecondaryStats(); }
+
+// Updates stats shown by the default (original D2) stat page
 // ---------------------------------
 function updateStats() {
 	var phys_min = ((1+((character.strength+character.all_attributes+character.level*character.strength_per_level)/100))*(character.level*character.min_damage_per_level+character.damage_min));
@@ -551,16 +513,6 @@ function updateSecondaryStats() {
 	document.getElementById("enemy_cres").innerHTML = character.enemy_cRes
 	document.getElementById("enemy_lres").innerHTML = character.enemy_lRes
 	document.getElementById("enemy_pres").innerHTML = character.enemy_pRes
-	
-/*	document.getElementById("target_defense").innerHTML = character.target_defense
-	document.getElementById("slow_target").innerHTML = character.slow_target
-	document.getElementById("thorns").innerHTML = (character.thorns + character.level*character.thorns_per_level)
-	document.getElementById("light_radius").innerHTML = character.light_radius
-	document.getElementById("slower_stam_drain").innerHTML = character.slower_stam_drain
-	document.getElementById("heal_stam").innerHTML = character.heal_stam
-	document.getElementById("ibc").innerHTML = character.ibc	*/
-	//updateSkillIcons()
-	//checkRequirements()
 }
 
 // Updates skill levels
@@ -697,7 +649,7 @@ function checkRequirements() {
 	else { document.getElementById("dexterity").style.color = "white" }
 	for (let s = 0; s < skills.length; s++) {
 		var req_met = 1;
-		if (skills[s].reqlvl > character.level) { req_met = 0 }
+		if (skills[s].level > character.level - skills[s].reqlvl + 1) { req_met = 0 }
 		if (skills[s].req.length > 0 && req_met == 1) { for (let r = 0; r < skills[s].req.length; r++) {
 			if (skills[skills[s].req[r]].level == 0) { req_met = 0 }
 		} }
@@ -715,15 +667,9 @@ function checkRequirements() {
 // ---------------------------------
 function addStat(event, stat) {
 	var points = 1
-	if (event.shiftKey) {
-		points = 10
-	}
-	if (event.ctrlKey) {
-		points = 100
-	}
-	if (character.statpoints < points) {
-		points = character.statpoints
-	}
+	if (event.shiftKey) { points = 10 }
+	if (event.ctrlKey) { points = 100 }
+	if (character.statpoints < points) { points = character.statpoints }
 	if (character.statpoints >= points) {
 		if (stat == "btn_strength") {
 			character.strength += points
@@ -780,8 +726,6 @@ function removeStat(event, stat) {
 	} else { points = 0 }
 	character.statpoints += points
 	updateStats()
-	//event.preventDefault();
-	//return false;
 }
 
 // Raises the skill level
@@ -817,8 +761,7 @@ function skillUp(event, skill) {
 				character.stamina += (character.levelup_stamina*levels)
 				character.mana += (character.levelup_mana*levels)
 			}
-			updateStats()
-			updateSecondaryStats()
+			updateAll()
 		}
 	}
 	showBaseLevels(skill)
@@ -869,12 +812,9 @@ function skillDown(event, skill) {
 	} else {
 		document.getElementById("p"+skill.key).innerHTML = display
 	}
-	updateStats()
-	updateSecondaryStats()
+	updateAll()
 	skillHover(skill)
 	showBaseLevels(skill)
-	//event.preventDefault();
-	//return false;
 }
 
 // Shows skill description tooltip on mouse-over
@@ -944,8 +884,7 @@ function skillHover(skill) {
 		document.getElementById("description").innerHTML = skill.description + "<br>"
 	}
 	updateSkillAmounts(character.class_name)
-	updateStats()
-	updateSecondaryStats()
+	updateAll()
 	showBaseLevels(skill)
 }
 
@@ -989,7 +928,7 @@ function skillOut() {
 
 // hides item tooltip for Charm Inventory
 // ---------------------------------
-function itemOut() { document.getElementById("item_stats").style.display="none" }
+function itemOut() { document.getElementById("item_tooltip").style.display="none" }
 
 // Shows item tooltip on mouse-over for Charm Inventory
 // id: unique string identifier for item
@@ -1012,8 +951,19 @@ function itemHover(ev, id) {
 	if (name == "Skill Grand Charm #2") { display = "+1 Grand Charm ("+character.tab2+")" }
 	if (name == "Skill Grand Charm #3") { display = "+1 Grand Charm ("+character.tab3+")" }
 	if (equipped["charms"][val].type != "small" && equipped["charms"][val].type != "large" && equipped["charms"][val].type != "grand") { style = "display: block; color: #ff8080;" }
-	document.getElementById("item_stats").innerHTML = display
-	document.getElementById("item_stats").style = style
+	document.getElementById("item_tooltip").innerHTML = display
+	document.getElementById("item_tooltip").style = style
+	
+	// better system:
+	
+	// start with cell divs at high z-index
+	// on mouseover, use cell info...
+	// if cell is not empty
+	//	if cell is not main-cell of occupying item			// main-cell: top cell when traversing inv[].in
+	//		lower z-index of cell  (pushes the item above, so it can be grabbed while all its other individual cells are surfaced)
+	// then, 
+	// on mouseout: raise z-level of cell 
+	
 }
 
 // Handles placement validation for Charm Inventory
@@ -1026,6 +976,9 @@ function allowDrop(ev, cell, y) {
 		if (inv[0].pickup_y > 1 && inv[cell+10].empty == 0 && inv[0].in[cell+10] != inv[0].onpickup) { allow = 0 }
 		if (inv[0].pickup_y > 2 && inv[cell+20].empty == 0 && inv[0].in[cell+20] != inv[0].onpickup) { allow = 0 }
 		if (allow == 1) {
+		if (inv[0].in[cell] == inv[0].onpickup) {
+		//	document.getElementById(inv[cell].id).style = "position: absolute; width: 29px; height: 29px; pointer-events: none;";
+		}
 		ev.preventDefault();
 		}
 	}
@@ -1040,8 +993,13 @@ function drag(ev) {
 	if (height > 80) { inv[0].pickup_y = 3 }
 	else if (height > 50) { inv[0].pickup_y = 2 }
 	else { inv[0].pickup_y = 1 }
-	for (s = 1; s <= inv[0].in.length; s++) {
+	for (s = 1; s < inv[0]["in"].length; s++) {
+		if (inv[0].in[s] == inv[0].onpickup) {
+			document.getElementById(inv[s].id).style = "position: absolute; width: 29px; height: 29px; z-index: 5;";
+		
+		}
 	}
+
 }
 
 // Handles item dropping for Charm Inventory
@@ -1054,16 +1012,21 @@ function drop(ev,cell) {
 	ev.target.appendChild(document.getElementById(data));
 	for (s = 1; s <= inv[0].in.length; s++) {
 		if (inv[0].in[s] == inv[0].onpickup) { inv[s].empty = 1; inv[0].in[s] = ""; 
-			document.getElementById(inv[s].id).style = "position: absolute; width: 29px; height: 29px;";
+		//	document.getElementById(inv[s].id).style = "position: absolute; width: 29px; height: 29px;";
+			inv[s].y = 1;
+			document.getElementById(inv[s].id).style = "position: absolute; width: 29px; height: 29px; z-index: 3;";
+		
 		}
 	}
 	inv[cell].empty = 0
 	inv[0].in[cell] = inv[0].onpickup
 	if (inv[0].pickup_y > 1) { inv[cell+10].empty = 0; inv[0].in[cell+10] = inv[0].onpickup; 
-		document.getElementById(inv[cell].id).style = "position: absolute; width: 29px; height: 58px;";
+	//	document.getElementById(inv[cell].id).style = "position: absolute; width: 29px; height: 58px;";
+		inv[cell].y = 2;
 	}
 	if (inv[0].pickup_y > 2) { inv[cell+20].empty = 0; inv[0].in[cell+20] = inv[0].onpickup; 
-		document.getElementById(inv[cell].id).style = "position: absolute; width: 29px; height: 87px;";
+	//	document.getElementById(inv[cell].id).style = "position: absolute; width: 29px; height: 87px;";
+		inv[cell].y = 3;
 	}
 	inv[0].onpickup = "none"
 }
@@ -1086,8 +1049,7 @@ function trash(ev) {
 	}
 	ev.target.remove();
 	updateSkillAmounts()
-	updateStats()
-	updateSecondaryStats()
+	updateAll()
 }
 
 // 

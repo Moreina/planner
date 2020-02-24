@@ -1,6 +1,7 @@
 
 
 var equipped = { helm:{name:"none"}, armor:{name:"none"}, gloves:{name:"none"}, boots:{name:"none"}, belt:{name:"none"}, amulet:{name:"none"}, ring1:{name:"none"}, ring2:{name:"none"}, weapon:{name:"none"}, offhand:{name:"none"}, charms:{name:"none"} }
+var equipped_charms = { id1:{name:"none"}, id2:{name:"none"} }
 
 var unequipped = {strength:0, dexterity:0, vitality:0, energy:0, life:0, mana:0, defense:0, ar:0, stamina:0,
 /* main stats		*/	fRes_max:75, cRes_max:75, lRes_max:75, pRes_max:75, mRes_max:75, fRes:0, cRes:0, lRes:0, pRes:0, mRes:0,
