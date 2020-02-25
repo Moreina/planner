@@ -2,11 +2,12 @@
 
 character = {};
 var skill_bonuses = {stamina_bonus:0, speed_bonus:0, defense_bonus:0, resistance_bonus:0, attack_bonus:0, cstrike_bonus:0, ar_bonus:0, pierce_bonus:0, damage_bonus:0, fRes_bonus:0, cRes_bonus:0, lRes_bonus:0, edged_bonus:[0,0,0], pole_bonus:[0,0,0], blunt_bonus:[0,0,0], thrown_bonus:[0,0,0], claw_bonus:[0,0,0], mana_regen_bonus:0, cPierce_bonus:0, lPierce_bonus:0, fPierce_bonus:0, cDamage_bonus:0, lDamage_bonus:0, fDamage_bonus:0};
-var base_stats = {level:1, skillpoints:0, statpoints:0, quests_completed:-1, running:-1, difficulty:3, fRes:0, cRes:0, lRes:0, pRes:0, mRes:0, fRes_max:295, cRes_max:295, lRes_max:295, pRes_max:295, mRes_max:295, strength_added:0, dexterity_added:0, vitality_added:0, energy_added:0, fRes_penalty:100, cRes_penalty:100, lRes_penalty:100, pRes_penalty:100, mRes_penalty:100}
+var base_stats = {level:1, skillpoints:0, statpoints:0, quests_completed:-1, running:-1, difficulty:3, strength_added:0, dexterity_added:0, vitality_added:0, energy_added:0, fRes_penalty:100, cRes_penalty:100, lRes_penalty:100, pRes_penalty:100, mRes_penalty:100, fRes:0, cRes:0, lRes:0, pRes:0, mRes:0, fRes_max:75, cRes_max:75, lRes_max:75, pRes_max:75, mRes_max:75}
 var gear = {req_level:0, req_strength:0, req_dexterity:0};
 var settings = {coupling:1}
 var MAX = 20;	// Highest Skill Hardpoints
 var LIMIT = 60; // Highest Skill Data
+var RES_CAP = 95;
 
 // Charm Inventory
 var inv = [
@@ -162,7 +163,6 @@ function equip(type, val) {
 	if (equipped[type].name != val) {
 		if (equipped[type].name != "none") {
 			for (old_affix in equipped[type]) {
-				if (old_affix == "all_attributes" || old_affix == "strength" || old_affix == "dexterity" || old_affix == "vitality" || old_affix == "energy") { adjustAttributes(old_affix, equipped[type][old_affix], -1) }
 				character[old_affix] -= equipped[type][old_affix]
 				equipped[type][old_affix] = unequipped[old_affix]
 			}
@@ -170,13 +170,12 @@ function equip(type, val) {
 		for (item in equipment[type]) {
 			if (equipment[type][item].name == val) {
 				for (affix in equipment[type][item]) {
-					if (affix == "all_attributes" || affix == "strength" || affix == "dexterity" || affix == "vitality" || affix == "energy") { adjustAttributes(affix, equipment[type][item][affix], 1) }
 					character[affix] += equipment[type][item][affix]
 					equipped[type][affix] = equipment[type][item][affix]
 				}
 			}
 		}
-		updateSkillAmounts()
+		calculateSkillAmounts()
 		updateAll()
 		checkRequirements()
 	}
@@ -295,13 +294,12 @@ function addCharm(val) {
 			for (item in equipment[ch]) {
 				if (equipment[ch][item].name == nameVal) {
 					for (affix in equipment[ch][item]) {
-						if (affix == "all_attributes" || affix == "strength" || affix == "dexterity" || affix == "vitality" || affix == "energy") { adjustAttributes(affix, equipment[ch][item][affix], 1) }
 						character[affix] += equipment[ch][item][affix]
 						equipped[ch][val][affix] = equipment[ch][item][affix]
 					}
 				}
 			}
-			updateSkillAmounts()
+			calculateSkillAmounts()
 			updateAll()
 		}
 	}
@@ -353,29 +351,6 @@ function toggleCoupling(coupling) {
 	if (coupling.checked) { settings.coupling = 1 } else { settings.coupling = 0 }
 }
 
-// Adjusts stats that depend on a modified main stat
-// attribute: the modified main stat (string)
-// value: the amount of change (any positive integer)
-// input: positive or negative change (-1, 1)
-// ---------------------------------
-function adjustAttributes(attribute, value, input) {
-	var points = value*input
-	if (attribute == "strength" || attribute == "all_attributes") {
-		// ?
-	}
-	if (attribute == "dexterity" || attribute == "all_attributes") {
-		character.ar += (points*character.gain_dexterity[0])
-		character.defense += (points*character.gain_dexterity[1])
-	}
-	if (attribute == "vitality" || attribute == "all_attributes") {
-		character.life += (points*character.gain_vitality[0])
-		character.stamina += (points*character.gain_vitality[1])
-	}
-	if (attribute == "energy" || attribute == "all_attributes") {
-		character.mana += (points*character.gain_energy)
-	}
-}
-
 // Updates all stats
 // ---------------------------------
 function updateAll() { updateStats(); updateSecondaryStats(); }
@@ -383,71 +358,78 @@ function updateAll() { updateStats(); updateSecondaryStats(); }
 // Updates stats shown by the default (original D2) stat page
 // ---------------------------------
 function updateStats() {
-	var phys_min = ((1+((character.strength+character.all_attributes+character.level*character.strength_per_level)/100))*(character.level*character.min_damage_per_level+character.damage_min));
-	var phys_max = ((1+((character.strength+character.all_attributes+character.level*character.strength_per_level)/100))*(character.level*character.max_damage_per_level+character.damage_max));
+	var c = character;
+	var phys_min = ((1+((c.strength+c.all_attributes+c.level*c.strength_per_level)/100))*(c.level*c.min_damage_per_level+c.damage_min));
+	var phys_max = ((1+((c.strength+c.all_attributes+c.level*c.strength_per_level)/100))*(c.level*c.max_damage_per_level+c.damage_max));
 	var weapon_bonus = 0;
-	if (character.class_name == "Barbarian" || character.class_name == "Assassin") {
+	if (c.class_name == "Barbarian" || c.class_name == "Assassin") {
 		if (equipped.weapon.type == "sword" || equipped.weapon.type == "axe" || equipped.weapon.type == "dagger") {
-			weapon_bonus = character.edged_bonus[0]
-			character.ar_bonus = character.edged_bonus[1]
-			character.cstrike_bonus = character.edged_bonus[2]
+			weapon_bonus = c.edged_bonus[0]
+			c.ar_bonus = c.edged_bonus[1]
+			c.cstrike_bonus = c.edged_bonus[2]
 		} else if (equipped.weapon.type == "polearm" || equipped.weapon.type == "spear") {
-			weapon_bonus = character.pole_bonus[0]
-			character.ar_bonus = character.pole_bonus[1]
-			character.cstrike_bonus = character.pole_bonus[2]
+			weapon_bonus = c.pole_bonus[0]
+			c.ar_bonus = c.pole_bonus[1]
+			c.cstrike_bonus = c.pole_bonus[2]
 		} else if (equipped.weapon.type == "mace" || equipped.weapon.type == "scepter" || equipped.weapon.type == "staff") {
-			weapon_bonus = character.blunt_bonus[0]
-			character.ar_bonus = character.blunt_bonus[1]
-			character.cstrike_bonus = character.blunt_bonus[2]
+			weapon_bonus = c.blunt_bonus[0]
+			c.ar_bonus = c.blunt_bonus[1]
+			c.cstrike_bonus = c.blunt_bonus[2]
 		} else if (equipped.weapon.type == "thrown") {
-			weapon_bonus = character.thrown_bonus[0]
-			character.ar_bonus = character.thrown_bonus[1]
-			character.pierce_bonus = character.thrown_bonus[2]
+			weapon_bonus = c.thrown_bonus[0]
+			c.ar_bonus = c.thrown_bonus[1]
+			c.pierce_bonus = c.thrown_bonus[2]
 		} else if (equipped.weapon.type == "claw") {
-			weapon_bonus = character.claw_bonus[0]
-			character.ar_bonus = character.claw_bonus[1]
-			character.cstrike_bonus = character.claw_bonus[2]
+			weapon_bonus = c.claw_bonus[0]
+			c.ar_bonus = c.claw_bonus[1]
+			c.cstrike_bonus = c.claw_bonus[2]
 		} else {
 			weapon_bonus = 0
-			character.ar_bonus = 0
-			character.cstrike_bonus = 0
-			character.pierce_bonus = 0
+			c.ar_bonus = 0
+			c.cstrike_bonus = 0
+			c.pierce_bonus = 0
 		}
 	}
 	
-	document.getElementById("basic_attack").innerHTML = Math.floor((1+character.damage_bonus/100)*(1+weapon_bonus/100)*(phys_min + character.fDamage_min + character.cDamage_min + character.lDamage_min + character.pDamage_min + character.mDamage_min)) + "-" + Math.floor((1+character.damage_bonus/100)*(1+weapon_bonus/100)*(phys_max + character.fDamage_max + character.cDamage_max + character.lDamage_max + character.pDamage_max + character.mDamage_max));
-	document.getElementById("strength").innerHTML = character.strength + character.all_attributes + Math.floor(character.level*character.strength_per_level)
-	document.getElementById("dexterity").innerHTML = character.dexterity + character.all_attributes
-	document.getElementById("vitality").innerHTML = character.vitality + character.all_attributes
-	document.getElementById("energy").innerHTML = character.energy + character.all_attributes
-	if (character.running > 0) { document.getElementById("defense").innerHTML = "N/A" }
-	else { document.getElementById("defense").innerHTML = Math.floor((character.defense + character.level*character.defense_per_level) * (1 + character.defense_bonus/100)) }
-	document.getElementById("ar").innerHTML = Math.floor(character.ar * (1 + character.ar_bonus/100))
-	document.getElementById("stamina").innerHTML = Math.floor((character.stamina + character.level*character.stamina_per_level) * (1+character.stamina_bonus/100))
-	document.getElementById("life").innerHTML = Math.floor((character.life + character.level*character.life_per_level) * (1 + character.max_life/100))
-	document.getElementById("mana").innerHTML = Math.floor((character.mana + character.level*character.mana_per_level) * (1 + character.max_mana/100))
-	document.getElementById("level").innerHTML = character.level
-	document.getElementById("class_name").innerHTML = character.class_name
-	document.getElementById("remainingstats").innerHTML = character.statpoints
-	document.getElementById("remainingskills").innerHTML = character.skillpoints
-	document.getElementById("fres").innerHTML = (character.fRes + character.all_res - character.fRes_penalty + character.resistance_bonus) + " / " + Math.min(95,(character.fRes_max + character.fRes_bonus))
-	document.getElementById("cres").innerHTML = (character.cRes + character.all_res - character.cRes_penalty + character.resistance_bonus) + " / " + Math.min(95,(character.cRes_max + character.cRes_bonus))
-	document.getElementById("lres").innerHTML = (character.lRes + character.all_res - character.lRes_penalty + character.resistance_bonus) + " / " + Math.min(95,(character.lRes_max + character.lRes_bonus))
-	document.getElementById("pres").innerHTML = (character.pRes + character.all_res - character.pRes_penalty + character.resistance_bonus) + " / " + Math.min(95,(character.pRes_max))
-	document.getElementById("mres").innerHTML = (character.mRes - character.mRes_penalty) + "%  +" + character.mDamage_reduced
-	if (character.statpoints == 0) {
+	var ar_addon = ((c.dexterity + c.all_attributes + c.level*c.dexterity_per_level)-c.starting_dexterity)*c.ar_per_dexterity;
+	var defense_addon = ((c.dexterity + c.all_attributes + c.level*c.dexterity_per_level)-c.starting_dexterity)*c.defense_per_dexterity;
+	var life_addon = ((c.vitality + c.all_attributes + c.level*c.vitality_per_level)-c.starting_vitality)*c.life_per_vitality;
+	var stamina_addon = ((c.vitality + c.all_attributes + c.level*c.vitality_per_level)-c.starting_vitality)*c.stamina_per_vitality;
+	var mana_addon = ((c.energy + c.all_attributes + c.level*c.energy_per_level)-c.starting_energy)*c.mana_per_energy;
+
+	document.getElementById("basic_attack").innerHTML = Math.floor((1+c.damage_bonus/100)*(1+weapon_bonus/100)*(phys_min + c.fDamage_min + c.cDamage_min + c.lDamage_min + c.pDamage_min + c.mDamage_min)) + "-" + Math.floor((1+c.damage_bonus/100)*(1+weapon_bonus/100)*(phys_max + c.fDamage_max + c.cDamage_max + c.lDamage_max + c.pDamage_max + c.mDamage_max));
+	document.getElementById("strength").innerHTML = c.strength + c.all_attributes + Math.floor(c.level*c.strength_per_level)
+	document.getElementById("dexterity").innerHTML = c.dexterity + c.all_attributes + Math.floor(c.level*c.dexterity_per_level)
+	document.getElementById("vitality").innerHTML = c.vitality + c.all_attributes + Math.floor(c.level*c.vitality_per_level)
+	document.getElementById("energy").innerHTML = c.energy + c.all_attributes + Math.floor(c.level*c.energy_per_level)
+	if (c.running > 0) { document.getElementById("defense").innerHTML = "N/A" }
+	else { document.getElementById("defense").innerHTML = Math.floor((c.defense + c.level*c.defense_per_level + defense_addon) * (1 + c.defense_bonus/100)) }
+	document.getElementById("ar").innerHTML = Math.floor((c.ar + c.level*c.ar_per_level + ar_addon) * (1 + c.ar_bonus/100))
+	document.getElementById("stamina").innerHTML = Math.floor((c.stamina + c.level*c.stamina_per_level + stamina_addon) * (1+c.stamina_bonus/100))
+	document.getElementById("life").innerHTML = Math.floor((c.life + c.level*c.life_per_level + life_addon) * (1 + c.max_life/100))
+	document.getElementById("mana").innerHTML = Math.floor((c.mana + c.level*c.mana_per_level + mana_addon) * (1 + c.max_mana/100))
+	document.getElementById("level").innerHTML = c.level
+	document.getElementById("class_name").innerHTML = c.class_name
+	document.getElementById("remainingstats").innerHTML = c.statpoints
+	document.getElementById("remainingskills").innerHTML = c.skillpoints
+	document.getElementById("fres").innerHTML = (c.fRes + c.all_res - c.fRes_penalty + c.resistance_bonus) + " / " + Math.min(RES_CAP,(c.fRes_max + c.fRes_bonus))
+	document.getElementById("cres").innerHTML = (c.cRes + c.all_res - c.cRes_penalty + c.resistance_bonus) + " / " + Math.min(RES_CAP,(c.cRes_max + c.cRes_bonus))
+	document.getElementById("lres").innerHTML = (c.lRes + c.all_res - c.lRes_penalty + c.resistance_bonus) + " / " + Math.min(RES_CAP,(c.lRes_max + c.lRes_bonus))
+	document.getElementById("pres").innerHTML = (c.pRes + c.all_res - c.pRes_penalty + c.resistance_bonus) + " / " + Math.min(RES_CAP,(c.pRes_max))
+	document.getElementById("mres").innerHTML = (c.mRes - c.mRes_penalty) + "%  +" + c.mDamage_reduced
+	if (c.statpoints == 0) {
 		document.getElementById("remainingstats").innerHTML = ""
 		document.getElementById("hide_statpoints").style.visibility = "visible"
 	} else {
 		document.getElementById("hide_statpoints").style.visibility = "hidden"
 	}
-	if (character.skillpoints == 0) {
+	if (c.skillpoints == 0) {
 		document.getElementById("remainingskills").innerHTML = ""
 		document.getElementById("hide_skillpoints").style.visibility = "visible"
 	} else {
 		document.getElementById("hide_skillpoints").style.visibility = "hidden"
 	}
-	if (character.level == 1 && character.statpoints == 0 && character.quests_completed < 0) {
+	if (c.level == 1 && c.statpoints == 0 && c.quests_completed < 0) {
 		document.getElementById("hide_stats").style.visibility = "visible"
 	} else {
 		document.getElementById("hide_stats").style.visibility = "hidden"
@@ -517,54 +499,62 @@ function updateSecondaryStats() {
 
 // Updates skill levels
 // ---------------------------------
-function updateSkillAmounts() {
+function calculateSkillAmounts() {
 	for (s = 0; s < skills.length; s++) {
+		skills[s].extra_levels = 0
+		skills[s].extra_levels += character.all_skills
 		var display = skills[s].level
 		if (character.class_name == "Amazon") {
-			if (s < 10) { skills[s].extra_levels = character.skills_javelins
+			skills[s].extra_levels += character.skills_amazon
+			if (s < 10) { skills[s].extra_levels += character.skills_javelins
 				if (s == 8) {skills[s].extra_levels += character.skill_lightning_strike }
 				if (s == 9) {skills[s].extra_levels += character.skill_lightning_fury }
-			} else if (s > 19) { skills[s].extra_levels = character.skills_bows
-			} else { skills[s].extra_levels = character.skills_passives }
+			} else if (s > 19) { skills[s].extra_levels += character.skills_bows
+			} else { skills[s].extra_levels += character.skills_passives }
 		} else if (character.class_name == "Assassin") {
-			if (s < 9) { skills[s].extra_levels = character.skills_martial
-			} else if (s > 19) { skills[s].extra_levels = character.skills_traps
-			} else { skills[s].extra_levels = character.skills_shadow }
+			skills[s].extra_levels += character.skills_assassin
+			if (s < 9) { skills[s].extra_levels += character.skills_martial
+			} else if (s > 19) { skills[s].extra_levels += character.skills_traps
+			} else { skills[s].extra_levels += character.skills_shadow }
 		} else if (character.class_name == "Barbarian") {
-			if (s < 10) { skills[s].extra_levels = character.skills_warcries
-			} else if (s > 17) { skills[s].extra_levels = character.skills_combat_barbarian
-			} else { skills[s].extra_levels = character.skills_masteries }
+			skills[s].extra_levels += character.skills_barbarian
+			if (s < 10) { skills[s].extra_levels += character.skills_warcries
+			} else if (s > 17) { skills[s].extra_levels += character.skills_combat_barbarian
+			} else { skills[s].extra_levels += character.skills_masteries }
 		} else if (character.class_name == "Druid") {
-			if (s < 11) { skills[s].extra_levels = character.skills_elemental
-			} else if (s > 20) { skills[s].extra_levels = character.skills_summoning_druid
-			} else { skills[s].extra_levels = character.skills_shapeshifting }
+			skills[s].extra_levels += character.skills_druid
+			if (s < 11) { skills[s].extra_levels += character.skills_elemental
+			} else if (s > 20) { skills[s].extra_levels += character.skills_summoning_druid
+			} else { skills[s].extra_levels += character.skills_shapeshifting }
 		} else if (character.class_name == "Necromancer") {
-			if (s < 11) { skills[s].extra_levels = character.skills_summoning_necromancer
-			} else if (s > 19) { skills[s].extra_levels = character.skills_curses
-			} else { skills[s].extra_levels = character.skills_poisonBone }
+			skills[s].extra_levels += character.skills_necromancer
+			if (s < 11) { skills[s].extra_levels += character.skills_summoning_necromancer
+			} else if (s > 19) { skills[s].extra_levels += character.skills_curses
+			} else { skills[s].extra_levels += character.skills_poisonBone }
 		} else if (character.class_name == "Paladin") {
-			if (s < 10) { skills[s].extra_levels = character.skills_defensive
-			} else if (s > 19) { skills[s].extra_levels = character.skills_combat_paladin
-			} else { skills[s].extra_levels = character.skills_offensive }
+			skills[s].extra_levels += character.skills_paladin
+			if (s < 10) { skills[s].extra_levels += character.skills_defensive
+			} else if (s > 19) { skills[s].extra_levels += character.skills_combat_paladin
+			} else { skills[s].extra_levels += character.skills_offensive }
 		} else if (character.class_name == "Sorceress") {
-			if (s < 11) { skills[s].extra_levels = character.skills_cold
+			skills[s].extra_levels += character.skills_sorceress
+			if (s < 11) { skills[s].extra_levels += character.skills_cold
 				if (s == 5) {skills[s].extra_levels += character.skill_glacial_spike }
-			} else if (s > 21) { skills[s].extra_levels = character.skills_fire
-			} else { skills[s].extra_levels = character.skills_lightning }
+			} else if (s > 21) { skills[s].extra_levels += character.skills_fire
+			} else { skills[s].extra_levels += character.skills_lightning }
 		}
-		skills[s].extra_levels += character.all_skills
 		display += skills[s].extra_levels
 		if (skills[s].level > 0) {
 			document.getElementById("p"+skills[s].key).innerHTML = display
 		}
 	}
-	updateSkillPassives(character.class_name)
+	calculateSkillPassives(character.class_name)
 }
 
 // Updates passive skills
 // className: the character class
 // ---------------------------------
-function updateSkillPassives(className) {
+function calculateSkillPassives(className) {
 	if (className == "Amazon") {
 		if (skills[11].level > 0) { character.cstrike_bonus = ~~skills[11].data.values[0][skills[11].level+skills[11].extra_levels]; } else { character.cstrike_bonus = 0 }
 		if (skills[15].level > 0) { character.ar_bonus = ~~skills[15].data.values[0][skills[15].level+skills[15].extra_levels]; } else { character.ar_bonus = 0 }
@@ -677,17 +667,12 @@ function addStat(event, stat) {
 		} else if (stat == "btn_dexterity") {
 			character.dexterity += points
 			character.dexterity_added += points
-			character.ar += (points*character.gain_dexterity[0])
-			character.defense += (points*character.gain_dexterity[1])
 		} else if (stat == "btn_vitality") {
 			character.vitality += points
 			character.vitality_added += points
-			character.life += (points*character.gain_vitality[0])
-			character.stamina += (points*character.gain_vitality[1])
 		} else if (stat == "btn_energy") {
 			character.energy += points
 			character.energy_added += points
-			character.mana += (points*character.gain_energy)
 		}
 		character.statpoints -= points
 		updateStats()
@@ -702,7 +687,6 @@ function removeStat(event, stat) {
 	if (event.shiftKey) { points = 10 }
 	if (event.ctrlKey) { points = 100 }
 	if ((stat == "btn_strength")) {
-		min_str = Math.min()
 		if (points > character.strength_added) { points = character.strength_added }
 		character.strength -= points
 		character.strength_added -= points
@@ -710,19 +694,14 @@ function removeStat(event, stat) {
 		if (points > character.dexterity_added) { points = character.dexterity_added }
 		character.dexterity -= points
 		character.dexterity_added -= points
-		character.ar -= (points*character.gain_dexterity[0])
-		character.defense -= (points*character.gain_dexterity[1])
 	} else if ((stat == "btn_vitality")) {
 		if (points > character.vitality_added) { points = character.vitality_added }
 		character.vitality -= points
 		character.vitality_added -= points
-		character.life -= (points*character.gain_vitality[0])
-		character.stamina -= (points*character.gain_vitality[1])
 	} else if ((stat == "btn_energy")) {
 		if (points > character.energy_added) { points = character.energy_added }
 		character.energy -= points
 		character.energy_added -= points
-		character.mana -= (points*character.gain_energy)
 	} else { points = 0 }
 	character.statpoints += points
 	updateStats()
@@ -834,18 +813,11 @@ function skillHover(skill) {
 	var next_value = 0;
 	var current_value = 0;
 	for (let i = 0, len = skill.data.values.length; i < len; i++) {
-		var mod_synergy = 1;
-		if (skill.data.synergies.length > 0) {
-			for (let n = 0, num = skill.data.synergies[i].length; n < num; n=n+2) {
-				mod_synergy = mod_synergy + (skill.data.synergies[i][n] * skills[skill.data.synergies[i][n+1]].level)
-			}
-		}
 		next_display += skill.text[i]
-		next_value = mod_synergy * skill.data.values[i][(skill.level+skill.extra_levels+1)]
 		if (skill.level == 0) {
-			if (mod_synergy == 1) { next_value = character.updateSkill(skill, skill.level+1, i) }
+			next_value = character.updateSkill(skill, skill.level+1, i)
 		} else {
-			if (mod_synergy == 1) { next_value = character.updateSkill(skill, (skill.level+skill.extra_levels+1), i) }
+			next_value = character.updateSkill(skill, (skill.level+skill.extra_levels+1), i)
 		}
 		next_value = round(next_value)
 		next_display += next_value
@@ -853,8 +825,7 @@ function skillHover(skill) {
 		current_display += skill.text[i]
 		//if (skill.level+skill.extra_levels <= LIMIT) { levels = skill.level+skill.extra_levels } else { levels = LIMIT }
 		levels = skill.level+skill.extra_levels
-		current_value = mod_synergy * skill.data.values[i][levels]
-		if (mod_synergy == 1) { current_value = character.updateSkill(skill, (levels), i) }
+		current_value = character.updateSkill(skill, (levels), i)
 		current_value = round(current_value)
 		current_display += current_value
 		
@@ -883,7 +854,7 @@ function skillHover(skill) {
 	if (skill.level == 0 || (skill.level > 0 && skill.data.index[0] > 0)) {
 		document.getElementById("description").innerHTML = skill.description + "<br>"
 	}
-	updateSkillAmounts(character.class_name)
+	calculateSkillAmounts(character.class_name)
 	updateAll()
 	showBaseLevels(skill)
 }
@@ -954,7 +925,7 @@ function itemHover(ev, id) {
 	document.getElementById("item_tooltip").innerHTML = display
 	document.getElementById("item_tooltip").style = style
 	
-	// better system:
+	// TODO: better system:
 	
 	// start with cell divs at high z-index
 	// on mouseover, use cell info...
@@ -1037,7 +1008,6 @@ function trash(ev) {
 	var val = ev.target.id;
 	var type = "charms"
 	for (old_affix in equipped[type][val]) {
-		if (old_affix == "all_attributes" || old_affix == "strength" || old_affix == "dexterity" || old_affix == "vitality" || old_affix == "energy") { adjustAttributes(old_affix, equipped[type][val][old_affix], -1) }
 		character[old_affix] -= equipped[type][val][old_affix]
 		equipped[type][val][old_affix] = unequipped[old_affix]
 	}
@@ -1048,7 +1018,7 @@ function trash(ev) {
 		}
 	}
 	ev.target.remove();
-	updateSkillAmounts()
+	calculateSkillAmounts()
 	updateAll()
 }
 
