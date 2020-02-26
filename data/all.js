@@ -925,7 +925,7 @@ function itemHover(ev, id) {
 	document.getElementById("item_tooltip").innerHTML = display
 	document.getElementById("item_tooltip").style = style
 	
-	// TODO: better system:
+	// TODO better system:
 	
 	// start with cell divs at high z-index
 	// on mouseover, use cell info...

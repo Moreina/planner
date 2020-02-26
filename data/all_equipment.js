@@ -35,7 +35,7 @@ var equipment = {
     armor: [
 {name:"Armor"},
 {name:"Skin of the Vipermagi", req_strength:43, req_level:29, defense:279, all_skills:1, fcr:30, mDamage_reduced:13, all_res:35},
-{name:"Shaftstop", req_strength:92, req_level:38, defense:684, velocity:-5, pdr:30, missile_defense:250, life:60, e_def:},
+{name:"Shaftstop", req_strength:92, req_level:38, defense:684, velocity:-5, pdr:30, missile_defense:250, life:60},
 {name:"Tyrael's Might", req_level:84, defense:1502, velocity:-5, frw:20, damage_vs_demons:100, strength:30, all_res:30, cbf:1, cdr:10, peace:1},
 {name:"Naj's Light Plate", req_strength:79, req_level:71, defense:830, velocity:-10, all_skills:1, damage_to_mana:45, all_res:25, life:65},
 {name:"Guardian Angel", req_strength:118, req_level:45, defense:825, velocity:-10, ibc:20, fbr:30, light_radius:4, all_res:15, fRes_max:7, cRes_max:7, lRes_max:7, pRes_max:7, ar_per_level:2.5, skills_paladin:1},
