@@ -18,6 +18,8 @@ var character_paladin = {class_name:"Paladin", strength:25, dexterity:20, vitali
 
 	if (skill.name == "Sacrifice" && elem == 1) { 	result += (10*skills[8].level + 5*skills[18].level) }
 	if (skill.name == "Smite" && elem == 0) { 	result += (8*skills[2].level) }
+	if (skill.name == "Holy Bolt" && elem < 2) { 	result *= (1+(0.35*skills[17].level + 0.35*skills[29].level)) }
+	if (skill.name == "Holy Bolt" && elem == 2) { 	result *= (1+(0.35*skills[0].level)) }
 	if (skill.name == "Zeal" && elem == 1) { 	result += (10*skills[20].level) }
 	if (skill.name == "Charge" && elem == 0) { 	result += (26*skills[6].level + 26*skills[10].level) }
 	if (skill.name == "Vengeance" && elem == 0) { 	result = character.damage_min + character.level*character.min_damage_per_level }
