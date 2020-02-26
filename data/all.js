@@ -510,40 +510,61 @@ function calculateSkillAmounts() {
 		if (character.class_name == "Amazon") {
 			skills[s].extra_levels += character.skills_amazon
 			if (s < 10) { skills[s].extra_levels += character.skills_javelins
-				if (s == 8) {skills[s].extra_levels += character.skill_lightning_strike }
-				if (s == 9) {skills[s].extra_levels += character.skill_lightning_fury }
+				if (s == 8) { skills[s].extra_levels += character.skill_lightning_strike }
+				if (s == 9) { skills[s].extra_levels += character.skill_lightning_fury }
+				if (s == 4) { skills[s].extra_levels += character.skill_lightning_bolt }
 			} else if (s > 19) { skills[s].extra_levels += character.skills_bows
-			} else { skills[s].extra_levels += character.skills_passives }
+			} else { skills[s].extra_levels += character.skills_passives 
+				if (s == 23 || s == 26 || s == 28) { skills[s].extra_levels += character.skills_fire_all }
+				if (s == 20 || s == 24 || s == 29) { skills[s].extra_levels += character.skills_cold_all }
+			}
 		} else if (character.class_name == "Assassin") {
 			skills[s].extra_levels += character.skills_assassin
+			if (s == 1 || s == 6 || s == 20 || s == 24 || s == 27) { skills[s].extra_levels += character.skills_fire_all }
 			if (s < 9) { skills[s].extra_levels += character.skills_martial
+				if (s == 1) { skills[s].extra_levels += character.skill_fists_of_ember }
+				if (s == 3 || s == 8) { skills[s].extra_levels += character.skills_cold_all }
 			} else if (s > 19) { skills[s].extra_levels += character.skills_traps
 			} else { skills[s].extra_levels += character.skills_shadow }
 		} else if (character.class_name == "Barbarian") {
 			skills[s].extra_levels += character.skills_barbarian
 			if (s < 10) { skills[s].extra_levels += character.skills_warcries
+				if (s == 6) { skills[s].extra_levels += character.skill_battle_orders }
+				if (s == 9) { skills[s].extra_levels += character.skill_battle_command }
 			} else if (s > 17) { skills[s].extra_levels += character.skills_combat_barbarian
 			} else { skills[s].extra_levels += character.skills_masteries }
 		} else if (character.class_name == "Druid") {
 			skills[s].extra_levels += character.skills_druid
+			if (s == 0 || s == 1 || s == 2 || s == 4 || s == 7 || s == 9 || s == 17) { skills[s].extra_levels += character.skills_fire_all }
 			if (s < 11) { skills[s].extra_levels += character.skills_elemental
+				if (s == 3 || s == 10) { skills[s].extra_levels += character.skills_cold_all }
 			} else if (s > 20) { skills[s].extra_levels += character.skills_summoning_druid
-			} else { skills[s].extra_levels += character.skills_shapeshifting }
+			} else { skills[s].extra_levels += character.skills_shapeshifting 
+				if (s == 14) { skills[s].extra_levels += character.skill_feral_rage }
+			}
 		} else if (character.class_name == "Necromancer") {
 			skills[s].extra_levels += character.skills_necromancer
 			if (s < 11) { skills[s].extra_levels += character.skills_summoning_necromancer
+				if (s == 0) { skills[s].extra_levels += character.skill_summon_mastery }
+				if (s == 4) { skills[s].extra_levels += character.skill_flesh_offering }
+				if (s == 9) { skills[s].extra_levels += character.skills_fire_all }
 			} else if (s > 19) { skills[s].extra_levels += character.skills_curses
 			} else { skills[s].extra_levels += character.skills_poisonBone }
 		} else if (character.class_name == "Paladin") {
 			skills[s].extra_levels += character.skills_paladin
 			if (s < 10) { skills[s].extra_levels += character.skills_defensive
 			} else if (s > 19) { skills[s].extra_levels += character.skills_combat_paladin
-			} else { skills[s].extra_levels += character.skills_offensive }
+			} else { skills[s].extra_levels += character.skills_offensive 
+				if (s == 11) { skills[s].extra_levels += character.skills_fire_all }
+				if (s == 15) { skills[s].extra_levels += character.skills_cold_all }
+			}
 		} else if (character.class_name == "Sorceress") {
 			skills[s].extra_levels += character.skills_sorceress
 			if (s < 11) { skills[s].extra_levels += character.skills_cold
-				if (s == 5) {skills[s].extra_levels += character.skill_glacial_spike }
+				skills[s].extra_levels += character.skills_cold_all
+				if (s == 5) { skills[s].extra_levels += character.skill_glacial_spike }
 			} else if (s > 21) { skills[s].extra_levels += character.skills_fire
+				skills[s].extra_levels += character.skills_fire_all
 			} else { skills[s].extra_levels += character.skills_lightning }
 		}
 		display += skills[s].extra_levels
