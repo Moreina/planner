@@ -20,11 +20,11 @@ var inv = [
 
 // Loads equipment/charm info to the appropriate dropdowns
 // ---------------------------------
-function loadEquipment() {
+function loadEquipment(className) {
 	var equipmentTypes = ["helm", "armor", "gloves", "boots", "belt", "amulet", "ring1", "ring2", "weapon", "offhand", "charms"];
 	var equipmentDropdowns = ["dropdown_helm", "dropdown_armor", "dropdown_gloves", "dropdown_boots", "dropdown_belt", "dropdown_amulet", "dropdown_ring1", "dropdown_ring2", "dropdown_weapon", "dropdown_offhand", "dropdown_charms"]
 	for (let i = 0; i < equipmentTypes.length; i++) {
-		loadItems(equipmentTypes[i], equipmentDropdowns[i])
+		loadItems(equipmentTypes[i], equipmentDropdowns[i], className)
 	}
 }
 
@@ -33,15 +33,17 @@ function loadEquipment() {
 // dropdown: string name of the dropdown to edit
 // called by: loadEquipment()
 // ---------------------------------
-function loadItems(type, dropdown) {
+function loadItems(type, dropdown, className) {
 	if (type.length == 0) document.getElementById(dropdown).innerHTML = "<option></option>"
 	else {
 		var choices = "";
 		for (item in equipment[type]) {
-			if (item > 0) {
-				choices += "<option class='dropdown-option'>" + equipment[type][item].name + "</option>"
-			} else {
-				choices += "<option selected>" + "­ ­ ­ ­ " + equipment[type][item].name + "</option>"
+			if (typeof(equipment[type][item].only) == 'undefined' || (typeof(equipment[type][item].only) != 'undefined' && equipment[type][item].only != null && equipment[type][item].only == className)) {
+				if (item > 0) {
+					choices += "<option class='dropdown-option'>" + equipment[type][item].name + "</option>"
+				} else {
+					choices += "<option selected>" + "­ ­ ­ ­ " + equipment[type][item].name + "</option>"
+				}
 			}
 		}
 		document.getElementById(dropdown).innerHTML = choices
@@ -52,6 +54,7 @@ function loadItems(type, dropdown) {
 // choice: character class to use (string)
 // ---------------------------------
 function startup(choice) {
+	loadEquipment(choice)
 	clearIconSources()
 	resetSkills()
 	resetEquipment()
@@ -225,7 +228,7 @@ function resetCharms() {
 	}
 }
 
-// Adds a charm to the inventory		// TODO: Too large
+// Adds a charm to the inventory		// TODO: Too large, split
 // val: the name of the charm
 // ---------------------------------
 function addCharm(val) {

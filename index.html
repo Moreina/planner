@@ -186,6 +186,7 @@
 
 </div>		<!--	/gui	-->
 
+<div style="display: block; height:118px; width: 650px; position: relative;">
 <div class="gray no-selection" style="display: block; width: 250px;" id="stats">
 	<a>Basic Attack: </a><a id="basic_attack"></a><br>
 	<a>Attack Rating: </a><a id="ar"></a><br>
@@ -193,6 +194,11 @@
 	<a>Stamina: </a><a id="stamina"></a><br>
 	<a>Life: </a><a id="life"></a><br>
 	<a>Mana: </a><a id="mana"></a>
+</div>
+<div class="gray" style="position: absolute; top: 0px; left: 320px;">
+<a id="skill1"></a><br>
+<a id="skill2"></a>
+</div>
 </div>
 
 <div style="float: left; position: relative; width: 321px; height: 434px; margin-bottom: 36px;">
@@ -351,8 +357,6 @@
 //
 // ---------------------------------
 function initial_load() {
-	loadEquipment()
-	
 	skills_all = {amazon:skills_amazon, assassin:skills_assassin, barbarian:skills_barbarian, druid:skills_druid, necromancer:skills_necromancer, paladin:skills_paladin, sorceress:skills_sorceress}
 	character_all = {amazon:character_amazon, assassin:character_assassin, barbarian:character_barbarian, druid:character_druid, necromancer:character_necromancer, paladin:character_paladin, sorceress:character_sorceress}
 	
@@ -361,7 +365,6 @@ function initial_load() {
 	var classes = ["amazon","assassin","barbarian","druid","necromancer","paladin","sorceress"]
 	var initial_class = classes[random];
 	skills = skills_all[initial_class]
-	character_setup = character_all[initial_class]
 	
 	startup(initial_class)
 }
