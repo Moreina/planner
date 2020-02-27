@@ -23,6 +23,7 @@ Character Skill Planner for Diablo 2: Path of Diablo
 * item description tooltips
 * full GUI inventory/stash
 * item socketing/corrupting
+* options for individual quests
 * interface niceties
 
 ### Stretch Goals:
