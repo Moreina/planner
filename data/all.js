@@ -163,55 +163,93 @@ function changeLevel(input) {
 // val: string name of item
 // ---------------------------------
 function equip(type, val) {
-	if (equipped[type].name != val) {		// ignored if already equipped (same name ID)
-		if (equipped[type].name != "none") {	// if replacing an item, previous item's affixes are removed from character
-			for (old_affix in equipped[type]) {
-				character[old_affix] -= equipped[type][old_affix]
-				equipped[type][old_affix] = unequipped[old_affix]
+	var set_bonuses = "";
+	var set = "";
+	var set_before = "";
+	var set_after = "";
+	for (item in equipment[type]) { if (equipment[type][item].name == val) { if (typeof(equipment[type][item].set_bonuses) != 'undefined') { set_bonuses = equipment[type][item].set_bonuses } } }
+	if (equipped[type].name != "none") { for (old_affix in equipped[type]) {
+		if (old_affix == "set_bonuses") { set_bonuses = equipped[type].set_bonuses; set = equipped[type]["set_bonuses"][0]; } } }
+	if (set_bonuses != "") {
+		set = set_bonuses[0]
+		set_before = character[set];
+	}
+	// if replacing an item, previous item's affixes are removed from character
+	//if (equipped[type].name != "none") {
+		for (old_affix in equipped[type]) {
+			character[old_affix] -= equipped[type][old_affix]
+			if (old_affix != "set_bonuses") equipped[type][old_affix] = unequipped[old_affix]
+		}
+	//}
+	// two-handed weapon verification
+	var allow = 1;
+	var twoHanded = 0;
+	for (item in equipment[type]) { if (equipment[type][item].name == val) { twoHanded == equipment[type][item].twoHanded } }
+	if (type == "weapon" && equipped["offhand"].name != "none" && equipped["offhand"].name != "Offhand") {
+		if (twoHanded == 1) {
+			allow = 0; document.getElementById("dropdown_weapon").selectedIndex = 0 }
+	}
+	if (type == "offhand" && equipped["weapon"].name != "none") {
+		if (equipped["weapon"].twoHanded == 1) {
+			allow = 0; document.getElementById("dropdown_offhand").selectedIndex = 0 }
+	}
+	// add affixes to character
+	if (allow == 1) { for (item in equipment[type]) {
+		if (equipment[type][item].name == val) {
+			for (affix in equipment[type][item]) {
+				character[affix] += equipment[type][item][affix]
+				equipped[type][affix] = equipment[type][item][affix]
 			}
 		}
-		// two-handed weapon verification
-		var allow = 1;
-		var id = "";
-		for (item in equipment[type]) { if (equipment[type][item].name == val) { id = item } }
-		if (type == "weapon" && equipped["offhand"].name != "none") {
-			if (typeof(equipment[type][id].twoHanded) != 'undefined' && equipment[type][id].twoHanded != null && equipment[type][id].twoHanded == 1) {
-				allow = 0; document.getElementById("dropdown_weapon").selectedIndex = 0 }
-		}
-		if (type == "offhand" && equipped["weapon"].name != "none") {
-			if (typeof(equipped["weapon"].twoHanded) != 'undefined' && equipped["weapon"].twoHanded != null && equipped["weapon"].twoHanded == 1) {
-				allow = 0; document.getElementById("dropdown_offhand").selectedIndex = 0 }
-		}
-		if (allow) {
-		// add affixes to character
-		for (item in equipment[type]) {
-			if (equipment[type][item].name == val) {
-				for (affix in equipment[type][item]) {
-				//	if (affix == "set_bonuses") {
-				//		var set = equipment[type][item][affix][0];
-				//		var setNum = character[set];
-				//		// TODO: add set bonuses up to [setNum]
-				//		
-				//		// add highest set bonus
-				//		character[affix] += equipment[type][item][affix][setNum]
-				//	}
-					character[affix] += equipment[type][item][affix]
-					equipped[type][affix] = equipment[type][item][affix]
+	} }
+	// handle set bonuses
+	if (set_bonuses != "") {
+		set_after = character[set];
+		if (set_before < set_after) {
+			// add set bonuses for new item
+			for (let i = 2; i < set_bonuses.length; i++) {
+				for (affix in set_bonuses[i]) {
+					if (i <= set_after) { character[affix] += set_bonuses[i][affix] }
+					equipped[type]["set_bonuses"][i][affix] = set_bonuses[i][affix]
 				}
 			}
+			// add new set bonus for other equipped items in the set
+			for (set_type in equipped) {
+				if (type != set_type && equipped[set_type][set_bonuses[0]] != null) {
+					for (affix in equipped[set_type]["set_bonuses"][set_after]) {
+						character[affix] += equipped[set_type]["set_bonuses"][set_after][affix]
+					}
+				}
+			}
+			for (affix in sets[set][set_after]) {
+				character[affix] += sets[set][set_after][affix]
+			}
 		}
+		if (set_before > set_after) {
+			// remove set bonuses from previous item
+			for (let j = 2; j < set_bonuses.length; j++) {
+				for (affix in set_bonuses[j]) {
+					if (j <= set_before) { character[affix] -= set_bonuses[j][affix] }
+					equipped[type]["set_bonuses"][j][affix] = unequipped[affix]
+				}
+			}
+			// remove old set bonus for other equipped items in the set
+			for (set_type in equipped) {
+				if (type != set_type && equipped[set_type][set] != null) {
+					for (affix in equipped[set_type]["set_bonuses"][set_before]) {
+						character[affix] -= equipped[set_type]["set_bonuses"][set_before][affix]
+					}
+				}
+			}
+			for (affix in sets[set][set_before]) {
+				character[affix] -= sets[set][set_before][affix]
+			}
 		}
-	//	if (typeof(equipment[type][item].set_bonuses) != 'undefined' && equipment[type][item].only != null) {
-	//		
-	//	}
-
-		
-		calculateSkillAmounts()
-		updateAll()
-		checkRequirements()
-		
-		
 	}
+	if (type == val) { document.getElementById(("dropdown_"+type)).selectedIndex = 0 }
+	calculateSkillAmounts()
+	updateAll()
+	checkRequirements()
 }
 
 // Resets functionality for skills
@@ -220,6 +258,8 @@ function resetSkills() {
 	for (bonus in skill_bonuses) { character[bonus] = skill_bonuses[bonus] }
 	for (s = 0, len = skills.length; s < len; s++) {
 		skills[s].level = 0
+		skills[s].extra_levels = 0
+		skills[s].force_levels = 0
 		document.getElementById("p"+skills[s].key).innerHTML = ""
 		document.getElementById("s"+skills[s].key).onmouseover = function() {mouseOut};
 		document.getElementById("s"+skills[s].key).onclick = function() {mouseOut};
@@ -233,7 +273,7 @@ function resetEquipment() {
 	var equipmentTypes = ["helm", "armor", "gloves", "boots", "belt", "amulet", "ring1", "ring2", "weapon", "offhand"];
 	var equipmentDropdowns = ["dropdown_helm", "dropdown_armor", "dropdown_gloves", "dropdown_boots", "dropdown_belt", "dropdown_amulet", "dropdown_ring1", "dropdown_ring2", "dropdown_weapon", "dropdown_offhand"]
 	for (let e = 0; e < equipmentTypes.length; e++) {
-		equip(equipmentTypes[e], "")
+		equip(equipmentTypes[e], "none")
 		document.getElementById(equipmentDropdowns[e]).selectedIndex = 0
 	}
 	resetCharms()
@@ -475,10 +515,10 @@ function updateStats() {
 // ---------------------------------
 function updateSecondaryStats() {
 	document.getElementById("pdr").innerHTML = character.pdr + "%  +" + character.damage_reduced
-	document.getElementById("fabsorb").innerHTML = character.fAbsorb + "%  +" + (character.fAbsorb_flat + (character.level*character.fAbsorb_per_level))
-	document.getElementById("cabsorb").innerHTML = character.cAbsorb + "%  +" + character.cAbsorb_flat
-	document.getElementById("labsorb").innerHTML = character.lAbsorb + "%  +" + character.lAbsorb_flat
-	document.getElementById("mabsorb").innerHTML = character.mAbsorb + "%  +" + character.mAbsorb_flat	
+	document.getElementById("fabsorb").innerHTML = character.fAbsorb + "%  +" + Math.floor(character.fAbsorb_flat + (character.level*character.fAbsorb_flat_per_level))
+	document.getElementById("cabsorb").innerHTML = character.cAbsorb + "%  +" + Math.floor(character.cAbsorb_flat + (character.level*character.cAbsorb_flat_per_level))
+	document.getElementById("labsorb").innerHTML = character.lAbsorb + "%  +" + Math.floor(character.lAbsorb_flat + (character.level*character.lAbsorb_flat_per_level))
+	document.getElementById("mabsorb").innerHTML = character.mAbsorb + "%  +" + Math.floor(character.mAbsorb_flat + (character.level*character.mAbsorb_flat_per_level))	
 	
 	document.getElementById("cdr").innerHTML = character.cdr
 	document.getElementById("fcr").innerHTML = character.fcr + Math.floor(character.level*character.fcr_per_level)
@@ -507,7 +547,7 @@ function updateSecondaryStats() {
 	document.getElementById("cstrike").innerHTML = character.cstrike + character.cstrike_skillup
 	document.getElementById("owounds").innerHTML = character.owounds
 	
-	document.getElementById("mf").innerHTML = (character.mf + character.level*character.mf_per_level)
+	document.getElementById("mf").innerHTML = Math.floor(character.mf + character.level*character.mf_per_level)
 	document.getElementById("gf").innerHTML = character.gf
 	
 	document.getElementById("damage_vs_demons").innerHTML = character.damage_vs_demons
@@ -544,7 +584,9 @@ function calculateSkillAmounts() {
 				if (s == 9) { skills[s].force_levels = character.skill_lightning_fury }
 				if (s == 4) { skills[s].force_levels = character.skill_lightning_bolt }
 			} else if (s > 19) { skills[s].extra_levels += character.skills_bows
-			} else { skills[s].extra_levels += character.skills_passives 
+				if (s == 2) { skills[s].force_levels = character.oskill_multiple_shot }				
+			} else { skills[s].extra_levels += character.skills_passives
+				if (s == 10) { skills[s].force_levels = character.oskill_inner_sight }
 				if (s == 23 || s == 26 || s == 28) { skills[s].extra_levels += character.skills_fire_all }
 				if (s == 20 || s == 24 || s == 29) { skills[s].extra_levels += character.skills_cold_all }
 			}
@@ -569,7 +611,7 @@ function calculateSkillAmounts() {
 			if (s < 11) { skills[s].extra_levels += character.skills_elemental
 				if (s == 3 || s == 10) { skills[s].extra_levels += character.skills_cold_all }
 			} else if (s > 20) { skills[s].extra_levels += character.skills_summoning_druid
-			} else { skills[s].extra_levels += character.skills_shapeshifting 
+			} else { skills[s].extra_levels += character.skills_shapeshifting
 				if (s == 14) { skills[s].force_levels = character.skill_feral_rage }
 			}
 		} else if (character.class_name == "Necromancer") {
@@ -579,7 +621,9 @@ function calculateSkillAmounts() {
 				if (s == 4) { skills[s].force_levels = character.skill_flesh_offering }
 				if (s == 9) { skills[s].extra_levels += character.skills_fire_all }
 			} else if (s > 19) { skills[s].extra_levels += character.skills_curses
-			} else { skills[s].extra_levels += character.skills_poisonBone }
+			} else { skills[s].extra_levels += character.skills_poisonBone
+				if (s == 15) { skills[s].force_levels = character.oskill_desecrate }
+			}
 		} else if (character.class_name == "Paladin") {
 			skills[s].extra_levels += character.skills_paladin
 			if (s < 10) { skills[s].extra_levels += character.skills_defensive
@@ -592,6 +636,7 @@ function calculateSkillAmounts() {
 			skills[s].extra_levels += character.skills_sorceress
 			if (s < 11) { skills[s].extra_levels += character.skills_cold
 				skills[s].extra_levels += character.skills_cold_all
+				if (s == 4) { skills[s].force_levels = character.oskill_shiver_armor }
 				if (s == 5) { skills[s].force_levels = character.skill_glacial_spike }
 				if (s == 10) { skills[s].force_levels = character.skill_cold_mastery }
 			} else if (s > 21) { skills[s].extra_levels += character.skills_fire
@@ -605,7 +650,7 @@ function calculateSkillAmounts() {
 		display += skills[s].extra_levels
 		if (skills[s].level > 0 || skills[s].force_levels > 0) {
 			document.getElementById("p"+skills[s].key).innerHTML = display
-		}
+		} else { document.getElementById("p"+skills[s].key).innerHTML = "" }
 	}
 	calculateSkillPassives(character.class_name)
 }
@@ -618,9 +663,9 @@ function calculateSkillPassives(className) {
 		if (skills[11].level > 0) { character.cstrike_skillup = ~~skills[11].data.values[0][skills[11].level+skills[11].extra_levels]; } else { character.cstrike_skillup = 0 }
 		if (skills[15].level > 0) { character.ar_skillup = ~~skills[15].data.values[0][skills[15].level+skills[15].extra_levels]; } else { character.ar_skillup = 0 }
 		if (skills[19].level > 0) { character.pierce_skillup = ~~skills[19].data.values[0][skills[19].level+skills[19].extra_levels]; } else { character.pierce_skillup = 0 }
-		//if (skills[13].level > 0) { character.dodge_bonus = ~~skills[13].data.values[0][skills[13].level+skills[13].extra_levels]; } else { character.dodge_bonus = 0 }
-		//if (skills[14].level > 0) { character.avoid_bonus = ~~skills[14].data.values[0][skills[14].level+skills[14].extra_levels]; } else { character.avoid_bonus = 0 }
-		//if (skills[16].level > 0) { character.evade_bonus = ~~skills[16].data.values[0][skills[16].level+skills[16].extra_levels]; } else { character.evade_bonus = 0 }
+		//if (skills[13].level > 0) { character.dodge_skillup = ~~skills[13].data.values[0][skills[13].level+skills[13].extra_levels]; } else { character.dodge_skillup = 0 }
+		//if (skills[14].level > 0) { character.avoid_skillup = ~~skills[14].data.values[0][skills[14].level+skills[14].extra_levels]; } else { character.avoid_skillup = 0 }
+		//if (skills[16].level > 0) { character.evade_skillup = ~~skills[16].data.values[0][skills[16].level+skills[16].extra_levels]; } else { character.evade_skillup = 0 }
 	} else if (className == "Assassin") {
 		if (skills[9].level > 0) {
 			character.claw_skillup[0] = ~~skills[9].data.values[0][skills[9].level+skills[9].extra_levels];
@@ -706,7 +751,7 @@ function checkRequirements() {
 	for (let s = 0; s < skills.length; s++) {
 		var req_met = 1;
 		if (skills[s].level > Math.max(0,(character.level - skills[s].reqlvl + 1))) { req_met = 0 }
-		if (skills[s].req.length > 0 && req_met == 1) { for (let r = 0; r < skills[s].req.length; r++) {
+		if (skills[s].force_levels == 0 && skills[s].req.length > 0 && req_met == 1) { for (let r = 0; r < skills[s].req.length; r++) {
 			if (skills[skills[s].req[r]].level == 0) { req_met = 0 }
 		} }
 		if (req_met == 0) {

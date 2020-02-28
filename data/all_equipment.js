@@ -3,23 +3,29 @@
 var equipped = { helm:{name:"none"}, armor:{name:"none"}, gloves:{name:"none"}, boots:{name:"none"}, belt:{name:"none"}, amulet:{name:"none"}, ring1:{name:"none"}, ring2:{name:"none"}, weapon:{name:"none", twoHanded:0}, offhand:{name:"none"}, charms:{name:"none"} }
 //var equipped_charms = { id1:{name:"none"}, id2:{name:"none"} }
 
-var unequipped = {name:"none", strength:0, dexterity:0, vitality:0, energy:0, life:0, mana:0, defense:0, ar:0, stamina:0,
+var unequipped = {name:"none", strength:0, dexterity:0, vitality:0, energy:0, life:0, mana:0, defense:0, ar:0, stamina:0, block:0,
 /* main stats		*/	fRes_max:75, cRes_max:75, lRes_max:75, pRes_max:75, mRes_max:75, fRes:0, cRes:0, lRes:0, pRes:0, mRes:0,
 /* skill tabs		*/	skills_javelins:0, skills_passives:0, skills_bows:0, skills_martial:0, skills_shadow:0, skills_traps:0, skills_warcries:0, skills_masteries:0, skills_combat_barbarian:0, skills_elemental:0, skills_shapeshifting:0, skills_summoning_druid:0, skills_summoning_necromancer:0, skills_poisonBone:0, skills_curses:0, skills_offensive:0, skills_defensive:0, skills_combat_paladin:0, skills_cold:0, skills_lightning:0, skills_fire:0, skills_amazon:0, skills_assassin:0, skills_barbarian:0, skills_druid:0, skills_necromancer:0, skills_paladin:0, skills_sorceress:0, skills_fire_all:0, skills_cold_all:0,
 /* skills		*/	skill_lightning_bolt:0, skill_lightning_fury:0, skill_lightning_strike:0, skill_glacial_spike:0, skill_battle_command:0, skill_battle_orders:0, skill_feral_rage:0, skill_summon_mastery:0, skill_flesh_offering:0, skill_fists_of_ember:0, skill_lightning_mastery:0, skill_fire_mastery:0, skill_cold_mastery:0, 
-/* open skills		*/	oskill_feral_rage:0, oskill_lycanthropy:0, oskill_werewolf:0, oskill_hydra:0, oskill_multishot:0, oskill_desecrate:0, 
-/* stats		*/	cdr:0, fcr:0, fbr:0, fhr:0, frw:0, ias:0, pierce:0, cblow:0, dstrike:0, cstrike:0, owounds:0, fDamage:0, cDamage:0, lDamage:0, pDamage:0, fPierce:0, cPierce:0, lPierce:0, pPierce:0, pdr:0, damage_reduced:0, mDamage_reduced:0, mf:0, gf:0, life_leech:0, mana_leech:0, life_per_hit:0, mana_per_hit:0, life_per_ranged_hit:0, mana_per_ranged_hit:0, fAbsorb:0, cAbsorb:0, lAbsorb:0, pAbsorb:0, mAbsorb:0, fAbsorb_flat:0, cAbsorb_flat:0, lAbsorb_flat:0, mAbsorb_flat:0, 
+/* open skills		*/	oskill_ball_lightning:0, oskill_feral_rage:0, oskill_lycanthropy:0, oskill_werewolf:0, oskill_hydra:0, oskill_multiple_shot:0, oskill_desecrate:0, oskill_shiver_armor:0, oskill_inner_sight:0, // oskill_frigerate:0, oskill_edged_weapon_mastery:0, oskill_cold_mastery:0, oskill_flame_dash:0, 
+/* stats		*/	cdr:0, fcr:0, fbr:0, fhr:0, frw:0, ias:0, pierce:0, cblow:0, dstrike:0, cstrike:0, owounds:0, fDamage:0, cDamage:0, lDamage:0, pDamage:0, fPierce:0, cPierce:0, lPierce:0, pPierce:0, pdr:0, damage_reduced:0, mDamage_reduced:0, mf:0, gf:0, life_leech:0, mana_leech:0, life_per_hit:0, mana_per_hit:0, life_per_ranged_hit:0, mana_per_ranged_hit:0, fAbsorb:0, cAbsorb:0, lAbsorb:0, mAbsorb:0, fAbsorb_flat:0, cAbsorb_flat:0, lAbsorb_flat:0, mAbsorb_flat:0, 
 /* stats (indirect)	*/	all_skills:0, all_attributes:0, all_res:0, velocity:0, damage_bonus:0, max_life:0, max_mana:0, defense_bonus:0, 
-/* stats (per level)	*/	life_per_level:0, mana_per_level:0, defense_per_level:0, ar_per_level:0, stamina_per_level:0, strength_per_level:0, dexterity_per_level:0, vitality_per_level:0, energy_per_level:0, fRes_per_level:0, cRes_per_level:0, lRes_per_level:0, pRes_per_level:0, fAbsorb_per_level:0, cAbsorb_per_level:0, lAbsorb_per_level:0, pAbsorb_per_level:0, mf_per_level:0, gf_per_level:0, fcr_per_level:0, dstrike_per_level:0, 
+/* stats (per level)	*/	life_per_level:0, mana_per_level:0, defense_per_level:0, ar_per_level:0, stamina_per_level:0, strength_per_level:0, dexterity_per_level:0, vitality_per_level:0, energy_per_level:0, fRes_per_level:0, cRes_per_level:0, lRes_per_level:0, pRes_per_level:0, fAbsorb_flat_per_level:0, cAbsorb_flat_per_level:0, lAbsorb_flat_per_level:0, mAbsorb_flat_per_level:0, mf_per_level:0, gf_per_level:0, fcr_per_level:0, dstrike_per_level:0, 
 /* attack damage	*/	damage_min:0, damage_max:0, fDamage_min:0, fDamage_max:0, cDamage_min:0, cDamage_max:0, lDamage_min:0, lDamage_max:0, pDamage_min:0, pDamage_max:0, mDamage_min:0, mDamage_max:0, min_damage_per_level:0, max_damage_per_level:0, kick_min:0, fDamage_max_per_level:0, cDamage_max_per_level:0, lDamage_max_per_level:0, pDamage_max_per_level:0, kick_damage_per_level:0, smite_min:0, smite_max:0, 
 /* other (not in-game)	*/	ibc:0, life_per_kill:0, mana_per_kill:0, damage_vs_demons:0, damage_vs_undead:0, ar_vs_demons:0, ar_vs_undead:0, damage_to_mana:0, life_regen:0, mana_regen:0, missile_defense:0, melee_defense:0, ar_vs_undead_per_level:0, damage_vs_undead_per_level:0, ar_vs_demons_per_level:0, damage_vs_demons_per_level:0, poison_length_reduced:0, thorns_lightning:0, life_per_demon_kill:0, light_radius:0, thorns:0, thorns_per_level:0, slower_stam_drain:0, heal_stam:0, heal_stam_per_level:0, ed_per_level:0, 
 /* other, affects enemy	*/	enemy_fRes:0, enemy_cRes:0, enemy_lRes:0, enemy_pRes:0, slow_target:0, target_defense:0, flee_on_hit:0, blind_on_hit:0, monster_defense_per_hit:0, freezes_target:0, 
 /* other, boolean	*/	itd:0, pmh:0, cbf:0, peace:0, knockback:0, half_freeze_duration:0, e_def:0,
 /* item qualities	*/	indestructible:0, req_reduced:0, autorepair:0, autoreplenish:0, stack_size:0, sockets:0, twoHanded:0, 
-/* sets			*/	set_IK:0, set_Mav:0, set_Gris:0, set_TO:0, set_TR:0, set_Nat:0, set_Ald:0, 
+/* sets			*/	set_IK:0, set_Mav:0, set_Gris:0, set_TO:0, set_TR:0, set_Nat:0, set_Ald:0, set_bonuses:["",{},{},{},{},{}],
 /* charges		*/	charges_poison_creeper:0, charges_oak_sage:0, charges_iron_maiden:0, charges_iron_golem:0, charges_spirit_of_barbs:0, 
 /* misc			*/	bonus_corpse_explosion:0, skill_random_sorc:0, 
 };
+
+var sets = {
+	set_TR:[0,{},{life_regen:10},{mf:65},{fhr:25},{skills_sorceress:3, life:150, all_res:50, missile_defense:50, defense:150}],
+	set_IK:[],
+};
+
 
 var equipment = {
     helm: [
@@ -41,7 +47,7 @@ var equipment = {
 {name:"Kira's Guardian", req_level:77, defense:170, fhr:20, cbf:1, all_res:70, base:"Tiara"},
 {name:"Griffon's Eye", req_level:76, defense:260, all_skills:1, lDamage:15, fcr:25, enemy_lRes:-20, base:"Diadem"},
 {name:"Crown of Ages", req_strength:174, req_level:82, defense:399, all_skills:1, pdr:15, all_res:30, fhr:30, sockets:2, base:"Corona"},
-//{set_TR:1, name:"Tal Rasha's Horadric Crest", req_strength:55, req_level:66, defense:131, life_leech:10, mana_leech:10, all_res:15, mana:30, life:60, base:"Death Mask", set_bonuses:["set_TR"]},
+{set_TR:1, name:"Tal Rasha's Horadric Crest", req_strength:55, req_level:66, defense:131, life_leech:10, mana_leech:10, all_res:15, mana:30, life:60, base:"Death Mask", set_bonuses:["set_TR",{},{},{},{},{}]},
 /*
 {name:"Biggin's Bonnet", req_strength:0, req_level:0, defense:0, base:"Cap"}
 {name:"Tarnhelm", req_strength:0, req_level:0, defense:0, base:"Skull Cap"}
@@ -74,37 +80,37 @@ var equipment = {
 {name:"Bramble Archon Plate", req_strength:103, req_level:61, defense:824, fhr:50, pDamage:50, max_mana:5, mana_regen:15, cRes_max:5, fRes:30, pRes:100, life_per_kill:13, charges_spirit_of_barbs:13},
 {name:"Enigma Archon Plate", req_strength:103, req_level:65, defense:1299, all_skills:2, frw:45, strength_per_level:0.75, max_life:5, pdr:8, life_per_kill:14, damage_to_mana:15, mf_per_level:1},
 {name:"Chains of Honor Archon Plate", req_strength:103, req_level:65, defense:890, all_skills:2, strength:20, life_leech:8, pdr:8, all_res:65, life_regen:7, damage_vs_demons:200, damage_vs_undead:100, mf:25},
-{set_TR:1, name:"Tal Rasha's Guardianship", req_strength:84, req_level:71, defense:941, velocity:-5, mDamage_reduced:15, cRes:40, lRes:40, fRes:40, mf:88, base:"Lacquered Plate", set_bonuses:["set_TR",0,{fcr:10}]},
+{set_TR:1, name:"Tal Rasha's Guardianship", req_strength:84, req_level:71, defense:941, velocity:-5, mDamage_reduced:15, cRes:40, lRes:40, fRes:40, mf:88, base:"Lacquered Plate", set_bonuses:["set_TR",{},{fcr:10},{},{},{}]},
 //{name:"Fortitude Archon Plate", req_strength:103, req_level:59, defense:1572, fcr:25, life_per_level:1.5, life_regen:7 lRes_max:5, all_res:30, damage_to_mana:12, light_radius:1, damage_reduced:7, e_def:300},	// implement ED
 //{name:"Duriel's Shell", req_strength:65, req_level:41, defense:404, defense_per_level:1.25, life_per_level:1, fRes:20, lRes:20, pRes:20, cRes:50, cbf:1, strength:15, e_def:200, base:"Cuirass"},	// defense per level is affected by ED
 /*
-{name:"Greyform", req_strength:0, req_level:0, defense:0, base:"Quilted Armor"}
-{name:"Blinkbat's Form", req_strength:0, req_level:0, defense:0, base:"Leather Armor"}
-{name:"The Centurion", req_strength:0, req_level:0, defense:0, base:"Hard Leather Armor"}
-{name:"Twitchthroe", req_strength:0, req_level:0, defense:0, base:"Studded Leather"}
-{name:"Darkglow", req_strength:0, req_level:0, defense:0, base:"Ring Mail"}
-{name:"Hawkmail", req_strength:0, req_level:0, defense:0, base:"Scale Mail"}
-{name:"Sparking Mail", req_strength:0, req_level:0, defense:0, base:"Chain Mail"}
-{name:"Venom Ward", req_strength:0, req_level:0, defense:0, base:"Breast Plate"}
-{name:"Iceblink", req_strength:0, req_level:0, defense:0, base:"Splint Mail"}
-{name:"Boneflesh", req_strength:0, req_level:0, defense:0, base:"Plate Mail"}
-{name:"Rockfleece", req_strength:0, req_level:0, defense:0, base:"Field Plate"}
-{name:"Rattlecage", req_strength:0, req_level:0, defense:0, base:"Gothic Plate"}
-{name:"Goldskin", req_strength:0, req_level:0, defense:0, base:"Full Plate"}
-{name:"Silks of the Victor", req_strength:0, req_level:0, defense:0, base:"Ancient Armor"}
-{name:"Heavenly Garb", req_strength:0, req_level:0, defense:0, base:"Light Plate"}
-{name:"Spirit Forge", req_strength:0, req_level:0, defense:0, base:""},
-{name:"The Spirit Shroud", req_strength:0, req_level:0, defense:0, base:"Ghost Armor"}
-{name:"Skin of the Flayed One", req_strength:0, req_level:0, defense:0, base:"Demonhide Armor"}
-{name:"Iron Pelt", req_strength:0, req_level:0, defense:0, base:"Trellised Armor"}
-{name:"Crow Caw", req_strength:0, req_level:0, defense:0, base:"Tigulated Mail"}
-{name:"Toothrow", req_strength:0, req_level:0, defense:0, base:"Sharktooth Armor"}
-{name:"Atma's Wail", req_strength:0, req_level:0, defense:0, base:"Embossed Plate"}
-{name:"Black Hades", req_strength:0, req_level:0, defense:0, base:""},
-{name:"Steel Carapace", req_strength:0, req_level:0, defense:0, base:"Shadow Plate"}
-{name:"Corpsemourn", req_strength:160, req_level:55, defense:1262, velocity:-5, fDamage_min:12, fDamage_max:36, e_def:180, strength:8, vitality:10, cRes:35, bonus_corpse_explosion:5, base:"Ornate Plate"},
-{name:"Ormus' Robes", req_strength:77, req_level:75, defense:487, fcr:20, cDamage:15, fDamage:15, lDamage:15, mana_regen:15, skill_random_sorc:3, base:"Dusk Shroud"},
-{name:"Templar's Might", req_strength:232, req_level:74, defense:1923, velocity:-5, e_def:220, missile_defense:300, strength:15, vitality:15, fhr:20, stamina:50, skills_offensive:2, base:""},
+{name:"Greyform", req_strength:0, req_level:0, defense:0, base:"Quilted Armor"},
+{name:"Blinkbat's Form", req_strength:0, req_level:0, defense:0, base:"Leather Armor"},
+{name:"The Centurion", req_strength:0, req_level:0, defense:0, base:"Hard Leather Armor"},
+{name:"Twitchthroe", req_strength:0, req_level:0, defense:0, base:"Studded Leather"},
+{name:"Darkglow", req_strength:0, req_level:0, defense:0, base:"Ring Mail"},
+{name:"Hawkmail", req_strength:0, req_level:0, defense:0, base:"Scale Mail"},
+{name:"Sparking Mail", req_strength:0, req_level:0, defense:0, base:"Chain Mail"},
+{name:"Venom Ward", req_strength:0, req_level:0, defense:0, base:"Breast Plate"},
+{name:"Iceblink", req_strength:0, req_level:0, defense:0, base:"Splint Mail"},
+{name:"Boneflesh", req_strength:0, req_level:0, defense:0, base:"Plate Mail"},
+{name:"Rockfleece", req_strength:0, req_level:0, defense:0, base:"Field Plate"},
+{name:"Rattlecage", req_strength:0, req_level:0, defense:0, base:"Gothic Plate"},
+{name:"Goldskin", req_strength:0, req_level:0, defense:0, base:"Full Plate"},
+{name:"Silks of the Victor", req_strength:0, req_level:0, defense:0, base:"Ancient Armor"},
+{name:"Heavenly Garb", req_strength:0, req_level:0, defense:0, base:"Light Plate"},
+{name:"Spirit Forge", req_strength:0, req_level:0, defense:0, base:""},,
+{name:"The Spirit Shroud", req_strength:0, req_level:0, defense:0, base:"Ghost Armor"},
+{name:"Skin of the Flayed One", req_strength:0, req_level:0, defense:0, base:"Demonhide Armor"},
+{name:"Iron Pelt", req_strength:0, req_level:0, defense:0, base:"Trellised Armor"},
+{name:"Crow Caw", req_strength:0, req_level:0, defense:0, base:"Tigulated Mail"},
+{name:"Toothrow", req_strength:0, req_level:0, defense:0, base:"Sharktooth Armor"},
+{name:"Atma's Wail", req_strength:0, req_level:0, defense:0, base:"Embossed Plate"},
+{name:"Black Hades", req_strength:0, req_level:0, defense:0, base:""},,
+{name:"Steel Carapace", req_strength:0, req_level:0, defense:0, base:"Shadow Plate"},
+{name:"Corpsemourn", req_strength:160, req_level:55, defense:1262, velocity:-5, fDamage_min:12, fDamage_max:36, e_def:180, strength:8, vitality:10, cRes:35, bonus_corpse_explosion:5, base:"Ornate Plate"},,
+{name:"Ormus' Robes", req_strength:77, req_level:75, defense:487, fcr:20, cDamage:15, fDamage:15, lDamage:15, mana_regen:15, skill_random_sorc:3, base:"Dusk Shroud"},,
+{name:"Templar's Might", req_strength:232, req_level:74, defense:1923, velocity:-5, e_def:220, missile_defense:300, strength:15, vitality:15, fhr:20, stamina:50, skills_offensive:2, base:""},,
 */
 	],
     gloves: [
@@ -118,13 +124,13 @@ var equipment = {
 {name:"Laying of Hands", req_strength:50, req_level:63, defense:87, ias:20, fRes:50, damage_vs_demons:250},
 {name:"Trang-Oul's Claws", req_strength:58, req_level:45, defense:74, skills_curses:2, fcr:20, cRes:30, pDamage:25},
 /*
-{name:"The Hand of Broc", req_strength:0, req_level:0, defense:0, base:"Leather Gloves"}
-{name:"Bloodfist", req_strength:0, req_level:0, defense:0, base:"Heavy Gloves"}
-{name:"Venom Grip", req_strength:0, req_level:0, defense:0, base:"Demonhide Gloves"}
-{name:"Gravepalm", req_strength:0, req_level:0, defense:0, base:"Sharkskin Gloves"}
-{name:"Lava Gout", req_strength:0, req_level:0, defense:0, base:"Battle Gauntlets"}
-{name:"Hellmouth", req_strength:0, req_level:0, defense:0, base:"War Gauntlets"}
-{name:"Steelrend", req_strength:0, req_level:0, defense:0, base:"Ogre Gauntlets"}
+{name:"The Hand of Broc", req_strength:0, req_level:0, defense:0, base:"Leather Gloves"},
+{name:"Bloodfist", req_strength:0, req_level:0, defense:0, base:"Heavy Gloves"},
+{name:"Venom Grip", req_strength:0, req_level:0, defense:0, base:"Demonhide Gloves"},
+{name:"Gravepalm", req_strength:0, req_level:0, defense:0, base:"Sharkskin Gloves"},
+{name:"Lava Gout", req_strength:0, req_level:0, defense:0, base:"Battle Gauntlets"},
+{name:"Hellmouth", req_strength:0, req_level:0, defense:0, base:"War Gauntlets"},
+{name:"Steelrend", req_strength:0, req_level:0, defense:0, base:"Ogre Gauntlets"},
 */
 	],
     boots: [
@@ -139,11 +145,11 @@ var equipment = {
 {name:"Shadow Dancer", req_strength:167, req_level:71, defense:144, kick_min:83, skills_shadow:2, frw:30, fhr:30, dexterity:25, base:"Myrmidon Greaves"},
 {name:"Aldur's Advance", req_strength:95, req_level:45, defense:47, kick_min:37, frw:40, stamina:180, damage_to_mana:10, heal_stam:32, life:50, fRes:50},
 /*
-{name:"Hotspur", req_strength:0, req_level:0, defense:0, kick_min:0, base:"Boots"}
-{name:"Gorefoot", req_strength:0, req_level:0, defense:0, kick_min:0, base:"Heavy Boots"}
-{name:"Treads of Cthon", req_strength:0, req_level:0, defense:0, kick_min:0, base:"Chain Boots"}
-{name:"Goblin Toe", req_strength:0, req_level:0, defense:0, kick_min:0, base:"Light Plated Boots"}
-{name:"Tearhaunch", req_strength:0, req_level:0, defense:0, kick_min:0, base:"Greaves"}
+{name:"Hotspur", req_strength:0, req_level:0, defense:0, kick_min:0, base:"Boots"},
+{name:"Gorefoot", req_strength:0, req_level:0, defense:0, kick_min:0, base:"Heavy Boots"},
+{name:"Treads of Cthon", req_strength:0, req_level:0, defense:0, kick_min:0, base:"Chain Boots"},
+{name:"Goblin Toe", req_strength:0, req_level:0, defense:0, kick_min:0, base:"Light Plated Boots"},
+{name:"Tearhaunch", req_strength:0, req_level:0, defense:0, kick_min:0, base:"Greaves"},
 */
 	],
     belt: [
@@ -155,14 +161,14 @@ var equipment = {
 {name:"Snowclash", req_strength:88, req_level:42, defense:116, skills_cold_all:1, cAbsorb_flat:15, skill_glacial_spike:3, cRes_max:5, base:"Battle Belt"},
 {name:"Thundergod's Vigor", req_strength:110, req_level:47, defense:159, lAbsorb_flat:20, lRes_max:10, strength:20, vitality:20, skill_lightning_fury:3, skill_lightning_strike:3, lDamage_min:1, lDamage_max:50, base:"War Belt"},
 {name:"Arachnid Mesh", req_strength:50, req_level:80, defense:138, all_skills:1, fcr:20, max_mana:5, slow_target:10, base:"Spiderweb Sash"},
-//{set_TR:1, name:"Tal Rasha's Fine-Spun Cloth", req_strength:47, req_level:53, defense:40, req_reduced:20, damage_to_mana:37, mana:30, dexterity:20, mf:15, base:"Mesh Belt", set_bonuses:["set_TR",0,{defense:60},{fcr:10}]},
+{set_TR:1, name:"Tal Rasha's Fine-Spun Cloth", req_strength:47, req_level:53, defense:40, req_reduced:20, damage_to_mana:37, mana:30, dexterity:20, mf:15, base:"Mesh Belt", set_bonuses:["set_TR",{},{defense:60},{fcr:10},{},{}]},
 /*
-{name:"Lenymo", req_strength:0, req_level:0, defense:0, base:"Sash"}
-{name:"Snakecord", req_strength:0, req_level:0, defense:0, base:"Light Belt"}
-{name:"Nightsmoke", req_strength:0, req_level:0, defense:0, base:"Belt"}
-{name:"Bladebuckle", req_strength:0, req_level:0, defense:0, base:"Plated Belt"}
-{name:"Gloom's Trap", req_strength:0, req_level:0, defense:0, base:"Mesh Belt"}
-{name:"Nosferatu's Coil", req_strength:0, req_level:0, defense:0, base:"Vampirefang Belt"}
+{name:"Lenymo", req_strength:0, req_level:0, defense:0, base:"Sash"},
+{name:"Snakecord", req_strength:0, req_level:0, defense:0, base:"Light Belt"},
+{name:"Nightsmoke", req_strength:0, req_level:0, defense:0, base:"Belt"},
+{name:"Bladebuckle", req_strength:0, req_level:0, defense:0, base:"Plated Belt"},
+{name:"Gloom's Trap", req_strength:0, req_level:0, defense:0, base:"Mesh Belt"},
+{name:"Nosferatu's Coil", req_strength:0, req_level:0, defense:0, base:"Vampirefang Belt"},
 */
 	],
     amulet: [
@@ -175,10 +181,10 @@ var equipment = {
 {name:"Seraph's Hymn", req_level:65, all_skills:2, skills_defensive:2, damage_vs_demons:50, damage_vs_undead:50, ar_vs_demons:250, ar_vs_undead:250, light_radius:2},
 {name:"The Cat's Eye", req_level:50, frw:30, ias:20, defense:100, dexterity:25, missile_defense:100},
 {name:"Metalgrid", req_level:81, ar:450, all_res:35, defense:350, charges_iron_maiden:12, charges_iron_golem:22},
-{name:"The Rising Sun", req_level:65, skills_fire_all:2, fAbsorb_per_level:0.75, fDamage_min:24, fDamage_max:48, life_regen:10, light_radius:4},
+{name:"The Rising Sun", req_level:65, skills_fire_all:2, fAbsorb_flat_per_level:0.75, fDamage_min:24, fDamage_max:48, life_regen:10, light_radius:4},
 {name:"The Eye of Etlich", req_level:15, all_skills:1, life_leech:7, cDamage_min:2, cDamage_max:5, missile_defense:40, light_radius:5},
 {name:"Telling of Beads", req_level:30, all_skills:1, pRes:50, cRes:18, thorns:10},
-//{set_TR:1, name:"Tal Rasha's Adjudication", req_level:67, skills_sorceress:2, lRes:33, mana:42, life:50, lDamage_min:3, lDamage_max:32, set_bonuses:["set_TR",0,{},{},{fcr:10}]},
+{set_TR:1, name:"Tal Rasha's Adjudication", req_level:67, skills_sorceress:2, lRes:33, mana:42, life:50, lDamage_min:3, lDamage_max:32, set_bonuses:["set_TR",{},{},{},{fcr:10},{}]},
 /*
 {name:"Atma's Scarab", req_level:0, },
 {name:"Crescent Moon", req_level:0, },
@@ -212,32 +218,32 @@ var equipment = {
 //{name:"Wisp Projector", req_level:76, lAbsorb:12, mf:20, frw:8, damage_bonus:10},	// implement damage_bonus
 	],
     weapon: [
-{name:"Weapon"},
-{only:"amazon", name:"Titan's Revenge", req_strength:25, req_dexterity:109, req_level:42, e_damage:200, damage_min:79, damage_max:155, skills_amazon:2, life_leech:9, frw:30, strength:20, dexterity:20, autoreplenish:1, skills_javelins:2},
-{only:"amazon", name:"Thunderstroke", req_strength:107, req_dexterity:151, req_level:69, e_damage:200, lDamage_min:1, lDamage_max:511, ias:15, enemy_lRes:-15, skills_javelins:4, skill_lightning_bolt:3},
-{only:"amazon", name:"Blood Raven's Charge", twoHanded:1, req_strength:87, req_dexterity:187, req_level:71, e_damage:230, ar_bonus:300, skills_bows:4, charges_revive:5},	// conflict with skill ar bonus
-{only:"amazon", name:"Lycander's Aim", twoHanded:1, req_strength:73, req_dexterity:110, req_level:42, e_damage:200, damage_min:82, damage_max:173, ias:20, skills_amazon:2, mana_leech:8, energy:20, dexterity:20, defense_bonus:20, skills_bows:2},	// bonus defense on weapon
-{only:"amazon", name:"Lycander's Flank", twoHanded:1, req_strength:115, req_dexterity:98, req_level:42, e_damage:200, damage_min:151, damage_max:353, skills_amazon:2, ias:30, life_leech:9, strength:20, vitality:20, defense_bonus:20, skills_javelins:2},	// bonus defense on weapon
-{only:"amazon", name:"Stoneraven", twoHanded:1, req_strength:114, req_dexterity:142, req_level:64, e_damage:280, mDamage_min:101, mDamage_max:187, damage_min:247, damage_max:361, defense:600, all_res:50, skills_javelins:3},
-{only:"assassin", name:"Bartuc's Cut-Throat", type:"claw", req_strength:79, req_dexterity:79, req_level:42, e_damage:200, damage_min:88, damage_max:155, fhr:30, bonus_ar:20, life_leech:9, strength:20, dexterity:20, skills_assassin:2, skills_martial:1, base:"Greater Talons"},
-{only:"assassin", name:"Jade Talon", type:"claw", req_strength:105, req_dexterity:105, req_level:66, e_damage:240, damage_min:115, damage_max:153, skills_martial:2, skills_shadow:2, fhr:30, mana_leech:15, all_res:50, base:"Wrist Sword"},
-{only:"assassin", name:"Shadow Killer", type:"claw", req_strength:100, req_dexterity:100, req_level:78, e_damage:220, damage_min:172, damage_max:201, target_defense:-25, freezes_target:2, mana_per_kill:15, indestructible:1, ethereal:1, base:"Battle Cestus"},
-{only:"assassin", name:"Firelizard's Talons", type:"claw", req_strength:113, req_dexterity:113, req_level:67, e_damage:270, damage_min:81, damage_max:196, fDamage_min:236, fDamage_max:480, ias:15, skills_martial:3, skills_fire_all:2, skill_fists_of_ember:2, fRes:70, base:"Feral Claws"},
+{name:"Weapon", twoHanded:0},
+{only:"amazon", name:"Titan's Revenge", twoHanded:0, req_strength:25, req_dexterity:109, req_level:42, e_damage:200, damage_min:79, damage_max:155, skills_amazon:2, life_leech:9, frw:30, strength:20, dexterity:20, autoreplenish:1, skills_javelins:2},
+{only:"amazon", name:"Thunderstroke", twoHanded:0, req_strength:107, req_dexterity:151, req_level:69, e_damage:200, lDamage_min:1, lDamage_max:511, ias:15, enemy_lRes:-15, skills_javelins:4, skill_lightning_bolt:3},
+{only:"amazon", name:"Blood Raven's Charge", twoHanded:1, twoHanded:0, req_strength:87, req_dexterity:187, req_level:71, e_damage:230, ar_bonus:300, skills_bows:4, charges_revive:5},	// conflict with skill ar bonus
+{only:"amazon", name:"Lycander's Aim", twoHanded:1, twoHanded:0, req_strength:73, req_dexterity:110, req_level:42, e_damage:200, damage_min:82, damage_max:173, ias:20, skills_amazon:2, mana_leech:8, energy:20, dexterity:20, defense_bonus:20, skills_bows:2},	// bonus defense on weapon
+{only:"amazon", name:"Lycander's Flank", twoHanded:1, twoHanded:0, req_strength:115, req_dexterity:98, req_level:42, e_damage:200, damage_min:151, damage_max:353, skills_amazon:2, ias:30, life_leech:9, strength:20, vitality:20, defense_bonus:20, skills_javelins:2},	// bonus defense on weapon
+{only:"amazon", name:"Stoneraven", twoHanded:1, twoHanded:0, req_strength:114, req_dexterity:142, req_level:64, e_damage:280, mDamage_min:101, mDamage_max:187, damage_min:247, damage_max:361, defense:600, all_res:50, skills_javelins:3},
+{only:"assassin", name:"Bartuc's Cut-Throat", type:"claw", twoHanded:0, req_strength:79, req_dexterity:79, req_level:42, e_damage:200, damage_min:88, damage_max:155, fhr:30, bonus_ar:20, life_leech:9, strength:20, dexterity:20, skills_assassin:2, skills_martial:1, base:"Greater Talons"},
+{only:"assassin", name:"Jade Talon", type:"claw", twoHanded:0, req_strength:105, req_dexterity:105, req_level:66, e_damage:240, damage_min:115, damage_max:153, skills_martial:2, skills_shadow:2, fhr:30, mana_leech:15, all_res:50, base:"Wrist Sword"},
+{only:"assassin", name:"Shadow Killer", type:"claw", twoHanded:0, req_strength:100, req_dexterity:100, req_level:78, e_damage:220, damage_min:172, damage_max:201, target_defense:-25, freezes_target:2, mana_per_kill:15, indestructible:1, ethereal:1, base:"Battle Cestus"},
+{only:"assassin", name:"Firelizard's Talons", type:"claw", twoHanded:0, req_strength:113, req_dexterity:113, req_level:67, e_damage:270, damage_min:81, damage_max:196, fDamage_min:236, fDamage_max:480, ias:15, skills_martial:3, skills_fire_all:2, skill_fists_of_ember:2, fRes:70, base:"Feral Claws"},
 {only:"sorceress", name:"The Oculus", req_level:42, skills_sorceress:3, mana_per_kill:5, all_res:20, fcr:30, vitality:20, energy:20, defense_bonus:20, mf:50, damage_min:18, damage_max:42},
 {only:"sorceress", name:"Eschuta's Temper", req_level:72, skills_sorceress:3, fcr:40, fDamage:20, lDamage:20, energy:30, damage_min:18, damage_max:50},
 {only:"sorceress", name:"Death's Fathom", req_level:73, skills_sorceress:3, fcr:20, cDamage:30, lRes:40, fRes:40, damage_min:30, damage_max:53},
-//{only:"sorceress", set_TR:1, name:"Tal Rasha's Lidless Eye", req_level:65, damage_min:18, damage_max:42, fcr:20, mana:77, life:57, energy:10, skill_lightning_mastery:2, skill_fire_mastery:2, skill_cold_mastery:2, base:"Swirling Crystal", set_bonuses:["set_TR",0,{skills_sorceress:1},{enemy_fRes:-15},{enemy_lRes:-15},{cDamage:15}]},
+{only:"sorceress", set_TR:1, name:"Tal Rasha's Lidless Eye", req_level:65, damage_min:18, damage_max:42, fcr:20, mana:77, life:57, energy:10, skill_lightning_mastery:2, skill_fire_mastery:2, skill_cold_mastery:2, base:"Swirling Crystal", set_bonuses:["set_TR",{},{skills_sorceress:1},{enemy_fRes:-15},{enemy_lRes:-15},{cDamage:15}]},
 {name:"Khalim's Will", type:"mace", ias:50, ar:40, life_leech:6, mana_leech:6, damage_vs_undead:50, damage_min:1, damage_max:15, lDamage_min:1, lDamage_max:40, base:"Flail"},
-{name:"Spirit Crystal Sword", req_strength:43, req_level:25, type:"sword", all_skills:2, fcr_per_level:0.375, fhr:55, life_leech:7, mana_per_level:1, missile_defense:75, mAbsorb_flat:8, damage_min:5, damage_max:15, pDamage_min:75, pDamage_max:75, lDamage_min:1, lDamage_max:50, cDamage_min:3, cDamage_max:14},
-{name:"Heart of the Oak Flail", req_dexterity:35, req_strength:41, req_level:55, type:"mace", all_skills:3, fcr:40, mana_leech:7, dexterity:10, life_regen:20, max_mana:15, all_res:40, max_life:8, damage_min:1, damage_max:24, cDamage_min:3, cDamage_max:14},
-{name:"Lightsabre", req_dexterity:136, req_strength:25, req_level:58, type:"sword", mana_leech:7, ias:20, itd:1, lAbsorb:15, light_radius:7, damage_min:103, damage_max:135, mDamage_min:60, mDamage_max:120, lDamage_min:1, lDamage_max:200, base:"Phase Blade"},
-{name:"Grief Phase Blade", req_dexterity:136, req_strength:25, req_level:59, type:"sword", ias:40, itd:1, target_defense:-25, enemy_pRes:-25, dstrike:20, pmh:1, mana_per_kill:2, life_per_kill:15, fDamage_min:5, fDamage_max:30, min_damage_per_level:3.375, max_damage_per_level:3.625, damage_min:31, damage_max:35},
-{name:"Death Cleaver", req_dexterity:59, req_strength:138, req_level:70, type:"axe", ias:40, damage_min:91, damage_max:269, target_defense:-33, dstrike:66, life_per_kill:9, base:"Berserker Axe"},
-{name:"Warshrike", req_strength:45, req_dexterity:142, req_level:75, type:"thrown", e_damage:250, damage_min:80, damage_max:136, dstrike:50, ias:30, autoreplenish:1, lDamage_min:1, lDamage_max:80, base:"Winged Knife"},
-{name:"Boneshade", req_strength:25, req_level:79, damage_vs_undead:50, fcr:25, skills_necromancer:2, skill_bone_spirit:2, skill_bone_spear:3, skill_bone_wall:3, skill_bone_armor:5, skill_teeth:5, damage_min:10, damage_max:31, base:"Lich Wand"},
-{name:"Death's Web", req_strength:25, req_level:66, damage_vs_undead:50, enemy_pRes:-50, mana_per_kill:12, life_per_kill:12, all_skills:2, skills_poisonBone:2, damage_min:22, damage_max:28, base:"Unearthed Wand"},
-{name:"Astreon's Iron Ward", req_strength:97, req_dexterity:70, req_level:66, e_damage:290, damage_vs_undead:50, damage_min:144, damage_max:167, mDamage_min:80, mDamage_max:240, cblow:33, slow_target:25, damage_reduced:7, skills_combat_paladin:4, ias:10, bonus_ar:200, base:"Caduceus"},
-{name:"The Cranium Basher", req_strength:253, req_level:87, type:"mace", cblow:75, ias:20, all_res:25, strength:25, damage_min:132, damage_max:652, damage_vs_undead:50},
+{name:"Spirit Crystal Sword", twoHanded:0, req_strength:43, req_level:25, type:"sword", all_skills:2, fcr_per_level:0.375, fhr:55, life_leech:7, mana_per_level:1, missile_defense:75, mAbsorb_flat:8, damage_min:5, damage_max:15, pDamage_min:75, pDamage_max:75, lDamage_min:1, lDamage_max:50, cDamage_min:3, cDamage_max:14},
+{name:"Heart of the Oak Flail", req_dexterity:35, twoHanded:0, req_strength:41, req_level:55, type:"mace", all_skills:3, fcr:40, mana_leech:7, dexterity:10, life_regen:20, max_mana:15, all_res:40, max_life:8, damage_min:1, damage_max:24, cDamage_min:3, cDamage_max:14},
+{name:"Lightsabre", req_dexterity:136, twoHanded:0, req_strength:25, req_level:58, type:"sword", mana_leech:7, ias:20, itd:1, lAbsorb:15, light_radius:7, damage_min:103, damage_max:135, mDamage_min:60, mDamage_max:120, lDamage_min:1, lDamage_max:200, base:"Phase Blade"},
+{name:"Grief Phase Blade", req_dexterity:136, twoHanded:0, req_strength:25, req_level:59, type:"sword", ias:40, itd:1, target_defense:-25, enemy_pRes:-25, dstrike:20, pmh:1, mana_per_kill:2, life_per_kill:15, fDamage_min:5, fDamage_max:30, min_damage_per_level:3.375, max_damage_per_level:3.625, damage_min:31, damage_max:35},
+{name:"Death Cleaver", req_dexterity:59, twoHanded:0, req_strength:138, req_level:70, type:"axe", ias:40, damage_min:91, damage_max:269, target_defense:-33, dstrike:66, life_per_kill:9, base:"Berserker Axe"},
+{name:"Warshrike", twoHanded:0, req_strength:45, req_dexterity:142, req_level:75, type:"thrown", e_damage:250, damage_min:80, damage_max:136, dstrike:50, ias:30, autoreplenish:1, lDamage_min:1, lDamage_max:80, base:"Winged Knife"},
+{name:"Boneshade", twoHanded:0, req_strength:25, req_level:79, damage_vs_undead:50, fcr:25, skills_necromancer:2, skill_bone_spirit:2, skill_bone_spear:3, skill_bone_wall:3, skill_bone_armor:5, skill_teeth:5, damage_min:10, damage_max:31, base:"Lich Wand"},
+{name:"Death's Web", twoHanded:0, req_strength:25, req_level:66, damage_vs_undead:50, enemy_pRes:-50, mana_per_kill:12, life_per_kill:12, all_skills:2, skills_poisonBone:2, damage_min:22, damage_max:28, base:"Unearthed Wand"},
+{name:"Astreon's Iron Ward", twoHanded:0, req_strength:97, req_dexterity:70, req_level:66, e_damage:290, damage_vs_undead:50, damage_min:144, damage_max:167, mDamage_min:80, mDamage_max:240, cblow:33, slow_target:25, damage_reduced:7, skills_combat_paladin:4, ias:10, bonus_ar:200, base:"Caduceus"},
+{name:"The Cranium Basher", twoHanded:0, req_strength:253, req_level:87, type:"mace", cblow:75, ias:20, all_res:25, strength:25, damage_min:132, damage_max:652, damage_vs_undead:50},
 {name:"Windforce", twoHanded:1, req_dexterity:167, req_strength:134, req_level:73, type:"bow", ias:20, mana_leech:8, strength:10, dexterity:5, knockback:1, damage_min:35, damage_max:241, damage_max_per_level:3.125, heal_stam:30},
 /*
 
@@ -251,30 +257,35 @@ var equipment = {
 {only:"paladin", name:"Herald of Zakarum", req_strength:89, req_level:42, defense:507, block:82, e_def:200, ibc:30, fbr:30, ar_bonus:20, strength:20, vitality:20, all_res:50, skills_paladin:2, skills_combat_paladin:2, smite_min:20, smite_max:28, base:"Gilded Shield"},
 {only:"paladin", name:"Alma Negra", req_strength:109, req_level:77, defense:511, block:78, e_def:210, cdr:30, skills_paladin:2, ibc:20, fbr:30, e_damage:75, are_bonus:75, mDamage_reduced:9, smite_min:35, smite_max:58, base:"Sacred Rondache"},
 {only:"paladin", name:"Dragonscale", req_strength:142, req_level:80, defense:582, block:52, e_damage:200, fDamage_min:211, fDamage_max:371, fDamage:15, oskill_hydra:10, fRes_max:5, strength:25, fAbsorb:20, smite_min:46, smite_max:46, base:"Zakarum Shield"},
-{name:"Stormshield", req_strength:156, req_level:73, defense:519, pdr:30, fbr:35, cRes:60, lRes:25, strength:30, defense_per_level:3.75, ibc:25, thorns:10, base:"Monarch"},
-{name:"Spirit Monarch", req_strength:156, req_level:54, defense:148, all_skills:2, fcr:35, fhr:55, vitality:22, mana:112, cRes:35, lRes:35, pRes:35, missile_defense:250, thorns:14, mAbsorb_flat:8},
-{name:"Lidless Wall", req_strength:58, req_level:41, defense:347, all_skills:1, max_mana:10, fcr:20, mana_per_kill:5, energy:10, light_radius:1, base:"Grim Shield"},
+{name:"Stormshield", req_strength:156, req_level:73, defense:519, block:0, pdr:30, fbr:35, cRes:60, lRes:25, strength:30, defense_per_level:3.75, ibc:25, thorns:10, smite_min:0, smite_max:0, base:"Monarch"},
+{name:"Spirit Monarch", req_strength:156, req_level:54, defense:148, block:0, all_skills:2, fcr:35, fhr:55, vitality:22, mana:112, cRes:35, lRes:35, pRes:35, missile_defense:250, thorns:14, mAbsorb_flat:8, smite_min:0, smite_max:0},
+{name:"Lidless Wall", req_strength:58, req_level:41, defense:347, block:0, all_skills:1, max_mana:10, fcr:20, mana_per_kill:5, energy:10, light_radius:1, smite_min:0, smite_max:0, base:"Grim Shield"},
+{name:"Medusa's Gaze", req_strength:110, req_level:76, defense:453, block:54, e_def:200, skills_cold_all:2, oskill_shiver_armor:3, enemy_cRes:-20, cRes_max:5, cRes:80, req_reduced:50, smite_min:18, smite_max:28, base:"Aegis"},
+{name:"Radament's Sphere", req_strength:110, req_level:50, defense:282, block:66, e_def:200, ibc:20, pRes:75, fcr:20, skills_poisonBone:2, oskill_desecrate:1, smite_min:12, smite_max:16, base:"Ancient Shield"},
+{name:"Blackoak Shield", req_strength:100, req_level:61, defense:372, block:50, oskill_inner_sight:1, fbr:50, e_def:200, dexterity_per_level:0.5, life_per_level:1.25, cAbsorb_flat_per_level:0.625, half_freeze:1, smite_min:17, smite_max:29, base:"Luna"},
 /*
-{name:"Pelta Lunata", req_strength:0, req_level:0, defense:0, block:0, base:"Buckler"}
-{name:"Umbral Disk", req_strength:0, req_level:0, defense:0, block:0, base:"Small Shield"}
-{name:"Stormguild", req_strength:0, req_level:0, defense:0, block:0, base:"Large Shield"}
-{name:"Swordback Hold", req_strength:0, req_level:0, defense:0, block:0, base:"Spiked Shield"}
-{name:"Steelclash", req_strength:0, req_level:0, defense:0, block:0, base:"Kite Shield"}
-{name:"Wall of the Eyeless", req_strength:0, req_level:0, defense:0, block:0, base:"Bone Shield"}
-{name:"Bverrit Keep", req_strength:0, req_level:0, defense:0, block:0, base:"Tower Shield"}
-{name:"The Ward", req_strength:0, req_level:0, defense:0, block:0, base:"Gothic Shield"}
-{name:"Visceratuant", req_strength:0, req_level:0, defense:0, block:0, base:"Defender"}
-{name:"Moser's Blessed Circle", req_level:, defense:, block:0, base:""},
-{name:"Stormchaser", req_strength:0, req_level:0, defense:0, block:0, base:"Scutum"}
-{name:"Lance Guard", req_strength:0, req_level:0, defense:0, block:0, base:"Barbed Shield"}
-{name:"Tiamat's Rebuke", req_strength:0, req_level:0, defense:0, block:0, base:"Dragon Shield"}
-{name:"Gerke's Sanctuary", req_strength:0, req_level:0, defense:0, block:0, base:"Pavise"}
-{name:"Radament's Sphere", req_strength:0, req_level:0, defense:0, block:0, base:"Ancient Shield"}
-{name:"Blackoak Shield", req_strength:0, req_level:0, defense:0, block:0, base:"Luna"}
-{name:"Spike Thorn", req_level:, defense:, block:0, base:""},
-{name:"Head Hunter's Glory", req_level:, defense:, block:0, base:""},
-{name:"Medusa's Gaze", req_strength:0, req_level:0, defense:0, block:0, base:"Aegis"}
-{name:"Spirit Ward", req_strength:0, req_level:0, defense:0, block:0, base:"Ward"}
+{name:"Pelta Lunata", req_strength:0, req_level:0, defense:0, block:0, smite_min:0, smite_max:0, base:"Buckler"},
+{name:"Umbral Disk", req_strength:0, req_level:0, defense:0, block:0, smite_min:0, smite_max:0, base:"Small Shield"},
+{name:"Stormguild", req_strength:0, req_level:0, defense:0, block:0, smite_min:0, smite_max:0, base:"Large Shield"},
+{name:"Swordback Hold", req_strength:0, req_level:0, defense:0, block:0, smite_min:0, smite_max:0, base:"Spiked Shield"},
+{name:"Steelclash", req_strength:0, req_level:0, defense:0, block:0, smite_min:0, smite_max:0, base:"Kite Shield"},
+{name:"Wall of the Eyeless", req_strength:0, req_level:0, defense:0, block:0, smite_min:0, smite_max:0, base:"Bone Shield"},
+{name:"Bverrit Keep", req_strength:0, req_level:0, defense:0, block:0, smite_min:0, smite_max:0, base:"Tower Shield"},
+{name:"The Ward", req_strength:0, req_level:0, defense:0, block:0, smite_min:0, smite_max:0, base:"Gothic Shield"},
+{name:"Visceratuant", req_strength:0, req_level:0, defense:0, block:0, smite_min:0, smite_max:0, base:"Defender"},
+{name:"Moser's Blessed Circle", req_strength:0, req_level:, defense:, block:0, sockets:0, smite_min:0, smite_max:0, base:""},
+{name:"Stormchaser", req_strength:0, req_level:0, defense:0, block:0, smite_min:0, smite_max:0, base:"Scutum"},
+{name:"Lance Guard", req_strength:0, req_level:0, defense:0, block:0, smite_min:0, smite_max:0, base:"Barbed Shield"},
+{name:"Tiamat's Rebuke", req_strength:0, req_level:0, defense:0, block:0, smite_min:0, smite_max:0, base:"Dragon Shield"},
+{name:"Gerke's Sanctuary", req_strength:0, req_level:0, defense:0, block:0, smite_min:0, smite_max:0, base:"Pavise"},
+{name:"Spike Thorn", req_strength:0, req_level:, defense:, block:0, sockets:0, smite_min:0, smite_max:0, base:""},
+{name:"Head Hunter's Glory", req_strength:106, req_level:75, defense:593, block:0, sockets:3, smite_min:0, smite_max:0, base:"Troll Nest"},
+{name:"Spirit Ward", req_strength:0, req_level:0, defense:0, block:0, smite_min:0, smite_max:0, base:"Ward"},
+
+{name:"Dragonbreath", type:"quiver", req_level:12, fDamage_max_per_level:2, fRes:15, base:""},
+{name:"Hailstorm", type:"quiver", req_level:12, cDamage_max_per_level:2, cRes:15, base:""},
+{name:"Ice Shards", type:"quiver", req_level:18, skills_cold_all:2, ias:20, energy:20, base:""},
+{name:"Moonfire", type:"quiver", req_level:21, ar_bonus:15, mDamage_reduced:4, base:""},
 */
 	],
     charms: [
@@ -313,30 +324,30 @@ var equipment = {
 
 {set_Ald:1, name:"Aldur's Rhythm", req_strength:74, req_level:42, damage_min:60, damage_max:83, damage_vs_demons:200, damage_vs_undead:50, lDamage_min:50, lDamage_max:75, ias:30, life_leech:10, mana_leech:5, sockets:3, base:"Jagged Star"},
 {set_Ald:1, name:"Aldur's Deception", req_strength:115, req_level:76, defense:857, req_reduced:50, lRes:50, dexterity:15, strength:20, skills_elemental:1, skills_shapeshifting:1, base:"Shadow Plate"},
-{set_Ald:1, name:"Aldur's Stony Gaze", req_strength:0, req_level:0, defense:0, base:"Hunter's Guise"}
+{set_Ald:1, name:"Aldur's Stony Gaze", req_strength:0, req_level:0, defense:0, base:"Hunter's Guise"},
 {set_Ald:1, name:"Aldur's Advance", req_strength:95, req_level:45, defense:47, kick_min:37, frw:40, stamina:180, damage_to_mana:10, heal_stam:32, life:50, fRes:50, base:"Battle Boots"},
 
-{set_TO:1, name:"Trang-Oul's Guise", req_strength:0, req_level:0, defense:0, base:"Bone Visage"}
-{set_TO:1, name:"Trang-Oul's Scales", req_strength:0, req_level:0, defense:0, base:"Chaos Armor"}
-{set_TO:1, name:"Trang-Oul's Wing", req_strength:0, req_level:0, defense:0, base:"Cantor Trophy"}
-{set_TO:1, name:"Trang-Oul's Girth", req_strength:0, req_level:0, defense:0, base:"Troll Belt"}
+{set_TO:1, name:"Trang-Oul's Guise", req_strength:0, req_level:0, defense:0, base:"Bone Visage"},
+{set_TO:1, name:"Trang-Oul's Scales", req_strength:0, req_level:0, defense:0, base:"Chaos Armor"},
+{set_TO:1, name:"Trang-Oul's Wing", req_strength:0, req_level:0, defense:0, base:"Cantor Trophy"},
+{set_TO:1, name:"Trang-Oul's Girth", req_strength:0, req_level:0, defense:0, base:"Troll Belt"},
 {set_TO:1, name:"Trang-Oul's Claws", req_strength:58, req_level:45, defense:74, skills_curses:2, fcr:20, cRes:30, pDamage:25, base:"Heavy Bracers"},
 
-{set_Gris:1, name:"Griswold's Heart", req_strength:0, req_level:0, defense:0, base:"Ornate Plate"}
-{set_Gris:1, name:"Griswold's Valor", req_strength:0, req_level:0, defense:0, base:"Corona"}
-{set_Gris:1, name:"Griswold's Redemption", req_strength:0, req_level:0, defense:0, base:"Caduceus"}
-{set_Gris:1, name:"Griswold's Honor", req_strength:0, req_level:0, defense:0, base:"Vortex Shield"}
+{set_Gris:1, name:"Griswold's Heart", req_strength:0, req_level:0, defense:0, base:"Ornate Plate"},
+{set_Gris:1, name:"Griswold's Valor", req_strength:0, req_level:0, defense:0, base:"Corona"},
+{set_Gris:1, name:"Griswold's Redemption", req_strength:0, req_level:0, defense:0, base:"Caduceus"},
+{set_Gris:1, name:"Griswold's Honor", req_strength:0, req_level:0, defense:0, base:"Vortex Shield"},
 
-{set_Nat:1, name:"Natalya's Totem", req_strength:0, req_level:0, defense:0, base:"Grim Helm"}
-{set_Nat:1, name:"Natalya's Mark", req_strength:0, req_level:0, defense:0, base:"Scissors Suwayyah"}
-{set_Nat:1, name:"Natalya's Shadow", req_strength:0, req_level:0, defense:0, base:"Loricated Mail"}
-{set_Nat:1, name:"Natalya's Soul", req_strength:0, req_level:0, defense:0, base:"Mesh Boots"}
+{set_Nat:1, name:"Natalya's Totem", req_strength:0, req_level:0, defense:0, base:"Grim Helm"},
+{set_Nat:1, name:"Natalya's Mark", req_strength:0, req_level:0, defense:0, base:"Scissors Suwayyah"},
+{set_Nat:1, name:"Natalya's Shadow", req_strength:0, req_level:0, defense:0, base:"Loricated Mail"},
+{set_Nat:1, name:"Natalya's Soul", req_strength:0, req_level:0, defense:0, base:"Mesh Boots"},
 
-//{set_TR:1, name:"Tal Rasha's Lidless Eye", req_level:65, damage_min:18, damage_max:42, fcr:20, mana:77, life:57, energy:10, skill_lightning_mastery:2, skill_fire_mastery:2, skill_cold_mastery:2, base:"Swirling Crystal", set_bonuses:[0,0,{skills_sorceress:1},{enemy_fRes:-15},{enemy_lRes:-15},{cDamage:15}]},
-//{set_TR:1, name:"Tal Rasha's Guardianship", req_strength:84, req_level:71, defense:941, velocity:-5, mDamage_reduced:15, cRes:40, lRes:40, fRes:40, mf:88, base:"Lacquered Plate", set_bonuses:[0,0,{fcr:10}]},
+//{set_TR:1, name:"Tal Rasha's Lidless Eye", req_level:65, damage_min:18, damage_max:42, fcr:20, mana:77, life:57, energy:10, skill_lightning_mastery:2, skill_fire_mastery:2, skill_cold_mastery:2, base:"Swirling Crystal", set_bonuses:[0,0,{skills_sorceress:1},{enemy_fRes:-15},{enemy_lRes:-15},{cDamage:15},]},
+//{set_TR:1, name:"Tal Rasha's Guardianship", req_strength:84, req_level:71, defense:941, velocity:-5, mDamage_reduced:15, cRes:40, lRes:40, fRes:40, mf:88, base:"Lacquered Plate", set_bonuses:[0,0,{fcr:10},]},
 //{set_TR:1, name:"Tal Rasha's Horadric Crest", req_strength:55, req_level:66, defense:131, life_leech:10, mana_leech:10, all_res:15, mana:30, life:60, base:"Death Mask"},
-//{set_TR:1, name:"Tal Rasha's Fine-Spun Cloth", req_strength:47, req_level:53, defense:40, req_reduced:20, damage_to_mana:37, mana:30, dexterity:20, mf:15, base:"Mesh Belt", set_bonuses:[0,0,{defense:60},{fcr:10}]},
-//{set_TR:1, name:"Tal Rasha's Adjudication", req_level:67, skills_sorceress:2, lRes:33, mana:42, life:50, lDamage_min:3, lDamage_max:32, set_bonuses:[0,0,{},{},{fcr:10}]},
+//{set_TR:1, name:"Tal Rasha's Fine-Spun Cloth", req_strength:47, req_level:53, defense:40, req_reduced:20, damage_to_mana:37, mana:30, dexterity:20, mf:15, base:"Mesh Belt", set_bonuses:[0,0,{defense:60},{fcr:10},]},
+//{set_TR:1, name:"Tal Rasha's Adjudication", req_level:67, skills_sorceress:2, lRes:33, mana:42, life:50, lDamage_min:3, lDamage_max:32, set_bonuses:[0,0,{},{},{fcr:10},]},
 
 {set_:1, name:"Angelic Mantle", req_strength:0, req_level:0, defense:0, base:"Ring Mail"},
 {set_:1, name:"Angelic Sickle", req_strength:0, req_level:0, base:"Saber"},
@@ -434,215 +445,214 @@ var equipment = {
 {name:"", req_strength:0, req_level:0, defense:0, base=""},
 
 	*/
-//var set_all_TR = [{},{},{life_regen:10},{mf:65},{fhr:25},{skills_sorceress:3, life:150, all_res:50, missile_defense:50, defense:150}];
 
 // UNIQUE WEAPONS
 /*
 
-{name:"The Gnasher", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Hand Axe"}
-{name:"Deathspade", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Axe"}
-{name:"Bladebone", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Double Axe"}
-{name:"Skull Splitter", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Military Pick"}
-{name:"Rakescar", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"War Axe"}
-{name:"Axe of Fechmar", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Large Axe"}
-{name:"Goreshovel", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Broad Axe"}
-{name:"The Chieftain", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Battle Axe"}
-{name:"Brainhew", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Great Axe"}
-{name:"Humongous", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Giant Axe"}
-{name:"Coldkill", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Hatchet"}
-{name:"Butcher's Pupil", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Cleaver"}
-{name:"Islestrike", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Twin Axe"}
-{name:"Pompeii's Wrath", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Crowbill"}
-{name:"Guardian Naga", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Naga"}
-{name:"Warlord's Trust", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Military Axe"}
-{name:"Spellsteel", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Bearded Axe"}
-{name:"Stormrider", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Tabar"}
-{name:"Boneslayer Blade", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Gothic Axe"}
-{name:"The Minotaur", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Ancient Axe"}
-{name:"Razor's Edge", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Tomahawk"}
-{name:"Rune Master", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Ettin Axe"}
-{name:"Cranebeak", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"War Spike"}
-{name:"Death Cleaver", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Berserker Axe"}
-{name:"Ethereal Edge", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Silver-Edged Axe"}
-{name:"Hellslayer", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Decapitator"}
-{name:"Messerschmidt's Reaver", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Champion Axe"}
-{name:"Executioner's Justice", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Glorious Axe"}
-{name:"Felloak", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Club"}
-{name:"Stoutnail", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Spiked Club"}
-{name:"Crushflange", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Mace"}
-{name:"Bloodrise", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Morning Star"}
-{name:"The General's Tan Do Li Ga", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Flail"}
-{name:"Ironstone", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"War Hammer"}
-{name:"Bonesnap", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Maul"}
-{name:"Steeldriver", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Great Maul"}
-{name:"Dark Clan Crusher", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Cudgel"}
-{name:"Fleshrender", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Barbed Club"}
-{name:"Sureshrill Frost", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Flanged Mace"}
-{name:"Moonfall", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Jagged Star"}
-{name:"Baezil's Vortex", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Knout"}
-{name:"Earthshaker", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Battle Hammer"}
-{name:"Bloodtree Stump", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"War Club"}
-{name:"The Gavel of Pain", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Martel de Fer"}
-{name:"Nord's Tenderizer", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Truncheon"}
-{name:"Demon Limb", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Tyrant Club"}
-{name:"Baranar's Star", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Devil Star"}
-{name:"Horizon's Tornado"}
-{name:"Stone Crusher"}
-{name:"Windhammer", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Ogre Maul"}
-{name:"Earth Shifter"}
-{name:"Knell Striker", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Scepter"}
-{name:"Rusthandle", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Grand Scepter"}
-{name:"Stormeye", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"War Scepter"}
-{name:"Zakarum's Hand", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Rune Scepter"}
-{name:"The Fetid Sprinkler", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Holy Water Sprinkler"}
-{name:"Hand of Blessed Light", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Divine Scepter"}
-{name:"Heaven's Light"}
-{name:"Astreon's Iron Ward", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Caduceus"}
-{name:"Rixot's Keen", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Short Sword"}
-{name:"Blood Crescent", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Scimitar"}
-{name:"Skewer of Krintiz", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Saber"}
-{name:"Gleamscythe", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Falchion"}
-{name:"Griswold's Edge", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Broad Sword"}
-{name:"Hellplague", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Long Sword"}
-{name:"Culwen's Point", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"War Sword"}
-{name:"Shadowfang", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Two-handed Sword"}
-{name:"Soulflay", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Claymore"}
-{name:"Kinemil's Awl", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Giant Sword"}
-{name:"Blacktongue", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Bastard Sword"}
-{name:"Ripsaw", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Flamberge"}
-{name:"The Patriarch", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Great Sword"}
-{name:"Bloodletter", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Gladius"}
-{name:"Coldsteel Eye", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Cutlass"}
-{name:"Hexfire", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Shamshir"}
-{name:"Blade of Ali Baba"}
-{name:"Ginther's Rift", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Dimensional Blade"}
-{name:"Headstriker", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Battle Sword"}
-{name:"Plague Bearer", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Rune Sword"}
-{name:"The Atlantean", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Ancient Sword"}
-{name:"Crainte Vomir", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Espandon"}
-{name:"Bing Sz Wang", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Dacian Falx"}
-{name:"The Vile Husk", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Tusk Sword"}
-{name:"Cloudcrack", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Gothic Sword"}
-{name:"Todesfaelle Flamme", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Zweihander"}
-{name:"Swordguard", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Executioner Sword"}
-{name:"Djinn Slayer"}
-{name:"Bloodmoon", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Elegant Blade"}
-{name:"Lightsabre"}
-{name:"Frostwind", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Cryptic Sword"}
-{name:"Flamebellow", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Balrog Blade"}
-{name:"Doombringer", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Champion Sword"}
-{name:"The Grandfather", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Colossus Blade"}
-{name:"Gull", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Dagger"}
-{name:"The Diggler", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Dirk"}
-{name:"The Jade Tan Do", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Kriss"}
-{name:"Spectral Shard", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Blade"}
-{name:"Spineripper", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Poignard"}
-{name:"Heart Carver", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Rondel"}
-{name:"Blackbog's Sharp", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Cinquedeas"}
-{name:"Stormspike", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Stilleto"}
-{name:"Wizardspike", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Bone Knife"}
-{name:"Fleshripper", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Fanged Knife"}
-{name:"Ghostflame", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Legend Spike"}
-{name:"Dimoak's Hew", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Bardiche"}
-{name:"Steelgoad", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Voulge"}
-{name:"Soul Harvest", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Scythe"}
-{name:"The Battlebranch", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Poleaxe"}
-{name:"Woestave", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Halberd"}
-{name:"The Grim Reaper", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"War Scythe"}
-{name:"The Meat Scraper", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Lochaber Axe"}
-{name:"Blackleach Blade", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Bill"}
-{name:"Athena's Wrath", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Battle Scythe"}
-{name:"Pierre Tombale Couant", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Partizan"}
-{name:"Husoldal Evo", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Bec-de-Corbin"}
-{name:"Grim's Burning Dead", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Grim Scythe"}
-{name:"Bonehew"}
-{name:"The Reaper's Toll", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Thresher"}
-{name:"Tomb Reaver"}
-{name:"Stormspire", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Giant Thresher"}
-{name:"The Dragon Chang", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Spear"}
-{name:"Razortine", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Trident"}
-{name:"Bloodthief", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Brandistock"}
-{name:"Lance of Yaggai", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Spetum"}
-{name:"The Tannr Gorerod", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Pike"}
-{name:"The Impaler", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"War Spear"}
-{name:"Kelpie Snare", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Fuscina"}
-{name:"Soulfeast Time", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"War Fork"}
-{name:"Hone Sundan"}
-{name:"Spire of Honor", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Lance"}
-{name:"Arioc's Needle", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Hyperion Spear"}
-{name:"Viperfork", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Mancatcher"}
-{name:"Steel Pillar", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"War Pike"}
-{name:"Demon's Arch", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Balrog Spear"}
-{name:"Wraith Flight", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Ghost Glaive"}
-{name:"Gargoyle's Bite", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Winged Harpoon"}
-{name:"The Scalper", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Francisca"}
-{name:"Deathbit", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Battle Dart"}
-{name:"Gimmershred", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Flying Axe"}
-{name:"Warshrike", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Winged Knife"}
-{name:"Lacerator", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Winged Axe"}
-{name:"Pluckeye", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Short Bow"}
-{name:"Witherstring", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Hunter's Bow"}
-{name:"Raven Claw", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Long Bow"}
-{name:"Rogue's Bow", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Composite Bow"}
-{name:"Stormstrike", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Short Battle Bow"}
-{name:"Wizendraw", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Long Battle Bow"}
-{name:"Hellclap", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Short War Bow"}
-{name:"Blastbark", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Long War Bow"}
-{name:"Skystrike", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Edge Bow"}
-{name:"Riphook", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Razor Bow"}
-{name:"Kuko Shakaku", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Cedar Bow"}
-{name:"Endlesshail", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Double Bow"}
-{name:"Witchwild String"}
-{name:"Cliffkiller", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Long Siege Bow"}
-{name:"Magewrath", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Rune Bow"}
-{name:"Goldstrike Arch", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Gothic Bow"}
-{name:"Eaglehorn", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Crusader Bow"}
-{name:"Widowmaker", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Ward Bow"}
-{name:"Windforce", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Hydra Bow"}
-{name:"Leadcrow", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Light Crossbow"}
-{name:"Ichorsting", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Crossbow"}
-{name:"Hellcast", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Heavy Crossbow"}
-{name:"Doomslinger", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Repeating Crossbow"}
-{name:"Langer Briser", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Arbalest"}
-{name:"Pus Spitter", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Siege Crossbow"}
-{name:"Buriza-Do Kyanon", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Ballista"}
-{name:"Demon Machine", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Chu-Ko-Nu"}
-{name:"Hellrack"}
-{name:"Gut Siphon", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Demon Crossbow"}
-{name:"Bane Ash", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Short Staff"}
-{name:"Serpent Lord", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Long Staff"}
-{name:"Spire of Lazarus", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Gnarled Staff"}
-{name:"The Salamander", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Battle Staff"}
-{name:"The Iron Jang Bong", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"War Staff"}
-{name:"Razorswitch", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Jo Staff"}
-{name:"Ribcracker", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Quarterstaff"}
-{name:"Chromatic Ire", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Cedar Staff"}
-{name:"Warpspear", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Gothic Staff"}
-{name:"Skull Collector", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Rune Staff"}
-{name:"Ondal's Wisdom", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Elder Staff"}
-{name:"Mang Song's Lesson", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Archon Staff"}
-{name:"Torch of Iro", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Wand"}
-{name:"Maelstrom", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Yew Wand"}
-{name:"Gravenspine", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Bone Wand"}
-{name:"Ume's Lament", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Grim Wand"}
-{name:"Suicide Branch", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Burnt Wand"}
-{name:"Carin Shard", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Petrified Wand"}
-{name:"Arm of King Leoric", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Tomb Wand"}
-{name:"Blackhand Key", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Grave Wand"}
-{name:"Boneshade", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Lich Wand"}
-{name:"Death's Web", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Unearthed Wand"}
-{name:"Bartuc's Cut-Throat", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Greater Talons"}
-{name:"Jade Talon", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Wrist Sword"}
-{name:"Shadow Killer", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Battle Cestus"}
-{name:"Firelizard's Talons", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Feral Claws"}
-{name:"The Oculus", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Swirling Crystal"}
-{name:"Eschuta's Temper", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Eldritch Orb"}
-{name:"Death's Fathom", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Dimensional Shard"}
-{name:"Titan's Revenge", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Ceremonial Javelin"}
-{name:"Thunderstroke", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Matriarchal Javelin"}
-{name:"Lycander's Aim", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Ceremonial Bow"}
-{name:"Blood Raven's Charge", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Matriarchal Bow"}
-{name:"Lycander's Flank", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Ceremonial Pike"}
-{name:"Stoneraven", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Matriarchal Spear"}
+{name:"The Gnasher", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Hand Axe"},
+{name:"Deathspade", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Axe"},
+{name:"Bladebone", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Double Axe"},
+{name:"Skull Splitter", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Military Pick"},
+{name:"Rakescar", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"War Axe"},
+{name:"Axe of Fechmar", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Large Axe"},
+{name:"Goreshovel", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Broad Axe"},
+{name:"The Chieftain", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Battle Axe"},
+{name:"Brainhew", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Great Axe"},
+{name:"Humongous", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Giant Axe"},
+{name:"Coldkill", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Hatchet"},
+{name:"Butcher's Pupil", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Cleaver"},
+{name:"Islestrike", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Twin Axe"},
+{name:"Pompeii's Wrath", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Crowbill"},
+{name:"Guardian Naga", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Naga"},
+{name:"Warlord's Trust", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Military Axe"},
+{name:"Spellsteel", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Bearded Axe"},
+{name:"Stormrider", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Tabar"},
+{name:"Boneslayer Blade", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Gothic Axe"},
+{name:"The Minotaur", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Ancient Axe"},
+{name:"Razor's Edge", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Tomahawk"},
+{name:"Rune Master", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Ettin Axe"},
+{name:"Cranebeak", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"War Spike"},
+{name:"Death Cleaver", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Berserker Axe"},
+{name:"Ethereal Edge", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Silver-Edged Axe"},
+{name:"Hellslayer", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Decapitator"},
+{name:"Messerschmidt's Reaver", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Champion Axe"},
+{name:"Executioner's Justice", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Glorious Axe"},
+{name:"Felloak", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Club"},
+{name:"Stoutnail", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Spiked Club"},
+{name:"Crushflange", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Mace"},
+{name:"Bloodrise", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Morning Star"},
+{name:"The General's Tan Do Li Ga", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Flail"},
+{name:"Ironstone", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"War Hammer"},
+{name:"Bonesnap", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Maul"},
+{name:"Steeldriver", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Great Maul"},
+{name:"Dark Clan Crusher", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Cudgel"},
+{name:"Fleshrender", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Barbed Club"},
+{name:"Sureshrill Frost", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Flanged Mace"},
+{name:"Moonfall", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Jagged Star"},
+{name:"Baezil's Vortex", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Knout"},
+{name:"Earthshaker", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Battle Hammer"},
+{name:"Bloodtree Stump", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"War Club"},
+{name:"The Gavel of Pain", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Martel de Fer"},
+{name:"Nord's Tenderizer", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Truncheon"},
+{name:"Demon Limb", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Tyrant Club"},
+{name:"Baranar's Star", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Devil Star"},
+{name:"Horizon's Tornado"},
+{name:"Stone Crusher"},
+{name:"Windhammer", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Ogre Maul"},
+{name:"Earth Shifter"},
+{name:"Knell Striker", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Scepter"},
+{name:"Rusthandle", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Grand Scepter"},
+{name:"Stormeye", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"War Scepter"},
+{name:"Zakarum's Hand", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Rune Scepter"},
+{name:"The Fetid Sprinkler", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Holy Water Sprinkler"},
+{name:"Hand of Blessed Light", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Divine Scepter"},
+{name:"Heaven's Light"},
+{name:"Astreon's Iron Ward", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Caduceus"},
+{name:"Rixot's Keen", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Short Sword"},
+{name:"Blood Crescent", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Scimitar"},
+{name:"Skewer of Krintiz", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Saber"},
+{name:"Gleamscythe", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Falchion"},
+{name:"Griswold's Edge", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Broad Sword"},
+{name:"Hellplague", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Long Sword"},
+{name:"Culwen's Point", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"War Sword"},
+{name:"Shadowfang", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Two-handed Sword"},
+{name:"Soulflay", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Claymore"},
+{name:"Kinemil's Awl", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Giant Sword"},
+{name:"Blacktongue", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Bastard Sword"},
+{name:"Ripsaw", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Flamberge"},
+{name:"The Patriarch", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Great Sword"},
+{name:"Bloodletter", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Gladius"},
+{name:"Coldsteel Eye", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Cutlass"},
+{name:"Hexfire", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Shamshir"},
+{name:"Blade of Ali Baba"},
+{name:"Ginther's Rift", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Dimensional Blade"},
+{name:"Headstriker", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Battle Sword"},
+{name:"Plague Bearer", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Rune Sword"},
+{name:"The Atlantean", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Ancient Sword"},
+{name:"Crainte Vomir", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Espandon"},
+{name:"Bing Sz Wang", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Dacian Falx"},
+{name:"The Vile Husk", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Tusk Sword"},
+{name:"Cloudcrack", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Gothic Sword"},
+{name:"Todesfaelle Flamme", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Zweihander"},
+{name:"Swordguard", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Executioner Sword"},
+{name:"Djinn Slayer"},
+{name:"Bloodmoon", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Elegant Blade"},
+{name:"Lightsabre"},
+{name:"Frostwind", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Cryptic Sword"},
+{name:"Flamebellow", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Balrog Blade"},
+{name:"Doombringer", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Champion Sword"},
+{name:"The Grandfather", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Colossus Blade"},
+{name:"Gull", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Dagger"},
+{name:"The Diggler", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Dirk"},
+{name:"The Jade Tan Do", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Kriss"},
+{name:"Spectral Shard", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Blade"},
+{name:"Spineripper", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Poignard"},
+{name:"Heart Carver", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Rondel"},
+{name:"Blackbog's Sharp", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Cinquedeas"},
+{name:"Stormspike", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Stilleto"},
+{name:"Wizardspike", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Bone Knife"},
+{name:"Fleshripper", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Fanged Knife"},
+{name:"Ghostflame", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Legend Spike"},
+{name:"Dimoak's Hew", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Bardiche"},
+{name:"Steelgoad", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Voulge"},
+{name:"Soul Harvest", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Scythe"},
+{name:"The Battlebranch", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Poleaxe"},
+{name:"Woestave", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Halberd"},
+{name:"The Grim Reaper", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"War Scythe"},
+{name:"The Meat Scraper", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Lochaber Axe"},
+{name:"Blackleach Blade", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Bill"},
+{name:"Athena's Wrath", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Battle Scythe"},
+{name:"Pierre Tombale Couant", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Partizan"},
+{name:"Husoldal Evo", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Bec-de-Corbin"},
+{name:"Grim's Burning Dead", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Grim Scythe"},
+{name:"Bonehew"},
+{name:"The Reaper's Toll", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Thresher"},
+{name:"Tomb Reaver"},
+{name:"Stormspire", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Giant Thresher"},
+{name:"The Dragon Chang", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Spear"},
+{name:"Razortine", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Trident"},
+{name:"Bloodthief", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Brandistock"},
+{name:"Lance of Yaggai", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Spetum"},
+{name:"The Tannr Gorerod", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Pike"},
+{name:"The Impaler", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"War Spear"},
+{name:"Kelpie Snare", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Fuscina"},
+{name:"Soulfeast Time", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"War Fork"},
+{name:"Hone Sundan"},
+{name:"Spire of Honor", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Lance"},
+{name:"Arioc's Needle", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Hyperion Spear"},
+{name:"Viperfork", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Mancatcher"},
+{name:"Steel Pillar", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"War Pike"},
+{name:"Demon's Arch", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Balrog Spear"},
+{name:"Wraith Flight", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Ghost Glaive"},
+{name:"Gargoyle's Bite", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Winged Harpoon"},
+{name:"The Scalper", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Francisca"},
+{name:"Deathbit", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Battle Dart"},
+{name:"Gimmershred", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Flying Axe"},
+{name:"Warshrike", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Winged Knife"},
+{name:"Lacerator", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Winged Axe"},
+{name:"Pluckeye", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Short Bow"},
+{name:"Witherstring", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Hunter's Bow"},
+{name:"Raven Claw", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Long Bow"},
+{name:"Rogue's Bow", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Composite Bow"},
+{name:"Stormstrike", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Short Battle Bow"},
+{name:"Wizendraw", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Long Battle Bow"},
+{name:"Hellclap", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Short War Bow"},
+{name:"Blastbark", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Long War Bow"},
+{name:"Skystrike", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Edge Bow"},
+{name:"Riphook", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Razor Bow"},
+{name:"Kuko Shakaku", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Cedar Bow"},
+{name:"Endlesshail", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Double Bow"},
+{name:"Witchwild String"},
+{name:"Cliffkiller", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Long Siege Bow"},
+{name:"Magewrath", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Rune Bow"},
+{name:"Goldstrike Arch", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Gothic Bow"},
+{name:"Eaglehorn", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Crusader Bow"},
+{name:"Widowmaker", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Ward Bow"},
+{name:"Windforce", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Hydra Bow"},
+{name:"Leadcrow", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Light Crossbow"},
+{name:"Ichorsting", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Crossbow"},
+{name:"Hellcast", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Heavy Crossbow"},
+{name:"Doomslinger", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Repeating Crossbow"},
+{name:"Langer Briser", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Arbalest"},
+{name:"Pus Spitter", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Siege Crossbow"},
+{name:"Buriza-Do Kyanon", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Ballista"},
+{name:"Demon Machine", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Chu-Ko-Nu"},
+{name:"Hellrack"},
+{name:"Gut Siphon", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Demon Crossbow"},
+{name:"Bane Ash", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Short Staff"},
+{name:"Serpent Lord", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Long Staff"},
+{name:"Spire of Lazarus", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Gnarled Staff"},
+{name:"The Salamander", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Battle Staff"},
+{name:"The Iron Jang Bong", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"War Staff"},
+{name:"Razorswitch", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Jo Staff"},
+{name:"Ribcracker", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Quarterstaff"},
+{name:"Chromatic Ire", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Cedar Staff"},
+{name:"Warpspear", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Gothic Staff"},
+{name:"Skull Collector", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Rune Staff"},
+{name:"Ondal's Wisdom", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Elder Staff"},
+{name:"Mang Song's Lesson", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Archon Staff"},
+{name:"Torch of Iro", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Wand"},
+{name:"Maelstrom", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Yew Wand"},
+{name:"Gravenspine", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Bone Wand"},
+{name:"Ume's Lament", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Grim Wand"},
+{name:"Suicide Branch", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Burnt Wand"},
+{name:"Carin Shard", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Petrified Wand"},
+{name:"Arm of King Leoric", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Tomb Wand"},
+{name:"Blackhand Key", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Grave Wand"},
+{name:"Boneshade", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Lich Wand"},
+{name:"Death's Web", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Unearthed Wand"},
+{name:"Bartuc's Cut-Throat", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Greater Talons"},
+{name:"Jade Talon", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Wrist Sword"},
+{name:"Shadow Killer", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Battle Cestus"},
+{name:"Firelizard's Talons", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Feral Claws"},
+{name:"The Oculus", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Swirling Crystal"},
+{name:"Eschuta's Temper", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Eldritch Orb"},
+{name:"Death's Fathom", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Dimensional Shard"},
+{name:"Titan's Revenge", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Ceremonial Javelin"},
+{name:"Thunderstroke", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Matriarchal Javelin"},
+{name:"Lycander's Aim", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Ceremonial Bow"},
+{name:"Blood Raven's Charge", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Matriarchal Bow"},
+{name:"Lycander's Flank", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Ceremonial Pike"},
+{name:"Stoneraven", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, base:"Matriarchal Spear"},
 
 */
