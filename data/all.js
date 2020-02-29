@@ -297,7 +297,6 @@ function equip(type, val) {
 	calculateSkillAmounts()
 	updateAll()
 	checkRequirements()
-	document.getElementById("pierce").innerHTML = old_set_before + " " + old_set_after + " " + set_before + " " + set_after
 }
 
 // Resets functionality for skills
