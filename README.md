@@ -1,6 +1,6 @@
 # [Planner](https://moreina.github.io/planner/)
 Character Skill Planner for Diablo 2: Path of Diablo
-### [Download](https://github.com/Moreina/planner/archive/v1.09.zip)
+### [Download](https://github.com/Moreina/planner/archive/v1.10.zip)
 ### Features So Far:
 * all skill info up to level 60
 * synergy calculation for all skills
@@ -24,7 +24,6 @@ Character Skill Planner for Diablo 2: Path of Diablo
 * full GUI inventory/stash
 * item socketing/corrupting
 * options for individual quests
-* option for strict character validation (prevent invalid character states instead of just making text red)
 * interface niceties
 
 ### Stretch Goals:

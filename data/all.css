@@ -95,6 +95,31 @@
   margin-bottom: 5px;
 */
 }
+.dropdown-set {
+  background-color: #222;
+  color: #00f000;
+  z-index: 6;
+}
+.dropdown-unique {
+  background-color: #222;
+  color: #928068;
+  z-index: 6;
+}
+.dropdown-magic {
+  background-color: #222;
+  color: #8080ff;
+  z-index: 6;
+}
+.dropdown-rare {
+  background-color: #222;
+  color: yellow;
+  z-index: 6;
+}
+.dropdown-debug {
+  background-color: #222;
+  color: #ff8080;
+  z-index: 6;
+}
 .dropdown:hover, .dropdown:focus {
   background-color: #222;
   z-index: 6;

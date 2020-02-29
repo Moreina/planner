@@ -40,7 +40,17 @@ function loadItems(type, dropdown, className) {
 		for (item in equipment[type]) {
 			if (typeof(equipment[type][item].only) == 'undefined' || (typeof(equipment[type][item].only) != 'undefined' && equipment[type][item].only != null && equipment[type][item].only == className)) {
 				if (item > 0) {
-					choices += "<option class='dropdown-option'>" + equipment[type][item].name + "</option>"
+					if (typeof(equipment[type][item].set_bonuses) != 'undefined') {
+						choices += "<option class='dropdown-set'>" + equipment[type][item].name + "</option>"
+					} else if (typeof(equipment[type][item].debug) != 'undefined'){
+						choices += "<option class='dropdown-debug'>" + equipment[type][item].name + "</option>"
+					} else if (typeof(equipment[type][item].rarity) != 'undefined' && equipment[type][item].rarity == "magic"){
+						choices += "<option class='dropdown-magic'>" + equipment[type][item].name + "</option>"
+					} else if (typeof(equipment[type][item].rarity) != 'undefined' && equipment[type][item].rarity == "rare"){
+						choices += "<option class='dropdown-rare'>" + equipment[type][item].name + "</option>"
+					} else {
+						choices += "<option class='dropdown-unique'>" + equipment[type][item].name + "</option>"
+					}
 				} else {
 					choices += "<option selected>" + "­ ­ ­ ­ " + equipment[type][item].name + "</option>"
 				}
@@ -163,6 +173,9 @@ function changeLevel(input) {
 // val: string name of item
 // ---------------------------------
 function equip(type, val) {
+	var rings_before = 0;
+	if (equipped.ring1.name == "Cathan's Seal" && equipped.ring2.name == "Cathan's Seal" && (type == "ring1" || type == "ring2")) {rings_before = 2}
+	if (equipped.ring1.name == "Angelic Halo" && equipped.ring2.name == "Angelic Halo" && (type == "ring1" || type == "ring2")) {rings_before = 2}
 	var set_bonuses = "";
 	var set = "";
 	var set_before = "";
@@ -173,6 +186,7 @@ function equip(type, val) {
 	if (set_bonuses != "") {
 		set = set_bonuses[0]
 		set_before = character[set];
+		set_before = Math.round(set_before,0)
 	}
 	// if replacing an item, previous item's affixes are removed from character
 	//if (equipped[type].name != "none") {
@@ -205,7 +219,11 @@ function equip(type, val) {
 	// handle set bonuses
 	if (set_bonuses != "") {
 		set_after = character[set];
-		if (set_before < set_after) {
+		set_after = Math.round(set_after,0)
+		var rings_after = 0;
+		if (equipped.ring1.name == "Cathan's Seal" && equipped.ring2.name == "Cathan's Seal" && (type == "ring1" || type == "ring2")) {rings_after = 2}
+		if (equipped.ring1.name == "Angelic Halo" && equipped.ring2.name == "Angelic Halo" && (type == "ring1" || type == "ring2")) {rings_after = 2}
+		if (set_before < set_after || rings_after == 2) {
 			// add set bonuses for new item
 			for (let i = 2; i < set_bonuses.length; i++) {
 				for (affix in set_bonuses[i]) {
@@ -214,7 +232,7 @@ function equip(type, val) {
 				}
 			}
 			// add new set bonus for other equipped items in the set
-			for (set_type in equipped) {
+			if (rings_after != 2) { for (set_type in equipped) {
 				if (type != set_type && equipped[set_type][set_bonuses[0]] != null) {
 					for (affix in equipped[set_type]["set_bonuses"][set_after]) {
 						character[affix] += equipped[set_type]["set_bonuses"][set_after][affix]
@@ -223,9 +241,9 @@ function equip(type, val) {
 			}
 			for (affix in sets[set][set_after]) {
 				character[affix] += sets[set][set_after][affix]
-			}
+			} }
 		}
-		if (set_before > set_after) {
+		if (set_before > set_after || rings_before == 2) {
 			// remove set bonuses from previous item
 			for (let j = 2; j < set_bonuses.length; j++) {
 				for (affix in set_bonuses[j]) {
@@ -234,7 +252,7 @@ function equip(type, val) {
 				}
 			}
 			// remove old set bonus for other equipped items in the set
-			for (set_type in equipped) {
+			if (rings_before != 2) { for (set_type in equipped) {
 				if (type != set_type && equipped[set_type][set] != null) {
 					for (affix in equipped[set_type]["set_bonuses"][set_before]) {
 						character[affix] -= equipped[set_type]["set_bonuses"][set_before][affix]
@@ -243,7 +261,7 @@ function equip(type, val) {
 			}
 			for (affix in sets[set][set_before]) {
 				character[affix] -= sets[set][set_before][affix]
-			}
+			} }
 		}
 	}
 	if (type == val) { document.getElementById(("dropdown_"+type)).selectedIndex = 0 }
