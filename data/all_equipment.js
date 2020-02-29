@@ -16,7 +16,7 @@ var unequipped = {name:"none", strength:0, dexterity:0, vitality:0, energy:0, li
 /* other, affects enemy	*/	enemy_fRes:0, enemy_cRes:0, enemy_lRes:0, enemy_pRes:0, slow_target:0, target_defense:0, flee_on_hit:0, blind_on_hit:0, monster_defense_per_hit:0, freezes_target:0, 
 /* other, boolean	*/	itd:0, pmh:0, cbf:0, peace:0, knockback:0, half_freeze_duration:0, e_def:0,
 /* item qualities	*/	indestructible:0, req_reduced:0, autorepair:0, autoreplenish:0, stack_size:0, sockets:0, twoHanded:0, 
-/* sets			*/	set_IK:0, set_Mav:0, set_Gris:0, set_TO:0, set_TR:0, set_Nat:0, set_Ald:0, set_Disciple:0, set_Angelic:0, set_Cathan:0, set_Cow:0, set_Brethren:0, set_Hwanin:0, set_Naj:0, set_Orphan:0, set_Sander:0, set_Sazabi:0, set_Arcanna:0, set_Arctic:0, set_Berserker:0, set_Civerb:0, set_Cleglaw:0, set_Death:0, set_Hsarus:0, set_Infernal:0, set_Iratha:0, set_Isenhart:0, set_Milabrega:0, set_Sigon:0, set_Tancred:0, set_Vidala:0, set_bonuses:["",{},{},{},{},{},{}],
+/* sets			*/	set_IK:0, set_Mav:0, set_Gris:0, set_TO:0, set_TR:0, set_Nat:0, set_Ald:0, set_Disciple:0, set_Angelic:0, set_Cathan:0, set_Cow:0, set_Brethren:0, set_Hwanin:0, set_Naj:0, set_Orphan:0, set_Sander:0, set_Sazabi:0, set_Arcanna:0, set_Arctic:0, set_Berserker:0, set_Civerb:0, set_Cleglaw:0, set_Death:0, set_Hsarus:0, set_Infernal:0, set_Iratha:0, set_Isenhart:0, set_Milabrega:0, set_Sigon:0, set_Tancred:0, set_Vidala:0, none:[0,{},{},{}],	//set_bonuses:["",{},{},{},{},{},{}],
 /* charges		*/	charges_poison_creeper:0, charges_oak_sage:0, charges_iron_maiden:0, charges_iron_golem:0, charges_spirit_of_barbs:0, 
 /* misc			*/	bonus_corpse_explosion:0, skill_random_sorc:0, 
 };
@@ -57,6 +57,7 @@ var sets = {
 	set_Tancred:[0,{},{},{},{},{}],
 	set_Vidala:[0,{},{},{},{}],
 	*/
+	none:[0,{},{},{}],
 };
 
 
@@ -82,7 +83,7 @@ var equipment = {
 {name:"Kira's Guardian", req_level:77, defense:170, fhr:20, cbf:1, all_res:70, base:"Tiara"},
 {name:"Griffon's Eye", req_level:76, defense:260, all_skills:1, lDamage:15, fcr:25, enemy_lRes:-20, base:"Diadem"},
 {name:"Crown of Ages", req_strength:174, req_level:82, defense:399, all_skills:1, pdr:15, all_res:30, fhr:30, sockets:2, base:"Corona"},
-{set_TR:1, name:"Tal Rasha's Horadric Crest", req_strength:55, req_level:66, defense:131, life_leech:10, mana_leech:10, all_res:15, mana:30, life:60, base:"Death Mask", set_bonuses:["set_TR",{},{},{},{},{}]},
+{set_TR:1, name:"Tal Rasha's Horadric Crest", req_strength:55, req_level:66, defense:131, life_leech:10, mana_leech:10, all_res:15, mana:30, life:60, base:"Death Mask", set_bonuses:["set_TR",0,{},{},{},{}]},
 {set_Gris:1, name:"Griswold's Valor", req_strength:105, req_level:69, defense:290, req_reduced:40, e_def:75, all_res:5, mf:30, cAbsorb_flat_per_level:0.25, sockets:2, base:"Corona", set_bonuses:["set_Gris",{},{skills_offensive:2},{},{}]},
 {set_Nat:1, name:"Natalya's Totem", req_strength:58, req_level:59, defense:300, all_res:20, dexterity:30, strength:20, mDamage_reduced:3, base:"Grim Helm", set_bonuses:["set_Nat",{},{},{},{}]},
 {set_TO:1, name:"Trang-Oul's Guise", req_strength:106, req_level:65, defense:257, fhr:25, life_regen:5, mana:150, thorns:20, base:"Bone Visage", set_bonuses:["set_TO",{},{},{},{},{}]},
@@ -118,7 +119,7 @@ var equipment = {
 {name:"Bramble Archon Plate", req_strength:103, req_level:61, defense:824, fhr:50, pDamage:50, max_mana:5, mana_regen:15, cRes_max:5, fRes:30, pRes:100, life_per_kill:13, charges_spirit_of_barbs:13},
 {name:"Enigma Archon Plate", req_strength:103, req_level:65, defense:1299, all_skills:2, frw:45, strength_per_level:0.75, max_life:5, pdr:8, life_per_kill:14, damage_to_mana:15, mf_per_level:1},
 {name:"Chains of Honor Archon Plate", req_strength:103, req_level:65, defense:890, all_skills:2, strength:20, life_leech:8, pdr:8, all_res:65, life_regen:7, damage_vs_demons:200, damage_vs_undead:100, mf:25},
-{set_TR:1, name:"Tal Rasha's Guardianship", req_strength:84, req_level:71, defense:941, velocity:-5, mDamage_reduced:15, cRes:40, lRes:40, fRes:40, mf:88, base:"Lacquered Plate", set_bonuses:["set_TR",{},{fcr:10},{},{},{}]},
+{set_TR:1, name:"Tal Rasha's Guardianship", req_strength:84, req_level:71, defense:941, velocity:-5, mDamage_reduced:15, cRes:40, lRes:40, fRes:40, mf:88, base:"Lacquered Plate", set_bonuses:["set_TR",0,{fcr:10},{},{},{}]},
 {set_IK:1, name:"Immortal King's Soul Cage", req_strength:232, req_level:76, defense:1000, pRes:50, skills_combat_barbarian:2, base:"Sacred Armor", set_bonuses:["set_IK",{},{fhr:25},{cRes:40},{fRes:40},{lRes:40},{defense:500}]},	//defense:500 = e_def:50
 {set_Mav:1, name:"M'avina's Embrace", req_strength:122, req_level:70, defense:771, velocity:-5, defense_per_level:4, skills_passives:2, req_reduced:30, base:"Kraken Shell", set_bonuses:["set_Mav",{},{},{fhr:30},{},{}]},	// +40% to Freezing Arrow Radius
 {set_Ald:1, name:"Aldur's Deception", req_strength:115, req_level:76, defense:857, velocity:-10, req_reduced:50, lRes:50, dexterity:15, strength:20, skills_elemental:1, skills_shapeshifting:1, base:"Shadow Plate", set_bonuses:["set_Ald",{},{vitality:15},{vitality:15},{vitality:15}]},
@@ -212,7 +213,7 @@ var equipment = {
 {name:"Snowclash", req_strength:88, req_level:42, defense:116, skills_cold_all:1, cAbsorb_flat:15, skill_glacial_spike:3, cRes_max:5, base:"Battle Belt"},
 {name:"Thundergod's Vigor", req_strength:110, req_level:47, defense:159, lAbsorb_flat:20, lRes_max:10, strength:20, vitality:20, skill_lightning_fury:3, skill_lightning_strike:3, lDamage_min:1, lDamage_max:50, base:"War Belt"},
 {name:"Arachnid Mesh", req_strength:50, req_level:80, defense:138, all_skills:1, fcr:20, max_mana:5, slow_target:10, base:"Spiderweb Sash"},
-{set_TR:1, name:"Tal Rasha's Fine-Spun Cloth", req_strength:47, req_level:53, defense:40, req_reduced:20, damage_to_mana:37, mana:30, dexterity:20, mf:15, base:"Mesh Belt", set_bonuses:["set_TR",{},{defense:60},{fcr:10},{},{}]},
+{set_TR:1, name:"Tal Rasha's Fine-Spun Cloth", req_strength:47, req_level:53, defense:40, req_reduced:20, damage_to_mana:37, mana:30, dexterity:20, mf:15, base:"Mesh Belt", set_bonuses:["set_TR",0,{defense:60},{fcr:10},{},{}]},
 {set_IK:1, name:"Immortal King's Detail", req_strength:110, req_level:29, defense:89, lRes:31, fRes:28, strength:25, base:"War Belt", set_bonuses:["set_IK",{},{defense:105},{fhr:25},{defense:89},{pdr:20},{skills_masteries:2}]},	// defense:89 = e_def:100
 {set_Mav:1, name:"M'avina's Tenet", req_strength:20, req_level:45, defense:86, frw:20, light_radius:5, mana_leech:5, base:"Sharkskin Belt", set_bonuses:["set_Mav",{},{},{},{all_res:25},{}]},
 {set_TO:1, name:"Trang-Oul's Girth", req_strength:91, req_level:62, defense:166, req_reduced:40, cbf:1, life_regen:5, mana:50, stamina:30, life:66, base:"Troll Belt", set_bonuses:["set_TO",{},{},{cRes:40},{},{}]},
@@ -238,7 +239,7 @@ var equipment = {
 {name:"The Rising Sun", req_level:65, skills_fire_all:2, fAbsorb_flat_per_level:0.75, fDamage_min:24, fDamage_max:48, life_regen:10, light_radius:4},
 {name:"The Eye of Etlich", req_level:15, all_skills:1, life_leech:7, cDamage_min:2, cDamage_max:5, missile_defense:40, light_radius:5},
 {set_Disciple:1, name:"Telling of Beads", req_level:30, all_skills:1, pRes:50, cRes:18, thorns:10, set_bonuses:["set_Disciple",{},{},{},{},{}]},
-{set_TR:1, name:"Tal Rasha's Adjudication", req_level:67, skills_sorceress:2, lRes:33, mana:42, life:50, lDamage_min:3, lDamage_max:32, set_bonuses:["set_TR",{},{},{},{fcr:10},{}]},
+{set_TR:1, name:"Tal Rasha's Adjudication", req_level:67, skills_sorceress:2, lRes:33, mana:42, life:50, lDamage_min:3, lDamage_max:32, set_bonuses:["set_TR",0,{},{},{fcr:10},{}]},
 {set_Cathan:1, name:"Cathan's Sigil", req_level:11, fhr:10, thorns_lightning:5, set_bonuses:["set_Cathan",{},{ar:50},{mf:25},{},{}]},
 {set_Angelic:1, name:"Angelic Wings", req_level:12, damage_to_mana:20, light_radius:3, set_bonuses:["set_Angelic",{},{life:75},{all_skills:1},{}]},
 /*
@@ -260,8 +261,8 @@ var equipment = {
 {name:"The Stone of Jordan", req_level:29, all_skills:1, mana:20, max_mana:25, lDamage_min:1, lDamage_max:12},
 {name:"Bul-Kathos' Wedding Band", req_level:58, all_skills:1, life_per_level:0.5, life_leech:5, stamina:50},
 //{name:"Wisp Projector", req_level:76, lAbsorb:12, mf:20, frw:8, damage_bonus:10},	// implement damage_bonus
-{set_Cathan:0.5, name:"Cathan's Seal", req_level:11, life_leech:6, damage_reduced:2, set_bonuses:["set_Cathan",{},{strength:10},{},{},{}]},
-{set_Angelic:0.5, name:"Angelic Halo", req_level:12, life_regen:6, life:20, set_bonuses:["set_Angelic",{},{ar_per_level:12},{mf:50},{}]},
+{set_Cathan:1, name:"Cathan's Seal", req_level:11, life_leech:6, damage_reduced:2, set_bonuses:["set_Cathan",{},{strength:10},{},{},{}]},
+{set_Angelic:1, name:"Angelic Halo", req_level:12, life_regen:6, life:20, set_bonuses:["set_Angelic",{},{ar_per_level:12},{mf:50},{}]},
 	],
     ring2: [
 {name:"Ring"},
@@ -295,7 +296,7 @@ var equipment = {
 {only:"sorceress", name:"The Oculus", req_level:42, skills_sorceress:3, mana_per_kill:5, all_res:20, fcr:30, vitality:20, energy:20, defense_bonus:20, mf:50, damage_min:18, damage_max:42},
 {only:"sorceress", name:"Eschuta's Temper", req_level:72, skills_sorceress:3, fcr:40, fDamage:20, lDamage:20, energy:30, damage_min:18, damage_max:50},
 {only:"sorceress", name:"Death's Fathom", req_level:73, skills_sorceress:3, fcr:20, cDamage:30, lRes:40, fRes:40, damage_min:30, damage_max:53},
-{only:"sorceress", set_TR:1, name:"Tal Rasha's Lidless Eye", req_level:65, damage_min:18, damage_max:42, fcr:20, mana:77, life:57, energy:10, skill_lightning_mastery:2, skill_fire_mastery:2, skill_cold_mastery:2, base:"Swirling Crystal", set_bonuses:["set_TR",{},{skills_sorceress:1},{enemy_fRes:-15},{enemy_lRes:-15},{cDamage:15}]},
+{only:"sorceress", set_TR:1, name:"Tal Rasha's Lidless Eye", req_level:65, damage_min:18, damage_max:42, fcr:20, mana:77, life:57, energy:10, skill_lightning_mastery:2, skill_fire_mastery:2, skill_cold_mastery:2, base:"Swirling Crystal", set_bonuses:["set_TR",0,{skills_sorceress:1},{enemy_fRes:-15},{enemy_lRes:-15},{cDamage:15}]},
 {name:"Khalim's Will", type:"mace", ias:50, ar:40, life_leech:6, mana_leech:6, damage_vs_undead:50, damage_min:1, damage_max:15, lDamage_min:1, lDamage_max:40, base:"Flail"},
 {name:"Spirit Crystal Sword", twoHanded:0, req_strength:43, req_level:25, type:"sword", all_skills:2, fcr_per_level:0.375, fhr:55, life_leech:7, mana_per_level:1, missile_defense:75, mAbsorb_flat:8, damage_min:5, damage_max:15, pDamage_min:75, pDamage_max:75, lDamage_min:1, lDamage_max:50, cDamage_min:3, cDamage_max:14},
 {name:"Heart of the Oak Flail", req_dexterity:35, twoHanded:0, req_strength:41, req_level:55, type:"mace", all_skills:3, fcr:40, mana_leech:7, dexterity:10, life_regen:20, max_mana:15, all_res:40, max_life:8, damage_min:1, damage_max:24, cDamage_min:3, cDamage_max:14},
