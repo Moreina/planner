@@ -173,9 +173,6 @@ function changeLevel(input) {
 // val: string name of item
 // ---------------------------------
 function equip(type, val) {
-//	var rings_before = 0;
-//	if (equipped.ring1.name == "Cathan's Seal" && equipped.ring2.name == "Cathan's Seal" && (type == "ring1" || type == "ring2")) {rings_before = 2}
-//	if (equipped.ring1.name == "Angelic Halo" && equipped.ring2.name == "Angelic Halo" && (type == "ring1" || type == "ring2")) {rings_before = 2}
 	var old_set_bonuses = "";
 	var old_set = "";
 	var old_set_before = 0;
@@ -185,10 +182,8 @@ function equip(type, val) {
 	var set_before = 0;
 	var set_after = 0;
 	var old = 0;
-	//if (equipped[type].name != "none") { 
 	for (old_affix in equipped[type]) {
-		if (old_affix == "set_bonuses") { if (/*typeof(equipped[type].set_bonuses) != 'undefined' && equipped[type].set_bonuses != ""*/true) { old_set_bonuses = equipped[type].set_bonuses } } }
-	//}
+		if (old_affix == "set_bonuses") { if (true) { old_set_bonuses = equipped[type].set_bonuses } } }
 	for (item in equipment[type]) { if (equipment[type][item].name == val) { if (typeof(equipment[type][item].set_bonuses) != 'undefined') { set_bonuses = equipment[type][item].set_bonuses } } }
 	
 	if (set_bonuses != "") {
@@ -203,19 +198,10 @@ function equip(type, val) {
 		old_set_before = Math.round(old_set_before,0)
 	}
 	// if replacing an item, previous item's affixes are removed from character
-	//if (equipped[type].name != "none") {
 		for (old_affix in equipped[type]) {
 			character[old_affix] -= equipped[type][old_affix]
-			if (old_affix != "set_bonuses" /*&& old_affix != old_set*/) { equipped[type][old_affix] = unequipped[old_affix] }
-		//	else { equipped[type][old_affix][0] = ""}
-			//equipped[type][old_affix] = unequipped[old_affix]
-		//	else { for (let i = 2; i < old_set_bonuses.length; i++) { 
-		//		for (set_affix in old_set_bonuses[i][affix]) {
-		//		character[old_affix][i][] -= equipped[type][old_affix] } } }
-			//equipped[type][old_affix] = unequipped[old_affix]
-		}
-	//}
-	
+			if (old_affix != "set_bonuses") { equipped[type][old_affix] = unequipped[old_affix] }
+		}	
 	
 	if (old == 1) {
 		old_set_after = character[old_set];
@@ -281,7 +267,6 @@ function equip(type, val) {
 			for (set_type in equipped) {
 				if (set_type != type && equipped[set_type]["set_bonuses"] != null) {
 					if (equipped[set_type]["set_bonuses"][1] == 1) {
-				//if (type != set_type && equipped[set_type][set_bonuses[0]] != null) {
 					for (affix in equipped[set_type]["set_bonuses"][set_after]) {
 						character[affix] += equipped[set_type]["set_bonuses"][set_after][affix]
 					}
@@ -297,7 +282,6 @@ function equip(type, val) {
 	calculateSkillAmounts()
 	updateAll()
 	checkRequirements()
-	document.getElementById("pierce").innerHTML = old_set_before + " " + old_set_after + " " + set_before + " " + set_after
 }
 
 // Resets functionality for skills
