@@ -183,27 +183,18 @@ function equip(type, val) {
 	var set = "";
 	var set_before = 0;
 	var set_after = 0;
-	var old = 0;
 	for (old_affix in equipped[type]) {
 		if (old_affix == "set_bonuses") { if (true) { old_set_bonuses = equipped[type].set_bonuses } } }
 	for (item in equipment[type]) { if (equipment[type][item].name == val) { if (typeof(equipment[type][item].set_bonuses) != 'undefined') { set_bonuses = equipment[type][item].set_bonuses } } }
-	
-	if (set_bonuses != "") {
-		set = set_bonuses[0]
-		set_before = character[set];
-	}
-	if (old_set_bonuses != "") {
-		old = 1
-		old_set = old_set_bonuses[0]
-		old_set_before = character[old_set];
-	}
+	if (set_bonuses != "") { set = set_bonuses[0]; set_before = character[set]; }
+	if (old_set_bonuses != "") { old_set = old_set_bonuses[0]; old_set_before = character[old_set]; }
 	// if replacing an item, previous item's affixes are removed from character
 		for (old_affix in equipped[type]) {
 			character[old_affix] -= equipped[type][old_affix]
 			if (old_affix != "set_bonuses") { equipped[type][old_affix] = unequipped[old_affix] }
-		}	
-	// set bonuses - removal
-	if (old == 1) {
+		}
+	// remove set bonuses from previous item
+	if (old_set_bonuses != "") {
 		old_set_after = character[old_set];
 		if (old_set_before > old_set_after) {
 			var old_rings = Math.round((old_set_before + old_set_after) * 2,0)
@@ -216,20 +207,20 @@ function equip(type, val) {
 				}
 			}
 			equipped[type]["set_bonuses"][1] = 0
-			if (old_set_before > old_set_after) {
-			// remove old set bonus for other equipped items in the set
-			for (set_type in equipped) {
-				if (set_type != type && equipped[set_type]["set_bonuses"] != null) {
-					if (equipped[set_type]["set_bonuses"][0] == old_set && equipped[set_type]["set_bonuses"][1] == 1) {
-					for (affix in equipped[set_type]["set_bonuses"][old_set_before]) {
-						character[affix] -= equipped[set_type]["set_bonuses"][old_set_before][affix]
-					}
+			if (old_set_before > old_set_after) {		// checked again to account for multiples of the same set item (rings)
+				// remove old set bonus for other equipped items in the set
+				for (set_type in equipped) {
+					if (set_type != type && equipped[set_type]["set_bonuses"] != null) {
+						if (equipped[set_type]["set_bonuses"][0] == old_set && equipped[set_type]["set_bonuses"][1] == 1) {
+							for (affix in equipped[set_type]["set_bonuses"][old_set_before]) {
+								character[affix] -= equipped[set_type]["set_bonuses"][old_set_before][affix]
+							}
+						}
 					}
 				}
-			}
-			for (affix in sets[old_set][old_set_before]) {
-				character[affix] -= sets[old_set][old_set_before][affix]
-			}
+				for (affix in sets[old_set][old_set_before]) {
+					character[affix] -= sets[old_set][old_set_before][affix]
+				}
 			}
 		}
 	}
@@ -254,9 +245,23 @@ function equip(type, val) {
 				character[affix] += equipment[type][item][affix]
 				equipped[type][affix] = equipment[type][item][affix]
 			}
+			// add affixes from base item
+			if (typeof(equipment[type][item]["base"]) != 'undefined') { if (equipment[type][item]["base"] != "") {
+				var base = equipment[type][item].base;
+				base = base.split(' ').join('_')
+				base = base.split('-').join('_')
+				base = base.split("'s").join("s")
+				if (typeof(bases[base]) != 'undefined') { for (affix in bases[base]) { if (affix == "damage_min" || affix == "damage_max") {//if (~~bases[base][affix] != 0) {
+					var mult = 1;
+					if (typeof(equipment[type][item]["ethereal"]) != 'undefined') { if (equipment[type][item]["ethereal"] == 1) { mult = 1.5 } }
+					character[affix] += Math.round(mult*bases[base][affix],0)
+					if (typeof(equipped[type][affix]) == 'undefined') { equipped[type][affix] = 0 }
+					equipped[type][affix] += Math.round(mult*bases[base][affix],0)
+				} } }
+			} }
 		}
 	} }
-	// set bonuses - adding
+	// add set bonuses
 	if (set_bonuses != "") {
 		set_after = character[set];
 		if (set_before < set_after) {
@@ -271,19 +276,19 @@ function equip(type, val) {
 			}
 			equipped[type]["set_bonuses"][1] = 1
 			if (set_before < set_after) {
-			// add new set bonus for other equipped items in the set
-			for (set_type in equipped) {
-				if (set_type != type && equipped[set_type]["set_bonuses"] != null) {
-					if (equipped[set_type]["set_bonuses"][1] == 1) {
-					for (affix in equipped[set_type]["set_bonuses"][set_after]) {
-						character[affix] += equipped[set_type]["set_bonuses"][set_after][affix]
-					}
+				// add new set bonus for other equipped items in the set
+				for (set_type in equipped) {
+					if (set_type != type && equipped[set_type]["set_bonuses"] != null) {
+						if (equipped[set_type]["set_bonuses"][1] == 1) {
+							for (affix in equipped[set_type]["set_bonuses"][set_after]) {
+								character[affix] += equipped[set_type]["set_bonuses"][set_after][affix]
+							}
+						}
 					}
 				}
-			}
-			for (affix in sets[set][set_after]) {
-				character[affix] += sets[set][set_after][affix]
-			}
+				for (affix in sets[set][set_after]) {
+					character[affix] += sets[set][set_after][affix]
+				}
 			}
 		}
 	}
@@ -511,8 +516,8 @@ function updateStats() {
 	var stamina_addon = ((c.vitality + c.all_attributes + c.level*c.vitality_per_level)-c.starting_vitality)*c.stamina_per_vitality;
 	var mana_addon = ((c.energy + c.all_attributes + c.level*c.energy_per_level)-c.starting_energy)*c.mana_per_energy;
 
-	var basic_min = Math.floor((1+c.damage_bonus/100)*(1+weapon_skillup/100)*phys_min + (c.fDamage_min + c.cDamage_min + c.lDamage_min + c.pDamage_min + c.mDamage_min));
-	var basic_max = Math.floor((1+c.damage_bonus/100)*(1+weapon_skillup/100)*phys_max + (c.fDamage_max + c.cDamage_max + c.lDamage_max + c.pDamage_max + c.mDamage_max));
+	var basic_min = Math.floor((1+c.e_damage/100)*(1+c.damage_bonus/100)*(1+weapon_skillup/100)*phys_min + (c.fDamage_min + c.cDamage_min + c.lDamage_min + c.pDamage_min + c.mDamage_min));
+	var basic_max = Math.floor((1+c.e_damage/100)*(1+c.damage_bonus/100)*(1+weapon_skillup/100)*phys_max + (c.fDamage_max + c.cDamage_max + c.lDamage_max + c.pDamage_max + c.mDamage_max));
 	if (basic_min > 0 || basic_max > 0) { document.getElementById("basic_attack").innerHTML = basic_min + "-" + basic_max }
 	else { document.getElementById("basic_attack").innerHTML = "" }
 	document.getElementById("strength").innerHTML = c.strength + c.all_attributes + Math.floor(c.level*c.strength_per_level)
