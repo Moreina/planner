@@ -511,7 +511,10 @@ function updateStats() {
 	var stamina_addon = ((c.vitality + c.all_attributes + c.level*c.vitality_per_level)-c.starting_vitality)*c.stamina_per_vitality;
 	var mana_addon = ((c.energy + c.all_attributes + c.level*c.energy_per_level)-c.starting_energy)*c.mana_per_energy;
 
-	document.getElementById("basic_attack").innerHTML = Math.floor((1+c.damage_bonus/100)*(1+weapon_skillup/100)*phys_min + (c.fDamage_min + c.cDamage_min + c.lDamage_min + c.pDamage_min + c.mDamage_min)) + "-" + Math.floor((1+c.damage_bonus/100)*(1+weapon_skillup/100)*phys_max + (c.fDamage_max + c.cDamage_max + c.lDamage_max + c.pDamage_max + c.mDamage_max));
+	var basic_min = Math.floor((1+c.damage_bonus/100)*(1+weapon_skillup/100)*phys_min + (c.fDamage_min + c.cDamage_min + c.lDamage_min + c.pDamage_min + c.mDamage_min));
+	var basic_max = Math.floor((1+c.damage_bonus/100)*(1+weapon_skillup/100)*phys_max + (c.fDamage_max + c.cDamage_max + c.lDamage_max + c.pDamage_max + c.mDamage_max));
+	if (basic_min > 0 || basic_max > 0) { document.getElementById("basic_attack").innerHTML = basic_min + "-" + basic_max }
+	else { document.getElementById("basic_attack").innerHTML = "" }
 	document.getElementById("strength").innerHTML = c.strength + c.all_attributes + Math.floor(c.level*c.strength_per_level)
 	document.getElementById("dexterity").innerHTML = c.dexterity + c.all_attributes + Math.floor(c.level*c.dexterity_per_level)
 	document.getElementById("vitality").innerHTML = c.vitality + c.all_attributes + Math.floor(c.level*c.vitality_per_level)
