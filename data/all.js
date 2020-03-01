@@ -1,7 +1,7 @@
 
 
 character = {};
-var skill_bonuses = {stamina_skillup:0, speed_skillup:0, defense_skillup:0, resistance_skillup:0, cstrike_skillup:0, ar_skillup:0, pierce_skillup:0, damage_skillup:0, fRes_skillup:0, cRes_skillup:0, lRes_skillup:0, edged_skillup:[0,0,0], pole_skillup:[0,0,0], blunt_skillup:[0,0,0], thrown_skillup:[0,0,0], claw_skillup:[0,0,0], mana_regen_skillup:0, cPierce_skillup:0, lPierce_skillup:0, fPierce_skillup:0, cDamage_skillup:0, lDamage_skillup:0, fDamage_skillup:0};
+var skill_bonuses = {stamina_skillup:0, speed_skillup:0, defense_skillup:0, resistance_skillup:0, cstrike_skillup:0, ar_skillup:0, pierce_skillup:0, damage_skillup:0, fRes_skillup:0, cRes_skillup:0, lRes_skillup:0, edged_skillup:[0,0,0], pole_skillup:[0,0,0], blunt_skillup:[0,0,0], thrown_skillup:[0,0,0], claw_skillup:[0,0,0], mana_regen_skillup:0, cPierce_skillup:0, lPierce_skillup:0, fPierce_skillup:0, cDamage_skillup:0, lDamage_skillup:0, fDamage_skillup:0, block_skillup:0};
 var base_stats = {level:1, skillpoints:0, statpoints:0, quests_completed:-1, running:-1, difficulty:3, strength_added:0, dexterity_added:0, vitality_added:0, energy_added:0, fRes_penalty:100, cRes_penalty:100, lRes_penalty:100, pRes_penalty:100, mRes_penalty:100, fRes:0, cRes:0, lRes:0, pRes:0, mRes:0, fRes_max:75, cRes_max:75, lRes_max:75, pRes_max:75, mRes_max:75, set_bonuses:[0,0,{},{},{},{},{}]}
 var gear = {req_level:0, req_strength:0, req_dexterity:0};
 var settings = {coupling:1}
@@ -48,6 +48,8 @@ function loadItems(type, dropdown, className) {
 						choices += "<option class='dropdown-magic'>" + equipment[type][item].name + "</option>"
 					} else if (typeof(equipment[type][item].rarity) != 'undefined' && equipment[type][item].rarity == "rare"){
 						choices += "<option class='dropdown-rare'>" + equipment[type][item].name + "</option>"
+					} else if (typeof(equipment[type][item].rw) != 'undefined'){
+						choices += "<option class='dropdown-runeword'>" + equipment[type][item].name + "</option>"
 					} else {
 						choices += "<option class='dropdown-unique'>" + equipment[type][item].name + "</option>"
 					}
@@ -189,24 +191,24 @@ function equip(type, val) {
 	if (set_bonuses != "") {
 		set = set_bonuses[0]
 		set_before = character[set];
-//		set_before = Math.round(set_before,0)
 	}
 	if (old_set_bonuses != "") {
 		old = 1
 		old_set = old_set_bonuses[0]
 		old_set_before = character[old_set];
-		old_set_before = Math.round(old_set_before,0)
 	}
 	// if replacing an item, previous item's affixes are removed from character
 		for (old_affix in equipped[type]) {
 			character[old_affix] -= equipped[type][old_affix]
 			if (old_affix != "set_bonuses") { equipped[type][old_affix] = unequipped[old_affix] }
 		}	
-	
+	// set bonuses - removal
 	if (old == 1) {
 		old_set_after = character[old_set];
-		old_set_after = Math.round(old_set_after);
 		if (old_set_before > old_set_after) {
+			var old_rings = Math.round((old_set_before + old_set_after) * 2,0)
+			old_set_before = Math.round(old_set_before,0)
+			old_set_after = Math.round(old_set_after,0)
 			// remove set bonuses for old item
 			for (let i = 1; i <= old_set_before; i++) {
 				for (affix in equipped[type]["set_bonuses"][i]) {
@@ -214,6 +216,7 @@ function equip(type, val) {
 				}
 			}
 			equipped[type]["set_bonuses"][1] = 0
+			if (old_set_before > old_set_after) {
 			// remove old set bonus for other equipped items in the set
 			for (set_type in equipped) {
 				if (set_type != type && equipped[set_type]["set_bonuses"] != null) {
@@ -226,6 +229,7 @@ function equip(type, val) {
 			}
 			for (affix in sets[old_set][old_set_before]) {
 				character[affix] -= sets[old_set][old_set_before][affix]
+			}
 			}
 		}
 	}
@@ -251,11 +255,13 @@ function equip(type, val) {
 			}
 		}
 	} }
-	
+	// set bonuses - adding
 	if (set_bonuses != "") {
 		set_after = character[set];
-		set_after = Math.round(set_after);
 		if (set_before < set_after) {
+			var rings = Math.round((set_before + set_after) * 2,0)
+			set_before = Math.round(set_before,0)
+			set_after = Math.round(set_after,0)
 			// add set bonuses for new item
 			for (let i = 1; i <= set_after; i++) {
 				for (affix in set_bonuses[i]) {
@@ -263,6 +269,7 @@ function equip(type, val) {
 				}
 			}
 			equipped[type]["set_bonuses"][1] = 1
+			if (set_before < set_after) {
 			// add new set bonus for other equipped items in the set
 			for (set_type in equipped) {
 				if (set_type != type && equipped[set_type]["set_bonuses"] != null) {
@@ -275,6 +282,7 @@ function equip(type, val) {
 			}
 			for (affix in sets[set][set_after]) {
 				character[affix] += sets[set][set_after][affix]
+			}
 			}
 		}
 	}
@@ -609,6 +617,7 @@ function calculateSkillAmounts() {
 		skills[s].extra_levels = 0
 		skills[s].extra_levels += character.all_skills
 		var display = skills[s].level
+		var temp = 0;
 		if (character.class_name == "Amazon") {
 			skills[s].extra_levels += character.skills_amazon
 			if (s < 10) { skills[s].extra_levels += character.skills_javelins
@@ -673,7 +682,14 @@ function calculateSkillAmounts() {
 				if (s == 10) { skills[s].force_levels = character.skill_cold_mastery }
 			} else if (s > 21) { skills[s].extra_levels += character.skills_fire
 				skills[s].extra_levels += character.skills_fire_all
-				if (s == 30) { skills[s].force_levels = character.skill_fire_mastery }
+				if (s == 26) { temp = 0; if (character.oskill_fire_ball > 0) { temp = Math.min(3, character.oskill_fire_ball) }
+					skills[s].force_levels = character.skill_fire_ball + temp }
+				if (s == 27) { temp = 0; if (character.oskill_fire_wall > 0) { temp = Math.min(3, character.oskill_fire_wall) }
+					skills[s].force_levels = character.skill_fire_wall + temp }
+				if (s == 29) { temp = 0; if (character.oskill_meteor > 0) { temp = Math.min(3, character.oskill_meteor) }
+					skills[s].force_levels = character.skill_meteor + temp }
+				if (s == 30) { temp = 0; if (character.oskill_fire_mastery > 0) { temp = Math.min(3, character.oskill_fire_mastery) }
+					skills[s].force_levels = character.skill_fire_mastery + temp }
 			} else { skills[s].extra_levels += character.skills_lightning 
 				if (s == 20) { skills[s].force_levels = character.skill_lightning_mastery }
 			}
@@ -699,6 +715,7 @@ function calculateSkillPassives(className) {
 		//if (skills[14].level > 0) { character.avoid_skillup = ~~skills[14].data.values[0][skills[14].level+skills[14].extra_levels]; } else { character.avoid_skillup = 0 }
 		//if (skills[16].level > 0) { character.evade_skillup = ~~skills[16].data.values[0][skills[16].level+skills[16].extra_levels]; } else { character.evade_skillup = 0 }
 	} else if (className == "Assassin") {
+		character.block_skillup = ~~skills[13].data.values[0][skills[13].level+skills[13].extra_levels];
 		if (skills[9].level > 0) {
 			character.claw_skillup[0] = ~~skills[9].data.values[0][skills[9].level+skills[9].extra_levels];
 			character.claw_skillup[1] = ~~skills[9].data.values[1][skills[9].level+skills[9].extra_levels];
@@ -1063,9 +1080,9 @@ function itemHover(ev, id) {
 	var style = "display: block; color: #634db0;"
 	var display = name //+ "<br>" + stats
 	if (name == "Annihilus" || name == "Hellfire Torch" || name == "Gheed's Fortune") { style = "display: block; color: #928068;" }
-	if (name == "Skill Grand Charm #1") { display = "+1 Grand Charm ("+character.tab1+")" }
-	if (name == "Skill Grand Charm #2") { display = "+1 Grand Charm ("+character.tab2+")" }
-	if (name == "Skill Grand Charm #3") { display = "+1 Grand Charm ("+character.tab3+")" }
+//	if (name == "Skill Grand Charm #1") { display = "+1 Grand Charm ("+character.tab1+")" }
+//	if (name == "Skill Grand Charm #2") { display = "+1 Grand Charm ("+character.tab2+")" }
+//	if (name == "Skill Grand Charm #3") { display = "+1 Grand Charm ("+character.tab3+")" }
 	if (equipped["charms"][val].type != "small" && equipped["charms"][val].type != "large" && equipped["charms"][val].type != "grand") { style = "display: block; color: #ff8080;" }
 	document.getElementById("item_tooltip").innerHTML = display
 	document.getElementById("item_tooltip").style = style
