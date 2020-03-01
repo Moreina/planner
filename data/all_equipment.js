@@ -22,8 +22,8 @@ var unequipped = {name:"none", strength:0, dexterity:0, vitality:0, energy:0, li
 };
 
 var bases = {
-	Shako:{group:"armor", type:"helm", def_low:98, def_high:141, req_strength:50, req_level:43, durability:12, max_sockets:2}
-	Flail:{group:"weapon", twoHanded:0, type:"mace", base_min:1, base_max:24, speed:-10, req_strength:41, req_dexterity:35, durability:30, max_sockets:5}
+	Shako:{group:"armor", type:"helm", def_low:98, def_high:141, req_strength:50, req_level:43, durability:12, max_sockets:2},
+	Flail:{group:"weapon", twoHanded:0, type:"mace", base_min:1, base_max:24, speed:-10, req_strength:41, req_dexterity:35, durability:30, max_sockets:5},
 }
 
 var sets = {
