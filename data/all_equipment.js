@@ -9,7 +9,7 @@ var unequipped = {name:"none", strength:0, dexterity:0, vitality:0, energy:0, li
 /* skills		*/	skill_lightning_bolt:0, skill_lightning_fury:0, skill_lightning_strike:0, skill_glacial_spike:0, skill_battle_command:0, skill_battle_orders:0, skill_feral_rage:0, skill_summon_mastery:0, skill_flesh_offering:0, skill_fists_of_ember:0, skill_lightning_mastery:0, skill_fire_mastery:0, skill_cold_mastery:0, 
 /* open skills		*/	oskill_ball_lightning:0, oskill_feral_rage:0, oskill_lycanthropy:0, oskill_werewolf:0, oskill_hydra:0, oskill_multiple_shot:0, oskill_desecrate:0, oskill_shiver_armor:0, oskill_inner_sight:0, oskill_fire_ball:0, oskill_fire_wall:0, oskill_meteor:0, oskill_fire_mastery:0, // oskill_frigerate:0, oskill_edged_weapon_mastery:0, oskill_cold_mastery:0, oskill_flame_dash:0, 
 /* stats		*/	cdr:0, fcr:0, fbr:0, fhr:0, frw:0, ias:0, pierce:0, cblow:0, dstrike:0, cstrike:0, owounds:0, fDamage:0, cDamage:0, lDamage:0, pDamage:0, fPierce:0, cPierce:0, lPierce:0, pPierce:0, pdr:0, damage_reduced:0, mDamage_reduced:0, mf:0, gf:0, life_leech:0, mana_leech:0, life_per_hit:0, mana_per_hit:0, life_per_ranged_hit:0, mana_per_ranged_hit:0, fAbsorb:0, cAbsorb:0, lAbsorb:0, mAbsorb:0, fAbsorb_flat:0, cAbsorb_flat:0, lAbsorb_flat:0, mAbsorb_flat:0, 
-/* stats (indirect)	*/	all_skills:0, all_attributes:0, all_res:0, velocity:0, damage_bonus:0, max_life:0, max_mana:0, defense_bonus:0, 
+/* stats (indirect)	*/	all_skills:0, all_attributes:0, all_res:0, velocity:0, max_life:0, max_mana:0, damage_bonus:0, defense_bonus:0, ar_bonus:0, 
 /* stats (per level)	*/	life_per_level:0, mana_per_level:0, defense_per_level:0, ar_per_level:0, stamina_per_level:0, strength_per_level:0, dexterity_per_level:0, vitality_per_level:0, energy_per_level:0, fRes_per_level:0, cRes_per_level:0, lRes_per_level:0, pRes_per_level:0, fAbsorb_flat_per_level:0, cAbsorb_flat_per_level:0, lAbsorb_flat_per_level:0, mAbsorb_flat_per_level:0, mf_per_level:0, gf_per_level:0, fcr_per_level:0, dstrike_per_level:0, 
 /* attack damage	*/	damage_min:0, damage_max:0, fDamage_min:0, fDamage_max:0, cDamage_min:0, cDamage_max:0, lDamage_min:0, lDamage_max:0, pDamage_min:0, pDamage_max:0, mDamage_min:0, mDamage_max:0, min_damage_per_level:0, max_damage_per_level:0, kick_min:0, fDamage_max_per_level:0, cDamage_max_per_level:0, lDamage_max_per_level:0, pDamage_max_per_level:0, kick_damage_per_level:0, smite_min:0, smite_max:0, 
 /* other (not in-game)	*/	ibc:0, life_per_kill:0, mana_per_kill:0, damage_vs_demons:0, damage_vs_undead:0, ar_vs_demons:0, ar_vs_undead:0, damage_to_mana:0, life_regen:0, mana_regen:0, missile_defense:0, melee_defense:0, ar_vs_undead_per_level:0, damage_vs_undead_per_level:0, ar_vs_demons_per_level:0, damage_vs_demons_per_level:0, poison_length_reduced:0, thorns_lightning:0, life_per_demon_kill:0, light_radius:0, thorns:0, thorns_per_level:0, slower_stam_drain:0, heal_stam:0, heal_stam_per_level:0, ed_per_level:0, 
@@ -21,10 +21,11 @@ var unequipped = {name:"none", strength:0, dexterity:0, vitality:0, energy:0, li
 /* misc			*/	bonus_corpse_explosion:0, skill_random_sorc:0, 
 };
 
-var bases = {
-	Shako:{group:"armor", type:"helm", def_low:98, def_high:141, req_strength:50, req_level:43, durability:12, max_sockets:2},
-	Flail:{group:"weapon", twoHanded:0, type:"mace", base_min:1, base_max:24, speed:-10, req_strength:41, req_dexterity:35, durability:30, max_sockets:5},
-}
+//var bases = {
+//	Shako:{group:"armor", tier:3, tierDown:"War Hat", type:"helm", def_low:98, def_high:141, req_strength:50, req_level:43, durability:12, max_sockets:2},
+//	Flail:{group:"weapon", tier:1, tierUp:"Knout", twoHanded:0, type:"mace", base_min:1, base_max:24, speed:-10, req_strength:41, req_dexterity:35, durability:30, max_sockets:5},
+//	Caduceus:{group:"weapon", tier:3, tierDown:"Divine Scepter", twoHanded:0, type:"scepter", base_min:37, base_max:43, speed:-10, req_strength:97, req_dexterity:70, durability:70, max_sockets:5},
+//};
 
 var sets = {
 	set_IK:[0,{},{ar:50},{ar:75},{ar:125},{ar:200},{skills_barbarian:3, life:150, all_res:50, mDamage_reduced:10}],
@@ -201,7 +202,7 @@ var equipment = {
 {set_Nat:1, name:"Natalya's Soul", req_strength:65, req_level:25, defense:169, kick_min:23, frw:40, heal_stam_per_level:0.25, cRes:25, lRes:25, base:"Mesh Boots", set_bonuses:["set_Nat",{},{},{},{}]},
 {set_Ald:1, name:"Aldur's Advance", req_strength:95, req_level:45, defense:47, kick_min:37, frw:40, stamina:180, damage_to_mana:10, heal_stam:32, life:50, fRes:50, indestructible:1, base:"Battle Boots", set_bonuses:["set_Ald",{},{dexterity:15},{dexterity:15},{dexterity:15}]},
 {set_Sigon:1, name:"Sigon's Sabot", req_strength:70, req_level:6, defense:15, kick_min:10, frw:20, cRes:40, base:"Greaves", set_bonuses:["set_Sigon",{},{ar:50},{mf:50},{},{},{}]},
-{rarity:"rare", name:"Best Possible Boots", req_level:37, defense:3, kick_min:3, frw:30, fRes:40, cRes:40, lRes:40, mf:25, gf:80, all_res:10, base:"Boots"},
+{rarity:"rare", name:"High Resistance Boots", req_level:37, defense:3, kick_min:3, frw:30, fRes:40, cRes:40, lRes:40, mf:25, gf:80, base:"Boots"},
 /*
 {name:"Hotspur", req_strength:0, req_level:0, defense:0, kick_min:0, base:"Boots"},
 {name:"Gorefoot", req_strength:0, req_level:0, defense:0, kick_min:0, base:"Heavy Boots"},
@@ -324,9 +325,9 @@ var equipment = {
 {only:"sorceress", set_TR:1, name:"Tal Rasha's Lidless Eye", req_level:65, damage_min:18, damage_max:42, fcr:20, mana:77, life:57, energy:10, skill_lightning_mastery:2, skill_fire_mastery:2, skill_cold_mastery:2, base:"Swirling Crystal", set_bonuses:["set_TR",0,{skills_sorceress:1},{enemy_fRes:-15},{enemy_lRes:-15},{cDamage:15}]},
 {rw:1, name:"Spirit Crystal Sword", twoHanded:0, req_strength:43, req_level:25, type:"sword", all_skills:2, fcr_per_level:0.375, fhr:55, life_leech:7, mana_per_level:1, missile_defense:75, mAbsorb_flat:8, damage_min:5, damage_max:15, pDamage_min:75, pDamage_max:75, lDamage_min:1, lDamage_max:50, cDamage_min:3, cDamage_max:14},
 {rw:1, name:"Heart of the Oak Flail", req_dexterity:35, twoHanded:0, req_strength:41, req_level:55, type:"mace", all_skills:3, fcr:40, mana_leech:7, dexterity:10, life_regen:20, max_mana:15, all_res:40, max_life:8, damage_min:1, damage_max:24, cDamage_min:3, cDamage_max:14},
+{rw:1, name:"Grief Phase Blade", req_dexterity:136, twoHanded:0, req_strength:25, req_level:59, type:"sword", ias:40, itd:1, target_defense:-25, enemy_pRes:-25, dstrike:20, pmh:1, mana_per_kill:2, life_per_kill:15, fDamage_min:5, fDamage_max:30, min_damage_per_level:3.375, max_damage_per_level:3.625, damage_min:31, damage_max:35},
 {name:"Khalim's Will", type:"mace", ias:50, ar:40, life_leech:6, mana_leech:6, damage_vs_undead:50, damage_min:1, damage_max:15, lDamage_min:1, lDamage_max:40, base:"Flail"},
 {name:"Lightsabre", req_dexterity:136, twoHanded:0, req_strength:25, req_level:58, type:"sword", mana_leech:7, ias:20, itd:1, lAbsorb:15, light_radius:7, damage_min:103, damage_max:135, mDamage_min:60, mDamage_max:120, lDamage_min:1, lDamage_max:200, base:"Phase Blade"},
-{name:"Grief Phase Blade", req_dexterity:136, twoHanded:0, req_strength:25, req_level:59, type:"sword", ias:40, itd:1, target_defense:-25, enemy_pRes:-25, dstrike:20, pmh:1, mana_per_kill:2, life_per_kill:15, fDamage_min:5, fDamage_max:30, min_damage_per_level:3.375, max_damage_per_level:3.625, damage_min:31, damage_max:35},
 {name:"Death Cleaver", req_dexterity:59, twoHanded:0, req_strength:138, req_level:70, type:"axe", ias:40, damage_min:91, damage_max:269, target_defense:-33, dstrike:66, life_per_kill:9, base:"Berserker Axe"},
 {name:"Warshrike", twoHanded:0, req_strength:45, req_dexterity:142, req_level:75, type:"thrown", e_damage:250, damage_min:80, damage_max:136, dstrike:50, ias:30, autoreplenish:1, lDamage_min:1, lDamage_max:80, base:"Winged Knife"},
 {name:"Boneshade", twoHanded:0, req_strength:25, req_level:79, damage_vs_undead:50, fcr:25, skills_necromancer:2, skill_bone_spirit:2, skill_bone_spear:3, skill_bone_wall:3, skill_bone_armor:5, skill_teeth:5, damage_min:10, damage_max:31, base:"Lich Wand"},
@@ -348,7 +349,7 @@ var equipment = {
 {only:"necromancer", name:"Boneflame", req_strength:95, req_level:72, defense:367, block:30, e_def:150, frw:20, skills_necromancer:3, all_res:30, base:"Succubae Skull"},
 {only:"necromancer", set_TO:1, name:"Trang-Oul's Wing", req_strength:50, req_level:54, defense:189, block:60, ibc:30, pRes:40, fRes:45, dexterity:15, strength:25, skills_poisonBone:2, base:"Cantor Trophy", set_bonuses:["set_TO",{},{},{enemy_pRes:-25},{life_regen:15},{}]},
 {only:"paladin", name:"Herald of Zakarum", req_strength:89, req_level:42, defense:507, block:82, e_def:200, ibc:30, fbr:30, ar_bonus:20, strength:20, vitality:20, all_res:50, skills_paladin:2, skills_combat_paladin:2, smite_min:20, smite_max:28, base:"Gilded Shield"},
-{only:"paladin", name:"Alma Negra", req_strength:109, req_level:77, defense:511, block:78, e_def:210, cdr:30, skills_paladin:2, ibc:20, fbr:30, e_damage:75, are_bonus:75, mDamage_reduced:9, smite_min:35, smite_max:58, base:"Sacred Rondache"},
+{only:"paladin", name:"Alma Negra", req_strength:109, req_level:77, defense:511, block:78, e_def:210, cdr:30, skills_paladin:2, ibc:20, fbr:30, e_damage:75, ar_bonus:75, mDamage_reduced:9, smite_min:35, smite_max:58, base:"Sacred Rondache"},
 {only:"paladin", name:"Dragonscale", req_strength:142, req_level:80, defense:582, block:52, e_damage:200, fDamage_min:211, fDamage_max:371, fDamage:15, oskill_hydra:10, fRes_max:5, strength:25, fAbsorb:20, smite_min:46, smite_max:46, base:"Zakarum Shield"},
 {only:"paladin", set_Gris:1, name:"Griswold's Honor", req_strength:148, req_level:68, defense:333, block:69, fbr:65, ibc:20, all_res:45, sockets:3, smite_min:5, smite_max:87, base:"Vortex Shield", set_bonuses:["set_Gris",{},{},{},{}]},
 //{only:"assassin", name:"Bartuc's Cut-Throat", type:"claw", twoHanded:0, req_strength:79, req_dexterity:79, req_level:42, e_damage:200, damage_min:88, damage_max:155, fhr:30, bonus_ar:20, life_leech:9, strength:20, dexterity:20, skills_assassin:2, skills_martial:1, base:"Greater Talons"},
@@ -363,6 +364,11 @@ var equipment = {
 {name:"Radament's Sphere", req_strength:110, req_level:50, defense:282, block:66, e_def:200, ibc:20, pRes:75, fcr:20, skills_poisonBone:2, oskill_desecrate:1, smite_min:12, smite_max:16, base:"Ancient Shield"},
 {name:"Blackoak Shield", req_strength:100, req_level:61, defense:372, block:50, oskill_inner_sight:1, fbr:50, e_def:200, dexterity_per_level:0.5, life_per_level:1.25, cAbsorb_flat_per_level:0.625, half_freeze:1, smite_min:17, smite_max:29, base:"Luna"},
 {set_Sigon:1, name:"Sigon's Guard", req_strength:75, req_level:6, defense:25, block:74, all_skills:1, ibc:20, smite_min:1, smite_max:5, base:"Tower Shield", set_bonuses:["set_Sigon",{},{},{},{},{},{}]},
+{only:"amazon", rarity:"rare", name:"High Damage Arrows", type:"quiver", req_level:0, max_damage_per_level:0.625, pierce:25, skills_bows:2, damage_min:26, damage_max:31, ias:16, dstrike:20, base:""},
+{only:"amazon", name:"Dragonbreath", type:"quiver", req_level:12, fDamage_max_per_level:2, fRes:15, base:""},
+{only:"amazon", name:"Hailstorm", type:"quiver", req_level:12, cDamage_max_per_level:2, cRes:15, base:""},
+{only:"amazon", name:"Ice Shards", type:"quiver", req_level:18, skills_cold_all:2, ias:20, energy:20, base:""},
+{only:"amazon", name:"Moonfire", type:"quiver", req_level:21, ar_bonus:15, mDamage_reduced:4, base:""},
 /*
 {name:"Pelta Lunata", req_strength:0, req_level:0, defense:0, block:0, smite_min:0, smite_max:0, base:"Buckler"},
 {name:"Umbral Disk", req_strength:0, req_level:0, defense:0, block:0, smite_min:0, smite_max:0, base:"Small Shield"},
@@ -381,11 +387,6 @@ var equipment = {
 {name:"Spike Thorn", req_strength:0, req_level:, defense:, block:0, sockets:0, smite_min:0, smite_max:0, base:""},
 {name:"Head Hunter's Glory", req_strength:106, req_level:75, defense:593, block:0, sockets:3, smite_min:0, smite_max:0, base:"Troll Nest"},
 {name:"Spirit Ward", req_strength:0, req_level:0, defense:0, block:0, smite_min:0, smite_max:0, base:"Ward"},
-
-{name:"Dragonbreath", type:"quiver", req_level:12, fDamage_max_per_level:2, fRes:15, base:""},
-{name:"Hailstorm", type:"quiver", req_level:12, cDamage_max_per_level:2, cRes:15, base:""},
-{name:"Ice Shards", type:"quiver", req_level:18, skills_cold_all:2, ias:20, energy:20, base:""},
-{name:"Moonfire", type:"quiver", req_level:21, ar_bonus:15, mDamage_reduced:4, base:""},
 */
 	],
     charms: [
@@ -427,7 +428,7 @@ var equipment = {
 {debug:1, name:"+1 skill", req_level:100, all_skills:1},
 {debug:1, name:"+20 skills", req_level:100, all_skills:20},
 	]
-}
+};
 
 // SET ITEMS
 	/*	

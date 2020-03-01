@@ -1,7 +1,7 @@
 
 
 character = {};
-var skill_bonuses = {stamina_skillup:0, speed_skillup:0, defense_skillup:0, resistance_skillup:0, cstrike_skillup:0, ar_skillup:0, pierce_skillup:0, damage_skillup:0, fRes_skillup:0, cRes_skillup:0, lRes_skillup:0, edged_skillup:[0,0,0], pole_skillup:[0,0,0], blunt_skillup:[0,0,0], thrown_skillup:[0,0,0], claw_skillup:[0,0,0], mana_regen_skillup:0, cPierce_skillup:0, lPierce_skillup:0, fPierce_skillup:0, cDamage_skillup:0, lDamage_skillup:0, fDamage_skillup:0, block_skillup:0};
+var skill_bonuses = {stamina_skillup:0, speed_skillup:0, defense_skillup:0, resistance_skillup:0, cstrike_skillup:0, ar_skillup:0, pierce_skillup:0, fRes_skillup:0, cRes_skillup:0, lRes_skillup:0, edged_skillup:[0,0,0], pole_skillup:[0,0,0], blunt_skillup:[0,0,0], thrown_skillup:[0,0,0], claw_skillup:[0,0,0], mana_regen_skillup:0, cPierce_skillup:0, lPierce_skillup:0, fPierce_skillup:0, cDamage_skillup:0, lDamage_skillup:0, fDamage_skillup:0, block_skillup:0};
 var base_stats = {level:1, skillpoints:0, statpoints:0, quests_completed:-1, running:-1, difficulty:3, strength_added:0, dexterity_added:0, vitality_added:0, energy_added:0, fRes_penalty:100, cRes_penalty:100, lRes_penalty:100, pRes_penalty:100, mRes_penalty:100, fRes:0, cRes:0, lRes:0, pRes:0, mRes:0, fRes_max:75, cRes_max:75, lRes_max:75, pRes_max:75, mRes_max:75, set_bonuses:[0,0,{},{},{},{},{}]}
 var gear = {req_level:0, req_strength:0, req_dexterity:0};
 var settings = {coupling:1}
@@ -237,14 +237,15 @@ function equip(type, val) {
 	// two-handed weapon verification
 	var allow = 1;
 	var twoHanded = 0;
-	for (item in equipment[type]) { if (equipment[type][item].name == val) { twoHanded == equipment[type][item].twoHanded } }
+	var itemType = "";
+	for (item in equipment[type]) { if (equipment[type][item].name == val) { twoHanded = equipment[type][item].twoHanded; if (typeof(equipment[type][item].type) != 'undefined') itemType = equipment[type][item].type } }
 	if (type == "weapon" && equipped["offhand"].name != "none" && equipped["offhand"].name != "Offhand") {
-		if (twoHanded == 1) {
-			allow = 0; document.getElementById("dropdown_weapon").selectedIndex = 0 }
+		if ((twoHanded == 1 || equipped["offhand"].type == "quiver") && !(equipped["offhand"].type == "quiver" && itemType == "bow")) {
+			allow = 0; document.getElementById("dropdown_weapon").selectedIndex = 0; }
 	}
 	if (type == "offhand" && equipped["weapon"].name != "none") {
-		if (equipped["weapon"].twoHanded == 1) {
-			allow = 0; document.getElementById("dropdown_offhand").selectedIndex = 0 }
+		if ((equipped["weapon"].twoHanded == 1 || (equipped["weapon"].type != "bow" && itemType == "quiver")) && !(equipped["weapon"].type == "bow" && itemType == "quiver")) {
+			allow = 0; document.getElementById("dropdown_offhand").selectedIndex = 0; }
 	}
 	// add affixes to character
 	if (allow == 1) { for (item in equipment[type]) {
@@ -510,14 +511,14 @@ function updateStats() {
 	var stamina_addon = ((c.vitality + c.all_attributes + c.level*c.vitality_per_level)-c.starting_vitality)*c.stamina_per_vitality;
 	var mana_addon = ((c.energy + c.all_attributes + c.level*c.energy_per_level)-c.starting_energy)*c.mana_per_energy;
 
-	document.getElementById("basic_attack").innerHTML = Math.floor((1+c.damage_skillup/100)*(1+weapon_skillup/100)*(phys_min + c.fDamage_min + c.cDamage_min + c.lDamage_min + c.pDamage_min + c.mDamage_min)) + "-" + Math.floor((1+c.damage_skillup/100)*(1+weapon_skillup/100)*(phys_max + c.fDamage_max + c.cDamage_max + c.lDamage_max + c.pDamage_max + c.mDamage_max));
+	document.getElementById("basic_attack").innerHTML = Math.floor((1+c.damage_bonus/100)*(1+weapon_skillup/100)*phys_min + (c.fDamage_min + c.cDamage_min + c.lDamage_min + c.pDamage_min + c.mDamage_min)) + "-" + Math.floor((1+c.damage_bonus/100)*(1+weapon_skillup/100)*phys_max + (c.fDamage_max + c.cDamage_max + c.lDamage_max + c.pDamage_max + c.mDamage_max));
 	document.getElementById("strength").innerHTML = c.strength + c.all_attributes + Math.floor(c.level*c.strength_per_level)
 	document.getElementById("dexterity").innerHTML = c.dexterity + c.all_attributes + Math.floor(c.level*c.dexterity_per_level)
 	document.getElementById("vitality").innerHTML = c.vitality + c.all_attributes + Math.floor(c.level*c.vitality_per_level)
 	document.getElementById("energy").innerHTML = c.energy + c.all_attributes + Math.floor(c.level*c.energy_per_level)
 	if (c.running > 0) { document.getElementById("defense").innerHTML = "N/A" }
-	else { document.getElementById("defense").innerHTML = Math.floor((c.defense + c.level*c.defense_per_level + defense_addon) * (1 + c.defense_skillup/100)) }
-	document.getElementById("ar").innerHTML = Math.floor((c.ar + c.level*c.ar_per_level + ar_addon) * (1 + c.ar_skillup/100))
+	else { document.getElementById("defense").innerHTML = Math.floor((c.defense + c.level*c.defense_per_level + defense_addon) * (1 + c.defense_skillup/100) * (1 + c.defense_bonus/100)) }
+	document.getElementById("ar").innerHTML = Math.floor((c.ar + c.level*c.ar_per_level + ar_addon) * (1 + c.ar_skillup/100) * (1 + c.ar_bonus/100))
 	document.getElementById("stamina").innerHTML = Math.floor((c.stamina + c.level*c.stamina_per_level + stamina_addon) * (1+c.stamina_skillup/100))
 	document.getElementById("life").innerHTML = Math.floor((c.life + c.level*c.life_per_level + life_addon) * (1 + c.max_life/100))
 	document.getElementById("mana").innerHTML = Math.floor((c.mana + c.level*c.mana_per_level + mana_addon) * (1 + c.max_mana/100))
