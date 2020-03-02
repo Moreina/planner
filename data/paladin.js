@@ -1,4 +1,6 @@
 
+// frames per attack with a base weapon speed of 0 and no IAS
+var weapon_frames = {dagger:16, oneHand_sword:14, oneHand_axe:14, twoHand_sword:17.5, twoHand_axe:17, staff:17, polearm:17, oneHand_mace:14, scepter:14, wand:14, twoHand_mace:20, javelin:19, spear:19, bow:15, crossbow:19}
 
 var character_paladin = {class_name:"Paladin", strength:25, dexterity:20, vitality:25, energy:15, life:55, mana:15, defense:5, ar:85, stamina:189, levelup_life:2.5, levelup_stamina:1, levelup_mana:1.5, ar_per_dexterity:5, defense_per_dexterity:0.25, life_per_vitality:3, stamina_per_vitality:1, mana_per_energy:1.5, starting_strength:25, starting_dexterity:20, starting_vitality:25, starting_energy:15, skill_layout:"./images/paladin.png", tab1:"Defensive Auras", tab2:"Offensive Auras", tab3:"Combat",
 	updateSkill : function(skill, lvl, elem) {
