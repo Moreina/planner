@@ -175,6 +175,7 @@ function changeLevel(input) {
 // val: string name of item
 // ---------------------------------
 function equip(type, val) {
+	//var selected = document.getElementById("dropdown_"+type).selectedIndex;
 	var old_set_bonuses = "";
 	var old_set = "";
 	var old_set_before = 0;
@@ -251,12 +252,19 @@ function equip(type, val) {
 				base = base.split(' ').join('_')
 				base = base.split('-').join('_')
 				base = base.split("'s").join("s")
-				if (typeof(bases[base]) != 'undefined') { for (affix in bases[base]) { if (affix == "damage_min" || affix == "damage_max") {//if (~~bases[base][affix] != 0) {
-					var mult = 1;
-					if (typeof(equipment[type][item]["ethereal"]) != 'undefined') { if (equipment[type][item]["ethereal"] == 1) { mult = 1.5 } }
-					character[affix] += Math.round(mult*bases[base][affix],0)
+				if (typeof(bases[base]) != 'undefined') { for (affix in bases[base]) { if (affix == "damage_min" || affix == "damage_max" || affix == "defense") {	//if (~~bases[base][affix] != 0) {
+					var multEthereal = 1;
+					var multDefense = 1;
+					var moreDefense = 0;
+					if (typeof(equipment[type][item]["e_def"]) != 'undefined') { multDefense = (1+equipment[type][item]["e_def"]/100); 
+						if (typeof(equipment[type][item]["defense"]) != 'undefined') { moreDefense += equipment[type][item]["defense"]; }
+					//	if (typeof(equipment[type][item]["dexterity"]) != 'undefined') { moreDefense += (equipment[type][item]["dexterity"]/4); }
+					//	if (typeof(equipment[type][item]["all_attributes"]) != 'undefined') { moreDefense += (equipment[type][item]["all_attributes"]/4); } 
+					}
+					if (typeof(equipment[type][item]["ethereal"]) != 'undefined') { if (equipment[type][item]["ethereal"] == 1) { multEthereal = 1.5 } }
 					if (typeof(equipped[type][affix]) == 'undefined') { equipped[type][affix] = 0 }
-					equipped[type][affix] += Math.round(mult*bases[base][affix],0)
+					equipped[type][affix] += Math.round(multDefense*multEthereal*bases[base][affix] + moreDefense,0)
+					character[affix] += Math.round(multDefense*multEthereal*bases[base][affix] + moreDefense,0)
 				} } }
 			} }
 		}
@@ -515,18 +523,34 @@ function updateStats() {
 	var life_addon = ((c.vitality + c.all_attributes + c.level*c.vitality_per_level)-c.starting_vitality)*c.life_per_vitality;
 	var stamina_addon = ((c.vitality + c.all_attributes + c.level*c.vitality_per_level)-c.starting_vitality)*c.stamina_per_vitality;
 	var mana_addon = ((c.energy + c.all_attributes + c.level*c.energy_per_level)-c.starting_energy)*c.mana_per_energy;
-
+	
+	var ar = Math.floor((c.ar + c.level*c.ar_per_level + ar_addon) * (1 + c.ar_skillup/100) * (1 + c.ar_bonus/100));
+	var def = Math.floor((c.defense + c.level*c.defense_per_level + defense_addon) * (1 + c.defense_skillup/100) * (1 + c.defense_bonus/100));
+	
 	var basic_min = Math.floor((1+c.e_damage/100)*(1+c.damage_bonus/100)*(1+weapon_skillup/100)*phys_min + (c.fDamage_min + c.cDamage_min + c.lDamage_min + c.pDamage_min + c.mDamage_min));
 	var basic_max = Math.floor((1+c.e_damage/100)*(1+c.damage_bonus/100)*(1+weapon_skillup/100)*phys_max + (c.fDamage_max + c.cDamage_max + c.lDamage_max + c.pDamage_max + c.mDamage_max));
 	if (basic_min > 0 || basic_max > 0) { document.getElementById("basic_attack").innerHTML = basic_min + "-" + basic_max }
 	else { document.getElementById("basic_attack").innerHTML = "" }
+/*	
+	var block = c.block;
+	if (c.class_name != "Paladin") { block -= 5; if (c.class_name == "Druid" || c.class_name == "Necromancer" || c.class_name == "Sorceress") { block -= 5 } }
+	if (c.running > 0) { block = Math.round(block / 3,0) }
+	if (block > 0) { document.getElementById("block").innerHTML = Math.min(75,block)+"%" } 
+	else { document.getElementById("block").innerHTML = "" }
+	
+	var monsterDefense = def;
+	var monsterLevel = c.level;
+	var hit = Math.max(5,Math.min(95,Math.round(200 * (ar/(ar+monsterDefense)) * (c.level/(c.level+monsterLevel)),0)));
+	if (hit > 0) { document.getElementById("hit").innerHTML = hit+"%" }
+	else { document.getElementById("hit").innerHTML = "" }
+*/	
 	document.getElementById("strength").innerHTML = c.strength + c.all_attributes + Math.floor(c.level*c.strength_per_level)
 	document.getElementById("dexterity").innerHTML = c.dexterity + c.all_attributes + Math.floor(c.level*c.dexterity_per_level)
 	document.getElementById("vitality").innerHTML = c.vitality + c.all_attributes + Math.floor(c.level*c.vitality_per_level)
 	document.getElementById("energy").innerHTML = c.energy + c.all_attributes + Math.floor(c.level*c.energy_per_level)
 	if (c.running > 0) { document.getElementById("defense").innerHTML = "N/A" }
-	else { document.getElementById("defense").innerHTML = Math.floor((c.defense + c.level*c.defense_per_level + defense_addon) * (1 + c.defense_skillup/100) * (1 + c.defense_bonus/100)) }
-	document.getElementById("ar").innerHTML = Math.floor((c.ar + c.level*c.ar_per_level + ar_addon) * (1 + c.ar_skillup/100) * (1 + c.ar_bonus/100))
+	else { document.getElementById("defense").innerHTML = def }
+	document.getElementById("ar").innerHTML = ar
 	document.getElementById("stamina").innerHTML = Math.floor((c.stamina + c.level*c.stamina_per_level + stamina_addon) * (1+c.stamina_skillup/100))
 	document.getElementById("life").innerHTML = Math.floor((c.life + c.level*c.life_per_level + life_addon) * (1 + c.max_life/100))
 	document.getElementById("mana").innerHTML = Math.floor((c.mana + c.level*c.mana_per_level + mana_addon) * (1 + c.max_mana/100))
@@ -652,6 +676,8 @@ function calculateSkillAmounts() {
 			skills[s].extra_levels += character.skills_barbarian
 			if (s < 10) { skills[s].extra_levels += character.skills_warcries
 				if (s == 6) { skills[s].force_levels = character.skill_battle_orders }
+				if (s == 7) { skills[s].force_levels = character.skill_grim_ward }
+				if (s == 8) { skills[s].force_levels = character.skill_war_cry }
 				if (s == 9) { skills[s].force_levels = character.skill_battle_command }
 			} else if (s > 17) { skills[s].extra_levels += character.skills_combat_barbarian
 			} else { skills[s].extra_levels += character.skills_masteries }
@@ -661,6 +687,10 @@ function calculateSkillAmounts() {
 			if (s < 11) { skills[s].extra_levels += character.skills_elemental
 				if (s == 3 || s == 10) { skills[s].extra_levels += character.skills_cold_all }
 			} else if (s > 20) { skills[s].extra_levels += character.skills_summoning_druid
+				if (s == 21) { skills[s].force_levels = character.skill_raven }
+				if (s == 26) { skills[s].force_levels = character.skill_oak_sage }
+				if (s == 27) { skills[s].force_levels = character.skill_dire_wolf }
+				if (s == 30) { skills[s].force_levels = character.skill_grizzly }
 			} else { skills[s].extra_levels += character.skills_shapeshifting
 				if (s == 14) { skills[s].force_levels = character.skill_feral_rage }
 			}
@@ -672,7 +702,10 @@ function calculateSkillAmounts() {
 				if (s == 9) { skills[s].extra_levels += character.skills_fire_all }
 			} else if (s > 19) { skills[s].extra_levels += character.skills_curses
 			} else { skills[s].extra_levels += character.skills_poisonBone
-				if (s == 15) { skills[s].force_levels = character.oskill_desecrate }
+				if (s == 11) { skills[s].force_levels = character.skill_deadly_poison }
+				if (s == 13) { skills[s].force_levels = character.skill_bone_armor }
+				if (s == 15) { skills[s].force_levels = character.oskill_desecrate + character.skill_desecrate }
+				if (s == 16) { skills[s].force_levels = character.skill_bone_spear }
 			}
 		} else if (character.class_name == "Paladin") {
 			skills[s].extra_levels += character.skills_paladin
@@ -688,18 +721,23 @@ function calculateSkillAmounts() {
 				skills[s].extra_levels += character.skills_cold_all
 				if (s == 4) { skills[s].force_levels = character.oskill_shiver_armor }
 				if (s == 5) { skills[s].force_levels = character.skill_glacial_spike }
+				if (s == 9) { skills[s].force_levels = character.skill_frozen_orb }
 				if (s == 10) { skills[s].force_levels = character.skill_cold_mastery }
 			} else if (s > 21) { skills[s].extra_levels += character.skills_fire
 				skills[s].extra_levels += character.skills_fire_all
 				if (s == 26) { temp = 0; if (character.oskill_fire_ball > 0) { temp = Math.min(3, character.oskill_fire_ball) }
-					skills[s].force_levels = character.skill_fire_ball + temp }
+					skills[s].force_levels = /*character.skill_fire_ball*/ + temp }
 				if (s == 27) { temp = 0; if (character.oskill_fire_wall > 0) { temp = Math.min(3, character.oskill_fire_wall) }
-					skills[s].force_levels = character.skill_fire_wall + temp }
+					skills[s].force_levels = /*character.skill_fire_wall*/ + temp }
 				if (s == 29) { temp = 0; if (character.oskill_meteor > 0) { temp = Math.min(3, character.oskill_meteor) }
-					skills[s].force_levels = character.skill_meteor + temp }
+					skills[s].force_levels = /*character.skill_meteor*/ + temp }
 				if (s == 30) { temp = 0; if (character.oskill_fire_mastery > 0) { temp = Math.min(3, character.oskill_fire_mastery) }
 					skills[s].force_levels = character.skill_fire_mastery + temp }
+				if (s == 31) { skills[s].force_levels = character.skill_hydra }
 			} else { skills[s].extra_levels += character.skills_lightning 
+				if (s == 12) { skills[s].force_levels = character.skill_static_field }
+				if (s == 15) { skills[s].force_levels = character.skill_lightning_surge }
+				if (s == 19) { skills[s].force_levels = character.skill_energy_shield }
 				if (s == 20) { skills[s].force_levels = character.skill_lightning_mastery }
 			}
 		}
