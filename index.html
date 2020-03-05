@@ -19,6 +19,12 @@
 <body class="background" onload="initial_load()">
 
 <div id="main">
+<!--
+<div id="side_panel" style="width: 100px; height:800px; position: relative; float: right;" class="no-selection" oncontextmenu="return false">
+-->
+
+<div id="full_interface" style="width: 1000px;" class="no-selection" oncontextmenu="return false">
+<div id="side" style="margin-left: 11px; margin-top: 4px; width: 120px; position: relative; float:right;"></div>
 
 <div id="interface" style="width: 869px;">
 
@@ -162,6 +168,8 @@
 <div style="margin-right: 240px; width: 160px; float: right;">
 <input id="coupling" type="checkbox" name="coupling" value="1" onclick="return toggleCoupling(this);" checked>
 <label style="color: #aaa;" for="coupling">Skill-Level Coupling</label>
+<input id="autocast" type="checkbox" name="autocast" value="1" onclick="return toggleAutocast(this);" checked>
+<label style="color: #aaa;" for="autocast">Autocast Buffs</label>
 </div>
 <div style="width: 350px;">
 <div style="margin-left: 12px; margin-bottom: 1px; width: 200px">
@@ -325,7 +333,7 @@
 	<font size="2">Attack Rating vs Demons: </font><font size="2" id="ar_vs_demons"></font><br>
 	<font size="2">Attack Rating vs Undead: </font><font size="2" id="ar_vs_undead"></font><br><br>
 	<font size="2">Defense vs Missiles: </font><font size="2" id="missile_defense"></font><br><br>
-	<font size="2">Life Regen: </font><font size="2" id="life_regen"></font><br>
+	<font size="2">Life Replenish: </font><font size="2" id="life_replenish"></font><br>
 	<font size="2">Mana Regen: </font><font size="2" id="mana_regen"></font><br><br>
 	<!--<font size="2">Target Defense: </font><font size="2" id="target_defense"></font><br>
 	<font size="2">Slow Target: </font><font size="2" id="slow_target"></font><br>
@@ -346,7 +354,7 @@
 </div>
 
 </div>		<!--	/interface	-->
-
+</div>		<!--	/full_interface		-->
 </div>		<!--	/main	-->
 
 </div>

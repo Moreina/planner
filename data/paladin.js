@@ -16,7 +16,7 @@ var character_paladin = {class_name:"Paladin", strength:25, dexterity:20, vitali
 	if (skill.name == "Holy Fire" && elem < 4) { result *= ((1+(0.04*skills[1].level + 0.06*skills[9].level)) * (1+character.fDamage/100)) }
 	if (skill.name == "Holy Freeze" && elem < 4) { result *= ((1+(0.04*skills[3].level + 0.06*skills[9].level)) * (1+character.cDamage/100)) }
 	if (skill.name == "Holy Shock" && elem < 4) { result *= ((1+(0.04*skills[5].level + 0.06*skills[9].level)) * (1+character.lDamage/100)) }
-	if (skill.name == "Sanctuary" && elem > 0 && elem < 3) { result *= (0.18*skills[4].level + 0.18*skills[30].level) }
+	if (skill.name == "Sanctuary" && elem > 0 && elem < 3) { result *= (1+(0.18*skills[4].level + 0.18*skills[30].level)) }
 
 	if (skill.name == "Sacrifice" && elem == 1) { 	result += (10*skills[8].level + 5*skills[18].level) }
 	if (skill.name == "Smite" && elem == 0) { 	result += (8*skills[2].level) }
@@ -35,13 +35,134 @@ var character_paladin = {class_name:"Paladin", strength:25, dexterity:20, vitali
 	if (skill.name == "Vengeance" && elem == 8) { 	result += (12*skills[1].level + 2*skills[9].level) }
 	if (skill.name == "Vengeance" && elem == 9) { 	result += (12*skills[3].level + 2*skills[9].level) }
 	if (skill.name == "Vengeance" && elem == 10) { 	result += (12*skills[5].level + 2*skills[9].level) }
-	if (skill.name == "Blessed Hammer" && elem < 2) { result *= (1+(0.14*skills[6].level + 0.14*skills[13].level)) }
+	if (skill.name == "Blessed Hammer" && elem < 2) { result *= ((1+(0.14*skills[6].level + 0.14*skills[13].level)) * (1+character.hammer_bonus/100)) }
 	if (skill.name == "Holy Shield" && elem == 3) { result += (15*skills[2].level) }
 	if (skill.name == "Fist of the Heavens" && elem < 2) { result *= (1+(0.15*skills[22].level)) }
 	if (skill.name == "Fist of the Heavens" && elem >1 && elem < 4) { result *= ((1+(0.08*skills[16].level)) * (1+character.lDamage/100)) }
 	if (skill.name == "Dashing Strike" && elem > 0 && elem < 3) { result *= (1+(0.12*skills[21].level + 0.12*skills[24].level + 0.12*skills[28].level)) }
 	
 	return result
+	},
+	
+	getBuffData : function(effect) {
+	var skill = skills[effect.skill]
+	var lvl = skill.level + skill.extra_levels;
+	var result = {};
+	
+    // Defensive Auras	
+	if (skill.name == "Prayer") {
+		disableAuras(skill);
+		result.life_regen = 1;
+		result.life_replenish = skill.data.values[0][lvl];
+	}
+	if (skill.name == "Resist Fire") {
+		disableAuras(skill);
+		result.fRes = skill.data.values[1][lvl];
+		result.fRes_max = skill.data.values[2][lvl];
+	}
+	if (skill.name == "Defiance") { disableAuras(skill); result.defense_bonus = skill.data.values[0][lvl]; }
+	if (skill.name == "Resist Cold") {
+		disableAuras(skill);
+		result.cRes = skill.data.values[1][lvl];
+		result.cRes_max = skill.data.values[2][lvl];
+	}
+	if (skill.name == "Cleansing") {
+		disableAuras(skill);
+		result.life_replenish = ~~skills[0].data.values[0][skills[0].level];
+		result.poison_length_reduced = skill.data.values[1][lvl];
+		result.curse_length_reduced = skill.data.values[1][lvl];
+	}
+	if (skill.name == "Resist Lightning") {
+		disableAuras(skill);
+		result.lRes = skill.data.values[1][lvl];
+		result.lRes_max = skill.data.values[2][lvl];
+	}
+	if (skill.name == "Vigor") {
+		disableAuras(skill);
+		result.velocity = skill.data.values[0][lvl];
+		result.max_stamina = skill.data.values[1][lvl];
+		result.heal_stam = skill.data.values[2][lvl];
+	}
+	if (skill.name == "Meditation") {
+		disableAuras(skill);
+		result.life_replenish = ~~skills[0].data.values[0][skills[0].level];
+		result.mana_regen = skill.data.values[1][lvl];
+	}
+	if (skill.name == "Redemption") {
+		disableAuras(skill);
+		//result. = skill.data.values[0][lvl];		// redeem soul
+		//result. = skill.data.values[1][lvl];		// life & mana recovered
+	}
+	if (skill.name == "Salvation") {
+		disableAuras(skill);
+		result.fDamage = skill.data.values[0][lvl];
+		result.cDamage = skill.data.values[0][lvl];
+		result.lDamage = skill.data.values[0][lvl];
+		result.all_res = skill.data.values[1][lvl];
+	}
+	
+    // Offensive Auras
+	if (skill.name == "Might") { disableAuras(skill); result.damage_bonus = skill.data.values[0][lvl]; }
+	if (skill.name == "Holy Fire") {
+		disableAuras(skill);
+		result.fDamage_min = skill.data.values[0][lvl] * (1 + 0.04*skills[1].level + 0.06*skills[9].level);
+		result.fDamage_max = skill.data.values[1][lvl] * (1 + 0.04*skills[1].level + 0.06*skills[9].level);
+	}
+	if (skill.name == "Precision") {
+		disableAuras(skill);
+		result.pierce = skill.data.values[0][lvl];
+		result.cstrike = skill.data.values[2][lvl];
+		result.ar_bonus = skill.data.values[3][lvl];
+	}
+	if (skill.name == "Blessed Aim") { disableAuras(skill); result.ar_bonus = skill.data.values[1][lvl]; }
+	if (skill.name == "Concentration") {
+		disableAuras(skill);
+		result.ar_bonus = skill.data.values[0][lvl];
+		result.damage_bonus = skill.data.values[1][lvl];
+		result.hammer_bonus = skill.data.values[2][lvl];
+	}
+	if (skill.name == "Holy Freeze") {
+		disableAuras(skill);
+		result.cDamage_min = skill.data.values[0][lvl] * (1 + 0.04*skills[3].level + 0.06*skills[9].level);
+		result.cDamage_max = skill.data.values[1][lvl] * (1 + 0.04*skills[3].level + 0.06*skills[9].level);
+		result.slow_enemies = skill.data.values[2][lvl];
+	}
+	if (skill.name == "Holy Shock") {
+		disableAuras(skill);
+		result.lDamage_min = skill.data.values[0][lvl] * (1 + 0.04*skills[5].level + 0.06*skills[9].level);
+		result.lDamage_max = skill.data.values[1][lvl] * (1 + 0.04*skills[5].level + 0.06*skills[9].level);
+	}
+	if (skill.name == "Sanctuary") { disableAuras(skill); result.damage_vs_undead = skill.data.values[0][lvl]; }
+	if (skill.name == "Fanaticism") {
+		disableAuras(skill);
+		result.damage_bonus = skill.data.values[1][lvl];
+		result.ias = skill.data.values[2][lvl];
+		result.ar_bonus = skill.data.values[3][lvl];
+	}
+	if (skill.name == "Conviction") {
+		disableAuras(skill);
+		result.enemy_defense = skill.data.values[0][lvl];
+		result.enemy_fRes = skill.data.values[1][lvl];
+		result.enemy_cRes = skill.data.values[1][lvl];
+		result.enemy_lRes = skill.data.values[1][lvl];
+		result.enemy_pRes = skill.data.values[1][lvl];
+	}
+
+    // Combat
+	if (skill.name == "Holy Shield") {
+		result.defense_bonus = skill.data.values[3][lvl];
+		result.block = skill.data.values[4][lvl];
+	}
+	
+	return result
+	}
+};
+
+function disableAuras(skill) {
+	for (let s = 0; s < 20; s++) {
+		if (skill.i != s && document.getElementById("e"+skills[s].key) != null) {
+			disableEffect(s)
+		}
 	}
 };
 
@@ -80,37 +201,37 @@ var character_paladin = {class_name:"Paladin", strength:25, dexterity:20, vitali
 /*[30] Dashing Strike	*/ var d363 = {index:[0,""], values:[["stun length",0.4,0.4,0.5,0.6,0.7,0.8,0.8,0.9,1,1.1,1.2,1.2,1.3,1.4,1.5,1.6,1.6,1.7,1.8,1.9,2,2,2.1,2.2,2.3,2.4,2.4,2.5,2.6,2.7,2.8,2.8,2.9,3,3.1,3.2,3.2,3.3,3.4,3.5,3.6,3.6,3.7,3.8,3.9,4,4,4.1,4.2,4.3,4.4,4.4,4.5,4.6,4.7,4.8,4.8,4.9,5,5.1], ["magic min",37,54,73,90,109,126,145,163,189,215,240,267,293,318,345,371,399,426,454,482,511,539,569,599,629,659,689,719,751,783,815,847,879,911,943,975,1007,1039,1071,1103,1135,1167,1199,1231,1263,1295,1327,1359,1391,1423,1455,1487,1519,1551,1583,1615,1647,1679,1711,1743], ["magic max",48,67,85,104,124,143,162,181,207,235,262,289,315,343,370,396,426,454,484,513,542,571,602,633,664,695,726,757,790,823,856,889,922,955,988,1021,1054,1087,1120,1153,1186,1219,1252,1285,1318,1351,1384,1417,1450,1483,1516,1549,1582,1615,1648,1681,1714,1747,1780,1813], ["mana cost",4,4.3,4.7,5.1,5.5,5.8,6.2,6.6,7,7.3,7.7,8.1,8.5,8.8,9.2,9.6,10,10.3,10.7,11.1,11.5,11.8,12.2,12.6,13,13.3,13.7,14.1,14.5,14.8,15.2,15.6,16,16.3,16.7,17.1,17.5,17.8,18.2,18.6,19,19.3,19.7,20.1,20.5,20.8,21.2,21.6,22,22.3,22.7,23.1,23.5,23.8,24.2,24.6,25,25.3,25.7,26.1]]};
 
 var skills_paladin = [
-{data:d111, key:"111", name:"Prayer", req:[], reqlvl:1, level:0, extra_levels:0, force_levels:0, style:"display: block; top: 82px; left: 2px;", description:"When active, aura slowly regenerates<br>the life of you and your party<br><br>Radius: 21.3 yards", syn_title:"", syn_text:"", graytext:"", text:["Heals: 1% of Maximum Life<br>Heals: "," Additional Life<br>Total Healing: ",""]},
-{data:d113, key:"113", name:"Resist Fire", req:[], reqlvl:1, level:0, extra_levels:0, force_levels:0, style:"display: block; top: 82px; left: 142px;", description:"When active, aura decreases fire damage<br>done to you and your party", syn_title:"", syn_text:"", graytext:"", text:["Radius: 28 yards<br>Passive: +","Resist Fire: +"," percent<br>Maximum Resist Fire: +"," percent",""]},
-{data:d122, key:"122", name:"Defiance", req:[], reqlvl:6, level:0, extra_levels:0, force_levels:0, style:"display: block; top: 150px; left: 72px;", description:"When active, aura increases the defense rating<br>of you and your party<br><br>Radius: 21.3 yards", syn_title:"", syn_text:"", graytext:"", text:["Defense Bonus: +"," percent",""]},
-{data:d123, key:"123", name:"Resist Cold", req:[], reqlvl:6, level:0, extra_levels:0, force_levels:0, style:"display: block; top: 150px; left: 142px;", description:"When active, aura decreases cold damage<br>done to you and your party", syn_title:"", syn_text:"", graytext:"", text:["Radius: 28 yards<br>Passive: +","Resist Cold: +"," percent<br>Maximum Resist Cold: +"," percent",""]},
-{data:d131, key:"131", name:"Cleansing", req:[0], reqlvl:12, level:0, extra_levels:0, force_levels:0, style:"display: block; top: 218px; left: 2px;", description:"When active, aura reduces the length<br>of time you and your party<br>will remain poisoned or cursed", syn_title:"<br>Cleansing Receives Bonuses From:<br>", syn_text:"Prayer", graytext:"", text:["Radius: 21.3 yards<br>Heals ","Duration reduced by "," percent",""]},
-{data:d133, key:"133", name:"Resist Lightning", req:[], reqlvl:12, level:0, extra_levels:0, force_levels:0, style:"display: block; top: 218px; left: 142px;", description:"When active, aura decreases lightning damage<br>done to you and your party", syn_title:"", syn_text:"", graytext:"", text:["Radius: 28 yards<br>Passive: +","Resist Lightning: +"," percent<br>Maximum Resist Lightning: +"," percent",""]},
-{data:d142, key:"142", name:"Vigor", req:[2,4,0], reqlvl:18, level:0, extra_levels:0, force_levels:0, style:"display: block; top: 286px; left: 72px;", description:"When active, aura increases stamina recovery rate, maximum stamina<br>and movement speed for you and your party<br><br>Radius: 21.3 yards", syn_title:"", syn_text:"", graytext:"", text:["Velocity: +"," percent<br>Stamina Bonus: +"," percent<br>Stamina Recovery Rate: +"," percent",""]},
-{data:d151, key:"151", name:"Meditation", req:[4,0], reqlvl:24, level:0, extra_levels:0, force_levels:0, style:"display: block; top: 354px; left: 2px;", description:"When active, aura increases mana recovery<br>for you and your party", syn_title:"<br>Meditation Receives Bonuses From:<br>", syn_text:"Prayer", graytext:"", text:["Radius: 21.3 yards<br>Heals ","Mana Recovery Rate: +"," percent",""]},
-{data:d162, key:"162", name:"Redemption", req:[6,2,4,0], reqlvl:30, level:0, extra_levels:0, force_levels:0, style:"display: block; top: 422px; left: 72px;", description:"When active, aura attempts to redeem<br>the souls of slain enemies to give<br>you life and mana<br><br>Radius: 16 yards", syn_title:"", syn_text:"", graytext:"", text:["Chance to redeem soul: "," percent<br>Life/Mana Recovered: "," points",""]},
-{data:d163, key:"163", name:"Salvation", req:[], reqlvl:30, level:0, extra_levels:0, force_levels:0, style:"display: block; top: 422px; left: 142px;", description:"When active, aura increases the elemental resistances<br>and damage of you and your party<br><br>Radius: 28 yards", syn_title:"", syn_text:"", graytext:"", text:["Elemental Damage: +"," percent<br>Resist All: +"," percent",""]},
+{data:d111, key:"111", name:"Prayer", i:0, req:[], reqlvl:1, level:0, extra_levels:0, force_levels:0, effect:5, style:"display: block; top: 82px; left: 2px;", description:"When active, aura slowly regenerates<br>the life of you and your party<br><br>Radius: 21.3 yards", syn_title:"", syn_text:"", graytext:"", text:["Heals: 1% of Maximum Life<br>Heals: "," Additional Life<br>Total Healing: ",""]},
+{data:d113, key:"113", name:"Resist Fire", i:1, req:[], reqlvl:1, level:0, extra_levels:0, force_levels:0, effect:5, style:"display: block; top: 82px; left: 142px;", description:"When active, aura decreases fire damage<br>done to you and your party", syn_title:"", syn_text:"", graytext:"", text:["Radius: 28 yards<br>Passive: +","Resist Fire: +"," percent<br>Maximum Resist Fire: +"," percent",""]},
+{data:d122, key:"122", name:"Defiance", i:2, req:[], reqlvl:6, level:0, extra_levels:0, force_levels:0, effect:5, style:"display: block; top: 150px; left: 72px;", description:"When active, aura increases the defense rating<br>of you and your party<br><br>Radius: 21.3 yards", syn_title:"", syn_text:"", graytext:"", text:["Defense Bonus: +"," percent",""]},
+{data:d123, key:"123", name:"Resist Cold", i:3, req:[], reqlvl:6, level:0, extra_levels:0, force_levels:0, effect:5, style:"display: block; top: 150px; left: 142px;", description:"When active, aura decreases cold damage<br>done to you and your party", syn_title:"", syn_text:"", graytext:"", text:["Radius: 28 yards<br>Passive: +","Resist Cold: +"," percent<br>Maximum Resist Cold: +"," percent",""]},
+{data:d131, key:"131", name:"Cleansing", i:4, req:[0], reqlvl:12, level:0, extra_levels:0, force_levels:0, effect:5, style:"display: block; top: 218px; left: 2px;", description:"When active, aura reduces the length<br>of time you and your party<br>will remain poisoned or cursed", syn_title:"<br>Cleansing Receives Bonuses From:<br>", syn_text:"Prayer", graytext:"", text:["Radius: 21.3 yards<br>Heals ","Duration reduced by "," percent",""]},
+{data:d133, key:"133", name:"Resist Lightning", i:5, req:[], reqlvl:12, level:0, extra_levels:0, force_levels:0, effect:5, style:"display: block; top: 218px; left: 142px;", description:"When active, aura decreases lightning damage<br>done to you and your party", syn_title:"", syn_text:"", graytext:"", text:["Radius: 28 yards<br>Passive: +","Resist Lightning: +"," percent<br>Maximum Resist Lightning: +"," percent",""]},
+{data:d142, key:"142", name:"Vigor", i:6, req:[2,4,0], reqlvl:18, level:0, extra_levels:0, force_levels:0, effect:5, style:"display: block; top: 286px; left: 72px;", description:"When active, aura increases stamina recovery rate, maximum stamina<br>and movement speed for you and your party<br><br>Radius: 21.3 yards", syn_title:"", syn_text:"", graytext:"", text:["Velocity: +"," percent<br>Stamina Bonus: +"," percent<br>Stamina Recovery Rate: +"," percent",""]},
+{data:d151, key:"151", name:"Meditation", i:7, req:[4,0], reqlvl:24, level:0, extra_levels:0, force_levels:0, effect:5, style:"display: block; top: 354px; left: 2px;", description:"When active, aura increases mana recovery<br>for you and your party", syn_title:"<br>Meditation Receives Bonuses From:<br>", syn_text:"Prayer", graytext:"", text:["Radius: 21.3 yards<br>Heals ","Mana Recovery Rate: +"," percent",""]},
+{data:d162, key:"162", name:"Redemption", i:8, req:[6,2,4,0], reqlvl:30, level:0, extra_levels:0, force_levels:0, effect:5, style:"display: block; top: 422px; left: 72px;", description:"When active, aura attempts to redeem<br>the souls of slain enemies to give<br>you life and mana<br><br>Radius: 16 yards", syn_title:"", syn_text:"", graytext:"", text:["Chance to redeem soul: "," percent<br>Life/Mana Recovered: "," points",""]},
+{data:d163, key:"163", name:"Salvation", i:9, req:[], reqlvl:30, level:0, extra_levels:0, force_levels:0, effect:5, style:"display: block; top: 422px; left: 142px;", description:"When active, aura increases the elemental resistances<br>and damage of you and your party<br><br>Radius: 28 yards", syn_title:"", syn_text:"", graytext:"", text:["Elemental Damage: +"," percent<br>Resist All: +"," percent",""]},
 
-{data:d211, key:"211", name:"Might", req:[], reqlvl:1, level:0, extra_levels:0, force_levels:0, style:"display: block; top: 82px; left: 204px;", description:"When active, aura increases the damage<br>done by you and your party<br><br>Radius: 16 yards", syn_title:"", syn_text:"", graytext:"", text:["Damage: +"," percent",""]},
-{data:d222, key:"222", name:"Holy Fire", req:[10], reqlvl:6, level:0, extra_levels:0, force_levels:0, style:"display: block; top: 150px; left: 214px;", description:"When active, aura damages nearby enemies<br>with heavenly flames<br><br>Radius: 12 yards", syn_title:"<br>Holy Fire Receives Bonuses From:<br>", syn_text:"Resist Fire: +4% Fire Damage per Level<br>Salvation: +6% Fire Damage per Level", graytext:"", text:["Fire Damage: ","-"," to your attack<br>Fire Damage: ","-",""]},
-{data:d223, key:"223", name:"Precision", req:[], reqlvl:6, level:0, extra_levels:0, force_levels:0, style:"display: block; top: 150px; left: 264px;", description:"When active, increases your chance to<br>attack, pierce and deal double damage.<br><br>Radius: 16 yards", syn_title:"", syn_text:"", graytext:"", text:["Your Piercing Attack: "," percent chance<br>Party Piercing Attack: "," percent chance<br>Critical Strike: "," percent chance<br>Attack Rating: +"," percent",""]},
-{data:d231, key:"231", name:"Blessed Aim", req:[10], reqlvl:12, level:0, extra_levels:0, force_levels:0, style:"display: block; top: 218px; left: 164px;", description:"When active, aura increases the attack rating<br>for you and your party<br><br>Radius: 16 yards", syn_title:"", syn_text:"", graytext:"", text:["Chance for you to cast Blessed Hammer on hit: ","%<br>Attack Rating: +"," percent",""]},
-{data:d241, key:"241", name:"Concentration", req:[13,10], reqlvl:18, level:0, extra_levels:0, force_levels:0, style:"display: block; top: 286px; left: 104px;", description:"When active, aura increases the damage and decreases the chance<br>that the attack will be interrupted for you and your party<br><br>Radius: 16 yards", syn_title:"", syn_text:"", graytext:"", text:["Attack Rating: +","<br>Chance uninterruptable: 20 percent<br>Damage: +"," percent<br>Blessed Hammer Magic Damage: +"," percent",""]},
-{data:d242, key:"242", name:"Holy Freeze", req:[11,10], reqlvl:18, level:0, extra_levels:0, force_levels:0, style:"display: block; top: 286px; left: 214px;", description:"When active, aura freezes nearby monsters<br><br>Radius: 13.3 yards", syn_title:"<br>Holy Freeze Receives Bonuses From:<br>", syn_text:"Resist Cold: +4% Cold Damage per Level<br>Salvation: +6% Cold Damage per Level", graytext:"", text:["Cold Damage: ","-"," to your attack<br>Cold Damage: ","-","<br>Enemies slowed "," percent",""]},
-{data:d252, key:"252", name:"Holy Shock", req:[15,11,10], reqlvl:24, level:0, extra_levels:0, force_levels:0, style:"display: block; top: 354px; left: 204px;", description:"When active, aura causes pulses of electricity<br>to damage nearby enemies<br>Adds lightning damage to your attack<br><br>Radius: 18.6 yards", syn_title:"<br>Holy Shock Receives Bonuses From:<br>", syn_text:"Resist Lightning: +4% Lightning Damage per Level<br>Salvation: +6% Lightning Damage per Level", graytext:"", text:["Lightning Damage: ","-"," to your attack<br>Lightning Damage: ","-",""]},
-{data:d253, key:"253", name:"Sanctuary", req:[12,15,11,10], reqlvl:24, level:0, extra_levels:0, force_levels:0, style:"display: block; top: 354px; left: 254px;", description:"When active, aura deals magic damage to nearby<br>enemies and increases your damage against undead<br><br>Radius: 12.6 yards", syn_title:"<br>Sanctuary Receives Bonuses From:<br>", syn_text:"Cleansing: +18% Magic Damage per Level<br>Dashing Strike: +18% Magic Damage per Level", graytext:"", text:["Damage to Undead: +"," percent<br>Magic Damage: ","-",""]},
-{data:d261, key:"261", name:"Fanaticism", req:[14,13,10], reqlvl:30, level:0, extra_levels:0, force_levels:0, style:"display: block; top: 422px; left: 134px;", description:"When active, aura increases damage, attack speed,<br>and attack rating for you and your party<br><br>Radius: 12 yards", syn_title:"", syn_text:"", graytext:"", text:["Party Damage: +"," percent<br>Your Damage: +"," percent<br>Attack Speed: +"," percent<br>Attack Rating: +"," percent",""]},
-{data:d263, key:"263", name:"Conviction", req:[17,12,15,11,10], reqlvl:30, level:0, extra_levels:0, force_levels:0, style:"display: block; top: 422px; left: 284px;", description:"When active, aura reduces the defenses<br>and resistances of nearby enemies<br><br>Radius: 21.3 yards", syn_title:"", syn_text:"", graytext:"", text:["Defense: "," percent<br>Resistances: "," percent",""]},
+{data:d211, key:"211", name:"Might", i:10, req:[], reqlvl:1, level:0, extra_levels:0, force_levels:0, effect:5, style:"display: block; top: 82px; left: 204px;", description:"When active, aura increases the damage<br>done by you and your party<br><br>Radius: 16 yards", syn_title:"", syn_text:"", graytext:"", text:["Damage: +"," percent",""]},
+{data:d222, key:"222", name:"Holy Fire", i:11, req:[10], reqlvl:6, level:0, extra_levels:0, force_levels:0, effect:5, style:"display: block; top: 150px; left: 214px;", description:"When active, aura damages nearby enemies<br>with heavenly flames<br><br>Radius: 12 yards", syn_title:"<br>Holy Fire Receives Bonuses From:<br>", syn_text:"Resist Fire: +4% Fire Damage per Level<br>Salvation: +6% Fire Damage per Level", graytext:"", text:["Fire Damage: ","-"," to your attack<br>Fire Damage: ","-",""]},
+{data:d223, key:"223", name:"Precision", i:12, req:[], reqlvl:6, level:0, extra_levels:0, force_levels:0, effect:5, style:"display: block; top: 150px; left: 264px;", description:"When active, increases your chance to<br>attack, pierce and deal double damage.<br><br>Radius: 16 yards", syn_title:"", syn_text:"", graytext:"", text:["Your Piercing Attack: "," percent chance<br>Party Piercing Attack: "," percent chance<br>Critical Strike: "," percent chance<br>Attack Rating: +"," percent",""]},
+{data:d231, key:"231", name:"Blessed Aim", i:13, req:[10], reqlvl:12, level:0, extra_levels:0, force_levels:0, effect:5, style:"display: block; top: 218px; left: 164px;", description:"When active, aura increases the attack rating<br>for you and your party<br><br>Radius: 16 yards", syn_title:"", syn_text:"", graytext:"", text:["Chance for you to cast Blessed Hammer on hit: ","%<br>Attack Rating: +"," percent",""]},
+{data:d241, key:"241", name:"Concentration", i:14, req:[13,10], reqlvl:18, level:0, extra_levels:0, force_levels:0, effect:5, style:"display: block; top: 286px; left: 104px;", description:"When active, aura increases the damage and decreases the chance<br>that the attack will be interrupted for you and your party<br><br>Radius: 16 yards", syn_title:"", syn_text:"", graytext:"", text:["Attack Rating: +","<br>Chance uninterruptable: 20 percent<br>Damage: +"," percent<br>Blessed Hammer Magic Damage: +"," percent",""]},
+{data:d242, key:"242", name:"Holy Freeze", i:15, req:[11,10], reqlvl:18, level:0, extra_levels:0, force_levels:0, effect:5, style:"display: block; top: 286px; left: 214px;", description:"When active, aura freezes nearby monsters<br><br>Radius: 13.3 yards", syn_title:"<br>Holy Freeze Receives Bonuses From:<br>", syn_text:"Resist Cold: +4% Cold Damage per Level<br>Salvation: +6% Cold Damage per Level", graytext:"", text:["Cold Damage: ","-"," to your attack<br>Cold Damage: ","-","<br>Enemies slowed "," percent",""]},
+{data:d252, key:"252", name:"Holy Shock", i:16, req:[15,11,10], reqlvl:24, level:0, extra_levels:0, force_levels:0, effect:5, style:"display: block; top: 354px; left: 204px;", description:"When active, aura causes pulses of electricity<br>to damage nearby enemies<br>Adds lightning damage to your attack<br><br>Radius: 18.6 yards", syn_title:"<br>Holy Shock Receives Bonuses From:<br>", syn_text:"Resist Lightning: +4% Lightning Damage per Level<br>Salvation: +6% Lightning Damage per Level", graytext:"", text:["Lightning Damage: ","-"," to your attack<br>Lightning Damage: ","-",""]},
+{data:d253, key:"253", name:"Sanctuary", i:17, req:[12,15,11,10], reqlvl:24, level:0, extra_levels:0, force_levels:0, effect:5, style:"display: block; top: 354px; left: 254px;", description:"When active, aura deals magic damage to nearby<br>enemies and increases your damage against undead<br><br>Radius: 12.6 yards", syn_title:"<br>Sanctuary Receives Bonuses From:<br>", syn_text:"Cleansing: +18% Magic Damage per Level<br>Dashing Strike: +18% Magic Damage per Level", graytext:"", text:["Damage to Undead: +"," percent<br>Magic Damage: ","-",""]},
+{data:d261, key:"261", name:"Fanaticism", i:18, req:[14,13,10], reqlvl:30, level:0, extra_levels:0, force_levels:0, effect:5, style:"display: block; top: 422px; left: 134px;", description:"When active, aura increases damage, attack speed,<br>and attack rating for you and your party<br><br>Radius: 12 yards", syn_title:"", syn_text:"", graytext:"", text:["Party Damage: +"," percent<br>Your Damage: +"," percent<br>Attack Speed: +"," percent<br>Attack Rating: +"," percent",""]},
+{data:d263, key:"263", name:"Conviction", i:19, req:[17,12,15,11,10], reqlvl:30, level:0, extra_levels:0, force_levels:0, effect:5, style:"display: block; top: 422px; left: 284px;", description:"When active, aura reduces the defenses<br>and resistances of nearby enemies<br><br>Radius: 21.3 yards", syn_title:"", syn_text:"", graytext:"", text:["Defense: "," percent<br>Resistances: "," percent",""]},
 
-{data:d311, key:"311", name:"Sacrifice", req:[], reqlvl:1, level:0, extra_levels:0, force_levels:0, style:"display: block; top: 82px; left: 336px;", description:"Increased accuracy and damage<br>at the cost of life<br><br>Deals 150% of Weapon damage<br>4 percent damage to self", syn_title:"<br>Sacrifice Receives Bonuses From:<br>", syn_text:"Redemption: +10% Damage per Level<br>Fanaticism: +5% Damage per Level", graytext:"", text:["To Attack Rating: +"," percent<br>Damage: +"," percent",""]},
-{data:d313, key:"313", name:"Smite", req:[], reqlvl:1, level:0, extra_levels:0, force_levels:0, style:"display: block; top: 82px; left: 346px;", description:"Temporarily stun your enemy<br>by bashing it with your shield<br><br>Gains additional damage while Holy Shield is active", syn_title:"<br>Smite Receives Bonuses From:<br>", syn_text:"Defiance: +8% Damage per Level", graytext:"", text:["Damage: +"," percent<br>Stun Length: "," seconds<br>Mana Cost: 4",""]},
-{data:d322, key:"322", name:"Holy Bolt", req:[], reqlvl:6, level:0, extra_levels:0, force_levels:0, style:"display: block; top: 150px; left: 326px;", description:"A bolt of Divine energy that<br>damages enemies and heals allies<br><br>Heal Duration: 1 second", syn_title:"<br>Holy Bolt Receives Bonuses From:<br>", syn_text:"Sanctuary: +35% Magic Damage per Level<br>Fist of the Heavens: +35% Magic Damage per Level<br>Prayer: +35% Life Healed per Level<br>+2 Additional Bolts while having 100+ Total Energy", graytext:"", text:["Magic Damage: ","-","<br>Heals: "," per second<br>Mana Cost: ",""]},
-{data:d331, key:"331", name:"Zeal", req:[20], reqlvl:12, level:0, extra_levels:0, force_levels:0, style:"display: block; top: 218px; left: 266px;", description:"Allows you to attack multiple adjacent enemies<br>with a single attack<br><br>Deals 100% of Weapon Damage", syn_title:"<br>Zeal Receives Bonuses From:<br>", syn_text:"Sacrifice: +10% Damage per Level", graytext:"", text:["Attack Bonus: +"," percent<br>Damage: +"," percent<br>"," hits<br>Mana Cost: 2",""]},
-{data:d333, key:"333", name:"Charge", req:[21], reqlvl:12, level:0, extra_levels:0, force_levels:0, style:"display: block; top: 218px; left: 426px;", description:"Charge into battle and attack an enemy<br><br>Deals 100% of weapon Damage", syn_title:"<br>Charge Receives Bonuses From:<br>", syn_text:"Vigor: +26% Damage per Level<br>Might: +26% Damage per Level", graytext:"", text:["Damage: +"," percent<br>Attack Rating: +"," percent<br>Mana Cost: 8",""]},
-{data:d341, key:"341", name:"Vengeance", req:[23,20], reqlvl:18, level:0, extra_levels:0, force_levels:0, style:"display: block; top: 286px; left: 266px;", description:"Fire, lightning, and cold damage are added<br>to each successful attack", syn_title:"<br>Vengeance Receives Bonuses From:<br>", syn_text:"Resist Fire: +12% Fire Damage per Level<br>Resist Cold: +12% Cold Damage per Level<br>Resist Lightning: +12% Lightning Damage per Level<br>Salvation: +2% Elemental Damage per Level", graytext:"", text:["Damage from Weapon: ","-","<br>Fire damage: ","-","<br>Cold Damage: ","-","<br>Lightning Damage: ","-","Fire Damage: +"," percent<br>Cold Damage: +"," percent<br>Lightning Damage: +"," percent<br>Attack Rating: +"," percent<br>Mana Cost: ",""]},
-{data:d342, key:"342", name:"Blessed Hammer", req:[22], reqlvl:18, level:0, extra_levels:0, force_levels:0, style:"display: block; top: 286px; left: 366px;", description:"Summons an ethereal hammer that<br>spirals outwards damaging enemies it hits<br><br>150 percent Damage to Undead", syn_title:"<br>Blessed Hammer Receives Bonuses From:<br>", syn_text:"Blessed Aim: +14% Magic Damage per Level<br>Vigor: +14% Magic Damage per Level", graytext:"", text:["Magic Damage: ","-","<br>Mana Cost: ",""]},
-{data:d351, key:"351", name:"Conversion", req:[25,23,20], reqlvl:24, level:0, extra_levels:0, force_levels:0, style:"display: block; top: 354px; left: 366px;", description:"Converts monsters to fight against<br>other foul demons and beasts", syn_title:"", syn_text:"", graytext:"", text:["Chance to convert: "," percent<br>Duration: "," seconds<br>Mana Cost: 20",""]},
-{data:d353, key:"353", name:"Holy Shield", req:[24,26,21,22], reqlvl:24, level:0, extra_levels:0, force_levels:0, style:"display: block; top: 354px; left: 416px;", description:"Enhances your shield with divine power", syn_title:"<br>Holy Shield Receives Bonuses From:<br>", syn_text:"Defiance: +15% Defense per Level", graytext:"", text:["Smite Damage: +","-","<br>Duration: "," seconds<br>Defense Bonus: +"," percent<br>Successful Block: +"," percent<br>Mana Cost: 35",""]},
-{data:d362, key:"362", name:"Fist of the Heavens", req:[26,27,22,25,23,20], reqlvl:30, level:0, extra_levels:0, force_levels:0, style:"display: block; top: 422px; left: 326px;", description:"Lightning Strikes your target as holy bolts<br>seek out nearby enemies", syn_title:"<br>Fist of the Heavens Receives Bonuses From:<br>", syn_text:"Holy Bolt: +15% Holy Bolt Damage per Level<br>Holy Shock: +8% Lightning damage per Level", graytext:"", text:["Holy Bolt Magic Damage: ","-","<br>Lightning Damage: ","-","<br>Mana Cost: ",""]},
-{data:d363, key:"363", name:"Dashing Strike", req:[28,24,26,21,22], reqlvl:30, level:0, extra_levels:0, force_levels:0, style:"display: block; top: 422px; left: 366px;", description:"Instantly dash forward to the target enemy or ally<br>stunning and damaging enemies nearby<br><br>Cooldown: 5 seconds", syn_title:"<br>Dashing Strike Receives Bonuses From:<br>", syn_text:"Smite: +12% Magic Damage per Level<br>Charge: +12% Magic Damage per Level<br>Holy Shield: +12% Magic Damage per Level", graytext:"", text:["Stun Length: "," seconds<br>Magic Damage: ","-","<br>Mana Cost: ",""]}
+{data:d311, key:"311", name:"Sacrifice", i:20, req:[], reqlvl:1, level:0, extra_levels:0, force_levels:0, style:"display: block; top: 82px; left: 336px;", description:"Increased accuracy and damage<br>at the cost of life<br><br>Deals 150% of Weapon damage<br>4 percent damage to self", syn_title:"<br>Sacrifice Receives Bonuses From:<br>", syn_text:"Redemption: +10% Damage per Level<br>Fanaticism: +5% Damage per Level", graytext:"", text:["To Attack Rating: +"," percent<br>Damage: +"," percent",""]},
+{data:d313, key:"313", name:"Smite", i:21, req:[], reqlvl:1, level:0, extra_levels:0, force_levels:0, style:"display: block; top: 82px; left: 346px;", description:"Temporarily stun your enemy<br>by bashing it with your shield<br><br>Gains additional damage while Holy Shield is active", syn_title:"<br>Smite Receives Bonuses From:<br>", syn_text:"Defiance: +8% Damage per Level", graytext:"", text:["Damage: +"," percent<br>Stun Length: "," seconds<br>Mana Cost: 4",""]},
+{data:d322, key:"322", name:"Holy Bolt", i:22, req:[], reqlvl:6, level:0, extra_levels:0, force_levels:0, style:"display: block; top: 150px; left: 326px;", description:"A bolt of Divine energy that<br>damages enemies and heals allies<br><br>Heal Duration: 1 second", syn_title:"<br>Holy Bolt Receives Bonuses From:<br>", syn_text:"Sanctuary: +35% Magic Damage per Level<br>Fist of the Heavens: +35% Magic Damage per Level<br>Prayer: +35% Life Healed per Level<br>+2 Additional Bolts while having 100+ Total Energy", graytext:"", text:["Magic Damage: ","-","<br>Heals: "," per second<br>Mana Cost: ",""]},
+{data:d331, key:"331", name:"Zeal", i:23, req:[20], reqlvl:12, level:0, extra_levels:0, force_levels:0, style:"display: block; top: 218px; left: 266px;", description:"Allows you to attack multiple adjacent enemies<br>with a single attack<br><br>Deals 100% of Weapon Damage", syn_title:"<br>Zeal Receives Bonuses From:<br>", syn_text:"Sacrifice: +10% Damage per Level", graytext:"", text:["Attack Bonus: +"," percent<br>Damage: +"," percent<br>"," hits<br>Mana Cost: 2",""]},
+{data:d333, key:"333", name:"Charge", i:24, req:[21], reqlvl:12, level:0, extra_levels:0, force_levels:0, style:"display: block; top: 218px; left: 426px;", description:"Charge into battle and attack an enemy<br><br>Deals 100% of weapon Damage", syn_title:"<br>Charge Receives Bonuses From:<br>", syn_text:"Vigor: +26% Damage per Level<br>Might: +26% Damage per Level", graytext:"", text:["Damage: +"," percent<br>Attack Rating: +"," percent<br>Mana Cost: 8",""]},
+{data:d341, key:"341", name:"Vengeance", i:25, req:[23,20], reqlvl:18, level:0, extra_levels:0, force_levels:0, style:"display: block; top: 286px; left: 266px;", description:"Fire, lightning, and cold damage are added<br>to each successful attack", syn_title:"<br>Vengeance Receives Bonuses From:<br>", syn_text:"Resist Fire: +12% Fire Damage per Level<br>Resist Cold: +12% Cold Damage per Level<br>Resist Lightning: +12% Lightning Damage per Level<br>Salvation: +2% Elemental Damage per Level", graytext:"", text:["Damage from Weapon: ","-","<br>Fire damage: ","-","<br>Cold Damage: ","-","<br>Lightning Damage: ","-","Fire Damage: +"," percent<br>Cold Damage: +"," percent<br>Lightning Damage: +"," percent<br>Attack Rating: +"," percent<br>Mana Cost: ",""]},
+{data:d342, key:"342", name:"Blessed Hammer", i:26, req:[22], reqlvl:18, level:0, extra_levels:0, force_levels:0, style:"display: block; top: 286px; left: 366px;", description:"Summons an ethereal hammer that<br>spirals outwards damaging enemies it hits<br><br>150 percent Damage to Undead", syn_title:"<br>Blessed Hammer Receives Bonuses From:<br>", syn_text:"Blessed Aim: +14% Magic Damage per Level<br>Vigor: +14% Magic Damage per Level", graytext:"", text:["Magic Damage: ","-","<br>Mana Cost: ",""]},
+{data:d351, key:"351", name:"Conversion", i:27, req:[25,23,20], reqlvl:24, level:0, extra_levels:0, force_levels:0, style:"display: block; top: 354px; left: 366px;", description:"Converts monsters to fight against<br>other foul demons and beasts", syn_title:"", syn_text:"", graytext:"", text:["Chance to convert: "," percent<br>Duration: "," seconds<br>Mana Cost: 20",""]},
+{data:d353, key:"353", name:"Holy Shield", i:28, req:[24,26,21,22], reqlvl:24, level:0, extra_levels:0, force_levels:0, effect:5, style:"display: block; top: 354px; left: 416px;", description:"Enhances your shield with divine power", syn_title:"<br>Holy Shield Receives Bonuses From:<br>", syn_text:"Defiance: +15% Defense per Level", graytext:"", text:["Smite Damage: +","-","<br>Duration: "," seconds<br>Defense Bonus: +"," percent<br>Successful Block: +"," percent<br>Mana Cost: 35",""]},
+{data:d362, key:"362", name:"Fist of the Heavens", i:29, req:[26,27,22,25,23,20], reqlvl:30, level:0, extra_levels:0, force_levels:0, style:"display: block; top: 422px; left: 326px;", description:"Lightning Strikes your target as holy bolts<br>seek out nearby enemies", syn_title:"<br>Fist of the Heavens Receives Bonuses From:<br>", syn_text:"Holy Bolt: +15% Holy Bolt Damage per Level<br>Holy Shock: +8% Lightning damage per Level", graytext:"", text:["Holy Bolt Magic Damage: ","-","<br>Lightning Damage: ","-","<br>Mana Cost: ",""]},
+{data:d363, key:"363", name:"Dashing Strike", i:30, req:[28,24,26,21,22], reqlvl:30, level:0, extra_levels:0, force_levels:0, style:"display: block; top: 422px; left: 366px;", description:"Instantly dash forward to the target enemy or ally<br>stunning and damaging enemies nearby<br><br>Cooldown: 5 seconds", syn_title:"<br>Dashing Strike Receives Bonuses From:<br>", syn_text:"Smite: +12% Magic Damage per Level<br>Charge: +12% Magic Damage per Level<br>Holy Shield: +12% Magic Damage per Level", graytext:"", text:["Stun Length: "," seconds<br>Magic Damage: ","-","<br>Mana Cost: ",""]}
 ];

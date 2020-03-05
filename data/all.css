@@ -247,3 +247,11 @@ position:absolute;
   width: 29px;
   z-index: 4;
 }
+
+.effect {
+  width: 36px;
+  height: 36px;
+  visibility: visible;
+  display: block;
+  z-index: 6;
+  }
