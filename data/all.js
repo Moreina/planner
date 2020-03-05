@@ -395,7 +395,7 @@ function addCharm(val) {
 	}
 	if (allow == 1) {
 		if (val != "Annihilus" && val != "Hellfire Torch" && val != "Gheed's Fortune") {
-			var append = "" + Math.floor((Math.random() * 999) + 1);
+			var append = "" + Math.floor((Math.random() * 999) + 1);	// generate "unique" ID for charm
 			val = val + "_" + append
 		}
 		if (nameVal == "Annihilus") { charmImage = "./images/items/charm1u.png"; }
@@ -796,7 +796,7 @@ function calculateSkillPassives(className) {
 		//if (skills[14].level > 0 || skills[14].force_levels > 0) { character.avoid_skillup = ~~skills[14].data.values[0][skills[14].level+skills[14].extra_levels]; } else { character.avoid_skillup = 0 }
 		//if (skills[16].level > 0 || skills[16].force_levels > 0) { character.evade_skillup = ~~skills[16].data.values[0][skills[16].level+skills[16].extra_levels]; } else { character.evade_skillup = 0 }
 	} else if (className == "Assassin") {
-		character.block_skillup = ~~skills[13].data.values[0][skills[13].level+skills[13].extra_levels];
+		if (skills[13].level > 0 || skills[13].force_levels > 0) { character.block_skillup = ~~skills[13].data.values[0][skills[13].level+skills[13].extra_levels]; }
 		if (skills[9].level > 0 || skills[9].force_levels > 0) {
 			character.claw_skillup[0] = ~~skills[9].data.values[0][skills[9].level+skills[9].extra_levels];
 			character.claw_skillup[1] = ~~skills[9].data.values[1][skills[9].level+skills[9].extra_levels];
