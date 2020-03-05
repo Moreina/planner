@@ -62,8 +62,8 @@ var character_necromancer = {class_name:"Necromancer", strength:15, dexterity:25
 	}
 	// Fire Golem aura?
 	if (skill.name == "Deadly Poison") {
-		result.pDamage_min = skill.data.values[1][lvl];
-		result.pDamage_max = skill.data.values[2][lvl];
+		result.pDamage_min = skill.data.values[1][lvl] * (1 + (0.10*skills[15].level + 0.10*skills[19].level));
+		result.pDamage_max = skill.data.values[2][lvl] * (1 + (0.10*skills[15].level + 0.10*skills[19].level));
 		result.pDamage_duration = 2;
 		result.enemy_pRes = skill.data.values[3][lvl];
 	}
