@@ -206,10 +206,10 @@ function equip(type, val) {
 	if (set_bonuses != "") { set = set_bonuses[0]; set_before = character[set]; }
 	if (old_set_bonuses != "") { old_set = old_set_bonuses[0]; old_set_before = character[old_set]; }
 	// if replacing an item, previous item's affixes are removed from character
-		for (old_affix in equipped[type]) {
-			character[old_affix] -= equipped[type][old_affix]
-			if (old_affix != "set_bonuses") { equipped[type][old_affix] = unequipped[old_affix] }
-		}
+	for (old_affix in equipped[type]) {
+		character[old_affix] -= equipped[type][old_affix]
+		if (old_affix != "set_bonuses") { equipped[type][old_affix] = unequipped[old_affix] }
+	}
 	// remove set bonuses from previous item
 	if (old_set_bonuses != "") {
 		old_set_after = character[old_set];
@@ -316,7 +316,6 @@ function equip(type, val) {
 	}
 	if (type == val) { document.getElementById(("dropdown_"+type)).selectedIndex = 0 }
 	calculateSkillAmounts()
-	updateEffectList()
 	updateAll()
 	checkRequirements()
 }
