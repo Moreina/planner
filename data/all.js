@@ -539,10 +539,11 @@ function updateStats() {
 	var ar = Math.floor((c.ar + (c.level-1)*c.ar_per_level + ar_addon) * (1 + c.ar_skillup/100) * (1 + c.ar_bonus/100));
 	var def = Math.floor((c.defense + (c.level-1)*c.defense_per_level + defense_addon) * (1 + c.defense_skillup/100) * (1 + c.defense_bonus/100));
 	
+	var wisp = 1+Math.round(c.wisp,0)/10;
 	var phys_min = ((1+statBonus+(c.e_damage+c.damage_bonus+weapon_skillup)/100)*((c.level-1)*c.min_damage_per_level+c.base_damage_min))+c.damage_min;
 	var phys_max = ((1+statBonus+(c.e_damage+c.damage_bonus+weapon_skillup)/100)*((c.level-1)*c.max_damage_per_level+c.base_damage_max))+c.damage_max;
-	var basic_min = Math.floor(phys_min + c.fDamage_min + c.cDamage_min + c.lDamage_min + c.mDamage_min);
-	var basic_max = Math.floor(phys_max + c.fDamage_max + c.cDamage_max + c.lDamage_max + c.mDamage_max + (c.pDamage_all+(c.pDamage_min+c.pDamage_max)/2));
+	var basic_min = Math.floor(wisp*(phys_min + c.fDamage_min + c.cDamage_min + c.lDamage_min) + c.mDamage_min);
+	var basic_max = Math.floor(wisp*(phys_max + c.fDamage_max + c.cDamage_max + c.lDamage_max) + c.mDamage_max + wisp*(c.pDamage_all+c.pDamage_max));
 	if (basic_min > 0 || basic_max > 0) { document.getElementById("basic_attack").innerHTML = basic_min + "-" + basic_max }
 	else { document.getElementById("basic_attack").innerHTML = "" }
 /*
@@ -687,11 +688,12 @@ function calculateSkillAmounts() {
 				if (s == 9) { skills[s].force_levels = character.skill_lightning_fury }
 				if (s == 4) { skills[s].force_levels = character.skill_lightning_bolt }
 			} else if (s > 19) { skills[s].extra_levels += character.skills_bows
-				if (s == 2) { skills[s].force_levels = character.oskill_multiple_shot }				
-			} else { skills[s].extra_levels += character.skills_passives
-				if (s == 10) { skills[s].force_levels = character.oskill_inner_sight }
+				if (s == 22) { skills[s].force_levels = character.oskill_multiple_shot }	
+				if (s == 28) { skills[s].force_levels = character.skill_immolation_arrow }	
 				if (s == 23 || s == 26 || s == 28) { skills[s].extra_levels += character.skills_fire_all }
 				if (s == 20 || s == 24 || s == 29) { skills[s].extra_levels += character.skills_cold_all }
+			} else { skills[s].extra_levels += character.skills_passives
+				if (s == 10) { skills[s].force_levels = character.oskill_inner_sight }
 			}
 		} else if (character.class_name == "Assassin") {
 			skills[s].extra_levels += character.skills_assassin
@@ -709,7 +711,10 @@ function calculateSkillAmounts() {
 				if (s == 8) { skills[s].force_levels = character.skill_war_cry }
 				if (s == 9) { skills[s].force_levels = character.skill_battle_command }
 			} else if (s > 17) { skills[s].extra_levels += character.skills_combat_barbarian
-			} else { skills[s].extra_levels += character.skills_masteries }
+				if (s == 22) { skills[s].force_levels = character.skill_leap }		
+			} else { skills[s].extra_levels += character.skills_masteries
+				if (s == 10) { skills[s].force_levels = character.oskill_edged_weapon_mastery }
+			}
 		} else if (character.class_name == "Druid") {
 			skills[s].extra_levels += character.skills_druid
 			if (s == 0 || s == 1 || s == 2 || s == 4 || s == 7 || s == 9 || s == 17) { skills[s].extra_levels += character.skills_fire_all }
@@ -739,6 +744,7 @@ function calculateSkillAmounts() {
 		} else if (character.class_name == "Paladin") {
 			skills[s].extra_levels += character.skills_paladin
 			if (s < 10) { skills[s].extra_levels += character.skills_defensive
+				if (s == 6) { skills[s].force_levels = character.skill_vigor }
 			} else if (s > 19) { skills[s].extra_levels += character.skills_combat_paladin
 			} else { skills[s].extra_levels += character.skills_offensive 
 				if (s == 11) { skills[s].extra_levels += character.skills_fire_all }
@@ -843,6 +849,9 @@ function calculateSkillPassives(className) {
 // 
 // ---------------------------------
 function updateEffectList() { for (let s = 0; s < skills.length; s++) { updateEffect(skills[s]); } }
+
+//function checkEffectSkill(skill) { var valid = 0; if (typeof(skill.effect) != 'undefined') { if (skill.effect > 3) { valid = 1 } } return valid }
+//function checkEffectItem(type) { var valid = 0; if (typeof(skill.effect) != 'undefined') { if (skill.effect > 3) { valid = 1 } } return valid }
 
 // 
 // ---------------------------------

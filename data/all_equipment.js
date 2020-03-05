@@ -1,11 +1,11 @@
 
 
-var equipped = { helm:{name:"none"}, armor:{name:"none"}, gloves:{name:"none"}, boots:{name:"none"}, belt:{name:"none"}, amulet:{name:"none"}, ring1:{name:"none"}, ring2:{name:"none"}, weapon:{name:"none", twoHanded:0}, offhand:{name:"none"}, charms:{name:"none"} }
+var equipped = { helm:{name:"none"}, armor:{name:"none"}, gloves:{name:"none"}, boots:{name:"none"}, belt:{name:"none"}, amulet:{name:"none"}, ring1:{name:"none"}, ring2:{name:"none"}, weapon:{name:"none", twoHanded:0}, offhand:{name:"none"}, charms:{name:"none"} };
 
 var unequipped = {name:"none", strength:0, dexterity:0, vitality:0, energy:0, life:0, mana:0, defense:0, ar:0, stamina:0, block:0,
 /* main stats		*/	fRes_max:0, cRes_max:0, lRes_max:0, pRes_max:0, mRes_max:0, fRes:0, cRes:0, lRes:0, pRes:0, mRes:0,
 /* skill tabs		*/	skills_javelins:0, skills_passives:0, skills_bows:0, skills_martial:0, skills_shadow:0, skills_traps:0, skills_warcries:0, skills_masteries:0, skills_combat_barbarian:0, skills_elemental:0, skills_shapeshifting:0, skills_summoning_druid:0, skills_summoning_necromancer:0, skills_poisonBone:0, skills_curses:0, skills_offensive:0, skills_defensive:0, skills_combat_paladin:0, skills_cold:0, skills_lightning:0, skills_fire:0, skills_amazon:0, skills_assassin:0, skills_barbarian:0, skills_druid:0, skills_necromancer:0, skills_paladin:0, skills_sorceress:0, skills_fire_all:0, skills_cold_all:0, skills_poison_all:0,
-/* skills		*/	skill_lightning_bolt:0, skill_lightning_fury:0, skill_lightning_strike:0, skill_glacial_spike:0, skill_battle_command:0, skill_battle_orders:0, skill_feral_rage:0, skill_raven:0, skill_summon_mastery:0, skill_flesh_offering:0, skill_fists_of_ember:0, skill_lightning_mastery:0, skill_fire_mastery:0, skill_cold_mastery:0, skill_energy_shield:0, skill_static_field:0, skill_lightning_surge:0, skill_frozen_orb:0, skill_hydra:0, skill_bone_spear:0, skill_bone_armor:0, skill_desecrate:0, skill_deadly_poison:0, skill_grizzly:0, skill_dire_wolf:0, skill_oak_sage:0, skill_war_cry:0, skill_grim_ward:0, 
+/* skills		*/	skill_lightning_bolt:0, skill_lightning_fury:0, skill_lightning_strike:0, skill_glacial_spike:0, skill_battle_command:0, skill_battle_orders:0, skill_feral_rage:0, skill_raven:0, skill_summon_mastery:0, skill_flesh_offering:0, skill_fists_of_ember:0, skill_lightning_mastery:0, skill_fire_mastery:0, skill_cold_mastery:0, skill_energy_shield:0, skill_static_field:0, skill_lightning_surge:0, skill_frozen_orb:0, skill_hydra:0, skill_bone_spear:0, skill_bone_armor:0, skill_desecrate:0, skill_deadly_poison:0, skill_grizzly:0, skill_dire_wolf:0, skill_oak_sage:0, skill_war_cry:0, skill_grim_ward:0, skill_leap:0, skill_vigor:0, skill_immolation_arrow:0, 
 /* open skills		*/	oskill_warp:0, oskill_ball_lightning:0, oskill_feral_rage:0, oskill_lycanthropy:0, oskill_werewolf:0, oskill_hydra:0, oskill_multiple_shot:0, oskill_desecrate:0, oskill_shiver_armor:0, oskill_inner_sight:0, oskill_fire_ball:0, oskill_fire_wall:0, oskill_meteor:0, oskill_fire_mastery:0, // oskill_frigerate:0, oskill_edged_weapon_mastery:0, oskill_cold_mastery:0, oskill_flame_dash:0, 
 /* stats		*/	cdr:0, fcr:0, fbr:0, fhr:0, frw:0, ias:0, pierce:0, cblow:0, dstrike:0, cstrike:0, owounds:0, fDamage:0, cDamage:0, lDamage:0, pDamage:0, fPierce:0, cPierce:0, lPierce:0, pPierce:0, pdr:0, damage_reduced:0, mDamage_reduced:0, mf:0, gf:0, life_leech:0, mana_leech:0, life_per_hit:0, mana_per_hit:0, life_per_ranged_hit:0, mana_per_ranged_hit:0, fAbsorb:0, cAbsorb:0, lAbsorb:0, mAbsorb:0, fAbsorb_flat:0, cAbsorb_flat:0, lAbsorb_flat:0, mAbsorb_flat:0, 
 /* stats (indirect)	*/	all_skills:0, all_attributes:0, all_res:0, velocity:0, max_life:0, max_mana:0, damage_bonus:0, defense_bonus:0, ar_bonus:0, 
@@ -16,8 +16,8 @@ var unequipped = {name:"none", strength:0, dexterity:0, vitality:0, energy:0, li
 /* other, boolean	*/	itd:0, pmh:0, cbf:0, peace:0, knockback:0, half_freeze_duration:0,
 /* item qualities	*/	indestructible:0, req_reduced:0, autorepair:0, autoreplenish:0, stack_size:0, sockets:0, e_def:0, group:"", tier:0, type:"", def_low:0, def_high:0, durability:0, max_sockets:0, upgrade:"", downgrade:"", 
 /* sets			*/	set_IK:0, set_Mav:0, set_Gris:0, set_TO:0, set_TR:0, set_Nat:0, set_Ald:0, set_Disciple:0, set_Angelic:0, set_Cathan:0, set_Cow:0, set_Brethren:0, set_Hwanin:0, set_Naj:0, set_Orphan:0, set_Sander:0, set_Sazabi:0, set_Arcanna:0, set_Arctic:0, set_Berserker:0, set_Civerb:0, set_Cleglaw:0, set_Death:0, set_Hsarus:0, set_Infernal:0, set_Iratha:0, set_Isenhart:0, set_Milabrega:0, set_Sigon:0, set_Tancred:0, set_Vidala:0,
-/* charges		*/	charges_poison_creeper:0, charges_oak_sage:0, charges_iron_maiden:0, charges_iron_golem:0, charges_spirit_of_barbs:0, charges_blood_golem:0, 
-/* misc			*/	bonus_corpse_explosion:0, skill_random_sorc:0, max_stamina:0, thorns_reflect:0, absorb:0, curse_length_reduced:0, enemy_defense:0, slow_enemies:0, hammer_bonus:0, skeleton_bonus:0, stun_length:0, charge_ember:0, charge_thunder:0, charge_ice:0, 
+/* charges		*/	charges_poison_creeper:0, charges_oak_sage:0, charges_wolverine:0, charges_iron_golem:0, charges_iron_maiden:0, charges_spirit_of_barbs:0, charges_blood_golem:0, 
+/* misc			*/	bonus_corpse_explosion:0, skill_random_sorc:0, max_stamina:0, thorns_reflect:0, absorb:0, curse_length_reduced:0, enemy_defense:0, slow_enemies:0, hammer_bonus:0, skeleton_bonus:0, stun_length:0, charge_ember:0, charge_thunder:0, charge_ice:0, wisp:0, 
 };
 
 var equipment = {
@@ -35,13 +35,29 @@ var equipment = {
 {only:"druid", set_Ald:1, name:"Aldur's Stony Gaze", req_strength:56, req_level:36, defense:90, fhr:25, mana_regen:17, cRes:50, light_radius:5, sockets:2, base:"Hunter's Guise", set_bonuses:["set_Ald",{},{energy:15},{energy:15},{energy:15}]},
 {only:"barbarian", rw:1, name:"Delirium ­ ­ - ­ ­ Lion Helm", req_strength:73, req_level:51, defense:261, all_skills:2, skill_war_cry:3, skill_battle_orders:3, skill_grim_ward:3, vitality:10, gf:50, mf:25, base:"Lion Helm"},		// also has other ctc effects, and Attract charges
 {only:"druid", rw:1, name:"Delirium ­ ­ - ­ ­ Griffon Headdress", req_strength:50, req_level:51, defense:261, all_skills:2, skill_grizzly:3, skill_dire_wolf:3, skill_oak_sage:3, vitality:10, gf:50, mf:25, base:"Griffon Headdress"},		// also has other ctc effects, and Attract charges
+{name:"Biggin's Bonnet", req_level:3, defense:14, e_damage:30, ar:30, mana:15, life:15, base:"Cap"},
+{name:"Tarnhelm", req_strength:15, req_level:15, all_skills:1, mf:50, gf:75, base:"Skull Cap"},
+{name:"Coif of Glory", req_strength:26, req_level:14, defense:10, thorns_lightning:7, blind_on_hit:1, lRes:15, missile_defense:100, base:"Helm"},
+{name:"Duskdeep", req_strength:41, req_level:17, defense:20, e_def:50, damage_reduced:7, all_res:15, damage_max:8, light_radius:-2, base:"Full Helm"},
+{name:"Howltusk", req_strength:63, req_level:25, e_def:80, damage_to_mana:35, mDamage_reduced:2, thorns:3, knockback:1, flee_on_hit:25, base:"Great Helm"},
+{name:"The Face of Horror", req_strength:23, req_level:20, defense:25, damage_vs_undead:50, flee_on_hit:50, all_res:10, strength:20, base:"Mask"},
+{name:"Undead Crown", req_strength:55, req_level:29, defense:40, e_def:60, damage_vs_undead:50, ar_vs_undead:100, half_freeze:1, life_leech:5, pRes:50, skill_summon_mastery:3, base:"Crown"},
+{name:"Wormskull", req_strength:25, req_level:21, skills_necromancer:1, pDamage_all:80, pDamage_duration:8, life_leech:5, pRes:25, mana:10, base:"Bone Helm"},
 {name:"Peasant Crown", req_strength:20, req_level:28, e_def:100, all_skills:1, frw:15, life_replenish:12, energy:20, vitality:20, base:"War Hat"},
 {name:"Rockstopper", req_strength:43, req_level:31, e_def:220, pdr:10, fhr:30, cRes:40, fRes:50, lRes:40, vitality:15, base:"Sallet"},
+{name:"Stealskull", req_strength:59, req_level:35, e_def:400, ias:10, fhr:10, life_leech:5, mana_leech:5, mf:50, base:"Casque"},
+{name:"Darksight Helm", req_strength:82, req_level:38, defense_per_level:2, cbf:1, fRes:40, mana_leech:5, light_radius:-4, base:"Basinet"},	// 6% ctc level 3 Dim Vision when struck, level 5 Cloak of Shadows (30 charges)
+{name:"Valkyrie Wing", req_strength:115, req_level:44, e_def:200, skills_amazon:2, frw:20, fhr:20, mana_per_kill:4, base:"Winged Helm"},
+{name:"Blackhorn's Face", req_strength:55, req_level:41, d_def:220, slows_target:20, thorns_lightning:25, pmh:1, lAbsorb_flat:20, lRes:15, base:"Death Mask"},
+{name:"Crown of Thieves", req_strength:103, req_level:49, e_def:200, life_leech:12, fRes:33, mana:35, life:50, dexterity:25, gf:100, base:"Grand Crown"},
 {name:"Vampire Gaze", req_strength:58, req_level:41, e_def:100, life_leech:8, mana_leech:8, pdr:20, slower_stam_drain:15, cDamage_min:6, cDamage_max:22, mDamage_reduced:15, base:"Grim Helm"},
 {name:"Harlequin Crest (Shako)", req_strength:50, req_level:62, mf:50, all_skills:2, life_per_level:1.5, mana_per_level:1.5, pdr:10, all_attributes:2, base:"Shako"},
-{name:"Andariel's Visage", req_strength:102, req_level:83, e_def:150, all_skills:2, ias:20, life_leech:10, strength:30, fRes:-30, pRes:70, pRes_max:10, base:"Demonhead"},
+{name:"Steel Shade", req_strength:109, req_level:62, e_def:130, ias:15, life_replenish:18, mana_leech:8, fAbsorb_flat:11, life_per_hit:89, base:"Armet"},
+{name:"Veil of Steel", req_strength:192, req_level:73, defense:140, e_def:60, all_res:50, strength:15, vitality:15, light_radius:-4, base:"Spired Helm"},
 {name:"Nightwing's Veil", req_strength:96, req_level:67, e_def:120, all_skills:2, cDamage:15, dexterity:20, cAbsorb_flat:9, base:"Spired Helm"},
+{name:"Andariel's Visage", req_strength:102, req_level:83, e_def:150, all_skills:2, ias:20, life_leech:10, strength:30, fRes:-30, pRes:70, pRes_max:10, base:"Demonhead"},	// 15% ctc level 15 Poison Nova when struck, level 3 Venom (20 charges)
 {name:"Crown of Ages", req_strength:174, req_level:82, defense:150, e_def:50, all_skills:1, pdr:15, all_res:30, fhr:30, sockets:2, base:"Corona"},
+{name:"Giant Skull", req_strength:106, req_level:65, defense:320, cblow:10, knockback:1, strength:35, pierce:10, sockets:2, base:"Bone Visage"},
 {name:"Kira's Guardian", req_level:77, defense:120, fhr:20, cbf:1, all_res:70, base:"Tiara"},
 {name:"Griffon's Eye", req_level:76, defense:200, all_skills:1, lDamage:15, fcr:25, enemy_lRes:-20, base:"Diadem"},
 {set_TR:1, name:"Tal Rasha's Horadric Crest", req_strength:55, req_level:66, defense:45, life_leech:10, mana_leech:10, all_res:15, mana:30, life:60, base:"Death Mask", set_bonuses:["set_TR",0,{},{},{},{}]},
@@ -50,23 +66,6 @@ var equipment = {
 {set_TO:1, name:"Trang-Oul's Guise", req_strength:106, req_level:65, defense:100, fhr:25, life_replenish:5, mana:150, thorns:20, base:"Bone Visage", set_bonuses:["set_TO",{},{},{},{},{}]},
 {set_Mav:1, name:"M'avina's True Sight", req_level:64, defense:150, life_replenish:10, mana:25, ias:30, base:"Diadem", set_bonuses:["set_Mav",{},{all_skills:1},{ar_bonus:50},{all_res:25},{}]},
 {set_Sigon:1, name:"Sigon's Visor", req_strength:63, req_level:6, defense:25, mana:30, base:"Great Helm", set_bonuses:["set_Sigon",{},{ar_per_level:8},{},{},{},{}]},
-/*
-{name:"Biggin's Bonnet", req_strength:0, req_level:0, defense:0, base:"Cap"}
-{name:"Tarnhelm", req_strength:0, req_level:0, defense:0, base:"Skull Cap"}
-{name:"Coif of Glory", req_strength:0, req_level:0, defense:0, base:"Helm"}
-{name:"Duskdeep", req_strength:0, req_level:0, defense:0, base:"Full Helm"}
-{name:"Howltusk", req_strength:0, req_level:0, defense:0, base:"Great Helm"}
-{name:"The Face of Horror", req_strength:0, req_level:0, defense:0, base:"Mask"}
-{name:"Undead Crown", req_strength:0, req_level:0, defense:0, base:"Crown"}
-{name:"Wormskull", req_strength:0, req_level:0, defense:0, base:"Bone Helm"}
-{name:"Stealskull", req_strength:0, req_level:0, defense:0, base:"Casque"}
-{name:"Darksight Helm", req_strength:0, req_level:0, defense:0, base:"Basinet"}
-{name:"Blackhorn's Face", req_strength:0, req_level:0, defense:0, base:"Death Mask"}
-{name:"Crown of Thieves", req_strength:0, req_level:0, defense:0, base:"Grand Crown"}
-{name:"Steel Shade", req_strength:0, req_level:0, defense:0, base:"Armet"}
-{name:"Valkyrie Wing", req_strength:0, req_level:0, defense:0, base:"Winged Helm"}
-{name:"Veil of Steel", req_strength:0, req_level:0, defense:0, base:"Spired Helm"}
-*/
 	],
     armor: [
 {name:"Armor"},
@@ -126,37 +125,40 @@ var equipment = {
 	],
     gloves: [
 {name:"Gloves"},
+{name:"The Hand of Broc", req_level:5, defense:10, e_def:20, life_leech:3, mana_leech:3, pRes:10, mana:20, base:"Leather Gloves"},
+{name:"Bloodfist", req_level:9, defense:10, e_def:20, ias:10, fhr:30, life:40, damage_min:5, base:"Heavy Gloves"},
 {name:"Chance Guards", req_strength:25, req_level:15, defense:15, e_def:30, ar:25, mf:40, gf:200, light_radius:2, base:"Chain Gloves"},
 {name:"Magefist", req_strength:45, req_level:23, defense:10, e_def:30, skills_fire_all:1, fcr:20, mana_regen:25, fDamage_min:1, fDamage_max:6, base:"Light Gauntlets"},
 {name:"Frostburn", req_strength:60, req_level:29, defense:30, e_def:20, max_mana:35, damage_bonus:5, cDamage_min:1, cDamage_max:6, base:"Gauntlets"},
+{name:"Venom Grip", req_strength:20, req_level:29, defense:25, e_def:160, cblow:5, pDamage_all:60, pDamage_duration:4, life_leech:5, pRes_max:5, pRes:30, base:"Demonhide Gloves"},
+{name:"Gravepalm", req_strength:20, req_level:32, e_def:180, damage_vs_undead:200, ar_vs_undead:200, energy:10, strength:10, base:"Sharkskin Gloves"},
 {name:"Ghoulhide", req_strength:58, req_level:36, e_def:190, ar_vs_undead_per_level:8, damage_vs_undead_per_level:2, mana_leech:5, life:20, base:"Heavy Bracers"},
-{name:"Dracul's Grasp", req_strength:50, req_level:76, e_def:120, strength:15, life_per_kill:10, owounds:25, life_leech:10, base:"Vampirebone Gloves"},
-{name:"Soul Drainer", req_strength:106, req_level:74, e_def:120, pierce:7, life_leech:7, mana_leech:7, monster_defense_per_hit:-50, dexterity:7, base:"Vambraces"},
+{name:"Lava Gout", req_strength:88, req_level:42, e_def:200, half_freeze:1, fDamage_min:13, fDamage_max:46, ias:20, fRes:24, base:"Battle Gauntlets"},	// 2% ctc Level 10 Enchant on striking	(EFFECT)
+{name:"Hellmouth", req_strength:110, req_level:47, e_def:200, fAbsorb_flat:15, fDamage_min:15, fDamage_max:72, base:"War Gauntlets"},	// 4% ctc level 12 Firestorm on striking, 2% ctc level 4 Meteor on striking
+{name:"Dracul's Grasp", req_strength:50, req_level:76, e_def:120, strength:15, life_per_kill:10, owounds:25, life_leech:10, base:"Vampirebone Gloves"},	// 5% ctc level 10 Life Tap on striking
+{name:"Soul Drainer", req_strength:106, req_level:74, e_def:120, pierce:7, life_leech:7, mana_leech:7, monster_defense_per_hit:-50, dexterity:7, base:"Vambraces"},	// level 8 Weaken (34 charges)
+{name:"Steelrend", req_strength:185, req_level:70, defense:210, e_damage:60, cblow:10, strength:20, base:"Ogre Gauntlets"},
 {set_IK:1, name:"Immortal King's Forge", req_strength:110, req_level:30, defense:65, dexterity:20, strength:20, base:"War Gauntlets", set_bonuses:["set_IK",{},{ias:25},{defense:120},{life_leech:10},{mana_leech:10},{freezes_target:2}]},
 {set_Mav:1, name:"M'avina's Icy Clutch", req_strength:88, req_level:32, defense:50, cDamage_min:6, cDamage_max:18, half_freeze:1, gf:56, strength:10, dexterity:15, base:"Battle Gauntlets", set_bonuses:["set_Mav",{},{},{},{cDamage_min:131, cDamage_max:252},{cDamage:20}]},
 {set_TO:1, name:"Trang-Oul's Claws", req_strength:58, req_level:45, defense:30, skills_curses:2, fcr:20, cRes:30, pDamage:25, base:"Heavy Bracers", set_bonuses:["set_TO",{},{},{},{},{}]},
 {set_Disciple:1, name:"Laying of Hands", req_strength:50, req_level:63, defense:25, ias:20, fRes:50, damage_vs_demons:250, set_bonuses:["set_Disciple",{},{},{},{},{}]},
 {set_Sigon:1, name:"Sigon's Gage", req_strength:60, req_level:6, ar:20, strength:10, base:"Gauntlets", set_bonuses:["set_Sigon",{},{ias:30},{},{},{},{}]},
 {rarity:"magic", only:"amazon", name:"Lancer's Mitts of Quickness", req_strength:50, req_level:42, skills_javelins:3, ias:40, base:"Bramble Mitts"},
-/*
-{name:"The Hand of Broc", req_strength:0, req_level:0, defense:0, base:"Leather Gloves"},
-{name:"Bloodfist", req_strength:0, req_level:0, defense:0, base:"Heavy Gloves"},
-{name:"Venom Grip", req_strength:0, req_level:0, defense:0, base:"Demonhide Gloves"},
-{name:"Gravepalm", req_strength:0, req_level:0, defense:0, base:"Sharkskin Gloves"},
-{name:"Lava Gout", req_strength:0, req_level:0, defense:0, base:"Battle Gauntlets"},
-{name:"Hellmouth", req_strength:0, req_level:0, defense:0, base:"War Gauntlets"},
-{name:"Steelrend", req_strength:0, req_level:0, defense:0, base:"Ogre Gauntlets"},
-*/
 	],
     boots: [
 {name:"Boots"},
+{name:"Hotspur", req_level:5, defense:6, e_def:20, kick_min:3, fRes:45, fRes_max:15, fDamage_min:3, fDamage_max:6, life:15, base:"Boots"},
+{name:"Gorefoot", req_strength:18, req_level:9, defense:12, e_def:30, kick_min:4, frw:20, mana_leech:2, thorns:2, skill_leap:2, base:"Heavy Boots"},
+{name:"Treads of Cthon", req_strength:30, req_level:15, defense:12, e_def:40, kick_min:6, slower_stam_drain:50, frw:30, missile_defense:50, life:10, base:"Chain Boots"},
+{name:"Goblin Toe", req_strength:50, req_level:22, defense:15, e_def:60, kick_min:8, cblow:25, light_radius:-1, damage_reduced:1, mDamage_reduced:1, base:"Light Plated Boots"},
+{name:"Tearhaunch", req_strength:70, req_level:29, defense:35, e_def:80, kick_min:10, frw:20, all_res:10, dexterity:5, strength:5, skill_vigor:2, base:"Greaves"},
 {name:"Infernostride", req_strength:20, req_level:29, defense:15, e_def:150, kick_min:26, frw:20, fRes:30, fRes_max:10, fire_min:12, fire_max:33, gf:70, light_radius:2, base:"Demonhide Boots"},
 {name:"Waterwalk", req_strength:47, req_level:32, e_def:210, kick_min:28, frw:20, dexterity:15, fRes_max:5, stamina:40, life:65, missile_defense:100, heal_stam:50, base:"Sharkskin Boots"},
 {name:"Silkweave", req_strength:65, req_level:36, e_def:190, kick_min:32, frw:30, mana_per_kill:5, max_mana:10, missile_defense:200, base:"Mesh Boots"},
 {name:"War Traveler", req_strength:95, req_level:42, e_def:190, kick_min:37, frw:25, vitality:10, strength:10, mf:50, damage_min:15, damage_max:25, thorns:10, slower_stam_drain:40, base:"Battle Boots"},
 {name:"Gore Rider", req_strength:94, req_level:47, e_def:200, kick_min:39, frw:30, owounds:10, cblow:15, dstrike:15, stamina:20, base:"War Boots"},
 {name:"Sandstorm Trek", req_strength:91, req_level:64, e_def:170, kick_min:60, frw:20, fhr:20, stamina_per_level:1, strength:15, vitality:15, slower_stam_drain:50, pRes:70, base:"Scarabshell Boots"},
-{name:"Marrowwalk", req_strength:118, req_level:66, e_def:200, kick_min:69, frw:20, e_def:200, skill_summon_mastery:2, skill_flesh_offering:1, skill_bone_offering:0, strength:20, dexterity:17, mana_regen:10, heal_stam:10, half_freeze:1, base:"Boneweave Boots"},
+{name:"Marrowwalk", req_strength:118, req_level:66, e_def:200, kick_min:69, frw:20, e_def:200, skill_summon_mastery:2, skill_flesh_offering:1, skill_bone_offering:0, strength:20, dexterity:17, mana_regen:10, heal_stam:10, half_freeze:1, base:"Boneweave Boots"},	// level 12 Life Tap (10 charges)
 {name:"Shadow Dancer", req_strength:167, req_level:71, e_def:100, kick_min:83, skills_shadow:2, frw:30, fhr:30, dexterity:25, base:"Myrmidon Greaves"},
 {set_IK:1, name:"Immortal King's Pillar", req_strength:125, req_level:31, defense:75, kick_min:39, frw:40, ar:110, life:44, base:"War Boots", set_bonuses:["set_IK",{},{mf:25},{skills_combat_barbarian:2},{defense:140},{half_freeze:1},{}]},
 {set_Nat:1, name:"Natalya's Soul", req_strength:65, req_level:25, defense:125, kick_min:23, frw:40, heal_stam_per_level:0.25, cRes:25, lRes:25, base:"Mesh Boots", set_bonuses:["set_Nat",{},{},{},{}]},
@@ -165,36 +167,27 @@ var equipment = {
 {set_Cow:1, name:"Cow King's Hooves", req_strength:18, req_level:13, defense:35, kick_min:4, frw:30, fDamage_min:25, fDamage_max:35, dexterity:20, mf:25, base:"Heavy Boots", set_bonuses:["set_Cow",{},{},{}]},
 {set_Sigon:1, name:"Sigon's Sabot", req_strength:70, req_level:6, kick_min:10, frw:20, cRes:40, base:"Greaves", set_bonuses:["set_Sigon",{},{ar:50},{mf:50},{},{},{}]},
 {rarity:"rare", name:"High Resistance Boots", req_level:37, kick_min:3, frw:30, fRes:40, cRes:40, lRes:40, mf:25, gf:80, base:"Boots"},
-/*
-{name:"Hotspur", req_strength:0, req_level:0, defense:0, kick_min:3, base:"Boots"},
-{name:"Gorefoot", req_strength:0, req_level:0, defense:0, kick_min:4, base:"Heavy Boots"},
-{name:"Treads of Cthon", req_strength:0, req_level:0, defense:0, kick_min:6, base:"Chain Boots"},
-{name:"Goblin Toe", req_strength:0, req_level:0, defense:0, kick_min:8, base:"Light Plated Boots"},
-{name:"Tearhaunch", req_strength:0, req_level:0, defense:0, kick_min:10, base:"Greaves"},
-*/
 	],
     belt: [
 {name:"Belt"},
+{name:"Lenymo", req_level:7, mana_regen:30, all_res:5, mana:15, light_radius:1, base:"Sash"},
+{name:"Snakecord", req_level:12, defense:10, e_def:30, life_replenish:10, pRes:25, poison_length_reduced:50, pDamage_all:12, pDamage_duration:3, base:"Light Belt"},
+{name:"Nightsmoke", req_strength:25, req_level:20, defense:15, e_def:50, damage_to_mana:50, damage_reduced:2, all_res:10, mana:20, base:"Belt"},
 {name:"Goldwrap", req_strength:45, req_level:27, defense:25, e_def:60, ias:10, mf:30, gf:80, light_radius:2, base:"Heavy Belt"},
+{name:"Bladebuckle", req_strength:60, req_level:29, defense:30, e_def:100, fhr:30, dexterity:10, strength:5, damage_reduced:3, thorns:8, base:"Plated Belt"},
 {name:"String of Ears", req_strength:20, req_level:29, defense:15, e_def:180, life_leech:8, pdr:15, mDamage_reduced:15, base:"Demonhide Sash"},
-{name:"Verdungo's Hearty Cord", req_strength:106, req_level:63, e_def:140, pdr:15, fhr:10, vitality:40, life_replenish:13, stamina:120, base:"Mithril Coil"},
 {name:"Razortail", req_strength:20, req_level:32, defense:15, e_def:150, damage_max:10, pierce:33, dexterity:15, thorns_per_level:1, base:"Sharkskin Belt"},
-{name:"Snowclash", req_strength:88, req_level:42, e_def:170, skills_cold_all:1, cAbsorb_flat:15, skill_glacial_spike:3, cRes_max:5, base:"Battle Belt"},
-{name:"Thundergod's Vigor", req_strength:110, req_level:47, e_def:200, lAbsorb_flat:20, lRes_max:10, strength:20, vitality:20, skill_lightning_fury:3, skill_lightning_strike:3, lDamage_min:1, lDamage_max:50, base:"War Belt"},
-{name:"Arachnid Mesh", req_strength:50, req_level:80, e_def:120, all_skills:1, fcr:20, max_mana:5, slow_target:10, base:"Spiderweb Sash"},
+{name:"Gloom's Trap", req_strength:58, req_level:36, e_def:150, mana_leech:5, max_mana:15, mana_regen:15, vitality:15, light_radius:-3, base:"Mesh Belt"},
+{name:"Snowclash", req_strength:88, req_level:42, e_def:170, skills_cold_all:1, cAbsorb_flat:15, skill_glacial_spike:3, cRes_max:5, base:"Battle Belt"},	// 5% ctc level 7-19 Blizzard when struck
+{name:"Thundergod's Vigor", req_strength:110, req_level:47, e_def:200, lAbsorb_flat:20, lRes_max:10, strength:20, vitality:20, skill_lightning_fury:3, skill_lightning_strike:3, lDamage_min:1, lDamage_max:50, base:"War Belt"},	// 5% ctc level 7 Fist of the Heavens when struck
+{name:"Arachnid Mesh", req_strength:50, req_level:80, e_def:120, all_skills:1, fcr:20, max_mana:5, slow_target:10, base:"Spiderweb Sash"},	// level 3 Venom (11 charges)	(EFFECT)
+{name:"Nosferatu's Coil", req_strength:50, req_level:51, slows_target:10, mana_per_kill:2, life_leech:7, strength:15, ias:10, light_radius:-3, base:"Vampirefang Belt"},
+{name:"Verdungo's Hearty Cord", req_strength:106, req_level:63, e_def:140, pdr:15, fhr:10, vitality:40, life_replenish:13, stamina:120, base:"Mithril Coil"},
 {set_IK:1, name:"Immortal King's Detail", req_strength:110, req_level:29, defense:36, lRes:31, fRes:28, strength:25, base:"War Belt", set_bonuses:["set_IK",{},{defense:105},{fhr:25},{defense:52},{pdr:20},{skills_masteries:2}]},	// set bonus (defense:193) does not include enhanced defense
 {set_TR:1, name:"Tal Rasha's Fine-Spun Cloth", req_strength:47, req_level:53, req_reduced:20, damage_to_mana:37, mana:30, dexterity:20, mf:15, base:"Mesh Belt", set_bonuses:["set_TR",0,{defense:60},{fcr:10},{},{}]},
 {set_Mav:1, name:"M'avina's Tenet", req_strength:20, req_level:45, defense:50, frw:20, light_radius:5, mana_leech:5, base:"Sharkskin Belt", set_bonuses:["set_Mav",{},{},{},{all_res:25},{}]},
 {set_TO:1, name:"Trang-Oul's Girth", req_strength:91, req_level:62, defense:100, req_reduced:40, cbf:1, life_replenish:5, mana:50, stamina:30, life:66, base:"Troll Belt", set_bonuses:["set_TO",{},{},{cRes:40},{},{}]},
 {set_Sigon:1, name:"Sigon's Wrap", req_strength:60, req_level:6, fRes:20, life:20, base:"Plated Belt", set_bonuses:["set_Sigon",{},{defense_per_level:2},{},{},{},{}]},
-/*
-{name:"Lenymo", req_strength:0, req_level:0, defense:0, base:"Sash"},
-{name:"Snakecord", req_strength:0, req_level:0, defense:0, base:"Light Belt"},
-{name:"Nightsmoke", req_strength:0, req_level:0, defense:0, base:"Belt"},
-{name:"Bladebuckle", req_strength:0, req_level:0, defense:0, base:"Plated Belt"},
-{name:"Gloom's Trap", req_strength:0, req_level:0, defense:0, base:"Mesh Belt"},
-{name:"Nosferatu's Coil", req_strength:0, req_level:0, defense:0, base:"Vampirefang Belt"},
-*/
 	],
     amulet: [
 {name:"Amulet"},
@@ -227,24 +220,22 @@ var equipment = {
 //{rarity:"magic", name:"Corrupted +skills #1", req_level:60, all_skills:1, skills_amazon:2, skills_martial:3, skills_warcries:3, skills_elemental:3, skills_summoning_necromancer:3, skills_defensive:3, skills_cold:3},
 //{rarity:"magic", name:"Corrupted +skills #2", req_level:60, all_skills:1, skills_passives:3, skills_shadow:3, skills_masteries:3, skills_shapeshifting:3, skills_poisonBone:3, skills_offensive:3, skills_lightning:3},
 //{rarity:"magic", name:"Corrupted +skills #3", req_level:60, all_skills:1, skills_amazon:2, skills_traps:3, skills_barbarian:2, skills_summoning_druid:3, skills_curses:3, skills_combat_paladin:3, skills_fire:3},
-{name:"Mara's Kaleidoscope", req_level:67, all_skills:2, all_res:30, all_attributes:5},
-{name:"Highlord's Wrath", req_level:65, all_skills:1, ias:20, dstrike_per_level:0.375, lRes:35, lDamage_min:1, lDamage_max:30, thorns:15},
-{name:"Seraph's Hymn", req_level:65, all_skills:2, skills_defensive:2, damage_vs_demons:50, damage_vs_undead:50, ar_vs_demons:250, ar_vs_undead:250, light_radius:2},
-{name:"The Cat's Eye", req_level:50, frw:30, ias:20, defense:100, dexterity:25, missile_defense:100},
-{name:"Metalgrid", req_level:81, ar:450, all_res:35, defense:350, charges_iron_maiden:12, charges_iron_golem:22},
-{name:"The Rising Sun", req_level:65, skills_fire_all:2, fAbsorb_flat_per_level:0.75, fDamage_min:24, fDamage_max:48, life_replenish:10, light_radius:4},
+{name:"Nokozan Relic", req_level:10, fhr:20, fRes:50, fRes_max:10, fDamage_min:3, fDamage_max:6, light_radius:3},
 {name:"The Eye of Etlich", req_level:15, all_skills:1, life_leech:7, cDamage_min:2, cDamage_max:5, missile_defense:40, light_radius:5},
+{name:"The Mahim-Oak Curio", req_level:25, defense:10, defense_bonus:10, ar_bonus:10, all_res:10, all_attributes:10},
+{name:"Saracen's Chance", req_level:47, all_res:25, all_attributes:12},	// 10% ctc level 2 Iron Maiden when struck
+{name:"Crescent Moon", req_level:50, damage_to_mana:10, mana:45, life_leech:6, mana_leech:15, mDamage_reduced:10, light_radius:-2},
+{name:"The Cat's Eye", req_level:50, frw:30, ias:20, defense:100, dexterity:25, missile_defense:100},
+{name:"Atma's Scarab", req_level:60, ar_bonus:20, pDamage_all:40, pDamage_duration:4, pRes:75, thorns:5, light_radius:3},	// 5% chance to cast Level 2 Amplified Damage on Striking
+{name:"The Rising Sun", req_level:65, skills_fire_all:2, fAbsorb_flat_per_level:0.75, fDamage_min:24, fDamage_max:48, life_replenish:10, light_radius:4},	// 2% ctc level 13-19 Meteor when struck
+{name:"Seraph's Hymn", req_level:65, all_skills:2, skills_defensive:2, damage_vs_demons:50, damage_vs_undead:50, ar_vs_demons:250, ar_vs_undead:250, light_radius:2},
+{name:"Highlord's Wrath", req_level:65, all_skills:1, ias:20, dstrike_per_level:0.375, lRes:35, lDamage_min:1, lDamage_max:30, thorns:15},
+{name:"Mara's Kaleidoscope", req_level:67, all_skills:2, all_res:30, all_attributes:5},
+{name:"Metalgrid", req_level:81, ar:450, all_res:35, defense:350, charges_iron_maiden:12, charges_iron_golem:22},	// (potential EFFECT)
 {set_TR:1, name:"Tal Rasha's Adjudication", req_level:67, skills_sorceress:2, lRes:33, mana:42, life:50, lDamage_min:3, lDamage_max:32, set_bonuses:["set_TR",0,{},{},{fcr:10},{}]},
 {set_Disciple:1, name:"Telling of Beads", req_level:30, all_skills:1, pRes:50, cRes:18, thorns:10, set_bonuses:["set_Disciple",{},{},{},{},{}]},
 {set_Cathan:1, name:"Cathan's Sigil", req_level:11, fhr:10, thorns_lightning:5, set_bonuses:["set_Cathan",{},{ar:50},{mf:25},{},{}]},
 {set_Angelic:1, name:"Angelic Wings", req_level:12, damage_to_mana:20, light_radius:3, set_bonuses:["set_Angelic",{},{life:75},{all_skills:1},{}]},
-/*
-{name:"Atma's Scarab", req_level:0, },
-{name:"Crescent Moon", req_level:0, },
-{name:"Nokozan Relic", req_level:0, },
-{name:"Saracen's Chance", req_level:0, },
-{name:"The Mahim-Oak Curio", req_level:0, },
-*/
 	],
     ring1: [
 {name:"Ring"},
@@ -256,7 +247,7 @@ var equipment = {
 {name:"Raven Frost", req_level:45, ar:250, cbf:1, dexterity:20, mana:40, cAbsorb:20, cDamage_min:15, cDamage_max:45},
 {name:"The Stone of Jordan", req_level:29, all_skills:1, mana:20, max_mana:25, lDamage_min:1, lDamage_max:12},
 {name:"Bul-Kathos' Wedding Band", req_level:58, all_skills:1, life_per_level:0.5, life_leech:5, stamina:50},
-//{name:"Wisp Projector", req_level:76, lAbsorb:12, mf:20, frw:8, wisp_aura:10},	// implement wisp_aura
+{name:"Wisp Projector", req_level:76, lAbsorb:12, mf:20, frw:8, wisp:0.5},	// level 9 Heart of Wolverine (17 charges)	(EFFECT)
 {set_Cathan:0.5, name:"Cathan's Seal", req_level:11, life_leech:6, damage_reduced:2, set_bonuses:["set_Cathan",{},{strength:10},{},{},{}]},
 {set_Angelic:0.5, name:"Angelic Halo", req_level:12, life_replenish:6, life:20, set_bonuses:["set_Angelic",0,{ar_per_level:12},{mf:50},{}]},
 	],
@@ -264,13 +255,13 @@ var equipment = {
 {name:"Ring"},
 {name:"Nagelring", req_level:7, mDamage_reduced:3, ar:75, thorns:3, mf:30},
 {name:"Manald Heal", req_level:15, mana_leech:7, life_replenish:8, mana_regen:20, life:20},
-{name:"Carrion Wind", req_level:60, life_leech:9, missile_defense:160, pRes:55, damage_to_mana:10, charges_poison_creeper:21},
-{name:"Nature's Peace", req_level:69, peace:1, pmh:1, pRes:30, damage_reduced:11, charges_oak_sage:5},
+{name:"Carrion Wind", req_level:60, life_leech:9, missile_defense:160, pRes:55, damage_to_mana:10, charges_poison_creeper:21},	// 10% ctc level 10 Poison Nova when struck, 8% ctc level 13 Twister on striking
+{name:"Nature's Peace", req_level:69, peace:1, pmh:1, pRes:30, damage_reduced:11, charges_oak_sage:5},	// (EFFECT)
 {name:"Dwarf Star", req_level:45, fAbsorb:15, stamina:40, life:40, gf:100, mDamage_reduced:15, cDamage_min:15, cDamage_max:45},
 {name:"Raven Frost", req_level:45, ar:250, cbf:1, dexterity:20, mana:40, cAbsorb:20},
 {name:"The Stone of Jordan", req_level:29, all_skills:1, mana:20, max_mana:25, lDamage_min:1, lDamage_max:12},
 {name:"Bul-Kathos' Wedding Band", req_level:58, all_skills:1, life_per_level:0.5, life_leech:5, stamina:50},
-//{name:"Wisp Projector", req_level:76, lAbsorb:12, mf:20, frw:8, wisp_aura:10},	// implement wisp_aura
+{name:"Wisp Projector", req_level:76, lAbsorb:12, mf:20, frw:8, wisp:0.5, charges_wolverine:9},	// level 9 Heart of Wolverine (17 charges)	(EFFECT)
 {set_Cathan:0.5, name:"Cathan's Seal", req_level:11, life_leech:6, damage_reduced:2, set_bonuses:["set_Cathan",{},{strength:10},{},{},{}]},
 {set_Angelic:0.5, name:"Angelic Halo", req_level:12, life_replenish:6, life:20, set_bonuses:["set_Angelic",{},{ar_per_level:12},{mf:50},{}]},
 	],
@@ -298,7 +289,7 @@ var equipment = {
 {rw:1, name:"Grief ­ ­ - ­ ­ Phase Blade", req_dexterity:136, req_strength:25, req_level:59, type:"sword", ias:40, itd:1, target_defense:-25, enemy_pRes:-25, dstrike:20, pmh:1, mana_per_kill:2, life_per_kill:15, fDamage_min:5, fDamage_max:30, min_damage_per_level:3.375, max_damage_per_level:3.625, base:"Phase Blade"},
 {rw:1, name:"Breath of the Dying ­ ­ - ­ ­ War Pike", req_strength:165, req_dexterity:106, req_level:69, twoHanded:1, indestructible:1, ias:60, e_damage:400, target_defense:-25, ar:50, damage_vs_undead:200, ar_vs_undead:50, mana_leech:7, life_leech:15, pmh:1, all_attributes:30, light_radius:1, req_reduced:20, type:"Spear", base:"War Pike"},
 //{rw:1, name:"Death ­ ­ - ­ ­ Colossus Sword", req_strength:189, req_dexterity:110, req_level:68, e_damage:385, ar_bonus:20, ar:50, lDamage_min:1, lDamage_max:50, mana_leech:7, cblow:50, dstrike_per_level:0.5, light_radius:1, req_reduced:20, charges_blood_golem:22, indestructible:1, type:"sword", twoHanded:1, base:"Colossus Sword"},
-//{only:"amazon", rw:1, name:"Faith ­ ­ - ­ ­ Grand Matron Bow", req_strength:108, req_dexterity:152, req_level:65, twoHanded:1, all_skills:2, e_damage:330, itd:1, ar_bonus:300, damage_vs_undead:75, ar_vs_undead:50, fDamage_min:120, fDamage_max:120, all_res:15, gf:75, type:"bow", base:"Grand Matron Bow"},			// also has 10% reanimate as: Returned, level 15 Fanaticism aura
+//{only:"amazon", rw:1, name:"Faith ­ ­ - ­ ­ Grand Matron Bow", req_strength:108, req_dexterity:152, req_level:65, twoHanded:1, all_skills:2, e_damage:330, itd:1, ar_bonus:300, damage_vs_undead:75, ar_vs_undead:50, fDamage_min:120, fDamage_max:120, all_res:15, gf:75, type:"bow", base:"Grand Matron Bow"},			// also has 10% reanimate as: Returned, level 15 Fanaticism aura	(EFFECT?)
 //{only:"sorceress", rw:1, name:"Memory ­ ­ - ­ ­ Quarterstaff", req_strength:25, req_level:37, skills_sorceress:3, fcr:33, damage_min:9, target_defense:-25, skill_energy_shield:6, skill_static_field:2, skill_lightning_surge:3, skill_lightning_mastery:3, defense_bonus:50, vitality:10, energy:10, max_mana:20, twoHanded:1, type:"staff", base:"Quarterstaff"},			// also has Lightning Surge deals 35% extra damage as physical
 {only:"sorceress", rw:1, name:"Plague ­ ­ - ­ ­ Jared's Stone", req_level:67, all_skills:2, skill_frozen_orb:3, skill_cold_mastery:3, skill_hydra:3, damage_vs_demons:380, enemy_pRes:-23, dstrike_per_level:0.375, owounds:25, freezes_target:3, strength:10, type:"orb", base:"Jared's Stone"},		// also has level 17 cleansing aura, 25% ctc level 15 Poison Nova on striking, 20% ctc level 12 Lower Resist when struck
 {only:"necromancer", rw:1, name:"White ­ ­ - ­ ­ Ghost Wand", req_strength:25, req_level:35, skills_poisonBone:3, fcr:20, skill_bone_spear:5, skill_summon_mastery:4, skill_bone_armor:3, skill_desecrate:3, skill_deadly_poison:3, flee_on_hit:25, vitality:10, mana:13, mDamage_reduced:4, type:"wand", base:"Ghost Wand"},
@@ -309,24 +300,24 @@ var equipment = {
 {name:"Boneshade", req_strength:25, req_level:79, damage_vs_undead:50, fcr:25, skills_necromancer:2, skill_bone_spirit:2, skill_bone_spear:3, skill_bone_wall:3, skill_bone_armor:5, skill_teeth:5, type:"wand", base:"Lich Wand"},
 {name:"Death's Web", req_strength:25, req_level:66, damage_vs_undead:50, enemy_pRes:-50, mana_per_kill:12, life_per_kill:12, all_skills:2, skills_poisonBone:2, type:"wand", base:"Unearthed Wand"},
 {name:"Astreon's Iron Ward", type:"scepter", req_strength:97, req_dexterity:70, req_level:66, e_damage:290, damage_vs_undead:50, damage_min:40, damage_max:85, mDamage_min:80, mDamage_max:240, cblow:33, slow_target:25, damage_reduced:7, skills_combat_paladin:4, ias:10, bonus_ar:200, base:"Caduceus"},
+{name:"Bonesnap", req_strength:69, req_level:24, e_damage:300, damage_vs_undead:100, cblow:40, cRes:30, fRes:30, type:"hammer", twoHanded:1, base:"Maul"},
+{name:"Steeldriver", req_strength:50, req_level:29, e_damage:250, damage_vs_undead:50, ias:40, req_reduced:50, heal_stam:25, type:"hammer", twoHanded:1, base:"Great Maul"},
+{name:"Windhammer", req_strength:225, req_level:68, e_damage:230, damage_vs_undead:50, cblow:50, ias:60, type:"hammer", twoHanded:1, base:"Ogre Maul"},	// 33% ctc level 22 Twister on striking
+{name:"Earth Shifter", req_strength:253, req_level:69, e_damage:300, damage_vs_undead:50, skills_elemental:7, ias:10, cblow:33, fcr:10, type:"hammer", twoHanded:1, base:"Thunder Maul"},	// 25% ctc level 14 Fissure on striking, level 14 Volcano (30 charges)
+//{name:"The Grandfather", req_strength:189, req_dexterity:110, req_level:81, e_damage:250, max_damage_per_level:2.5, ar_bonus:50, life:80, all_attributes:20, indestructible:1, oskill_edged_weapon_mastery:3, life_regen:2, type:"sword", twoHanded:1, base:"Colossus Blade"},
+{name:"The Reaper's Toll", req_strength:114, req_dexterity:89, req_level:75, e_damage:240, itd:1, cDamage_min:4, cDamage_max:44, life_leech:15, dstrike:33, req_reduced:25, type:"polearm", twoHanded:1, base:"Thresher"},	// 33% ctc level 1 Decrepify on striking
 {name:"The Cranium Basher", twoHanded:1, req_strength:253, req_level:87, type:"hammer", cblow:75, ias:20, all_res:25, strength:25, damage_min:20, e_damage:240, damage_vs_undead:50, base:"Thunder Maul"},
 {name:"Executioner's Justice", twoHanded:1, type:"axe", req_strength:164, req_dexterity:55, req_level:75, cblow:25, ias:30, target_defense:-33, e_damage:290, base:"Glorious Axe"},
 {name:"Ribcracker", req_strength:25, req_level:31, damage_min:30, damage_max:65, e_damage:300, damage_vs_undead:50, cblow:50, ias:50, fhr:50, defense_bonus:100, defense:100, dexterity:15, twoHanded:1, base:"Quarterstaff"},
-{name:"Windforce", twoHanded:1, req_dexterity:167, req_strength:134, req_level:73, type:"bow", ias:20, mana_leech:8, strength:10, dexterity:5, knockback:1, e_damage:250, damage_max_per_level:3.125, heal_stam:30, base:"Hydra Bow"},
+{name:"Buriza-Do Kyanon", req_strength:110, req_dexterity:80, req_level:41, e_damage:200, max_damage_per_level:2.5, cDamage_min:32, cDamage_max:196, pierce:100, freezes_target:3, defense:150, dexterity:35, ias:80, twoHanded:1, type:"crossbow", base:"Ballista"},
+{name:"Goldstrike Arch", req_strength:95, req_dexterity:118, req_level:46, e_damage:250, damage_vs_demons:200, damage_vs_undead:200, ias:50, life_replenish:12, ar_bonus:150, type:"bow", twoHanded:1, base:"Gothic Bow"},	// 5% ctc level 7 Fist of the Heavens on striking
+{name:"Kuko Shakaku", req_strength:53, req_dexterity:49, req_level:33, e_damage:180, pierce:50, fDamage_min:40, fDamage_max:180, skills_bows:3, skill_immolation_arrow:3, type:"bow", twoHanded:1, base:"Cedar Bow"},	// fires explosive arrows (level 7)
+{name:"Windforce", twoHanded:1, req_dexterity:167, req_strength:134, req_level:73, type:"bow", ias:20, mana_leech:8, strength:10, dexterity:5, knockback:1, e_damage:250, max_damage_per_level:3.125, heal_stam:30, base:"Hydra Bow"},
 {set_IK:1, name:"Immortal King's Stone Crusher", twoHanded:1, type:"mace", req_strength:225, req_level:76, e_damage:200, damage_vs_demons:200, damage_vs_undead:250, ias:40, indestuctible:1, cblow:40, sockets:2, base:"Ogre Maul", set_bonuses:["set_IK",{},{fDamage_min:211, fDamage_max:397},{lDamage_min:7, lDamage_max:477},{cDamage_min:127, cDamage_max:364},{pDamage_all:204, pDamage_duration:6},{mDamage_min:250, mDamage_max:361}]},
 {set_Gris:1, name:"Griswold's Redemption", type:"scepter", req_strength:78, req_dexterity:56, req_level:66, e_damage:240, damage_vs_undead:250, req_reduced:20, ias:40, sockets:4, base:"Caduceus", set_bonuses:["set_Gris",{},{skills_combat_paladin:2},{damage_min:10, damage_max:20},{damage_min:10, damage_max:20}]},
 {set_Ald:1, name:"Aldur's Rhythm", type:"mace", req_strength:74, req_level:42, damage_min:40, damage_max:62, damage_vs_demons:200, damage_vs_undead:50, lDamage_min:50, lDamage_max:75, ias:30, life_leech:10, mana_leech:5, sockets:3, base:"Jagged Star", set_bonuses:["set_Ald",{},{strength:15},{strength:15},{strength:15}]},
 /*
-{name:"Bonesnap", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, twoHanded:1, base:"Maul"},
-{name:"Steeldriver", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, twoHanded:1, base:"Great Maul"},
-{name:"Windhammer", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, twoHanded:1, base:"Ogre Maul"},
-{name:"Earth Shifter", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, twoHanded:1, base:""},
-{name:"The Grandfather", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, twoHanded:1, base:"Colossus Blade"},
-{name:"The Reaper's Toll", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, twoHanded:1, base:"Thresher"},
-{name:"Kuko Shakaku", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, twoHanded:1, base:"Cedar Bow"},
-{name:"Goldstrike Arch", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, twoHanded:1, base:"Gothic Bow"},
-{name:"Buriza-Do Kyanon", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, twoHanded:1, base:"Ballista"},
-{name:"Ondal's Wisdom", req_strength:0, req_level:0, damage_min:0, damage_max:0, e_damage:0, twoHanded:1, base:"Elder Staff"},
+{name:"Ondal's Wisdom", req_strength:0, req_level:0, e_damage:0, type:"staff", twoHanded:1, base:"Elder Staff"},
 */
 	],
     offhand: [
@@ -353,10 +344,10 @@ var equipment = {
 {name:"Blackoak Shield", req_strength:100, req_level:61, e_def:200, block:50, oskill_inner_sight:1, fbr:50, e_def:200, dexterity_per_level:0.5, life_per_level:1.25, cAbsorb_flat_per_level:0.625, half_freeze:1, smite_min:17, smite_max:29, base:"Luna"},
 {set_Sigon:1, name:"Sigon's Guard", req_strength:75, req_level:6, block:74, all_skills:1, ibc:20, smite_min:1, smite_max:5, base:"Tower Shield", set_bonuses:["set_Sigon",{},{},{},{},{},{}]},
 {only:"amazon", rarity:"rare", name:"High Damage Arrows", type:"quiver", req_level:0, max_damage_per_level:0.625, pierce:25, skills_bows:2, damage_min:26, damage_max:31, ias:16, dstrike:20, base:""},
-{only:"amazon", name:"Dragonbreath", type:"quiver", req_level:12, fDamage_max_per_level:2, fRes:15, base:""},
-{only:"amazon", name:"Hailstorm", type:"quiver", req_level:12, cDamage_max_per_level:2, cRes:15, base:""},
-{only:"amazon", name:"Ice Shards", type:"quiver", req_level:18, skills_cold_all:2, ias:20, energy:20, base:""},
-{only:"amazon", name:"Moonfire", type:"quiver", req_level:21, ar_bonus:15, mDamage_reduced:4, base:""},
+{only:"amazon", name:"Dragonbreath", type:"quiver", req_level:12, fDamage_max_per_level:2, fRes:15},
+{only:"amazon", name:"Hailstorm", type:"quiver", req_level:12, cDamage_max_per_level:2, cRes:15},
+{only:"amazon", name:"Ice Shards", type:"quiver", req_level:18, skills_cold_all:2, ias:20, energy:20},
+{only:"amazon", name:"Moonfire", type:"quiver", req_level:21, ar_bonus:15, mDamage_reduced:4},
 /*
 {name:"Pelta Lunata", req_strength:0, req_level:0, defense:0, block:0, smite_min:0, smite_max:0, base:"Buckler"},
 {name:"Umbral Disk", req_strength:0, req_level:0, defense:0, block:0, smite_min:0, smite_max:0, base:"Small Shield"},
