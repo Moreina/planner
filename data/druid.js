@@ -71,8 +71,8 @@ var character_druid = {class_name:"Druid", strength:15, dexterity:20, vitality:2
 	if (skill.name == "Werebear") {
 		if (document.getElementById("e"+skills[11].key) != null) { if (effects["e"+skills[11].key].enabled == 1) { disableEffect(11); } }	// disables Werewolf
 		result.max_life = (25 + lycan_life);
-		result.max_damage_bonus = skill.data.values[1][lvl] + lycan_damage;
-		result.max_defense_bonus = skill.data.values[2][lvl];
+		result.damage_bonus = skill.data.values[1][lvl] + lycan_damage;
+		result.defense_bonus = skill.data.values[2][lvl];
 	}
 	if (skill.name == "Feral Rage") {
 		result.frw = skill.data.values[1][lvl];

@@ -30,7 +30,7 @@ var character_barbarian = {class_name:"Barbarian", strength:30, dexterity:20, vi
 	var lvl = skill.level + skill.extra_levels;
 	var result = {};
 	
-	if (skill.name == "Battle Command") { result.all_skills = Math.floor(1+(lvl / 10)); }
+	if (skill.name == "Battle Command") { result.all_skills = Math.floor(1+(skill.level / 10)); }
 	if (skill.name == "Shout") { result.defense_bonus = skill.data.values[0][lvl]; }
 	if (skill.name == "Battle Orders") {
 		result.max_stamina = skill.data.values[1][lvl];
