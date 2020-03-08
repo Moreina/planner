@@ -256,7 +256,7 @@ var equipment = {
 {name:"Raven Frost", req_level:45, ar:250, cbf:1, dexterity:20, mana:40, cAbsorb:20, cDamage_min:15, cDamage_max:45},
 {name:"The Stone of Jordan", req_level:29, all_skills:1, mana:20, max_mana:25, lDamage_min:1, lDamage_max:12},
 {name:"Bul-Kathos' Wedding Band", req_level:58, all_skills:1, life_per_level:0.5, life_leech:5, stamina:50},
-{name:"Wisp Projector", req_level:76, lAbsorb:12, mf:20, frw:8, wisp:0.5},	// level 9 Heart of Wolverine (17 charges)	(EFFECT)
+{name:"Wisp Projector", req_level:76, lAbsorb:12, mf:20, frw:8, wisp:0.5, charges_wolverine:9},	// level 9 Heart of Wolverine (17 charges)	(EFFECT)
 {set_Cathan:0.5, name:"Cathan's Seal", req_level:11, life_leech:6, damage_reduced:2, set_bonuses:["set_Cathan",{},{strength:10},{},{},{}]},
 {set_Angelic:0.5, name:"Angelic Halo", req_level:12, life_replenish:6, life:20, set_bonuses:["set_Angelic",0,{ar_per_level:12},{mf:50},{}]},
 	],

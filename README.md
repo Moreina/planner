@@ -38,7 +38,7 @@ Character Skill Planner for Diablo 2: Path of Diablo
 * comparison of skill effectiveness per level/class
 * dynamic item/skill recommendations
 
-### Links:
+### Feedback:
 [Reddit Thread](https://www.reddit.com/r/pathofdiablo/comments/f81e5u/character_skill_calculator_with_skill_info_up_to/)
 
 [Planner Wiki](https://github.com/Moreina/planner/wiki) (report bugs or add suggestions)

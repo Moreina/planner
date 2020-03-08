@@ -8,7 +8,7 @@ var character_assassin = {class_name:"Assassin", strength:20, dexterity:20, vita
 	
 	if (skill.name == "Dual Strike" && elem == 0) { 		result += (5*skills[9].level + 5*skills[13].level) }
 	if (skill.name == "Static Strike" && elem < 2) { 		result *= ((1 + (0.08*skills[21].level)) * (1+0.20*character.charge_thunder) * (1+character.lDamage/100)) }
-	if (skill.name == "Ember Storm" && elem < 2) { 			result *= ((1 + (0.18*skills[20].level)) * (1+0.20*character.charge_ember) * (1+character.fDamage/100)) }
+	if (skill.name == "Emberstorm" && elem < 2) { 			result *= ((1 + (0.18*skills[20].level)) * (1+0.20*character.charge_ember) * (1+character.fDamage/100)) }
 	if (skill.name == "Blades of Ice" && elem > 0 && elem < 3) { 	result *= ((1+0.20*character.charge_ice) * (1+character.cDamage/100)) }
 	if (skill.name == "Dragon Talon" && elem == 0) { 		result = character.kick_min }
 	if (skill.name == "Dragon Talon" && elem == 1) { 		result = Math.floor(1.5*character.kick_min) }
