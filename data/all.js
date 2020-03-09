@@ -316,6 +316,7 @@ function equip(type, val) {
 	}
 	if (type == val) { document.getElementById(("dropdown_"+type)).selectedIndex = 0 }
 	calculateSkillAmounts()
+	updateEffectList()
 	updateAll()
 	checkRequirements()
 }
@@ -552,7 +553,7 @@ function updateStats() {
 	if (c.class_name != "Paladin") { block -= 5; if (c.class_name == "Druid" || c.class_name == "Necromancer" || c.class_name == "Sorceress") { block -= 5 } }
 	block = (block + c.block_skillup)*(dexTotal-15)/(c.level*2)
 	if (c.running > 0) { block = block / 3 }
-	if (block > 0) { document.getElementById("block").innerHTML = Math.floor(Math.min(75,block))+"%" }
+	if (c.block > 0) { document.getElementById("block").innerHTML = Math.floor(Math.min(75,c.block,block))+"%" }
 	else { document.getElementById("block").innerHTML = "" }
 /*
 	TODO: Hit chance calculations
@@ -718,6 +719,7 @@ function calculateSkillAmounts() {
 			skills[s].extra_levels += character.skills_druid
 			if (s == 0 || s == 1 || s == 2 || s == 4 || s == 7 || s == 9 || s == 17) { skills[s].extra_levels += character.skills_fire_all }
 			if (s < 11) { skills[s].extra_levels += character.skills_elemental
+				if (s == 2) { skills[s].force_levels = character.oskill_flame_dash }
 				if (s == 3 || s == 10) { skills[s].extra_levels += character.skills_cold_all }
 			} else if (s > 20) { skills[s].extra_levels += character.skills_summoning_druid
 				if (s == 21) { skills[s].force_levels = character.skill_raven }
@@ -753,10 +755,11 @@ function calculateSkillAmounts() {
 			skills[s].extra_levels += character.skills_sorceress
 			if (s < 11) { skills[s].extra_levels += character.skills_cold
 				skills[s].extra_levels += character.skills_cold_all
+				if (s == 1) { skills[s].force_levels = character.oskill_frigerate }
 				if (s == 4) { skills[s].force_levels = character.oskill_shiver_armor }
 				if (s == 5) { skills[s].force_levels = character.skill_glacial_spike }
 				if (s == 9) { skills[s].force_levels = character.skill_frozen_orb }
-				if (s == 10) { skills[s].force_levels = character.skill_cold_mastery }
+				if (s == 10) { skills[s].force_levels = character.skill_cold_mastery + character.oskill_cold_mastery}
 			} else if (s > 21) { skills[s].extra_levels += character.skills_fire
 				skills[s].extra_levels += character.skills_fire_all
 				if (s == 26) { temp = 0; if (character.oskill_fire_ball > 0) { temp = Math.min(3, character.oskill_fire_ball) }
@@ -796,7 +799,7 @@ function calculateSkillPassives(className) {
 		//if (skills[14].level > 0 || skills[14].force_levels > 0) { character.avoid_skillup = ~~skills[14].data.values[0][skills[14].level+skills[14].extra_levels]; } else { character.avoid_skillup = 0 }
 		//if (skills[16].level > 0 || skills[16].force_levels > 0) { character.evade_skillup = ~~skills[16].data.values[0][skills[16].level+skills[16].extra_levels]; } else { character.evade_skillup = 0 }
 	} else if (className == "Assassin") {
-		if (skills[13].level > 0 || skills[13].force_levels > 0) { character.block_skillup = ~~skills[13].data.values[0][skills[13].level+skills[13].extra_levels]; } else { character.block_skillup = 0 }
+		if ((skills[13].level > 0 || skills[13].force_levels > 0) && equipped.weapon.type == "claw" && equipped.offhand.type == "claw") { character.block_skillup = ~~skills[13].data.values[0][skills[13].level+skills[13].extra_levels]; } else { character.block_skillup = 0 }
 		if (skills[9].level > 0 || skills[9].force_levels > 0) {
 			character.claw_skillup[0] = ~~skills[9].data.values[0][skills[9].level+skills[9].extra_levels];
 			character.claw_skillup[1] = ~~skills[9].data.values[1][skills[9].level+skills[9].extra_levels];
