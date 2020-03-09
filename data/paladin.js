@@ -9,9 +9,9 @@ var character_paladin = {class_name:"Paladin", strength:25, dexterity:20, vitali
 	if (skill.name == "Resist Fire" && elem == 0) { result = Math.floor(skill.level/4); character.fRes_skillup = result; }
 	if (skill.name == "Resist Cold" && elem == 0) { result = Math.floor(skill.level/4); character.cRes_skillup = result; }
 	if (skill.name == "Resist Lightning" && elem == 0) { result = Math.floor(skill.level/4); character.lRes_skillup = result; }
-	if (skill.name == "Prayer" && elem == 1) { result = ((character.life+character.level*character.life_per_level)*0.01 + skill.data.values[0][lvl]) }
+	if (skill.name == "Prayer" && elem == 1) { result = ((Math.floor((character.life + (character.level-1)*character.life_per_level + (((character.vitality + character.all_attributes + (character.level-1)*character.vitality_per_level)-character.starting_vitality)*character.life_per_vitality)) * (1 + character.max_life/100)))*0.01 + skill.data.values[0][lvl]) }
 	if ((skill.name == "Cleansing" || skill.name == "Meditation") && elem == 0) { 
-		if (skills[0].level > 0) { result = skills[0].data.values[0][skills[0].level] } else { result = 0 } }
+		if (skills[0].level > 0) { result = skills[0].data.values[0][skills[0].level+skills[0].extra_levels] } else { result = 0 } }
 	
 	if (skill.name == "Holy Fire" && elem < 4) { result *= ((1+(0.04*skills[1].level + 0.06*skills[9].level)) * (1+character.fDamage/100)) }
 	if (skill.name == "Holy Freeze" && elem < 4) { result *= ((1+(0.04*skills[3].level + 0.06*skills[9].level)) * (1+character.cDamage/100)) }

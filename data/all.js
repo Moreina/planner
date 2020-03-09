@@ -508,10 +508,10 @@ function updateAll() { updateStats(); updateMisc(); updateSecondaryStats(); }
 // ---------------------------------
 function updateStats() {
 	var c = character;
-	var strTotal = (c.strength + c.all_attributes + (c.level-1)*c.strength_per_level)
-	var dexTotal = (c.dexterity + c.all_attributes + (c.level-1)*c.dexterity_per_level)
-	var vitTotal = (c.vitality + c.all_attributes + (c.level-1)*c.vitality_per_level)
-	var energyTotal = (c.energy + c.all_attributes + (c.level-1)*c.energy_per_level)
+	var strTotal = (c.strength + c.all_attributes + (c.level-1)*c.strength_per_level);
+	var dexTotal = (c.dexterity + c.all_attributes + (c.level-1)*c.dexterity_per_level);
+	var vitTotal = (c.vitality + c.all_attributes + (c.level-1)*c.vitality_per_level);
+	var energyTotal = (c.energy + c.all_attributes + (c.level-1)*c.energy_per_level);
 	var statBonus = 1;
 	if (typeof(equipped.weapon.type) != 'undefined') { 
 		if (equipped.weapon.type == "hammer") { statBonus = (strTotal*1.1/100) }
