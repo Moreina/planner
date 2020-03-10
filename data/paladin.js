@@ -25,8 +25,8 @@ var character_paladin = {class_name:"Paladin", strength:25, dexterity:20, vitali
 	if (skill.name == "Zeal" && elem == 1) { 	result += (10*skills[20].level) }
 	if (skill.name == "Charge" && elem == 0) { 	result += (26*skills[6].level + 26*skills[10].level) }
 	
-	var phys_min = ((1+(c.e_damage+c.damage_bonus+weapon_skillup)/100)*((c.level-1)*c.min_damage_per_level+c.base_damage_min))+c.damage_min;
-	var phys_max = ((1+(c.e_damage+c.damage_bonus+weapon_skillup)/100)*((c.level-1)*c.max_damage_per_level+c.base_damage_max))+c.damage_max;
+	var phys_min = ((1+(character.e_damage+character.damage_bonus)/100)*((character.level-1)*character.min_damage_per_level+character.base_damage_min))+character.damage_min;
+	var phys_max = ((1+(character.e_damage+character.damage_bonus)/100)*((character.level-1)*character.max_damage_per_level+character.base_damage_max))+character.damage_max;
 	if (skill.name == "Vengeance" && elem == 0) { 	result = phys_min }
 	if (skill.name == "Vengeance" && elem == 1) { 	result = phys_max }
 	if (skill.name == "Vengeance" && elem == 2) { 	result = Math.floor(phys_min * (1+(skill.data.values[8][lvl] + 12*skills[1].level + 2*skills[9].level)/100)) }
