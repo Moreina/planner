@@ -52,7 +52,8 @@ function loadItems(type, dropdown, className) {
 	else {
 		var choices = "";
 		for (item in equipment[type]) {
-			if (typeof(equipment[type][item].only) == 'undefined' || (typeof(equipment[type][item].only) != 'undefined' && equipment[type][item].only != null && equipment[type][item].only == className)) {
+			if (typeof(equipment[type][item].only) == 'undefined' || equipment[type][item].only == className) {
+			if (typeof(equipment[type][item].not) == 'undefined' || equipment[type][item].not != className) {
 				if (item > 0) {
 					if (typeof(equipment[type][item].set_bonuses) != 'undefined') {
 						choices += "<option class='dropdown-set'>" + equipment[type][item].name + "</option>"
@@ -62,6 +63,8 @@ function loadItems(type, dropdown, className) {
 						choices += "<option class='dropdown-magic'>" + equipment[type][item].name + "</option>"
 					} else if (typeof(equipment[type][item].rarity) != 'undefined' && equipment[type][item].rarity == "rare"){
 						choices += "<option class='dropdown-rare'>" + equipment[type][item].name + "</option>"
+					} else if (typeof(equipment[type][item].rarity) != 'undefined' && equipment[type][item].rarity == "crafted"){
+						choices += "<option class='dropdown-crafted'>" + equipment[type][item].name + "</option>"
 					} else if (typeof(equipment[type][item].rw) != 'undefined'){
 						choices += "<option class='dropdown-runeword'>" + equipment[type][item].name + "</option>"
 					} else {
@@ -70,6 +73,7 @@ function loadItems(type, dropdown, className) {
 				} else {
 					choices += "<option selected>" + "­ ­ ­ ­ " + equipment[type][item].name + "</option>"
 				}
+			}
 			}
 		}
 		document.getElementById(dropdown).innerHTML = choices
@@ -191,7 +195,7 @@ function changeLevel(input) {
 // val: string name of item
 // ---------------------------------
 function equip(type, val) {
-	//var selected = document.getElementById("dropdown_"+type).selectedIndex;
+	//var selected = document.getElementById("dropdown_"+type).selectedIndex;	// consider using if unequipping weapon/offhand due to equipping a new incompatible item
 	var old_set_bonuses = "";
 	var old_set = "";
 	var old_set_before = 0;
@@ -200,8 +204,7 @@ function equip(type, val) {
 	var set = "";
 	var set_before = 0;
 	var set_after = 0;
-	for (old_affix in equipped[type]) {
-		if (old_affix == "set_bonuses") { if (true) { old_set_bonuses = equipped[type].set_bonuses } } }
+	for (old_affix in equipped[type]) { if (old_affix == "set_bonuses") { old_set_bonuses = equipped[type].set_bonuses } }
 	for (item in equipment[type]) { if (equipment[type][item].name == val) { if (typeof(equipment[type][item].set_bonuses) != 'undefined') { set_bonuses = equipment[type][item].set_bonuses } } }
 	if (set_bonuses != "") { set = set_bonuses[0]; set_before = character[set]; }
 	if (old_set_bonuses != "") { old_set = old_set_bonuses[0]; old_set_before = character[old_set]; }
@@ -214,29 +217,29 @@ function equip(type, val) {
 	if (old_set_bonuses != "") {
 		old_set_after = character[old_set];
 		if (old_set_before > old_set_after) {
-			var old_rings = Math.round((old_set_before + old_set_after) * 2,0)
-			old_set_before = Math.round(old_set_before,0)
-			old_set_after = Math.round(old_set_after,0)
+			//var old_rings = Math.round((old_set_before + old_set_after) * 2,0)	// decrepated
+			var before = Math.round(old_set_before,0)
+			var after = Math.round(old_set_after,0)
 			// remove set bonuses for old item
-			for (let i = 1; i <= old_set_before; i++) {
+			for (let i = 1; i <= before; i++) {
 				for (affix in equipped[type]["set_bonuses"][i]) {
 					character[affix] -= equipped[type]["set_bonuses"][i][affix]
 				}
 			}
-			equipped[type]["set_bonuses"][1] = 0
-			if (old_set_before > old_set_after) {		// checked again to account for multiples of the same set item (rings)
-				// remove old set bonus for other equipped items in the set
+			equipped[type]["set_bonuses"][1] = 0	// invalid/outdated set info
+			if (before > after) {
+				// remove old set bonus for other equipped items in the set (only if the removed set item wasn't a duplicate of another set item, i.e. ring)
 				for (set_type in equipped) {
 					if (set_type != type && equipped[set_type]["set_bonuses"] != null) {
 						if (equipped[set_type]["set_bonuses"][0] == old_set && equipped[set_type]["set_bonuses"][1] == 1) {
-							for (affix in equipped[set_type]["set_bonuses"][old_set_before]) {
-								character[affix] -= equipped[set_type]["set_bonuses"][old_set_before][affix]
+							for (affix in equipped[set_type]["set_bonuses"][before]) {
+								character[affix] -= equipped[set_type]["set_bonuses"][before][affix]
 							}
 						}
 					}
 				}
-				for (affix in sets[old_set][old_set_before]) {
-					character[affix] -= sets[old_set][old_set_before][affix]
+				for (affix in sets[old_set][before]) {
+					character[affix] -= sets[old_set][before][affix]
 				}
 			}
 		}
@@ -264,21 +267,19 @@ function equip(type, val) {
 			}
 			// add affixes from base item
 			if (typeof(equipment[type][item]["base"]) != 'undefined') { if (equipment[type][item]["base"] != "") {
-				var base = equipment[type][item].base;
-				base = base.split(' ').join('_')
-				base = base.split('-').join('_')
-				base = base.split("'s").join("s")
-				if (typeof(bases[base]) != 'undefined') { for (affix in bases[base]) { if (affix == "base_damage_min" || affix == "base_damage_max" || affix == "defense") {	//if (~~bases[base][affix] != 0) {
-					var multEthereal = 1;
-					var multDefense = 1;
-					var moreDefense = 0;
-					if (typeof(equipment[type][item]["e_def"]) != 'undefined') { multDefense = (1+equipment[type][item]["e_def"]/100); 
-						if (typeof(equipment[type][item]["defense"]) != 'undefined') { moreDefense += equipment[type][item]["defense"]; }
+				var base = equipment[type][item].base; base = base.split(' ').join('_'); base = base.split('-').join('_'); base = base.split("'s").join("s");	// spaces, hypens, and apostrophes converted to match named entry in bases{}
+				if (typeof(bases[base]) != 'undefined') { for (affix in bases[base]) { if (affix == "base_damage_min" || affix == "base_damage_max" || affix == "defense" || affix == "req_strength" || affix == "req_dexterity") {			// if (~~bases[base][affix] != 0) {	...use to check undefined?
+					var mult = 1;
+					if (affix == "defense") { if (typeof(equipment[type][item]["e_def"]) != 'undefined') { mult += (equipment[type][item]["e_def"]/100) } }
+					if (typeof(equipment[type][item]["ethereal"]) != 'undefined') { if (affix == "defense" || affix == "base_damage_min" || affix == "base_damage_max") { if (equipment[type][item]["ethereal"] == 1) { mult += 0.5 } } }
+					if (affix == "req_strength") { if (typeof(equipment[type][item]["req"]) != 'undefined') { if (typeof(equipment[type][item]["req_strength"]) == 'undefined') { mult += (equipment[type][item]["req"]/100) } } }
+					if (affix == "req_dexterity") { if (typeof(equipment[type][item]["req"]) != 'undefined') { if (typeof(equipment[type][item]["req_dexterity"]) == 'undefined') { mult += (equipment[type][item]["req"]/100) } } }
+					
+					if (typeof(equipped[type][affix]) == 'undefined') { equipped[type][affix] = 0 }	// undefined (new) affixes get set to zero
+					if (affix == "base_damage_min" || affix == "base_damage_max" || affix == "defense" || affix == "req_strength" || affix == "req_dexterity") {
+						equipped[type][affix] += Math.round(mult*bases[base][affix],0)
+						character[affix] += Math.round(mult*bases[base][affix],0)
 					}
-					if (typeof(equipment[type][item]["ethereal"]) != 'undefined') { if (equipment[type][item]["ethereal"] == 1) { multEthereal = 1.5 } }
-					if (typeof(equipped[type][affix]) == 'undefined') { equipped[type][affix] = 0 }	// initiate undefined affixes
-					equipped[type][affix] += Math.round(multDefense*multEthereal*bases[base][affix] + moreDefense,0)
-					character[affix] += Math.round(multDefense*multEthereal*bases[base][affix] + moreDefense,0)
 				} } }
 			} }
 		}
@@ -287,29 +288,29 @@ function equip(type, val) {
 	if (set_bonuses != "") {
 		set_after = character[set];
 		if (set_before < set_after) {
-			var rings = Math.round((set_before + set_after) * 2,0)
-			set_before = Math.round(set_before,0)
-			set_after = Math.round(set_after,0)
+			//var rings = Math.round((set_before + set_after) * 2,0)	// decrepated
+			var before = Math.round(set_before,0)
+			var after = Math.round(set_after,0)
 			// add set bonuses for new item
-			for (let i = 1; i <= set_after; i++) {
+			for (let i = 1; i <= after; i++) {
 				for (affix in set_bonuses[i]) {
 					character[affix] += set_bonuses[i][affix]
 				}
 			}
-			equipped[type]["set_bonuses"][1] = 1
-			if (set_before < set_after) {
+			equipped[type]["set_bonuses"][1] = 1	// valid set info
+			if (before < after) {
 				// add new set bonus for other equipped items in the set
 				for (set_type in equipped) {
 					if (set_type != type && equipped[set_type]["set_bonuses"] != null) {
-						if (equipped[set_type]["set_bonuses"][1] == 1) {
-							for (affix in equipped[set_type]["set_bonuses"][set_after]) {
-								character[affix] += equipped[set_type]["set_bonuses"][set_after][affix]
+						if (equipped[set_type]["set_bonuses"][0] == set && equipped[set_type]["set_bonuses"][1] == 1) {
+							for (affix in equipped[set_type]["set_bonuses"][after]) {
+								character[affix] += equipped[set_type]["set_bonuses"][after][affix]
 							}
 						}
 					}
 				}
-				for (affix in sets[set][set_after]) {
-					character[affix] += sets[set][set_after][affix]
+				for (affix in sets[set][after]) {
+					character[affix] += sets[set][after][affix]
 				}
 			}
 		}
@@ -514,20 +515,21 @@ function updateStats() {
 	var vitTotal = (c.vitality + c.all_attributes + (c.level-1)*c.vitality_per_level);
 	var energyTotal = (c.energy + c.all_attributes + (c.level-1)*c.energy_per_level);
 	var statBonus = 1;
-	if (typeof(equipped.weapon.type) != 'undefined') { 
-		if (equipped.weapon.type == "hammer") { statBonus = (strTotal*1.1/100) }
-		else if (equipped.weapon.type == "bow" || equipped.weapon.type == "crossbow") { statBonus = (dexTotal/100) }
-		else if (typeof(equipped.weapon.only) != 'undefined') { if (equipped.weapon.type == "spear" || equipped.weapon.type == "javelin" || equipped.weapon.only == "amazon") { statBonus = ((strTotal*0.8/100)+(dexTotal*0.5/100)) } }
-		else if (equipped.weapon.type == "dagger" || equipped.weapon.type == "thrown" || equipped.weapon.type == "claw" || equipped.weapon.type == "javelin") { statBonus = ((strTotal*0.75/100)+(dexTotal*0.75/100)) }
+	var weaponType = equipped.weapon.type;
+	if (typeof(weaponType) != 'undefined') { 
+		if (weaponType == "hammer") { statBonus = (strTotal*1.1/100) }
+		else if (weaponType == "bow" || weaponType == "crossbow") { statBonus = (dexTotal/100) }
+		else if (typeof(equipped.weapon.only) != 'undefined') { if (weaponType == "spear" || weaponType == "javelin" || equipped.weapon.only == "amazon") { statBonus = ((strTotal*0.8/100)+(dexTotal*0.5/100)) } }
+		else if (weaponType == "dagger" || weaponType == "thrown" || weaponType == "claw" || weaponType == "javelin") { statBonus = ((strTotal*0.75/100)+(dexTotal*0.75/100)) }
 		else  { statBonus = (strTotal/100) }
 	}
 	var weapon_skillup = 0;
 	if (c.class_name == "Barbarian" || c.class_name == "Assassin") {
-		if (equipped.weapon.type == "sword" || equipped.weapon.type == "axe" || equipped.weapon.type == "dagger") { weapon_skillup = c.edged_skillup[0]; c.ar_skillup = c.edged_skillup[1]; c.cstrike_skillup = c.edged_skillup[2]; }
-		else if (equipped.weapon.type == "polearm" || equipped.weapon.type == "spear") { weapon_skillup = c.pole_skillup[0]; c.ar_skillup = c.pole_skillup[1]; c.cstrike_skillup = c.pole_skillup[2]; }
-		else if (equipped.weapon.type == "mace" || equipped.weapon.type == "scepter" || equipped.weapon.type == "staff" || equipped.weapon.type == "hammer" || equipped.weapon.type == "club") { weapon_skillup = c.blunt_skillup[0]; c.ar_skillup = c.blunt_skillup[1]; c.cstrike_skillup = c.blunt_skillup[2]; }
-		else if (equipped.weapon.type == "thrown") { weapon_skillup = c.thrown_skillup[0]; c.ar_skillup = c.thrown_skillup[1]; c.pierce_skillup = c.thrown_skillup[2]; }
-		else if (equipped.weapon.type == "claw") { weapon_skillup = c.claw_skillup[0]; c.ar_skillup = c.claw_skillup[1]; c.cstrike_skillup = c.claw_skillup[2]; }
+		if (weaponType == "sword" || weaponType == "axe" || weaponType == "dagger") { weapon_skillup = c.edged_skillup[0]; c.ar_skillup = c.edged_skillup[1]; c.cstrike_skillup = c.edged_skillup[2]; }
+		else if (weaponType == "polearm" || weaponType == "spear") { weapon_skillup = c.pole_skillup[0]; c.ar_skillup = c.pole_skillup[1]; c.cstrike_skillup = c.pole_skillup[2]; }
+		else if (weaponType == "mace" || weaponType == "scepter" || weaponType == "staff" || weaponType == "hammer" || weaponType == "club") { weapon_skillup = c.blunt_skillup[0]; c.ar_skillup = c.blunt_skillup[1]; c.cstrike_skillup = c.blunt_skillup[2]; }
+		else if (weaponType == "thrown") { weapon_skillup = c.thrown_skillup[0]; c.ar_skillup = c.thrown_skillup[1]; c.pierce_skillup = c.thrown_skillup[2]; }
+		else if (weaponType == "claw") { weapon_skillup = c.claw_skillup[0]; c.ar_skillup = c.claw_skillup[1]; c.cstrike_skillup = c.claw_skillup[2]; }
 		else { weapon_skillup = 0; c.ar_skillup = 0; c.cstrike_skillup = 0; c.pierce_skillup = 0; }
 	}
 	var ar_addon = (dexTotal-c.starting_dexterity)*c.ar_per_dexterity;
@@ -536,7 +538,7 @@ function updateStats() {
 	var stamina_addon = (vitTotal-c.starting_vitality)*c.stamina_per_vitality;
 	var mana_addon = (energyTotal-c.starting_energy)*c.mana_per_energy;
 	
-	var ar = Math.floor((c.ar + (c.level-1)*c.ar_per_level + ar_addon) * (1 + c.ar_skillup/100) * (1 + c.ar_bonus/100));
+	var ar = Math.floor((c.ar + (c.level-1)*c.ar_per_level + ar_addon) * (1 + c.ar_skillup/100) * (1 + (c.ar_bonus + c.level*c.ar_bonus_per_level)/100));
 	var def = Math.floor((c.defense + (c.level-1)*c.defense_per_level + defense_addon) * (1 + c.defense_skillup/100) * (1 + c.defense_bonus/100));
 	
 	var wisp = 1+Math.round(c.wisp,0)/10;
@@ -567,7 +569,7 @@ function updateStats() {
 	document.getElementById("dexterity").innerHTML = Math.floor(dexTotal)
 	document.getElementById("vitality").innerHTML = Math.floor(vitTotal)
 	document.getElementById("energy").innerHTML = Math.floor(energyTotal)
-	if (c.running > 0) { document.getElementById("defense").innerHTML = "N/A" }
+	if (c.running > 0) { document.getElementById("defense").innerHTML = "" }
 	else { document.getElementById("defense").innerHTML = def }
 	document.getElementById("ar").innerHTML = ar
 	document.getElementById("stamina").innerHTML = Math.floor((c.stamina + (c.level-1)*c.stamina_per_level + stamina_addon) * (1+c.stamina_skillup/100) * (1+c.max_stamina/100))
@@ -641,7 +643,7 @@ function updateSecondaryStats() {
 	document.getElementById("mana_regen").innerHTML = c.mana_regen + c.mana_regen_skillup
 	
 	document.getElementById("damage_to_mana").innerHTML = c.damage_to_mana
-	if (c.running > 0) { document.getElementById("missile_defense").innerHTML = "N/A" }
+	if (c.running > 0) { document.getElementById("missile_defense").innerHTML = "" }
 	else { document.getElementById("missile_defense").innerHTML = c.missile_defense }
 	
 	document.getElementById("enemy_fres").innerHTML = c.enemy_fRes
@@ -747,9 +749,11 @@ function calculateSkillAmounts() {
 			if (s < 10) { skills[s].extra_levels += character.skills_defensive
 				if (s == 6) { skills[s].force_levels = character.skill_vigor }
 			} else if (s > 19) { skills[s].extra_levels += character.skills_combat_paladin
-			} else { skills[s].extra_levels += character.skills_offensive 
+				if (s == 29) { skills[s].force_levels = character.skill_fist_of_the_heavens }
+			} else { skills[s].extra_levels += character.skills_offensive
 				if (s == 11) { skills[s].extra_levels += character.skills_fire_all }
 				if (s == 15) { skills[s].extra_levels += character.skills_cold_all }
+				if (s == 16) { skills[s].force_levels = character.skill_holy_shock }
 			}
 		} else if (character.class_name == "Sorceress") {
 			skills[s].extra_levels += character.skills_sorceress

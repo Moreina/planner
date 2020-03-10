@@ -115,6 +115,11 @@
   color: yellow;
   z-index: 6;
 }
+.dropdown-crafted {
+  background-color: #222;
+  color: orange;
+  z-index: 6;
+}
 .dropdown-runeword {
   background-color: #222;
   color: #b2a992;

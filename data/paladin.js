@@ -6,16 +6,16 @@ var character_paladin = {class_name:"Paladin", strength:25, dexterity:20, vitali
 	updateSkill : function(skill, lvl, elem) {
 	var result = skill.data.values[elem][lvl]
 	
-	if (skill.name == "Resist Fire" && elem == 0) { result = Math.floor(skill.level/4); character.fRes_skillup = result; }
-	if (skill.name == "Resist Cold" && elem == 0) { result = Math.floor(skill.level/4); character.cRes_skillup = result; }
-	if (skill.name == "Resist Lightning" && elem == 0) { result = Math.floor(skill.level/4); character.lRes_skillup = result; }
-	if (skill.name == "Prayer" && elem == 1) { result = ((Math.floor((character.life + (character.level-1)*character.life_per_level + (((character.vitality + character.all_attributes + (character.level-1)*character.vitality_per_level)-character.starting_vitality)*character.life_per_vitality)) * (1 + character.max_life/100)))*0.01 + skill.data.values[0][lvl]) }
+	if (skill.name == "Resist Fire" && elem == 0) { 	result = Math.floor(skill.level/4); character.fRes_skillup = result; }
+	if (skill.name == "Resist Cold" && elem == 0) { 	result = Math.floor(skill.level/4); character.cRes_skillup = result; }
+	if (skill.name == "Resist Lightning" && elem == 0) { 	result = Math.floor(skill.level/4); character.lRes_skillup = result; }
+	if (skill.name == "Prayer" && elem == 1) { 		result = ((Math.floor((character.life + (character.level-1)*character.life_per_level + (((character.vitality + character.all_attributes + (character.level-1)*character.vitality_per_level)-character.starting_vitality)*character.life_per_vitality)) * (1 + character.max_life/100)))*0.01 + skill.data.values[0][lvl]) }
 	if ((skill.name == "Cleansing" || skill.name == "Meditation") && elem == 0) { 
 		if (skills[0].level > 0) { result = skills[0].data.values[0][skills[0].level+skills[0].extra_levels] } else { result = 0 } }
 	
-	if (skill.name == "Holy Fire" && elem < 4) { result *= ((1+(0.04*skills[1].level + 0.06*skills[9].level)) * (1+character.fDamage/100)) }
-	if (skill.name == "Holy Freeze" && elem < 4) { result *= ((1+(0.04*skills[3].level + 0.06*skills[9].level)) * (1+character.cDamage/100)) }
-	if (skill.name == "Holy Shock" && elem < 4) { result *= ((1+(0.04*skills[5].level + 0.06*skills[9].level)) * (1+character.lDamage/100)) }
+	if (skill.name == "Holy Fire" && elem < 4) { 		result *= ((1+(0.04*skills[1].level + 0.06*skills[9].level)) * (1+character.fDamage/100)) }
+	if (skill.name == "Holy Freeze" && elem < 4) { 		result *= ((1+(0.04*skills[3].level + 0.06*skills[9].level)) * (1+character.cDamage/100)) }
+	if (skill.name == "Holy Shock" && elem < 4) { 		result *= ((1+(0.04*skills[5].level + 0.06*skills[9].level)) * (1+character.lDamage/100)) }
 	if (skill.name == "Sanctuary" && elem > 0 && elem < 3) { result *= (1+(0.18*skills[4].level + 0.18*skills[30].level)) }
 
 	if (skill.name == "Sacrifice" && elem == 1) { 	result += (10*skills[8].level + 5*skills[18].level) }
@@ -24,22 +24,25 @@ var character_paladin = {class_name:"Paladin", strength:25, dexterity:20, vitali
 	if (skill.name == "Holy Bolt" && elem == 2) { 	result *= (1+(0.35*skills[0].level)) }
 	if (skill.name == "Zeal" && elem == 1) { 	result += (10*skills[20].level) }
 	if (skill.name == "Charge" && elem == 0) { 	result += (26*skills[6].level + 26*skills[10].level) }
-	if (skill.name == "Vengeance" && elem == 0) { 	result = character.damage_min + character.level*character.min_damage_per_level }
-	if (skill.name == "Vengeance" && elem == 1) { 	result = character.damage_max + character.level*character.max_damage_per_level }
-	if (skill.name == "Vengeance" && elem == 2) { 	result = Math.floor((character.damage_min + character.level*character.min_damage_per_level) * (1+(skill.data.values[8][lvl] + 12*skills[1].level + 2*skills[9].level)/100)) }
-	if (skill.name == "Vengeance" && elem == 3) { 	result = Math.floor((character.damage_max + character.level*character.max_damage_per_level) * (1+(skill.data.values[8][lvl] + 12*skills[1].level + 2*skills[9].level)/100)) }
-	if (skill.name == "Vengeance" && elem == 4) { 	result = Math.floor((character.damage_min + character.level*character.min_damage_per_level) * (1+(skill.data.values[9][lvl] + 12*skills[3].level + 2*skills[9].level)/100)) }
-	if (skill.name == "Vengeance" && elem == 5) { 	result = Math.floor((character.damage_max + character.level*character.max_damage_per_level) * (1+(skill.data.values[9][lvl] + 12*skills[3].level + 2*skills[9].level)/100)) }
-	if (skill.name == "Vengeance" && elem == 6) { 	result = Math.floor((character.damage_min + character.level*character.min_damage_per_level) * (1+(skill.data.values[10][lvl] + 12*skills[5].level + 2*skills[9].level)/100)) }
-	if (skill.name == "Vengeance" && elem == 7) { 	result = Math.floor((character.damage_max + character.level*character.max_damage_per_level) * (1+(skill.data.values[10][lvl] + 12*skills[5].level + 2*skills[9].level)/100)) }
+	
+	var phys_min = ((1+(c.e_damage+c.damage_bonus+weapon_skillup)/100)*((c.level-1)*c.min_damage_per_level+c.base_damage_min))+c.damage_min;
+	var phys_max = ((1+(c.e_damage+c.damage_bonus+weapon_skillup)/100)*((c.level-1)*c.max_damage_per_level+c.base_damage_max))+c.damage_max;
+	if (skill.name == "Vengeance" && elem == 0) { 	result = phys_min }
+	if (skill.name == "Vengeance" && elem == 1) { 	result = phys_max }
+	if (skill.name == "Vengeance" && elem == 2) { 	result = Math.floor(phys_min * (1+(skill.data.values[8][lvl] + 12*skills[1].level + 2*skills[9].level)/100)) }
+	if (skill.name == "Vengeance" && elem == 3) { 	result = Math.floor(phys_max * (1+(skill.data.values[8][lvl] + 12*skills[1].level + 2*skills[9].level)/100)) }
+	if (skill.name == "Vengeance" && elem == 4) { 	result = Math.floor(phys_min * (1+(skill.data.values[9][lvl] + 12*skills[3].level + 2*skills[9].level)/100)) }
+	if (skill.name == "Vengeance" && elem == 5) { 	result = Math.floor(phys_max * (1+(skill.data.values[9][lvl] + 12*skills[3].level + 2*skills[9].level)/100)) }
+	if (skill.name == "Vengeance" && elem == 6) { 	result = Math.floor(phys_min * (1+(skill.data.values[10][lvl] + 12*skills[5].level + 2*skills[9].level)/100)) }
+	if (skill.name == "Vengeance" && elem == 7) { 	result = Math.floor(phys_max * (1+(skill.data.values[10][lvl] + 12*skills[5].level + 2*skills[9].level)/100)) }
 	if (skill.name == "Vengeance" && elem == 8) { 	result += (12*skills[1].level + 2*skills[9].level) }
 	if (skill.name == "Vengeance" && elem == 9) { 	result += (12*skills[3].level + 2*skills[9].level) }
 	if (skill.name == "Vengeance" && elem == 10) { 	result += (12*skills[5].level + 2*skills[9].level) }
-	if (skill.name == "Blessed Hammer" && elem < 2) { result *= ((1+(0.14*skills[6].level + 0.14*skills[13].level)) * (1+character.hammer_bonus/100)) }
-	if (skill.name == "Holy Shield" && elem == 3) { result += (15*skills[2].level) }
-	if (skill.name == "Fist of the Heavens" && elem < 2) { result *= (1+(0.15*skills[22].level)) }
-	if (skill.name == "Fist of the Heavens" && elem >1 && elem < 4) { result *= ((1+(0.08*skills[16].level)) * (1+character.lDamage/100)) }
-	if (skill.name == "Dashing Strike" && elem > 0 && elem < 3) { result *= (1+(0.12*skills[21].level + 0.12*skills[24].level + 0.12*skills[28].level)) }
+	if (skill.name == "Blessed Hammer" && elem < 2) { 			result *= ((1+(0.14*skills[6].level + 0.14*skills[13].level)) * (1+character.hammer_bonus/100)) }
+	if (skill.name == "Holy Shield" && elem == 3) { 			result += (15*skills[2].level) }
+	if (skill.name == "Fist of the Heavens" && elem < 2) { 			result *= (1+(0.15*skills[22].level)) }
+	if (skill.name == "Fist of the Heavens" && elem >1 && elem < 4) { 	result *= ((1+(0.08*skills[16].level)) * (1+character.lDamage/100)) }
+	if (skill.name == "Dashing Strike" && elem > 0 && elem < 3) { 		result *= (1+(0.12*skills[21].level + 0.12*skills[24].level + 0.12*skills[28].level)) }
 	
 	return result
 	},
