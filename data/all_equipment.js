@@ -154,8 +154,9 @@ var equipment = {
 {set_Orphan:1, name:"Magnus' Skin", req_level:37, e_def:50, ias:20, ar:100, light_radius:3, fRes:15, base:"Sharkskin Gloves", set_bonuses:["set_Orphan",{},{},{},{}]},
 {set_Sigon:1, name:"Sigon's Gage", req_level:6, ar:20, strength:10, base:"Gauntlets", set_bonuses:["set_Sigon",{},{ias:30},{},{},{},{}]},
 {rarity:"magic", only:"amazon", name:"Lancer's Mitts of Quickness", req_level:42, skills_javelins:3, ias:20, base:"Bramble Mitts"},
-{only:"amazon", rarity:"crafted", name:"Hitpower Vambraces", req_level:51, thorns:7, knockback:1, life_leech:5, mana_leech:5, ias:20, fRes:30, cRes:30, skills_bows:2, base:"Vambraces"},	// 5% ctc level 4 Frost Nova when hit
-{rarity:"crafted", name:"Blood Gloves", req_level:47, life:20, life_leech:8, mana_leech:5, cblow:10, ias:20, fRes:30, cRes:30, lRes:30, base:"Vampirebone Gloves"},	// check Inner Sight aura from charges? Deadly Poison?
+{only:"amazon", rarity:"crafted", name:"Bowyer's Hitpower Vambraces", req_level:51, thorns:7, knockback:1, life_leech:5, mana_leech:5, ias:20, fRes:30, cRes:30, skills_bows:2, base:"Vambraces"},	// 5% ctc level 4 Frost Nova when hit
+{only:"assassin", rarity:"crafted", name:"Sensei's Blood Gloves", req_level:51, life:20, life_leech:8, mana_leech:5, cblow:10, ias:20, fRes:30, cRes:30, skills_martial:2, base:"Vampirebone Gloves"},	// 5% ctc level 4 Frost Nova when hit
+{not:"assassin", rarity:"crafted", name:"Blood Gloves", req_level:47, life:20, life_leech:8, mana_leech:5, cblow:10, ias:20, fRes:30, cRes:30, lRes:30, base:"Vampirebone Gloves"},	// check Inner Sight aura from charges? Deadly Poison?
 {rarity:"crafted", name:"Caster Mitts", req_level:42, mana_regen:10, mana:20, mana_per_kill:3, mana_leech:5, ias:20, mf:25, fRes:30, cRes:30, lRes:30, base:"Bramble Mitts"},
 ],
     boots: [
