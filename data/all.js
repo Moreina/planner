@@ -208,6 +208,19 @@ function equip(type, val) {
 	for (item in equipment[type]) { if (equipment[type][item].name == val) { if (typeof(equipment[type][item].set_bonuses) != 'undefined') { set_bonuses = equipment[type][item].set_bonuses } } }
 	if (set_bonuses != "") { set = set_bonuses[0]; set_before = character[set]; }
 	if (old_set_bonuses != "") { old_set = old_set_bonuses[0]; old_set_before = character[old_set]; }
+	
+	// TODO: fix bug - stale effects
+	for (old_affix in equipped[type]) {
+		for (let s = 0; s < skills.length; s++) {
+			if (skills[s].level == 0 && skills[s].force_levels > 0) {
+				var affixName = skills[s].name; affixName = affixName.split(' ').join('_'); affixName = "skill_" + affixName;
+				if (old_affix == affixName || old_affix == ("o"+affixName)) { disableEffect(s); }		// TODO: rename skill affixes
+				// ...? updateEffect(skills[s])	// TODO: update effective levels?
+				// effective levels aren't correct even before attempting to disable their effects
+			}
+		}
+	}
+
 	// if replacing an item, previous item's affixes are removed from character
 	for (old_affix in equipped[type]) {
 		character[old_affix] -= equipped[type][old_affix]
@@ -686,100 +699,100 @@ function calculateSkillAmounts() {
 		if (character.class_name == "Amazon") {
 			skills[s].extra_levels += character.skills_amazon
 			if (s < 10) { skills[s].extra_levels += character.skills_javelins
-				if (s == 8) { skills[s].force_levels = character.skill_lightning_strike }
-				if (s == 9) { skills[s].force_levels = character.skill_lightning_fury }
-				if (s == 4) { skills[s].force_levels = character.skill_lightning_bolt }
+				if (s == 8) { skills[s].force_levels = character.skill_Lightning_Strike }
+				if (s == 9) { skills[s].force_levels = character.skill_Lightning_Fury }
+				if (s == 4) { skills[s].force_levels = character.skill_Lightning_Bolt }
 			} else if (s > 19) { skills[s].extra_levels += character.skills_bows
-				if (s == 22) { skills[s].force_levels = character.oskill_multiple_shot }	
-				if (s == 28) { skills[s].force_levels = character.skill_immolation_arrow }	
+				if (s == 22) { skills[s].force_levels = character.oskill_Multiple_Shot }	
+				if (s == 28) { skills[s].force_levels = character.skill_Immolation_Arrow }	
 				if (s == 23 || s == 26 || s == 28) { skills[s].extra_levels += character.skills_fire_all }
 				if (s == 20 || s == 24 || s == 29) { skills[s].extra_levels += character.skills_cold_all }
 			} else { skills[s].extra_levels += character.skills_passives
-				if (s == 10) { skills[s].force_levels = character.oskill_inner_sight }
+				if (s == 10) { skills[s].force_levels = character.oskill_Inner_Sight }
 			}
 		} else if (character.class_name == "Assassin") {
 			skills[s].extra_levels += character.skills_assassin
 			if (s == 1 || s == 6 || s == 20 || s == 24 || s == 27) { skills[s].extra_levels += character.skills_fire_all }
 			if (s < 9) { skills[s].extra_levels += character.skills_martial
-				if (s == 1) { skills[s].force_levels = character.skill_fists_of_ember }
+				if (s == 1) { skills[s].force_levels = character.skill_Fists_of_Ember }
 				if (s == 3 || s == 8) { skills[s].extra_levels += character.skills_cold_all }
 			} else if (s > 19) { skills[s].extra_levels += character.skills_traps
 			} else { skills[s].extra_levels += character.skills_shadow }
 		} else if (character.class_name == "Barbarian") {
 			skills[s].extra_levels += character.skills_barbarian
 			if (s < 10) { skills[s].extra_levels += character.skills_warcries
-				if (s == 6) { skills[s].force_levels = character.skill_battle_orders }
-				if (s == 7) { skills[s].force_levels = character.skill_grim_ward }
-				if (s == 8) { skills[s].force_levels = character.skill_war_cry }
-				if (s == 9) { skills[s].force_levels = character.skill_battle_command }
+				if (s == 6) { skills[s].force_levels = character.skill_Battle_Orders }
+				if (s == 7) { skills[s].force_levels = character.skill_Grim_Ward }
+				if (s == 8) { skills[s].force_levels = character.skill_War_Cry }
+				if (s == 9) { skills[s].force_levels = character.skill_Battle_Command }
 			} else if (s > 17) { skills[s].extra_levels += character.skills_combat_barbarian
-				if (s == 22) { skills[s].force_levels = character.skill_leap }		
+				if (s == 22) { skills[s].force_levels = character.skill_Leap }		
 			} else { skills[s].extra_levels += character.skills_masteries
-				if (s == 10) { skills[s].force_levels = character.oskill_edged_weapon_mastery }
+				if (s == 10) { skills[s].force_levels = character.oskill_Edged_Weapon_Mastery }
 			}
 		} else if (character.class_name == "Druid") {
 			skills[s].extra_levels += character.skills_druid
 			if (s == 0 || s == 1 || s == 2 || s == 4 || s == 7 || s == 9 || s == 17) { skills[s].extra_levels += character.skills_fire_all }
 			if (s < 11) { skills[s].extra_levels += character.skills_elemental
-				if (s == 2) { skills[s].force_levels = character.oskill_flame_dash }
+				if (s == 2) { skills[s].force_levels = character.oskill_Flame_Dash }
 				if (s == 3 || s == 10) { skills[s].extra_levels += character.skills_cold_all }
 			} else if (s > 20) { skills[s].extra_levels += character.skills_summoning_druid
-				if (s == 21) { skills[s].force_levels = character.skill_raven }
-				if (s == 26) { skills[s].force_levels = character.skill_oak_sage }
-				if (s == 27) { skills[s].force_levels = character.skill_dire_wolf }
-				if (s == 30) { skills[s].force_levels = character.skill_grizzly }
+				if (s == 21) { skills[s].force_levels = character.skill_Raven }
+				if (s == 26) { skills[s].force_levels = character.skill_Oak_Sage }
+				if (s == 27) { skills[s].force_levels = character.skill_Dire_Wolf }
+				if (s == 30) { skills[s].force_levels = character.skill_Grizzly }
 			} else { skills[s].extra_levels += character.skills_shapeshifting
-				if (s == 14) { skills[s].force_levels = character.skill_feral_rage }
+				if (s == 14) { skills[s].force_levels = character.skill_Feral_Rage }
 			}
 		} else if (character.class_name == "Necromancer") {
 			skills[s].extra_levels += character.skills_necromancer
 			if (s < 11) { skills[s].extra_levels += character.skills_summoning_necromancer
-				if (s == 0) { skills[s].force_levels = character.skill_summon_mastery }
-				if (s == 4) { skills[s].force_levels = character.skill_flesh_offering }
+				if (s == 0) { skills[s].force_levels = character.skill_Summon_Mastery }
+				if (s == 4) { skills[s].force_levels = character.skill_Flesh_Offering }
 				if (s == 9) { skills[s].extra_levels += character.skills_fire_all }
 			} else if (s > 19) { skills[s].extra_levels += character.skills_curses
 			} else { skills[s].extra_levels += character.skills_poisonBone
-				if (s == 11) { skills[s].force_levels = character.skill_deadly_poison }
-				if (s == 13) { skills[s].force_levels = character.skill_bone_armor }
-				if (s == 15) { skills[s].force_levels = character.oskill_desecrate + character.skill_desecrate }
-				if (s == 16) { skills[s].force_levels = character.skill_bone_spear }
+				if (s == 11) { skills[s].force_levels = character.skill_Deadly_Poison }
+				if (s == 13) { skills[s].force_levels = character.skill_Bone_Armor }
+				if (s == 15) { skills[s].force_levels = character.oskill_Desecrate + character.skill_Desecrate }
+				if (s == 16) { skills[s].force_levels = character.skill_Bone_Spear }
 			}
 		} else if (character.class_name == "Paladin") {
 			skills[s].extra_levels += character.skills_paladin
 			if (s < 10) { skills[s].extra_levels += character.skills_defensive
-				if (s == 6) { skills[s].force_levels = character.skill_vigor }
+				if (s == 6) { skills[s].force_levels = character.skill_Vigor }
 			} else if (s > 19) { skills[s].extra_levels += character.skills_combat_paladin
-				if (s == 29) { skills[s].force_levels = character.skill_fist_of_the_heavens }
+				if (s == 29) { skills[s].force_levels = character.skill_Fist_of_the_Heavens }
 			} else { skills[s].extra_levels += character.skills_offensive
 				if (s == 11) { skills[s].extra_levels += character.skills_fire_all }
 				if (s == 15) { skills[s].extra_levels += character.skills_cold_all }
-				if (s == 16) { skills[s].force_levels = character.skill_holy_shock }
+				if (s == 16) { skills[s].force_levels = character.skill_Holy_Shock }
 			}
 		} else if (character.class_name == "Sorceress") {
 			skills[s].extra_levels += character.skills_sorceress
 			if (s < 11) { skills[s].extra_levels += character.skills_cold
 				skills[s].extra_levels += character.skills_cold_all
-				if (s == 1) { skills[s].force_levels = character.oskill_frigerate }
-				if (s == 4) { skills[s].force_levels = character.oskill_shiver_armor }
-				if (s == 5) { skills[s].force_levels = character.skill_glacial_spike }
-				if (s == 9) { skills[s].force_levels = character.skill_frozen_orb }
-				if (s == 10) { skills[s].force_levels = character.skill_cold_mastery + character.oskill_cold_mastery}
+				if (s == 1) { skills[s].force_levels = character.oskill_Frigerate }
+				if (s == 4) { skills[s].force_levels = character.oskill_Shiver_Armor }
+				if (s == 5) { skills[s].force_levels = character.skill_Glacial_Spike }
+				if (s == 9) { skills[s].force_levels = character.skill_Frozen_Orb }
+				if (s == 10) { skills[s].force_levels = character.skill_Cold_Mastery + character.oskill_Cold_Mastery}
 			} else if (s > 21) { skills[s].extra_levels += character.skills_fire
 				skills[s].extra_levels += character.skills_fire_all
-				if (s == 26) { temp = 0; if (character.oskill_fire_ball > 0) { temp = Math.min(3, character.oskill_fire_ball) }
-					skills[s].force_levels = /*character.skill_fire_ball*/ + temp }
-				if (s == 27) { temp = 0; if (character.oskill_fire_wall > 0) { temp = Math.min(3, character.oskill_fire_wall) }
-					skills[s].force_levels = /*character.skill_fire_wall*/ + temp }
-				if (s == 29) { temp = 0; if (character.oskill_meteor > 0) { temp = Math.min(3, character.oskill_meteor) }
-					skills[s].force_levels = /*character.skill_meteor*/ + temp }
-				if (s == 30) { temp = 0; if (character.oskill_fire_mastery > 0) { temp = Math.min(3, character.oskill_fire_mastery) }
-					skills[s].force_levels = character.skill_fire_mastery + temp }
-				if (s == 31) { skills[s].force_levels = character.skill_hydra }
+				if (s == 26) { temp = 0; if (character.oskill_Fire_Ball > 0) { temp = Math.min(3, character.oskill_Fire_Ball) }
+					skills[s].force_levels = /*character.skill_Fire_Ball*/ + temp }
+				if (s == 27) { temp = 0; if (character.oskill_Fire_Wall > 0) { temp = Math.min(3, character.oskill_Fire_Wall) }
+					skills[s].force_levels = /*character.skill_Fire_Wall*/ + temp }
+				if (s == 29) { temp = 0; if (character.oskill_Meteor > 0) { temp = Math.min(3, character.oskill_Meteor) }
+					skills[s].force_levels = /*character.skill_Meteor*/ + temp }
+				if (s == 30) { temp = 0; if (character.oskill_Fire_Mastery > 0) { temp = Math.min(3, character.oskill_Fire_Mastery) }
+					skills[s].force_levels = character.skill_Fire_Mastery + temp }
+				if (s == 31) { skills[s].force_levels = character.skill_Hydra }
 			} else { skills[s].extra_levels += character.skills_lightning 
-				if (s == 12) { skills[s].force_levels = character.skill_static_field }
-				if (s == 15) { skills[s].force_levels = character.skill_lightning_surge }
-				if (s == 19) { skills[s].force_levels = character.skill_energy_shield }
-				if (s == 20) { skills[s].force_levels = character.skill_lightning_mastery }
+				if (s == 12) { skills[s].force_levels = character.skill_Static_Field }
+				if (s == 15) { skills[s].force_levels = character.skill_Lightning_Surge }
+				if (s == 19) { skills[s].force_levels = character.skill_Energy_Shield }
+				if (s == 20) { skills[s].force_levels = character.skill_Lightning_Mastery }
 			}
 		}
 		skills[s].extra_levels += skills[s].force_levels
