@@ -44,6 +44,6 @@ Character Skill Planner for Diablo 2: Path of Diablo
 
 [Planner Wiki](https://github.com/Moreina/planner/wiki) (report bugs or add suggestions)
 
-If you'd like to to help with development, or just have some ideas for a different design/implementation, let's chat.
+If you'd like to to help develop, or just have some ideas for a different design/implementation, let's chat.
 
 For anyone curious about the program code, the files (.html, .js, .css) can be edited with any text editor. Most of the program logic is in "all.js", with the skill data in the class files and item data in "all_equipment.js". The page layout is handled by "index.html" and style elements are included in "all.css".

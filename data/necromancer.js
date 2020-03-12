@@ -2,7 +2,7 @@
 // frames per attack with a base weapon speed of 0 and no IAS
 var weapon_frames = {dagger:18, oneHand_sword:18, oneHand_axe:18, twoHand_sword:22, twoHand_axe:19, staff:19, polearm:19, oneHand_mace:18, scepter:18, wand:18, twoHand_mace:22, javelin:23, spear:23, bow:17, crossbow:19}
 
-var character_necromancer = {class_name:"Necromancer", strength:15, dexterity:25, vitality:15, energy:25, life:45, mana:25, defense:6, ar:80, stamina:179, levelup_life:2, levelup_stamina:1, levelup_mana:2, ar_per_dexterity:5, defense_per_dexterity:0.25, life_per_vitality:2, stamina_per_vitality:1, mana_per_energy:2, starting_strength:15, starting_dexterity:25, starting_vitality:15, starting_energy:25, skill_layout:"./images/necromancer.png", tab1:"Summoning", tab2:"Poison & Bone", tab3:"Curses",
+var character_necromancer = {class_name:"Necromancer", strength:15, dexterity:25, vitality:15, energy:25, life:45, mana:25, defense:6, ar:80, stamina:179, levelup_life:2, levelup_stamina:1, levelup_mana:2, ar_per_dexterity:5, defense_per_dexterity:0.25, life_per_vitality:2, stamina_per_vitality:1, mana_per_energy:2, starting_strength:15, starting_dexterity:25, starting_vitality:15, starting_energy:25, ar_const:-10, skill_layout:"./images/necromancer.png", tab1:"Summoning", tab2:"Poison & Bone", tab3:"Curses",
 	updateSkill : function(skill, lvl, elem) {
 	var result = skill.data.values[elem][lvl];
 	var sum_damage = (1+((~~skills[0].data.values[4][skills[0].level+skills[0].extra_levels]) / 100));

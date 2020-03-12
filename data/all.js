@@ -208,19 +208,14 @@ function equip(type, val) {
 	for (item in equipment[type]) { if (equipment[type][item].name == val) { if (typeof(equipment[type][item].set_bonuses) != 'undefined') { set_bonuses = equipment[type][item].set_bonuses } } }
 	if (set_bonuses != "") { set = set_bonuses[0]; set_before = character[set]; }
 	if (old_set_bonuses != "") { old_set = old_set_bonuses[0]; old_set_before = character[old_set]; }
-	
-	// TODO: fix bug - stale effects
+	// remove effects
 	for (old_affix in equipped[type]) {
 		for (let s = 0; s < skills.length; s++) {
 			if (skills[s].level == 0 && skills[s].force_levels > 0) {
-				var affixName = skills[s].name; affixName = affixName.split(' ').join('_'); affixName = "skill_" + affixName;
-				if (old_affix == affixName || old_affix == ("o"+affixName)) { disableEffect(s); }		// TODO: rename skill affixes
-				// ...? updateEffect(skills[s])	// TODO: update effective levels?
-				// effective levels aren't correct even before attempting to disable their effects
+				disableEffect(s)
 			}
 		}
 	}
-
 	// if replacing an item, previous item's affixes are removed from character
 	for (old_affix in equipped[type]) {
 		character[old_affix] -= equipped[type][old_affix]
@@ -230,7 +225,6 @@ function equip(type, val) {
 	if (old_set_bonuses != "") {
 		old_set_after = character[old_set];
 		if (old_set_before > old_set_after) {
-			//var old_rings = Math.round((old_set_before + old_set_after) * 2,0)	// decrepated
 			var before = Math.round(old_set_before,0)
 			var after = Math.round(old_set_after,0)
 			// remove set bonuses for old item
@@ -239,18 +233,19 @@ function equip(type, val) {
 					character[affix] -= equipped[type]["set_bonuses"][i][affix]
 				}
 			}
-			equipped[type]["set_bonuses"][1] = 0	// invalid/outdated set info
+			equipped[type]["set_bonuses"][1] = 0	// save "state" for invalid/outdated set info
 			if (before > after) {
 				// remove old set bonus for other equipped items in the set (only if the removed set item wasn't a duplicate of another set item, i.e. ring)
 				for (set_type in equipped) {
 					if (set_type != type && equipped[set_type]["set_bonuses"] != null) {
-						if (equipped[set_type]["set_bonuses"][0] == old_set && equipped[set_type]["set_bonuses"][1] == 1) {
+						if (equipped[set_type]["set_bonuses"][0] == old_set && equipped[set_type]["set_bonuses"][1] == 1) {	// same set as removed item & set info is valid
 							for (affix in equipped[set_type]["set_bonuses"][before]) {
 								character[affix] -= equipped[set_type]["set_bonuses"][before][affix]
 							}
 						}
 					}
 				}
+				// TODO: what is this doing? Isn't it the same as the above code for removing other set bonuses?
 				for (affix in sets[old_set][before]) {
 					character[affix] -= sets[old_set][before][affix]
 				}
@@ -271,9 +266,11 @@ function equip(type, val) {
 		if ((equipped["weapon"].twoHanded == 1 || (equipped["weapon"].type != "bow" && itemType == "quiver")) && !((equipped["weapon"].type == "bow" || equipped["weapon"].type == "crossbow") && itemType == "quiver")) {
 			allow = 0; document.getElementById("dropdown_offhand").selectedIndex = 0; }
 	}
+	
 	// add affixes to character
 	if (allow == 1) { for (item in equipment[type]) {
 		if (equipment[type][item].name == val) {
+			// add regular affixes
 			for (affix in equipment[type][item]) {
 				character[affix] += equipment[type][item][affix]
 				equipped[type][affix] = equipment[type][item][affix]
@@ -281,17 +278,23 @@ function equip(type, val) {
 			// add affixes from base item
 			if (typeof(equipment[type][item]["base"]) != 'undefined') { if (equipment[type][item]["base"] != "") {
 				var base = equipment[type][item].base; base = base.split(' ').join('_'); base = base.split('-').join('_'); base = base.split("'s").join("s");	// spaces, hypens, and apostrophes converted to match named entry in bases{}
-				if (typeof(bases[base]) != 'undefined') { for (affix in bases[base]) { if (affix == "base_damage_min" || affix == "base_damage_max" || affix == "defense" || affix == "req_strength" || affix == "req_dexterity") {			// if (~~bases[base][affix] != 0) {	...use to check undefined?
-					var mult = 1;
-					if (affix == "defense") { if (typeof(equipment[type][item]["e_def"]) != 'undefined') { mult += (equipment[type][item]["e_def"]/100) } }
-					if (typeof(equipment[type][item]["ethereal"]) != 'undefined') { if (affix == "defense" || affix == "base_damage_min" || affix == "base_damage_max") { if (equipment[type][item]["ethereal"] == 1) { mult += 0.5 } } }
-					if (affix == "req_strength") { if (typeof(equipment[type][item]["req"]) != 'undefined') { if (typeof(equipment[type][item]["req_strength"]) == 'undefined') { mult += (equipment[type][item]["req"]/100) } } }
-					if (affix == "req_dexterity") { if (typeof(equipment[type][item]["req"]) != 'undefined') { if (typeof(equipment[type][item]["req_dexterity"]) == 'undefined') { mult += (equipment[type][item]["req"]/100) } } }
+				if (typeof(bases[base]) != 'undefined') { for (affix in bases[base]) { if (affix == "base_damage_min" || affix == "base_damage_max" || affix == "base_defense" || affix == "req_strength" || affix == "req_dexterity") {			// if (~~bases[base][affix] != 0) {	...use to check undefined?
+					var multEth = 1;
+					var multED = 1;
+					var multReq = 1;
+					if (typeof(equipment[type][item]["ethereal"]) != 'undefined') { if (equipment[type][item]["ethereal"] == 1) { multEth = 1.5; } }
+					if (affix == "base_defense") { if (typeof(equipment[type][item]["e_def"]) != 'undefined') { multED += (equipment[type][item]["e_def"]/100) } }
+					if (affix == "base_damage_min" || affix == "base_damage_max") { if (typeof(equipment[type][item]["e_damage"]) != 'undefined') { multED += (equipment[type][item]["e_damage"]/100) } }
+					if (affix == "req_strength" || affix == "req_dexterity") { if (typeof(equipment[type][item]["req"]) != 'undefined') { multReq += (equipment[type][item]["req"]/100) } }
 					
-					if (typeof(equipped[type][affix]) == 'undefined') { equipped[type][affix] = 0 }	// undefined (new) affixes get set to zero
-					if (affix == "base_damage_min" || affix == "base_damage_max" || affix == "defense" || affix == "req_strength" || affix == "req_dexterity") {
-						equipped[type][affix] += Math.round(mult*bases[base][affix],0)
-						character[affix] += Math.round(mult*bases[base][affix],0)
+					if (typeof(equipped[type][affix]) == 'undefined') { equipped[type][affix] = 0 }	// undefined (new) affixes get initialized to zero
+					if (affix == "base_damage_min" || affix == "base_damage_max" || affix == "base_defense") {
+						equipped[type][affix] = Math.floor(multEth*multED*bases[base][affix])
+						character[affix] += Math.floor(multEth*multED*bases[base][affix])
+					}
+					if (affix == "req_strength" || affix == "req_dexterity") {
+						equipped[type][affix] += Math.floor(multReq*bases[base][affix])
+						character[affix] += Math.floor(multReq*bases[base][affix])
 					}
 				} } }
 			} }
@@ -301,7 +304,6 @@ function equip(type, val) {
 	if (set_bonuses != "") {
 		set_after = character[set];
 		if (set_before < set_after) {
-			//var rings = Math.round((set_before + set_after) * 2,0)	// decrepated
 			var before = Math.round(set_before,0)
 			var after = Math.round(set_after,0)
 			// add set bonuses for new item
@@ -322,6 +324,7 @@ function equip(type, val) {
 						}
 					}
 				}
+				// TODO: what is this doing? Isn't it the same as the above code for adding other set bonuses?
 				for (affix in sets[set][after]) {
 					character[affix] += sets[set][after][affix]
 				}
@@ -546,17 +549,22 @@ function updateStats() {
 		else { weapon_skillup = 0; c.ar_skillup = 0; c.cstrike_skillup = 0; c.pierce_skillup = 0; }
 	}
 	var ar_addon = (dexTotal-c.starting_dexterity)*c.ar_per_dexterity;
-	var defense_addon = (dexTotal-c.starting_dexterity)*c.defense_per_dexterity;
+	var defense_addon = (dexTotal-c.starting_dexterity)*c.defense_per_dexterity;	// it may be easier to use: dexTotal/4
 	var life_addon = (vitTotal-c.starting_vitality)*c.life_per_vitality;
 	var stamina_addon = (vitTotal-c.starting_vitality)*c.stamina_per_vitality;
 	var mana_addon = (energyTotal-c.starting_energy)*c.mana_per_energy;
 	
-	var ar = Math.floor((c.ar + (c.level-1)*c.ar_per_level + ar_addon) * (1 + c.ar_skillup/100) * (1 + (c.ar_bonus + c.level*c.ar_bonus_per_level)/100));
-	var def = Math.floor((c.defense + (c.level-1)*c.defense_per_level + defense_addon) * (1 + c.defense_skillup/100) * (1 + c.defense_bonus/100));
+	var def_items = 0;
+	for (type in equipped) { def_items += Math.floor(~~equipped[type]["base_defense"] + ~~equipped[type]["defense"]) }	// e_def left out here, calculated elsewhere
+	var def = Math.floor((def_items + dexTotal/4) * (1 + (c.defense_bonus + c.defense_skillup)/100) + (c.level-1)*c.defense_per_level);
+	
+	//var _ar = Math.floor((c.ar + (c.level-1)*c.ar_per_level + ar_addon) * (1 + (c.ar_skillup + c.ar_bonus + c.level*c.ar_bonus_per_level)/100));			// OLD
+	var ar = Math.floor((((dexTotal - 7) * 5 + c.ar + (c.level-1)*c.ar_per_level + c.ar_const)/2) * (1+(c.ar_skillup + c.ar_bonus + c.level*c.ar_bonus_per_level)/100));
 	
 	var wisp = 1+Math.round(c.wisp,0)/10;
 	var phys_min = ((1+statBonus+(c.e_damage+c.damage_bonus+weapon_skillup)/100)*((c.level-1)*c.min_damage_per_level+c.base_damage_min))+c.damage_min;
 	var phys_max = ((1+statBonus+(c.e_damage+c.damage_bonus+weapon_skillup)/100)*((c.level-1)*c.max_damage_per_level+c.base_damage_max))+c.damage_max;
+	
 	var basic_min = Math.floor(wisp*(phys_min + c.fDamage_min + c.cDamage_min + c.lDamage_min) + c.mDamage_min);
 	var basic_max = Math.floor(wisp*(phys_max + c.fDamage_max + c.cDamage_max + c.lDamage_max) + c.mDamage_max + wisp*(c.pDamage_all+c.pDamage_max));
 	if (basic_min > 0 || basic_max > 0) { document.getElementById("basic_attack").innerHTML = basic_min + "-" + basic_max }
@@ -865,7 +873,7 @@ function calculateSkillPassives(className) {
 	}
 }
 
-// 
+// does updateEffect() for each skill
 // ---------------------------------
 function updateEffectList() { for (let s = 0; s < skills.length; s++) { updateEffect(skills[s]); } }
 
@@ -876,15 +884,16 @@ function updateEffectList() { for (let s = 0; s < skills.length; s++) { updateEf
 // ---------------------------------
 function updateEffect(skill) {
 	if (typeof(skill.effect) != 'undefined') { if (skill.effect > 3) {
+		var eff = "e"+skill.key;
+		var effectElem = document.getElementById(eff);
 		if (skill.level > 0 || skill.force_levels > 0) {
-			var effectElem = document.getElementById("e"+skill.key)
 			if (effectElem == null) {
 				
 				var newEffect = document.createElement("img")
 				var effectIcon = "./images/skills/"+character.class_name.toLowerCase()+"/dark/"+skill.name+" dark.png";
 				
 				var eClass = document.createAttribute("class");	eClass.value = "effect";	newEffect.setAttributeNode(eClass);
-				var eId = document.createAttribute("id");	eId.value = "e"+skill.key;	newEffect.setAttributeNode(eId);
+				var eId = document.createAttribute("id");	eId.value = eff;	newEffect.setAttributeNode(eId);
 				var eSrc = document.createAttribute("src");	eSrc.value = effectIcon;	newEffect.setAttributeNode(eSrc);
 				
 				var eHoverOn = document.createAttribute("onmouseover");		eHoverOn.value = "hoverEffect("+skill.i+")";	newEffect.setAttributeNode(eHoverOn);
@@ -895,89 +904,24 @@ function updateEffect(skill) {
 				var effectGUI = document.getElementById("side");
 				effectGUI.appendChild(newEffect);
 				
-				effects["e"+skill.key] = {}
-				effects["e"+skill.key]["enabled"] = 0
-				effects["e"+skill.key]["skill"] = skill.i
+				effects[eff] = {}
+				effects[eff]["enabled"] = 0
+				effects[eff]["skill"] = skill.i
 				// if () ... calculate passive effects here instead of passing them forward (if they are shown as effects)
 				
 				if (settings.autocast == 1) { enableEffect(skill.i) }
 			}
 		} else {
-			var effectElem = document.getElementById("e"+skill.key)
-			if (effectElem != null) {
-				effects["e"+skill.key].enabled = 0
+			if (effectElem != null) {	// && effects[eff].enabled == 1
+				effects[eff].enabled = 0
 				effectElem.remove();
 			}
-			if (typeof(effects["e"+skill.key]) != 'undefined') { if (effects["e"+skill.key]["enabled"] == 1) {
+			if (typeof(effects[eff]) != 'undefined') { if (effects[eff]["enabled"] == 1) {
 				disableEffect(skill.i)
 			} }
 		}
 	} }
 }
-
-/*
-// 
-// ---------------------------------
-function setupShrines() {
-	var shrines = ["Skill", "Combat", "Armor", "Mana_Regeneration", "Resist_Poison", "Resist_Cold", "Resist_Fire", "Resist_Lightning"];
-	for (let s = 0; s < shrines.length; s++) {
-		var newEffect = document.createElement("img")
-		//var effectIcon = "./images/misc/"+shrines[s]+"_Shrine.gif";
-		var effectIcon = "./images/skills/none.png";
-		
-		var eClass = document.createAttribute("class");	eClass.value = "effect";	newEffect.setAttributeNode(eClass);
-		var eId = document.createAttribute("id");	eId.value = shrines[s];		newEffect.setAttributeNode(eId);
-		var eSrc = document.createAttribute("src");	eSrc.value = effectIcon;	newEffect.setAttributeNode(eSrc);
-		
-		var eEnable = document.createAttribute("onclick");		eEnable.value = "enableShrine("+shrines[s]+")";		newEffect.setAttributeNode(eEnable);
-		var eDisable = document.createAttribute("oncontextmenu");	eDisable.value = "disableShrine("+shrines[s]+")";	newEffect.setAttributeNode(eDisable);
-		
-		var effectGUI = document.getElementById("side");
-		effectGUI.appendChild(newEffect);
-		
-		effects[shrines[s]] = {}
-		effects[shrines[s]]["enabled"] = 0
-		if (settings.autocast == 1) { enableShrine(shrines[s]) }
-	}
-}
-
-// 
-// ---------------------------------
-function disableShrine(name) {
-	if (typeof(effects[name]) != 'undefined') { if (effects[name]["enabled"] == 1) {
-		effects[name]["enabled"] = 0
-		document.getElementById(name).src = "./images/skills/none.png";
-		for (affix in effects[name]) {
-			character[affix] -= effects[name][affix]
-			if (affix != "enabled") { effects[name][affix] = 0 }
-		}
-		calculateSkillAmounts()
-		updateAll()
-	} }
-	
-	var effectElem = document.getElementById(name)
-	if (effectElem != null) {
-		effects[name].enabled = 0
-		effectElem.remove();
-	}
-}
-
-
-// 
-// ---------------------------------
-function enableShrine(name) {
-	if (typeof(effects[name]) != 'undefined') { if (effects[name]["enabled"] == 0) {
-		effects[name]["enabled"] = 1
-		document.getElementById(name).src = "./images/misc/"+name+"_Shrine.gif";
-		for (affix in shrineEffects[name]) {
-			character[affix] += shrineEffects[name][affix]
-			if (effects[name][affix] != "enabled") { effects[name][affix] = shrineEffects[name][affix] }
-		}
-		calculateSkillAmounts()
-		updateAll()
-	} }
-}
-*/
 
 // 
 // ---------------------------------
@@ -990,12 +934,13 @@ function effectOut(s) {}
 // 
 // ---------------------------------
 function disableEffect(s) {
-	if (typeof(effects["e"+skills[s].key]) != 'undefined') {
-	var effect = effects["e"+skills[s].key];
-	if (effect["enabled"] == 1) {
-		effect["enabled"] = 0
-		document.getElementById("e"+skills[s].key).src = "./images/skills/"+character.class_name.toLowerCase()+"/dark/"+skills[s].name+" dark.png";
-		removeEffect(effect)
+	var eff = "e"+skills[s].key;
+	if (typeof(effects[eff]) != 'undefined') {
+	if (effects[eff]["enabled"] == 1) {
+		effects[eff]["enabled"] = 0
+		document.getElementById(eff).src = "./images/skills/"+character.class_name.toLowerCase()+"/dark/"+skills[s].name+" dark.png";
+		removeEffect(effects[eff])
+	//	if (document.getElementById(eff) != null) { document.getElementById(eff).remove(); }
 		calculateSkillAmounts()
 		updateAll()
 	}
@@ -1005,12 +950,12 @@ function disableEffect(s) {
 // 
 // ---------------------------------
 function enableEffect(s) {
-	if (typeof(effects["e"+skills[s].key]) != 'undefined') {
-	var effect = effects["e"+skills[s].key];
-	if (effect["enabled"] == 0) {
-		effect["enabled"] = 1
-		document.getElementById("e"+skills[s].key).src = "./images/skills/"+character.class_name.toLowerCase()+"/"+skills[s].name+".png";	
-		addEffect(effect)
+	var eff = "e"+skills[s].key;
+	if (typeof(effects[eff]) != 'undefined') {
+	if (effects[eff]["enabled"] == 0) {
+		effects[eff]["enabled"] = 1
+		document.getElementById(eff).src = "./images/skills/"+character.class_name.toLowerCase()+"/"+skills[s].name+".png";	
+		addEffect(effects[eff])
 		calculateSkillAmounts()
 		updateAll()
 	}
@@ -1018,6 +963,7 @@ function enableEffect(s) {
 }
 
 // 
+// effect: the effects[] element being removed
 // ---------------------------------
 function removeEffect(effect) {
 	for (affix in effect) {
@@ -1027,6 +973,7 @@ function removeEffect(effect) {
 }
 
 // 
+// effect: the effects[] element being added
 // ---------------------------------
 function addEffect(effect) {
 	buffData = character.getBuffData(effect)
@@ -1042,7 +989,7 @@ function modifyEffect(skill) {
 	if (typeof(skill.effect) != 'undefined') { if (skill.effect > 3) {
 		updateEffect(skill);
 		if (typeof(effects["e"+skill.key]) != 'undefined') { if (effects["e"+skill.key].enabled == 1) {
-			disableEffect(skill.i); 
+			disableEffect(skill.i);
 			updateEffect(skill);
 			enableEffect(skill.i);
 			updateEffect(skill);
@@ -1145,6 +1092,9 @@ function removeStat(event, stat) {
 // skill: the skill to modify
 // ---------------------------------
 function skillUp(event, skill) {
+	if (typeof(skill.effect) != 'undefined') { if (skill.effect > 3) {
+		if (skill.level == 0 && skill.force_levels == 0 && typeof(effects["e"+skill.key]) == 'undefined') { enableEffect(skill.i) }
+	} }
 	var old_level = skill.level;
 	var levels = 1;
 	if (event.shiftKey) { levels = 10 }
@@ -1173,7 +1123,6 @@ function skillUp(event, skill) {
 	}
 	if (typeof(skill.effect) != 'undefined') { if (skill.effect > 3) {
 		skillHover(skill)
-		//if (skill.level == 0) { disableEffect(skill.i) }
 		modifyEffect(skill)
 	} }
 	skillHover(skill)
@@ -1218,8 +1167,7 @@ function skillDown(event, skill) {
 	}
 	if (typeof(skill.effect) != 'undefined') { if (skill.effect > 3) {
 		skillHover(skill)
-		//if (skill.level == 0) { disableEffect(skill.i) }	// TEST: if (skill.level == 0 && typeof(effects["e"+skill.key]) != 'undefined') { if (effects["e"+skill.key].enabled == 1) { disableEffect(skill.i) } }
-		if (skill.level == 0 && typeof(effects["e"+skill.key]) != 'undefined') { if (effects["e"+skill.key].enabled == 1) { disableEffect(skill.i) } }
+		if (skill.level == 0 && skill.force_levels == 0 && typeof(effects["e"+skill.key]) != 'undefined') { if (effects["e"+skill.key].enabled == 1) { disableEffect(skill.i) } }
 		modifyEffect(skill)
 	} }
 	skillHover(skill)
@@ -1474,3 +1422,67 @@ function itemRemove(ev, x, y) {
 	trash(ev_new)
 */	return;
 }
+
+/*
+// 
+// ---------------------------------
+function setupShrines() {
+	var shrines = ["Skill", "Combat", "Armor", "Mana_Regeneration", "Resist_Poison", "Resist_Cold", "Resist_Fire", "Resist_Lightning"];
+	for (let s = 0; s < shrines.length; s++) {
+		var newEffect = document.createElement("img")
+		//var effectIcon = "./images/misc/"+shrines[s]+"_Shrine.gif";
+		var effectIcon = "./images/skills/none.png";
+		
+		var eClass = document.createAttribute("class");	eClass.value = "effect";	newEffect.setAttributeNode(eClass);
+		var eId = document.createAttribute("id");	eId.value = shrines[s];		newEffect.setAttributeNode(eId);
+		var eSrc = document.createAttribute("src");	eSrc.value = effectIcon;	newEffect.setAttributeNode(eSrc);
+		
+		var eEnable = document.createAttribute("onclick");		eEnable.value = "enableShrine("+shrines[s]+")";		newEffect.setAttributeNode(eEnable);
+		var eDisable = document.createAttribute("oncontextmenu");	eDisable.value = "disableShrine("+shrines[s]+")";	newEffect.setAttributeNode(eDisable);
+		
+		var effectGUI = document.getElementById("side");
+		effectGUI.appendChild(newEffect);
+		
+		effects[shrines[s]] = {}
+		effects[shrines[s]]["enabled"] = 0
+		if (settings.autocast == 1) { enableShrine(shrines[s]) }
+	}
+}
+
+// 
+// ---------------------------------
+function disableShrine(name) {
+	if (typeof(effects[name]) != 'undefined') { if (effects[name]["enabled"] == 1) {
+		effects[name]["enabled"] = 0
+		document.getElementById(name).src = "./images/skills/none.png";
+		for (affix in effects[name]) {
+			character[affix] -= effects[name][affix]
+			if (affix != "enabled") { effects[name][affix] = 0 }
+		}
+		calculateSkillAmounts()
+		updateAll()
+	} }
+	
+	var effectElem = document.getElementById(name)
+	if (effectElem != null) {
+		effects[name].enabled = 0
+		effectElem.remove();
+	}
+}
+
+
+// 
+// ---------------------------------
+function enableShrine(name) {
+	if (typeof(effects[name]) != 'undefined') { if (effects[name]["enabled"] == 0) {
+		effects[name]["enabled"] = 1
+		document.getElementById(name).src = "./images/misc/"+name+"_Shrine.gif";
+		for (affix in shrineEffects[name]) {
+			character[affix] += shrineEffects[name][affix]
+			if (effects[name][affix] != "enabled") { effects[name][affix] = shrineEffects[name][affix] }
+		}
+		calculateSkillAmounts()
+		updateAll()
+	} }
+}
+*/
