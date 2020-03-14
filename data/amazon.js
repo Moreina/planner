@@ -6,7 +6,7 @@ var character_amazon = {class_name:"Amazon", strength:20, dexterity:25, vitality
 	updateSkill : function(skill, lvl, elem) {
 	var result = skill.data.values[elem][lvl]
 	
-	if (skill.name == "Poison Javelin" && elem < 2) { 		result *= ((1 + (0.15*skills[6].level)) * (1 + 0.02*(character.dexterity + character.all_attributes + character.level*character.dexterity_per_level)) * (1+character.pDamage/100)) }
+	if (skill.name == "Poison Javelin" && elem < 2) { 		result *= ((1 + 0.15*skills[6].level + 0.02*(character.dexterity + character.all_attributes + character.level*character.dexterity_per_level)) * (1+character.pDamage/100)) }
 	if (skill.name == "Plague Javelin" && elem > 0 && elem < 3) { 	result *= ((1 + (0.22*skills[2].level)) * (1+character.pDamage/100)) }
 	if (skill.name == "Power Strike" && elem > 0 && elem < 3) { 	result *= ((1 + (0.20*skills[5].level + 0.20*skills[8].level)) * (1+character.lDamage/100)) }
 	if (skill.name == "Lightning Bolt" && elem < 2) { 		result *= ((1 + (0.12*skills[1].level + 0.12*skills[9].level)) * (1+character.lDamage/100)) }

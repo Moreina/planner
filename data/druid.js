@@ -9,8 +9,8 @@ var character_druid = {class_name:"Druid", strength:15, dexterity:20, vitality:2
 	var result = skill.data.values[elem][lvl]
 	
 	if (skill.name == "Firestorm" && elem > 0 && elem < 3) { 	result *= ((1 + (0.30*skills[1].level + 0.30*skills[4].level)) * (1+character.fDamage/100)) }
-	if (skill.name == "Flame Dash" && elem == 0) { 			result = Math.max(0.5, (8 - 0.4*skill.level)) }
-	if (skill.name == "Flame Dash" && elem < 3 && elem > 0) { 	result *= ((1 + (0.10*skills[1].level)) * (1 + 0.01*(character.energy + character.all_attributes + character.level*character.energy_per_level)) * (1+character.fDamage/100)) }
+	if (skill.name == "Flame Dash" && elem == 0) { 			result = Math.max(0.5, (8.4 - 0.4*skill.level)) }
+	if (skill.name == "Flame Dash" && elem < 3 && elem > 0) { 	result *= ((1 + 0.10*skills[1].level + 0.01*(character.energy + character.all_attributes + character.level*character.energy_per_level)) * (1+character.fDamage/100)) }
 	if (skill.name == "Molten Boulder" && elem < 2) { 		result *= (1 + (0.20*skills[7].level)) }
 	if (skill.name == "Molten Boulder" && elem > 1 && elem < 4) { 	result *= ((1 + (0.23*skills[0].level)) * (1+character.fDamage/100)) }
 	if (skill.name == "Molten Boulder" && elem > 3 && elem < 6) { 	result *= ((1 + (0.17*skills[0].level)) * (1+character.fDamage/100)) }
@@ -35,7 +35,7 @@ var character_druid = {class_name:"Druid", strength:15, dexterity:20, vitality:2
 	if (skill.name == "Rabies" && elem > 0 && elem < 3) { result *= ((1 + (0.20*skills[22].level + 0.20*skills[27].level)) * (1+character.pDamage/100)) }
 
 	if (skill.name == "Raven" && elem < 3 && elem > 0) { result *= (1 + (0.20*skills[5].level + 0.20*skills[6].level)) }
-	if (skill.name == "Raven" && elem < 5 && elem > 2) { result *= ((1 + (0.21*skills[3].level)) * (1 + 0.01*(character.energy + character.all_attributes + character.level*character.energy_per_level))) }
+	if (skill.name == "Raven" && elem < 5 && elem > 2) { result *= (1 + 0.21*skills[3].level + 0.01*(character.energy + character.all_attributes + character.level*character.energy_per_level)) }
 	if (skill.name == "Summon Spirit Wolf" && elem == 0) { result = Math.min(7, skill.level) }
 	if (skill.name == "Summon Spirit Wolf" && elem == 1) { if (skills[27].level > 0) { result = ((1 + (skills[27].data.values[6][skills[27].level+skills[27].extra_levels] / 100)) * skill.data.values[elem][character.difficulty]) } else { result = skill.data.values[elem][character.difficulty] } }
 	if (skill.name == "Summon Spirit Wolf" && elem < 4 && elem > 1) { if (skills[30].level > 0) { result *= (1 + (skills[30].data.values[5][skills[30].level+skills[30].extra_levels] / 100)) } }

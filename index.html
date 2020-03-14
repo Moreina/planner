@@ -134,7 +134,7 @@
 <img class="I Ic1 Iy6" id="i361"><img class="I Ic2 Iy6" id="i362"><img class="I Ic3 Iy6" id="i363">
 
 <!--	Equipment Menus 	-->
-<div class="dropdown" id="equipment" style="display: block; float: right; width: 200px; height: 300px; position: relative;">
+<div class="dropdown" id="equipment" style="display: block; float: right; width: 200px; height: 300px; position: relative; z-index: 6;">
 <select class="dropdown" id="dropdown_helm" onChange="equip('helm', this.value)" onContextMenu="equip('helm', 'helm')"></select>
 <select class="dropdown" id="dropdown_armor" onChange="equip('armor', this.value)" onContextMenu="equip('armor', 'armor')"></select>
 <select class="dropdown" id="dropdown_gloves" onChange="equip('gloves', this.value)" onContextMenu="equip('gloves', 'gloves')"></select>
@@ -145,7 +145,9 @@
 <select class="dropdown" id="dropdown_ring2" onChange="equip('ring2', this.value)" onContextMenu="equip('ring2', 'ring2')"></select>
 <select class="dropdown" id="dropdown_weapon" onChange="equip('weapon', this.value)" onContextMenu="equip('weapon', 'weapon')"></select>
 <select class="dropdown" id="dropdown_offhand" onChange="equip('offhand', this.value)" onContextMenu="equip('offhand', 'offhand')"></select>
-<select class="dropdown" id="dropdown_charms" onChange="addCharm(this.value)"></select>
+<select class="dropdown" id="dropdown_charms" onChange="addCharm(this.value)"><option class="gray" disabled selected>­ ­ ­ ­ Charms</option></select>
+<br><br>
+<select class="dropdown" id="dropdown_misc" onChange="addMisc(this.value)"><option class="gray" disabled selected>­ ­ ­ ­ Miscellaneous</option></select>
 </div>
 
 <!--	skill hover text	-->

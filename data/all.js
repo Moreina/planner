@@ -40,6 +40,7 @@ function loadEquipment(className) {
 	for (let i = 0; i < equipmentTypes.length; i++) {
 		loadItems(equipmentTypes[i], equipmentDropdowns[i], className)
 	}
+	loadMisc()
 }
 
 // Creates a dropdown menu option
@@ -71,13 +72,25 @@ function loadItems(type, dropdown, className) {
 						choices += "<option class='dropdown-unique'>" + equipment[type][item].name + "</option>"
 					}
 				} else {
-					choices += "<option selected>" + "­ ­ ­ ­ " + equipment[type][item].name + "</option>"
+					if (type != "charms") {
+						choices += "<option selected>" + "­ ­ ­ ­ " + equipment[type][item].name + "</option>"
+					} else {
+						choices += "<option disabled selected>" + "­ ­ ­ ­ " + equipment[type][item].name + "</option>"
+					}
 				}
 			}
 			}
 		}
 		document.getElementById(dropdown).innerHTML = choices
 	}
+}
+
+// Loads non-item effects
+// ---------------------------------
+function loadMisc() {
+	var choices = "<option class='gray' disabled selected>­ ­ ­ ­ Miscellaneous</option>";
+	for (let m = 1; m < non_items.length; m++) { choices += "<option>" + non_items[m].name + "</option>" }
+	document.getElementById("dropdown_misc").innerHTML = choices
 }
 
 // Resets everything and starts a new character
@@ -465,6 +478,86 @@ function addCharm(val) {
 	document.getElementById("dropdown_charms").selectedIndex = 0
 }
 
+// Adds miscellaneous effect
+// val: the chosen effect
+// ---------------------------------
+function addMisc(val) {
+	document.getElementById("dropdown_misc").selectedIndex = 0
+	for (let m = 1; m < non_items.length; m++) {
+		if (val == non_items[m].name) {
+			if (typeof(effects[non_items[m].effect]) == 'undefined') { effects[non_items[m].effect] = {} }
+			initiateMiscEffect(non_items[m].effect, m)
+			calculateSkillAmounts()
+			updateAll()
+		}
+	}
+}
+
+// 
+// ---------------------------------
+function initiateMiscEffect(name, i) {
+	if (document.getElementById(name) == null) {
+		var newEffect = document.createElement("img")
+		var effectIcon = "./images/misc/dark/"+name+".png";
+		
+		var eClass = document.createAttribute("class");	eClass.value = "effect";	newEffect.setAttributeNode(eClass);
+		var eId = document.createAttribute("id");	eId.value = name;		newEffect.setAttributeNode(eId);
+		var eSrc = document.createAttribute("src");	eSrc.value = effectIcon;	newEffect.setAttributeNode(eSrc);
+		
+		var eToggle = document.createAttribute("onclick");		eToggle.value = "toggleMiscEffect("+name+", "+i+")";	newEffect.setAttributeNode(eToggle);
+		var eRemove = document.createAttribute("oncontextmenu");	eRemove.value = "removeMiscEffect("+name+", "+i+")";	newEffect.setAttributeNode(eRemove);
+		
+		var effectGUI = document.getElementById("side");
+		effectGUI.appendChild(newEffect);
+		
+		if (typeof(effects[name]) == 'undefined') { effects[name] = {} }
+		effects[name]["enabled"] = 0
+		if (settings.autocast == 1) {
+			toggleMiscEffect(name, i)
+		}
+	}
+}
+
+// 
+// ---------------------------------
+function removeMiscEffect(name, i) {
+	if (i > 0) { name = non_items[i].effect } else { i = non_items[i].i }
+	if (typeof(effects[name]) != 'undefined') {
+		if (document.getElementById(name) != null) { document.getElementById(name).remove(); }
+		for (affix in effects[name]) {
+			character[affix] -= effects[name][affix]
+			effects[name][affix] = 0
+		}
+		calculateSkillAmounts()
+		updateAll()
+	}
+}
+
+// 
+// ---------------------------------
+function toggleMiscEffect(name, i) {
+	if (i > 0) { name = non_items[i].effect } else { i = non_items[i].i }
+	if (effects[name]["enabled"] == 1) {
+		for (affix in effects[name]) {
+			character[affix] -= effects[name][affix]
+			effects[name][affix] = 0
+		}
+		effects[name]["enabled"] = 0
+		document.getElementById(name).src = "./images/misc/dark/"+name+".png"
+	} else {
+		for (affix in non_items[i]) {
+			if (affix != "enabled" && affix != "name" && affix != "duration" && affix != "recharge" && affix != "effect" && affix != "i") {
+				effects[name][affix] = non_items[i][affix]
+				character[affix] += non_items[i][affix]
+			}
+		}
+		effects[name]["enabled"] = 1
+		document.getElementById(name).src = "./images/misc/"+name+".gif"
+	}
+	calculateSkillAmounts()
+	updateAll()
+}
+
 // Toggles the completion of all quests and their rewards
 // ---------------------------------
 function toggleQuests(quests) {
@@ -559,7 +652,7 @@ function updateStats() {
 	var def = Math.floor((def_items + dexTotal/4) * (1 + (c.defense_bonus + c.defense_skillup)/100) + (c.level-1)*c.defense_per_level);
 	
 	//var _ar = Math.floor((c.ar + (c.level-1)*c.ar_per_level + ar_addon) * (1 + (c.ar_skillup + c.ar_bonus + c.level*c.ar_bonus_per_level)/100));			// OLD
-	var ar = Math.floor((((dexTotal - 7) * 5 + c.ar + (c.level-1)*c.ar_per_level + c.ar_const)/2) * (1+(c.ar_skillup + c.ar_bonus + c.level*c.ar_bonus_per_level)/100));
+	var ar = Math.floor((((dexTotal - 7) * 5 + c.ar + (c.level-1)*c.ar_per_level + c.ar_const)/2) * (1+(c.ar_skillup + c.ar_bonus + c.level*c.ar_bonus_per_level)/100) * (1+c.ar_shrine_bonus/100));
 	
 	var wisp = 1+Math.round(c.wisp,0)/10;
 	var phys_min = ((1+statBonus+(c.e_damage+c.damage_bonus+weapon_skillup)/100)*((c.level-1)*c.min_damage_per_level+c.base_damage_min))+c.damage_min;
@@ -1422,67 +1515,3 @@ function itemRemove(ev, x, y) {
 	trash(ev_new)
 */	return;
 }
-
-/*
-// 
-// ---------------------------------
-function setupShrines() {
-	var shrines = ["Skill", "Combat", "Armor", "Mana_Regeneration", "Resist_Poison", "Resist_Cold", "Resist_Fire", "Resist_Lightning"];
-	for (let s = 0; s < shrines.length; s++) {
-		var newEffect = document.createElement("img")
-		//var effectIcon = "./images/misc/"+shrines[s]+"_Shrine.gif";
-		var effectIcon = "./images/skills/none.png";
-		
-		var eClass = document.createAttribute("class");	eClass.value = "effect";	newEffect.setAttributeNode(eClass);
-		var eId = document.createAttribute("id");	eId.value = shrines[s];		newEffect.setAttributeNode(eId);
-		var eSrc = document.createAttribute("src");	eSrc.value = effectIcon;	newEffect.setAttributeNode(eSrc);
-		
-		var eEnable = document.createAttribute("onclick");		eEnable.value = "enableShrine("+shrines[s]+")";		newEffect.setAttributeNode(eEnable);
-		var eDisable = document.createAttribute("oncontextmenu");	eDisable.value = "disableShrine("+shrines[s]+")";	newEffect.setAttributeNode(eDisable);
-		
-		var effectGUI = document.getElementById("side");
-		effectGUI.appendChild(newEffect);
-		
-		effects[shrines[s]] = {}
-		effects[shrines[s]]["enabled"] = 0
-		if (settings.autocast == 1) { enableShrine(shrines[s]) }
-	}
-}
-
-// 
-// ---------------------------------
-function disableShrine(name) {
-	if (typeof(effects[name]) != 'undefined') { if (effects[name]["enabled"] == 1) {
-		effects[name]["enabled"] = 0
-		document.getElementById(name).src = "./images/skills/none.png";
-		for (affix in effects[name]) {
-			character[affix] -= effects[name][affix]
-			if (affix != "enabled") { effects[name][affix] = 0 }
-		}
-		calculateSkillAmounts()
-		updateAll()
-	} }
-	
-	var effectElem = document.getElementById(name)
-	if (effectElem != null) {
-		effects[name].enabled = 0
-		effectElem.remove();
-	}
-}
-
-
-// 
-// ---------------------------------
-function enableShrine(name) {
-	if (typeof(effects[name]) != 'undefined') { if (effects[name]["enabled"] == 0) {
-		effects[name]["enabled"] = 1
-		document.getElementById(name).src = "./images/misc/"+name+"_Shrine.gif";
-		for (affix in shrineEffects[name]) {
-			character[affix] += shrineEffects[name][affix]
-			if (effects[name][affix] != "enabled") { effects[name][affix] = shrineEffects[name][affix] }
-		}
-		calculateSkillAmounts()
-		updateAll()
-	} }
-}
-*/

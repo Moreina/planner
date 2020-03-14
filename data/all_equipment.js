@@ -1,6 +1,6 @@
 
 
-var equipped = { helm:{name:"none"}, armor:{name:"none"}, gloves:{name:"none"}, boots:{name:"none"}, belt:{name:"none"}, amulet:{name:"none"}, ring1:{name:"none"}, ring2:{name:"none"}, weapon:{name:"none", twoHanded:0}, offhand:{name:"none"}, charms:{name:"none"} };
+var equipped = { helm:{name:"none"}, armor:{name:"none"}, gloves:{name:"none"}, boots:{name:"none"}, belt:{name:"none"}, amulet:{name:"none"}, ring1:{name:"none"}, ring2:{name:"none"}, weapon:{name:"none", twoHanded:0}, offhand:{name:"none"}, charms:{name:"none"}};
 
 var unequipped = {name:"none", strength:0, dexterity:0, vitality:0, energy:0, life:0, mana:0, defense:0, ar:0, stamina:0, block:0, base_defense:0, 
 /* main stats		*/	fRes_max:0, cRes_max:0, lRes_max:0, pRes_max:0, mRes_max:0, fRes:0, cRes:0, lRes:0, pRes:0, mRes:0,
@@ -17,8 +17,22 @@ var unequipped = {name:"none", strength:0, dexterity:0, vitality:0, energy:0, li
 /* item qualities	*/	indestructible:0, req:0, autorepair:0, autoreplenish:0, stack_size:0, sockets:0, e_def:0, group:"", tier:0, type:"", def_low:0, def_high:0, durability:0, max_sockets:0, upgrade:"", downgrade:"", 
 /* sets			*/	set_IK:0, set_Mav:0, set_Gris:0, set_TO:0, set_TR:0, set_Nat:0, set_Ald:0, set_Disciple:0, set_Angelic:0, set_Cathan:0, set_Cow:0, set_Brethren:0, set_Hwanin:0, set_Naj:0, set_Orphan:0, set_Sander:0, set_Sazabi:0, set_Arcanna:0, set_Arctic:0, set_Berserker:0, set_Civerb:0, set_Cleglaw:0, set_Death:0, set_Hsarus:0, set_Infernal:0, set_Iratha:0, set_Isenhart:0, set_Milabrega:0, set_Sigon:0, set_Tancred:0, set_Vidala:0,
 /* charges		*/	charges_poison_creeper:0, charges_oak_sage:0, charges_wolverine:0, charges_iron_golem:0, charges_iron_maiden:0, charges_spirit_of_barbs:0, charges_blood_golem:0, 
-/* misc			*/	bonus_corpse_explosion:0, skill_random_sorc:0, max_stamina:0, thorns_reflect:0, absorb:0, curse_length_reduced:0, enemy_defense:0, slow_enemies:0, hammer_bonus:0, skeleton_bonus:0, stun_length:0, charge_ember:0, charge_thunder:0, charge_ice:0, wisp:0, 
+/* misc			*/	ar_shrine_bonus:0, bonus_corpse_explosion:0, skill_random_sorc:0, max_stamina:0, thorns_reflect:0, absorb:0, curse_length_reduced:0, enemy_defense:0, slow_enemies:0, hammer_bonus:0, skeleton_bonus:0, stun_length:0, charge_ember:0, charge_thunder:0, charge_ice:0, wisp:0, 
 };
+
+var non_items = [
+{name:"Miscellaneous"},
+{name:"Shrine: Skill", all_skills:2, duration:96, recharge:240, effect:"Skill", i:1},					// my not apply to skills gained solely from items
+{name:"Shrine: Combat", damage_bonus:200, ar_shrine_bonus:200, duration:96, recharge:240, effect:"Combat", i:2},	// AR bonus can stack with other Combat shrines
+{name:"Shrine: Armor", defense_bonus:100, duration:96, recharge:240, effect:"Armor", i:3},
+{name:"Shrine: Mana Regeneration", mana_regen:400, duration:96, recharge:240, effect:"Mana_Regeneration", i:4},
+{name:"Shrine: Fire Resist", fRes:75, duration:144, recharge:240, effect:"Resist_Fire", i:5},
+{name:"Shrine: Cold Resist", cRes:75, duration:144, recharge:240, effect:"Resist_Cold", i:6},
+{name:"Shrine: Lightning Resist", lRes:75, duration:144, recharge:240, effect:"Resist_Lightning", i:7},
+{name:"Shrine: Poison Resist", pRes:75, duration:144, recharge:240, effect:"Resist_Poison", i:8},
+{name:"Potion: Thawing", cRes:50, duration:30, effect:"Thawing", i:9},							// stackable
+{name:"Potion: Antitode", pRes:50, duration:30, effect:"Antidote", i:10},						// stackable
+];
 
 var equipment = {
     helm: [
@@ -73,7 +87,7 @@ var equipment = {
 {only:"assassin", rarity:"crafted", name:"Psychic Caster Demonhead", req_level:55, mana_regen:10, mana:20, mana_leech:4, skills_shadow:2, mana_per_level:0.75, life:60, e_def:200, fhr:10, ar_bonus:5, light_radius:5, base:"Demonhead"},
 {only:"assassin", rarity:"crafted", name:"Sensei's Blood Armet", req_level:51, dstrike:10, life:80, life_leech:4, skills_martial:2, ar_bonus_per_level:1, e_def:200, fhr:10, ar_bonus:5, light_radius:5, base:"Armet"},
 {only:"barbarian", rarity:"crafted", name:"Veteran's Blood Armet", req_level:51, dstrike:10, life:80, life_leech:4, skills_combat_barbarian:2, ar_bonus_per_level:1, e_def:200, fhr:10, ar_bonus:5, light_radius:5, base:"Armet"},
-],
+	],
     armor: [
 {name:"Armor"},
 {rw:1, name:"Bramble ­ ­ - ­ ­ Archon Plate", req_level:63, defense:300, fhr:50, pDamage:50, max_mana:5, mana_regen:15, cRes_max:5, fRes:30, pRes:100, life_per_kill:13, charges_spirit_of_barbs:13, base:"Archon Plate"},
@@ -131,7 +145,7 @@ var equipment = {
 {name:"Corpsemourn", req_level:55, e_def:180, velocity:-5, fDamage_min:12, fDamage_max:36, strength:8, vitality:10, cRes:35, bonus_corpse_explosion:5, base:"Ornate Plate"},
 {name:"Ormus' Robes", req_level:75, defense:20, fcr:20, cDamage:15, fDamage:15, lDamage:15, mana_regen:15, skill_random_sorc:3, base:"Dusk Shroud"},
 */
-],
+	],
     gloves: [
 {name:"Gloves"},
 {name:"The Hand of Broc", req_level:5, defense:10, e_def:20, life_leech:3, mana_leech:3, pRes:10, mana:20, base:"Leather Gloves"},
@@ -158,7 +172,7 @@ var equipment = {
 {only:"assassin", rarity:"crafted", name:"Sensei's Blood Gloves", req_level:51, life:20, life_leech:8, mana_leech:5, cblow:10, ias:20, fRes:30, cRes:30, skills_martial:2, base:"Vampirebone Gloves"},	// 5% ctc level 4 Frost Nova when hit
 {not:"assassin", rarity:"crafted", name:"Blood Gloves", req_level:47, life:20, life_leech:8, mana_leech:5, cblow:10, ias:20, fRes:30, cRes:30, lRes:30, base:"Vampirebone Gloves"},	// check Inner Sight aura from charges? Deadly Poison?
 {rarity:"crafted", name:"Caster Mitts", req_level:42, mana_regen:10, mana:20, mana_per_kill:3, mana_leech:5, ias:20, mf:25, fRes:30, cRes:30, lRes:30, base:"Bramble Mitts"},
-],
+	],
     boots: [
 {name:"Boots"},
 {name:"Hotspur", req_level:5, defense:6, e_def:20, kick_min:3, fRes:45, fRes_max:15, fDamage_min:3, fDamage_max:6, life:15, base:"Boots"},
@@ -184,7 +198,7 @@ var equipment = {
 {rarity:"rare", name:"High Resistance Boots", req_level:37, kick_min:3, frw:30, fRes:40, cRes:40, lRes:40, mf:25, gf:80, base:"Boots"},
 {rarity:"crafted", name:"Blood Boots", req_level:25, kick_min:37, life_leech:3, life:20, life_replenish:10, frw:30, fRes:40, cRes:40, lRes:40, mf:25, gf:80, base:"Battle Boots"},
 {rarity:"crafted", name:"Caster Boots", req_level:45, kick_min:65, mana_regen:10, mana:20, max_mana:5, frw:30, fRes:40, cRes:40, lRes:40, mf:25, gf:80, base:"Wyrmhide Boots"},
-],
+	],
     belt: [
 {name:"Belt"},
 {name:"Lenymo", req_level:7, mana_regen:30, all_res:5, mana:15, light_radius:1, base:"Sash"},
@@ -209,7 +223,7 @@ var equipment = {
 {set_Sigon:1, name:"Sigon's Wrap", req_level:6, fRes:20, life:20, base:"Plated Belt", set_bonuses:["set_Sigon",{},{defense_per_level:2},{},{},{},{}]},
 {rarity:"crafted", name:"Blood Coil", req_level:56, life:80, life_leech:3, owounds:10, fhr:24, strength:30, fRes:30, cRes:30, lRes:30, base:"Mithril Coil"},
 {rarity:"crafted", name:"Caster Belt", req_level:51, mana_regen:10, mana:20, fcr:10, life:60, fhr:24, strength:30, fRes:30, cRes:30, lRes:30, base:"Vampirefang Belt"},
-],
+	],
     amulet: [
 {name:"Amulet"},
 {name:"Nokozan Relic", req_level:10, fhr:20, fRes:50, fRes_max:10, fDamage_min:3, fDamage_max:6, light_radius:3},
@@ -259,7 +273,7 @@ var equipment = {
 //{rarity:"magic", name:"Corrupted +skills #3", req_level:60, all_skills:1, skills_amazon:2, skills_traps:3, skills_barbarian:2, skills_summoning_druid:3, skills_curses:3, skills_combat_paladin:3, skills_fire:3},
 {rarity:"crafted", name:"Blood Amulet", req_level:89, life_leech:12, life:20, frw:10, strength:30, mana_leech:5, all_res:20, skills_amazon:2, skills_assassin:2, skills_barbarian:2, skills_druid:2, skills_necromancer:2, skills_paladin:2, skills_sorceress:2},	// check on: Inner Sight, Grim Ward, Teleport (from charges)
 {rarity:"crafted", name:"Caster Amulet", req_level:89, mana_regen:10, mana:100, fcr:20, all_res:20, strength:30, dexterity:20, skills_amazon:2, skills_assassin:2, skills_barbarian:2, skills_druid:2, skills_necromancer:2, skills_paladin:2, skills_sorceress:2},
-],
+	],
     ring1: [
 {name:"Ring"},
 {name:"Nagelring", req_level:7, mDamage_reduced:3, ar:75, thorns:3, mf:30},
@@ -275,7 +289,7 @@ var equipment = {
 {set_Angelic:0.5, name:"Angelic Halo", req_level:12, life_replenish:6, life:20, set_bonuses:["set_Angelic",0,{ar_per_level:12},{mf:50},{}]},
 {rarity:"crafted", name:"Blood Ring", req_level:0, life_leech:11, life:20, strength:25, ar:120, all_res:11, fcr:10, mana_leech:5},	// check on: Deadly Poison, Telekinesis (from charges)
 {rarity:"crafted", name:"Caster Ring", req_level:0, mana_regen:10, mana:100, energy:20, all_res:11, fcr:10, strength:20, life:40},
-],
+	],
     ring2: [
 {name:"Ring"},
 {name:"Nagelring", req_level:7, mDamage_reduced:3, ar:75, thorns:3, mf:30},
@@ -291,7 +305,7 @@ var equipment = {
 {set_Angelic:0.5, name:"Angelic Halo", req_level:12, life_replenish:6, life:20, set_bonuses:["set_Angelic",{},{ar_per_level:12},{mf:50},{}]},
 {rarity:"crafted", name:"Blood Ring", req_level:0, life_leech:11, life:20, strength:25, ar:120, all_res:11, fcr:10, mana_leech:5},	// check on: Deadly Poison, Telekinesis (from charges), check level requirement of affixes
 {rarity:"crafted", name:"Caster Ring", req_level:0, mana_regen:10, mana:100, energy:20, all_res:11, fcr:10, strength:20, life:40},
-],
+	],
     weapon: [
 {name:"Weapon"},
 {only:"amazon", name:"Titan's Revenge", req_level:42, e_damage:200, damage_min:25, damage_max:50, skills_amazon:2, life_leech:9, frw:30, strength:20, dexterity:20, autoreplenish:1, skills_javelins:2},
@@ -351,7 +365,7 @@ var equipment = {
 /*
 {name:"Ondal's Wisdom", req_level:0, e_damage:0, type:"staff", twoHanded:1, base:"Elder Staff"},
 */
-],
+	],
     offhand: [
 {name:"Offhand"},
 {only:"necromancer", name:"Homunculus", req_level:42, block:72, e_def:200, mana_per_kill:5, ibc:40, fbr:30, skills_necromancer:2, energy:20, mana_regen:33, all_res:40, skills_curses:2, base:"Heirophant Trophy"},
@@ -407,7 +421,7 @@ var equipment = {
 {name:"Head Hunter's Glory", req_level:75, defense:593, block:0, sockets:3, smite_min:0, smite_max:0, base:"Troll Nest"},
 {name:"Spirit Ward", req_level:0, defense:0, block:0, smite_min:0, smite_max:0, base:"Ward"},
 */
-],
+	],
     charms: [
 {name:"Charms"},
 {name:"Annihilus", type:"small", req_level:80, all_res:20, all_attributes:20, all_skills:1},
@@ -441,12 +455,13 @@ var equipment = {
 {rarity:"magic", name:"Res,MF Small Charm", type:"small", req_level:33, all_res:5, mf:7},
 {rarity:"magic", name:"Res,FRW Small Charm", type:"small", req_level:33, all_res:5, frw:3},
 {rarity:"magic", name:"FHR,AR,Damage Small Charm", type:"small", req_level:39, fhr:5, ar:20, damage_max:3},
+{rarity:"magic", name:"Pestilent Small Charm of Anthrax", type:"small", req_level:80, pDamage_all:451, pDamage_duration:12},
 {rarity:"magic", name:"Life,AR,Damage Small Charm", type:"small", req_level:39, life:20, ar:20, damage_max:3},
 {rarity:"magic", name:"Life,AR,Damage Large Charm", type:"large", req_level:66, life:35, ar:48, damage_max:6},
 {rarity:"magic", name:"Life,AR,Damage Grand Charm", type:"grand", req_level:83, life:45, ar:76, damage_max:10},
 {debug:1, name:"+1 skill", req_level:100, all_skills:1},
 {debug:1, name:"+20 skills", req_level:100, all_skills:20},
-	]
+	],
 };
 
 // SET ITEMS
