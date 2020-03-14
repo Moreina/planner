@@ -101,7 +101,6 @@ function startup(choice) {
 	clearIconSources()
 	resetSkills()
 	resetEquipment()
-//	setupShrines()
 	updateEffectList()
 	document.getElementById("quests").checked = 0
 	document.getElementById("running").checked = 0
@@ -654,7 +653,7 @@ function updateStats() {
 	//var _ar = Math.floor((c.ar + (c.level-1)*c.ar_per_level + ar_addon) * (1 + (c.ar_skillup + c.ar_bonus + c.level*c.ar_bonus_per_level)/100));			// OLD
 	var ar = Math.floor((((dexTotal - 7) * 5 + c.ar + (c.level-1)*c.ar_per_level + c.ar_const)/2) * (1+(c.ar_skillup + c.ar_bonus + c.level*c.ar_bonus_per_level)/100) * (1+c.ar_shrine_bonus/100));
 	
-	var wisp = 1+Math.round(c.wisp,0)/10;
+	var wisp = 1+Math.round(c.wisp/20,0)/10
 	var phys_min = ((1+statBonus+(c.e_damage+c.damage_bonus+weapon_skillup)/100)*((c.level-1)*c.min_damage_per_level+c.base_damage_min))+c.damage_min;
 	var phys_max = ((1+statBonus+(c.e_damage+c.damage_bonus+weapon_skillup)/100)*((c.level-1)*c.max_damage_per_level+c.base_damage_max))+c.damage_max;
 	

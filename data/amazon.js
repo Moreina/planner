@@ -4,30 +4,31 @@ var weapon_frames = {dagger:12, oneHand_sword:13, oneHand_axe:13, twoHand_sword:
 
 var character_amazon = {class_name:"Amazon", strength:20, dexterity:25, vitality:20, energy:15, life:50, mana:15, defense:6, ar:100, stamina:184, levelup_life:2.5, levelup_stamina:1, levelup_mana:1.5, ar_per_dexterity:5, defense_per_dexterity:0.25, life_per_vitality:3, stamina_per_vitality:1, mana_per_energy:1.5, starting_strength:20, starting_dexterity:25, starting_vitality:20, starting_energy:15, ar_const:10, skill_layout:"./images/amazon.png", tab1:"Javelins & Spears", tab2:"Passives", tab3:"Bows & Crossbows",
 	updateSkill : function(skill, lvl, elem) {
-	var result = skill.data.values[elem][lvl]
+	var result = skill.data.values[elem][lvl];
+	var wisp = (1+Math.round(character.wisp/20,0)/10);
 	
-	if (skill.name == "Poison Javelin" && elem < 2) { 		result *= ((1 + 0.15*skills[6].level + 0.02*(character.dexterity + character.all_attributes + character.level*character.dexterity_per_level)) * (1+character.pDamage/100)) }
-	if (skill.name == "Plague Javelin" && elem > 0 && elem < 3) { 	result *= ((1 + (0.22*skills[2].level)) * (1+character.pDamage/100)) }
-	if (skill.name == "Power Strike" && elem > 0 && elem < 3) { 	result *= ((1 + (0.20*skills[5].level + 0.20*skills[8].level)) * (1+character.lDamage/100)) }
-	if (skill.name == "Lightning Bolt" && elem < 2) { 		result *= ((1 + (0.12*skills[1].level + 0.12*skills[9].level)) * (1+character.lDamage/100)) }
-	if (skill.name == "Charged Strike" && elem > 0 && elem < 3) { 	result *= ((1 + (0.20*skills[1].level + 0.20*skills[8].level)) * (1+character.lDamage/100)) }
-	if (skill.name == "Lightning Strike" && elem > 0 && elem < 3) { result *= ((1 + (0.15*skills[1].level + 0.15*skills[5].level)) * (1+character.lDamage/100)) }
-	if (skill.name == "Lightning Fury" && elem > 0 && elem < 3) { 	result *= ((1 + (0.06*skills[4].level)) * (1+character.lDamage/100)) }
+	if (skill.name == "Poison Javelin" && elem < 2) { 		result *= ((1 + 0.15*skills[6].level + 0.02*(character.dexterity + character.all_attributes + character.level*character.dexterity_per_level)) * (1+character.pDamage/100) * wisp) }
+	if (skill.name == "Plague Javelin" && elem > 0 && elem < 3) { 	result *= ((1 + (0.22*skills[2].level)) * (1+character.pDamage/100) * wisp) }
+	if (skill.name == "Power Strike" && elem > 0 && elem < 3) { 	result *= ((1 + (0.20*skills[5].level + 0.20*skills[8].level)) * (1+character.lDamage/100) * wisp) }
+	if (skill.name == "Lightning Bolt" && elem < 2) { 		result *= ((1 + (0.12*skills[1].level + 0.12*skills[9].level)) * (1+character.lDamage/100) * wisp) }
+	if (skill.name == "Charged Strike" && elem > 0 && elem < 3) { 	result *= ((1 + (0.20*skills[1].level + 0.20*skills[8].level)) * (1+character.lDamage/100) * wisp) }
+	if (skill.name == "Lightning Strike" && elem > 0 && elem < 3) { result *= ((1 + (0.15*skills[1].level + 0.15*skills[5].level)) * (1+character.lDamage/100) * wisp) }
+	if (skill.name == "Lightning Fury" && elem > 0 && elem < 3) { 	result *= ((1 + (0.06*skills[4].level)) * (1+character.lDamage/100) * wisp) }
 	
 	if (skill.name == "Decoy" && elem == 0) { 			result = Math.max(1, skills[22].level) }
 	if (skill.name == "Decoy" && elem < 3 && elem > 0) { 		result = 1 }
 	if (skill.name == "Valkyrie" && elem < 2) { 			result *= (1 + (0.20*skills[1].level + 0.20*skills[8].level)) }
 	if (skill.name == "Valkyrie" && elem > 1 && elem < 4) { 	result *= (1 + (0.18*skills[0].level)) }
 	
-	if (skill.name == "Cold Arrow" && elem > 0 && elem < 3) { 	result *= ((1 + (0.12*skills[24].level)) * (1+character.cDamage/100)) }
-	if (skill.name == "Ice Arrow" && elem < 2) { 			result *= ((1 + (0.10*skills[20].level)) * (1+character.cDamage/100)) }
+	if (skill.name == "Cold Arrow" && elem > 0 && elem < 3) { 	result *= ((1 + (0.12*skills[24].level)) * (1+character.cDamage/100) * wisp) }
+	if (skill.name == "Ice Arrow" && elem < 2) { 			result *= ((1 + (0.10*skills[20].level)) * (1+character.cDamage/100) * wisp) }
 	if (skill.name == "Ice Arrow" && elem == 2) { 			result *= (1 + (0.05*skills[29].level)) }
-	if (skill.name == "Freezing Arrow" && elem < 2) { 		result *= ((1 + (0.21*skills[20].level + 0.02*skills[24].level)) * (1+character.cDamage/100)) }
+	if (skill.name == "Freezing Arrow" && elem < 2) { 		result *= ((1 + (0.21*skills[20].level + 0.02*skills[24].level)) * (1+character.cDamage/100) * wisp) }
 	if (skill.name == "Freezing Arrow" && elem == 2) { 		result = (2 * (1 + 0.05*skills[24].level)) }
-	if (skill.name == "Fire Arrow" && (elem == 1 || elem == 2 || elem == 4 || elem == 5)) { result *= ((1 + (0.12*skills[26].level)) * (1+character.fDamage/100)) }
-	if (skill.name == "Exploding Arrow" && elem < 2) { 		result *= ((1 + (0.20*skills[21].level + 0.20*skills[23].level)) * (1+character.fDamage/100)) }
-	if (skill.name == "Immolation Arrow" && elem < 2) { 		result *= ((1 + (0.15*skills[26].level)) * (1+character.fDamage/100)) }
-	if (skill.name == "Immolation Arrow" && elem > 1 && elem < 4) { result *= ((1 + (0.16*skills[23].level)) * (1+character.fDamage/100)) }
+	if (skill.name == "Fire Arrow" && (elem == 1 || elem == 2 || elem == 4 || elem == 5)) { result *= ((1 + (0.12*skills[26].level)) * (1+character.fDamage/100) * wisp) }
+	if (skill.name == "Exploding Arrow" && elem < 2) { 		result *= ((1 + (0.20*skills[21].level + 0.20*skills[23].level)) * (1+character.fDamage/100) * wisp) }
+	if (skill.name == "Immolation Arrow" && elem < 2) { 		result *= ((1 + (0.15*skills[26].level)) * (1+character.fDamage/100) * wisp) }
+	if (skill.name == "Immolation Arrow" && elem > 1 && elem < 4) { result *= ((1 + (0.16*skills[23].level)) * (1+character.fDamage/100) * wisp) }
 	return result
 	},
 	

@@ -5,6 +5,7 @@ var weapon_frames = {dagger:16, oneHand_sword:14, oneHand_axe:14, twoHand_sword:
 var character_paladin = {class_name:"Paladin", strength:25, dexterity:20, vitality:25, energy:15, life:55, mana:15, defense:5, ar:85, stamina:189, levelup_life:2.5, levelup_stamina:1, levelup_mana:1.5, ar_per_dexterity:5, defense_per_dexterity:0.25, life_per_vitality:3, stamina_per_vitality:1, mana_per_energy:1.5, starting_strength:25, starting_dexterity:20, starting_vitality:25, starting_energy:15, ar_const:20, skill_layout:"./images/paladin.png", tab1:"Defensive Auras", tab2:"Offensive Auras", tab3:"Combat",
 	updateSkill : function(skill, lvl, elem) {
 	var result = skill.data.values[elem][lvl]
+	var wisp = (1+Math.round(character.wisp/20,0)/10);
 	
 	if (skill.name == "Resist Fire" && elem == 0) { 	result = Math.floor(skill.level/4); character.fRes_skillup = result; }
 	if (skill.name == "Resist Cold" && elem == 0) { 	result = Math.floor(skill.level/4); character.cRes_skillup = result; }
@@ -14,9 +15,9 @@ var character_paladin = {class_name:"Paladin", strength:25, dexterity:20, vitali
 		if (skills[0].level > 0) { result = skills[0].data.values[0][skills[0].level+skills[0].extra_levels] } else { result = 0 } }
 	
 	if (skill.name == "Blessed Aim" && elem == 0) { 	result = (5*skill.level); character.ar_skillup = result; }
-	if (skill.name == "Holy Fire" && elem < 4) { 		result *= ((1+(0.04*skills[1].level + 0.06*skills[9].level)) * (1+character.fDamage/100)) }
-	if (skill.name == "Holy Freeze" && elem < 4) { 		result *= ((1+(0.04*skills[3].level + 0.06*skills[9].level)) * (1+character.cDamage/100)) }
-	if (skill.name == "Holy Shock" && elem < 4) { 		result *= ((1+(0.04*skills[5].level + 0.06*skills[9].level)) * (1+character.lDamage/100)) }
+	if (skill.name == "Holy Fire" && elem < 4) { 		result *= ((1+(0.04*skills[1].level + 0.06*skills[9].level)) * (1+character.fDamage/100) * wisp) }
+	if (skill.name == "Holy Freeze" && elem < 4) { 		result *= ((1+(0.04*skills[3].level + 0.06*skills[9].level)) * (1+character.cDamage/100) * wisp) }
+	if (skill.name == "Holy Shock" && elem < 4) { 		result *= ((1+(0.04*skills[5].level + 0.06*skills[9].level)) * (1+character.lDamage/100) * wisp) }
 	if (skill.name == "Sanctuary" && elem > 0 && elem < 3) { result *= (1+(0.18*skills[4].level + 0.18*skills[30].level)) }
 
 	if (skill.name == "Sacrifice" && elem == 1) { 	result += (10*skills[8].level + 5*skills[18].level) }
@@ -42,7 +43,7 @@ var character_paladin = {class_name:"Paladin", strength:25, dexterity:20, vitali
 	if (skill.name == "Blessed Hammer" && elem < 2) { 			result *= ((1+(0.14*skills[6].level + 0.14*skills[13].level)) * (1+character.hammer_bonus/100)) }
 	if (skill.name == "Holy Shield" && elem == 3) { 			result += (15*skills[2].level) }
 	if (skill.name == "Fist of the Heavens" && elem < 2) { 			result *= (1+(0.15*skills[22].level)) }
-	if (skill.name == "Fist of the Heavens" && elem >1 && elem < 4) { 	result *= ((1+(0.08*skills[16].level)) * (1+character.lDamage/100)) }
+	if (skill.name == "Fist of the Heavens" && elem >1 && elem < 4) { 	result *= ((1+(0.08*skills[16].level)) * (1+character.lDamage/100) * wisp) }
 	if (skill.name == "Dashing Strike" && elem > 0 && elem < 3) { 		result *= (1+(0.12*skills[21].level + 0.12*skills[24].level + 0.12*skills[28].level)) }
 	
 	return result

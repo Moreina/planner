@@ -8,6 +8,7 @@ var character_necromancer = {class_name:"Necromancer", strength:15, dexterity:25
 	var sum_damage = 1; if (skills[0].level > 0 || skills[0].force_levels > 0) { sum_damage = (1+((~~skills[0].data.values[4][skills[0].level+skills[0].extra_levels]) / 100)); }
 	var sum_life = 1; if (skills[0].level > 0 || skills[0].force_levels > 0) { sum_life = (1+((~~skills[0].data.values[3][skills[0].level+skills[0].extra_levels]) / 100)); }
 	var diffResult = skill.data.values[elem][character.difficulty];
+	var wisp = (1+Math.round(character.wisp/20,0)/10);
 	
 	if (skill.name == "Raise Skeleton Warrior" && elem < 2) {	result *= (sum_damage * (1+character.skeleton_bonus/100)) }
 	if (skill.name == "Raise Skeleton Warrior" && elem == 2) {	result = (sum_life * (diffResult + (6 * skill.level))) }
@@ -32,9 +33,9 @@ var character_necromancer = {class_name:"Necromancer", strength:15, dexterity:25
 	if (skill.name == "Teeth" && elem > 0 && elem < 3) { 		result *= (1 + (0.17*skills[16].level + 0.17*skills[18].level)) }
 	if (skill.name == "Bone Spear" && elem < 2) { 			result *= (1 + (0.07*skills[12].level + 0.07*skills[18].level)) }
 	if (skill.name == "Bone Spirit" && elem < 2) { 			result *= (1 + (0.10*skills[12].level + 0.10*skills[16].level)) }
-	if (skill.name == "Deadly Poison" && elem > 0 && elem < 3) { 	result *= ((1 + (0.10*skills[15].level + 0.10*skills[19].level)) * (1+character.pDamage/100)) }
-	if (skill.name == "Desecrate" && elem > 0 && elem < 3) { 	result *= ((1 + (0.16*skills[11].level + 0.16*skills[19].level)) * (1+character.pDamage/100)) }
-	if (skill.name == "Poison Nova" && elem < 2) { 			result *= ((1 + (0.13*skills[11].level + 0.13*skills[15].level)) * (1+character.pDamage/100)) }
+	if (skill.name == "Deadly Poison" && elem > 0 && elem < 3) { 	result *= ((1 + (0.10*skills[15].level + 0.10*skills[19].level)) * (1+character.pDamage/100) * wisp) }
+	if (skill.name == "Desecrate" && elem > 0 && elem < 3) { 	result *= ((1 + (0.16*skills[11].level + 0.16*skills[19].level)) * (1+character.pDamage/100) * wisp) }
+	if (skill.name == "Poison Nova" && elem < 2) { 			result *= ((1 + (0.13*skills[11].level + 0.13*skills[15].level)) * (1+character.pDamage/100) * wisp) }
 	
 	if (skill.name == "Hemorrhage" && elem ) { result *= (1 + (0.20*skills[23].level + 0.20*skills[24].level + 0.20*skills[27].level)) }
 	

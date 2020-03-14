@@ -22,16 +22,18 @@ var unequipped = {name:"none", strength:0, dexterity:0, vitality:0, energy:0, li
 
 var non_items = [
 {name:"Miscellaneous"},
-{name:"Shrine: Skill", all_skills:2, duration:96, recharge:240, effect:"Skill", i:1},					// my not apply to skills gained solely from items
-{name:"Shrine: Combat", damage_bonus:200, ar_shrine_bonus:200, duration:96, recharge:240, effect:"Combat", i:2},	// AR bonus can stack with other Combat shrines
-{name:"Shrine: Armor", defense_bonus:100, duration:96, recharge:240, effect:"Armor", i:3},
-{name:"Shrine: Mana Regeneration", mana_regen:400, duration:96, recharge:240, effect:"Mana_Regeneration", i:4},
-{name:"Shrine: Fire Resist", fRes:75, duration:144, recharge:240, effect:"Resist_Fire", i:5},
-{name:"Shrine: Cold Resist", cRes:75, duration:144, recharge:240, effect:"Resist_Cold", i:6},
-{name:"Shrine: Lightning Resist", lRes:75, duration:144, recharge:240, effect:"Resist_Lightning", i:7},
-{name:"Shrine: Poison Resist", pRes:75, duration:144, recharge:240, effect:"Resist_Poison", i:8},
-{name:"Potion: Thawing", cRes:50, duration:30, effect:"Thawing", i:9},							// stackable
-{name:"Potion: Antitode", pRes:50, duration:30, effect:"Antidote", i:10},						// stackable
+{i:1, name:"Shrine: Skill", all_skills:2, duration:96, recharge:240, effect:"Skill"},					// my not apply to skills gained solely from items
+{i:2, name:"Shrine: Combat", damage_bonus:200, ar_shrine_bonus:200, duration:96, recharge:240, effect:"Combat"},	// AR bonus can stack with other Combat shrines
+{i:3, name:"Shrine: Armor", defense_bonus:100, duration:96, recharge:240, effect:"Armor"},
+{i:4, name:"Shrine: Mana Regeneration", mana_regen:400, duration:96, recharge:240, effect:"Mana_Regeneration"},
+{i:5, name:"Shrine: Fire Resist", fRes:75, duration:144, recharge:240, effect:"Resist_Fire"},
+{i:6, name:"Shrine: Cold Resist", cRes:75, duration:144, recharge:240, effect:"Resist_Cold"},
+{i:7, name:"Shrine: Lightning Resist", lRes:75, duration:144, recharge:240, effect:"Resist_Lightning"},
+{i:8, name:"Shrine: Poison Resist", pRes:75, duration:144, recharge:240, effect:"Resist_Poison"},
+{i:9, name:"Potion: Thawing", cRes:50, duration:30, effect:"Thawing"},							// stackable
+{i:10, name:"Potion: Antitode", pRes:50, duration:30, effect:"Antidote"},						// stackable
+{i:11, name:"Mercenary: Fanaticism", effect:"Fanaticism"},
+//{i:11, name:"Mercenary: Fanaticism", effect:"Fanaticism"},
 ];
 
 var equipment = {
@@ -284,7 +286,7 @@ var equipment = {
 {name:"Raven Frost", req_level:45, ar:250, cbf:1, dexterity:20, mana:40, cAbsorb:20, cDamage_min:15, cDamage_max:45},
 {name:"The Stone of Jordan", req_level:29, all_skills:1, mana:20, max_mana:25, lDamage_min:1, lDamage_max:12},
 {name:"Bul-Kathos' Wedding Band", req_level:58, all_skills:1, life_per_level:0.5, life_leech:5, stamina:50},
-{name:"Wisp Projector", req_level:76, lAbsorb:12, mf:20, frw:8, wisp:0.5, charges_wolverine:9},	// level 9 Heart of Wolverine (17 charges)(EFFECT)
+{name:"Wisp Projector", req_level:76, lAbsorb:12, mf:20, frw:8, wisp:10, charges_wolverine:9},	// level 9 Heart of Wolverine (17 charges)(EFFECT)
 {set_Cathan:0.5, name:"Cathan's Seal", req_level:11, life_leech:6, damage_reduced:2, set_bonuses:["set_Cathan",{},{strength:10},{},{},{}]},
 {set_Angelic:0.5, name:"Angelic Halo", req_level:12, life_replenish:6, life:20, set_bonuses:["set_Angelic",0,{ar_per_level:12},{mf:50},{}]},
 {rarity:"crafted", name:"Blood Ring", req_level:0, life_leech:11, life:20, strength:25, ar:120, all_res:11, fcr:10, mana_leech:5},	// check on: Deadly Poison, Telekinesis (from charges)
@@ -300,7 +302,7 @@ var equipment = {
 {name:"Raven Frost", req_level:45, ar:250, cbf:1, dexterity:20, mana:40, cAbsorb:20},
 {name:"The Stone of Jordan", req_level:29, all_skills:1, mana:20, max_mana:25, lDamage_min:1, lDamage_max:12},
 {name:"Bul-Kathos' Wedding Band", req_level:58, all_skills:1, life_per_level:0.5, life_leech:5, stamina:50},
-{name:"Wisp Projector", req_level:76, lAbsorb:12, mf:20, frw:8, wisp:0.5, charges_wolverine:9},	// level 9 Heart of Wolverine (17 charges)(EFFECT)
+{name:"Wisp Projector", req_level:76, lAbsorb:12, mf:20, frw:8, wisp:10, charges_wolverine:9},	// level 9 Heart of Wolverine (17 charges)(EFFECT)
 {set_Cathan:0.5, name:"Cathan's Seal", req_level:11, life_leech:6, damage_reduced:2, set_bonuses:["set_Cathan",{},{strength:10},{},{},{}]},
 {set_Angelic:0.5, name:"Angelic Halo", req_level:12, life_replenish:6, life:20, set_bonuses:["set_Angelic",{},{ar_per_level:12},{mf:50},{}]},
 {rarity:"crafted", name:"Blood Ring", req_level:0, life_leech:11, life:20, strength:25, ar:120, all_res:11, fcr:10, mana_leech:5},	// check on: Deadly Poison, Telekinesis (from charges), check level requirement of affixes
