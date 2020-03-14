@@ -9,7 +9,7 @@ Character Skill Planner for Diablo 2: Path of Diablo
   * stats gained from quests
   * difficulty differences (character resistances, summon skills)
   * stats gained from items
-  * stats gained from buffs, minions, & auras
+  * stats gained from effects (buffs, minions, auras, shrines, etc)
 * equipment selection
 * charm inventory
 * character validation
@@ -17,7 +17,7 @@ Character Skill Planner for Diablo 2: Path of Diablo
 ### Upcoming Plans:
 * display section for active skill(s)
 * more items (all uniques, etc)
-* tracking of more effects (item auras, debuffs, shrines)
+* tracking of more effects (item auras, debuffs)
 * breakpoints
 * mercenary info
 * item socketing/corrupting
