@@ -5,6 +5,7 @@ var skill_bonuses = {stamina_skillup:0, frw_skillup:0, defense_skillup:0, resist
 //var buffs = {stamina_buff:0, max_life_buff:0, max_mana_buff:0, defense_buff:0, all_skills_buff:0, fhr_buff:0, frw_buff:0, ias_buff:0, ar_buff:0, damage_buff:0, all_res_buff:0, pdr_buff:0, curses_reduced_buff:0, pDamage_min_buff:0, pDamage_max_buff:0, pDamage_duration_buff:0, thorns_buff:0, life_per_hit_buff:0, life_per_ranged_hit_buff:0, enemy_pRes_buff:0, fcr_buff:0, skeleton_damage_buff:0, block_buff:0, smite_min_buff:0, smite_max_buff:0, absorb_buff:0, absorb_flat_buff:0, life_regen_buff:0, fDamage_min_buff:0, fDamage_max_buff:0, cDamage_min_buff:0, cDamage_max_buff:0, enemy_defense_buff:0, pDamage_cutoff:0, velocity_aura:0, fRes_aura:0, cRes_aura:0, lRes_aura:0, defense_aura:0, life_regen_aura:0, poison_reduced_aura:0, fRes_max_aura:0, cRes_max_aura:0, lRes_max_aura:0, stam_recovery_aura:0, mana_regen_aura:0, elemental_damage_aura:0, lDamage_min_aura:0, lDamage_max_aura:0, pierce_aura:0, cstrike_aura:0, enemy_defense_aura:0, enemy_resists_aura:0, damage_vs_undead_aura:0};
 var base_stats = {level:1, skillpoints:0, statpoints:0, quests_completed:-1, running:-1, difficulty:3, strength_added:0, dexterity_added:0, vitality_added:0, energy_added:0, fRes_penalty:100, cRes_penalty:100, lRes_penalty:100, pRes_penalty:100, mRes_penalty:100, fRes:0, cRes:0, lRes:0, pRes:0, mRes:0, fRes_max_base:75, cRes_max_base:75, lRes_max_base:75, pRes_max_base:75, mRes_max_base:75, set_bonuses:[0,0,{},{},{},{},{}]}
 var effects = {};
+var lastCharm = "";
 var gear = {req_level:0, req_strength:0, req_dexterity:0};
 var settings = {coupling:1, autocast:1}
 var MAX = 20;	// Highest Skill Hardpoints
@@ -431,7 +432,7 @@ function addCharm(val) {
 		if (nameVal == "Annihilus") { charmImage = "./images/items/charm1u.png"; }
 		if (nameVal == "Hellfire Torch") { charmImage = "./images/items/charm2u.png"; }
 		if (nameVal == "Gheed's Fortune") { charmImage = "./images/items/charm3u.png"; }
-		var charmHTML = '<img style="width: ' + charmWidth + '; height: ' + charmHeight + '; pointer-events: auto;" id="' + val + '" src="' + charmImage + '" draggable="true" ondragstart="drag(event)" width="' + charmWidth + '" height="' + charmHeight + '" oncontextmenu="trash(event)" onmouseover="itemHover(event, this.value)" onmouseout="itemOut()">';
+		var charmHTML = '<img style="width: ' + charmWidth + '; height: ' + charmHeight + '; pointer-events: auto;" id="' + val + '" src="' + charmImage + '" draggable="true" ondragstart="drag(event)" width="' + charmWidth + '" height="' + charmHeight + '" oncontextmenu="trash(event)" onmouseover="itemHover(event, this.value)" onmouseout="itemOut()" onclick="itemSelect(event)">';
 		var insertion = "";
 		var space_found = 0;
 		var empty = 1;
@@ -661,7 +662,11 @@ function updateStats() {
 	var basic_max = Math.floor(wisp*(phys_max + c.fDamage_max + c.cDamage_max + c.lDamage_max) + c.mDamage_max + wisp*(c.pDamage_all+c.pDamage_max));
 	if (basic_min > 0 || basic_max > 0) { document.getElementById("basic_attack").innerHTML = basic_min + "-" + basic_max }
 	else { document.getElementById("basic_attack").innerHTML = "" }
-/*
+
+	//testing
+	//document.getElementById("skill1").innerHTML = wisp +" * "+ phys_max +" "+ c.fDamage_max +" "+ c.cDamage_max +" "+ c.lDamage_max +" "+ c.pDamage_max +" "+ c.pDamage_all +" "+ c.mDamage_max
+	//document.getElementById("skill2").innerHTML = "( "+ 1 +" + "+ statBonus +" + "+ c.e_damage/100 +" + "+ c.damage_bonus/100 +" + "+ weapon_skillup/100 +" ) * ( "+ ((c.level-1)*c.max_damage_per_level) +" + "+ c.base_damage_max +" ) + "+ c.damage_max
+	/*
 	TODO: DPS calculations
 /**/
 	var block = c.block;
@@ -1395,6 +1400,7 @@ function itemHover(ev, id) {
 	if (equipped["charms"][val].type != "small" && equipped["charms"][val].type != "large" && equipped["charms"][val].type != "grand") { style = "display: block; color: #ff8080;" }
 	document.getElementById("item_tooltip").innerHTML = display
 	document.getElementById("item_tooltip").style = style
+	lastCharm = name
 	
 	// TODO better system:
 	
@@ -1406,6 +1412,22 @@ function itemHover(ev, id) {
 	// then, 
 	// on mouseout: raise z-level of cell 
 	
+}
+
+// Duplicates the selected charm
+// id: unique string identifier for charm
+// ---------------------------------
+function itemSelect(ev) {
+	var dup = 0;
+	if (ev.shiftKey) { dup = 1 }
+	if (ev.ctrlKey) { dup = 10 }
+	if (dup > 0) {
+		if (name != "Annihilus" && name != "Hellfire Torch" && name != "Gheed's Fortune") {
+			for (let d = 0; d < dup; d++) {
+				addCharm(lastCharm)
+			}
+		}
+	}
 }
 
 // Handles placement validation for Charm Inventory
@@ -1492,6 +1514,16 @@ function trash(ev) {
 	calculateSkillAmounts()
 	updateAll()
 	document.getElementById("item_tooltip").innerHTML = ""
+	
+/* TODO: Make ctrl+click remove more copies of the removed charm
+	var dup = 0;
+	if (ev.ctrlKey) { dup = 10 }
+	if (dup > 0) {
+		for (let d = 0; d < dup; d++) {
+			addCharm(lastCharm)
+		}
+	}
+*/
 }
 
 // 
