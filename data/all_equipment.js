@@ -32,7 +32,7 @@ var non_items = [
 {i:8, name:"Shrine: Poison Resist", pRes:75, duration:144, recharge:240, effect:"Resist_Poison"},
 {i:9, name:"Potion: Thawing", cRes:50, duration:30, effect:"Thawing"},							// stackable
 {i:10, name:"Potion: Antitode", pRes:50, duration:30, effect:"Antidote"},						// stackable
-{i:11, name:"Mercenary: Fanaticism", effect:"Fanaticism"},
+//{i:11, name:"Mercenary: Fanaticism", effect:"Fanaticism"},
 //{i:11, name:"Mercenary: Fanaticism", effect:"Fanaticism"},
 ];
 
