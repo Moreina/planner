@@ -824,6 +824,12 @@ function calculateSkillAmounts() {
 				if (s == 20 || s == 24 || s == 29) { skills[s].extra_levels += character.skills_cold_all }
 			} else { skills[s].extra_levels += character.skills_passives
 				if (s == 10) { skills[s].force_levels = character.oskill_Inner_Sight }
+				if (s == 11) { temp = 0; if (character.oskill_Lethal_Strike > 0) { temp = Math.min(3, character.oskill_Lethal_Strike) }
+					skills[s].force_levels = character.skill_Lethal_Strike + temp }
+				if (s == 12) { skills[s].force_levels = character.skill_Phase_Run }
+				if (s == 13) { skills[s].force_levels = character.skill_Dodge }
+				if (s == 18) { temp = 0; if (character.oskill_Valkyrie > 0) { temp = Math.min(3, character.oskill_Valkyrie) }
+					skills[s].force_levels = character.skill_Valkyrie + temp }
 			}
 		} else if (character.class_name == "Assassin") {
 			skills[s].extra_levels += character.skills_assassin
@@ -846,7 +852,9 @@ function calculateSkillAmounts() {
 				if (s == 8) { skills[s].force_levels = character.skill_War_Cry }
 				if (s == 9) { skills[s].force_levels = character.skill_Battle_Command }
 			} else if (s > 17) { skills[s].extra_levels += character.skills_combat_barbarian
-				if (s == 22) { skills[s].force_levels = character.skill_Leap }		
+				if (s == 18) { skills[s].force_levels = character.skill_Frenzy }
+				if (s == 22) { skills[s].force_levels = character.skill_Leap }
+				if (s == 24) { skills[s].force_levels = character.oskill_Bash }
 			} else { skills[s].extra_levels += character.skills_masteries
 				if (s == 10) { skills[s].force_levels = character.oskill_Edged_Weapon_Mastery }
 			}
@@ -862,7 +870,11 @@ function calculateSkillAmounts() {
 				if (s == 27) { skills[s].force_levels = character.skill_Dire_Wolf }
 				if (s == 30) { skills[s].force_levels = character.skill_Grizzly }
 			} else { skills[s].extra_levels += character.skills_shapeshifting
+				if (s == 11) { skills[s].force_levels = character.skill_Werewolf }
+				if (s == 12) { skills[s].force_levels = ocharacter.skill_Lycanthropy }
+				if (s == 13) { skills[s].force_levels = ocharacter.skill_Werebear }
 				if (s == 14) { skills[s].force_levels = character.skill_Feral_Rage }
+				if (s == 15) { skills[s].force_levels = character.skill_Maul }
 			}
 		} else if (character.class_name == "Necromancer") {
 			skills[s].extra_levels += character.skills_necromancer
@@ -882,6 +894,8 @@ function calculateSkillAmounts() {
 			if (s < 10) { skills[s].extra_levels += character.skills_defensive
 				if (s == 6) { skills[s].force_levels = character.skill_Vigor }
 			} else if (s > 19) { skills[s].extra_levels += character.skills_combat_paladin
+				if (s == 23) { skills[s].force_levels = character.oskill_Zeal }
+				if (s == 25) { skills[s].force_levels = character.oskill_Vengeance }
 				if (s == 29) { skills[s].force_levels = character.skill_Fist_of_the_Heavens }
 			} else { skills[s].extra_levels += character.skills_offensive
 				if (s == 11) { skills[s].extra_levels += character.skills_fire_all }
@@ -899,6 +913,9 @@ function calculateSkillAmounts() {
 				if (s == 10) { skills[s].force_levels = character.skill_Cold_Mastery + character.oskill_Cold_Mastery}
 			} else if (s > 21) { skills[s].extra_levels += character.skills_fire
 				skills[s].extra_levels += character.skills_fire_all
+				if (s == 22) { skills[s].force_levels = character.skill_Fire_Bolt }
+				if (s == 23) { skills[s].force_levels = character.skill_Warmth }
+				if (s == 24) { skills[s].force_levels = character.skill_Blaze }
 				if (s == 26) { temp = 0; if (character.oskill_Fire_Ball > 0) { temp = Math.min(3, character.oskill_Fire_Ball) }
 					skills[s].force_levels = /*character.skill_Fire_Ball*/ + temp }
 				if (s == 27) { temp = 0; if (character.oskill_Fire_Wall > 0) { temp = Math.min(3, character.oskill_Fire_Wall) }
