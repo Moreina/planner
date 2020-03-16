@@ -46,6 +46,7 @@ var character_sorceress = {class_name:"Sorceress", strength:10, dexterity:25, vi
 	return result
 	},
 	
+	//getBuffData : function(effect, selfbuff) {
 	getBuffData : function(effect) {
 	var skill = skills[effect.skill]
 	var lvl = skill.level + skill.extra_levels;

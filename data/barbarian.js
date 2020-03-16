@@ -26,6 +26,7 @@ var character_barbarian = {class_name:"Barbarian", strength:30, dexterity:20, vi
 	return result
 	},
 	
+	//getBuffData : function(effect, selfbuff) {
 	getBuffData : function(effect) {
 	var skill = skills[effect.skill]
 	var lvl = skill.level + skill.extra_levels;

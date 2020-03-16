@@ -4,7 +4,9 @@ character = {};
 var skill_bonuses = {stamina_skillup:0, frw_skillup:0, defense_skillup:0, resistance_skillup:0, cstrike_skillup:0, ar_skillup:0, pierce_skillup:0, fRes_skillup:0, cRes_skillup:0, lRes_skillup:0, edged_skillup:[0,0,0], pole_skillup:[0,0,0], blunt_skillup:[0,0,0], thrown_skillup:[0,0,0], claw_skillup:[0,0,0], mana_regen_skillup:0, cPierce_skillup:0, lPierce_skillup:0, fPierce_skillup:0, cDamage_skillup:0, lDamage_skillup:0, fDamage_skillup:0, block_skillup:0, velocity_skillup:0};
 //var buffs = {stamina_buff:0, max_life_buff:0, max_mana_buff:0, defense_buff:0, all_skills_buff:0, fhr_buff:0, frw_buff:0, ias_buff:0, ar_buff:0, damage_buff:0, all_res_buff:0, pdr_buff:0, curses_reduced_buff:0, pDamage_min_buff:0, pDamage_max_buff:0, pDamage_duration_buff:0, thorns_buff:0, life_per_hit_buff:0, life_per_ranged_hit_buff:0, enemy_pRes_buff:0, fcr_buff:0, skeleton_damage_buff:0, block_buff:0, smite_min_buff:0, smite_max_buff:0, absorb_buff:0, absorb_flat_buff:0, life_regen_buff:0, fDamage_min_buff:0, fDamage_max_buff:0, cDamage_min_buff:0, cDamage_max_buff:0, enemy_defense_buff:0, pDamage_cutoff:0, velocity_aura:0, fRes_aura:0, cRes_aura:0, lRes_aura:0, defense_aura:0, life_regen_aura:0, poison_reduced_aura:0, fRes_max_aura:0, cRes_max_aura:0, lRes_max_aura:0, stam_recovery_aura:0, mana_regen_aura:0, elemental_damage_aura:0, lDamage_min_aura:0, lDamage_max_aura:0, pierce_aura:0, cstrike_aura:0, enemy_defense_aura:0, enemy_resists_aura:0, damage_vs_undead_aura:0};
 var base_stats = {level:1, skillpoints:0, statpoints:0, quests_completed:-1, running:-1, difficulty:3, strength_added:0, dexterity_added:0, vitality_added:0, energy_added:0, fRes_penalty:100, cRes_penalty:100, lRes_penalty:100, pRes_penalty:100, mRes_penalty:100, fRes:0, cRes:0, lRes:0, pRes:0, mRes:0, fRes_max_base:75, cRes_max_base:75, lRes_max_base:75, pRes_max_base:75, mRes_max_base:75, set_bonuses:[0,0,{},{},{},{},{}]}
+var active = {};
 var effects = {};
+var oskills = {basicAttack:{},basicThrow:{}};
 var lastCharm = "";
 var gear = {req_level:0, req_strength:0, req_dexterity:0};
 var settings = {coupling:1, autocast:1}
@@ -20,18 +22,6 @@ var inv = [
 {x:1,y:1,empty:1,id:"h13"},{x:1,y:1,empty:1,id:"h23"},{x:1,y:1,empty:1,id:"h33"},{x:1,y:1,empty:1,id:"h43"},{x:1,y:1,empty:1,id:"h53"},{x:1,y:1,empty:1,id:"h63"},{x:1,y:1,empty:1,id:"h73"},{x:1,y:1,empty:1,id:"h83"},{x:1,y:1,empty:1,id:"h93"},{x:1,y:1,empty:1,id:"h03"},
 {x:1,y:1,empty:1,id:"h14"},{x:1,y:1,empty:1,id:"h24"},{x:1,y:1,empty:1,id:"h34"},{x:1,y:1,empty:1,id:"h44"},{x:1,y:1,empty:1,id:"h54"},{x:1,y:1,empty:1,id:"h64"},{x:1,y:1,empty:1,id:"h74"},{x:1,y:1,empty:1,id:"h84"},{x:1,y:1,empty:1,id:"h94"},{x:1,y:1,empty:1,id:"h04"}
 ];
-/*
-var shrineEffects = {
-	Skill:{all_skills:2},
-	Combat:{ar_bonus:200, damage_bonus:200},
-	Armor:{defense_bonus:100},
-	Mana_Regeneration:{mana_regen:400},
-	Resist_Cold:{cRes:75},
-	Resist_Fire:{fRes:75},
-	Resist_Lightning:{lRes:75},
-	Resist_Poison:{pRes:75},
-};
-*/
 
 // Loads equipment/charm info to the appropriate dropdowns
 // ---------------------------------
@@ -55,7 +45,17 @@ function loadItems(type, dropdown, className) {
 		var choices = "";
 		for (item in equipment[type]) {
 			if (typeof(equipment[type][item].only) == 'undefined' || equipment[type][item].only == className) {
-			if (typeof(equipment[type][item].not) == 'undefined' || equipment[type][item].not != className) {
+			if (typeof(equipment[type][item].not) == 'undefined' || (typeof(equipment[type][item].not) == String && equipment[type][item].not != className)) {
+			var halt = 0;
+		/*	TODO: Make a way to specify more than one included/excluded class for items.
+			if (typeof(equipment[type][item].limit) != 'undefined') {
+				for (let i = 0; i < equipment[type][item][limit].length; i++) {
+					if (equipment[type][item][limit][i] == className) {
+						halt = 1;
+					}
+				}
+			}
+		*/	if (halt == 0) {
 				if (item > 0) {
 					if (typeof(equipment[type][item].set_bonuses) != 'undefined') {
 						choices += "<option class='dropdown-set'>" + equipment[type][item].name + "</option>"
@@ -79,6 +79,7 @@ function loadItems(type, dropdown, className) {
 						choices += "<option disabled selected>" + "­ ­ ­ ­ " + equipment[type][item].name + "</option>"
 					}
 				}
+			}
 			}
 			}
 		}
@@ -497,6 +498,15 @@ function addMisc(val) {
 // ---------------------------------
 function initiateMiscEffect(name, i) {
 	if (document.getElementById(name) == null) {
+		/*
+		// TODO: Change getBuffData to work with other classes
+		var auraLevel = 0;
+		var auraEffects = {};
+		var selfbuff = 0;
+		if (non_items[i].name == "Mercenary: "+name.split('_').join(' ')) { auraLevel = getMercenaryAuraLevel(character.level-1) }
+		auraEffects = character_paladin.getBuffData(effects[name], selfbuff)
+		//skills_all["paladin"]
+		*/
 		var newEffect = document.createElement("img")
 		var effectIcon = "./images/misc/dark/"+name+".png";
 		
@@ -822,7 +832,12 @@ function calculateSkillAmounts() {
 				if (s == 1) { skills[s].force_levels = character.skill_Fists_of_Ember }
 				if (s == 3 || s == 8) { skills[s].extra_levels += character.skills_cold_all }
 			} else if (s > 19) { skills[s].extra_levels += character.skills_traps
-			} else { skills[s].extra_levels += character.skills_shadow }
+				if (s == 24) { skills[s].force_levels = character.skill_Wake_of_Fire }
+				if (s == 25) { skills[s].force_levels = character.skill_Blade_Fury }
+				if (s == 29) { skills[s].force_levels = character.skill_Blade_Shield }
+			} else { skills[s].extra_levels += character.skills_shadow 
+				if (s == 15) { skills[s].force_levels = character.skill_Fade }
+			}
 		} else if (character.class_name == "Barbarian") {
 			skills[s].extra_levels += character.skills_barbarian
 			if (s < 10) { skills[s].extra_levels += character.skills_warcries
@@ -1073,7 +1088,8 @@ function removeEffect(effect) {
 // effect: the effects[] element being added
 // ---------------------------------
 function addEffect(effect) {
-	buffData = character.getBuffData(effect)
+	var selfbuff = 1;
+	buffData = character.getBuffData(effect, selfbuff)
 	for (affix in buffData) {
 		character[affix] += buffData[affix]
 		if (effect[affix] != "enabled" && affix != "skill") { effect[affix] = buffData[affix] }
@@ -1093,6 +1109,19 @@ function modifyEffect(skill) {
 		} }
 	} }
 }
+
+
+// Get highest mercenary aura level
+// hlvl: level of mercenary
+// ---------------------------------
+function getMercenaryAuraLevel(hlvl) {
+	result = 0;
+	if (hlvl > 9 && hlvl < 31) { result = (3+((hlvl-9)*10/32)) }
+	else if (hlvl > 30 && hlvl < 55) { result = (10+((hlvl-31)*10/32)) }
+	else if (hlvl > 54) { result = 18 }
+	return result;
+}
+
 
 // Recolors stats/skills based on unmet item/skill/level requirements
 // ---------------------------------
@@ -1189,6 +1218,9 @@ function removeStat(event, stat) {
 // skill: the skill to modify
 // ---------------------------------
 function skillUp(event, skill) {
+    if (event.altKey) {
+	focusSkill(skill)
+    } else {
 	if (typeof(skill.effect) != 'undefined') { if (skill.effect > 3) {
 		if (skill.level == 0 && skill.force_levels == 0 && typeof(effects["e"+skill.key]) == 'undefined') { enableEffect(skill.i) }
 	} }
@@ -1223,6 +1255,7 @@ function skillUp(event, skill) {
 		modifyEffect(skill)
 	} }
 	skillHover(skill)
+    }
 }
 
 // Lowers the skill level
@@ -1344,6 +1377,15 @@ function showBaseLevels (skill) {
 		document.getElementById("p"+skill.key).innerHTML = skill.level;
 		//document.getElementById("p"+skill.key).innerHTML = (skill.level+skill.force_levels);
 	}
+}
+
+// 
+// ---------------------------------
+function focusSkill (skill) {
+	document.getElementById("skill3").innerHTML = skill.name
+	document.getElementById("skill4").innerHTML = getFocusData(skill.name)
+	// TODO
+	for (affix in active) { character[affix] = active[affix] }
 }
 
 // num: number to round

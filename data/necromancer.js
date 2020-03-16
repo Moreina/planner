@@ -26,8 +26,8 @@ var character_necromancer = {class_name:"Necromancer", strength:15, dexterity:25
 	if (skill.name == "Revive" && elem == 0) {			result = (skill.data.values[elem][1] + ~~skills[0].data.values[0][skills[0].level+skills[0].extra_levels]) }
 	if (skill.name == "Revive" && elem == 1) {			result = (skill.data.values[elem][1] + ~~skills[0].data.values[1][skills[0].level+skills[0].extra_levels]) }
 
-	if (skill.name == "Corpse Explosion" && elem == 0) { if (skill.level == 0) { result = 21 } }
-	if (skill.name == "Corpse Explosion" && elem == 1) { if (skill.level == 0) { result = 27 } }
+	if (skill.name == "Corpse Explosion" && elem == 0) { if (skill.level == 0) { result = (21 )}} //+ ~~bonus_corpse_explosion) } else { result += ~~bonus_corpse_explosion } }
+	if (skill.name == "Corpse Explosion" && elem == 1) { if (skill.level == 0) { result = (27 )}} //+ ~~bonus_corpse_explosion) } else { result += ~~bonus_corpse_explosion } }
 	if (skill.name == "Bone Armor" && elem == 0) { 			result += 20*skills[17].level + 20*skills[18].level }
 	if (skill.name == "Bone Wall" && elem < 1) { 			result *= (1 + (0.10*skills[13].level)) }
 	if (skill.name == "Teeth" && elem > 0 && elem < 3) { 		result *= (1 + (0.17*skills[16].level + 0.17*skills[18].level)) }
@@ -42,6 +42,7 @@ var character_necromancer = {class_name:"Necromancer", strength:15, dexterity:25
 	return result
 	},
 	
+	//getBuffData : function(effect, selfbuff) {
 	getBuffData : function(effect) {
 	var skill = skills[effect.skill];
 	var lvl = skill.level + skill.extra_levels;

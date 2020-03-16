@@ -32,6 +32,7 @@ var character_amazon = {class_name:"Amazon", strength:20, dexterity:25, vitality
 	return result
 	},
 	
+	//getBuffData : function(effect, selfbuff) {
 	getBuffData : function(effect) {
 	var skill = skills[effect.skill]
 	var lvl = skill.level + skill.extra_levels;
@@ -39,6 +40,14 @@ var character_amazon = {class_name:"Amazon", strength:20, dexterity:25, vitality
 	
 	if (skill.name == "Phase Run") { result.fhr = 30; result.frw = 30; }
 	
+	return result
+	},
+	
+	getFocusData : function(skill) {
+	
+	var result = "";
+	if (skill = "Jab") { result = {ar_bonus:updateSkill(skill, skill.level+skill.extra_levels, 0), damage_bonus:updateSkill(skill, skill.level+skill.extra_levels, 1)} }
+	for (affix in result) { active[affix] = result[affix] }
 	return result
 	}
 };

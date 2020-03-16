@@ -52,6 +52,7 @@ var character_druid = {class_name:"Druid", strength:15, dexterity:20, vitality:2
 	return result
 	},
 	
+	//getBuffData : function(effect, selfbuff) {
 	getBuffData : function(effect) {
 	var skill = skills[effect.skill]
 	var lvl = skill.level + skill.extra_levels;
@@ -155,7 +156,7 @@ var skills_druid = [
 {data:d261, key:"261", name:"Fury", i:20, req:[16,14,11], reqlvl:30, level:0, extra_levels:0, force_levels:0, style:"display: block; top: 422px; left: 204px;", description:"When in werewolf form, attack<br>either multiple adjacent targets<br>or one target multiple times", syn_title:"", syn_text:"", graytext:"", text:[""," hits<br>Attack Bonus: +"," percent<br>Damage: +"," percent<br>Mana Cost: 4",""]},
 
 {data:d312, key:"312", name:"Raven", i:21, req:[], reqlvl:1, level:0, extra_levels:0, force_levels:0, style:"display: block; top: 82px; left: 326px;", description:"Summon ravens to peck out<br>the eyes of your enemies<br><br>3 Hits<br>Ravens Attacks deal Splash Damage", syn_title:"<br>Raven Receives Bonuses From:<br>", syn_text:"Cyclone Armor: +20% Physical Damage per Level<br>Twister: +20% Physical Damage per Level<br>Arctic Blast: +21% Cold Damage per Level<br>1% Increased Cold Damage per Energy", graytext:"", text:["Ravens: ","<br>Damage: ","-","<br>Cold Damage: ","-","<br>Mana Cost per Raven: ",""]},
-{data:d313, key:"313", name:"Poison Creeper", i:22, req:[], reqlvl:1, level:0, extra_levels:0, force_levels:0, style:"display: block; top: 82px; left: 496px;", description:"Summon a vine that spreads<br>disease to all it contacts", syn_title:"", syn_text:"", graytext:"", text:["Life: ","<br>Poison Damage: ","-","<br>over 5 seconds<br>Mana Cost: ",""]},
+{data:d313, key:"313", name:"Poison Creeper", i:22, req:[], reqlvl:1, level:0, extra_levels:0, force_levels:0, style:"display: block; top: 82px; left: 496px;", description:"Summon a vine that spreads<br>disease to all it contacts", syn_title:"", syn_text:"", graytext:"", text:["Life: ","<br>Poison Damage: ","-","<br>over 5 seconds<br>Mana Cost: 8"]},
 {data:d321, key:"321", name:"Heart of Wolverine", i:23, req:[], reqlvl:6, level:0, extra_levels:0, force_levels:0, effect:5, style:"display: block; top: 150px; left: 336px;", description:"Summon a spirit pet that adds<br>to the damage and attack rating<br>of you and your party", syn_title:"", syn_text:"", graytext:"", text:["Life: ","<br>Damage: +"," percent<br>Attack Rating: +"," percent<br>Radius: "," yards<br>Mana Cost: ",""]},
 {data:d322, key:"322", name:"Summon Spirit Wolf", i:24, req:[21], reqlvl:6, level:0, extra_levels:0, force_levels:0, style:"display: block; top: 150px; left: 366px;", description:"Summon a wolf to fight by your side", syn_title:"<br>Summon Spirit Wolf Receives Bonuses From:<br>", syn_text:"Summon Dire Wolf<br>Summon Grizzly", graytext:"<br>One Wolf per Base Level. Max: 7<br>", text:["Wolves: ","<br>Mana Cost: 15<br>Life: ","Damage: ","-","<br>Attack Rating: +"," percent<br>Defense: +"," percent"]},
 {data:d333, key:"333", name:"Carrion Vine", i:25, req:[22], reqlvl:12, level:0, extra_levels:0, force_levels:0, style:"display: block; top: 218px; left: 466px;", description:"Summon a vine that eats corpses<br>and replenishes your life", syn_title:"", syn_text:"", graytext:"", text:["Life: ","<br>Heals: "," percent<br>Mana Cost: 10",""]},

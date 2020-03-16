@@ -49,6 +49,7 @@ var character_paladin = {class_name:"Paladin", strength:25, dexterity:20, vitali
 	return result
 	},
 	
+	//getBuffData : function(effect, selfbuff) {
 	getBuffData : function(effect) {
 	var skill = skills[effect.skill]
 	var lvl = skill.level + skill.extra_levels;

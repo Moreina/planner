@@ -42,6 +42,7 @@ var character_assassin = {class_name:"Assassin", strength:20, dexterity:20, vita
 	return result
 	},
 	
+	//getBuffData : function(effect, selfbuff) {
 	getBuffData : function(effect) {
 	var skill = skills[effect.skill]
 	var lvl = skill.level + skill.extra_levels;
