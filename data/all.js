@@ -40,22 +40,26 @@ function loadEquipment(className) {
 // called by: loadEquipment()
 // ---------------------------------
 function loadItems(type, dropdown, className) {
-	if (type.length == 0) document.getElementById(dropdown).innerHTML = "<option></option>"
+	if (type.length == 0) { document.getElementById(dropdown).innerHTML = "<option></option>" }
 	else {
 		var choices = "";
 		for (item in equipment[type]) {
 			if (typeof(equipment[type][item].only) == 'undefined' || equipment[type][item].only == className) {
 			if (typeof(equipment[type][item].not) == 'undefined' || (typeof(equipment[type][item].not) == String && equipment[type][item].not != className)) {
 			var halt = 0;
-		/*	TODO: Make a way to specify more than one included/excluded class for items.
 			if (typeof(equipment[type][item].limit) != 'undefined') {
-				for (let i = 0; i < equipment[type][item][limit].length; i++) {
-					if (equipment[type][item][limit][i] == className) {
-						halt = 1;
-					}
+				for (let l = 0; l < equipment[type][item].limit.length; l++) {
+					if (equipment[type][item].limit[l] == className) { halt = 1 }
 				}
 			}
-		*/	if (halt == 0) {
+		// unneeded
+		//	if (typeof(equipment[type][item].valid) != 'undefined') {
+		//		var halt = 1;
+		//		for (let l = 0; l < equipment[type][item].valid.length; l++) {
+		//			if (equipment[type][item].valid[l] == className) { halt = 0 }
+		//		}
+		//	}
+			if (halt == 0) {
 				if (item > 0) {
 					if (typeof(equipment[type][item].set_bonuses) != 'undefined') {
 						choices += "<option class='dropdown-set'>" + equipment[type][item].name + "</option>"
@@ -847,6 +851,7 @@ function calculateSkillAmounts() {
 		} else if (character.class_name == "Barbarian") {
 			skills[s].extra_levels += character.skills_barbarian
 			if (s < 10) { skills[s].extra_levels += character.skills_warcries
+				if (s == 3) { skills[s].force_levels = character.skill_Shout }
 				if (s == 6) { skills[s].force_levels = character.skill_Battle_Orders }
 				if (s == 7) { skills[s].force_levels = character.skill_Grim_Ward }
 				if (s == 8) { skills[s].force_levels = character.skill_War_Cry }
@@ -857,6 +862,7 @@ function calculateSkillAmounts() {
 				if (s == 24) { skills[s].force_levels = character.oskill_Bash }
 			} else { skills[s].extra_levels += character.skills_masteries
 				if (s == 10) { skills[s].force_levels = character.oskill_Edged_Weapon_Mastery }
+				if (s == 15) { skills[s].force_levels = character.skill_Iron_Skin }
 			}
 		} else if (character.class_name == "Druid") {
 			skills[s].extra_levels += character.skills_druid
@@ -864,15 +870,20 @@ function calculateSkillAmounts() {
 			if (s < 11) { skills[s].extra_levels += character.skills_elemental
 				if (s == 2) { skills[s].force_levels = character.oskill_Flame_Dash }
 				if (s == 3 || s == 10) { skills[s].extra_levels += character.skills_cold_all }
+				if (s == 5) { skills[s].force_levels = character.skill_Cyclone_Armor }
+				if (s == 9) { skills[s].force_levels = character.skill_Armageddon }
+				if (s == 10) { skills[s].force_levels = character.skill_Hurricane }
 			} else if (s > 20) { skills[s].extra_levels += character.skills_summoning_druid
 				if (s == 21) { skills[s].force_levels = character.skill_Raven }
+				if (s == 23) { skills[s].force_levels = character.skill_Heart_of_Wolverine }
+				if (s == 24) { skills[s].force_levels = character.skill_Spirit_Wolf }
 				if (s == 26) { skills[s].force_levels = character.skill_Oak_Sage }
 				if (s == 27) { skills[s].force_levels = character.skill_Dire_Wolf }
 				if (s == 30) { skills[s].force_levels = character.skill_Grizzly }
 			} else { skills[s].extra_levels += character.skills_shapeshifting
-				if (s == 11) { skills[s].force_levels = character.skill_Werewolf }
-				if (s == 12) { skills[s].force_levels = ocharacter.skill_Lycanthropy }
-				if (s == 13) { skills[s].force_levels = ocharacter.skill_Werebear }
+				if (s == 11) { skills[s].force_levels = character.skill_Werewolf }	// oskill_Werewolf only obtainable by Barbarian
+				if (s == 12) { skills[s].force_levels = character.oskill_Lycanthropy }
+				if (s == 13) { skills[s].force_levels = character.oskill_Werebear }
 				if (s == 14) { skills[s].force_levels = character.skill_Feral_Rage }
 				if (s == 15) { skills[s].force_levels = character.skill_Maul }
 			}
