@@ -202,24 +202,28 @@
 
 <div class="no-selection" style="display: block; height:118px; width: 650px; position: relative;">
 <div class="gray" style="display: block; width: 250px;" id="stats">
-	<a>Attack Rating: </a><a id="ar"></a><br>
-	<a>Defense: </a><a id="defense"></a><br>
-	<a>Stamina: </a><a id="stamina"></a><br>
 	<a>Life: </a><a id="life"></a><br>
-	<a>Mana: </a><a id="mana"></a>
+	<a>Mana: </a><a id="mana"></a><br>
+	<a>Stamina: </a><a id="stamina"></a><br>
+	<a>Defense: </a><a id="defense"></a><br>
+	<a style="visibility:visible;">Block Chance: </a><a id="block"></a>
 </div>
-<div class="gray" style="position: absolute; top: 0px; left: 170px;">
+<div class="gray" style="position: absolute; top: 0px; left: 150px; width: 200px;">
 <!--<a style="visibility:visible;">Damage per Second: </a><a id="dps"></a><br>-->
 <!--<a style="visibility:visible;">Chance to Hit: </a><a id="hit"></a><br>-->
 	<a>Basic Attack: </a><a id="basic_attack"></a><br>
-	<a style="visibility:visible;">Block Chance: </a><a id="block"></a>
+	<div class="none" id="skillDetail1" style="height: 22px; width: 300px; position: relative; z-index: 4;">
+	<select class="none" id="dropdown_skill1" onChange="checkSkill(this.value, 1)"><option class="gray-all" disabled selected> ­ ­ ­ ­ Skill 1</option></select><a id="skill1_info">: </a>
+	</div>
+	<div class="none" id="skillDetail2" style="height: 22px; width: 275px; position: relative; z-index: 4;">
+	<select class="none" id="dropdown_skill2" onChange="checkSkill(this.value, 2)"><option class="gray-all" disabled selected> ­ ­ ­ ­ Skill 2</option></select><a id="skill2_info">: </a>
+	</div>
 </div>
-<div class="gray" style="position: absolute; top: 0px; left: 320px;">
-<a id="skill1"></a><br>
-<a id="skill2"></a><br>
-<a id="skill3"></a><br>
-<a id="skill4"></a><br>
-</div>
+
+<div class="none" style="position: absolute; top: 0px; left: 430px;">
+	<a>Attack Rating: </a><a id="ar"></a><br>
+	<a style="visibility: hidden;">AR: </a><a id="ar_skill1"></a><br>
+	<a style="visibility: hidden;">AR: </a><a id="ar_skill2"></a>
 </div>
 
 <div style="float: left; position: relative; width: 321px; height: 434px; margin-bottom: 36px;">
@@ -335,11 +339,12 @@
 	<font size="2">Enemy Fire Resistance: </font><font size="2" id="enemy_fres"></font><br>
 	<font size="2">Enemy Cold Resistance: </font><font size="2" id="enemy_cres"></font><br>
 	<font size="2">Enemy Lightning Resistance: </font><font size="2" id="enemy_lres"></font><br>
-	<font size="2">Enemy Poison Resistance: </font><font size="2" id="enemy_pres"></font><br>
+	<font size="2">Enemy Poison Resistance: </font><font size="2" id="enemy_pres"></font><br><br>
+	<font size="2" id="find3"></font><br>
 </div>
 <div class="gray" style="position: relative; display: block; float: left; width: 200px;" id="stats3b">
-	<font size="2">Attack Rating vs Demons: </font><font size="2" id="ar_vs_demons"></font><br>
-	<font size="2">Attack Rating vs Undead: </font><font size="2" id="ar_vs_undead"></font><br><br>
+	<font size="2">AR vs Demons: </font><font size="2" id="ar_vs_demons"></font><br>
+	<font size="2">AR vs Undead: </font><font size="2" id="ar_vs_undead"></font><br><br>
 	<font size="2">Defense vs Missiles: </font><font size="2" id="missile_defense"></font><br><br>
 	<font size="2">Life Replenish: </font><font size="2" id="life_replenish"></font><br>
 	<font size="2">Mana Regen: </font><font size="2" id="mana_regen"></font><br><br>
@@ -349,7 +354,12 @@
 	<font size="2">Light Radius: </font><font size="2" id="light_radius"></font><br>
 	<font size="2">Increased Block Chance: </font><font size="2" id="ibc"></font><br>
 	<font size="2">Slower Stamina Drain: </font><font size="2" id="slower_stam_drain"></font><br>
-	<font size="2">Heal Stamina: </font><font size="2" id="heal_stam"></font><br>-->
+	<font size="2">Heal Stamina: </font><font size="2" id="heal_stam"></font><br><br>-->
+	<font size="2" id="f4"></font><br>
+	<font size="2" id="c4"></font><br>
+	<font size="2" id="l4"></font><br>
+	<font size="2" id="p4"></font><br><br>
+	<font size="2" id="find4"></font>
 </div>
 </div>
 

@@ -1,3 +1,13 @@
+.none {
+  background-color: black;
+  color: gray;
+  border-color: #333;
+}
+.none-test {
+  background-color: black;
+  color: white;
+  border-color: #333;
+}
 .no-selection {
 -webkit-user-select: none; /* for safari & chrome browsers */
 -moz-user-select: none; /* for mozilla browsers */
@@ -58,6 +68,11 @@
 .gray {
   color: gray;
   z-index: 3;
+}
+.gray-all {
+  color: gray;
+  z-index: 3;
+/*  background-color: #333;	*/
 }
 .background {
   background-color: black;

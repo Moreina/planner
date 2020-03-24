@@ -1,6 +1,23 @@
+<!-- Path of Diablo Planner
+
+* Click on the character's level or class to change them
+* Use right click to remove points or items
+* Shift and ctrl modify the amount of points added or removed
+
+To report a bug, edit the planner wiki or post on the reddit thread. Direct messages work too.
+
+Current Known Bugs:
+* Charms can't be moved into a new space below the original space if they overlap eachother
+* Shift + Right Click in Firefox doesn't work (and still opens the default menu)
+
+https://github.com/Moreina/planner#planner -->
+
 # [Planner](https://moreina.github.io/planner/)
+
 Character Skill Planner for Diablo 2: Path of Diablo
+
 ### [Download](https://github.com/Moreina/planner/archive/v1.13.zip)
+
 ### Features So Far:
 * all skill info up to level 60
 * synergy calculation for all skills
@@ -44,6 +61,16 @@ Character Skill Planner for Diablo 2: Path of Diablo
 
 [Planner Wiki](https://github.com/Moreina/planner/wiki) (report bugs or add suggestions)
 
-If you'd like to to help develop, or just have some ideas for a different design/implementation, let's chat.
+If you'd like to to help develop, or just have an idea for a different design/implementation, let's chat.
 
-For anyone curious about the program code, the files (.html, .js, .css) can be edited with any text editor. Most of the program logic is in "all.js", with the skill data in the class files and item data in "all_equipment.js". The page layout is handled by "index.html" and style elements are included in "all.css".
+For anyone curious about the program code, the files can be edited with any text editor:
+* **index.html**
+  * Handles page layout
+* **all.css**
+  * Defines style elements
+* **all.js**
+  * Holds most of the program logic
+* **all_equipment.js**
+  * Contains item data
+* **class .js files**  *(amazon, assassin, barbarian, druid, necromancer, paladin, sorceress)*
+  * Contains skill data

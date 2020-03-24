@@ -4,10 +4,13 @@ character = {};
 var skill_bonuses = {stamina_skillup:0, frw_skillup:0, defense_skillup:0, resistance_skillup:0, cstrike_skillup:0, ar_skillup:0, pierce_skillup:0, fRes_skillup:0, cRes_skillup:0, lRes_skillup:0, edged_skillup:[0,0,0], pole_skillup:[0,0,0], blunt_skillup:[0,0,0], thrown_skillup:[0,0,0], claw_skillup:[0,0,0], mana_regen_skillup:0, cPierce_skillup:0, lPierce_skillup:0, fPierce_skillup:0, cDamage_skillup:0, lDamage_skillup:0, fDamage_skillup:0, block_skillup:0, velocity_skillup:0};
 //var buffs = {stamina_buff:0, max_life_buff:0, max_mana_buff:0, defense_buff:0, all_skills_buff:0, fhr_buff:0, frw_buff:0, ias_buff:0, ar_buff:0, damage_buff:0, all_res_buff:0, pdr_buff:0, curses_reduced_buff:0, pDamage_min_buff:0, pDamage_max_buff:0, pDamage_duration_buff:0, thorns_buff:0, life_per_hit_buff:0, life_per_ranged_hit_buff:0, enemy_pRes_buff:0, fcr_buff:0, skeleton_damage_buff:0, block_buff:0, smite_min_buff:0, smite_max_buff:0, absorb_buff:0, absorb_flat_buff:0, life_regen_buff:0, fDamage_min_buff:0, fDamage_max_buff:0, cDamage_min_buff:0, cDamage_max_buff:0, enemy_defense_buff:0, pDamage_cutoff:0, velocity_aura:0, fRes_aura:0, cRes_aura:0, lRes_aura:0, defense_aura:0, life_regen_aura:0, poison_reduced_aura:0, fRes_max_aura:0, cRes_max_aura:0, lRes_max_aura:0, stam_recovery_aura:0, mana_regen_aura:0, elemental_damage_aura:0, lDamage_min_aura:0, lDamage_max_aura:0, pierce_aura:0, cstrike_aura:0, enemy_defense_aura:0, enemy_resists_aura:0, damage_vs_undead_aura:0};
 var base_stats = {level:1, skillpoints:0, statpoints:0, quests_completed:-1, running:-1, difficulty:3, strength_added:0, dexterity_added:0, vitality_added:0, energy_added:0, fRes_penalty:100, cRes_penalty:100, lRes_penalty:100, pRes_penalty:100, mRes_penalty:100, fRes:0, cRes:0, lRes:0, pRes:0, mRes:0, fRes_max_base:75, cRes_max_base:75, lRes_max_base:75, pRes_max_base:75, mRes_max_base:75, set_bonuses:[0,0,{},{},{},{},{}]}
-var active = {};
+
 var effects = {};
+var skillList = []; var skillList1 = []; var skillList2 = []; var skill1 = {name:"", details:""}; var skill2 = {name:"", details:""};
 var oskills = {basicAttack:{},basicThrow:{}};
+var abilities = {basicAttack:{},basicThrow:{}};
 var lastCharm = "";
+var lastSelected = "";
 var gear = {req_level:0, req_strength:0, req_dexterity:0};
 var settings = {coupling:1, autocast:1}
 var MAX = 20;	// Highest Skill Hardpoints
@@ -238,6 +241,9 @@ function equip(type, val) {
 	for (old_affix in equipped[type]) {
 		character[old_affix] -= equipped[type][old_affix]
 		if (old_affix != "set_bonuses") { equipped[type][old_affix] = unequipped[old_affix] }
+		if (old_affix == "aura") {
+			removeAura(equipment[type][item][old_affix], equipment[type][item].aura_lvl)
+		}
 	}
 	// remove set bonuses from previous item
 	if (old_set_bonuses != "") {
@@ -292,6 +298,10 @@ function equip(type, val) {
 			for (affix in equipment[type][item]) {
 				character[affix] += equipment[type][item][affix]
 				equipped[type][affix] = equipment[type][item][affix]
+				if (affix == "aura") {
+					document.getElementById("find3").innerHTML = "aura: " + equipment[type][item][affix] + "("+equipment[type][item].aura_lvl+")"
+					addAura(equipment[type][item][affix], equipment[type][item].aura_lvl)
+				}
 			}
 			// add affixes from base item
 			if (typeof(equipment[type][item]["base"]) != 'undefined') { if (equipment[type][item]["base"] != "") {
@@ -354,6 +364,55 @@ function equip(type, val) {
 	updateEffectList()
 	updateAll()
 	checkRequirements()
+}
+
+// 
+// ---------------------------------
+function addAura(aura, aura_lvl) {
+	name = aura
+	i = aura_lvl
+	if (document.getElementById(name) == null) {
+		var newEffect = document.createElement("img")
+		var effectIcon = "./images/more"+"/"+name+".png"
+		
+		var eClass = document.createAttribute("class");	eClass.value = "effect";	newEffect.setAttributeNode(eClass);
+		var eId = document.createAttribute("id");	eId.value = name;		newEffect.setAttributeNode(eId);
+		var eSrc = document.createAttribute("src");	eSrc.value = effectIcon;	newEffect.setAttributeNode(eSrc);
+		
+		var eToggle = document.createAttribute("onclick");		eToggle.value = "toggleAura("+name+", "+i+")";	newEffect.setAttributeNode(eToggle);
+		var eRemove = document.createAttribute("oncontextmenu");	eRemove.value = "removeAura("+name+", "+i+")";	newEffect.setAttributeNode(eRemove);
+		
+		var effectGUI = document.getElementById("side");
+		effectGUI.appendChild(newEffect);
+		
+		if (typeof(effects[name]) == 'undefined') { effects[name] = {} }
+		effects[name]["enabled"] = 0
+		if (settings.autocast == 1) {
+			toggleAura(name, i)
+		}
+	}
+	calculateSkillAmounts()
+	updateAll()
+}
+
+// 
+// ---------------------------------
+function removeAura(name, i) {
+	// TODO
+	// var data = getAuraData(name, i)
+	// for (affix in data) {
+	//	character[affix] -= data[affix]	
+	// }
+	if (i > 0) { name = non_items[i].effect } else { i = non_items[i].i }
+	if (typeof(effects[name]) != 'undefined') {
+		if (document.getElementById(name) != null) { document.getElementById(name).remove(); }
+		for (affix in effects[name]) {
+			character[affix] -= effects[name][affix]
+			effects[name][affix] = 0
+		}
+		calculateSkillAmounts()
+		updateAll()
+	}
 }
 
 // Resets functionality for skills
@@ -502,15 +561,16 @@ function addMisc(val) {
 // ---------------------------------
 function initiateMiscEffect(name, i) {
 	if (document.getElementById(name) == null) {
-		/*
-		// TODO: Change getBuffData to work with other classes
-		var auraLevel = 0;
-		var auraEffects = {};
-		var selfbuff = 0;
-		if (non_items[i].name == "Mercenary: "+name.split('_').join(' ')) { auraLevel = getMercenaryAuraLevel(character.level-1) }
-		auraEffects = character_paladin.getBuffData(effects[name], selfbuff)
-		//skills_all["paladin"]
-		*/
+
+	//	// TODO: Change getBuffData to work with other classes
+	//	var auraLevel = 0;
+	//	var auraEffects = {};
+	//	var selfbuff = 0;
+	//	if (non_items[i].name == "Mercenary: "+name.split('_').join(' ')) { auraLevel = getMercenaryAuraLevel(character.level-1) }
+	//	auraEffects = character_paladin.getBuffData(effects[name], selfbuff)
+	//	//skills_all["paladin"]
+		character.heal =  100
+
 		var newEffect = document.createElement("img")
 		var effectIcon = "./images/misc/dark/"+name+".png";
 		
@@ -530,6 +590,7 @@ function initiateMiscEffect(name, i) {
 			toggleMiscEffect(name, i)
 		}
 	}
+
 }
 
 // 
@@ -716,6 +777,48 @@ function updateStats() {
 	document.getElementById("lres").innerHTML = (c.lRes + c.all_res - c.lRes_penalty + c.resistance_skillup) + " / " + Math.min(RES_CAP,(c.lRes_max_base + c.lRes_max + c.lRes_skillup))
 	document.getElementById("pres").innerHTML = (c.pRes + c.all_res - c.pRes_penalty + c.resistance_skillup) + " / " + Math.min(RES_CAP,(c.pRes_max_base + c.pRes_max))
 	document.getElementById("mres").innerHTML = (c.mRes - c.mRes_penalty) + "%  +" + c.mDamage_reduced
+
+	var bmin1 = (1+~~skill1.details.damage_bonus/100);
+	var bmax1 = (1+~~skill1.details.damage_bonus/100);
+	var dmin1 = (~~skill1.details.damage_min);
+	var dmax1 = (~~skill1.details.damage_max);
+	var fmin1 = (~~skill1.details.fDamage_min);
+	var fmax1 = (~~skill1.details.fDamage_max);
+	var cmin1 = (~~skill1.details.cDamage_min);
+	var cmax1 = (~~skill1.details.cDamage_max);
+	var lmin1 = (~~skill1.details.lDamage_min);
+	var lmax1 = (~~skill1.details.lDamage_max);
+	var pmin1 = (~~skill1.details.pDamage_min);
+	var pmax1 = (~~skill1.details.pDamage_max+skill1.details.pDamage_all);
+	var mmin1 = (~~skill1.details.mDamage_min);
+	var mmax1 = (~~skill1.details.mDamage_max);
+	var bmin2 = (1+~~skill2.details.damage_bonus/100);
+	var bmax2 = (1+~~skill2.details.damage_bonus/100);
+	var dmin2 = (~~skill1.details.damage_min);
+	var dmax2 = (~~skill1.details.damage_max);
+	var fmin2 = (~~skill2.details.fDamage_min);
+	var fmax2 = (~~skill2.details.fDamage_max);
+	var cmin2 = (~~skill2.details.cDamage_min);
+	var cmax2 = (~~skill2.details.cDamage_max);
+	var lmin2 = (~~skill2.details.lDamage_min);
+	var lmax2 = (~~skill2.details.lDamage_max);
+	var pmin2 = (~~skill2.details.pDamage_min);
+	var pmax2 = (~~skill2.details.pDamage_max+skill2.details.pDamage_all);
+	var mmin2 = (~~skill2.details.mDamage_min);
+	var mmax2 = (~~skill2.details.mDamage_max);
+	var basic_min1 = Math.floor(wisp*((phys_min+dmin1)*bmin1 + c.fDamage_min+fmin1 + c.cDamage_min+cmin1 + c.lDamage_min+lmin1) + c.mDamage_min+mmin1);
+	var basic_max1 = Math.floor(wisp*((phys_max+dmax1)*bmax1 + c.fDamage_max+fmax1 + c.cDamage_max+cmax1 + c.lDamage_max+lmax1) + c.mDamage_max+mmax1 + wisp*(c.pDamage_all+c.pDamage_max+pmax1));
+	var basic_min2 = Math.floor(wisp*((phys_min+dmin2)*bmin2 + c.fDamage_min+fmin2 + c.cDamage_min+cmin2 + c.lDamage_min+lmin2) + c.mDamage_min+mmin2);
+	var basic_max2 = Math.floor(wisp*((phys_max+dmax2)*bmax2 + c.fDamage_max+fmax2 + c.cDamage_max+cmax2 + c.lDamage_max+lmax2) + c.mDamage_max+mmax2 + wisp*(c.pDamage_all+c.pDamage_max+pmax2));
+
+	if (basic_min1 > 0 || basic_max1 > 0) { document.getElementById("skill1_info").innerHTML = ": " + basic_min1 + "-" + basic_max1 } else { document.getElementById("ar_skill1").innerHTML = ":" }
+	if (basic_min2 > 0 || basic_max2 > 0) { document.getElementById("skill2_info").innerHTML = ": " + basic_min1 + "-" + basic_max2 } else { document.getElementById("ar_skill2").innerHTML = ":" }
+	if (document.getElementById("dropdown_skill1").innerHTML == skill1.name) { document.getElementById("ar_skill1").innerHTML = "AR: " + ar * (1+~~skill1.details.ar_bonus/100) } else { document.getElementById("ar_skill1").innerHTML = "" }
+	if (document.getElementById("dropdown_skill2").innerHTML == skill2.name) { document.getElementById("ar_skill2").innerHTML = "AR: " + ar * (1+~~skill2.details.ar_bonus/100) } else { document.getElementById("ar_skill2").innerHTML = "" }
+//	if (typeof(skill1.details.ar_bonus) != 'undefined') { document.getElementById("ar_skill1").innerHTML = ar * (1+~~skill1.details.ar_bonus/100) } else { document.getElementById("ar_skill1").innerHTML = "" }
+//	if (typeof(skill2.details.ar_bonus) != 'undefined') { document.getElementById("ar_skill2").innerHTML = ar * (1+~~skill2.details.ar_bonus/100) } else { document.getElementById("ar_skill2").innerHTML = "" }
+//	document.getElementById("ar_skill1").innerHTML = ar * character.skillFocus(skill1)
+//	document.getElementById("ar_skill2").innerHTML = ar * character.skillFocus(skill2)
 }
 
 // Updates stats shown on the secondary (Path of Diablo) stat page
@@ -833,7 +936,7 @@ function calculateSkillAmounts() {
 				if (s == 12) { skills[s].force_levels = character.skill_Phase_Run }
 				if (s == 13) { skills[s].force_levels = character.skill_Dodge }
 				if (s == 18) { temp = 0; if (character.oskill_Valkyrie > 0) { temp = Math.min(3, character.oskill_Valkyrie) }
-					skills[s].force_levels = character.skill_Valkyrie + temp }
+					skills[s].force_levels = temp }
 			}
 		} else if (character.class_name == "Assassin") {
 			skills[s].extra_levels += character.skills_assassin
@@ -881,7 +984,7 @@ function calculateSkillAmounts() {
 				if (s == 27) { skills[s].force_levels = character.skill_Dire_Wolf }
 				if (s == 30) { skills[s].force_levels = character.skill_Grizzly }
 			} else { skills[s].extra_levels += character.skills_shapeshifting
-				if (s == 11) { skills[s].force_levels = character.skill_Werewolf }	// oskill_Werewolf only obtainable by Barbarian
+				if (s == 11) { skills[s].force_levels = character.skill_Werewolf }	// oskill_Werewolf only obtainable by Barbarian?
 				if (s == 12) { skills[s].force_levels = character.oskill_Lycanthropy }
 				if (s == 13) { skills[s].force_levels = character.oskill_Werebear }
 				if (s == 14) { skills[s].force_levels = character.skill_Feral_Rage }
@@ -950,6 +1053,27 @@ function calculateSkillAmounts() {
 		} else { document.getElementById("p"+skills[s].key).innerHTML = "" }
 	}
 	calculateSkillPassives(character.class_name)
+	var skillChoices = "";
+//	for (let os = 0; os < oskills.length; os++) {
+//		if (oskills[os].level > 0 || oskills[os].force_levels > 0) { skillChoices += '<option class="gray">'+oskills[os].name+'</option>' }
+//	}
+	for (let s = 0; s < skills.length; s++) {
+		if (skills[s].level > 0 || skills[s].force_levels > 0) { skillChoices += '<option class="gray">'+skills[s].name+'</option>' }
+	}
+
+	// document.getElementById("dropdown_item").onchange = function() {var selected = document.getElementById("dropdown_item").selectedIndex};
+/*
+	if (skillChoices != "") {
+		document.getElementById("dropdown_skill1").innerHTML = '<option class="gray" disabled> ­ ­ ­ ­ Skill 1</option>' + skillChoices;
+		lastSelected = document.getElementById("dropdown_skill1").selectedIndex;
+	}
+	else { document.getElementById("dropdown_skill1").innerHTML = "<option class='gray' disabled selected> ­ ­ ­ ­ Skill 1</option>" + skillChoices }
+	if (skillChoices != "") {
+		document.getElementById("dropdown_skill2").innerHTML = '<option class="gray" disabled> ­ ­ ­ ­ Skill 2</option>' + skillChoices;
+		lastSelected = document.getElementById("dropdown_skill2").selectedIndex;
+	}
+	else { document.getElementById("dropdown_skill2").innerHTML = "<option class='gray' disabled selected> ­ ­ ­ ­ Skill 2</option>" + skillChoices }
+*/
 }
 
 // Updates passive skills
@@ -1140,7 +1264,7 @@ function modifyEffect(skill) {
 
 
 // Get highest mercenary aura level
-// hlvl: level of mercenary
+// hlvl: level of mercenary (maximum is clvl - 1)
 // ---------------------------------
 function getMercenaryAuraLevel(hlvl) {
 	result = 0;
@@ -1247,7 +1371,7 @@ function removeStat(event, stat) {
 // ---------------------------------
 function skillUp(event, skill) {
     if (event.altKey) {
-	focusSkill(skill)
+	focusSkill(skill, 1)
     } else {
 	if (typeof(skill.effect) != 'undefined') { if (skill.effect > 3) {
 		if (skill.level == 0 && skill.force_levels == 0 && typeof(effects["e"+skill.key]) == 'undefined') { enableEffect(skill.i) }
@@ -1284,12 +1408,18 @@ function skillUp(event, skill) {
 	} }
 	skillHover(skill)
     }
+//    checkSkill(skill)
+//    refreshSkills()
+    updateSkillList(skill, 1)
 }
 
 // Lowers the skill level
 // skill: the skill to modify
 // ---------------------------------
 function skillDown(event, skill) {
+    if (event.altKey) {
+	focusSkill(skill, 2)
+    } else {
 	var old_level = skill.level
 	var levels = 1
 	if (event.shiftKey) { levels = 10 }
@@ -1329,6 +1459,14 @@ function skillDown(event, skill) {
 		modifyEffect(skill)
 	} }
 	skillHover(skill)
+//	if (skill.level == 0 && skill.force_levels == 0) {	//&& document.getElementById("skill3").innerHTML == skill.name
+//		document.getElementById("skill1_info").innerHTML = character.getFocusData(skill)
+//		document.getElementById("skill2_info").innerHTML = character.getFocusData(skill)
+//	}
+    }
+//    checkSkill(skill)
+//    refreshSkills()
+    updateSkillList(skill, 2)
 }
 
 // Shows skill description tooltip on mouse-over
@@ -1399,21 +1537,224 @@ function skillHover(skill) {
 // skill: the skill to use
 // called by: skillHover()
 // ---------------------------------
-function showBaseLevels (skill) {
+function showBaseLevels(skill) {
 	if ((skill.extra_levels > 0 && skill.level > 0) || skill.force_levels > 0) {
 		document.getElementById("p"+skill.key).style.color = "#999999";
 		document.getElementById("p"+skill.key).innerHTML = skill.level;
-		//document.getElementById("p"+skill.key).innerHTML = (skill.level+skill.force_levels);
 	}
 }
 
 // 
 // ---------------------------------
-function focusSkill (skill) {
-	document.getElementById("skill3").innerHTML = skill.name
-	document.getElementById("skill4").innerHTML = getFocusData(skill.name)
-	// TODO
-	for (affix in active) { character[affix] = active[affix] }
+function focusSkill(skill, num) {
+	var choices = "";
+	if (num == 1) {
+		for (let k = 0; k < skillList1.length; k++) {
+			var s = k;
+			skillList1[k] = "<option>" + skills[s].name + "</option>"
+			if (skills[s].name == skill.name) { skillList1[k] = "<option selected>" + skills[s].name + "</option>" }
+			choices += skillList1[k];
+			skill1.name = skills[s].name;
+			skill1.details = character.getFocusData(skill);
+		}
+		document.getElementById("dropdown_skill1").innerHTML = choices
+	}
+	if (num == 2) {
+		for (let k = 0; k < skillList2.length; k++) {
+			var s = k;
+			skillList2[k] = "<option>" + skills[s].name + "</option>"
+			if (skills[s].name == skill.name) { skillList2[k] = "<option selected>" + skills[s].name + "</option>" }
+			choices += skillList2[k];
+			skill2.name = skills[s].name;
+			skill2.details = character.getFocusData(skill);
+		}
+		document.getElementById("dropdown_skill1").innerHTML = choices
+	}
+	updateStats()
+	
+//	for (let i = 0; i < skillList.length; i++) {
+//		if (num == 1) { skill1 = skills[s].name }
+//		if (num == 2) { skill2 = skills[s].name }
+//	}
+/*	if (skill.level > 0 || skill.force_levels > 0) {
+		if (document.getElementById("skill"+num+"_info").innerHTML == character.getFocusData(skill)) {
+			if (num == 1) { skill1 = skill; document.getElementById("dropdown_skill1").innerHTML = "<option class='gray' disabled selected>" + skill.name + "</option>" }
+			if (num == 2) { skill2 = skill; document.getElementById("dropdown_skill2").innerHTML = "<option class='gray' disabled selected>" + skill.name + "</option>" }
+		}
+	} else {
+		
+	}
+*/
+}
+
+// 
+// ---------------------------------
+function updateSkillList(skill, num) {
+	var choices = "";
+	var k = 0;
+	for (let s = 0; s < skills.length; s++) {
+		if (skills[s].bindable > 0 && (skills[s].level > 0 || skills[s].force_levels > 0)) {
+			skillList1[k] = "<option>" + skills[s].name + "</option>"
+			skillList2[k] = "<option>" + skills[s].name + "</option>"
+			if (num == 1 && skill.name == skills[s].name) {
+				skill1.name = skills[s].name
+				skillList1[k] = "<option selected>" + skills[s].name + "</option>"
+			}
+			if (num == 2 && skill.name == skills[s].name) {
+				skill2.name = skills[s].name
+				skillList2[k] = "<option selected>" + skills[s].name + "</option>"
+			}
+			if (num == 1) { choices += skillList1[k] }
+			if (num == 2) { choices += skillList2[k] }
+			k++
+		}
+	}
+	
+	if (num == 1) {
+		document.getElementById("dropdown_skill1").innerHTML = "<option class='gray' disabled>" + " ­ ­ ­ ­ Skill 1" + "</option>" + choices
+		if (skill1.name == "") {skill1.name = skill.name}
+//		var d = skill1.details;
+//		document.getElementById("ar_skill1").innerHTML = document.getElementById("ar").innerHTML * d.ar_bonus
+	}
+	if (num == 2) {
+		document.getElementById("dropdown_skill2").innerHTML = "<option class='gray' disabled>" + " ­ ­ ­ ­ Skill 2" + "</option>" + choices
+		if (skill2.name == "") {skill2.name = skill.name}
+//		var d = skill2.details;
+//		document.getElementById("ar_skill2").innerHTML = document.getElementById("ar").innerHTML * d.ar_bonus
+	}
+	
+	// TODO: only unselect selected skill when it's zero IF it was already selected
+	
+	if (skill.level == 0 && skill.force_levels == 0 && skill.name == skill1.name) {
+		document.getElementById("dropdown_skill1").innerHTML = "<option class='gray' selected disabled>" + " ­ ­ ­ ­ Skill 1" + "</option>" + choices
+	}
+	if (skill.level == 0 && skill.force_levels == 0 && skill.name == skill2.name) {
+		document.getElementById("dropdown_skill2").innerHTML = "<option class='gray' selected disabled>" + " ­ ­ ­ ­ Skill 2" + "</option>" + choices
+	}
+
+	// TODO: don't refresh if a skill is selected?
+//	if (skill1 != "") { document.getElementById("dropdown_skill1").innerHTML = "<option class='gray' disabled>" + skill1.name + "</option>" + choices }
+//	else { document.getElementById("dropdown_skill1").innerHTML = "<option class='gray' disabled> ­ ­ ­ ­ Skill 1</option>" + choices }
+//	if (skill2 != "") { document.getElementById("dropdown_skill2").innerHTML = "<option class='gray' disabled>" + skill2.name + "</option>" + choices }
+//	else { document.getElementById("dropdown_skill2").innerHTML = "<option class='gray' disabled> ­ ­ ­ ­ Skill 2</option>" + choices }
+	updateStats()
+
+}
+
+// 
+// ---------------------------------
+function checkSkill(skill) {
+	var display1 = "";
+	var display2 = "";
+/*	var num = 1;
+	lastSelected = document.getElementById("dropdown_skill"+num).selectedIndex
+	
+	if (typeof(active[skill.name]) != 'undefined' || active[skill.name] == "") {
+		if (skill.level == 0 && skill.force_levels == 0) {
+			active[skill.name] = ""
+		}
+	} else {
+		if (skill.level > 0 || skill.force_levels > 0) {
+			active[skill.name] = skill.level
+			focusSkill(skill, num)
+		}
+	}
+	document.getElementById("skill1_info").innerHTML = character.getFocusData(skill)
+	document.getElementById("skill2_info").innerHTML = character.getFocusData(skill)
+*/
+/*
+	var sum1 = "";
+	var sum2 = "";
+	var affixes1 = character.getFocusData(skill)
+	var affixes2 = character.getFocusData(skill)
+	for (affix in affixes1) {
+		sum1 += affixes1[affix] + " "
+	}
+	for (affix in affixes2) {
+		sum2 += affixes2[affix] + " "
+	}
+	var skill1 = document.getElementById("dropdown_skill1").innerHTML;
+	var skill2 = document.getElementById("dropdown_skill2").innerHTML;
+	document.getElementById("skill1_info").innerHTML = sum1
+	document.getElementById("skill2_info").innerHTML = sum2
+	
+	
+	document.getElementById("f4").innerHTML = sum1
+	document.getElementById("c4").innerHTML = sum2
+	document.getElementById("l4").innerHTML = skill1
+	document.getElementById("p4").innerHTML = skill2
+*/
+
+// TODO: Replace with skill damage calculations
+// 	1. Create functions to get this data, so it can be called from class javascript files
+//	2. Modify getFocusData() to use this data when calculating the actual damage
+/*
+	var c = character;
+	var strTotal = (c.strength + c.all_attributes + (c.level-1)*c.strength_per_level);
+	var dexTotal = (c.dexterity + c.all_attributes + (c.level-1)*c.dexterity_per_level);
+	var vitTotal = (c.vitality + c.all_attributes + (c.level-1)*c.vitality_per_level);
+	var energyTotal = (c.energy + c.all_attributes + (c.level-1)*c.energy_per_level);
+	var statBonus = 1;
+	var weaponType = equipped.weapon.type;
+	if (typeof(weaponType) != 'undefined') { 
+		if (weaponType == "hammer") { statBonus = (strTotal*1.1/100) }
+		else if (weaponType == "bow" || weaponType == "crossbow") { statBonus = (dexTotal/100) }
+		else if (typeof(equipped.weapon.only) != 'undefined') { if (weaponType == "spear" || weaponType == "javelin" || equipped.weapon.only == "amazon") { statBonus = ((strTotal*0.8/100)+(dexTotal*0.5/100)) } }
+		else if (weaponType == "dagger" || weaponType == "thrown" || weaponType == "claw" || weaponType == "javelin") { statBonus = ((strTotal*0.75/100)+(dexTotal*0.75/100)) }
+		else  { statBonus = (strTotal/100) }
+	}
+	var weapon_skillup = 0;
+	if (c.class_name == "Barbarian" || c.class_name == "Assassin") {
+		if (weaponType == "sword" || weaponType == "axe" || weaponType == "dagger") { weapon_skillup = c.edged_skillup[0]; c.ar_skillup = c.edged_skillup[1]; c.cstrike_skillup = c.edged_skillup[2]; }
+		else if (weaponType == "polearm" || weaponType == "spear") { weapon_skillup = c.pole_skillup[0]; c.ar_skillup = c.pole_skillup[1]; c.cstrike_skillup = c.pole_skillup[2]; }
+		else if (weaponType == "mace" || weaponType == "scepter" || weaponType == "staff" || weaponType == "hammer" || weaponType == "club") { weapon_skillup = c.blunt_skillup[0]; c.ar_skillup = c.blunt_skillup[1]; c.cstrike_skillup = c.blunt_skillup[2]; }
+		else if (weaponType == "thrown") { weapon_skillup = c.thrown_skillup[0]; c.ar_skillup = c.thrown_skillup[1]; c.pierce_skillup = c.thrown_skillup[2]; }
+		else if (weaponType == "claw") { weapon_skillup = c.claw_skillup[0]; c.ar_skillup = c.claw_skillup[1]; c.cstrike_skillup = c.claw_skillup[2]; }
+		else { weapon_skillup = 0; c.ar_skillup = 0; c.cstrike_skillup = 0; c.pierce_skillup = 0; }
+	}
+	var ar_addon = (dexTotal-c.starting_dexterity)*c.ar_per_dexterity;
+	var defense_addon = (dexTotal-c.starting_dexterity)*c.defense_per_dexterity;
+	var life_addon = (vitTotal-c.starting_vitality)*c.life_per_vitality;
+	var stamina_addon = (vitTotal-c.starting_vitality)*c.stamina_per_vitality;
+	var mana_addon = (energyTotal-c.starting_energy)*c.mana_per_energy;
+	
+	var def_items = 0;
+	for (type in equipped) { def_items += Math.floor(~~equipped[type]["base_defense"] + ~~equipped[type]["defense"]) }
+	var def = Math.floor((def_items + dexTotal/4) * (1 + (c.defense_bonus + c.defense_skillup)/100) + (c.level-1)*c.defense_per_level);
+	
+	var ar = Math.floor((((dexTotal - 7) * 5 + c.ar + (c.level-1)*c.ar_per_level + c.ar_const)/2) * (1+(c.ar_skillup + c.ar_bonus + c.level*c.ar_bonus_per_level)/100) * (1+c.ar_shrine_bonus/100));
+	
+	var wisp = 1+Math.round(c.wisp/20,0)/10
+	var phys_min = ((1+statBonus+(c.e_damage+c.damage_bonus+weapon_skillup)/100)*((c.level-1)*c.min_damage_per_level+c.base_damage_min))+c.damage_min;
+	var phys_max = ((1+statBonus+(c.e_damage+c.damage_bonus+weapon_skillup)/100)*((c.level-1)*c.max_damage_per_level+c.base_damage_max))+c.damage_max;
+	
+	var basic_min = Math.floor(wisp*(phys_min + c.fDamage_min + c.cDamage_min + c.lDamage_min) + c.mDamage_min);
+	var basic_max = Math.floor(wisp*(phys_max + c.fDamage_max + c.cDamage_max + c.lDamage_max) + c.mDamage_max + wisp*(c.pDamage_all+c.pDamage_max));
+	if (basic_min > 0 || basic_max > 0) {
+		document.getElementById("basic_attack").innerHTML = basic_min + "-" + basic_max //}
+	//	else { document.getElementById("basic_attack").innerHTML = "" }
+		document.getElementById("skill1_info").innerHTML = ": " + character.getFocusData(skill)
+		document.getElementById("skill2_info").innerHTML = ": " + character.getFocusData(skill)
+	}
+*/
+}
+
+// Refreshes the list of skills available from the dropdown menus
+// Called by SkillUp() and SkillDown()
+// ---------------------------------
+function refreshSkills() {
+/*	var choices = "";
+	for (s = 0; s < skills.length; s++) {
+		if (skills[s].level > 0 || skills[s].force_levels > 0) {
+			choices += "<option>" + skills[s].name + "</option>" 
+		}
+	}
+	// TODO: don't refresh if a skill is selected?
+	if (skill1 != "") { document.getElementById("dropdown_skill1").innerHTML = "<option class='gray' disabled selected>" + skill1.name + "</option>" + choices }
+	else { document.getElementById("dropdown_skill1").innerHTML = "<option class='gray' disabled selected> ­ ­ ­ ­ Skill 1</option>" + choices }
+	if (skill2 != "") { document.getElementById("dropdown_skill2").innerHTML = "<option class='gray' disabled selected>" + skill2.name + "</option>" + choices }
+	else { document.getElementById("dropdown_skill2").innerHTML = "<option class='gray' disabled selected> ­ ­ ­ ­ Skill 2</option>" + choices }
+*/
 }
 
 // num: number to round
@@ -1464,9 +1805,6 @@ function itemHover(ev, id) {
 	var style = "display: block; color: #634db0;"
 	var display = name //+ "<br>" + stats
 	if (name == "Annihilus" || name == "Hellfire Torch" || name == "Gheed's Fortune") { style = "display: block; color: #928068;" }
-//	if (name == "Skill Grand Charm #1") { display = "+1 Grand Charm ("+character.tab1+")" }
-//	if (name == "Skill Grand Charm #2") { display = "+1 Grand Charm ("+character.tab2+")" }
-//	if (name == "Skill Grand Charm #3") { display = "+1 Grand Charm ("+character.tab3+")" }
 	if (equipped["charms"][val].type != "small" && equipped["charms"][val].type != "large" && equipped["charms"][val].type != "grand") { style = "display: block; color: #ff8080;" }
 	document.getElementById("item_tooltip").innerHTML = display
 	document.getElementById("item_tooltip").style = style
@@ -1546,20 +1884,16 @@ function drop(ev,cell) {
 	ev.target.appendChild(document.getElementById(data));
 	for (s = 1; s <= inv[0].in.length; s++) {
 		if (inv[0].in[s] == inv[0].onpickup) { inv[s].empty = 1; inv[0].in[s] = ""; 
-		//	document.getElementById(inv[s].id).style = "position: absolute; width: 29px; height: 29px;";
 			inv[s].y = 1;
 			document.getElementById(inv[s].id).style = "position: absolute; width: 29px; height: 29px; z-index: 3;";
-		
 		}
 	}
 	inv[cell].empty = 0
 	inv[0].in[cell] = inv[0].onpickup
 	if (inv[0].pickup_y > 1) { inv[cell+10].empty = 0; inv[0].in[cell+10] = inv[0].onpickup; 
-	//	document.getElementById(inv[cell].id).style = "position: absolute; width: 29px; height: 58px;";
 		inv[cell].y = 2;
 	}
 	if (inv[0].pickup_y > 2) { inv[cell+20].empty = 0; inv[0].in[cell+20] = inv[0].onpickup; 
-	//	document.getElementById(inv[cell].id).style = "position: absolute; width: 29px; height: 87px;";
 		inv[cell].y = 3;
 	}
 	inv[0].onpickup = "none"
