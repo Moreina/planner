@@ -239,11 +239,12 @@ function equip(type, val) {
 	}
 	// if replacing an item, previous item's affixes are removed from character
 	for (old_affix in equipped[type]) {
+		var aura_lvl = 0;
 		character[old_affix] -= equipped[type][old_affix]
-		if (old_affix != "set_bonuses") { equipped[type][old_affix] = unequipped[old_affix] }
 		if (old_affix == "aura") {
-			removeAura(equipment[type][item][old_affix], equipment[type][item].aura_lvl)
+			removeAura(equipped[type][old_affix], equipped[type].aura_lvl)
 		}
+		if (old_affix != "set_bonuses") { equipped[type][old_affix] = unequipped[old_affix] }
 	}
 	// remove set bonuses from previous item
 	if (old_set_bonuses != "") {
@@ -299,7 +300,7 @@ function equip(type, val) {
 				character[affix] += equipment[type][item][affix]
 				equipped[type][affix] = equipment[type][item][affix]
 				if (affix == "aura") {
-					document.getElementById("find3").innerHTML = "aura: " + equipment[type][item][affix] + "("+equipment[type][item].aura_lvl+")"
+					equipped[type].aura_lvl = equipment[type][item].aura_lvl
 					addAura(equipment[type][item][affix], equipment[type][item].aura_lvl)
 				}
 			}
@@ -371,16 +372,17 @@ function equip(type, val) {
 function addAura(aura, aura_lvl) {
 	name = aura
 	i = aura_lvl
-	if (document.getElementById(name) == null) {
+//	document.getElementById("f4").innerHTML = "addAura("+name+","+i+")"
+//	if (document.getElementById(name) == null) {
 		var newEffect = document.createElement("img")
-		var effectIcon = "./images/more"+"/"+name+".png"
+		var effectIcon = "./images/more/"+name+".png"
 		
 		var eClass = document.createAttribute("class");	eClass.value = "effect";	newEffect.setAttributeNode(eClass);
 		var eId = document.createAttribute("id");	eId.value = name;		newEffect.setAttributeNode(eId);
 		var eSrc = document.createAttribute("src");	eSrc.value = effectIcon;	newEffect.setAttributeNode(eSrc);
 		
-		var eToggle = document.createAttribute("onclick");		eToggle.value = "toggleAura("+name+", "+i+")";	newEffect.setAttributeNode(eToggle);
-		var eRemove = document.createAttribute("oncontextmenu");	eRemove.value = "removeAura("+name+", "+i+")";	newEffect.setAttributeNode(eRemove);
+		var eToggle = document.createAttribute("onclick");		eToggle.value = "toggleAura("+aura+", "+aura_lvl+")";	newEffect.setAttributeNode(eToggle);
+		var eRemove = document.createAttribute("oncontextmenu");	eRemove.value = "removeAura("+aura+", "+aura_lvl+")";	newEffect.setAttributeNode(eRemove);
 		
 		var effectGUI = document.getElementById("side");
 		effectGUI.appendChild(newEffect);
@@ -390,7 +392,7 @@ function addAura(aura, aura_lvl) {
 		if (settings.autocast == 1) {
 			toggleAura(name, i)
 		}
-	}
+//	}
 	calculateSkillAmounts()
 	updateAll()
 }
@@ -398,11 +400,11 @@ function addAura(aura, aura_lvl) {
 // 
 // ---------------------------------
 function removeAura(name, i) {
-	// TODO
-	// var data = getAuraData(name, i)
-	// for (affix in data) {
-	//	character[affix] -= data[affix]	
-	// }
+//	document.getElementById("f4").innerHTML = "begin: removeAura("+name+","+i+")"
+	var data = getAuraData(name, i)
+	for (affix in data) {
+		character[affix] -= data[affix]
+	}
 	if (i > 0) { name = non_items[i].effect } else { i = non_items[i].i }
 	if (typeof(effects[name]) != 'undefined') {
 		if (document.getElementById(name) != null) { document.getElementById(name).remove(); }
@@ -465,24 +467,30 @@ function resetCharms() {
 // val: the name of the charm
 // ---------------------------------
 function addCharm(val) {
-	var charm_img = {prefix:"./images/items/", small:["charm1_paw.png","charm1_disc.png","charm1_coin.png"], large:["charm2_page.png","charm2_horn.png","charm2_lantern.png"], grand:["charm3_lace.png","charm3_eye.png","charm3_monster.png"]};
+	var charm_img = {prefix:"./images/items/charms/", small:["charm1_paw.png","charm1_disc.png","charm1_coin.png"], large:["charm2_page.png","charm2_horn.png","charm2_lantern.png"], grand:["charm3_lace.png","charm3_eye.png","charm3_monster.png"]};
 	var charmImage = "";
 	var charmHeight = "";
 	var charmWidth = "29";
 	var type = "";
 	var charm_y = 1;
 	var nameVal = val;
+	var charmItem = "";
 	for (item in equipment["charms"]) {
 		if (equipment["charms"][item].name == val) {
-			type = equipment["charms"][item].type
+			charmItem = equipment["charms"][item]
+			type = charmItem.type
 		}
 	}
 	var r = Math.floor((Math.random() * 3));
 	if (type == "grand") { charmHeight = "88"; charmImage = charm_img.prefix+charm_img.grand[r]; charm_y = 3; }
 	else if (type == "large") { charmHeight = "59"; charmImage = charm_img.prefix+charm_img.large[r]; charm_y = 2; }
 	else if (type == "small") { charmHeight = "29"; charmImage = charm_img.prefix+charm_img.small[r]; charm_y = 1; }
-	else { charmHeight = "29"; charmImage = charm_img.prefix+"debug.png"; charm_y = 1; }
-		
+	if (typeof(charmItem.debug) != 'undefined') {
+		if (val == "+20 skills") { charmHeight = "29"; charmImage = charm_img.prefix+"debug1.png"; charm_y = 1; }
+		else if (val == "+1 skill") { charmHeight = "29"; charmImage = charm_img.prefix+"debug3.png"; charm_y = 1; }
+		else { charmHeight = "29"; charmImage = charm_img.prefix+"debug2.png"; charm_y = 1; }
+	}
+	
 	var allow = 1;
 	for (let c = 1; c <= inv[0].in.length; c++) {
 		if (inv[0].in[c] == val) {
@@ -493,9 +501,9 @@ function addCharm(val) {
 			var append = "" + Math.floor((Math.random() * 999) + 1);	// generate "unique" ID for charm
 			val = val + "_" + append
 		}
-		if (nameVal == "Annihilus") { charmImage = "./images/items/charm1u.png"; }
-		if (nameVal == "Hellfire Torch") { charmImage = "./images/items/charm2u.png"; }
-		if (nameVal == "Gheed's Fortune") { charmImage = "./images/items/charm3u.png"; }
+		if (nameVal == "Annihilus") { charmImage = "./images/items/charms/charm1u.png"; }
+		if (nameVal == "Hellfire Torch") { charmImage = "./images/items/charms/charm2u.png"; }
+		if (nameVal == "Gheed's Fortune") { charmImage = "./images/items/charms/charm3u.png"; }
 		var charmHTML = '<img style="width: ' + charmWidth + '; height: ' + charmHeight + '; pointer-events: auto;" id="' + val + '" src="' + charmImage + '" draggable="true" ondragstart="drag(event)" width="' + charmWidth + '" height="' + charmHeight + '" oncontextmenu="trash(event)" onmouseover="itemHover(event, this.value)" onmouseout="itemOut()" onclick="itemSelect(event)">';
 		var insertion = "";
 		var space_found = 0;
@@ -650,6 +658,9 @@ function toggleQuests(quests) {
 		updateStats()
 		updateMisc()
 	}
+	// testing
+	document.getElementById("find3").innerHTML = ""
+	document.getElementById("find4").innerHTML = ""
 }
 
 // Toggles whether the character is running or walking/standing
@@ -729,7 +740,7 @@ function updateStats() {
 	//var _ar = Math.floor((c.ar + (c.level-1)*c.ar_per_level + ar_addon) * (1 + (c.ar_skillup + c.ar_bonus + c.level*c.ar_bonus_per_level)/100));			// OLD
 	var ar = Math.floor((((dexTotal - 7) * 5 + c.ar + (c.level-1)*c.ar_per_level + c.ar_const)/2) * (1+(c.ar_skillup + c.ar_bonus + c.level*c.ar_bonus_per_level)/100) * (1+c.ar_shrine_bonus/100));
 	
-	var wisp = 1+Math.round(c.wisp/20,0)/10
+	var wisp = 1+~~Math.round(c.wisp/20,0)/10
 	var phys_min = ((1+statBonus+(c.e_damage+c.damage_bonus+weapon_skillup)/100)*((c.level-1)*c.min_damage_per_level+c.base_damage_min))+c.damage_min;
 	var phys_max = ((1+statBonus+(c.e_damage+c.damage_bonus+weapon_skillup)/100)*((c.level-1)*c.max_damage_per_level+c.base_damage_max))+c.damage_max;
 	
@@ -806,13 +817,13 @@ function updateStats() {
 	var pmax2 = (~~skill2.details.pDamage_max+skill2.details.pDamage_all);
 	var mmin2 = (~~skill2.details.mDamage_min);
 	var mmax2 = (~~skill2.details.mDamage_max);
-	var basic_min1 = Math.floor(wisp*((phys_min+dmin1)*bmin1 + c.fDamage_min+fmin1 + c.cDamage_min+cmin1 + c.lDamage_min+lmin1) + c.mDamage_min+mmin1);
-	var basic_max1 = Math.floor(wisp*((phys_max+dmax1)*bmax1 + c.fDamage_max+fmax1 + c.cDamage_max+cmax1 + c.lDamage_max+lmax1) + c.mDamage_max+mmax1 + wisp*(c.pDamage_all+c.pDamage_max+pmax1));
-	var basic_min2 = Math.floor(wisp*((phys_min+dmin2)*bmin2 + c.fDamage_min+fmin2 + c.cDamage_min+cmin2 + c.lDamage_min+lmin2) + c.mDamage_min+mmin2);
-	var basic_max2 = Math.floor(wisp*((phys_max+dmax2)*bmax2 + c.fDamage_max+fmax2 + c.cDamage_max+cmax2 + c.lDamage_max+lmax2) + c.mDamage_max+mmax2 + wisp*(c.pDamage_all+c.pDamage_max+pmax2));
+	var basic_min1 = Math.floor(wisp*((~~phys_min+dmin1)*bmin1 + ~~c.fDamage_min+fmin1 + ~~c.cDamage_min+cmin1 + ~~c.lDamage_min+lmin1) + ~~c.mDamage_min+mmin1);
+	var basic_max1 = Math.floor(wisp*((~~phys_max+dmax1)*bmax1 + ~~c.fDamage_max+fmax1 + ~~c.cDamage_max+cmax1 + ~~c.lDamage_max+lmax1) + ~~c.mDamage_max+mmax1 + wisp*(~~c.pDamage_all+~~c.pDamage_max+~~pmax1));
+	var basic_min2 = Math.floor(wisp*((~~phys_min+dmin2)*bmin2 + ~~c.fDamage_min+fmin2 + ~~c.cDamage_min+cmin2 + ~~c.lDamage_min+lmin2) + ~~c.mDamage_min+mmin2);
+	var basic_max2 = Math.floor(wisp*((~~phys_max+dmax2)*bmax2 + ~~c.fDamage_max+fmax2 + ~~c.cDamage_max+cmax2 + ~~c.lDamage_max+lmax2) + ~~c.mDamage_max+mmax2 + wisp*(~~c.pDamage_all+~~c.pDamage_max+~~pmax2));
 
-	if (basic_min1 > 0 || basic_max1 > 0) { document.getElementById("skill1_info").innerHTML = ": " + basic_min1 + "-" + basic_max1 } else { document.getElementById("ar_skill1").innerHTML = ":" }
-	if (basic_min2 > 0 || basic_max2 > 0) { document.getElementById("skill2_info").innerHTML = ": " + basic_min1 + "-" + basic_max2 } else { document.getElementById("ar_skill2").innerHTML = ":" }
+	if (basic_min1 > basic_min || basic_max1 > basic_max) { document.getElementById("skill1_info").innerHTML = ": " + basic_min1 + "-" + basic_max1 } else { document.getElementById("ar_skill1").innerHTML = ":" }
+	if (basic_min2 > basic_min || basic_max2 > basic_max) { document.getElementById("skill2_info").innerHTML = ": " + basic_min1 + "-" + basic_max2 } else { document.getElementById("ar_skill2").innerHTML = ":" }
 	if (document.getElementById("dropdown_skill1").innerHTML == skill1.name) { document.getElementById("ar_skill1").innerHTML = "AR: " + ar * (1+~~skill1.details.ar_bonus/100) } else { document.getElementById("ar_skill1").innerHTML = "" }
 	if (document.getElementById("dropdown_skill2").innerHTML == skill2.name) { document.getElementById("ar_skill2").innerHTML = "AR: " + ar * (1+~~skill2.details.ar_bonus/100) } else { document.getElementById("ar_skill2").innerHTML = "" }
 //	if (typeof(skill1.details.ar_bonus) != 'undefined') { document.getElementById("ar_skill1").innerHTML = ar * (1+~~skill1.details.ar_bonus/100) } else { document.getElementById("ar_skill1").innerHTML = "" }
