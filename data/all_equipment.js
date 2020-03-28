@@ -1,6 +1,6 @@
 
 
-var equipped = { helm:{name:"none"}, armor:{name:"none"}, gloves:{name:"none"}, boots:{name:"none"}, belt:{name:"none"}, amulet:{name:"none"}, ring1:{name:"none"}, ring2:{name:"none"}, weapon:{name:"none", twoHanded:0}, offhand:{name:"none"}, charms:{name:"none"}};
+var equipped = { helm:{name:"none"}, armor:{name:"none"}, gloves:{name:"none"}, boots:{name:"none"}, belt:{name:"none"}, amulet:{name:"none"}, ring1:{name:"none"}, ring2:{name:"none"}, weapon:{name:"none", twoHanded:0, type:""}, offhand:{name:"none", type:""}, charms:{name:"none"}};
 
 var unequipped = {name:"none", strength:0, dexterity:0, vitality:0, energy:0, life:0, mana:0, defense:0, ar:0, stamina:0, block:0, base_defense:0, 
 /* main stats		*/	fRes_max:0, cRes_max:0, lRes_max:0, pRes_max:0, mRes_max:0, fRes:0, cRes:0, lRes:0, pRes:0, mRes:0,
@@ -718,6 +718,13 @@ var equipment = {
 	],
     offhand: [
 {name:"Offhand"},
+{only:"assassin", rw:1, name:"Chaos ­ ­ - ­ ­ Scissors Suwayyah", req_level:57, e_damage:290, ias:35, mDamage_min:216, mDamage_max:471, owounds:25, oskill_Zeal:1, strength:10, life_per_demon_kill:15, skill_Wake_of_Fire:3, skill_Blade_Shield:3, skill_Fade:3, type:"claw", base:"Scissors Suwayyah", pod_changes:1},	// 9% ctc level 11 Frozen Orb on striking, 11% ctc level 9 Charged Bolt on striking
+{only:"assassin", rw:1, name:"Pattern ­ ­ - ­ ­ Greater Claws", req_level:21, e_damage:80, fbr:30, ar_bonus:10, fDamage_min:12, fDamage_max:32, lDamage_min:1, lDamage_max:50, pDamage_all:75, pDamage_duration:5, strength:6, dexterity:6, all_res:15, mana_per_kill:2, skill_Wake_of_Fire:3, skill_Blade_Fury:3, skill_Fade:3, type:"claw", base:"Greater Claws", pod_changes:1},
+{only:"assassin", name:"Bartuc's Cut-Throat", req_level:42, e_damage:200, damage_min:25, damage_max:50, fhr:30, bonus_ar:20, life_leech:9, strength:20, dexterity:20, skills_assassin:2, skills_martial:1, type:"claw", base:"Greater Talons"},
+{only:"assassin", name:"Jade Talon", type:"claw", req_level:66, e_damage:240, skills_martial:2, skills_shadow:2, fhr:30, mana_leech:15, all_res:50, base:"Wrist Sword"},
+{only:"assassin", name:"Shadow Killer", type:"claw", req_level:78, e_damage:220, target_defense:-25, freezes_target:2, mana_per_kill:15, indestructible:1, ethereal:1, base:"Battle Cestus", pod_changes:1},
+{only:"assassin", name:"Firelizard's Talons", type:"claw", req_level:67, e_damage:270, fDamage_min:236, fDamage_max:480, ias:15, skills_martial:3, skills_fire_all:2, skill_Fists_of_Ember:2, fRes:70, base:"Feral Claws", pod_changes:1},
+{only:"assassin", set_Nat:1, name:"Natalya's Mark", type:"claw", req_level:79, e_damage:200, damage_vs_undead:200, damage_vs_demons:200, fDamage_min:12, fDamage_max:17, itd:1, ias:40, cDamage_min:50, cDamage_max:50, base:"Scissors Suwayyah", set_bonuses:["set_Nat",{},{},{},{}]},
 {only:"necromancer", name:"Homunculus", req_level:42, block:72, e_def:200, mana_per_kill:5, ibc:40, fbr:30, skills_necromancer:2, energy:20, mana_regen:33, all_res:40, skills_curses:2, base:"Heirophant Trophy"},
 {only:"necromancer", name:"Darkforce Spawn", req_level:65, block:32, e_def:180, skills_summoning_necromancer:3, skills_poisonBone:3, skills_curses:3, fcr:30, max_mana:10, base:"Bloodlord Skull"},
 {only:"necromancer", name:"Boneflame", req_level:72, block:30, e_def:150, frw:20, skills_necromancer:3, all_res:30, base:"Succubae Skull"},
@@ -1191,6 +1198,7 @@ var bases = {
 	Succubae_Skull:{group:"armor", type:"shield", base_defense:146, def_low:100, def_high:146, req_level:60, req_strength:95, durability:20, max_sockets:2, downgrade:"Succubae Skull", block:30},
 	Bloodlord_Skull:{group:"armor", type:"shield", base_defense:148, def_low:103, def_high:148, req_level:65, req_strength:106, durability:20, max_sockets:2, downgrade:"Bloodlord Skull", block:32},
 
+	// axe
 	Hand_Axe:{group:"weapon", type:"axe", base_damage_min:3, base_damage_max:6, durability:28, speed:0, range:0, max_sockets:2, upgrade:"Hatchet"},
 	Axe:{group:"weapon", type:"axe", base_damage_min:4, base_damage_max:11, req_strength:32, durability:24, speed:10, range:1, max_sockets:4, upgrade:"Cleaver"},
 	Double_Axe:{group:"weapon", type:"axe", base_damage_min:5, base_damage_max:13, req_strength:43, durability:24, speed:10, range:1, max_sockets:5, upgrade:"Twin Axe"},
@@ -1221,6 +1229,7 @@ var bases = {
 	Decapitator:{group:"weapon", type:"axe", base_damage_min:49, base_damage_max:137, req_level:54, req_strength:189, req_dexterity:33, durability:40, speed:10, range:2, max_sockets:5, downgrade:"Tabar", twoHands:1},
 	Champion_Axe:{group:"weapon", type:"axe", base_damage_min:59, base_damage_max:94, req_level:61, req_strength:167, req_dexterity:59, durability:50, speed:-10, range:2, max_sockets:6, downgrade:"Gothic Axe", twoHands:1},
 	Glorious_Axe:{group:"weapon", type:"axe", base_damage_min:60, base_damage_max:124, req_level:66, req_strength:164, req_dexterity:55, durability:50, speed:10, range:3, max_sockets:6, downgrade:"Ancient Axe", twoHands:1},
+	// mace
 	Club:{group:"weapon", type:"mace", base_damage_min:1, base_damage_max:6, durability:24, speed:-10, range:0, max_sockets:2, upgrade:"Cudgel", subtype:"club"},
 	Spiked_Club:{group:"weapon", type:"mace", base_damage_min:5, base_damage_max:8, durability:36, speed:0, range:1, max_sockets:2, upgrade:"Barbed Club", subtype:"club"},
 	Mace:{group:"weapon", type:"mace", base_damage_min:3, base_damage_max:10, req_strength:27, durability:60, speed:0, range:0, max_sockets:2, upgrade:"Flanged Mace", subtype:"mace"},
@@ -1245,6 +1254,7 @@ var bases = {
 	Legendary_Mallet:{group:"weapon", type:"mace", base_damage_min:50, base_damage_max:61, req_level:61, req_strength:189, durability:65, speed:20, range:1, max_sockets:4, downgrade:"Battle Hammer", subtype:"hammer"},
 	Ogre_Maul:{group:"weapon", type:"mace", base_damage_min:77, base_damage_max:106, req_level:51, req_strength:225, durability:60, speed:10, range:1, max_sockets:6, downgrade:"War Club", twoHands:1, subtype:"hammer"},
 	Thunder_Maul:{group:"weapon", type:"mace", base_damage_min:33, base_damage_max:180, req_level:65, req_strength:253, durability:60, speed:20, range:2, max_sockets:6, downgrade:"Martel de Fer", twoHands:1, subtype:"hammer"},
+	// sword
 	Short_Sword:{group:"weapon", type:"sword", base_damage_min:2, base_damage_max:7, durability:24, speed:0, range:0, max_sockets:2, upgrade:"Gladius"},
 	Scimitar:{group:"weapon", type:"sword", base_damage_min:2, base_damage_max:6, req_dexterity:21, durability:22, speed:-20, range:0, max_sockets:2, upgrade:"Cutlass"},
 	Saber:{group:"weapon", type:"sword", base_damage_min:3, base_damage_max:8, req_strength:25, req_dexterity:25, durability:32, speed:-10, range:0, max_sockets:2, upgrade:"Shamshir"},
@@ -1287,6 +1297,7 @@ var bases = {
 	Champion_Sword:{group:"weapon", type:"sword", base_damage_min:71, base_damage_max:83, req_level:57, req_strength:163, req_dexterity:103, durability:40, speed:-10, range:2, max_sockets:4, downgrade:"Gothic Sword", twoHands:1, damageOneHand_min:24, damageOneHand_max:54},
 	Colossus_Sword:{group:"weapon", type:"sword", base_damage_min:61, base_damage_max:121, req_level:60, req_strength:182, req_dexterity:95, durability:50, speed:10, range:2, max_sockets:5, downgrade:"Zweihander", twoHands:1, damageOneHand_min:26, damageOneHand_max:70},
 	Colossus_Blade:{group:"weapon", type:"sword", base_damage_min:58, base_damage_max:115, req_level:63, req_strength:189, req_dexterity:110, durability:50, speed:5, range:2, max_sockets:6, downgrade:"Executioner Sword", twoHands:1, damageOneHand_min:25, damageOneHand_max:65},
+	// dagger
 	Dagger:{group:"weapon", type:"dagger", base_damage_min:1, base_damage_max:4, durability:16, speed:-20, max_sockets:1, upgrade:"Poignard"},
 	Dirk:{group:"weapon", type:"dagger", base_damage_min:3, base_damage_max:9, req_dexterity:25, durability:20, speed:0, max_sockets:1, upgrade:"Rondel"},
 	Kriss:{group:"weapon", type:"dagger", base_damage_min:2, base_damage_max:11, req_dexterity:45, durability:24, speed:-20, max_sockets:3, upgrade:"Cinquedeas"},
@@ -1299,6 +1310,7 @@ var bases = {
 	Mithral_Point:{group:"weapon", type:"dagger", base_damage_min:37, base_damage_max:53, req_level:52, req_strength:55, req_dexterity:98, durability:55, speed:0, max_sockets:1, downgrade:"Rondel"},
 	Fanged_Knife:{group:"weapon", type:"dagger", base_damage_min:15, base_damage_max:57, req_level:62, req_strength:42, req_dexterity:86, durability:36, speed:-20, max_sockets:3, downgrade:"Cinquedeas"},
 	Legend_Spike:{group:"weapon", type:"dagger", base_damage_min:31, base_damage_max:47, req_level:66, req_strength:65, req_dexterity:67, durability:47, speed:-10, max_sockets:2, downgrade:"Stilleto"},
+	// thrown
 	Throwing_Knife:{group:"weapon", type:"thrown", base_damage_min:2, base_damage_max:3, req_dexterity:21, durability:4, speed:0, upgrade:"Battle Dart", subtype:"dagger", throw_min:4, throw_max:9},
 	Throwing_Axe:{group:"weapon", type:"thrown", base_damage_min:4, base_damage_max:7, req_dexterity:40, durability:6, speed:10, upgrade:"Francisca", subtype:"axe", throw_min:8, throw_max:12},
 	Balanced_Knife:{group:"weapon", type:"thrown", base_damage_min:1, base_damage_max:8, req_dexterity:51, durability:8, speed:-20, upgrade:"War Dart", subtype:"dagger", throw_min:6, throw_max:11},
@@ -1311,6 +1323,7 @@ var bases = {
 	Flying_Axe:{group:"weapon", type:"thrown", base_damage_min:17, base_damage_max:65, req_level:42, req_strength:88, req_dexterity:108, durability:15, speed:10, downgrade:"Francisca", subtype:"axe", throw_min:15, throw_max:66},
 	Winged_Knife:{group:"weapon", type:"thrown", base_damage_min:27, base_damage_max:35, req_level:57, req_strength:45, req_dexterity:142, durability:20, speed:-20, downgrade:"War Dart", subtype:"dagger", throw_min:23, throw_max:39},
 	Winged_Axe:{group:"weapon", type:"thrown", base_damage_min:11, base_damage_max:56, req_level:60, req_strength:96, req_dexterity:122, durability:16, speed:-10, downgrade:"Hurlbat", subtype:"axe", throw_min:7, throw_max:60},
+	// javelin
 	Javelin:{group:"weapon", type:"javelin", base_damage_min:1, base_damage_max:5, durability:2, speed:-10, range:2, upgrade:"War Javelin"},
 	Pilum:{group:"weapon", type:"javelin", base_damage_min:4, base_damage_max:9, req_dexterity:45, durability:3, speed:0, range:2, upgrade:"Great Pilum"},
 	Short_Spear:{group:"weapon", type:"javelin", base_damage_min:2, base_damage_max:13, req_strength:40, req_dexterity:40, durability:4, speed:10, range:2, upgrade:"Simbilan"},
@@ -1326,6 +1339,7 @@ var bases = {
 	Balrog_Spear:{group:"weapon", type:"javelin", base_damage_min:33, base_damage_max:63, req_level:53, req_strength:127, req_dexterity:95, durability:14, speed:10, range:2, downgrade:"Simbilan"},
 	Ghost_Glaive:{group:"weapon", type:"javelin", base_damage_min:19, base_damage_max:60, req_level:59, req_strength:89, req_dexterity:137, durability:16, speed:20, range:2, downgrade:"Spiculum"},
 	Winged_Harpoon:{group:"weapon", type:"javelin", base_damage_min:27, base_damage_max:35, req_level:65, req_strength:76, req_dexterity:145, durability:18, speed:-10, range:2, downgrade:"Harpoon"},
+	// spear
 	Spear:{group:"weapon", type:"spear", base_damage_min:3, base_damage_max:15, req_dexterity:20, durability:30, speed:-10, range:3, max_sockets:3, upgrade:"War Spear", twoHands:1},
 	Trident:{group:"weapon", type:"spear", base_damage_min:9, base_damage_max:15, req_strength:38, req_dexterity:24, durability:35, speed:0, range:3, max_sockets:4, upgrade:"Fuscina", twoHands:1},
 	Brandistock:{group:"weapon", type:"spear", base_damage_min:7, base_damage_max:17, req_strength:40, req_dexterity:50, durability:28, speed:-20, range:4, max_sockets:5, upgrade:"War Fork", twoHands:1},
@@ -1341,6 +1355,7 @@ var bases = {
 	Mancatcher:{group:"weapon", type:"spear", base_damage_min:42, base_damage_max:92, req_level:55, req_strength:132, req_dexterity:134, durability:28, speed:-20, range:4, max_sockets:5, downgrade:"War Fork", twoHands:1},
 	Ghost_Spear:{group:"weapon", type:"spear", base_damage_min:18, base_damage_max:155, req_level:62, req_strength:122, req_dexterity:163, durability:28, speed:0, range:4, max_sockets:6, downgrade:"Yari", twoHands:1},
 	War_Pike:{group:"weapon", type:"spear", base_damage_min:33, base_damage_max:178, req_level:66, req_strength:165, req_dexterity:106, durability:25, speed:20, range:4, max_sockets:6, downgrade:"Lance", twoHands:1},
+	// polearm
 	Bardiche:{group:"weapon", type:"polearm", base_damage_min:1, base_damage_max:27, req_strength:40, durability:50, speed:10, range:2, max_sockets:3, upgrade:"Lochaber Axe", twoHands:1},
 	Voulge:{group:"weapon", type:"polearm", base_damage_min:6, base_damage_max:21, req_strength:50, durability:50, speed:0, range:2, max_sockets:4, upgrade:"Bill", twoHands:1},
 	Scythe:{group:"weapon", type:"polearm", base_damage_min:8, base_damage_max:20, req_strength:41, req_dexterity:41, durability:65, speed:-10, range:1, max_sockets:5, upgrade:"Battle Scythe", twoHands:1},
@@ -1359,6 +1374,7 @@ var bases = {
 	Cryptic_Axe:{group:"weapon", type:"polearm", base_damage_min:33, base_damage_max:150, req_level:59, req_strength:165, req_dexterity:103, durability:65, speed:10, range:3, max_sockets:5, downgrade:"Partizan", twoHands:1},
 	Great_Poleaxe:{group:"weapon", type:"polearm", base_damage_min:46, base_damage_max:127, req_level:63, req_strength:179, req_dexterity:99, durability:55, speed:0, range:4, max_sockets:6, downgrade:"Bec-de-Corbin", twoHands:1},
 	Giant_Thresher:{group:"weapon", type:"polearm", base_damage_min:40, base_damage_max:114, req_level:66, req_strength:188, req_dexterity:140, durability:55, speed:-10, range:4, max_sockets:6, downgrade:"Grim Scythe", twoHands:1},
+	// bow
 	Short_Bow:{group:"weapon", type:"bow", base_damage_min:1, base_damage_max:4, req_dexterity:15, speed:5, max_sockets:3, upgrade:"Edge Bow", twoHands:1},
 	Hunters_Bow:{group:"weapon", type:"bow", base_damage_min:2, base_damage_max:6, req_dexterity:28, speed:-10, max_sockets:4, upgrade:"Razor Bow", twoHands:1},
 	Long_Bow:{group:"weapon", type:"bow", base_damage_min:3, base_damage_max:10, req_strength:22, req_dexterity:19, speed:0, max_sockets:5, upgrade:"Cedar Bow", twoHands:1},
@@ -1383,6 +1399,7 @@ var bases = {
 	Crusader_Bow:{group:"weapon", type:"bow", base_damage_min:15, base_damage_max:63, req_level:57, req_strength:97, req_dexterity:121, speed:10, max_sockets:6, downgrade:"Long Siege Bow", twoHands:1},
 	Ward_Bow:{group:"weapon", type:"bow", base_damage_min:20, base_damage_max:53, req_level:60, req_strength:72, req_dexterity:146, speed:0, max_sockets:5, downgrade:"Rune Bow", twoHands:1},
 	Hydra_Bow:{group:"weapon", type:"bow", base_damage_min:10, base_damage_max:68, req_level:63, req_strength:134, req_dexterity:167, speed:10, max_sockets:6, downgrade:"Gothic Bow", twoHands:1},
+	// crossbow
 	Light_Crossbow:{group:"weapon", type:"crossbow", base_damage_min:6, base_damage_max:9, req_strength:21, req_dexterity:27, speed:-10, max_sockets:3, upgrade:"Arbalest", twoHands:1},
 	Crossbow:{group:"weapon", type:"crossbow", base_damage_min:9, base_damage_max:16, req_strength:40, req_dexterity:33, speed:0, max_sockets:4, upgrade:"Siege Crossbow", twoHands:1},
 	Heavy_Crossbow:{group:"weapon", type:"crossbow", base_damage_min:14, base_damage_max:26, req_strength:60, req_dexterity:40, speed:10, max_sockets:6, upgrade:"Ballista", twoHands:1},
@@ -1395,6 +1412,7 @@ var bases = {
 	Gorgon_Crossbow:{group:"weapon", type:"crossbow", base_damage_min:25, base_damage_max:87, req_level:50, req_strength:117, req_dexterity:105, speed:0, max_sockets:4, downgrade:"Siege Crossbow", twoHands:1},
 	Colossus_Crossbow:{group:"weapon", type:"crossbow", base_damage_min:32, base_damage_max:91, req_level:56, req_strength:163, req_dexterity:77, speed:10, max_sockets:6, downgrade:"Ballista", twoHands:1},
 	Demon_Crossbow:{group:"weapon", type:"crossbow", base_damage_min:26, base_damage_max:40, req_level:63, req_strength:141, req_dexterity:98, speed:-60, max_sockets:5, downgrade:"Chu-Ko-Nu", twoHands:1},
+	// staff
 	Short_Staff:{group:"weapon", type:"staff", base_damage_min:1, base_damage_max:5, durability:20, speed:-10, range:1, max_sockets:2, upgrade:"Jo Staff", twoHands:1},
 	Long_Staff:{group:"weapon", type:"staff", base_damage_min:2, base_damage_max:8, durability:30, speed:0, range:1, max_sockets:3, upgrade:"Quarterstaff", twoHands:1},
 	Gnarled_Staff:{group:"weapon", type:"staff", base_damage_min:4, base_damage_max:12, durability:35, speed:10, range:1, max_sockets:4, upgrade:"Cedar Staff", twoHands:1},
@@ -1410,6 +1428,7 @@ var bases = {
 	Elder_Staff:{group:"weapon", type:"staff", base_damage_min:80, base_damage_max:93, req_level:55, req_strength:44, req_dexterity:37, durability:35, speed:0, range:1, max_sockets:4, downgrade:"Cedar Staff", twoHands:1},
 	Shillelagh:{group:"weapon", type:"staff", base_damage_min:65, base_damage_max:108, req_level:62, req_strength:52, req_dexterity:27, durability:40, speed:0, range:1, max_sockets:4, downgrade:"Gothic Staff", twoHands:1},
 	Archon_Staff:{group:"weapon", type:"staff", base_damage_min:83, base_damage_max:99, req_level:66, req_strength:34, durability:26, speed:10, range:1, max_sockets:6, downgrade:"Rune Staff", twoHands:1},
+	// wand
 	Wand:{group:"weapon", type:"wand", base_damage_min:2, base_damage_max:4, durability:15, speed:0, range:0, max_sockets:1, upgrade:"Burnt Wand"},
 	Yew_Wand:{group:"weapon", type:"wand", base_damage_min:2, base_damage_max:8, durability:15, speed:10, range:0, max_sockets:1, upgrade:"Petrified Wand"},
 	Bone_Wand:{group:"weapon", type:"wand", base_damage_min:3, base_damage_max:7, durability:15, speed:-20, range:0, max_sockets:2, upgrade:"Tomb Wand"},
@@ -1422,6 +1441,7 @@ var bases = {
 	Ghost_Wand:{group:"weapon", type:"wand", base_damage_min:20, base_damage_max:42, req_level:48, req_strength:25, durability:14, speed:10, range:0, max_sockets:2, downgrade:"Petrified Wand"},
 	Lich_Wand:{group:"weapon", type:"wand", base_damage_min:10, base_damage_max:31, req_level:56, req_strength:25, durability:17, speed:-20, range:0, max_sockets:2, downgrade:"Tomb Wand"},
 	Unearthed_Wand:{group:"weapon", type:"wand", base_damage_min:22, base_damage_max:28, req_level:64, req_strength:25, durability:18, speed:0, range:0, max_sockets:2, downgrade:"Grave Wand"},
+	// scepter
 	Scepter:{group:"weapon", type:"scepter", base_damage_min:6, base_damage_max:11, req_strength:25, durability:50, speed:0, range:0, max_sockets:2, upgrade:"Rune Scepter"},
 	Grand_Scepter:{group:"weapon", type:"scepter", base_damage_min:8, base_damage_max:18, req_strength:37, durability:60, speed:10, range:1, max_sockets:3, upgrade:"Holy Water Sprinkler"},
 	War_Scepter:{group:"weapon", type:"scepter", base_damage_min:10, base_damage_max:17, req_strength:55, durability:70, speed:-10, range:1, max_sockets:5, upgrade:"Divine Scepter"},
@@ -1431,6 +1451,7 @@ var bases = {
 	Mighty_Scepter:{group:"weapon", type:"scepter", base_damage_min:40, base_damage_max:52, req_level:46, req_strength:125, req_dexterity:65, durability:50, speed:0, range:0, max_sockets:2, downgrade:"Rune Scepter"},
 	Seraph_Rod:{group:"weapon", type:"scepter", base_damage_min:45, base_damage_max:54, req_level:57, req_strength:108, req_dexterity:69, durability:60, speed:10, range:1, max_sockets:3, downgrade:"Holy Water Sprinkler"},
 	Caduceus:{group:"weapon", type:"scepter", base_damage_min:37, base_damage_max:43, req_level:66, req_strength:97, req_dexterity:70, durability:70, speed:-10, range:1, max_sockets:5, downgrade:"Divine Scepter"},
+	// claw
 	Katar:{group:"weapon", type:"claw", base_damage_min:4, base_damage_max:7, req_strength:20, req_dexterity:20, durability:48, speed:-10, range:1, max_sockets:2, upgrade:"Quhab", only:"assassin"},
 	Wrist_Blade:{group:"weapon", type:"claw", base_damage_min:5, base_damage_max:9, req_strength:33, req_dexterity:33, durability:52, speed:0, range:1, max_sockets:2, upgrade:"Wrist Spike", only:"assassin"},
 	Hatchet_Hands:{group:"weapon", type:"claw", base_damage_min:2, base_damage_max:15, req_strength:37, req_dexterity:37, durability:56, speed:10, range:1, max_sockets:2, upgrade:"Fascia", only:"assassin"},
@@ -1452,6 +1473,7 @@ var bases = {
 	Feral_Claws:{group:"weapon", type:"claw", base_damage_min:22, base_damage_max:53, req_level:58, req_strength:113, req_dexterity:113, durability:52, speed:-20, range:1, max_sockets:3, downgrade:"Greater Claws", only:"assassin"},
 	Runic_Talons:{group:"weapon", type:"claw", base_damage_min:24, base_damage_max:44, req_level:60, req_strength:115, req_dexterity:115, durability:69, speed:-30, range:1, max_sockets:3, downgrade:"Greater Talons", only:"assassin"},
 	Scissors_Suwayyah:{group:"weapon", type:"claw", base_damage_min:40, base_damage_max:51, req_level:64, req_strength:118, req_dexterity:118, durability:68, speed:0, range:1, max_sockets:3, downgrade:"Scissors Quhab", only:"assassin"},
+	// orb
 	Eagle_Orb:{group:"weapon", type:"orb", base_damage_min:2, base_damage_max:5, durability:20, speed:-10, range:0, max_sockets:2, upgrade:"Glowing Orb", only:"sorceress"},
 	Sacred_Globe:{group:"weapon", type:"orb", base_damage_min:3, base_damage_max:8, durability:30, speed:-10, range:0, max_sockets:2, upgrade:"Crystalline Globe", only:"sorceress"},
 	Smoked_Sphere:{group:"weapon", type:"orb", base_damage_min:4, base_damage_max:10, req_level:8, durability:35, speed:0, range:0, max_sockets:2, upgrade:"Cloudy Sphere", only:"sorceress"},
@@ -1467,6 +1489,7 @@ var bases = {
 	Demon_Heart:{group:"weapon", type:"orb", base_damage_min:23, base_damage_max:55, req_level:56, durability:35, speed:0, range:0, max_sockets:2, downgrade:"Cloudy Sphere", only:"sorceress"},
 	Vortex_Orb:{group:"weapon", type:"orb", base_damage_min:12, base_damage_max:66, req_level:63, durability:40, speed:0, range:0, max_sockets:2, downgrade:"Sparkling Ball", only:"sorceress"},
 	Dimensional_Shard:{group:"weapon", type:"orb", base_damage_min:30, base_damage_max:53, req_level:66, durability:50, speed:10, range:0, max_sockets:3, downgrade:"Swirling Crystal", only:"sorceress"},
+	// amazon weapons
 	Stag_Bow:{group:"weapon", type:"bow", base_damage_min:7, base_damage_max:12, req_level:14, req_strength:30, req_dexterity:45, speed:0, max_sockets:5, upgrade:"Ashwood Bow", twoHands:1, only:"amazon"},
 	Reflex_Bow:{group:"weapon", type:"bow", base_damage_min:9, base_damage_max:19, req_level:20, req_strength:35, req_dexterity:60, speed:10, max_sockets:5, upgrade:"Ceremonial Bow", twoHands:1, only:"amazon"},
 	Ashwood_Bow:{group:"weapon", type:"bow", base_damage_min:16, base_damage_max:29, req_level:29, req_strength:56, req_dexterity:77, speed:0, max_sockets:5, upgrade:"Matriarchal Bow", downgrade:"Stag Bow", twoHands:1, only:"amazon"},

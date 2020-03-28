@@ -7,7 +7,7 @@ var base_stats = {level:1, skillpoints:0, statpoints:0, quests_completed:-1, run
 
 var effects = {};
 var skillList = []; var skillOptions = []; var skillList1 = []; var skillList2 = [];
-
+var selectedSkill = [" ­ ­ ­ ­ Skill 1", " ­ ­ ­ ­ Skill 2"];
 var active = {};
 var oskills = {basicAttack:{},basicThrow:{}};
 var abilities = {basicAttack:{},basicThrow:{}};
@@ -376,6 +376,8 @@ function equip(type, val) {
 	updateEffectList()
 	updateAll()
 	checkRequirements()
+	if (selectedSkill[0] != " ­ ­ ­ ­ Skill 1") { checkSkill(selectedSkill[0], 1) }
+	if (selectedSkill[1] != " ­ ­ ­ ­ Skill 2") { checkSkill(selectedSkill[1], 2) }
 }
 
 // 
@@ -558,6 +560,8 @@ function addCharm(val) {
 				}
 			}
 			calculateSkillAmounts()
+			if (selectedSkill[0] != " ­ ­ ­ ­ Skill 1") { checkSkill(selectedSkill[0], 1) }
+			if (selectedSkill[1] != " ­ ­ ­ ­ Skill 2") { checkSkill(selectedSkill[1], 2) }
 			updateAll()
 		}
 	}
@@ -1231,6 +1235,8 @@ function addStat(event, stat) {
 		character.statpoints -= points
 		updateStats()
 		updateMisc()
+		if (selectedSkill[0] != " ­ ­ ­ ­ Skill 1") { checkSkill(selectedSkill[0], 1) }
+		if (selectedSkill[1] != " ­ ­ ­ ­ Skill 2") { checkSkill(selectedSkill[1], 2) }
 	}
 }
 
@@ -1261,6 +1267,8 @@ function removeStat(event, stat) {
 	character.statpoints += points
 	updateStats()
 	updateMisc()
+	if (selectedSkill[0] != " ­ ­ ­ ­ Skill 1") { checkSkill(selectedSkill[0], 1) }
+	if (selectedSkill[1] != " ­ ­ ­ ­ Skill 2") { checkSkill(selectedSkill[1], 2) }
 }
 
 // Raises the skill level
@@ -1303,6 +1311,11 @@ function skillUp(event, skill) {
 	skillHover(skill)
     if (skill.bindable > 0 && (old_level == 0 || (old_level > 0 && skill.level == 0 && skill.force_levels == 0))) {
 	updateSkills(skill)
+	if (selectedSkill[0] != " ­ ­ ­ ­ Skill 1") { checkSkill(selectedSkill[0], 1) }
+	if (selectedSkill[1] != " ­ ­ ­ ­ Skill 2") { checkSkill(selectedSkill[1], 2) }
+    } else {
+	if (selectedSkill[0] != " ­ ­ ­ ­ Skill 1") { checkSkill(selectedSkill[0], 1) }
+	if (selectedSkill[1] != " ­ ­ ­ ­ Skill 2") { checkSkill(selectedSkill[1], 2) }
     }
 }
 
@@ -1351,6 +1364,11 @@ function skillDown(event, skill) {
 	skillHover(skill)
     if (skill.bindable > 0 && (old_level == 0 || (old_level > 0 && skill.level == 0 && skill.force_levels == 0))) {
 	updateSkills(skill)
+	if (selectedSkill[0] != " ­ ­ ­ ­ Skill 1") { checkSkill(selectedSkill[0], 1) }
+	if (selectedSkill[1] != " ­ ­ ­ ­ Skill 2") { checkSkill(selectedSkill[1], 2) }
+    } else {
+	if (selectedSkill[0] != " ­ ­ ­ ­ Skill 1") { checkSkill(selectedSkill[0], 1) }
+	if (selectedSkill[1] != " ­ ­ ­ ­ Skill 2") { checkSkill(selectedSkill[1], 2) }
     }
 }
 
@@ -1433,26 +1451,37 @@ function showBaseLevels(skill) {
 // ---------------------------------
 function updateSkills(skill) {
 	var choices = "";
-	var k = 0;
+	var k = 1;
 	for (let s = 0; s < skills.length; s++) {
 		if (skills[s].bindable > 0 && (skills[s].level > 0 || skills[s].force_levels > 0)) {
 			skillList[k] = skills[s].name
 			skillOptions[k] = "<option>" + skills[s].name + "</option>"
-		} else {
-			skillList[k] = ""
-			skillOptions[k] = ""
+			choices += skillOptions[k]
+			k++
 		}
-		choices += skillOptions[k]
-		k++
+		if (skills[s].level == 0 && skills[s].force_levels == 0) {
+			if (selectedSkill[0] == skills[s].name) { selectedSkill[0] = " ­ ­ ­ ­ Skill 1" }
+			if (selectedSkill[1] == skills[s].name) { selectedSkill[1] = " ­ ­ ­ ­ Skill 2" }
+		}
 	}
 	document.getElementById("dropdown_skill1").innerHTML = "<option class='gray' disabled>" + " ­ ­ ­ ­ Skill 1" + "</option>" + choices
 	document.getElementById("dropdown_skill2").innerHTML = "<option class='gray' disabled>" + " ­ ­ ­ ­ Skill 2" + "</option>" + choices
-	updateStats()
+	var selectedIndex = [0,0];
+	for (let l = 0; l < skillList.length; l++) {
+		if (skillList[l] == selectedSkill[0]) { selectedIndex[0] = l }
+		if (skillList[l] == selectedSkill[1]) { selectedIndex[1] = l }
+	}
+	document.getElementById("dropdown_skill1").selectedIndex = selectedIndex[0]
+	document.getElementById("dropdown_skill2").selectedIndex = selectedIndex[1]
+	if (selectedSkill[0] == " ­ ­ ­ ­ Skill 1") { document.getElementById("skill1_info").innerHTML = ":"; document.getElementById("ar_skill1").innerHTML = ""; }
+	if (selectedSkill[1] == " ­ ­ ­ ­ Skill 2") { document.getElementById("skill2_info").innerHTML = ":"; document.getElementById("ar_skill2").innerHTML = ""; }
+	//updateStats()
 }
 
 // 
 // ---------------------------------
 function checkSkill(skillName, num) {
+	selectedSkill[num-1] = skillName
 	var c = character;
 	var strTotal = (c.strength + c.all_attributes + (c.level-1)*c.strength_per_level);
 	var dexTotal = (c.dexterity + c.all_attributes + (c.level-1)*c.dexterity_per_level);
@@ -1480,8 +1509,8 @@ function checkSkill(skillName, num) {
 	var wisp = 1+~~Math.round(c.wisp/20,0)/10
 	var phys_min = Math.floor(wisp*(((1+statBonus+(c.e_damage+c.damage_bonus+weapon_skillup)/100)*((c.level-1)*c.min_damage_per_level+c.base_damage_min))+c.damage_min));
 	var phys_max = Math.floor(wisp*(((1+statBonus+(c.e_damage+c.damage_bonus+weapon_skillup)/100)*((c.level-1)*c.max_damage_per_level+c.base_damage_max))+c.damage_max));
-	var ele_min = Math.floor(wisp*(c.fDamage_min*(c.fDamage+c.fDamage_skillup) + c.cDamage_min*(c.cDamage+c.cDamage_skillup) + c.lDamage_min*(c.lDamage+c.lDamage_skillup)));
-	var ele_max = Math.floor(wisp*(c.fDamage_max*(c.fDamage+c.fDamage_skillup) + c.cDamage_max*(c.cDamage+c.cDamage_skillup) + c.lDamage_max*(c.lDamage+c.lDamage_skillup) + (c.pDamage_all+c.pDamage_max)*c.pDamage));
+	var ele_min = Math.floor(wisp*(c.fDamage_min*(1+(c.fDamage+c.fDamage_skillup)/100) + c.cDamage_min*(1+(c.cDamage+c.cDamage_skillup)/100) + c.lDamage_min*(1+(c.lDamage+c.lDamage_skillup)/100)));
+	var ele_max = Math.floor(wisp*(c.fDamage_max*(1+(c.fDamage+c.fDamage_skillup)/100) + c.cDamage_max*(1+(c.cDamage+c.cDamage_skillup)/100) + c.lDamage_max*(1+(c.lDamage+c.lDamage_skillup)/100) + (c.pDamage_all+c.pDamage_max)*(1+c.pDamage/100)));
 
 	var skill = "";
 	for (let s = 0; s < skills.length; s++) {
@@ -1490,6 +1519,7 @@ function checkSkill(skillName, num) {
 		}
 	}
 	c.getFocusData(skill, num, ar, phys_min, phys_max, ele_min, ele_max, c.mDamage_min, c.mDamage_max, wisp);
+	updateSkills(skill)
 }	
 
 // num: number to round
@@ -1651,6 +1681,8 @@ function trash(ev) {
 	}
 	ev.target.remove();
 	calculateSkillAmounts()
+	if (selectedSkill[0] != " ­ ­ ­ ­ Skill 1") { checkSkill(selectedSkill[0], 1) }
+	if (selectedSkill[1] != " ­ ­ ­ ­ Skill 2") { checkSkill(selectedSkill[1], 2) }
 	updateAll()
 	document.getElementById("item_tooltip").innerHTML = ""
 	

@@ -98,60 +98,64 @@ var character_sorceress = {class_name:"Sorceress", strength:10, dexterity:25, vi
 		var skillMin = ""; var skillMax = ""; var skillAr = "";
 		var spell = 0;
 		
-		if (skill.name = "Ice Bolt") { 		 }
-		else if (skill.name = "Frost Nova") { 	 }
-		else if (skill.name = "Ice Blast") { 	 }
-		else if (skill.name = "Shiver Armor") { spell = 2; }	// cannot be bound to left click
-		else if (skill.name = "Glacial Spike") { 	 }
-		else if (skill.name = "Blizzard") { 		 }	// cannot be bound to left click
-		else if (skill.name = "Freezing Pulse") { 	 }
-		else if (skill.name = "Chilling Armor") { spell = 2; }	// cannot be bound to left click
-		else if (skill.name = "Frozen Orb") { 	 }
+		if (skill.name == "Ice Bolt") { 		 }
+		else if (skill.name == "Frost Nova") { 	 }
+		else if (skill.name == "Ice Blast") { 	 }
+		else if (skill.name == "Shiver Armor") { spell = 2; }	// cannot be bound to left click
+		else if (skill.name == "Glacial Spike") { 	 }
+		else if (skill.name == "Blizzard") { 		 }	// cannot be bound to left click
+		else if (skill.name == "Freezing Pulse") { 	 }
+		else if (skill.name == "Chilling Armor") { spell = 2; }	// cannot be bound to left click
+		else if (skill.name == "Frozen Orb") { 	 }
 		// Frigerate - not bindable
 		// Cold Mastery - not bindable
 		
-		else if (skill.name = "Charged Bolt") { 	 }
-	//	else if (skill.name = "Static Field") { spell = 2; }
-		else if (skill.name = "Telekinesis") { 	 }	// cannot be bound to left click
-		else if (skill.name = "Nova") { 		 }
-		else if (skill.name = "Lightning Surge") { 	 }
-		else if (skill.name = "Chain Lightning") { 	 }
-	//	else if (skill.name = "Teleport") { spell = 2; }	// cannot be bound to left click
-		else if (skill.name = "Discharge") { 	 }
-	//	else if (skill.name = "Energy Shield") { spell = 2; }	// cannot be bound to left click
-		else if (skill.name = "Thunder Storm") { 	 }	// cannot be bound to left click
+		else if (skill.name == "Charged Bolt") { 	 }
+	//	else if (skill.name == "Static Field") { spell = 2; }
+		else if (skill.name == "Telekinesis") { 	 }	// cannot be bound to left click
+		else if (skill.name == "Nova") { 		 }
+		else if (skill.name == "Lightning Surge") { 	 }
+		else if (skill.name == "Chain Lightning") { 	 }
+	//	else if (skill.name == "Teleport") { spell = 2; }	// cannot be bound to left click
+		else if (skill.name == "Discharge") { 	 }
+	//	else if (skill.name == "Energy Shield") { spell = 2; }	// cannot be bound to left click
+		else if (skill.name == "Thunder Storm") { 	 }	// cannot be bound to left click
 		// Lightning Mastery - not bindable
 		
-		else if (skill.name = "Fire Bolt") { 	 }
-		else if (skill.name = "Blaze") { 		 }	// cannot be bound to left click
-		else if (skill.name = "Immolate") { 		 }
-		else if (skill.name = "Fire Ball") { 	 }
-		else if (skill.name = "Fire Wall") { 	 }	// cannot be bound to left click
-		else if (skill.name = "Meteor") { 		 }
-		else if (skill.name = "Hydra") { 		 }
+		else if (skill.name == "Fire Bolt") { 	 }
+		else if (skill.name == "Blaze") { 		 }	// cannot be bound to left click
+		else if (skill.name == "Immolate") { 		 }
+		else if (skill.name == "Fire Ball") { 	 }
+		else if (skill.name == "Fire Wall") { 	 }	// cannot be bound to left click
+		else if (skill.name == "Meteor") { 		 }
+		else if (skill.name == "Hydra") { 		 }
 		// Warmth - not bindable
 		// Enflame - not bindable
 		// Fire Mastery - not bindable
 		else { spell = 2; }
 
-		ele_min += Math.floor(wisp*(fDamage_min*(character.fDamage+character.fDamage_skillup)+cDamage_min*(character.cDamage+character.cDamage_skillup)+lDamage_min*(character.lDamage+character.lDamage_skillup)))
-		ele_max += Math.floor(wisp*(fDamage_max*(character.fDamage+character.fDamage_skillup)+cDamage_max*(character.cDamage+character.cDamage_skillup)+lDamage_max*(character.lDamage+character.lDamage_skillup)+pDamage_max*character.pDamage))
+		if (typeof(skill.reqWeapon) != 'undefined') { var match = 0; for (let w = 0; w < skill.reqWeapon.length; w++) {
+			if (equipped.weapon.type == skill.reqWeapon[w]) { match = 1 }
+		} if (match == 0) { spell = 2 } }
+		
+		ele_min += Math.floor(wisp*(fDamage_min*(1+(character.fDamage+character.fDamage_skillup)/100) + cDamage_min*(1+(character.cDamage+character.cDamage_skillup)/100) + lDamage_min*(1+(character.lDamage+character.lDamage_skillup)/100)));
+		ele_max += Math.floor(wisp*(fDamage_max*(1+(character.fDamage+character.fDamage_skillup)/100) + cDamage_max*(1+(character.cDamage+character.cDamage_skillup)/100) + lDamage_max*(1+(character.lDamage+character.lDamage_skillup)/100) + pDamage_max*(1+character.pDamage/100)));
 		phys_min = Math.floor((phys_min*damage_bonus/100) + (wisp*damage_min*damage_bonus/100))
 		phys_max = Math.floor((phys_max*damage_bonus/100) + (wisp*damage_max*damage_bonus/100))
 
 		if (spell == 0) {
-			skillMin = Math.floor(mag_min+ele_min+phys_min); skillMax = Math.floor(mag_max+ele_max+phys_max); skillAr = Math.floor(ar*(1+ar_bonus/100));
+			skillMin = Math.floor(mag_min+mDamage_min+ele_min+phys_min); skillMax = Math.floor(mag_max+mDamage_max+ele_max+phys_max); skillAr = Math.floor(ar*(1+ar_bonus/100));
 		} else if (spell == 1) {	// no attack rating
-			skillMin = Math.floor(mag_min+ele_min+phys_min); skillMax = Math.floor(mag_max+ele_max+phys_max); skillAr = "";
+			skillMin = Math.floor(mag_min+mDamage_min+ele_min+phys_min); skillMax = Math.floor(mag_max+mDamage_max+ele_max+phys_max); skillAr = "";
 		} else if (spell == 2) {	// not damaging
 			skillMin = ""; skillMax = ""; skillAr = "";
 		}
-
+		var output = ": " + skillMin + " - " + skillMax;
 		if (num == 1) {
-			document.getElementById("skill1_info").innerHTML = ": " + skillMin + " - " + skillMax
+			if (output != ": 0 - 0" && output != ":  - ") { document.getElementById("skill1_info").innerHTML = output } else { document.getElementById("skill1_info").innerHTML = ":" }
 			if (skillAr != "") { document.getElementById("ar_skill1").innerHTML = "AR: " + skillAr } else { document.getElementById("ar_skill1").innerHTML = "" }
 		} else if (num == 2) {
-			document.getElementById("skill2_info").innerHTML = ": " + skillMin + " - " + skillMax
+			if (output != ": 0 - 0" && output != ":  - ") { document.getElementById("skill2_info").innerHTML = output } else { document.getElementById("skill2_info").innerHTML = ":" }
 			if (skillAr != "") { document.getElementById("ar_skill2").innerHTML = "AR: " + skillAr } else { document.getElementById("ar_skill2").innerHTML = "" }
 		}
 	}

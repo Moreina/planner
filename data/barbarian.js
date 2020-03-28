@@ -64,50 +64,59 @@ var character_barbarian = {class_name:"Barbarian", strength:30, dexterity:20, vi
 		var skillMin = ""; var skillMax = ""; var skillAr = "";
 		var spell = 0;
 		
-		if (skill.name = "War Cry") {			damage_min = updateSkill(skill, lvl, 0); damage_max = updateSkill(skill, lvl, 1); }
-	//	else if (skill.name = "Howl") {			distance = updateSkill(skill, lvl, 0); duration = updateSkill(skill, lvl, 1); }	// cannot be bound to left click
-	//	else if (skill.name = "Find Potion") {		chance = updateSkill(skill, lvl, 0); }	// cannot be bound to left click
-	//	else if (skill.name = "Taunt") { 		ar_bonus = updateSkill(skill, lvl, 0); damage_bonus = updateSkill(skill, lvl, 1); }	// cannot be bound to left click
-	//	else if (skill.name = "Shout") {		target_damage = updateSkill(skill, lvl, 0); target_defense = updateSkill(skill, lvl, 1); }	// cannot be bound to left click
-	//	else if (skill.name = "Find Item") {		chance = updateSkill(skill, lvl, 0); }	// cannot be bound to left click
-	//	else if (skill.name = "Battle Cry") {		damage_bonus = updateSkill(skill, lvl, 2); defense_bonus = updateSkill(skill, lvl, 1); }	// cannot be bound to left click
-	//	else if (skill.name = "Battle Orders") {	max_life = updateSkill(skill, lvl, 2); max_mana = updateSkill(skill, lvl, 3); stamina = updateSkill(skill, lvl, 1); }	// cannot be bound to left click
-	//	else if (skill.name = "Grim Ward") {		ar_bonus = updateSkill(skill, lvl, 0); damage_bonus = updateSkill(skill, lvl, 1); }	// cannot be bound to left click
-	//	else if (skill.name = "Battle Command") {	all_skills = updateSkill(skill, lvl, 0); }	// cannot be bound to left click
+		if (skill.name == "War Cry") {			damage_min = updateSkill(skill, lvl, 0); damage_max = updateSkill(skill, lvl, 1); }
+	//	else if (skill.name == "Howl") {			distance = updateSkill(skill, lvl, 0); duration = updateSkill(skill, lvl, 1); }	// cannot be bound to left click
+	//	else if (skill.name == "Find Potion") {		chance = updateSkill(skill, lvl, 0); }	// cannot be bound to left click
+	//	else if (skill.name == "Taunt") { 		ar_bonus = updateSkill(skill, lvl, 0); damage_bonus = updateSkill(skill, lvl, 1); }	// cannot be bound to left click
+	//	else if (skill.name == "Shout") {		target_damage = updateSkill(skill, lvl, 0); target_defense = updateSkill(skill, lvl, 1); }	// cannot be bound to left click
+	//	else if (skill.name == "Find Item") {		chance = updateSkill(skill, lvl, 0); }	// cannot be bound to left click
+	//	else if (skill.name == "Battle Cry") {		damage_bonus = updateSkill(skill, lvl, 2); defense_bonus = updateSkill(skill, lvl, 1); }	// cannot be bound to left click
+	//	else if (skill.name == "Battle Orders") {	max_life = updateSkill(skill, lvl, 2); max_mana = updateSkill(skill, lvl, 3); stamina = updateSkill(skill, lvl, 1); }	// cannot be bound to left click
+	//	else if (skill.name == "Grim Ward") {		ar_bonus = updateSkill(skill, lvl, 0); damage_bonus = updateSkill(skill, lvl, 1); }	// cannot be bound to left click
+	//	else if (skill.name == "Battle Command") {	all_skills = updateSkill(skill, lvl, 0); }	// cannot be bound to left click
 		
 		// Edged Mastery, Pole Mastery, Blunt Mastery, Thrown Mastery, Increased Stamina, Iron Skin, Increased Speed, Natural Resistance
 		// no combat mastery skills are bindable
 		
-		else if (skill.name = "Frenzy") { 		damage_min = updateSkill(skill, lvl, 0); damage_max = updateSkill(skill, lvl, 0); }
-		else if (skill.name = "Concentrate") {		damage_min = updateSkill(skill, lvl, 2); damage_max = updateSkill(skill, lvl, 2); ar_bonus = updateSkill(skill, lvl, 1); defense_bonus = updateSkill(skill, lvl, 0); }
-		else if (skill.name = "Cleave") { 		damage_min = updateSkill(skill, lvl, 0); damage_max = updateSkill(skill, lvl, 1); }
-		else if (skill.name = "Stun") { 		ar_bonus = updateSkill(skill, lvl, 0); damage_bonus = updateSkill(skill, lvl, 0); }
-	//	else if (skill.name = "Leap") { 		spell = 2; }
-		else if (skill.name = "Power Throw") {		ar_bonus = updateSkill(skill, lvl, 0); damage_bonus = updateSkill(skill, lvl, 0); }
-		else if (skill.name = "Bash") { 		ar_bonus = updateSkill(skill, lvl, 0); damage_bonus = updateSkill(skill, lvl, 0); }
-		else if (skill.name = "Leap Attack") {		ar_bonus = updateSkill(skill, lvl, 0); damage_bonus = updateSkill(skill, lvl, 0); }	// cannot be bound to left click
-		else if (skill.name = "Ethereal Throw") { 	ar_bonus = updateSkill(skill, lvl, 0); damage_bonus = updateSkill(skill, lvl, 0); }
-		else if (skill.name = "Whirlwind") {		ar_bonus = updateSkill(skill, lvl, 0); damage_bonus = updateSkill(skill, lvl, 0); }
+		else if (skill.name == "Frenzy") { 		damage_min = updateSkill(skill, lvl, 0); damage_max = updateSkill(skill, lvl, 0); }
+		else if (skill.name == "Concentrate") {		damage_min = updateSkill(skill, lvl, 2); damage_max = updateSkill(skill, lvl, 2); ar_bonus = updateSkill(skill, lvl, 1); defense_bonus = updateSkill(skill, lvl, 0); }
+		else if (skill.name == "Cleave") { 		damage_min = updateSkill(skill, lvl, 0); damage_max = updateSkill(skill, lvl, 1); }
+		else if (skill.name == "Stun") { 		ar_bonus = updateSkill(skill, lvl, 0); damage_bonus = updateSkill(skill, lvl, 0); }
+	//	else if (skill.name == "Leap") { 		spell = 2; }
+		else if (skill.name == "Power Throw") {		ar_bonus = updateSkill(skill, lvl, 0); damage_bonus = updateSkill(skill, lvl, 0); }
+		else if (skill.name == "Bash") { 		ar_bonus = updateSkill(skill, lvl, 0); damage_bonus = updateSkill(skill, lvl, 0); }
+		else if (skill.name == "Leap Attack") {		ar_bonus = updateSkill(skill, lvl, 0); damage_bonus = updateSkill(skill, lvl, 0); }	// cannot be bound to left click
+		else if (skill.name == "Ethereal Throw") { 	ar_bonus = updateSkill(skill, lvl, 0); damage_bonus = updateSkill(skill, lvl, 0); }
+		else if (skill.name == "Whirlwind") {		ar_bonus = updateSkill(skill, lvl, 0); damage_bonus = updateSkill(skill, lvl, 0); }
 		else { spell = 2; }
 
-		ele_min += Math.floor(wisp*(fDamage_min*(character.fDamage+character.fDamage_skillup)+cDamage_min*(character.cDamage+character.cDamage_skillup)+lDamage_min*(character.lDamage+character.lDamage_skillup)))
-		ele_max += Math.floor(wisp*(fDamage_max*(character.fDamage+character.fDamage_skillup)+cDamage_max*(character.cDamage+character.cDamage_skillup)+lDamage_max*(character.lDamage+character.lDamage_skillup)+pDamage_max*character.pDamage))
+		if (typeof(skill.reqWeapon) != 'undefined') { var match = 0; for (let w = 0; w < skill.reqWeapon.length; w++) {
+			if (equipped.weapon.type == skill.reqWeapon[w]) {
+				if (skill.name == "Frenzy") { for (let x = 0; x < skill.reqWeapon.length; x++) {
+					if (equipped.offhand.type == skill.reqWeapon[x]) { match = 1 }
+				} }
+				else { match = 1 }
+			}
+		} if (match == 0) { spell = 2 } }
+		
+		ele_min += Math.floor(wisp*(fDamage_min*(1+(character.fDamage+character.fDamage_skillup)/100) + cDamage_min*(1+(character.cDamage+character.cDamage_skillup)/100) + lDamage_min*(1+(character.lDamage+character.lDamage_skillup)/100)));
+		ele_max += Math.floor(wisp*(fDamage_max*(1+(character.fDamage+character.fDamage_skillup)/100) + cDamage_max*(1+(character.cDamage+character.cDamage_skillup)/100) + lDamage_max*(1+(character.lDamage+character.lDamage_skillup)/100) + pDamage_max*(1+character.pDamage/100)));
 		phys_min = Math.floor((phys_min*damage_bonus/100) + (wisp*damage_min*damage_bonus/100))
 		phys_max = Math.floor((phys_max*damage_bonus/100) + (wisp*damage_max*damage_bonus/100))
 
 		if (spell == 0) {
-			skillMin = Math.floor(mag_min+ele_min+phys_min); skillMax = Math.floor(mag_max+ele_max+phys_max); skillAr = Math.floor(ar*(1+ar_bonus/100));
+			skillMin = Math.floor(mag_min+mDamage_min+ele_min+phys_min); skillMax = Math.floor(mag_max+mDamage_max+ele_max+phys_max); skillAr = Math.floor(ar*(1+ar_bonus/100));
 		} else if (spell == 1) {	// no attack rating
-			skillMin = Math.floor(mag_min+ele_min+phys_min); skillMax = Math.floor(mag_max+ele_max+phys_max); skillAr = "";
+			skillMin = Math.floor(mag_min+mDamage_min+ele_min+phys_min); skillMax = Math.floor(mag_max+mDamage_max+ele_max+phys_max); skillAr = "";
 		} else if (spell == 2) {	// not damaging
 			skillMin = ""; skillMax = ""; skillAr = "";
 		}
-
+		var output = ": " + skillMin + " - " + skillMax;
 		if (num == 1) {
-			document.getElementById("skill1_info").innerHTML = ": " + skillMin + " - " + skillMax
+			if (output != ": 0 - 0" && output != ":  - ") { document.getElementById("skill1_info").innerHTML = output } else { document.getElementById("skill1_info").innerHTML = ":" }
 			if (skillAr != "") { document.getElementById("ar_skill1").innerHTML = "AR: " + skillAr } else { document.getElementById("ar_skill1").innerHTML = "" }
 		} else if (num == 2) {
-			document.getElementById("skill2_info").innerHTML = ": " + skillMin + " - " + skillMax
+			if (output != ": 0 - 0" && output != ":  - ") { document.getElementById("skill2_info").innerHTML = output } else { document.getElementById("skill2_info").innerHTML = ":" }
 			if (skillAr != "") { document.getElementById("ar_skill2").innerHTML = "AR: " + skillAr } else { document.getElementById("ar_skill2").innerHTML = "" }
 		}
 	}
@@ -165,14 +174,14 @@ var skills_barbarian = [
 {data:d251, key:"251", code:144, name:"Increased Speed", i:16, req:[14], reqlvl:24, level:0, extra_levels:0, force_levels:0, effect:1, bindable:0, style:"display: block; top: 354px; left: 134px;", description:"Passive - Increases walk and run speed", syn_title:"", syn_text:"", graytext:"", text:["Walk/Run Speed: +"," percent",""]},
 {data:d263, key:"263", code:145, name:"Natural Resistance", i:17, req:[15], reqlvl:30, level:0, extra_levels:0, force_levels:0, effect:1, bindable:0, style:"display: block; top: 422px; left: 294px;", description:"Passive - Increases natural resistances<br>to elemental and poison damage", syn_title:"", syn_text:"", graytext:"", text:["Resistances: +"," percent",""]},
 
-{data:d312, key:"312", code:146, name:"Frenzy", i:18, req:[], reqlvl:1, level:0, extra_levels:0, force_levels:0, effect:3, bindable:2, style:"display: block; top: 82px; left: 326px;", description:"Allows you to swing two weapons at once<br>East successful attack increases your overall speed<br>Requires you to equip two weapons", syn_title:"<br>Frenzy Receives Bonuses From:<br>", syn_text:"Cleave: +10% Damage per Level<br>Bash: +1% Magic Damage per Level<br>Concentrate: +8% Attack Rating per Level", graytext:"", text:["Deals 115% of Weapon Damage<br>Magic Damage: +","Damage: +"," percent<br>Attack Rating: +"," percent<br>Attack Speed: +","-"," percent<br>Walk/Run Speed: +","-"," percent<br>Mana Cost: ",""]},
-{data:d321, key:"321", code:147, name:"Concentrate", i:19, req:[], reqlvl:6, level:0, extra_levels:0, force_levels:0, bindable:2, style:"display: block; top: 150px; left: 306px;", description:"Attack that is not interruptible and<br>improves attack and defense rating<br><br>Deals 160% of Weapon Damage", syn_title:"<br>Concentrate Receives Bonuses From:<br>", syn_text:"Bash: +5% Damage per Level<br>Battle Orders: +10% Damage per Level<br>Taunt: +10% Damage per Level", graytext:"", text:["Defense Bonus: +"," percent<br>Attack Rating: +"," percent<br>Damage: +"," percent<br>Mana Cost: 2",""]},
-{data:d323, key:"323", code:148, name:"Cleave", i:20, req:[18], reqlvl:6, level:0, extra_levels:0, force_levels:0, bindable:2, style:"display: block; top: 150px; left: 456px;", description:"Attacks in an arc, dealing damage<br>to all enemies caught in the swing<br><br>Deals 60% of Weapon Damage", syn_title:"<br>Cleave Receives Bonuses From:<br>", syn_text:"Frenzy: +15% Damage per Level", graytext:"", text:["Damage: ","-","<br>Mana Cost: ",""]},
-{data:d332, key:"332", code:149, name:"Stun", i:21, req:[18], reqlvl:12, level:0, extra_levels:0, force_levels:0, bindable:2, style:"display: block; top: 218px; left: 346px;", description:"Stuns your target for a short time<br>and increases your attack rating", syn_title:"<br>Stun Receives Bonuses From:<br>", syn_text:"Bash: +10% Damage per Level<br>Concentrate: +5% Attack Rating per Level<br>War Cry +5% Duration per Level", graytext:"", text:["Deals 100% of Weapon Damage<br>Damage: +","Attack Rating: "," percent<br>Duration: "," seconds<br>Mana Cost: 2",""]},
+{data:d312, key:"312", code:146, name:"Frenzy", i:18, req:[], reqlvl:1, reqWeapon:["axe","mace","sword","dagger","thrown","javelin","scepter","wand"], level:0, extra_levels:0, force_levels:0, effect:3, bindable:2, style:"display: block; top: 82px; left: 326px;", description:"Allows you to swing two weapons at once<br>East successful attack increases your overall speed<br>Requires you to equip two weapons", syn_title:"<br>Frenzy Receives Bonuses From:<br>", syn_text:"Cleave: +10% Damage per Level<br>Bash: +1% Magic Damage per Level<br>Concentrate: +8% Attack Rating per Level", graytext:"", text:["Deals 115% of Weapon Damage<br>Magic Damage: +","Damage: +"," percent<br>Attack Rating: +"," percent<br>Attack Speed: +","-"," percent<br>Walk/Run Speed: +","-"," percent<br>Mana Cost: ",""]},
+{data:d321, key:"321", code:147, name:"Concentrate", i:19, req:[], reqlvl:6, reqWeapon:["axe","mace","sword","dagger","thrown","javelin","scepter","wand"], level:0, extra_levels:0, force_levels:0, bindable:2, style:"display: block; top: 150px; left: 306px;", description:"Attack that is not interruptible and<br>improves attack and defense rating<br><br>Deals 160% of Weapon Damage", syn_title:"<br>Concentrate Receives Bonuses From:<br>", syn_text:"Bash: +5% Damage per Level<br>Battle Orders: +10% Damage per Level<br>Taunt: +10% Damage per Level", graytext:"", text:["Defense Bonus: +"," percent<br>Attack Rating: +"," percent<br>Damage: +"," percent<br>Mana Cost: 2",""]},
+{data:d323, key:"323", code:148, name:"Cleave", i:20, req:[18], reqlvl:6, reqWeapon:["axe","mace","sword","dagger","thrown","javelin","scepter","wand"], level:0, extra_levels:0, force_levels:0, bindable:2, style:"display: block; top: 150px; left: 456px;", description:"Attacks in an arc, dealing damage<br>to all enemies caught in the swing<br><br>Deals 60% of Weapon Damage", syn_title:"<br>Cleave Receives Bonuses From:<br>", syn_text:"Frenzy: +15% Damage per Level", graytext:"", text:["Damage: ","-","<br>Mana Cost: ",""]},
+{data:d332, key:"332", code:149, name:"Stun", i:21, req:[18], reqlvl:12, reqWeapon:["axe","mace","sword","dagger","thrown","javelin","scepter","wand"], level:0, extra_levels:0, force_levels:0, bindable:2, style:"display: block; top: 218px; left: 346px;", description:"Stuns your target for a short time<br>and increases your attack rating", syn_title:"<br>Stun Receives Bonuses From:<br>", syn_text:"Bash: +10% Damage per Level<br>Concentrate: +5% Attack Rating per Level<br>War Cry +5% Duration per Level", graytext:"", text:["Deals 100% of Weapon Damage<br>Damage: +","Attack Rating: "," percent<br>Duration: "," seconds<br>Mana Cost: 2",""]},
 {data:d333, key:"333", code:150, name:"Leap", i:22, req:[20,18], reqlvl:12, level:0, extra_levels:0, force_levels:0, bindable:2, style:"display: block; top: 218px; left: 496px;", description:"Leaps away from danger<br>or into the fray", syn_title:"", syn_text:"", graytext:"", text:["Radius: "," yards",""]},
-{data:d341, key:"341", code:151, name:"Power Throw", i:23, req:[19], reqlvl:18, level:0, extra_levels:0, force_levels:0, bindable:2, style:"display: block; top: 286px; left: 266px;", description:"Gathers momentum to unleash a powerful throw<br>that deals damage to the target and nearby enemies<br><br>Deals 120% of Weapon Damage<br><br>Increases Physical Damage for 0.5 seconds", syn_title:"", syn_text:"", graytext:"", text:["Damage: +"," percent<br>To Attack Rating: +"," percent<br>Mana Cost: ",""]},
-{data:d342, key:"342", code:152, name:"Bash", i:24, req:[21,18], reqlvl:18, level:0, extra_levels:0, force_levels:0, bindable:2, style:"display: block; top: 286px; left: 366px;", description:"Powerful blow that converts physical damage to<br>magic and knocks back enemies", syn_title:"<br>Bash Receives Bonuses From:<br>", syn_text:"Stun: +10% Damage per Level<br>Concentrate: +5% Attack Rating per Level", graytext:"", text:["Deals 110% of Weapon Damage<br>","Magic Damage: "," percent<br>Attack Rating: +"," percent<br>Damage: +"," percent<br>Mana Cost: 2",""]},
-{data:d353, key:"353", code:153, name:"Leap Attack", i:25, req:[22,20,18], reqlvl:24, level:0, extra_levels:0, force_levels:0, bindable:1, style:"display: block; top: 354px; left: 436px;", description:"Leaps to and attacks target enemy<br>in one swift assault<br><br>Deals 175% of Weapon Damage", syn_title:"<br>Leap Attack Receives Bonuses From:<br>", syn_text:"Leap: +20% Damage per Level", graytext:"", text:["Damage: +"," percent<br>Attack Rating: +"," percent<br>Mana Cost: 4",""]},
-{data:d361, key:"361", code:154, name:"Ethereal Throw", i:26, req:[23,24,19,21,18], reqlvl:30, level:0, extra_levels:0, force_levels:0, bindable:2, style:"display: block; top: 422px; left: 266px;", description:"Throw your weapon with tremendous force,<br>converting it into a burst of energy<br>that explodes upon impact<br><br>Deals 60% of Weapon Damage", syn_title:"<br>Ethereal Throw Receives Bonuses From:<br>", syn_text:"Power Throw: +4% Magic Damage per Level<br>Bash: +4% Magic Damage per Level", graytext:"", text:["Magic Damage: ","-","<br>Mana Cost: ",""]},
-{data:d362, key:"362", code:155, name:"Whirlwind", i:27, req:[24,21,18], reqlvl:30, level:0, extra_levels:0, force_levels:0, bindable:2, style:"display: block; top: 422px; left: 386px;", description:"A whirling dance of death<br>that cuts a path through the<br>legions of your enemies<br><br>Deals 90% of Weapon Damage", syn_title:"", syn_text:"", graytext:"", text:["Damage: "," percent<br>Attack Rating: +"," percent<br>Mana Cost: ",""]},
+{data:d341, key:"341", code:151, name:"Power Throw", i:23, req:[19], reqlvl:18, reqWeapon:["thrown","javelin"], level:0, extra_levels:0, force_levels:0, bindable:2, style:"display: block; top: 286px; left: 266px;", description:"Gathers momentum to unleash a powerful throw<br>that deals damage to the target and nearby enemies<br><br>Deals 120% of Weapon Damage<br><br>Increases Physical Damage for 0.5 seconds", syn_title:"", syn_text:"", graytext:"", text:["Damage: +"," percent<br>To Attack Rating: +"," percent<br>Mana Cost: ",""]},
+{data:d342, key:"342", code:152, name:"Bash", i:24, req:[21,18], reqlvl:18, reqWeapon:["axe","mace","sword","dagger","thrown","javelin","scepter","wand"], level:0, extra_levels:0, force_levels:0, bindable:2, style:"display: block; top: 286px; left: 366px;", description:"Powerful blow that converts physical damage to<br>magic and knocks back enemies", syn_title:"<br>Bash Receives Bonuses From:<br>", syn_text:"Stun: +10% Damage per Level<br>Concentrate: +5% Attack Rating per Level", graytext:"", text:["Deals 110% of Weapon Damage<br>","Magic Damage: "," percent<br>Attack Rating: +"," percent<br>Damage: +"," percent<br>Mana Cost: 2",""]},
+{data:d353, key:"353", code:153, name:"Leap Attack", i:25, req:[22,20,18], reqlvl:24, reqWeapon:["axe","mace","sword","dagger","thrown","javelin","scepter","wand"], level:0, extra_levels:0, force_levels:0, bindable:1, style:"display: block; top: 354px; left: 436px;", description:"Leaps to and attacks target enemy<br>in one swift assault<br><br>Deals 175% of Weapon Damage", syn_title:"<br>Leap Attack Receives Bonuses From:<br>", syn_text:"Leap: +20% Damage per Level", graytext:"", text:["Damage: +"," percent<br>Attack Rating: +"," percent<br>Mana Cost: 4",""]},
+{data:d361, key:"361", code:154, name:"Ethereal Throw", i:26, req:[23,24,19,21,18], reqlvl:30, reqWeapon:["thrown","javelin"], level:0, extra_levels:0, force_levels:0, bindable:2, style:"display: block; top: 422px; left: 266px;", description:"Throw your weapon with tremendous force,<br>converting it into a burst of energy<br>that explodes upon impact<br><br>Deals 60% of Weapon Damage", syn_title:"<br>Ethereal Throw Receives Bonuses From:<br>", syn_text:"Power Throw: +4% Magic Damage per Level<br>Bash: +4% Magic Damage per Level", graytext:"", text:["Magic Damage: ","-","<br>Mana Cost: ",""]},
+{data:d362, key:"362", code:155, name:"Whirlwind", i:27, req:[24,21,18], reqlvl:30, reqWeapon:["axe","mace","sword","dagger","thrown","javelin","scepter","wand"], level:0, extra_levels:0, force_levels:0, bindable:2, style:"display: block; top: 422px; left: 386px;", description:"A whirling dance of death<br>that cuts a path through the<br>legions of your enemies<br><br>Deals 90% of Weapon Damage", syn_title:"", syn_text:"", graytext:"", text:["Damage: "," percent<br>Attack Rating: +"," percent<br>Mana Cost: ",""]},
 ];

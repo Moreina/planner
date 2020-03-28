@@ -92,59 +92,63 @@ var character_necromancer = {class_name:"Necromancer", strength:15, dexterity:25
 		var skillMin = ""; var skillMax = ""; var skillAr = "";
 		var spell = 0;
 		
-		if (skill.name = "Skeleton Warrior") { 	 }	// cannot be bound to left click
-		else if (skill.name = "Bone Offering") { spell = 2; }
-		else if (skill.name = "Clay Golem") { 	 }	// cannot be bound to left click
-		else if (skill.name = "Flesh Offering") { spell = 2; }
-		else if (skill.name = "Skeletal Mage") { 	 }	// cannot be bound to left click
-		else if (skill.name = "Blood Golem") { 	 }	// cannot be bound to left click
-	//	else if (skill.name = "Convocation") { spell = 2; }	// cannot be bound to left click
-		else if (skill.name = "Iron Golem") { 	 }	// cannot be bound to left click
-		else if (skill.name = "Fire Golem") { 	 }	// cannot be bound to left click
-		else if (skill.name = "Revive") { 		 }	// cannot be bound to left click
+		if (skill.name == "Skeleton Warrior") { 	 }	// cannot be bound to left click
+		else if (skill.name == "Bone Offering") { spell = 2; }
+		else if (skill.name == "Clay Golem") { 	 }	// cannot be bound to left click
+		else if (skill.name == "Flesh Offering") { spell = 2; }
+		else if (skill.name == "Skeletal Mage") { 	 }	// cannot be bound to left click
+		else if (skill.name == "Blood Golem") { 	 }	// cannot be bound to left click
+	//	else if (skill.name == "Convocation") { spell = 2; }	// cannot be bound to left click
+		else if (skill.name == "Iron Golem") { 	 }	// cannot be bound to left click
+		else if (skill.name == "Fire Golem") { 	 }	// cannot be bound to left click
+		else if (skill.name == "Revive") { 		 }	// cannot be bound to left click
 		// Summon Mastery - not bindable
 		
-		else if (skill.name = "Deadly Poison") { 	 }	// cannot be bound to left click
-		else if (skill.name = "Teeth") { 		 }
-	//	else if (skill.name = "Bone Armor") { spell = 2; }	// cannot be bound to left click
-		else if (skill.name = "Corpse Explosion") { spell = 2; }
-		else if (skill.name = "Desecrate") { 	 }	// cannot be bound to left click
-		else if (skill.name = "Bone Spear") { 	 }
-	//	else if (skill.name = "Bone Wall") { spell = 2; }	// cannot be bound to left click
-		else if (skill.name = "Bone Spirit") { 	 }
-		else if (skill.name = "Poison Nova") { 	 }
+		else if (skill.name == "Deadly Poison") { 	 }	// cannot be bound to left click
+		else if (skill.name == "Teeth") { 		 }
+	//	else if (skill.name == "Bone Armor") { spell = 2; }	// cannot be bound to left click
+		else if (skill.name == "Corpse Explosion") { spell = 2; }
+		else if (skill.name == "Desecrate") { 	 }	// cannot be bound to left click
+		else if (skill.name == "Bone Spear") { 	 }
+	//	else if (skill.name == "Bone Wall") { spell = 2; }	// cannot be bound to left click
+		else if (skill.name == "Bone Spirit") { 	 }
+		else if (skill.name == "Poison Nova") { 	 }
 		
-	//	else if (skill.name = "Amplify Damage") { 	 }	// cannot be bound to left click
-	//	else if (skill.name = "Dim Vision") { 	 }	// cannot be bound to left click
-		else if (skill.name = "Hemorrhage") { 	 }	// cannot be bound to left click
-	//	else if (skill.name = "Weaken") { 		 }	// cannot be bound to left click
-	//	else if (skill.name = "Iron Maiden") { 	 }	// cannot be bound to left click
-	//	else if (skill.name = "Terror") { 		 }	// cannot be bound to left click
-	//	else if (skill.name = "Confuse") { 		 }	// cannot be bound to left click
-	//	else if (skill.name = "Life Tap") { 		 }	// cannot be bound to left click
-	//	else if (skill.name = "Attract") { 		 }	// cannot be bound to left click
-	//	else if (skill.name = "Decrepify") { 	 }	// cannot be bound to left click
-	//	else if (skill.name = "Lower Resist") { 	 }	// cannot be bound to left click
+	//	else if (skill.name == "Amplify Damage") { 	 }	// cannot be bound to left click
+	//	else if (skill.name == "Dim Vision") { 	 }	// cannot be bound to left click
+		else if (skill.name == "Hemorrhage") { 	 }	// cannot be bound to left click
+	//	else if (skill.name == "Weaken") { 		 }	// cannot be bound to left click
+	//	else if (skill.name == "Iron Maiden") { 	 }	// cannot be bound to left click
+	//	else if (skill.name == "Terror") { 		 }	// cannot be bound to left click
+	//	else if (skill.name == "Confuse") { 		 }	// cannot be bound to left click
+	//	else if (skill.name == "Life Tap") { 		 }	// cannot be bound to left click
+	//	else if (skill.name == "Attract") { 		 }	// cannot be bound to left click
+	//	else if (skill.name == "Decrepify") { 	 }	// cannot be bound to left click
+	//	else if (skill.name == "Lower Resist") { 	 }	// cannot be bound to left click
 		else { spell = 2; }
 
-		ele_min += Math.floor(wisp*(fDamage_min*(character.fDamage+character.fDamage_skillup)+cDamage_min*(character.cDamage+character.cDamage_skillup)+lDamage_min*(character.lDamage+character.lDamage_skillup)))
-		ele_max += Math.floor(wisp*(fDamage_max*(character.fDamage+character.fDamage_skillup)+cDamage_max*(character.cDamage+character.cDamage_skillup)+lDamage_max*(character.lDamage+character.lDamage_skillup)+pDamage_max*character.pDamage))
+		if (typeof(skill.reqWeapon) != 'undefined') { var match = 0; for (let w = 0; w < skill.reqWeapon.length; w++) {
+			if (equipped.weapon.type == skill.reqWeapon[w]) { match = 1 }
+		} if (match == 0) { spell = 2 } }
+		
+		ele_min += Math.floor(wisp*(fDamage_min*(1+(character.fDamage+character.fDamage_skillup)/100) + cDamage_min*(1+(character.cDamage+character.cDamage_skillup)/100) + lDamage_min*(1+(character.lDamage+character.lDamage_skillup)/100)));
+		ele_max += Math.floor(wisp*(fDamage_max*(1+(character.fDamage+character.fDamage_skillup)/100) + cDamage_max*(1+(character.cDamage+character.cDamage_skillup)/100) + lDamage_max*(1+(character.lDamage+character.lDamage_skillup)/100) + pDamage_max*(1+character.pDamage/100)));
 		phys_min = Math.floor((phys_min*damage_bonus/100) + (wisp*damage_min*damage_bonus/100))
 		phys_max = Math.floor((phys_max*damage_bonus/100) + (wisp*damage_max*damage_bonus/100))
 
 		if (spell == 0) {
-			skillMin = Math.floor(mag_min+ele_min+phys_min); skillMax = Math.floor(mag_max+ele_max+phys_max); skillAr = Math.floor(ar*(1+ar_bonus/100));
+			skillMin = Math.floor(mag_min+mDamage_min+ele_min+phys_min); skillMax = Math.floor(mag_max+mDamage_max+ele_max+phys_max); skillAr = Math.floor(ar*(1+ar_bonus/100));
 		} else if (spell == 1) {	// no attack rating
-			skillMin = Math.floor(mag_min+ele_min+phys_min); skillMax = Math.floor(mag_max+ele_max+phys_max); skillAr = "";
+			skillMin = Math.floor(mag_min+mDamage_min+ele_min+phys_min); skillMax = Math.floor(mag_max+mDamage_max+ele_max+phys_max); skillAr = "";
 		} else if (spell == 2) {	// not damaging
 			skillMin = ""; skillMax = ""; skillAr = "";
 		}
-
+		var output = ": " + skillMin + " - " + skillMax;
 		if (num == 1) {
-			document.getElementById("skill1_info").innerHTML = ": " + skillMin + " - " + skillMax
+			if (output != ": 0 - 0" && output != ":  - ") { document.getElementById("skill1_info").innerHTML = output } else { document.getElementById("skill1_info").innerHTML = ":" }
 			if (skillAr != "") { document.getElementById("ar_skill1").innerHTML = "AR: " + skillAr } else { document.getElementById("ar_skill1").innerHTML = "" }
 		} else if (num == 2) {
-			document.getElementById("skill2_info").innerHTML = ": " + skillMin + " - " + skillMax
+			if (output != ": 0 - 0" && output != ":  - ") { document.getElementById("skill2_info").innerHTML = output } else { document.getElementById("skill2_info").innerHTML = ":" }
 			if (skillAr != "") { document.getElementById("ar_skill2").innerHTML = "AR: " + skillAr } else { document.getElementById("ar_skill2").innerHTML = "" }
 		}
 	}
