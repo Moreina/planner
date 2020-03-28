@@ -61,12 +61,12 @@ var character_amazon = {class_name:"Amazon", strength:20, dexterity:25, vitality
 		var spell = 0;
 
 		if (skill.name == "Jab") { 			ar_bonus = character.updateSkill(skill, lvl, 0); damage_bonus = 100+character.updateSkill(skill, lvl, 1); }
-		else if (skill.name == "Power Strike") { 	ar_bonus = character.updateSkill(skill, lvl, 0); damage_bonus = 100; lDamage_min = character.updateSkill(skill, lvl, 1); lDamage_max = character.updateSkill(skill, lvl, 2); }
+		else if (skill.name == "Power Strike") { 	ar_bonus = character.updateSkill(skill, lvl, 0); lDamage_min = character.updateSkill(skill, lvl, 1); lDamage_max = character.updateSkill(skill, lvl, 2); }
 		else if (skill.name == "Poison Javelin") {	pDamage_min = character.updateSkill(skill, lvl, 0); pDamage_max = character.updateSkill(skill, lvl, 1); pDamage_duration = 5; spell = 1; }
 		else if (skill.name == "Fend") { 		ar_bonus = character.updateSkill(skill, lvl, 0); damage_bonus = 125+character.updateSkill(skill, lvl, 1); }
 		else if (skill.name == "Lightning Bolt") {	lDamage_min = phys_min+character.updateSkill(skill, lvl, 0); lDamage_max = phys_max+character.updateSkill(skill, lvl, 1); spell = 1; }
 		else if (skill.name == "Charged Strike") {	lDamage_min = character.updateSkill(skill, lvl, 1); lDamage_max = character.updateSkill(skill, lvl, 2); spell = 1; }
-		else if (skill.name == "Plague Javelin") {	ar_bonus = character.updateSkill(skill, lvl, 0); pDamage_min = character.updateSkill(skill, lvl, 1); pDamage_max = character.updateSkill(skill, lvl, 2); pDamage_duration = 5 }
+		else if (skill.name == "Plague Javelin") {	ar_bonus = character.updateSkill(skill, lvl, 0); pDamage_min = character.updateSkill(skill, lvl, 1); pDamage_max = character.updateSkill(skill, lvl, 2); pDamage_duration = 5; }
 		else if (skill.name == "Ground Slam") { 	damage_bonus = 85 }
 		else if (skill.name == "Lightning Strike") {	lDamage_min = character.updateSkill(skill, lvl, 1); lDamage_max = character.updateSkill(skill, lvl, 2); spell = 1; }
 		else if (skill.name == "Lightning Fury") {	lDamage_min = character.updateSkill(skill, lvl, 1); lDamage_max = character.updateSkill(skill, lvl, 2); spell = 1; }
@@ -87,25 +87,27 @@ var character_amazon = {class_name:"Amazon", strength:20, dexterity:25, vitality
 		else if (skill.name == "Freezing Arrow") {	cDamage_min = character.updateSkill(skill, lvl, 0); cDamage_max = character.updateSkill(skill, lvl, 1); }
 		else { spell = 2; }
 
-		ele_min += Math.floor(wisp*(fDamage_min*(c.fDamage+c.fDamage_skillup)+cDamage_min*(c.cDamage+c.cDamage_skillup)+lDamage_min*(c.lDamage+c.lDamage_skillup)))
-		ele_max += Math.floor(wisp*(fDamage_max*(c.fDamage+c.fDamage_skillup)+cDamage_max*(c.cDamage+c.cDamage_skillup)+lDamage_max*(c.lDamage+c.lDamage_skillup)+pDamage_max*c.pDamage))
+		ele_min += Math.floor(wisp*(fDamage_min*(character.fDamage+character.fDamage_skillup)+cDamage_min*(character.cDamage+character.cDamage_skillup)+lDamage_min*(character.lDamage+character.lDamage_skillup)))
+		ele_max += Math.floor(wisp*(fDamage_max*(character.fDamage+character.fDamage_skillup)+cDamage_max*(character.cDamage+character.cDamage_skillup)+lDamage_max*(character.lDamage+character.lDamage_skillup)+pDamage_max*character.pDamage))
 		phys_min = Math.floor((phys_min*damage_bonus/100) + (wisp*damage_min*damage_bonus/100))
 		phys_max = Math.floor((phys_max*damage_bonus/100) + (wisp*damage_max*damage_bonus/100))
-		
+
+		skillMin = Math.floor(mag_min+ele_min+phys_min); skillMax = Math.floor(mag_max+ele_max+phys_max); skillAr = Math.floor(ar*(1+ar_bonus/100));
+
 		if (spell == 0) {
 			skillMin = Math.floor(mag_min+ele_min+phys_min); skillMax = Math.floor(mag_max+ele_max+phys_max); skillAr = Math.floor(ar*(1+ar_bonus/100));
 		} else if (spell == 1) {	// no attack rating
-			skillMin = Math.floor(mag_min+ele_min+phys_min); skillMax = Math.floor(mag_max+ele_max+phys_max); skillAr = ""
+			skillMin = Math.floor(mag_min+ele_min+phys_min); skillMax = Math.floor(mag_max+ele_max+phys_max); skillAr = "";
 		} else if (spell == 2) {	// not damaging
 			skillMin = ""; skillMax = ""; skillAr = "";
 		}
-		
+
 		if (num == 1) {
 			document.getElementById("skill1_info").innerHTML = ": " + skillMin + " - " + skillMax
-			document.getElementById("ar_skill1").innerHTML = "AR: " + skillAr
+			if (skillAr != "") { document.getElementById("ar_skill1").innerHTML = "AR: " + skillAr } else { document.getElementById("ar_skill1").innerHTML = "" }
 		} else if (num == 2) {
 			document.getElementById("skill2_info").innerHTML = ": " + skillMin + " - " + skillMax
-			document.getElementById("ar_skill2").innerHTML = "AR: " + skillAr
+			if (skillAr != "") { document.getElementById("ar_skill2").innerHTML = "AR: " + skillAr } else { document.getElementById("ar_skill2").innerHTML = "" }
 		}
 	}
 };

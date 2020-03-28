@@ -70,7 +70,7 @@ var character_barbarian = {class_name:"Barbarian", strength:30, dexterity:20, vi
 	//	else if (skill.name = "Taunt") { 		ar_bonus = updateSkill(skill, lvl, 0); damage_bonus = updateSkill(skill, lvl, 1); }	// cannot be bound to left click
 	//	else if (skill.name = "Shout") {		target_damage = updateSkill(skill, lvl, 0); target_defense = updateSkill(skill, lvl, 1); }	// cannot be bound to left click
 	//	else if (skill.name = "Find Item") {		chance = updateSkill(skill, lvl, 0); }	// cannot be bound to left click
-	//	else if (skill.name = "Battle Cry") {		damage_bonus = updateSkill(skill, lvl, 2), defense_bonus = updateSkill(skill, lvl, 1); }	// cannot be bound to left click
+	//	else if (skill.name = "Battle Cry") {		damage_bonus = updateSkill(skill, lvl, 2); defense_bonus = updateSkill(skill, lvl, 1); }	// cannot be bound to left click
 	//	else if (skill.name = "Battle Orders") {	max_life = updateSkill(skill, lvl, 2); max_mana = updateSkill(skill, lvl, 3); stamina = updateSkill(skill, lvl, 1); }	// cannot be bound to left click
 	//	else if (skill.name = "Grim Ward") {		ar_bonus = updateSkill(skill, lvl, 0); damage_bonus = updateSkill(skill, lvl, 1); }	// cannot be bound to left click
 	//	else if (skill.name = "Battle Command") {	all_skills = updateSkill(skill, lvl, 0); }	// cannot be bound to left click
@@ -79,7 +79,7 @@ var character_barbarian = {class_name:"Barbarian", strength:30, dexterity:20, vi
 		// no combat mastery skills are bindable
 		
 		else if (skill.name = "Frenzy") { 		damage_min = updateSkill(skill, lvl, 0); damage_max = updateSkill(skill, lvl, 0); }
-		else if (skill.name = "Concentrate") {		damage_min = updateSkill(skill, lvl, 2), damage_max = updateSkill(skill, lvl, 2), ar_bonus = updateSkill(skill, lvl, 1); defense_bonus = updateSkill(skill, lvl, 0); }
+		else if (skill.name = "Concentrate") {		damage_min = updateSkill(skill, lvl, 2); damage_max = updateSkill(skill, lvl, 2); ar_bonus = updateSkill(skill, lvl, 1); defense_bonus = updateSkill(skill, lvl, 0); }
 		else if (skill.name = "Cleave") { 		damage_min = updateSkill(skill, lvl, 0); damage_max = updateSkill(skill, lvl, 1); }
 		else if (skill.name = "Stun") { 		ar_bonus = updateSkill(skill, lvl, 0); damage_bonus = updateSkill(skill, lvl, 0); }
 	//	else if (skill.name = "Leap") { 		spell = 2; }
@@ -90,25 +90,25 @@ var character_barbarian = {class_name:"Barbarian", strength:30, dexterity:20, vi
 		else if (skill.name = "Whirlwind") {		ar_bonus = updateSkill(skill, lvl, 0); damage_bonus = updateSkill(skill, lvl, 0); }
 		else { spell = 2; }
 
-		ele_min += Math.floor(wisp*(fDamage_min*(c.fDamage+c.fDamage_skillup)+cDamage_min*(c.cDamage+c.cDamage_skillup)+lDamage_min*(c.lDamage+c.lDamage_skillup)))
-		ele_max += Math.floor(wisp*(fDamage_max*(c.fDamage+c.fDamage_skillup)+cDamage_max*(c.cDamage+c.cDamage_skillup)+lDamage_max*(c.lDamage+c.lDamage_skillup)+pDamage_max*c.pDamage))
+		ele_min += Math.floor(wisp*(fDamage_min*(character.fDamage+character.fDamage_skillup)+cDamage_min*(character.cDamage+character.cDamage_skillup)+lDamage_min*(character.lDamage+character.lDamage_skillup)))
+		ele_max += Math.floor(wisp*(fDamage_max*(character.fDamage+character.fDamage_skillup)+cDamage_max*(character.cDamage+character.cDamage_skillup)+lDamage_max*(character.lDamage+character.lDamage_skillup)+pDamage_max*character.pDamage))
 		phys_min = Math.floor((phys_min*damage_bonus/100) + (wisp*damage_min*damage_bonus/100))
 		phys_max = Math.floor((phys_max*damage_bonus/100) + (wisp*damage_max*damage_bonus/100))
-		
+
 		if (spell == 0) {
 			skillMin = Math.floor(mag_min+ele_min+phys_min); skillMax = Math.floor(mag_max+ele_max+phys_max); skillAr = Math.floor(ar*(1+ar_bonus/100));
 		} else if (spell == 1) {	// no attack rating
-			skillMin = Math.floor(mag_min+ele_min+phys_min); skillMax = Math.floor(mag_max+ele_max+phys_max); skillAr = ""
+			skillMin = Math.floor(mag_min+ele_min+phys_min); skillMax = Math.floor(mag_max+ele_max+phys_max); skillAr = "";
 		} else if (spell == 2) {	// not damaging
 			skillMin = ""; skillMax = ""; skillAr = "";
 		}
-		
+
 		if (num == 1) {
 			document.getElementById("skill1_info").innerHTML = ": " + skillMin + " - " + skillMax
-			document.getElementById("ar_skill1").innerHTML = "AR: " + skillAr
+			if (skillAr != "") { document.getElementById("ar_skill1").innerHTML = "AR: " + skillAr } else { document.getElementById("ar_skill1").innerHTML = "" }
 		} else if (num == 2) {
 			document.getElementById("skill2_info").innerHTML = ": " + skillMin + " - " + skillMax
-			document.getElementById("ar_skill2").innerHTML = "AR: " + skillAr
+			if (skillAr != "") { document.getElementById("ar_skill2").innerHTML = "AR: " + skillAr } else { document.getElementById("ar_skill2").innerHTML = "" }
 		}
 	}
 };

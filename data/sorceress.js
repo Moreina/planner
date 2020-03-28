@@ -134,25 +134,25 @@ var character_sorceress = {class_name:"Sorceress", strength:10, dexterity:25, vi
 		// Fire Mastery - not bindable
 		else { spell = 2; }
 
-		ele_min += Math.floor(wisp*(fDamage_min*(c.fDamage+c.fDamage_skillup)+cDamage_min*(c.cDamage+c.cDamage_skillup)+lDamage_min*(c.lDamage+c.lDamage_skillup)))
-		ele_max += Math.floor(wisp*(fDamage_max*(c.fDamage+c.fDamage_skillup)+cDamage_max*(c.cDamage+c.cDamage_skillup)+lDamage_max*(c.lDamage+c.lDamage_skillup)+pDamage_max*c.pDamage))
+		ele_min += Math.floor(wisp*(fDamage_min*(character.fDamage+character.fDamage_skillup)+cDamage_min*(character.cDamage+character.cDamage_skillup)+lDamage_min*(character.lDamage+character.lDamage_skillup)))
+		ele_max += Math.floor(wisp*(fDamage_max*(character.fDamage+character.fDamage_skillup)+cDamage_max*(character.cDamage+character.cDamage_skillup)+lDamage_max*(character.lDamage+character.lDamage_skillup)+pDamage_max*character.pDamage))
 		phys_min = Math.floor((phys_min*damage_bonus/100) + (wisp*damage_min*damage_bonus/100))
 		phys_max = Math.floor((phys_max*damage_bonus/100) + (wisp*damage_max*damage_bonus/100))
-		
+
 		if (spell == 0) {
 			skillMin = Math.floor(mag_min+ele_min+phys_min); skillMax = Math.floor(mag_max+ele_max+phys_max); skillAr = Math.floor(ar*(1+ar_bonus/100));
 		} else if (spell == 1) {	// no attack rating
-			skillMin = Math.floor(mag_min+ele_min+phys_min); skillMax = Math.floor(mag_max+ele_max+phys_max); skillAr = ""
+			skillMin = Math.floor(mag_min+ele_min+phys_min); skillMax = Math.floor(mag_max+ele_max+phys_max); skillAr = "";
 		} else if (spell == 2) {	// not damaging
 			skillMin = ""; skillMax = ""; skillAr = "";
 		}
-		
+
 		if (num == 1) {
 			document.getElementById("skill1_info").innerHTML = ": " + skillMin + " - " + skillMax
-			document.getElementById("ar_skill1").innerHTML = "AR: " + skillAr
+			if (skillAr != "") { document.getElementById("ar_skill1").innerHTML = "AR: " + skillAr } else { document.getElementById("ar_skill1").innerHTML = "" }
 		} else if (num == 2) {
 			document.getElementById("skill2_info").innerHTML = ": " + skillMin + " - " + skillMax
-			document.getElementById("ar_skill2").innerHTML = "AR: " + skillAr
+			if (skillAr != "") { document.getElementById("ar_skill2").innerHTML = "AR: " + skillAr } else { document.getElementById("ar_skill2").innerHTML = "" }
 		}
 	}
 };
