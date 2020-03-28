@@ -4,143 +4,172 @@ var weapon_frames = {dagger:20, oneHand_sword:20, oneHand_axe:20, twoHand_sword:
 var wereform_frames = {dagger:22, oneHand_sword:22, oneHand_axe:22, twoHand_sword:25, twoHand_axe:20, staff:20, polearm:20, oneHand_mace:22, scepter:22, wand:22, twoHand_mace:23, javelin:27, spear:27, bow:19, crossbow:24}
 
 var character_druid = {class_name:"Druid", strength:15, dexterity:20, vitality:25, energy:20, life:55, mana:20, defense:5, ar:70, stamina:184, levelup_life:1.5, levelup_stamina:1, levelup_mana:2, ar_per_dexterity:5, defense_per_dexterity:0.25, life_per_vitality:2, stamina_per_vitality:1, mana_per_energy:2, starting_strength:15, starting_dexterity:20, starting_vitality:25, starting_energy:20, ar_const:5, skill_layout:"./images/druid.png", tab1:"Elemental", tab2:"Shapeshifting", tab3:"Summoning",
+	
+	// 
+	// ---------------------------------
 	updateSkill : function(skill, lvl, elem) {
-	var result = skill.data.values[elem][lvl];
-	var wisp = (1+Math.round(character.wisp/20,0)/10);
-	
-	if (skill.name == "Firestorm" && elem > 0 && elem < 3) { 	result *= ((1 + (0.30*skills[1].level + 0.30*skills[4].level)) * (1+character.fDamage/100) * wisp) }
-	if (skill.name == "Flame Dash" && elem == 0) { 			result = Math.max(0.5, (8.4 - 0.4*skill.level)) }
-	if (skill.name == "Flame Dash" && elem < 3 && elem > 0) { 	result *= ((1 + 0.10*skills[1].level + 0.01*(character.energy + character.all_attributes + character.level*character.energy_per_level)) * (1+character.fDamage/100) * wisp) }
-	if (skill.name == "Molten Boulder" && elem < 2) { 		result *= (1 + (0.20*skills[7].level)) }
-	if (skill.name == "Molten Boulder" && elem > 1 && elem < 4) { 	result *= ((1 + (0.23*skills[0].level)) * (1+character.fDamage/100) * wisp) }
-	if (skill.name == "Molten Boulder" && elem > 3 && elem < 6) { 	result *= ((1 + (0.17*skills[0].level)) * (1+character.fDamage/100) * wisp) }
-	if (skill.name == "Fissure" && elem < 2) { 			result *= ((1 + (0.15*skills[0].level + 0.15*skills[7].level)) * (1+character.fDamage/100) * wisp) }
-	if (skill.name == "Volcano" && elem < 2) { 			result *= (1 + (0.20*skills[1].level)) }
-	if (skill.name == "Volcano" && elem > 1 && elem < 4) { 		result *= ((1 + (0.14*skills[4].level + 0.14*skills[9].level)) * (1+character.fDamage/100) * wisp) }
-	if (skill.name == "Armageddon" && elem == 0) { 			result += (2*skills[4].level) }
-	if (skill.name == "Armageddon" && elem < 3 && elem > 0) { 	result *= (1 + (0.12*skills[1].level)) }
-	if (skill.name == "Armageddon" && elem < 5 && elem > 2) { 	result *= ((1 + (0.12*skills[0].level + 0.12*skills[7].level)) * (1+character.fDamage/100) * wisp) }
-	if (skill.name == "Arctic Blast" && elem < 2) { 		result *= ((1 + (0.10*skills[5].level + 0.10*skills[10].level)) * (1+character.cDamage/100) * wisp) }
-	if (skill.name == "Twister" && elem < 2) { 			result *= (1 + (0.30*skills[8].level + 0.30*skills[10].level)) }
-	if (skill.name == "Tornado" && elem < 2) { 			result *= (1 + (0.07*skills[5].level + 0.18*skills[6].level + 0.18*skills[10].level)) }
-	if (skill.name == "Hurricane" && elem == 0) { 			result += (2*skills[5].level) }
-	if (skill.name == "Hurricane" && elem < 3 && elem > 0) { 	result *= ((1 + (0.04*skills[3].level + 0.04*skills[6].level + 0.04*skills[8].level)) * (1+character.cDamage/100) * wisp) }
-	
-	if (skill.name == "Werewolf" && elem == 0) { if (skills[12].level > 0) { result = (15 + skills[12].data.values[1][skills[12].level+skills[12].extra_levels]) } else { result = 15 } }
-	if (skill.name == "Werewolf" && elem == 3) { if (skills[12].level > 0) { result = (skills[12].data.values[0][skills[12].level+skills[12].extra_levels]) } else { result = 0 } }
-	if (skill.name == "Werebear" && elem == 0) { if (skills[12].level > 0) { result = (25 + skills[12].data.values[1][skills[12].level+skills[12].extra_levels]) } else { result = 25 } }
-	if (skill.name == "Werebear" && elem == 1) { if (skills[12].level > 0) { result += (skills[12].data.values[0][skills[12].level+skills[12].extra_levels]) } }
-	if (skill.name == "Fire Claws" && elem < 2) { result *= ((1 + (0.11*skills[0].level + 0.11*skills[1].level + 0.11*skills[4].level + 0.11*skills[7].level)) * (1+character.fDamage/100) * wisp) }
-	if (skill.name == "Shock Wave" && elem < 2) { result *= (1 + (0.08*skills[15].level)) }
-	if (skill.name == "Rabies" && elem > 0 && elem < 3) { result *= ((1 + (0.20*skills[22].level + 0.20*skills[27].level)) * (1+character.pDamage/100) * wisp) }
+		var result = skill.data.values[elem][lvl];
+		var wisp = (1+Math.round(character.wisp/20,0)/10);
+		
+		if (skill.name == "Firestorm" && elem > 0 && elem < 3) { 	result *= ((1 + (0.30*skills[1].level + 0.30*skills[4].level)) * (1+character.fDamage/100) * wisp) }
+		if (skill.name == "Flame Dash" && elem == 0) { 			result = Math.max(0.5, (8.4 - 0.4*skill.level)) }
+		if (skill.name == "Flame Dash" && elem < 3 && elem > 0) { 	result *= ((1 + 0.10*skills[1].level + 0.01*(character.energy + character.all_attributes + character.level*character.energy_per_level)) * (1+character.fDamage/100) * wisp) }
+		if (skill.name == "Molten Boulder" && elem < 2) { 		result *= (1 + (0.20*skills[7].level)) }
+		if (skill.name == "Molten Boulder" && elem > 1 && elem < 4) { 	result *= ((1 + (0.23*skills[0].level)) * (1+character.fDamage/100) * wisp) }
+		if (skill.name == "Molten Boulder" && elem > 3 && elem < 6) { 	result *= ((1 + (0.17*skills[0].level)) * (1+character.fDamage/100) * wisp) }
+		if (skill.name == "Fissure" && elem < 2) { 			result *= ((1 + (0.15*skills[0].level + 0.15*skills[7].level)) * (1+character.fDamage/100) * wisp) }
+		if (skill.name == "Volcano" && elem < 2) { 			result *= (1 + (0.20*skills[1].level)) }
+		if (skill.name == "Volcano" && elem > 1 && elem < 4) { 		result *= ((1 + (0.14*skills[4].level + 0.14*skills[9].level)) * (1+character.fDamage/100) * wisp) }
+		if (skill.name == "Armageddon" && elem == 0) { 			result += (2*skills[4].level) }
+		if (skill.name == "Armageddon" && elem < 3 && elem > 0) { 	result *= (1 + (0.12*skills[1].level)) }
+		if (skill.name == "Armageddon" && elem < 5 && elem > 2) { 	result *= ((1 + (0.12*skills[0].level + 0.12*skills[7].level)) * (1+character.fDamage/100) * wisp) }
+		if (skill.name == "Arctic Blast" && elem < 2) { 		result *= ((1 + (0.10*skills[5].level + 0.10*skills[10].level)) * (1+character.cDamage/100) * wisp) }
+		if (skill.name == "Twister" && elem < 2) { 			result *= (1 + (0.30*skills[8].level + 0.30*skills[10].level)) }
+		if (skill.name == "Tornado" && elem < 2) { 			result *= (1 + (0.07*skills[5].level + 0.18*skills[6].level + 0.18*skills[10].level)) }
+		if (skill.name == "Hurricane" && elem == 0) { 			result += (2*skills[5].level) }
+		if (skill.name == "Hurricane" && elem < 3 && elem > 0) { 	result *= ((1 + (0.04*skills[3].level + 0.04*skills[6].level + 0.04*skills[8].level)) * (1+character.cDamage/100) * wisp) }
+		
+		if (skill.name == "Werewolf" && elem == 0) { if (skills[12].level > 0) { result = (15 + skills[12].data.values[1][skills[12].level+skills[12].extra_levels]) } else { result = 15 } }
+		if (skill.name == "Werewolf" && elem == 3) { if (skills[12].level > 0) { result = (skills[12].data.values[0][skills[12].level+skills[12].extra_levels]) } else { result = 0 } }
+		if (skill.name == "Werebear" && elem == 0) { if (skills[12].level > 0) { result = (25 + skills[12].data.values[1][skills[12].level+skills[12].extra_levels]) } else { result = 25 } }
+		if (skill.name == "Werebear" && elem == 1) { if (skills[12].level > 0) { result += (skills[12].data.values[0][skills[12].level+skills[12].extra_levels]) } }
+		if (skill.name == "Fire Claws" && elem < 2) { result *= ((1 + (0.11*skills[0].level + 0.11*skills[1].level + 0.11*skills[4].level + 0.11*skills[7].level)) * (1+character.fDamage/100) * wisp) }
+		if (skill.name == "Shock Wave" && elem < 2) { result *= (1 + (0.08*skills[15].level)) }
+		if (skill.name == "Rabies" && elem > 0 && elem < 3) { result *= ((1 + (0.20*skills[22].level + 0.20*skills[27].level)) * (1+character.pDamage/100) * wisp) }
 
-	if (skill.name == "Raven" && elem < 3 && elem > 0) { result *= (1 + (0.20*skills[5].level + 0.20*skills[6].level)) }
-	if (skill.name == "Raven" && elem < 5 && elem > 2) { result *= (1 + 0.21*skills[3].level + 0.01*(character.energy + character.all_attributes + character.level*character.energy_per_level)) }
-	if (skill.name == "Summon Spirit Wolf" && elem == 0) { result = Math.min(7, skill.level) }
-	if (skill.name == "Summon Spirit Wolf" && elem == 1) { if (skills[27].level > 0) { result = ((1 + (skills[27].data.values[6][skills[27].level+skills[27].extra_levels] / 100)) * skill.data.values[elem][character.difficulty]) } else { result = skill.data.values[elem][character.difficulty] } }
-	if (skill.name == "Summon Spirit Wolf" && elem < 4 && elem > 1) { if (skills[30].level > 0) { result *= (1 + (skills[30].data.values[5][skills[30].level+skills[30].extra_levels] / 100)) } }
-	if (skill.name == "Summon Dire Wolf" && elem == 0) { result = Math.min(3, skill.level) }
-	if (skill.name == "Summon Dire Wolf" && elem == 1) { if (skills[24].level > 0) { result = skills[24].data.values[4][skills[24].level+skills[24].extra_levels] } else { result = 0 } }
-	if (skill.name == "Summon Dire Wolf" && elem == 2) { if (skills[24].level > 0) { result = skills[24].data.values[5][skills[24].level+skills[24].extra_levels] } else { result = 0 } }
-	if (skill.name == "Summon Dire Wolf" && elem == 3) { if (skill.level > 0) { result = ((1 + (skill.data.values[6][skill.level] / 100)) * skill.data.values[elem][character.difficulty]) } else { result = skill.data.values[elem][character.difficulty] } }
-	if (skill.name == "Summon Dire Wolf" && elem < 6 && elem > 3) { if (skills[30].level > 0) { result *= (1 + (skills[30].data.values[5][skills[30].level+skills[30].extra_levels] / 100)) } }
-	if (skill.name == "Summon Grizzly" && elem == 0) { if (skills[27].level > 0) { result = ((1 + (skills[27].data.values[6][skills[27].level+skills[27].extra_levels] / 100)) * skill.data.values[elem][character.difficulty]) } else { result = skill.data.values[elem][character.difficulty] } }
-	if (skill.name == "Summon Grizzly" && elem == 1) { if (skills[24].level > 0) { result = skills[24].data.values[4][skills[24].level+skills[24].extra_levels] } else { result = 0 } }
-	if (skill.name == "Summon Grizzly" && elem == 2) { if (skills[24].level > 0) { result = skills[24].data.values[5][skills[24].level+skills[24].extra_levels] } else { result = 0 } }
-	if ((skill.name == "Poison Creeper" || skill.name == "Heart of Wolverine" || skill.name == "Carrion Vine" || skill.name == "Oak Sage" || skill.name == "Solar Creeper" || skill.name == "Spirit of Barbs") && elem == 0) { result = skill.data.values[elem][character.difficulty][lvl] }
-	
-return result
+		if (skill.name == "Raven" && elem < 3 && elem > 0) { result *= (1 + (0.20*skills[5].level + 0.20*skills[6].level)) }
+		if (skill.name == "Raven" && elem < 5 && elem > 2) { result *= (1 + 0.21*skills[3].level + 0.01*(character.energy + character.all_attributes + character.level*character.energy_per_level)) }
+		if (skill.name == "Summon Spirit Wolf" && elem == 0) { result = Math.min(7, skill.level) }
+		if (skill.name == "Summon Spirit Wolf" && elem == 1) { if (skills[27].level > 0) { result = ((1 + (skills[27].data.values[6][skills[27].level+skills[27].extra_levels] / 100)) * skill.data.values[elem][character.difficulty]) } else { result = skill.data.values[elem][character.difficulty] } }
+		if (skill.name == "Summon Spirit Wolf" && elem < 4 && elem > 1) { if (skills[30].level > 0) { result *= (1 + (skills[30].data.values[5][skills[30].level+skills[30].extra_levels] / 100)) } }
+		if (skill.name == "Summon Dire Wolf" && elem == 0) { result = Math.min(3, skill.level) }
+		if (skill.name == "Summon Dire Wolf" && elem == 1) { if (skills[24].level > 0) { result = skills[24].data.values[4][skills[24].level+skills[24].extra_levels] } else { result = 0 } }
+		if (skill.name == "Summon Dire Wolf" && elem == 2) { if (skills[24].level > 0) { result = skills[24].data.values[5][skills[24].level+skills[24].extra_levels] } else { result = 0 } }
+		if (skill.name == "Summon Dire Wolf" && elem == 3) { if (skill.level > 0) { result = ((1 + (skill.data.values[6][skill.level] / 100)) * skill.data.values[elem][character.difficulty]) } else { result = skill.data.values[elem][character.difficulty] } }
+		if (skill.name == "Summon Dire Wolf" && elem < 6 && elem > 3) { if (skills[30].level > 0) { result *= (1 + (skills[30].data.values[5][skills[30].level+skills[30].extra_levels] / 100)) } }
+		if (skill.name == "Summon Grizzly" && elem == 0) { if (skills[27].level > 0) { result = ((1 + (skills[27].data.values[6][skills[27].level+skills[27].extra_levels] / 100)) * skill.data.values[elem][character.difficulty]) } else { result = skill.data.values[elem][character.difficulty] } }
+		if (skill.name == "Summon Grizzly" && elem == 1) { if (skills[24].level > 0) { result = skills[24].data.values[4][skills[24].level+skills[24].extra_levels] } else { result = 0 } }
+		if (skill.name == "Summon Grizzly" && elem == 2) { if (skills[24].level > 0) { result = skills[24].data.values[5][skills[24].level+skills[24].extra_levels] } else { result = 0 } }
+		if ((skill.name == "Poison Creeper" || skill.name == "Heart of Wolverine" || skill.name == "Carrion Vine" || skill.name == "Oak Sage" || skill.name == "Solar Creeper" || skill.name == "Spirit of Barbs") && elem == 0) { result = skill.data.values[elem][character.difficulty][lvl] }
+		
+	return result
 	},
 	
-	//getBuffData : function(effect, selfbuff) {
+	// 
+	// ---------------------------------
 	getBuffData : function(effect) {
-	var skill = skills[effect.skill]
-	var lvl = skill.level + skill.extra_levels;
-	var result = {};
-	var lycan_damage = ~~(skills[12].data.values[0][skills[12].level+skills[12].extra_levels]);
-	var lycan_life = ~~(skills[12].data.values[1][skills[12].level+skills[12].extra_levels]);
+		var skill = skills[effect.skill]
+		var lvl = skill.level + skill.extra_levels;
+		var result = {};
+		var lycan_damage = ~~(skills[12].data.values[0][skills[12].level+skills[12].extra_levels]);
+		var lycan_life = ~~(skills[12].data.values[1][skills[12].level+skills[12].extra_levels]);
+		
+		if (skill.name == "Cyclone Armor") { result.absorb = skill.data.values[0][lvl]; }
+		if (skill.name == "Werewolf") {
+			if (document.getElementById("e"+skills[13].key) != null) { if (effects["e"+skills[13].key].enabled == 1) { disableEffect(13); } }	// disables Werebear
+			result.max_life = (15 + lycan_life);
+			result.max_stamina = 40;
+			result.ar_bonus = skill.data.values[1][lvl];
+			result.ias = skill.data.values[2][lvl];
+			result.damage_bonus = lycan_damage;
+		}
+		if (skill.name == "Werebear") {
+			if (document.getElementById("e"+skills[11].key) != null) { if (effects["e"+skills[11].key].enabled == 1) { disableEffect(11); } }	// disables Werewolf
+			result.max_life = (25 + lycan_life);
+			result.damage_bonus = skill.data.values[1][lvl] + lycan_damage;
+			result.defense_bonus = skill.data.values[2][lvl];
+		}
+		if (skill.name == "Feral Rage") {
+			result.frw = skill.data.values[1][lvl];
+			result.life_leech = skill.data.values[3][lvl];
+			result.damage_bonus = skill.data.values[4][lvl];
+			result.ar_bonus = skill.data.values[5][lvl];
+		}
+		if (skill.name == "Maul") {
+			result.stun_length = skill.data.values[0][lvl];
+			result.damage_bonus = skill.data.values[2][lvl];
+			result.ar_bonus = skill.data.values[3][lvl];
+		}
+		if (skill.name == "Heart of Wolverine") {
+			result.damage_bonus = skill.data.values[1][lvl];
+			result.ar_bonus = skill.data.values[2][lvl];
+		}
+		if (skill.name == "Oak Sage") { result.max_life = skill.data.values[1][lvl]; }
+		if (skill.name == "Spirit of Barbs") { result.thorns_reflect = skill.data.values[0][lvl]; }
+		
+	return result
+	},
 	
-	if (skill.name == "Cyclone Armor") { result.absorb = skill.data.values[0][lvl]; }
-	if (skill.name == "Werewolf") {
-		if (document.getElementById("e"+skills[13].key) != null) { if (effects["e"+skills[13].key].enabled == 1) { disableEffect(13); } }	// disables Werebear
-		result.max_life = (15 + lycan_life);
-		result.max_stamina = 40;
-		result.ar_bonus = skill.data.values[1][lvl];
-		result.ias = skill.data.values[2][lvl];
-		result.damage_bonus = lycan_damage;
+	// 
+	// ---------------------------------
+	getFocusData : function(skill, num, ar, phys_min, phys_max, ele_min, ele_max, mag_min, mag_max, wisp) {
+		var lvl = skill.level+skill.extra_levels;
+		var ar_bonus = 0; var damage_bonus = 100;
+		var damage_min = 0; var damage_max = 0;
+		var fDamage_min = 0; var fDamage_max = 0;
+		var cDamage_min = 0; var cDamage_max = 0;
+		var lDamage_min = 0; var lDamage_max = 0;
+		var pDamage_min = 0; var pDamage_max = 0; var pDamage_duration = 0;
+		var mDamage_min = 0; var mDamage_max = 0;
+		var skillMin = ""; var skillMax = ""; var skillAr = "";
+		var spell = 0;
+		
+		if (skill.name = "Firestorm") { 		ar_bonus = updateSkill(skill, lvl, 0); damage_bonus = updateSkill(skill, lvl, 0); }
+		else if (skill.name = "Molten Boulder") { 	ar_bonus = updateSkill(skill, lvl, 0); damage_bonus = updateSkill(skill, lvl, 0); }
+		else if (skill.name = "Flame Dash") { 		ar_bonus = updateSkill(skill, lvl, 0); damage_bonus = updateSkill(skill, lvl, 0); }	// cannot be bound to left click
+		else if (skill.name = "Arctic Blast") { 	ar_bonus = updateSkill(skill, lvl, 0); damage_bonus = updateSkill(skill, lvl, 0); }
+		else if (skill.name = "Fissure") { 		ar_bonus = updateSkill(skill, lvl, 0); damage_bonus = updateSkill(skill, lvl, 0); }	// cannot be bound to left click
+		else if (skill.name = "Cyclone Armor") { 	spell = 2; }	// cannot be bound to left click
+		else if (skill.name = "Twister") { 		ar_bonus = updateSkill(skill, lvl, 0); damage_bonus = updateSkill(skill, lvl, 0); }
+		else if (skill.name = "Volcano") { 		ar_bonus = updateSkill(skill, lvl, 0); damage_bonus = updateSkill(skill, lvl, 0); }	// cannot be bound to left click
+		else if (skill.name = "Tornado") { 		ar_bonus = updateSkill(skill, lvl, 0); damage_bonus = updateSkill(skill, lvl, 0); }
+		else if (skill.name = "Armageddon") {		ar_bonus = updateSkill(skill, lvl, 0); damage_bonus = updateSkill(skill, lvl, 0); }
+		else if (skill.name = "Hurricane") {		ar_bonus = updateSkill(skill, lvl, 0); damage_bonus = updateSkill(skill, lvl, 0); }
+		
+		else if (skill.name = "Werewolf") {		spell = 2; }	// cannot be bound to left click
+		else if (skill.name = "Werebear") {		spell = 2; }	// cannot be bound to left click
+		else if (skill.name = "Feral Rage") {		ar_bonus = updateSkill(skill, lvl, 0); damage_bonus = updateSkill(skill, lvl, 0); }
+		else if (skill.name = "Maul") { 		ar_bonus = updateSkill(skill, lvl, 0); damage_bonus = updateSkill(skill, lvl, 0); }
+		else if (skill.name = "Rabies") { 		ar_bonus = updateSkill(skill, lvl, 0); damage_bonus = updateSkill(skill, lvl, 0); }
+		else if (skill.name = "Fire Claws") {		ar_bonus = updateSkill(skill, lvl, 0); damage_bonus = updateSkill(skill, lvl, 0); }
+		else if (skill.name = "Hunger") { 		ar_bonus = updateSkill(skill, lvl, 0); damage_bonus = updateSkill(skill, lvl, 0); }
+		else if (skill.name = "Shock Wave") {		ar_bonus = updateSkill(skill, lvl, 0); damage_bonus = updateSkill(skill, lvl, 0); }
+		else if (skill.name = "Fury") { 		ar_bonus = updateSkill(skill, lvl, 0); damage_bonus = updateSkill(skill, lvl, 0); }
+		// Lycanthropy - not bindable
+		
+		else if (skill.name = "Raven") { 		ar_bonus = updateSkill(skill, lvl, 0); damage_bonus = updateSkill(skill, lvl, 0); }	// cannot be bound to left click
+		else if (skill.name = "Poison Creeper") { 	ar_bonus = updateSkill(skill, lvl, 0); damage_bonus = updateSkill(skill, lvl, 0); }	// cannot be bound to left click
+		else if (skill.name = "Heart of Woverine") {	spell = 2; }	// cannot be bound to left click
+		else if (skill.name = "Spirit Wolf") {		ar_bonus = updateSkill(skill, lvl, 0); damage_bonus = updateSkill(skill, lvl, 0); }	// cannot be bound to left click
+		else if (skill.name = "Carrion Vine") { 	spell = 2; }	// cannot be bound to left click
+		else if (skill.name = "Oak Sage") { 		spell = 2; }	// cannot be bound to left click
+		else if (skill.name = "Dire Wolf") {		ar_bonus = updateSkill(skill, lvl, 0); damage_bonus = updateSkill(skill, lvl, 0); }	// cannot be bound to left click
+		else if (skill.name = "Solar Creeper") { 	spell = 2; }	// cannot be bound to left click
+		else if (skill.name = "Spirit of Barbs") { 	spell = 2; }	// cannot be bound to left click
+		else if (skill.name = "Grizzly") { 		ar_bonus = updateSkill(skill, lvl, 0); damage_bonus = updateSkill(skill, lvl, 0); }	// cannot be bound to left click
+		else { spell = 2; }
+
+		ele_min += Math.floor(wisp*(fDamage_min*(c.fDamage+c.fDamage_skillup)+cDamage_min*(c.cDamage+c.cDamage_skillup)+lDamage_min*(c.lDamage+c.lDamage_skillup)))
+		ele_max += Math.floor(wisp*(fDamage_max*(c.fDamage+c.fDamage_skillup)+cDamage_max*(c.cDamage+c.cDamage_skillup)+lDamage_max*(c.lDamage+c.lDamage_skillup)+pDamage_max*c.pDamage))
+		phys_min = Math.floor((phys_min*damage_bonus/100) + (wisp*damage_min*damage_bonus/100))
+		phys_max = Math.floor((phys_max*damage_bonus/100) + (wisp*damage_max*damage_bonus/100))
+		
+		if (spell == 0) {
+			skillMin = Math.floor(mag_min+ele_min+phys_min); skillMax = Math.floor(mag_max+ele_max+phys_max); skillAr = Math.floor(ar*(1+ar_bonus/100));
+		} else if (spell == 1) {	// no attack rating
+			skillMin = Math.floor(mag_min+ele_min+phys_min); skillMax = Math.floor(mag_max+ele_max+phys_max); skillAr = ""
+		} else if (spell == 2) {	// not damaging
+			skillMin = ""; skillMax = ""; skillAr = "";
+		}
+		
+		if (num == 1) {
+			document.getElementById("skill1_info").innerHTML = ": " + skillMin + " - " + skillMax
+			document.getElementById("ar_skill1").innerHTML = "AR: " + skillAr
+		} else if (num == 2) {
+			document.getElementById("skill2_info").innerHTML = ": " + skillMin + " - " + skillMax
+			document.getElementById("ar_skill2").innerHTML = "AR: " + skillAr
+		}
 	}
-	if (skill.name == "Werebear") {
-		if (document.getElementById("e"+skills[11].key) != null) { if (effects["e"+skills[11].key].enabled == 1) { disableEffect(11); } }	// disables Werewolf
-		result.max_life = (25 + lycan_life);
-		result.damage_bonus = skill.data.values[1][lvl] + lycan_damage;
-		result.defense_bonus = skill.data.values[2][lvl];
-	}
-	if (skill.name == "Feral Rage") {
-		result.frw = skill.data.values[1][lvl];
-		result.life_leech = skill.data.values[3][lvl];
-		result.damage_bonus = skill.data.values[4][lvl];
-		result.ar_bonus = skill.data.values[5][lvl];
-	}
-	if (skill.name == "Maul") {
-		result.stun_length = skill.data.values[0][lvl];
-		result.damage_bonus = skill.data.values[2][lvl];
-		result.ar_bonus = skill.data.values[3][lvl];
-	}
-	if (skill.name == "Heart of Wolverine") {
-		result.damage_bonus = skill.data.values[1][lvl];
-		result.ar_bonus = skill.data.values[2][lvl];
-	}
-	if (skill.name == "Oak Sage") { result.max_life = skill.data.values[1][lvl]; }
-	if (skill.name == "Spirit of Barbs") { result.thorns_reflect = skill.data.values[0][lvl]; }
-	
-return result
-},
-	
-	getFocusData : function(skill) {
-	var lvl = skill.level+skill.extra_levels;
-	var result = {};
-	
-	if (skill.name = "Firestorm") { 	result = { ar_bonus:updateSkill(skill, lvl, 0), damage_bonus:updateSkill(skill, lvl, 0) } }
-	if (skill.name = "Molten Boulder") { 	result = { ar_bonus:updateSkill(skill, lvl, 0), damage_bonus:updateSkill(skill, lvl, 0) } }
-	if (skill.name = "Flame Dash") { 	result = { ar_bonus:updateSkill(skill, lvl, 0), damage_bonus:updateSkill(skill, lvl, 0) } }	// cannot be bound to left click
-	if (skill.name = "Arctic Blast") { 	result = { ar_bonus:updateSkill(skill, lvl, 0), damage_bonus:updateSkill(skill, lvl, 0) } }
-	if (skill.name = "Fissure") { 		result = { ar_bonus:updateSkill(skill, lvl, 0), damage_bonus:updateSkill(skill, lvl, 0) } }	// cannot be bound to left click
-	if (skill.name = "Cyclone Armor") { 	result = { ar_bonus:updateSkill(skill, lvl, 0), damage_bonus:updateSkill(skill, lvl, 0) } }	// cannot be bound to left click
-	if (skill.name = "Twister") { 		result = { ar_bonus:updateSkill(skill, lvl, 0), damage_bonus:updateSkill(skill, lvl, 0) } }
-	if (skill.name = "Volcano") { 		result = { ar_bonus:updateSkill(skill, lvl, 0), damage_bonus:updateSkill(skill, lvl, 0) } }	// cannot be bound to left click
-	if (skill.name = "Tornado") { 		result = { ar_bonus:updateSkill(skill, lvl, 0), damage_bonus:updateSkill(skill, lvl, 0) } }
-	if (skill.name = "Armageddon") { 	result = { ar_bonus:updateSkill(skill, lvl, 0), damage_bonus:updateSkill(skill, lvl, 0) } }
-	if (skill.name = "Hurricane") { 	result = { ar_bonus:updateSkill(skill, lvl, 0), damage_bonus:updateSkill(skill, lvl, 0) } }
-	
-	if (skill.name = "Werewolf") { 		result = { ar_bonus:updateSkill(skill, lvl, 0), damage_bonus:updateSkill(skill, lvl, 0) } }	// cannot be bound to left click
-	if (skill.name = "Werebear") { 		result = { ar_bonus:updateSkill(skill, lvl, 0), damage_bonus:updateSkill(skill, lvl, 0) } }	// cannot be bound to left click
-	if (skill.name = "Feral Rage") { 	result = { ar_bonus:updateSkill(skill, lvl, 0), damage_bonus:updateSkill(skill, lvl, 0) } }
-	if (skill.name = "Maul") { 		result = { ar_bonus:updateSkill(skill, lvl, 0), damage_bonus:updateSkill(skill, lvl, 0) } }
-	if (skill.name = "Rabies") { 		result = { ar_bonus:updateSkill(skill, lvl, 0), damage_bonus:updateSkill(skill, lvl, 0) } }
-	if (skill.name = "Fire Claws") { 	result = { ar_bonus:updateSkill(skill, lvl, 0), damage_bonus:updateSkill(skill, lvl, 0) } }
-	if (skill.name = "Hunger") { 		result = { ar_bonus:updateSkill(skill, lvl, 0), damage_bonus:updateSkill(skill, lvl, 0) } }
-	if (skill.name = "Shock Wave") { 	result = { ar_bonus:updateSkill(skill, lvl, 0), damage_bonus:updateSkill(skill, lvl, 0) } }
-	if (skill.name = "Fury") { 		result = { ar_bonus:updateSkill(skill, lvl, 0), damage_bonus:updateSkill(skill, lvl, 0) } }
-	// Lycanthropy - not bindable
-	
-	if (skill.name = "Raven") { 		result = { ar_bonus:updateSkill(skill, lvl, 0), damage_bonus:updateSkill(skill, lvl, 0) } }	// cannot be bound to left click
-	if (skill.name = "Poison Creeper") { 	result = { ar_bonus:updateSkill(skill, lvl, 0), damage_bonus:updateSkill(skill, lvl, 0) } }	// cannot be bound to left click
-	if (skill.name = "Heart of Woverine") { result = { ar_bonus:updateSkill(skill, lvl, 0), damage_bonus:updateSkill(skill, lvl, 0) } }	// cannot be bound to left click
-	if (skill.name = "Spirit Wolf") { 	result = { ar_bonus:updateSkill(skill, lvl, 0), damage_bonus:updateSkill(skill, lvl, 0) } }	// cannot be bound to left click
-	if (skill.name = "Carrion Vine") { 	result = { ar_bonus:updateSkill(skill, lvl, 0), damage_bonus:updateSkill(skill, lvl, 0) } }	// cannot be bound to left click
-	if (skill.name = "Oak Sage") { 		result = { ar_bonus:updateSkill(skill, lvl, 0), damage_bonus:updateSkill(skill, lvl, 0) } }	// cannot be bound to left click
-	if (skill.name = "Dire Wolf") { 	result = { ar_bonus:updateSkill(skill, lvl, 0), damage_bonus:updateSkill(skill, lvl, 0) } }	// cannot be bound to left click
-	if (skill.name = "Solar Creeper") { 	result = { ar_bonus:updateSkill(skill, lvl, 0), damage_bonus:updateSkill(skill, lvl, 0) } }	// cannot be bound to left click
-	if (skill.name = "Spirit of Barbs") { 	result = { ar_bonus:updateSkill(skill, lvl, 0), damage_bonus:updateSkill(skill, lvl, 0) } }	// cannot be bound to left click
-	if (skill.name = "Grizzly") { 		result = { ar_bonus:updateSkill(skill, lvl, 0), damage_bonus:updateSkill(skill, lvl, 0) } }	// cannot be bound to left click
-	
-	// Attack
-	// Throw
-	// Move Only
-	// Unsummon	// cannot be bound to left click
-	
-	for (affix in result) { active[affix] = result[affix] }
-return result	}
 };
 
 /*[ 0] Firestorm	*/ var d111 = {index:[0,""], values:[["fire spread",0,5,10,15,20,25,30,35,40,45,50,55,60,65,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70], ["fire min",2,4,7,9,11,14,16,18,25,32,39,46,53,60,67,75,85,96,106,117,127,138,158,178,198,217,237,257,294,330,366,402,439,475,511,547,584,620,656,693,730,766,802,839,875,911,948,984,1020,1057,1093,1129,1166,1202,1238,1275,1311,1347,1383,1420], ["fire max",3,7,10,14,17,21,24,28,36,44,52,60,69,77,85,93,105,117,128,140,152,164,185,206,227,248,269,290,328,365,403,440,478,515,552,589,628,665,702,740,778,815,853,890,928,965,1003,1040,1078,1115,1153,1190,1228,1265,1303,1340,1378,1415,1453,1490], ["mana cost",4,4.5,5,5.5,6,6.5,7,7.5,8,8.5,9,9.5,10,10.5,11,11.5,12,12.5,13,13.5,14,14.5,15,15.5,16,16.5,17,17.5,18,18.5,19,19.5,20,20.5,21,21.5,22,22.5,23,23.5,24,24.5,25,25.5,26,26.5,27,27.5,28,28.5,29,29.5,30,30.5,31,31.5,32,32.5,33,33.5]]};
@@ -178,37 +207,37 @@ return result	}
 /*[30] Grizzly		*/ var d362 = {index:[3," percent"], values:[["base life",650,875,1350],[],[], ["damage min",87,117,151,189,230,275,323,375,448,527,611,700,795,895,1001,1112,1253,1401,1557,1720,1890,2067,2312,2568,2835,3113,3401,3700,4093,4501,4925,5363,5816,6284,6767,7266,7779,8307,8850,9408,9982,10570,11173,11791,12424,13073,13736,14414,15107,15815,16539,17277,18030,18798,19581,20380,21193,22021,22864,23722], ["damage max",140,190,246,308,376,450,530,616,719,830,949,1074,1207,1346,1493,1648,1859,2081,2314,2557,2812,3077,3413,3764,4130,4510,4904,5312,5866,6441,7037,7654,8292,8951,9631,10332,11053,11796,12560,13345,14151,14978,15826,16695,17585,18496,19427,20380,21354,22349,23365,24402,25460,26539,27639,28760,29901,31064,32248,33453], ["damage bonus",75,90,105,120,135,150,165,180,195,210,225,240,255,270,285,300,315,330,345,360,375,390,405,420,435,450,465,480,495,510,525,540,555,570,585,600,615,630,645,660,675,690,705,720,735,750,765,780,795,810,825,840,855,870,885,900,915,930,945,960]]};
 
 var skills_druid = [
-{data:d111, key:"111", name:"Firestorm", i:0, req:[], reqlvl:1, level:0, extra_levels:0, force_levels:0, bindable:2, style:"display: block; top: 82px; left: 2px;", description:"Unleash fiery chaos to burn your enemies", syn_title:"<br>Firestorm Receives Bonuses From:<br>", syn_text:"Molten Boulder: +30% Fire Damage per Level<br>Fissure: +30% Fire Damage per Level", graytext:"", text:["+","% increased fire spread speed<br>Average Fire Damage: ","-"," per second<br>Mana Cost: ",""]},
-{data:d121, key:"121", name:"Molten Boulder", i:1, req:[0], reqlvl:6, level:0, extra_levels:0, force_levels:0, bindable:2, style:"display: block; top: 150px; left: 2px;", description:"Launch a boulder of flaming hot magma<br>that knocks back your enemies", syn_title:"<br>Molten Boulder Receives Bonuses From:<br>", syn_text:"Volcano: +20% damage per Level<br>Firestorm: +23% Fire Damage per Level<br>Firestorm: +17% Average Fire Damage per Second per Level", graytext:"", text:["Damage: ","-","<br>Fire Damage: ","-","<br>Average Fire Damage: ","-"," per second<br>Mana Cost: ",""]},
-{data:d122, key:"122", name:"Flame Dash", i:2, req:[1,0], reqlvl:6, level:0, extra_levels:0, force_levels:0, bindable:1, style:"display: block; top: 150px; left: 72px;", description:"Instantly teleport to a location and unleash a fiery<br>explosion that incinerates all enemies in your path", syn_title:"<br>Flame Dash Receives Bonuses From:<br>", syn_text:"Molten Boulder: +10% Fire Damage per Level<br>1% Increased Fire Damage per Energy", graytext:"<br>Cooldown Reduced by 0.4 Seconds per Base Level", text:["Cooldown: ","Fire Damage: ","-","<br>Mana Cost: ",""]},
-{data:d123, key:"123", name:"Arctic Blast", i:3, req:[], reqlvl:6, level:0, extra_levels:0, force_levels:0, bindable:2, style:"display: block; top: 150px; left: 142px;", description:"Blast a continous jet of ice<br>to burn your enemies with frost<br><br>Minimum Mana Required to Cast: 4", syn_title:"<br>Arctic Blast Receives Bonuses From:<br>", syn_text:"Hurricane: +10% Cold Damage per Level<br>Cyclone Armor: +10% Cold Damage per Level", graytext:"", text:["Average Cold Damage: ","-"," per second<br>Cold Length: "," seconds<br>Range: "," yards<br>Mana Cost: "," per second",""]},
-{data:d131, key:"131", name:"Fissure", i:4, req:[1,0], reqlvl:12, level:0, extra_levels:0, force_levels:0, bindable:1, style:"display: block; top: 218px; left: 2px;", description:"Open volcanic vents below your enemies,<br>burning them to a crisp<br><br>Mana Cost: 15", syn_title:"<br>Fissure Receives Bonuses From:<br>", syn_text:"Firestorm: +15% Fire Damage per Level<br>Volcano: +15% Fire Damage per Level", graytext:"", text:["Fire Damage: ","-","<br>Duration: 3.2 seconds",""]},
-{data:d133, key:"133", name:"Cyclone Armor", i:5, req:[3], reqlvl:12, level:0, extra_levels:0, force_levels:0, effect:3, bindable:1, style:"display: block; top: 218px; left: 142px;", description:"Shield yourself from damage caused by<br>fire, cold, and lightning", syn_title:"", syn_text:"", graytext:"", text:["Absorbs "," damage<br>Mana Cost: ",""]},
-{data:d142, key:"142", name:"Twister", i:6, req:[5,3], reqlvl:18, level:0, extra_levels:0, force_levels:0, bindable:2, style:"display: block; top: 286px; left: 72px;", description:"Release several small whirlwinds that<br>cut a path through your enemies<br><br>Stun Length: 1 second<br>Mana Cost: 7", syn_title:"<br>Twister Receives Bonuses From:<br>", syn_text:"Tornado: +30% Damage per Level<br>Hurricane: +30% Damage per Level", graytext:"", text:["Damage: ","-",""]},
-{data:d151, key:"151", name:"Volcano", i:7, req:[4,1,0], reqlvl:24, level:0, extra_levels:0, force_levels:0, bindable:1, style:"display: block; top: 354px; left: 2px;", description:"Summon forth a volcano to rain death<br>and destruction over your enemies<br><br>Mana Cost: 25", syn_title:"<br>Volcano Receives Bonuses From:<br>", syn_text:"Molten Boulder: +20% Physical Damage per Level<br>Fissure: +14% Fire Damage per Level<br>Armageddon: +14% Fire Damage per Level", graytext:"", text:["Damage: ","-","<br>Fire Damage: ","-",""]},
-{data:d152, key:"152", name:"Tornado", i:8, req:[6,5,3], reqlvl:24, level:0, extra_levels:0, force_levels:0, bindable:2, style:"display: block; top: 354px; left: 72px;", description:"Create a funnel of wind and debris<br>to blast your enemies<br><br>Mana Cost: 10", syn_title:"<br>Tornado Receives Bonuses From:<br>", syn_text:"Cyclone Armor: +7% Damage per Level<br>Twister: +18% Damage per Level<br>Hurricane: +18% Damage per Level", graytext:"", text:["Damage: ","-",""]},
-{data:d161, key:"161", name:"Armageddon", i:9, req:[7,4,1,0], reqlvl:30, level:0, extra_levels:0, force_levels:0, effect:2, bindable:2, style:"display: block; top: 422px; left: 2px;", description:"Create a meteor shower to rain fiery<br>destruction on nearby enemies", syn_title:"<br>Armageddon Receives Bonuses From:<br>", syn_text:"Fissure: +2 Seconds per Level<br>Firestorm: +12% Fire Damage per Level<br>Molten Boulder: +12% Physical Damage per Level<br>Volcano: +12% Fire Damage per Level", graytext:"", text:["Duration: ","Damage: ","-","<br>Fire Damage: ","-",""]},
-{data:d162, key:"162", name:"Hurricane", i:10, req:[8,6,5,3], reqlvl:30, level:0, extra_levels:0, force_levels:0, effect:2, bindable:2, style:"display: block; top: 422px; left: 72px;", description:"Create a massive storm of wind and<br>debris to pound your enemies to bits", syn_title:"<br>Hurricane Receives Bonuses From:<br>", syn_text:"Cyclone Armor: +2 Seconds per Level<br>Twister: +4% Cold Damage per Level<br>Tornado: +4% Cold Damage per Level<br>Arctic Blast: +4% Cold Damage per Level", graytext:"", text:["Duration: ","Cold Damage: ","-",""]},
+{data:d111, key:"111", code:220, name:"Firestorm", i:0, req:[], reqlvl:1, level:0, extra_levels:0, force_levels:0, bindable:2, style:"display: block; top: 82px; left: 2px;", description:"Unleash fiery chaos to burn your enemies", syn_title:"<br>Firestorm Receives Bonuses From:<br>", syn_text:"Molten Boulder: +30% Fire Damage per Level<br>Fissure: +30% Fire Damage per Level", graytext:"", text:["+","% increased fire spread speed<br>Average Fire Damage: ","-"," per second<br>Mana Cost: ",""]},
+{data:d121, key:"121", code:221, name:"Molten Boulder", i:1, req:[0], reqlvl:6, level:0, extra_levels:0, force_levels:0, bindable:2, style:"display: block; top: 150px; left: 2px;", description:"Launch a boulder of flaming hot magma<br>that knocks back your enemies", syn_title:"<br>Molten Boulder Receives Bonuses From:<br>", syn_text:"Volcano: +20% damage per Level<br>Firestorm: +23% Fire Damage per Level<br>Firestorm: +17% Average Fire Damage per Second per Level", graytext:"", text:["Damage: ","-","<br>Fire Damage: ","-","<br>Average Fire Damage: ","-"," per second<br>Mana Cost: ",""]},
+{data:d122, key:"122", code:222, name:"Flame Dash", i:2, req:[1,0], reqlvl:6, level:0, extra_levels:0, force_levels:0, bindable:1, style:"display: block; top: 150px; left: 72px;", description:"Instantly teleport to a location and unleash a fiery<br>explosion that incinerates all enemies in your path", syn_title:"<br>Flame Dash Receives Bonuses From:<br>", syn_text:"Molten Boulder: +10% Fire Damage per Level<br>1% Increased Fire Damage per Energy", graytext:"<br>Cooldown Reduced by 0.4 Seconds per Base Level", text:["Cooldown: ","Fire Damage: ","-","<br>Mana Cost: ",""]},
+{data:d123, key:"123", code:223, name:"Arctic Blast", i:3, req:[], reqlvl:6, level:0, extra_levels:0, force_levels:0, bindable:2, style:"display: block; top: 150px; left: 142px;", description:"Blast a continous jet of ice<br>to burn your enemies with frost<br><br>Minimum Mana Required to Cast: 4", syn_title:"<br>Arctic Blast Receives Bonuses From:<br>", syn_text:"Hurricane: +10% Cold Damage per Level<br>Cyclone Armor: +10% Cold Damage per Level", graytext:"", text:["Average Cold Damage: ","-"," per second<br>Cold Length: "," seconds<br>Range: "," yards<br>Mana Cost: "," per second",""]},
+{data:d131, key:"131", code:224, name:"Fissure", i:4, req:[1,0], reqlvl:12, level:0, extra_levels:0, force_levels:0, bindable:1, style:"display: block; top: 218px; left: 2px;", description:"Open volcanic vents below your enemies,<br>burning them to a crisp<br><br>Mana Cost: 15", syn_title:"<br>Fissure Receives Bonuses From:<br>", syn_text:"Firestorm: +15% Fire Damage per Level<br>Volcano: +15% Fire Damage per Level", graytext:"", text:["Fire Damage: ","-","<br>Duration: 3.2 seconds",""]},
+{data:d133, key:"133", code:225, name:"Cyclone Armor", i:5, req:[3], reqlvl:12, level:0, extra_levels:0, force_levels:0, effect:3, bindable:1, style:"display: block; top: 218px; left: 142px;", description:"Shield yourself from damage caused by<br>fire, cold, and lightning", syn_title:"", syn_text:"", graytext:"", text:["Absorbs "," damage<br>Mana Cost: ",""]},
+{data:d142, key:"142", code:226, name:"Twister", i:6, req:[5,3], reqlvl:18, level:0, extra_levels:0, force_levels:0, bindable:2, style:"display: block; top: 286px; left: 72px;", description:"Release several small whirlwinds that<br>cut a path through your enemies<br><br>Stun Length: 1 second<br>Mana Cost: 7", syn_title:"<br>Twister Receives Bonuses From:<br>", syn_text:"Tornado: +30% Damage per Level<br>Hurricane: +30% Damage per Level", graytext:"", text:["Damage: ","-",""]},
+{data:d151, key:"151", code:227, name:"Volcano", i:7, req:[4,1,0], reqlvl:24, level:0, extra_levels:0, force_levels:0, bindable:1, style:"display: block; top: 354px; left: 2px;", description:"Summon forth a volcano to rain death<br>and destruction over your enemies<br><br>Mana Cost: 25", syn_title:"<br>Volcano Receives Bonuses From:<br>", syn_text:"Molten Boulder: +20% Physical Damage per Level<br>Fissure: +14% Fire Damage per Level<br>Armageddon: +14% Fire Damage per Level", graytext:"", text:["Damage: ","-","<br>Fire Damage: ","-",""]},
+{data:d152, key:"152", code:228, name:"Tornado", i:8, req:[6,5,3], reqlvl:24, level:0, extra_levels:0, force_levels:0, bindable:2, style:"display: block; top: 354px; left: 72px;", description:"Create a funnel of wind and debris<br>to blast your enemies<br><br>Mana Cost: 10", syn_title:"<br>Tornado Receives Bonuses From:<br>", syn_text:"Cyclone Armor: +7% Damage per Level<br>Twister: +18% Damage per Level<br>Hurricane: +18% Damage per Level", graytext:"", text:["Damage: ","-",""]},
+{data:d161, key:"161", code:229, name:"Armageddon", i:9, req:[7,4,1,0], reqlvl:30, level:0, extra_levels:0, force_levels:0, effect:2, bindable:2, style:"display: block; top: 422px; left: 2px;", description:"Create a meteor shower to rain fiery<br>destruction on nearby enemies", syn_title:"<br>Armageddon Receives Bonuses From:<br>", syn_text:"Fissure: +2 Seconds per Level<br>Firestorm: +12% Fire Damage per Level<br>Molten Boulder: +12% Physical Damage per Level<br>Volcano: +12% Fire Damage per Level", graytext:"", text:["Duration: ","Damage: ","-","<br>Fire Damage: ","-",""]},
+{data:d162, key:"162", code:230, name:"Hurricane", i:10, req:[8,6,5,3], reqlvl:30, level:0, extra_levels:0, force_levels:0, effect:2, bindable:2, style:"display: block; top: 422px; left: 72px;", description:"Create a massive storm of wind and<br>debris to pound your enemies to bits", syn_title:"<br>Hurricane Receives Bonuses From:<br>", syn_text:"Cyclone Armor: +2 Seconds per Level<br>Twister: +4% Cold Damage per Level<br>Tornado: +4% Cold Damage per Level<br>Arctic Blast: +4% Cold Damage per Level", graytext:"", text:["Duration: ","Cold Damage: ","-",""]},
 
-{data:d211, key:"211", name:"Werewolf", i:11, req:[], reqlvl:1, level:0, extra_levels:0, force_levels:0, effect:5, bindable:1, style:"display: block; top: 82px; left: 204px;", description:"Transform into a werewolf", syn_title:"<br>Werewolf Receives Bonuses From:<br>", syn_text:"Lycanthropy", graytext:"", text:["Life: +","To Attack Rating: +"," percent<br>Attack Speed: +"," percent<br>Damage: +"," percent",""]},
-{data:d212, key:"212", name:"Lycanthropy", i:12, req:[11], reqlvl:1, level:0, extra_levels:0, force_levels:0, bindable:0, style:"display: block; top: 82px; left: 234px;", description:"Passive - Improves damage and life<br>when in werewolf or werebear form", syn_title:"", syn_text:"", graytext:"", text:["Damage: +"," percent<br>Max Life: +"," percent",""]},
-{data:d223, key:"223", name:"Werebear", i:13, req:[], reqlvl:6, level:0, extra_levels:0, force_levels:0, effect:5, bindable:1, style:"display: block; top: 150px; left: 264px;", description:"Transform into a werebear", syn_title:"<br>Werebear Receives Bonuses From:<br>", syn_text:"Lycanthropy", graytext:"", text:["Life: +","Damage: +"," percent<br>Defense: +"," percent<br>Mana Cost: 15",""]},
-{data:d231, key:"231", name:"Feral Rage", i:14, req:[11], reqlvl:12, level:0, extra_levels:0, force_levels:0, effect:3, bindable:2, style:"display: block; top: 218px; left: 164px;", description:"When in werewolf form,<br>go into a frenzied rage to steal<br>increasing amounts of life from your enemies<br>with successive hits<br><br>Mana Cost: 3<br>Duration: 20 seconds", syn_title:"", syn_text:"", graytext:"", text:["Walk/Run Speed: +","-"," percent<br>Life Steal: +","-"," percent<br>Damage: +"," percent<br>Attack Rating: +"," percent",""]},
-{data:d233, key:"233", name:"Maul", i:15, req:[13], reqlvl:12, level:0, extra_levels:0, force_levels:0, effect:3, bindable:2, style:"display: block; top: 218px; left: 304px;", description:"When in werebear form,<br>maul your enemies<br>for increasing extra damage<br>with successive hits<br><br>Mana Cost: 3<br>Duration: 20 seconds", syn_title:"", syn_text:"", graytext:"", text:["Stun Length: "," seconds<br>Damage: +","-"," percent<br>Attack Rating: +"," percent",""]},
-{data:d241, key:"241", name:"Rabies", i:16, req:[14,11], reqlvl:18, level:0, extra_levels:0, force_levels:0, bindable:2, style:"display: block; top: 286px; left: 184px;", description:"When in werewolf form,<br>bite your enemies<br>to inflict them with disease<br>that spreads to other monsters<br><br>Mana Cost: 10", syn_title:"<br>Rabies Receives Bonuses From:<br>", syn_text:"Poison Creeper: +20% Poison damage per Level<br>Summon Dire Wolf: +20% Poison Damage per Level", graytext:"", text:["Attack Rating: +"," percent<br>Poison Damage: ","-","<br>over 4 seconds",""]},
-{data:d242, key:"242", name:"Fire Claws", i:17, req:[14,15,11,13], reqlvl:18, level:0, extra_levels:0, force_levels:0, bindable:2, style:"display: block; top: 286px; left: 144px;", description:"When in werewolf or werebear<br>form, maul your enemies<br>with a fiery claw attack<br><br>Deals 100% of Fire Weapon Damage as Splash Damage<br>Radius: 7 yards", syn_title:"<br>Fire Claws Receives Bonuses From:<br>", syn_text:"Firestorm: +11% Fire Damage per Level<br>Molten Boulder: +11% Fire Damage per Level<br>Fissure: +11% Fire Damage per Level<br>Volcano: +11% Fire Damage per Level", graytext:"", text:["Fire Damage: ","-","<br>Attack Rating: +"," percent<br>Mana Cost: ",""]},
-{data:d252, key:"252", name:"Hunger", i:18, req:[17,14,15,11,13], reqlvl:24, level:0, extra_levels:0, force_levels:0, bindable:2, style:"display: block; top: 354px; left: 204px;", description:"When in werewolf or werebear<br>form, bite youre enemies<br>to gain life and mana<br><br>Damage: -75 percent", syn_title:"", syn_text:"", graytext:"", text:["Life Steal: "," percent<br>Mana Steal: "," percent<br>Attack Rating: +"," percent<br>Mana Cost: 3",""]},
-{data:d253, key:"253", name:"Shock Wave", i:19, req:[15,13], reqlvl:24, level:0, extra_levels:0, force_levels:0, bindable:2, style:"display: block; top: 354px; left: 254px;", description:"When in werebear form,<br>stomp to create a shock wave<br>that crushes enemies<br><br>Deals 25% of Weapon Damage", syn_title:"<br>Shock Wave Receives Bonuses From:<br>", syn_text:"Maul: +8% Damage per Level", graytext:"", text:["Stun Length: 1.4 seconds<br>Damage: ","-","<br>Mana Cost: 7",""]},
-{data:d261, key:"261", name:"Fury", i:20, req:[16,14,11], reqlvl:30, level:0, extra_levels:0, force_levels:0, bindable:2, style:"display: block; top: 422px; left: 204px;", description:"When in werewolf form, attack<br>either multiple adjacent targets<br>or one target multiple times", syn_title:"", syn_text:"", graytext:"", text:[""," hits<br>Attack Bonus: +"," percent<br>Damage: +"," percent<br>Mana Cost: 4",""]},
+{data:d211, key:"211", code:231, name:"Werewolf", i:11, req:[], reqlvl:1, level:0, extra_levels:0, force_levels:0, effect:5, bindable:1, style:"display: block; top: 82px; left: 204px;", description:"Transform into a werewolf", syn_title:"<br>Werewolf Receives Bonuses From:<br>", syn_text:"Lycanthropy", graytext:"", text:["Life: +","To Attack Rating: +"," percent<br>Attack Speed: +"," percent<br>Damage: +"," percent",""]},
+{data:d212, key:"212", code:232, name:"Lycanthropy", i:12, req:[11], reqlvl:1, level:0, extra_levels:0, force_levels:0, bindable:0, style:"display: block; top: 82px; left: 234px;", description:"Passive - Improves damage and life<br>when in werewolf or werebear form", syn_title:"", syn_text:"", graytext:"", text:["Damage: +"," percent<br>Max Life: +"," percent",""]},
+{data:d223, key:"223", code:233, name:"Werebear", i:13, req:[], reqlvl:6, level:0, extra_levels:0, force_levels:0, effect:5, bindable:1, style:"display: block; top: 150px; left: 264px;", description:"Transform into a werebear", syn_title:"<br>Werebear Receives Bonuses From:<br>", syn_text:"Lycanthropy", graytext:"", text:["Life: +","Damage: +"," percent<br>Defense: +"," percent<br>Mana Cost: 15",""]},
+{data:d231, key:"231", code:234, name:"Feral Rage", i:14, req:[11], reqlvl:12, level:0, extra_levels:0, force_levels:0, effect:3, bindable:2, style:"display: block; top: 218px; left: 164px;", description:"When in werewolf form,<br>go into a frenzied rage to steal<br>increasing amounts of life from your enemies<br>with successive hits<br><br>Mana Cost: 3<br>Duration: 20 seconds", syn_title:"", syn_text:"", graytext:"", text:["Walk/Run Speed: +","-"," percent<br>Life Steal: +","-"," percent<br>Damage: +"," percent<br>Attack Rating: +"," percent",""]},
+{data:d233, key:"233", code:235, name:"Maul", i:15, req:[13], reqlvl:12, level:0, extra_levels:0, force_levels:0, effect:3, bindable:2, style:"display: block; top: 218px; left: 304px;", description:"When in werebear form,<br>maul your enemies<br>for increasing extra damage<br>with successive hits<br><br>Mana Cost: 3<br>Duration: 20 seconds", syn_title:"", syn_text:"", graytext:"", text:["Stun Length: "," seconds<br>Damage: +","-"," percent<br>Attack Rating: +"," percent",""]},
+{data:d241, key:"241", code:236, name:"Rabies", i:16, req:[14,11], reqlvl:18, level:0, extra_levels:0, force_levels:0, bindable:2, style:"display: block; top: 286px; left: 184px;", description:"When in werewolf form,<br>bite your enemies<br>to inflict them with disease<br>that spreads to other monsters<br><br>Mana Cost: 10", syn_title:"<br>Rabies Receives Bonuses From:<br>", syn_text:"Poison Creeper: +20% Poison damage per Level<br>Summon Dire Wolf: +20% Poison Damage per Level", graytext:"", text:["Attack Rating: +"," percent<br>Poison Damage: ","-","<br>over 4 seconds",""]},
+{data:d242, key:"242", code:237, name:"Fire Claws", i:17, req:[14,15,11,13], reqlvl:18, level:0, extra_levels:0, force_levels:0, bindable:2, style:"display: block; top: 286px; left: 144px;", description:"When in werewolf or werebear<br>form, maul your enemies<br>with a fiery claw attack<br><br>Deals 100% of Fire Weapon Damage as Splash Damage<br>Radius: 7 yards", syn_title:"<br>Fire Claws Receives Bonuses From:<br>", syn_text:"Firestorm: +11% Fire Damage per Level<br>Molten Boulder: +11% Fire Damage per Level<br>Fissure: +11% Fire Damage per Level<br>Volcano: +11% Fire Damage per Level", graytext:"", text:["Fire Damage: ","-","<br>Attack Rating: +"," percent<br>Mana Cost: ",""]},
+{data:d252, key:"252", code:238, name:"Hunger", i:18, req:[17,14,15,11,13], reqlvl:24, level:0, extra_levels:0, force_levels:0, bindable:2, style:"display: block; top: 354px; left: 204px;", description:"When in werewolf or werebear<br>form, bite youre enemies<br>to gain life and mana<br><br>Damage: -75 percent", syn_title:"", syn_text:"", graytext:"", text:["Life Steal: "," percent<br>Mana Steal: "," percent<br>Attack Rating: +"," percent<br>Mana Cost: 3",""]},
+{data:d253, key:"253", code:239, name:"Shock Wave", i:19, req:[15,13], reqlvl:24, level:0, extra_levels:0, force_levels:0, bindable:2, style:"display: block; top: 354px; left: 254px;", description:"When in werebear form,<br>stomp to create a shock wave<br>that crushes enemies<br><br>Deals 25% of Weapon Damage", syn_title:"<br>Shock Wave Receives Bonuses From:<br>", syn_text:"Maul: +8% Damage per Level", graytext:"", text:["Stun Length: 1.4 seconds<br>Damage: ","-","<br>Mana Cost: 7",""]},
+{data:d261, key:"261", code:240, name:"Fury", i:20, req:[16,14,11], reqlvl:30, level:0, extra_levels:0, force_levels:0, bindable:2, style:"display: block; top: 422px; left: 204px;", description:"When in werewolf form, attack<br>either multiple adjacent targets<br>or one target multiple times", syn_title:"", syn_text:"", graytext:"", text:[""," hits<br>Attack Bonus: +"," percent<br>Damage: +"," percent<br>Mana Cost: 4",""]},
 
-{data:d312, key:"312", name:"Raven", i:21, req:[], reqlvl:1, level:0, extra_levels:0, force_levels:0, bindable:1, style:"display: block; top: 82px; left: 326px;", description:"Summon ravens to peck out<br>the eyes of your enemies<br><br>3 Hits<br>Ravens Attacks deal Splash Damage", syn_title:"<br>Raven Receives Bonuses From:<br>", syn_text:"Cyclone Armor: +20% Physical Damage per Level<br>Twister: +20% Physical Damage per Level<br>Arctic Blast: +21% Cold Damage per Level<br>1% Increased Cold Damage per Energy", graytext:"", text:["Ravens: ","<br>Damage: ","-","<br>Cold Damage: ","-","<br>Mana Cost per Raven: ",""]},
-{data:d313, key:"313", name:"Poison Creeper", i:22, req:[], reqlvl:1, level:0, extra_levels:0, force_levels:0, bindable:1, style:"display: block; top: 82px; left: 496px;", description:"Summon a vine that spreads<br>disease to all it contacts", syn_title:"", syn_text:"", graytext:"", text:["Life: ","<br>Poison Damage: ","-","<br>over 5 seconds<br>Mana Cost: 8"]},
-{data:d321, key:"321", name:"Heart of Wolverine", i:23, req:[], reqlvl:6, level:0, extra_levels:0, force_levels:0, effect:5, bindable:1, style:"display: block; top: 150px; left: 336px;", description:"Summon a spirit pet that adds<br>to the damage and attack rating<br>of you and your party", syn_title:"", syn_text:"", graytext:"", text:["Life: ","<br>Damage: +"," percent<br>Attack Rating: +"," percent<br>Radius: "," yards<br>Mana Cost: ",""]},
-{data:d322, key:"322", name:"Summon Spirit Wolf", i:24, req:[21], reqlvl:6, level:0, extra_levels:0, force_levels:0, bindable:1, style:"display: block; top: 150px; left: 366px;", description:"Summon a wolf to fight by your side", syn_title:"<br>Summon Spirit Wolf Receives Bonuses From:<br>", syn_text:"Summon Dire Wolf<br>Summon Grizzly", graytext:"<br>One Wolf per Base Level. Max: 7<br>", text:["Wolves: ","<br>Mana Cost: 15<br>Life: ","Damage: ","-","<br>Attack Rating: +"," percent<br>Defense: +"," percent"]},
-{data:d333, key:"333", name:"Carrion Vine", i:25, req:[22], reqlvl:12, level:0, extra_levels:0, force_levels:0, bindable:1, style:"display: block; top: 218px; left: 466px;", description:"Summon a vine that eats corpses<br>and replenishes your life", syn_title:"", syn_text:"", graytext:"", text:["Life: ","<br>Heals: "," percent<br>Mana Cost: 10",""]},
-{data:d341, key:"341", name:"Oak Sage", i:26, req:[23], reqlvl:18, level:0, extra_levels:0, force_levels:0, effect:5, bindable:1, style:"display: block; top: 286px; left: 326px;", description:"Summon a spirit pet that increases<br>life for you and your party", syn_title:"", syn_text:"", graytext:"", text:["Life: ","<br>Life: +"," percent<br>Radius: "," yards<br>Mana Cost: ",""]},
-{data:d342, key:"342", name:"Summon Dire Wolf", i:27, req:[23,24,21], reqlvl:18, level:0, extra_levels:0, force_levels:0, bindable:1, style:"display: block; top: 286px; left: 386px;", description:"Summon a wolf that becomes enraged,<br>eating corpses to increase its damage", syn_title:"<br>Summon Dire Wolf Receives Bonuses From:<br>", syn_text:"Summon Spirit Wolf<br>Summon Grizzly", graytext:"<br>One Wolf per Base Level. Max: 3<br>", text:["Wolves: ","<br>Mana Cost: 20<br>Attack Rating: +"," percent<br>Defense: +","Life: ","<br>Damage: ","-","<br>Life: +"," percent",""]},
-{data:d353, key:"353", name:"Solar Creeper", i:28, req:[25,22], reqlvl:24, level:0, extra_levels:0, force_levels:0, bindable:1, style:"display: block; top: 354px; left: 466px;", description:"Summon a vine that eats corpses<br>and replenishes your mana", syn_title:"", syn_text:"", graytext:"", text:["Life: ","<br>Mana Recovery Rate: "," percent<br>Mana Cost: ",""]},
-{data:d361, key:"361", name:"Spirit of Barbs", i:29, req:[26,23], reqlvl:30, level:0, extra_levels:0, force_levels:0, effect:3, bindable:1, style:"display: block; top: 422px; left: 296px;", description:"Summon spirit pet that reflects damage<br>taken by you and your party<br>back at your enemies", syn_title:"", syn_text:"", graytext:"", text:["Life: ","<br>"," percent damage returned<br>Radius: "," yards<br>Mana Cost: ",""]},
-{data:d362, key:"362", name:"Summon Grizzly", i:30, req:[27,23,24,21], reqlvl:30, level:0, extra_levels:0, force_levels:0, bindable:1, style:"display: block; top: 422px; left: 346px;", description:"Summon a ferocious grizzly bear", syn_title:"<br>Summon Grizzly Receives Bonuses From:<br>", syn_text:"Summon Spirit Wolf<br>Summon Dire Wolf", graytext:"", text:["Mana Cost: 40<br>Life: ","<br>Attack Rating: +"," percent<br>Defense: +","Damage: ","-","<br>Damage: +"," percent",""]}
+{data:d312, key:"312", code:241, name:"Raven", i:21, req:[], reqlvl:1, level:0, extra_levels:0, force_levels:0, bindable:1, style:"display: block; top: 82px; left: 326px;", description:"Summon ravens to peck out<br>the eyes of your enemies<br><br>3 Hits<br>Ravens Attacks deal Splash Damage", syn_title:"<br>Raven Receives Bonuses From:<br>", syn_text:"Cyclone Armor: +20% Physical Damage per Level<br>Twister: +20% Physical Damage per Level<br>Arctic Blast: +21% Cold Damage per Level<br>1% Increased Cold Damage per Energy", graytext:"", text:["Ravens: ","<br>Damage: ","-","<br>Cold Damage: ","-","<br>Mana Cost per Raven: ",""]},
+{data:d313, key:"313", code:242, name:"Poison Creeper", i:22, req:[], reqlvl:1, level:0, extra_levels:0, force_levels:0, bindable:1, style:"display: block; top: 82px; left: 496px;", description:"Summon a vine that spreads<br>disease to all it contacts", syn_title:"", syn_text:"", graytext:"", text:["Life: ","<br>Poison Damage: ","-","<br>over 5 seconds<br>Mana Cost: 8"]},
+{data:d321, key:"321", code:243, name:"Heart of Wolverine", i:23, req:[], reqlvl:6, level:0, extra_levels:0, force_levels:0, effect:5, bindable:1, style:"display: block; top: 150px; left: 336px;", description:"Summon a spirit pet that adds<br>to the damage and attack rating<br>of you and your party", syn_title:"", syn_text:"", graytext:"", text:["Life: ","<br>Damage: +"," percent<br>Attack Rating: +"," percent<br>Radius: "," yards<br>Mana Cost: ",""]},
+{data:d322, key:"322", code:244, name:"Summon Spirit Wolf", i:24, req:[21], reqlvl:6, level:0, extra_levels:0, force_levels:0, bindable:1, style:"display: block; top: 150px; left: 366px;", description:"Summon a wolf to fight by your side", syn_title:"<br>Summon Spirit Wolf Receives Bonuses From:<br>", syn_text:"Summon Dire Wolf<br>Summon Grizzly", graytext:"<br>One Wolf per Base Level. Max: 7<br>", text:["Wolves: ","<br>Mana Cost: 15<br>Life: ","Damage: ","-","<br>Attack Rating: +"," percent<br>Defense: +"," percent"]},
+{data:d333, key:"333", code:245, name:"Carrion Vine", i:25, req:[22], reqlvl:12, level:0, extra_levels:0, force_levels:0, bindable:1, style:"display: block; top: 218px; left: 466px;", description:"Summon a vine that eats corpses<br>and replenishes your life", syn_title:"", syn_text:"", graytext:"", text:["Life: ","<br>Heals: "," percent<br>Mana Cost: 10",""]},
+{data:d341, key:"341", code:246, name:"Oak Sage", i:26, req:[23], reqlvl:18, level:0, extra_levels:0, force_levels:0, effect:5, bindable:1, style:"display: block; top: 286px; left: 326px;", description:"Summon a spirit pet that increases<br>life for you and your party", syn_title:"", syn_text:"", graytext:"", text:["Life: ","<br>Life: +"," percent<br>Radius: "," yards<br>Mana Cost: ",""]},
+{data:d342, key:"342", code:247, name:"Summon Dire Wolf", i:27, req:[23,24,21], reqlvl:18, level:0, extra_levels:0, force_levels:0, bindable:1, style:"display: block; top: 286px; left: 386px;", description:"Summon a wolf that becomes enraged,<br>eating corpses to increase its damage", syn_title:"<br>Summon Dire Wolf Receives Bonuses From:<br>", syn_text:"Summon Spirit Wolf<br>Summon Grizzly", graytext:"<br>One Wolf per Base Level. Max: 3<br>", text:["Wolves: ","<br>Mana Cost: 20<br>Attack Rating: +"," percent<br>Defense: +","Life: ","<br>Damage: ","-","<br>Life: +"," percent",""]},
+{data:d353, key:"353", code:248, name:"Solar Creeper", i:28, req:[25,22], reqlvl:24, level:0, extra_levels:0, force_levels:0, bindable:1, style:"display: block; top: 354px; left: 466px;", description:"Summon a vine that eats corpses<br>and replenishes your mana", syn_title:"", syn_text:"", graytext:"", text:["Life: ","<br>Mana Recovery Rate: "," percent<br>Mana Cost: ",""]},
+{data:d361, key:"361", code:249, name:"Spirit of Barbs", i:29, req:[26,23], reqlvl:30, level:0, extra_levels:0, force_levels:0, effect:3, bindable:1, style:"display: block; top: 422px; left: 296px;", description:"Summon spirit pet that reflects damage<br>taken by you and your party<br>back at your enemies", syn_title:"", syn_text:"", graytext:"", text:["Life: ","<br>"," percent damage returned<br>Radius: "," yards<br>Mana Cost: ",""]},
+{data:d362, key:"362", code:250, name:"Summon Grizzly", i:30, req:[27,23,24,21], reqlvl:30, level:0, extra_levels:0, force_levels:0, bindable:1, style:"display: block; top: 422px; left: 346px;", description:"Summon a ferocious grizzly bear", syn_title:"<br>Summon Grizzly Receives Bonuses From:<br>", syn_text:"Summon Spirit Wolf<br>Summon Dire Wolf", graytext:"", text:["Mana Cost: 40<br>Life: ","<br>Attack Rating: +"," percent<br>Defense: +","Damage: ","-","<br>Damage: +"," percent",""]}
 ];

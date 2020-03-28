@@ -6,7 +6,9 @@ var skill_bonuses = {stamina_skillup:0, frw_skillup:0, defense_skillup:0, resist
 var base_stats = {level:1, skillpoints:0, statpoints:0, quests_completed:-1, running:-1, difficulty:3, strength_added:0, dexterity_added:0, vitality_added:0, energy_added:0, fRes_penalty:100, cRes_penalty:100, lRes_penalty:100, pRes_penalty:100, mRes_penalty:100, fRes:0, cRes:0, lRes:0, pRes:0, mRes:0, fRes_max_base:75, cRes_max_base:75, lRes_max_base:75, pRes_max_base:75, mRes_max_base:75, set_bonuses:[0,0,{},{},{},{},{}]}
 
 var effects = {};
-var skillList = []; var skillList1 = []; var skillList2 = []; var skill1 = {name:"", details:""}; var skill2 = {name:"", details:""};
+var skillList = []; var skillOptions = []; var skillList1 = []; var skillList2 = [];
+
+var active = {};
 var oskills = {basicAttack:{},basicThrow:{}};
 var abilities = {basicAttack:{},basicThrow:{}};
 var lastCharm = "";
@@ -16,6 +18,19 @@ var settings = {coupling:1, autocast:1}
 var MAX = 20;	// Highest Skill Hardpoints
 var LIMIT = 60; // Highest Skill Data
 var RES_CAP = 95;
+
+var offskills = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+		0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+		0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+
+var oskills = {
+/* oskills  amazon	*/	oskill_Multiple_Shot:0, oskill_Magic_Arrow:0, oskill_Guided_Arrow:0, oskill_Inner_Sight:0, oskill_Lethal_Strike:0, oskill_Valkyrie:0, 
+/* oskills  barbarian	*/	oskill_Battle_Orders:0, oskill_Battle_Command:0, oskill_Battle_Cry:0, oskill_Edged_Weapon_Mastery:0, oskill_Bash:0, 
+/* oskills  druid	*/	oskill_Werewolf:0, oskill_Werebear:0, oskill_Lycanthropy:0, oskill_Feral_Rage:0, oskill_Summon_Dire_Wolf:0, oskill_Flame_Dash:0, 
+/* oskills  necromancer	*/	oskill_Summon_Mastery:0, oskill_Desecrate:0, 
+/* oskills  paladin	*/	oskill_Zeal:0, oskill_Vengeance:0, 
+/* oskills  sorceress	*/	oskill_Fire_Ball:0, oskill_Fire_Wall:0, oskill_Meteor:0, oskill_Frigerate:0, oskill_Hydra:0, oskill_Shiver_Armor:0, oskill_Fire_Mastery:0, oskill_Cold_Mastery:0, 
+}
 
 // Charm Inventory
 var inv = [
@@ -55,13 +70,6 @@ function loadItems(type, dropdown, className) {
 					if (equipment[type][item].limit[l] == className) { halt = 1 }
 				}
 			}
-		// unneeded
-		//	if (typeof(equipment[type][item].valid) != 'undefined') {
-		//		var halt = 1;
-		//		for (let l = 0; l < equipment[type][item].valid.length; l++) {
-		//			if (equipment[type][item].valid[l] == className) { halt = 0 }
-		//		}
-		//	}
 			if (halt == 0) {
 				if (item > 0) {
 					if (typeof(equipment[type][item].set_bonuses) != 'undefined') {
@@ -299,6 +307,9 @@ function equip(type, val) {
 			for (affix in equipment[type][item]) {
 				character[affix] += equipment[type][item][affix]
 				equipped[type][affix] = equipment[type][item][affix]
+			//	for (skill in oskills) {
+			//		if (oskills.skill == affix) {offskills[skills[s].code] = ... }
+			//	}
 				if (affix == "aura") {
 					equipped[type].aura_lvl = equipment[type][item].aura_lvl
 					addAura(equipment[type][item][affix], equipment[type][item].aura_lvl)
@@ -430,6 +441,9 @@ function resetSkills() {
 		document.getElementById("s"+skills[s].key).onclick = function() {mouseOut};
 		document.getElementById("s"+skills[s].key).oncontextmenu = function() {mouseOut};
 	}
+	
+	document.getElementById("dropdown_skill1").innerHTML = "<option class='gray' disabled selected>" + " ­ ­ ­ ­ Skill 1" + "</option>"
+	document.getElementById("dropdown_skill2").innerHTML = "<option class='gray' disabled selected>" + " ­ ­ ­ ­ Skill 2" + "</option>"
 }
 
 // Resets all items
@@ -788,48 +802,6 @@ function updateStats() {
 	document.getElementById("lres").innerHTML = (c.lRes + c.all_res - c.lRes_penalty + c.resistance_skillup) + " / " + Math.min(RES_CAP,(c.lRes_max_base + c.lRes_max + c.lRes_skillup))
 	document.getElementById("pres").innerHTML = (c.pRes + c.all_res - c.pRes_penalty + c.resistance_skillup) + " / " + Math.min(RES_CAP,(c.pRes_max_base + c.pRes_max))
 	document.getElementById("mres").innerHTML = (c.mRes - c.mRes_penalty) + "%  +" + c.mDamage_reduced
-
-	var bmin1 = (1+~~skill1.details.damage_bonus/100);
-	var bmax1 = (1+~~skill1.details.damage_bonus/100);
-	var dmin1 = (~~skill1.details.damage_min);
-	var dmax1 = (~~skill1.details.damage_max);
-	var fmin1 = (~~skill1.details.fDamage_min);
-	var fmax1 = (~~skill1.details.fDamage_max);
-	var cmin1 = (~~skill1.details.cDamage_min);
-	var cmax1 = (~~skill1.details.cDamage_max);
-	var lmin1 = (~~skill1.details.lDamage_min);
-	var lmax1 = (~~skill1.details.lDamage_max);
-	var pmin1 = (~~skill1.details.pDamage_min);
-	var pmax1 = (~~skill1.details.pDamage_max+skill1.details.pDamage_all);
-	var mmin1 = (~~skill1.details.mDamage_min);
-	var mmax1 = (~~skill1.details.mDamage_max);
-	var bmin2 = (1+~~skill2.details.damage_bonus/100);
-	var bmax2 = (1+~~skill2.details.damage_bonus/100);
-	var dmin2 = (~~skill1.details.damage_min);
-	var dmax2 = (~~skill1.details.damage_max);
-	var fmin2 = (~~skill2.details.fDamage_min);
-	var fmax2 = (~~skill2.details.fDamage_max);
-	var cmin2 = (~~skill2.details.cDamage_min);
-	var cmax2 = (~~skill2.details.cDamage_max);
-	var lmin2 = (~~skill2.details.lDamage_min);
-	var lmax2 = (~~skill2.details.lDamage_max);
-	var pmin2 = (~~skill2.details.pDamage_min);
-	var pmax2 = (~~skill2.details.pDamage_max+skill2.details.pDamage_all);
-	var mmin2 = (~~skill2.details.mDamage_min);
-	var mmax2 = (~~skill2.details.mDamage_max);
-	var basic_min1 = Math.floor(wisp*((~~phys_min+dmin1)*bmin1 + ~~c.fDamage_min+fmin1 + ~~c.cDamage_min+cmin1 + ~~c.lDamage_min+lmin1) + ~~c.mDamage_min+mmin1);
-	var basic_max1 = Math.floor(wisp*((~~phys_max+dmax1)*bmax1 + ~~c.fDamage_max+fmax1 + ~~c.cDamage_max+cmax1 + ~~c.lDamage_max+lmax1) + ~~c.mDamage_max+mmax1 + wisp*(~~c.pDamage_all+~~c.pDamage_max+~~pmax1));
-	var basic_min2 = Math.floor(wisp*((~~phys_min+dmin2)*bmin2 + ~~c.fDamage_min+fmin2 + ~~c.cDamage_min+cmin2 + ~~c.lDamage_min+lmin2) + ~~c.mDamage_min+mmin2);
-	var basic_max2 = Math.floor(wisp*((~~phys_max+dmax2)*bmax2 + ~~c.fDamage_max+fmax2 + ~~c.cDamage_max+cmax2 + ~~c.lDamage_max+lmax2) + ~~c.mDamage_max+mmax2 + wisp*(~~c.pDamage_all+~~c.pDamage_max+~~pmax2));
-
-	if (basic_min1 > basic_min || basic_max1 > basic_max) { document.getElementById("skill1_info").innerHTML = ": " + basic_min1 + "-" + basic_max1 } else { document.getElementById("ar_skill1").innerHTML = ":" }
-	if (basic_min2 > basic_min || basic_max2 > basic_max) { document.getElementById("skill2_info").innerHTML = ": " + basic_min1 + "-" + basic_max2 } else { document.getElementById("ar_skill2").innerHTML = ":" }
-	if (document.getElementById("dropdown_skill1").innerHTML == skill1.name) { document.getElementById("ar_skill1").innerHTML = "AR: " + ar * (1+~~skill1.details.ar_bonus/100) } else { document.getElementById("ar_skill1").innerHTML = "" }
-	if (document.getElementById("dropdown_skill2").innerHTML == skill2.name) { document.getElementById("ar_skill2").innerHTML = "AR: " + ar * (1+~~skill2.details.ar_bonus/100) } else { document.getElementById("ar_skill2").innerHTML = "" }
-//	if (typeof(skill1.details.ar_bonus) != 'undefined') { document.getElementById("ar_skill1").innerHTML = ar * (1+~~skill1.details.ar_bonus/100) } else { document.getElementById("ar_skill1").innerHTML = "" }
-//	if (typeof(skill2.details.ar_bonus) != 'undefined') { document.getElementById("ar_skill2").innerHTML = ar * (1+~~skill2.details.ar_bonus/100) } else { document.getElementById("ar_skill2").innerHTML = "" }
-//	document.getElementById("ar_skill1").innerHTML = ar * character.skillFocus(skill1)
-//	document.getElementById("ar_skill2").innerHTML = ar * character.skillFocus(skill2)
 }
 
 // Updates stats shown on the secondary (Path of Diablo) stat page
@@ -927,134 +899,65 @@ function calculateSkillAmounts() {
 	for (s = 0; s < skills.length; s++) {
 		skills[s].extra_levels = 0
 		skills[s].extra_levels += character.all_skills
-		var display = skills[s].level
+		var display = skills[s].level;
 		var temp = 0;
+		var skillSolo = "skill_" + skills[s].name.split(" ").join("_");
+		skills[s].force_levels = character[skillSolo]
+		var oskillSolo = "oskill_" + skills[s].name.split(" ").join("_");
+		skills[s].force_levels += character[oskillSolo]
+		offskills[skills[s].code] = skills[s].level + skills[s].extra_levels + skills[s].force_levels
 		if (character.class_name == "Amazon") {
 			skills[s].extra_levels += character.skills_amazon
 			if (s < 10) { skills[s].extra_levels += character.skills_javelins
-				if (s == 8) { skills[s].force_levels = character.skill_Lightning_Strike }
-				if (s == 9) { skills[s].force_levels = character.skill_Lightning_Fury }
-				if (s == 4) { skills[s].force_levels = character.skill_Lightning_Bolt }
 			} else if (s > 19) { skills[s].extra_levels += character.skills_bows
-				if (s == 22) { skills[s].force_levels = character.oskill_Multiple_Shot }	
-				if (s == 28) { skills[s].force_levels = character.skill_Immolation_Arrow }	
 				if (s == 23 || s == 26 || s == 28) { skills[s].extra_levels += character.skills_fire_all }
 				if (s == 20 || s == 24 || s == 29) { skills[s].extra_levels += character.skills_cold_all }
 			} else { skills[s].extra_levels += character.skills_passives
-				if (s == 10) { skills[s].force_levels = character.oskill_Inner_Sight }
-				if (s == 11) { temp = 0; if (character.oskill_Lethal_Strike > 0) { temp = Math.min(3, character.oskill_Lethal_Strike) }
-					skills[s].force_levels = character.skill_Lethal_Strike + temp }
-				if (s == 12) { skills[s].force_levels = character.skill_Phase_Run }
-				if (s == 13) { skills[s].force_levels = character.skill_Dodge }
-				if (s == 18) { temp = 0; if (character.oskill_Valkyrie > 0) { temp = Math.min(3, character.oskill_Valkyrie) }
-					skills[s].force_levels = temp }
 			}
 		} else if (character.class_name == "Assassin") {
 			skills[s].extra_levels += character.skills_assassin
 			if (s == 1 || s == 6 || s == 20 || s == 24 || s == 27) { skills[s].extra_levels += character.skills_fire_all }
 			if (s < 9) { skills[s].extra_levels += character.skills_martial
-				if (s == 1) { skills[s].force_levels = character.skill_Fists_of_Ember }
 				if (s == 3 || s == 8) { skills[s].extra_levels += character.skills_cold_all }
 			} else if (s > 19) { skills[s].extra_levels += character.skills_traps
-				if (s == 24) { skills[s].force_levels = character.skill_Wake_of_Fire }
-				if (s == 25) { skills[s].force_levels = character.skill_Blade_Fury }
-				if (s == 29) { skills[s].force_levels = character.skill_Blade_Shield }
-			} else { skills[s].extra_levels += character.skills_shadow 
-				if (s == 15) { skills[s].force_levels = character.skill_Fade }
+			} else { skills[s].extra_levels += character.skills_shadow
 			}
 		} else if (character.class_name == "Barbarian") {
 			skills[s].extra_levels += character.skills_barbarian
 			if (s < 10) { skills[s].extra_levels += character.skills_warcries
-				if (s == 3) { skills[s].force_levels = character.skill_Shout }
-				if (s == 6) { skills[s].force_levels = character.skill_Battle_Orders }
-				if (s == 7) { skills[s].force_levels = character.skill_Grim_Ward }
-				if (s == 8) { skills[s].force_levels = character.skill_War_Cry }
-				if (s == 9) { skills[s].force_levels = character.skill_Battle_Command }
 			} else if (s > 17) { skills[s].extra_levels += character.skills_combat_barbarian
-				if (s == 18) { skills[s].force_levels = character.skill_Frenzy }
-				if (s == 22) { skills[s].force_levels = character.skill_Leap }
-				if (s == 24) { skills[s].force_levels = character.oskill_Bash }
 			} else { skills[s].extra_levels += character.skills_masteries
-				if (s == 10) { skills[s].force_levels = character.oskill_Edged_Weapon_Mastery }
-				if (s == 15) { skills[s].force_levels = character.skill_Iron_Skin }
 			}
 		} else if (character.class_name == "Druid") {
 			skills[s].extra_levels += character.skills_druid
 			if (s == 0 || s == 1 || s == 2 || s == 4 || s == 7 || s == 9 || s == 17) { skills[s].extra_levels += character.skills_fire_all }
 			if (s < 11) { skills[s].extra_levels += character.skills_elemental
-				if (s == 2) { skills[s].force_levels = character.oskill_Flame_Dash }
 				if (s == 3 || s == 10) { skills[s].extra_levels += character.skills_cold_all }
-				if (s == 5) { skills[s].force_levels = character.skill_Cyclone_Armor }
-				if (s == 9) { skills[s].force_levels = character.skill_Armageddon }
-				if (s == 10) { skills[s].force_levels = character.skill_Hurricane }
 			} else if (s > 20) { skills[s].extra_levels += character.skills_summoning_druid
-				if (s == 21) { skills[s].force_levels = character.skill_Raven }
-				if (s == 23) { skills[s].force_levels = character.skill_Heart_of_Wolverine }
-				if (s == 24) { skills[s].force_levels = character.skill_Spirit_Wolf }
-				if (s == 26) { skills[s].force_levels = character.skill_Oak_Sage }
-				if (s == 27) { skills[s].force_levels = character.skill_Dire_Wolf }
-				if (s == 30) { skills[s].force_levels = character.skill_Grizzly }
 			} else { skills[s].extra_levels += character.skills_shapeshifting
-				if (s == 11) { skills[s].force_levels = character.skill_Werewolf }	// oskill_Werewolf only obtainable by Barbarian?
-				if (s == 12) { skills[s].force_levels = character.oskill_Lycanthropy }
-				if (s == 13) { skills[s].force_levels = character.oskill_Werebear }
-				if (s == 14) { skills[s].force_levels = character.skill_Feral_Rage }
-				if (s == 15) { skills[s].force_levels = character.skill_Maul }
 			}
 		} else if (character.class_name == "Necromancer") {
 			skills[s].extra_levels += character.skills_necromancer
 			if (s < 11) { skills[s].extra_levels += character.skills_summoning_necromancer
-				if (s == 0) { skills[s].force_levels = character.skill_Summon_Mastery }
-				if (s == 4) { skills[s].force_levels = character.skill_Flesh_Offering }
 				if (s == 9) { skills[s].extra_levels += character.skills_fire_all }
 			} else if (s > 19) { skills[s].extra_levels += character.skills_curses
 			} else { skills[s].extra_levels += character.skills_poisonBone
-				if (s == 11) { skills[s].force_levels = character.skill_Deadly_Poison }
-				if (s == 13) { skills[s].force_levels = character.skill_Bone_Armor }
-				if (s == 15) { skills[s].force_levels = character.oskill_Desecrate + character.skill_Desecrate }
-				if (s == 16) { skills[s].force_levels = character.skill_Bone_Spear }
 			}
 		} else if (character.class_name == "Paladin") {
 			skills[s].extra_levels += character.skills_paladin
 			if (s < 10) { skills[s].extra_levels += character.skills_defensive
-				if (s == 6) { skills[s].force_levels = character.skill_Vigor }
 			} else if (s > 19) { skills[s].extra_levels += character.skills_combat_paladin
-				if (s == 23) { skills[s].force_levels = character.oskill_Zeal }
-				if (s == 25) { skills[s].force_levels = character.oskill_Vengeance }
-				if (s == 29) { skills[s].force_levels = character.skill_Fist_of_the_Heavens }
 			} else { skills[s].extra_levels += character.skills_offensive
 				if (s == 11) { skills[s].extra_levels += character.skills_fire_all }
 				if (s == 15) { skills[s].extra_levels += character.skills_cold_all }
-				if (s == 16) { skills[s].force_levels = character.skill_Holy_Shock }
 			}
 		} else if (character.class_name == "Sorceress") {
 			skills[s].extra_levels += character.skills_sorceress
 			if (s < 11) { skills[s].extra_levels += character.skills_cold
 				skills[s].extra_levels += character.skills_cold_all
-				if (s == 1) { skills[s].force_levels = character.oskill_Frigerate }
-				if (s == 4) { skills[s].force_levels = character.oskill_Shiver_Armor }
-				if (s == 5) { skills[s].force_levels = character.skill_Glacial_Spike }
-				if (s == 9) { skills[s].force_levels = character.skill_Frozen_Orb }
-				if (s == 10) { skills[s].force_levels = character.skill_Cold_Mastery + character.oskill_Cold_Mastery}
 			} else if (s > 21) { skills[s].extra_levels += character.skills_fire
 				skills[s].extra_levels += character.skills_fire_all
-				if (s == 22) { skills[s].force_levels = character.skill_Fire_Bolt }
-				if (s == 23) { skills[s].force_levels = character.skill_Warmth }
-				if (s == 24) { skills[s].force_levels = character.skill_Blaze }
-				if (s == 26) { temp = 0; if (character.oskill_Fire_Ball > 0) { temp = Math.min(3, character.oskill_Fire_Ball) }
-					skills[s].force_levels = /*character.skill_Fire_Ball*/ + temp }
-				if (s == 27) { temp = 0; if (character.oskill_Fire_Wall > 0) { temp = Math.min(3, character.oskill_Fire_Wall) }
-					skills[s].force_levels = /*character.skill_Fire_Wall*/ + temp }
-				if (s == 29) { temp = 0; if (character.oskill_Meteor > 0) { temp = Math.min(3, character.oskill_Meteor) }
-					skills[s].force_levels = /*character.skill_Meteor*/ + temp }
-				if (s == 30) { temp = 0; if (character.oskill_Fire_Mastery > 0) { temp = Math.min(3, character.oskill_Fire_Mastery) }
-					skills[s].force_levels = character.skill_Fire_Mastery + temp }
-				if (s == 31) { skills[s].force_levels = character.skill_Hydra }
-			} else { skills[s].extra_levels += character.skills_lightning 
-				if (s == 12) { skills[s].force_levels = character.skill_Static_Field }
-				if (s == 15) { skills[s].force_levels = character.skill_Lightning_Surge }
-				if (s == 19) { skills[s].force_levels = character.skill_Energy_Shield }
-				if (s == 20) { skills[s].force_levels = character.skill_Lightning_Mastery }
+			} else { skills[s].extra_levels += character.skills_lightning
 			}
 		}
 		skills[s].extra_levels += skills[s].force_levels
@@ -1065,26 +968,9 @@ function calculateSkillAmounts() {
 	}
 	calculateSkillPassives(character.class_name)
 	var skillChoices = "";
-//	for (let os = 0; os < oskills.length; os++) {
-//		if (oskills[os].level > 0 || oskills[os].force_levels > 0) { skillChoices += '<option class="gray">'+oskills[os].name+'</option>' }
-//	}
 	for (let s = 0; s < skills.length; s++) {
 		if (skills[s].level > 0 || skills[s].force_levels > 0) { skillChoices += '<option class="gray">'+skills[s].name+'</option>' }
 	}
-
-	// document.getElementById("dropdown_item").onchange = function() {var selected = document.getElementById("dropdown_item").selectedIndex};
-/*
-	if (skillChoices != "") {
-		document.getElementById("dropdown_skill1").innerHTML = '<option class="gray" disabled> ­ ­ ­ ­ Skill 1</option>' + skillChoices;
-		lastSelected = document.getElementById("dropdown_skill1").selectedIndex;
-	}
-	else { document.getElementById("dropdown_skill1").innerHTML = "<option class='gray' disabled selected> ­ ­ ­ ­ Skill 1</option>" + skillChoices }
-	if (skillChoices != "") {
-		document.getElementById("dropdown_skill2").innerHTML = '<option class="gray" disabled> ­ ­ ­ ­ Skill 2</option>' + skillChoices;
-		lastSelected = document.getElementById("dropdown_skill2").selectedIndex;
-	}
-	else { document.getElementById("dropdown_skill2").innerHTML = "<option class='gray' disabled selected> ­ ­ ­ ­ Skill 2</option>" + skillChoices }
-*/
 }
 
 // Updates passive skills
@@ -1381,9 +1267,6 @@ function removeStat(event, stat) {
 // skill: the skill to modify
 // ---------------------------------
 function skillUp(event, skill) {
-    if (event.altKey) {
-	focusSkill(skill, 1)
-    } else {
 	if (typeof(skill.effect) != 'undefined') { if (skill.effect > 3) {
 		if (skill.level == 0 && skill.force_levels == 0 && typeof(effects["e"+skill.key]) == 'undefined') { enableEffect(skill.i) }
 	} }
@@ -1418,19 +1301,15 @@ function skillUp(event, skill) {
 		modifyEffect(skill)
 	} }
 	skillHover(skill)
+    if (skill.bindable > 0 && (old_level == 0 || (old_level > 0 && skill.level == 0 && skill.force_levels == 0))) {
+	updateSkills(skill)
     }
-//    checkSkill(skill)
-//    refreshSkills()
-    updateSkillList(skill, 1)
 }
 
 // Lowers the skill level
 // skill: the skill to modify
 // ---------------------------------
 function skillDown(event, skill) {
-    if (event.altKey) {
-	focusSkill(skill, 2)
-    } else {
 	var old_level = skill.level
 	var levels = 1
 	if (event.shiftKey) { levels = 10 }
@@ -1470,14 +1349,9 @@ function skillDown(event, skill) {
 		modifyEffect(skill)
 	} }
 	skillHover(skill)
-//	if (skill.level == 0 && skill.force_levels == 0) {	//&& document.getElementById("skill3").innerHTML == skill.name
-//		document.getElementById("skill1_info").innerHTML = character.getFocusData(skill)
-//		document.getElementById("skill2_info").innerHTML = character.getFocusData(skill)
-//	}
+    if (skill.bindable > 0 && (old_level == 0 || (old_level > 0 && skill.level == 0 && skill.force_levels == 0))) {
+	updateSkills(skill)
     }
-//    checkSkill(skill)
-//    refreshSkills()
-    updateSkillList(skill, 2)
 }
 
 // Shows skill description tooltip on mouse-over
@@ -1557,149 +1431,28 @@ function showBaseLevels(skill) {
 
 // 
 // ---------------------------------
-function focusSkill(skill, num) {
-	var choices = "";
-	if (num == 1) {
-		for (let k = 0; k < skillList1.length; k++) {
-			var s = k;
-			skillList1[k] = "<option>" + skills[s].name + "</option>"
-			if (skills[s].name == skill.name) { skillList1[k] = "<option selected>" + skills[s].name + "</option>" }
-			choices += skillList1[k];
-			skill1.name = skills[s].name;
-			skill1.details = character.getFocusData(skill);
-		}
-		document.getElementById("dropdown_skill1").innerHTML = choices
-	}
-	if (num == 2) {
-		for (let k = 0; k < skillList2.length; k++) {
-			var s = k;
-			skillList2[k] = "<option>" + skills[s].name + "</option>"
-			if (skills[s].name == skill.name) { skillList2[k] = "<option selected>" + skills[s].name + "</option>" }
-			choices += skillList2[k];
-			skill2.name = skills[s].name;
-			skill2.details = character.getFocusData(skill);
-		}
-		document.getElementById("dropdown_skill1").innerHTML = choices
-	}
-	updateStats()
-	
-//	for (let i = 0; i < skillList.length; i++) {
-//		if (num == 1) { skill1 = skills[s].name }
-//		if (num == 2) { skill2 = skills[s].name }
-//	}
-/*	if (skill.level > 0 || skill.force_levels > 0) {
-		if (document.getElementById("skill"+num+"_info").innerHTML == character.getFocusData(skill)) {
-			if (num == 1) { skill1 = skill; document.getElementById("dropdown_skill1").innerHTML = "<option class='gray' disabled selected>" + skill.name + "</option>" }
-			if (num == 2) { skill2 = skill; document.getElementById("dropdown_skill2").innerHTML = "<option class='gray' disabled selected>" + skill.name + "</option>" }
-		}
-	} else {
-		
-	}
-*/
-}
-
-// 
-// ---------------------------------
-function updateSkillList(skill, num) {
+function updateSkills(skill) {
 	var choices = "";
 	var k = 0;
 	for (let s = 0; s < skills.length; s++) {
 		if (skills[s].bindable > 0 && (skills[s].level > 0 || skills[s].force_levels > 0)) {
-			skillList1[k] = "<option>" + skills[s].name + "</option>"
-			skillList2[k] = "<option>" + skills[s].name + "</option>"
-			if (num == 1 && skill.name == skills[s].name) {
-				skill1.name = skills[s].name
-				skillList1[k] = "<option selected>" + skills[s].name + "</option>"
-			}
-			if (num == 2 && skill.name == skills[s].name) {
-				skill2.name = skills[s].name
-				skillList2[k] = "<option selected>" + skills[s].name + "</option>"
-			}
-			if (num == 1) { choices += skillList1[k] }
-			if (num == 2) { choices += skillList2[k] }
-			k++
+			skillList[k] = skills[s].name
+			skillOptions[k] = "<option>" + skills[s].name + "</option>"
+		} else {
+			skillList[k] = ""
+			skillOptions[k] = ""
 		}
+		choices += skillOptions[k]
+		k++
 	}
-	
-	if (num == 1) {
-		document.getElementById("dropdown_skill1").innerHTML = "<option class='gray' disabled>" + " ­ ­ ­ ­ Skill 1" + "</option>" + choices
-		if (skill1.name == "") {skill1.name = skill.name}
-//		var d = skill1.details;
-//		document.getElementById("ar_skill1").innerHTML = document.getElementById("ar").innerHTML * d.ar_bonus
-	}
-	if (num == 2) {
-		document.getElementById("dropdown_skill2").innerHTML = "<option class='gray' disabled>" + " ­ ­ ­ ­ Skill 2" + "</option>" + choices
-		if (skill2.name == "") {skill2.name = skill.name}
-//		var d = skill2.details;
-//		document.getElementById("ar_skill2").innerHTML = document.getElementById("ar").innerHTML * d.ar_bonus
-	}
-	
-	// TODO: only unselect selected skill when it's zero IF it was already selected
-	
-	if (skill.level == 0 && skill.force_levels == 0 && skill.name == skill1.name) {
-		document.getElementById("dropdown_skill1").innerHTML = "<option class='gray' selected disabled>" + " ­ ­ ­ ­ Skill 1" + "</option>" + choices
-	}
-	if (skill.level == 0 && skill.force_levels == 0 && skill.name == skill2.name) {
-		document.getElementById("dropdown_skill2").innerHTML = "<option class='gray' selected disabled>" + " ­ ­ ­ ­ Skill 2" + "</option>" + choices
-	}
-
-	// TODO: don't refresh if a skill is selected?
-//	if (skill1 != "") { document.getElementById("dropdown_skill1").innerHTML = "<option class='gray' disabled>" + skill1.name + "</option>" + choices }
-//	else { document.getElementById("dropdown_skill1").innerHTML = "<option class='gray' disabled> ­ ­ ­ ­ Skill 1</option>" + choices }
-//	if (skill2 != "") { document.getElementById("dropdown_skill2").innerHTML = "<option class='gray' disabled>" + skill2.name + "</option>" + choices }
-//	else { document.getElementById("dropdown_skill2").innerHTML = "<option class='gray' disabled> ­ ­ ­ ­ Skill 2</option>" + choices }
+	document.getElementById("dropdown_skill1").innerHTML = "<option class='gray' disabled>" + " ­ ­ ­ ­ Skill 1" + "</option>" + choices
+	document.getElementById("dropdown_skill2").innerHTML = "<option class='gray' disabled>" + " ­ ­ ­ ­ Skill 2" + "</option>" + choices
 	updateStats()
-
 }
 
 // 
 // ---------------------------------
-function checkSkill(skill) {
-	var display1 = "";
-	var display2 = "";
-/*	var num = 1;
-	lastSelected = document.getElementById("dropdown_skill"+num).selectedIndex
-	
-	if (typeof(active[skill.name]) != 'undefined' || active[skill.name] == "") {
-		if (skill.level == 0 && skill.force_levels == 0) {
-			active[skill.name] = ""
-		}
-	} else {
-		if (skill.level > 0 || skill.force_levels > 0) {
-			active[skill.name] = skill.level
-			focusSkill(skill, num)
-		}
-	}
-	document.getElementById("skill1_info").innerHTML = character.getFocusData(skill)
-	document.getElementById("skill2_info").innerHTML = character.getFocusData(skill)
-*/
-/*
-	var sum1 = "";
-	var sum2 = "";
-	var affixes1 = character.getFocusData(skill)
-	var affixes2 = character.getFocusData(skill)
-	for (affix in affixes1) {
-		sum1 += affixes1[affix] + " "
-	}
-	for (affix in affixes2) {
-		sum2 += affixes2[affix] + " "
-	}
-	var skill1 = document.getElementById("dropdown_skill1").innerHTML;
-	var skill2 = document.getElementById("dropdown_skill2").innerHTML;
-	document.getElementById("skill1_info").innerHTML = sum1
-	document.getElementById("skill2_info").innerHTML = sum2
-	
-	
-	document.getElementById("f4").innerHTML = sum1
-	document.getElementById("c4").innerHTML = sum2
-	document.getElementById("l4").innerHTML = skill1
-	document.getElementById("p4").innerHTML = skill2
-*/
-
-// TODO: Replace with skill damage calculations
-// 	1. Create functions to get this data, so it can be called from class javascript files
-//	2. Modify getFocusData() to use this data when calculating the actual damage
-/*
+function checkSkill(skillName, num) {
 	var c = character;
 	var strTotal = (c.strength + c.all_attributes + (c.level-1)*c.strength_per_level);
 	var dexTotal = (c.dexterity + c.all_attributes + (c.level-1)*c.dexterity_per_level);
@@ -1723,50 +1476,21 @@ function checkSkill(skill) {
 		else if (weaponType == "claw") { weapon_skillup = c.claw_skillup[0]; c.ar_skillup = c.claw_skillup[1]; c.cstrike_skillup = c.claw_skillup[2]; }
 		else { weapon_skillup = 0; c.ar_skillup = 0; c.cstrike_skillup = 0; c.pierce_skillup = 0; }
 	}
-	var ar_addon = (dexTotal-c.starting_dexterity)*c.ar_per_dexterity;
-	var defense_addon = (dexTotal-c.starting_dexterity)*c.defense_per_dexterity;
-	var life_addon = (vitTotal-c.starting_vitality)*c.life_per_vitality;
-	var stamina_addon = (vitTotal-c.starting_vitality)*c.stamina_per_vitality;
-	var mana_addon = (energyTotal-c.starting_energy)*c.mana_per_energy;
-	
-	var def_items = 0;
-	for (type in equipped) { def_items += Math.floor(~~equipped[type]["base_defense"] + ~~equipped[type]["defense"]) }
-	var def = Math.floor((def_items + dexTotal/4) * (1 + (c.defense_bonus + c.defense_skillup)/100) + (c.level-1)*c.defense_per_level);
-	
 	var ar = Math.floor((((dexTotal - 7) * 5 + c.ar + (c.level-1)*c.ar_per_level + c.ar_const)/2) * (1+(c.ar_skillup + c.ar_bonus + c.level*c.ar_bonus_per_level)/100) * (1+c.ar_shrine_bonus/100));
-	
-	var wisp = 1+Math.round(c.wisp/20,0)/10
-	var phys_min = ((1+statBonus+(c.e_damage+c.damage_bonus+weapon_skillup)/100)*((c.level-1)*c.min_damage_per_level+c.base_damage_min))+c.damage_min;
-	var phys_max = ((1+statBonus+(c.e_damage+c.damage_bonus+weapon_skillup)/100)*((c.level-1)*c.max_damage_per_level+c.base_damage_max))+c.damage_max;
-	
-	var basic_min = Math.floor(wisp*(phys_min + c.fDamage_min + c.cDamage_min + c.lDamage_min) + c.mDamage_min);
-	var basic_max = Math.floor(wisp*(phys_max + c.fDamage_max + c.cDamage_max + c.lDamage_max) + c.mDamage_max + wisp*(c.pDamage_all+c.pDamage_max));
-	if (basic_min > 0 || basic_max > 0) {
-		document.getElementById("basic_attack").innerHTML = basic_min + "-" + basic_max //}
-	//	else { document.getElementById("basic_attack").innerHTML = "" }
-		document.getElementById("skill1_info").innerHTML = ": " + character.getFocusData(skill)
-		document.getElementById("skill2_info").innerHTML = ": " + character.getFocusData(skill)
-	}
-*/
-}
+	var wisp = 1+~~Math.round(c.wisp/20,0)/10
+	var phys_min = Math.floor(wisp*(((1+statBonus+(c.e_damage+c.damage_bonus+weapon_skillup)/100)*((c.level-1)*c.min_damage_per_level+c.base_damage_min))+c.damage_min));
+	var phys_max = Math.floor(wisp*(((1+statBonus+(c.e_damage+c.damage_bonus+weapon_skillup)/100)*((c.level-1)*c.max_damage_per_level+c.base_damage_max))+c.damage_max));
+	var ele_min = Math.floor(wisp*(c.fDamage_min*(c.fDamage+c.fDamage_skillup) + c.cDamage_min*(c.cDamage+c.cDamage_skillup) + c.lDamage_min*(c.lDamage+c.lDamage_skillup)));
+	var ele_max = Math.floor(wisp*(c.fDamage_max*(c.fDamage+c.fDamage_skillup) + c.cDamage_max*(c.cDamage+c.cDamage_skillup) + c.lDamage_max*(c.lDamage+c.lDamage_skillup) + (c.pDamage_all+c.pDamage_max)*c.pDamage));
 
-// Refreshes the list of skills available from the dropdown menus
-// Called by SkillUp() and SkillDown()
-// ---------------------------------
-function refreshSkills() {
-/*	var choices = "";
-	for (s = 0; s < skills.length; s++) {
-		if (skills[s].level > 0 || skills[s].force_levels > 0) {
-			choices += "<option>" + skills[s].name + "</option>" 
+	var skill = "";
+	for (let s = 0; s < skills.length; s++) {
+		if (skills[s].name == skillName) { 
+			skill = skills[s]
 		}
 	}
-	// TODO: don't refresh if a skill is selected?
-	if (skill1 != "") { document.getElementById("dropdown_skill1").innerHTML = "<option class='gray' disabled selected>" + skill1.name + "</option>" + choices }
-	else { document.getElementById("dropdown_skill1").innerHTML = "<option class='gray' disabled selected> ­ ­ ­ ­ Skill 1</option>" + choices }
-	if (skill2 != "") { document.getElementById("dropdown_skill2").innerHTML = "<option class='gray' disabled selected>" + skill2.name + "</option>" + choices }
-	else { document.getElementById("dropdown_skill2").innerHTML = "<option class='gray' disabled selected> ­ ­ ­ ­ Skill 2</option>" + choices }
-*/
-}
+	c.getFocusData(skill, num, ar, phys_min, phys_max, ele_min, ele_max, c.mDamage_min, c.mDamage_max, wisp);
+}	
 
 // num: number to round
 // return: rounded number (no decimals if above 33 or ending in ".0")

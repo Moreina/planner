@@ -3,100 +3,111 @@
 var weapon_frames = {dagger:12, oneHand_sword:13, oneHand_axe:13, twoHand_sword:17, twoHand_axe:17, staff:17, polearm:17, oneHand_mace:13, scepter:13, wand:13, twoHand_mace:20, javelin:15, spear:15, bow:13, crossbow:19}
 
 var character_amazon = {class_name:"Amazon", strength:20, dexterity:25, vitality:20, energy:15, life:50, mana:15, defense:6, ar:100, stamina:184, levelup_life:2.5, levelup_stamina:1, levelup_mana:1.5, ar_per_dexterity:5, defense_per_dexterity:0.25, life_per_vitality:3, stamina_per_vitality:1, mana_per_energy:1.5, starting_strength:20, starting_dexterity:25, starting_vitality:20, starting_energy:15, ar_const:10, skill_layout:"./images/amazon.png", tab1:"Javelins & Spears", tab2:"Passives", tab3:"Bows & Crossbows",
+	
+	// 
+	// ---------------------------------
 	updateSkill : function(skill, lvl, elem) {
-	var result = skill.data.values[elem][lvl];
-	var wisp = (1+Math.round(character.wisp/20,0)/10);
-	
-	if (skill.name == "Poison Javelin" && elem < 2) { 		result *= ((1 + 0.15*skills[6].level + 0.02*(character.dexterity + character.all_attributes + character.level*character.dexterity_per_level)) * (1+character.pDamage/100) * wisp) }
-	if (skill.name == "Plague Javelin" && elem > 0 && elem < 3) { 	result *= ((1 + (0.22*skills[2].level)) * (1+character.pDamage/100) * wisp) }
-	if (skill.name == "Power Strike" && elem > 0 && elem < 3) { 	result *= ((1 + (0.20*skills[5].level + 0.20*skills[8].level)) * (1+character.lDamage/100) * wisp) }
-	if (skill.name == "Lightning Bolt" && elem < 2) { 		result *= ((1 + (0.12*skills[1].level + 0.12*skills[9].level)) * (1+character.lDamage/100) * wisp) }
-	if (skill.name == "Charged Strike" && elem > 0 && elem < 3) { 	result *= ((1 + (0.20*skills[1].level + 0.20*skills[8].level)) * (1+character.lDamage/100) * wisp) }
-	if (skill.name == "Lightning Strike" && elem > 0 && elem < 3) { result *= ((1 + (0.15*skills[1].level + 0.15*skills[5].level)) * (1+character.lDamage/100) * wisp) }
-	if (skill.name == "Lightning Fury" && elem > 0 && elem < 3) { 	result *= ((1 + (0.06*skills[4].level)) * (1+character.lDamage/100) * wisp) }
-	
-	if (skill.name == "Decoy" && elem == 0) { 			result = Math.max(1, skills[22].level) }
-	if (skill.name == "Decoy" && elem < 3 && elem > 0) { 		result = 1 }
-	if (skill.name == "Valkyrie" && elem < 2) { 			result *= (1 + (0.20*skills[1].level + 0.20*skills[8].level)) }
-	if (skill.name == "Valkyrie" && elem > 1 && elem < 4) { 	result *= (1 + (0.18*skills[0].level)) }
-	
-	if (skill.name == "Cold Arrow" && elem > 0 && elem < 3) { 	result *= ((1 + (0.12*skills[24].level)) * (1+character.cDamage/100) * wisp) }
-	if (skill.name == "Ice Arrow" && elem < 2) { 			result *= ((1 + (0.10*skills[20].level)) * (1+character.cDamage/100) * wisp) }
-	if (skill.name == "Ice Arrow" && elem == 2) { 			result *= (1 + (0.05*skills[29].level)) }
-	if (skill.name == "Freezing Arrow" && elem < 2) { 		result *= ((1 + (0.21*skills[20].level + 0.02*skills[24].level)) * (1+character.cDamage/100) * wisp) }
-	if (skill.name == "Freezing Arrow" && elem == 2) { 		result = (2 * (1 + 0.05*skills[24].level)) }
-	if (skill.name == "Fire Arrow" && (elem == 1 || elem == 2 || elem == 4 || elem == 5)) { result *= ((1 + (0.12*skills[26].level)) * (1+character.fDamage/100) * wisp) }
-	if (skill.name == "Exploding Arrow" && elem < 2) { 		result *= ((1 + (0.20*skills[21].level + 0.20*skills[23].level)) * (1+character.fDamage/100) * wisp) }
-	if (skill.name == "Immolation Arrow" && elem < 2) { 		result *= ((1 + (0.15*skills[26].level)) * (1+character.fDamage/100) * wisp) }
-	if (skill.name == "Immolation Arrow" && elem > 1 && elem < 4) { result *= ((1 + (0.16*skills[23].level)) * (1+character.fDamage/100) * wisp) }
-return result
-},
-	
-	//getBuffData : function(effect, selfbuff) {
-	getBuffData : function(effect) {
-	var skill = skills[effect.skill]
-	var lvl = skill.level + skill.extra_levels;
-	var result = {};
-	
-	if (skill.name == "Phase Run") { result.fhr = 30; result.frw = 30; }
-	
-return result
-},
-/*
-	skillFocus : function(skill) {
-		var lvl = skill.level+skill.extra_levels;
-		var result = {};
-		if (skill.name = "Fend") {
-		//	result = { ar_bonus:updateSkill(skill, lvl, 0), damage_bonus:updateSkill(skill, lvl, 1) }
-			result = ~~updateSkill(skill, lvl, 0)
-	}
-return result
-},
-*/		
-	getFocusData : function(skill) {
-	var lvl = skill.level+skill.extra_levels;
-	var result = {};
-	
-//	if (skill.name = "Jab") { 		result = { ar_bonus:updateSkill(skill, lvl, 0), damage_bonus:updateSkill(skill, lvl, 1) } }
-	if (skill.name = "Power Strike") { 	result = { ar_bonus:updateSkill(skill, lvl, 0), lDamage_min:updateSkill(skill, lvl, 1), lDamage_max:updateSkill(skill, lvl, 2) } }
-	if (skill.name = "Poison Javelin") {	result = { pDamage_min:updateSkill(skill, lvl, 0), pDamage_max:updateSkill(skill, lvl, 1), pDamage_duration:5 } }
-	if (skill.name = "Fend") { 		result = { ar_bonus:updateSkill(skill, lvl, 0), damage_bonus:updateSkill(skill, lvl, 1) } }
-	if (skill.name = "Lightning Bolt") {	result = { lDamage_min:updateSkill(skill, lvl, 0), lDamage_max:updateSkill(skill, lvl, 1) } }
-	if (skill.name = "Charged Strike") {	result = { lDamage_min:updateSkill(skill, lvl, 1), lDamage_max:updateSkill(skill, lvl, 2) } }
-	if (skill.name = "Plague Javelin") {	result = { ar_bonus:updateSkill(skill, lvl, 0), pDamage_min:updateSkill(skill, lvl, 1), pDamage_max:updateSkill(skill, lvl, 2), pDamage_duration:5 } }
-//	if (skill.name = "Ground Slam") { 	result = { damage_bonus:-15 } }
-	if (skill.name = "Lightning Strike") {	result = { lDamage_min:updateSkill(skill, lvl, 1), lDamage_max:updateSkill(skill, lvl, 2) } }
-	if (skill.name = "Lightning Fury") {	result = { lDamage_min:updateSkill(skill, lvl, 1), lDamage_max:updateSkill(skill, lvl, 2) } }
-	
-//	if (skill.name = "Phase Run") {		result = { } }
-//	if (skill.name = "Decoy") {		result = { } }	// cannot be bound to left click
-//	if (skill.name = "Valkyrie") {		result = { } }	// cannot be bound to left click
-		// Inner Sight - not bindable
-		// Lethal Strike - not bindable
-		// Dodge - not bindable
-		// Avoid - not bindable
-		// Penetrate - not bindable
-		// Evade - not bindable
-		// Pierce - not bindable
+		var result = skill.data.values[elem][lvl];
+		var wisp = (1+Math.round(character.wisp/20,0)/10);
 		
-	if (skill.name = "Cold Arrow") {	result = { cDamage_min:updateSkill(skill, lvl, 0), cDamage_max:updateSkill(skill, lvl, 1) } }
-	if (skill.name = "Magic Arrow") {	result = { mDamage_min:updateSkill(skill, lvl, 0), mDamage_max:updateSkill(skill, lvl, 1) } }
-	if (skill.name = "Multiple Shot") {	result = { damage_min:updateSkill(skill, lvl, 0), damage_max:updateSkill(skill, lvl, 1) } }
-//	if (skill.name = "Fire Arrow") {	result = { fDamage_min:updateSkill(skill, lvl, 0), fDamage_max:updateSkill(skill, lvl, 1), ar_bonus:updateSkill(skill, lvl 2), fDamage_min:updateSkill(skill, lvl, 3), fDamage_max:updateSkill(skill, lvl, 4) } }
-	if (skill.name = "Ice Arrow") {		result = { cDamage_min:updateSkill(skill, lvl, 0), cDamage_max:updateSkill(skill, lvl, 1) } }
-	if (skill.name = "Guided Arrow") {	result = { damage_bonus:150 } }
-	if (skill.name = "Exploding Arrow") {	result = { fDamage_min:updateSkill(skill, lvl, 0), fDamage_max:updateSkill(skill, lvl, 1) } }
-	if (skill.name = "Strafe") {		result = { damage_min:updateSkill(skill, lvl, 0), damage_max:updateSkill(skill, lvl, 1), damage_bonus:updateSkill(skill, lvl, 3) } }
-	if (skill.name = "Immolation Arrow") {	result = { fDamage_min:updateSkill(skill, lvl, 0), fDamage_max:updateSkill(skill, lvl, 1), fDamage_min:updateSkill(skill, lvl, 3), fDamage_max:updateSkill(skill, lvl, 4) } }
-	if (skill.name = "Freezing Arrow") {	result = { cDamage_min:updateSkill(skill, lvl, 0), cDamage_max:updateSkill(skill, lvl, 1) } }
+		if (skill.name == "Poison Javelin" && elem < 2) { 		result *= ((1 + 0.15*skills[6].level + 0.02*(character.dexterity + character.all_attributes + character.level*character.dexterity_per_level)) * (1+character.pDamage/100) * wisp) }
+		if (skill.name == "Plague Javelin" && elem > 0 && elem < 3) { 	result *= ((1 + (0.22*skills[2].level)) * (1+character.pDamage/100) * wisp) }
+		if (skill.name == "Power Strike" && elem > 0 && elem < 3) { 	result *= ((1 + (0.20*skills[5].level + 0.20*skills[8].level)) * (1+character.lDamage/100) * wisp) }
+		if (skill.name == "Lightning Bolt" && elem < 2) { 		result *= ((1 + (0.12*skills[1].level + 0.12*skills[9].level)) * (1+character.lDamage/100) * wisp) }
+		if (skill.name == "Charged Strike" && elem > 0 && elem < 3) { 	result *= ((1 + (0.20*skills[1].level + 0.20*skills[8].level)) * (1+character.lDamage/100) * wisp) }
+		if (skill.name == "Lightning Strike" && elem > 0 && elem < 3) { result *= ((1 + (0.15*skills[1].level + 0.15*skills[5].level)) * (1+character.lDamage/100) * wisp) }
+		if (skill.name == "Lightning Fury" && elem > 0 && elem < 3) { 	result *= ((1 + (0.06*skills[4].level)) * (1+character.lDamage/100) * wisp) }
+		
+		if (skill.name == "Decoy" && elem == 0) { 			result = Math.max(1, skills[22].level) }
+		if (skill.name == "Decoy" && elem < 3 && elem > 0) { 		result = 1 }
+		if (skill.name == "Valkyrie" && elem < 2) { 			result *= (1 + (0.20*skills[1].level + 0.20*skills[8].level)) }
+		if (skill.name == "Valkyrie" && elem > 1 && elem < 4) { 	result *= (1 + (0.18*skills[0].level)) }
+		
+		if (skill.name == "Cold Arrow" && elem > 0 && elem < 3) { 	result *= ((1 + (0.12*skills[24].level)) * (1+character.cDamage/100) * wisp) }
+		if (skill.name == "Ice Arrow" && elem < 2) { 			result *= ((1 + (0.10*skills[20].level)) * (1+character.cDamage/100) * wisp) }
+		if (skill.name == "Ice Arrow" && elem == 2) { 			result *= (1 + (0.05*skills[29].level)) }
+		if (skill.name == "Freezing Arrow" && elem < 2) { 		result *= ((1 + (0.21*skills[20].level + 0.02*skills[24].level)) * (1+character.cDamage/100) * wisp) }
+		if (skill.name == "Freezing Arrow" && elem == 2) { 		result = (2 * (1 + 0.05*skills[24].level)) }
+		if (skill.name == "Fire Arrow" && (elem == 1 || elem == 2 || elem == 4 || elem == 5)) { result *= ((1 + (0.12*skills[26].level)) * (1+character.fDamage/100) * wisp) }
+		if (skill.name == "Exploding Arrow" && elem < 2) { 		result *= ((1 + (0.20*skills[21].level + 0.20*skills[23].level)) * (1+character.fDamage/100) * wisp) }
+		if (skill.name == "Immolation Arrow" && elem < 2) { 		result *= ((1 + (0.15*skills[26].level)) * (1+character.fDamage/100) * wisp) }
+		if (skill.name == "Immolation Arrow" && elem > 1 && elem < 4) { result *= ((1 + (0.16*skills[23].level)) * (1+character.fDamage/100) * wisp) }
+	return result
+	},
 	
-	// Attack
-	// Throw
-	// Move Only
-	// Unsummon	// cannot be bound to left click
+	// 
+	// ---------------------------------
+	getBuffData : function(effect) {
+		var skill = skills[effect.skill]
+		var lvl = skill.level + skill.extra_levels;
+		var result = {};
+		
+		if (skill.name == "Phase Run") { result.fhr = 30; result.frw = 30; }
+	return result
+	},
 	
-	for (affix in result) { active[affix] = result[affix] }
-return result	}
+	// 
+	// ---------------------------------
+	getFocusData : function(skill, num, ar, phys_min, phys_max, ele_min, ele_max, mag_min, mag_max, wisp) {
+		var lvl = skill.level+skill.extra_levels;
+		var ar_bonus = 0; var damage_bonus = 100;
+		var damage_min = 0; var damage_max = 0;
+		var fDamage_min = 0; var fDamage_max = 0;
+		var cDamage_min = 0; var cDamage_max = 0;
+		var lDamage_min = 0; var lDamage_max = 0;
+		var pDamage_min = 0; var pDamage_max = 0; var pDamage_duration = 0;
+		var mDamage_min = 0; var mDamage_max = 0;
+		var skillMin = ""; var skillMax = ""; var skillAr = "";
+		var spell = 0;
+
+		if (skill.name == "Jab") { 			ar_bonus = character.updateSkill(skill, lvl, 0); damage_bonus = 100+character.updateSkill(skill, lvl, 1); }
+		else if (skill.name == "Power Strike") { 	ar_bonus = character.updateSkill(skill, lvl, 0); damage_bonus = 100; lDamage_min = character.updateSkill(skill, lvl, 1); lDamage_max = character.updateSkill(skill, lvl, 2); }
+		else if (skill.name == "Poison Javelin") {	pDamage_min = character.updateSkill(skill, lvl, 0); pDamage_max = character.updateSkill(skill, lvl, 1); pDamage_duration = 5; spell = 1; }
+		else if (skill.name == "Fend") { 		ar_bonus = character.updateSkill(skill, lvl, 0); damage_bonus = 125+character.updateSkill(skill, lvl, 1); }
+		else if (skill.name == "Lightning Bolt") {	lDamage_min = phys_min+character.updateSkill(skill, lvl, 0); lDamage_max = phys_max+character.updateSkill(skill, lvl, 1); spell = 1; }
+		else if (skill.name == "Charged Strike") {	lDamage_min = character.updateSkill(skill, lvl, 1); lDamage_max = character.updateSkill(skill, lvl, 2); spell = 1; }
+		else if (skill.name == "Plague Javelin") {	ar_bonus = character.updateSkill(skill, lvl, 0); pDamage_min = character.updateSkill(skill, lvl, 1); pDamage_max = character.updateSkill(skill, lvl, 2); pDamage_duration = 5 }
+		else if (skill.name == "Ground Slam") { 	damage_bonus = 85 }
+		else if (skill.name == "Lightning Strike") {	lDamage_min = character.updateSkill(skill, lvl, 1); lDamage_max = character.updateSkill(skill, lvl, 2); spell = 1; }
+		else if (skill.name == "Lightning Fury") {	lDamage_min = character.updateSkill(skill, lvl, 1); lDamage_max = character.updateSkill(skill, lvl, 2); spell = 1; }
+		
+		// Phase Run
+		// Decoy
+		// Valkyrie
+		
+		else if (skill.name == "Cold Arrow") {		cDamage_min = character.updateSkill(skill, lvl, 0); cDamage_max = character.updateSkill(skill, lvl, 1); }
+		else if (skill.name == "Magic Arrow") {		mDamage_min = character.updateSkill(skill, lvl, 0); mDamage_max = character.updateSkill(skill, lvl, 1); }
+		else if (skill.name == "Multiple Shot") {	damage_min = character.updateSkill(skill, lvl, 0); damage_max = character.updateSkill(skill, lvl, 1); }
+		else if (skill.name == "Fire Arrow") {		fDamage_min = character.updateSkill(skill, lvl, 0); fDamage_max = character.updateSkill(skill, lvl, 1); ar_bonus = character.updateSkill(skill, lvl, 2); fDamage_min = character.updateSkill(skill, lvl, 3); fDamage_max = character.updateSkill(skill, lvl, 4); }
+		else if (skill.name == "Ice Arrow") {		cDamage_min = character.updateSkill(skill, lvl, 0); cDamage_max = character.updateSkill(skill, lvl, 1); }
+		else if (skill.name == "Guided Arrow") {	damage_bonus = 150+character.updateSkill(skill, lvl, 0); }
+		else if (skill.name == "Exploding Arrow") {	fDamage_min = character.updateSkill(skill, lvl, 0); fDamage_max = character.updateSkill(skill, lvl, 1); }
+		else if (skill.name == "Strafe") {		damage_min = character.updateSkill(skill, lvl, 0); damage_max = character.updateSkill(skill, lvl, 1); damage_bonus = character.updateSkill(skill, lvl, 3); }
+		else if (skill.name == "Immolation Arrow") {	fDamage_min = character.updateSkill(skill, lvl, 0); fDamage_max = character.updateSkill(skill, lvl, 1); fDamage_min = character.updateSkill(skill, lvl, 3); fDamage_max = character.updateSkill(skill, lvl, 4); }
+		else if (skill.name == "Freezing Arrow") {	cDamage_min = character.updateSkill(skill, lvl, 0); cDamage_max = character.updateSkill(skill, lvl, 1); }
+		else { spell = 2; }
+
+		ele_min += Math.floor(wisp*(fDamage_min*(c.fDamage+c.fDamage_skillup)+cDamage_min*(c.cDamage+c.cDamage_skillup)+lDamage_min*(c.lDamage+c.lDamage_skillup)))
+		ele_max += Math.floor(wisp*(fDamage_max*(c.fDamage+c.fDamage_skillup)+cDamage_max*(c.cDamage+c.cDamage_skillup)+lDamage_max*(c.lDamage+c.lDamage_skillup)+pDamage_max*c.pDamage))
+		phys_min = Math.floor((phys_min*damage_bonus/100) + (wisp*damage_min*damage_bonus/100))
+		phys_max = Math.floor((phys_max*damage_bonus/100) + (wisp*damage_max*damage_bonus/100))
+		
+		if (spell == 0) {
+			skillMin = Math.floor(mag_min+ele_min+phys_min); skillMax = Math.floor(mag_max+ele_max+phys_max); skillAr = Math.floor(ar*(1+ar_bonus/100));
+		} else if (spell == 1) {	// no attack rating
+			skillMin = Math.floor(mag_min+ele_min+phys_min); skillMax = Math.floor(mag_max+ele_max+phys_max); skillAr = ""
+		} else if (spell == 2) {	// not damaging
+			skillMin = ""; skillMax = ""; skillAr = "";
+		}
+		
+		if (num == 1) {
+			document.getElementById("skill1_info").innerHTML = ": " + skillMin + " - " + skillMax
+			document.getElementById("ar_skill1").innerHTML = "AR: " + skillAr
+		} else if (num == 2) {
+			document.getElementById("skill2_info").innerHTML = ": " + skillMin + " - " + skillMax
+			document.getElementById("ar_skill2").innerHTML = "AR: " + skillAr
+		}
+	}
 };
 
 /*[ 0] Jab		*/ var d111 = {index:[0,""], values:[["attack rating",40,50,60,70,80,90,100,110,120,130,140,150,160,170,180,190,200,210,220,230,240,250,260,270,280,290,300,310,320,330,340,350,360,370,380,390,400,410,420,430,440,450,460,470,480,490,500,510,520,530,540,550,560,570,580,590,600,610,620,630], ["damage",30,36,42,48,54,60,66,72,78,84,90,96,102,108,114,120,126,132,138,144,150,156,162,168,174,180,186,192,198,204,210,216,222,228,234,240,246,252,258,264,270,276,282,288,294,300,306,312,318,324,330,336,342,348,354,360,366,372,378,384], ["mana cost",2,2.2,2.5,2.7,3,3.2,3.5,3.7,4,4.2,4.5,4.7,5,5.2,5.5,5.7,6,6.2,6.5,6.7,7,7.2,7.5,7.7,8,8.2,8.5,8.7,9,9.2,9.5,9.7,10,10.2,10.5,10.7,11,11.2,11.5,11.7,12,12.2,12.5,12.7,13,13.2,13.5,13.7,14,14.2,14.5,14.7,15,15.2,15.5,15.7,16,16.2,16.5,16.7]]};
@@ -133,36 +144,36 @@ return result	}
 /*[29] Freezing Arrow	*/ var d361 = {index:[0,""], values:[["cold min",40,55,70,85,100,115,130,144,165,185,205,225,244,265,285,305,330,352,376,401,424,448,475,501,526,553,578,605,635,665,695,725,755,785,815,845,875,905,935,965,995,1025,1055,1085,1115,1145,1175,1205,1235,1265,1295,1325,1355,1385,1415,1445,1475,1505,1535,1565], ["cold max",50,65,80,95,110,125,40,155,175,195,215,235,255,275,295,315,340,362,387,411,435,459,484,511,536,563,588,615,645,675,705,735,765,795,825,855,885,915,945,975,1005,1035,1065,1095,1125,1155,1185,1215,1245,1275,1305,1335,1365,1395,1425,1455,1485,1515,1545,1575], ["freeze length"], ["mana cost",8,8.2,8.5,8.7,9,9.2,9.5,9.7,10,10.2,10.5,10.7,11,11.2,11.5,11.7,12,12.2,12.5,12.7,13,13.2,13.5,13.7,14,14.2,14.5,14.7,15,15.2,15.5,15.7,16,16.2,16.5,16.7,17,17.2,17.5,17.7,18,18.2,18.5,18.7,19,19.2,19.5,19.7,20,20.2,20.5,20.7,21,21.2,21.5,21.7,22,22.2,22.5,22.7]]};
 
 var skills_amazon = [
-{data:d111, key:"111", name:"Jab", level:0, i:0, req:[], reqlvl:1, extra_levels:0, force_levels:0, bindable:2, style:"display: block; top: 82px; left: 2px;", description:"Attacks with a series of rapid thrusts<br>using a javelin or spear class weapon<br><br>Deals 100% of Weapon Damage<br>Attacks three times", syn_title:"", syn_text:"", graytext:"", text:["Attack Rating: +"," percent<br>Damage: +"," percent<br>Mana Cost: ",""]},
-{data:d122, key:"122", name:"Power Strike", i:1, req:[0], reqlvl:6, level:0, extra_levels:0, force_levels:0, bindable:2, style:"display: block; top: 150px; left: 72px;", description:"Adds lightning damage to attacks with<br>javelin and spear class weapons<br><br>Deals 100% of Weapon Damage", syn_title:"<br>Power Strike Receives Bonuses From:<br>", syn_text:"Charged Strike: +20% Lightning Damage per Level<br>Lightning Strike: +20% Lightning Damage per Level", graytext:"", text:["To Attack Rating: +"," percent<br>Lightning Damage: ","-","<br>Mana Cost: ",""]},
-{data:d123, key:"123", name:"Poison Javelin", i:2, req:[], reqlvl:6, level:0, extra_levels:0, force_levels:0, bindable:2, style:"display: block; top: 150px; left: 142px;", description:"Magically enhances your javelin<br>to leave a trail of poison clouds", syn_title:"<br>Poison Javelin Receives Bonuses From:<br>", syn_text:"Plague Javelin: +15% Poison Damage per Level<br>2% Increased Poison Damage per Dexterity<br>+2 Additional Javelins While Having 100+ Total Dexterity", graytext:"", text:["Poison Damage: ","-","<br>over 5 seconds<br>Mana Cost: ",""]},
-{data:d131, key:"131", name:"Fend", i:3, req:[0], reqlvl:12, level:0, extra_levels:0, force_levels:0, bindable:2, style:"display: block; top: 218px; left: 2px;", description:"Attacks all adjacent targets<br><br>Deals 125% of Weapon Damage<br>Attacks up to twelve times", syn_title:"", syn_text:"", graytext:"", text:["Attack Rating: +"," percent<br>Damage: +"," percent<br>Mana Cost: 5",""]},
-{data:d133, key:"133", name:"Lightning Bolt", i:4, req:[1,2,0], reqlvl:12, level:0, extra_levels:0, force_levels:0, bindable:2, style:"display: block; top: 218px; left: 142px;", description:"Magically converts your javelin into a bolt of lightning<br><br>Deals 100% of Weapon Damage<br>100% of Physical Damage converted to Lightning", syn_title:"<br>Lightning Bolt Receives Bonuses From:<br>", syn_text:"Lightning Fury: +12% Lightning Damage per Level<br>Power Strike: +12% Lightning Damage per Level", graytext:"", text:["Lightning Damage: ","-","<br>Mana Cost: ",""]},
-{data:d142, key:"142", name:"Charged Strike", i:5, req:[1,0], reqlvl:18, level:0, extra_levels:0, force_levels:0, bindable:2, style:"display: block; top: 286px; left: 72px;", description:"Adds lightning damage to javelin and spear class weapons<br>and releases charged bolts upon impact", syn_title:"<br>Charged Strike Receives Bonuses From:<br>", syn_text:"Power Strike: +20% Lightning Damage per Level<br>Lightning Strike: +20% Lightning Damage per Level", graytext:"", text:["Releases "," charged bolts<br>Lightning Damage: ","-","<br>Mana Cost: ",""]},
-{data:d143, key:"143", name:"Plague Javelin", i:6, req:[4,1,0], reqlvl:18, level:0, extra_levels:0, force_levels:0, bindable:2, style:"display: block; top: 286px; left: 142px;", description:"Magically enhances your javelin to release<br>expanding clouds of poison upon impact", syn_title:"<br>Plague Javelin Receives Bonuses From:<br>", syn_text:"Poison Javelin: +22% Poison Damage per Level", graytext:"", text:["Attack Rating: +"," percent<br>Poison Damage: ","-","<br>over 5 seconds<br>Mana Cost: ",""]},
-{data:d151, key:"151", name:"Ground Slam", i:7, req:[3,0], reqlvl:24, level:0, extra_levels:0, force_levels:0, bindable:2, style:"display: block; top: 354px; left: 2px;", description:"Forcefully drive your spear into the eart<br>creating fissures that explode on impact<br><br>Waves: 3<br>Deals 85% of Weapon Damage", syn_title:"", syn_text:"", graytext:"", text:["+","% increased explosion size<br>Mana Cost: ",""]},
-{data:d162, key:"162", name:"Lightning Strike", i:8, req:[5,1,0], reqlvl:30, level:0, extra_levels:0, force_levels:0, bindable:2, style:"display: block; top: 422px; left: 72px;", description:"Adds lightning damage to javelin and spear class weapons<br>and releases chain lightning upon impact", syn_title:"<br>Lightning Strike Receives Bonuses From:<br>", syn_text:"Power Strike: +15% Lightning Damage per Level<br>Charged Strike: +15% Lightning Damage per Level", graytext:"", text:[""," hits<br>Lightning Damage: ","-","<br>Mana Cost: 9",""]},
-{data:d163, key:"163", name:"Lightning Fury", i:9, req:[6,4,1,0], reqlvl:30, level:0, extra_levels:0, force_levels:0, bindable:2, style:"display: block; top: 422px; left: 142px;", description:"Changes a thrown javelin into a powerful<br>bolt of lightning that splits on impact", syn_title:"<br>Lightning Fury Receives Bonuses From:<br>", syn_text:"Lightning Bolt: +6% Lightning Damage per Level", graytext:"", text:["Releases "," bolts<br>Lightning Damage: ","-","<br>Mana Cost: ",""]},
+{data:d111, key:"111", code:6, name:"Jab", level:0, i:0, req:[], reqlvl:1, extra_levels:0, force_levels:0, bindable:2, style:"display: block; top: 82px; left: 2px;", description:"Attacks with a series of rapid thrusts<br>using a javelin or spear class weapon<br><br>Deals 100% of Weapon Damage<br>Attacks three times", syn_title:"", syn_text:"", graytext:"", text:["Attack Rating: +"," percent<br>Damage: +"," percent<br>Mana Cost: ",""]},
+{data:d122, key:"122", code:7, name:"Power Strike", i:1, req:[0], reqlvl:6, level:0, extra_levels:0, force_levels:0, bindable:2, style:"display: block; top: 150px; left: 72px;", description:"Adds lightning damage to attacks with<br>javelin and spear class weapons<br><br>Deals 100% of Weapon Damage", syn_title:"<br>Power Strike Receives Bonuses From:<br>", syn_text:"Charged Strike: +20% Lightning Damage per Level<br>Lightning Strike: +20% Lightning Damage per Level", graytext:"", text:["To Attack Rating: +"," percent<br>Lightning Damage: ","-","<br>Mana Cost: ",""]},
+{data:d123, key:"123", code:8, name:"Poison Javelin", i:2, req:[], reqlvl:6, level:0, extra_levels:0, force_levels:0, bindable:2, style:"display: block; top: 150px; left: 142px;", description:"Magically enhances your javelin<br>to leave a trail of poison clouds", syn_title:"<br>Poison Javelin Receives Bonuses From:<br>", syn_text:"Plague Javelin: +15% Poison Damage per Level<br>2% Increased Poison Damage per Dexterity<br>+2 Additional Javelins While Having 100+ Total Dexterity", graytext:"", text:["Poison Damage: ","-","<br>over 5 seconds<br>Mana Cost: ",""]},
+{data:d131, key:"131", code:9, name:"Fend", i:3, req:[0], reqlvl:12, level:0, extra_levels:0, force_levels:0, bindable:2, style:"display: block; top: 218px; left: 2px;", description:"Attacks all adjacent targets<br><br>Deals 125% of Weapon Damage<br>Attacks up to twelve times", syn_title:"", syn_text:"", graytext:"", text:["Attack Rating: +"," percent<br>Damage: +"," percent<br>Mana Cost: 5",""]},
+{data:d133, key:"133", code:10, name:"Lightning Bolt", i:4, req:[1,2,0], reqlvl:12, level:0, extra_levels:0, force_levels:0, bindable:2, style:"display: block; top: 218px; left: 142px;", description:"Magically converts your javelin into a bolt of lightning<br><br>Deals 100% of Weapon Damage<br>100% of Physical Damage converted to Lightning", syn_title:"<br>Lightning Bolt Receives Bonuses From:<br>", syn_text:"Lightning Fury: +12% Lightning Damage per Level<br>Power Strike: +12% Lightning Damage per Level", graytext:"", text:["Lightning Damage: ","-","<br>Mana Cost: ",""]},
+{data:d142, key:"142", code:11, name:"Charged Strike", i:5, req:[1,0], reqlvl:18, level:0, extra_levels:0, force_levels:0, bindable:2, style:"display: block; top: 286px; left: 72px;", description:"Adds lightning damage to javelin and spear class weapons<br>and releases charged bolts upon impact", syn_title:"<br>Charged Strike Receives Bonuses From:<br>", syn_text:"Power Strike: +20% Lightning Damage per Level<br>Lightning Strike: +20% Lightning Damage per Level", graytext:"", text:["Releases "," charged bolts<br>Lightning Damage: ","-","<br>Mana Cost: ",""]},
+{data:d143, key:"143", code:12, name:"Plague Javelin", i:6, req:[4,1,0], reqlvl:18, level:0, extra_levels:0, force_levels:0, bindable:2, style:"display: block; top: 286px; left: 142px;", description:"Magically enhances your javelin to release<br>expanding clouds of poison upon impact", syn_title:"<br>Plague Javelin Receives Bonuses From:<br>", syn_text:"Poison Javelin: +22% Poison Damage per Level", graytext:"", text:["Attack Rating: +"," percent<br>Poison Damage: ","-","<br>over 5 seconds<br>Mana Cost: ",""]},
+{data:d151, key:"151", code:13, name:"Ground Slam", i:7, req:[3,0], reqlvl:24, level:0, extra_levels:0, force_levels:0, bindable:2, style:"display: block; top: 354px; left: 2px;", description:"Forcefully drive your spear into the eart<br>creating fissures that explode on impact<br><br>Waves: 3<br>Deals 85% of Weapon Damage", syn_title:"", syn_text:"", graytext:"", text:["+","% increased explosion size<br>Mana Cost: ",""]},
+{data:d162, key:"162", code:14, name:"Lightning Strike", i:8, req:[5,1,0], reqlvl:30, level:0, extra_levels:0, force_levels:0, bindable:2, style:"display: block; top: 422px; left: 72px;", description:"Adds lightning damage to javelin and spear class weapons<br>and releases chain lightning upon impact", syn_title:"<br>Lightning Strike Receives Bonuses From:<br>", syn_text:"Power Strike: +15% Lightning Damage per Level<br>Charged Strike: +15% Lightning Damage per Level", graytext:"", text:[""," hits<br>Lightning Damage: ","-","<br>Mana Cost: 9",""]},
+{data:d163, key:"163", code:15, name:"Lightning Fury", i:9, req:[6,4,1,0], reqlvl:30, level:0, extra_levels:0, force_levels:0, bindable:2, style:"display: block; top: 422px; left: 142px;", description:"Changes a thrown javelin into a powerful<br>bolt of lightning that splits on impact", syn_title:"<br>Lightning Fury Receives Bonuses From:<br>", syn_text:"Lightning Bolt: +6% Lightning Damage per Level", graytext:"", text:["Releases "," bolts<br>Lightning Damage: ","-","<br>Mana Cost: ",""]},
 
-{data:d211, key:"211", name:"Inner Sight", i:10, req:[], reqlvl:1, level:0, extra_levels:0, force_levels:0, effect:2, bindable:0, style:"display: block; top: 82px; left: 204px;", description:"Illuminates nearby enemies<br>making them easier to hit<br>for you and your party", syn_title:"", syn_text:"", graytext:"", text:["Enemy Defense: ","<br>Radius: "," yards",""]},
-{data:d213, key:"213", name:"Lethal Strike", i:11, req:[], reqlvl:1, level:0, extra_levels:0, force_levels:0, effect:1, bindable:0, style:"display: block; top: 82px; left: 254px;", description:"Passive - Your attacks have a chance to do double damage", syn_title:"", syn_text:"", graytext:"", text:[""," percent critical strike chance",""]},
-{data:d221, key:"221", name:"Phase Run", i:12, req:[10], reqlvl:6, level:0, extra_levels:0, force_levels:0, effect:5, bindable:2, style:"display: block; top: 150px; left: 194px;", description:"Transcend to a heighten state, granting<br>faster movement and recovery speed", syn_title:"", syn_text:"", graytext:"", text:["Faster Hit Recovery: +30 percent<br>Walk/Run Speed: +30 percent<br>Duration: "," seconds<br>Mana Cost: ",""]},
-{data:d222, key:"222", name:"Dodge", i:13, req:[], reqlvl:6, level:0, extra_levels:0, force_levels:0, effect:1, bindable:0, style:"display: block; top: 150px; left: 234px;", description:"Passive - You have a chance to dodge<br>a melee attack when attacking<br>or standing still", syn_title:"", syn_text:"", graytext:"", text:[""," percent chance",""]},
-{data:d232, key:"232", name:"Avoid", i:14, req:[], reqlvl:12, level:0, extra_levels:0, force_levels:0, effect:1, bindable:0, style:"display: block; top: 218px; left: 194px;", description:"Passive - You have a chance to dodge enemy missiles<br>when attacking or standing still", syn_title:"", syn_text:"", graytext:"", text:[""," percent chance",""]},
-{data:d233, key:"233", name:"Penetrate", i:15, req:[11], reqlvl:12, level:0, extra_levels:0, force_levels:0, effect:1, bindable:0, style:"display: block; top: 218px; left: 334px;", description:"Passive - Increases your attack rating", syn_title:"", syn_text:"", graytext:"", text:["To Attack Rating: +"," percent",""]},
-{data:d242, key:"242", name:"Evade", i:16, req:[], reqlvl:18, level:0, extra_levels:0, force_levels:0, effect:1, bindable:0, style:"display: block; top: 286px; left: 254px;", description:"Passive - You have a chance to dodge<br>a melee or missile attack<br>when walking or running", syn_title:"", syn_text:"", graytext:"", text:[""," percent chance",""]},
-{data:d251, key:"251", name:"Decoy", i:17, req:[12,10], reqlvl:24, level:0, extra_levels:0, force_levels:0, bindable:1, style:"display: block; top: 354px; left: 134px;", description:"Creates a stationary duplicate of yourself that<br>draws fire from enemies and shoots arrows", syn_title:"<br>Decoy Receives Bonuses From:<br>", syn_text:"Pierce<br>Penetrate<br>Lethal Strike<br>Multiple Shot", graytext:"", text:["Decoy has 100% of your Bows Physical Damage<br>Decoy has 50% of your Maximum Life<br>Uses Multiple Shot Skill Level: ","<br>Damage: ","-","Damage: ","-","<br>Elemental Resistances: +","<br>Attack Rating: +","<br>Life: +"," percent<br>Duration: "," seconds<br>Mana Cost: ",""]},
-{data:d261, key:"261", name:"Valkyrie", i:18, req:[17,12,10], reqlvl:30, level:0, extra_levels:0, force_levels:0, bindable:1, style:"display: block; top: 422px; left: 134px;", description:"Summons a powerful Valkyrie ally<br><br>Mana Cost: 30", syn_title:"<br>Valkyrie Receives Bonuses From:<br>", syn_text:"Jab: +18% Damage Per Level<br>Lightning Strike: +20% Lightning Damage Per Level<br>Power Strike: +20% Lightning Damage Per Level<br>Phase Run<br>Penetrate<br>Lethal Strike<br>Dodge<br>Avoid<br>Evade", graytext:"", text:["Lightning Damage: ","-","<br>Damage: ","-","<br>Life: ","<br>Attack Rating: +","<br>Defense Bonus: +"," percent<br>Elemental Resistances: +",""]},
-{data:d263, key:"263", name:"Pierce", i:19, req:[15,11], reqlvl:30, level:0, extra_levels:0, force_levels:0, effect:1, bindable:0, style:"display: block; top: 422px; left: 324px;", description:"Passive - Your missiles have a chance to<br>pass through enemies that they hit", syn_title:"", syn_text:"", graytext:"", text:[""," percent pierce chance",""]},
+{data:d211, key:"211", code:16, name:"Inner Sight", i:10, req:[], reqlvl:1, level:0, extra_levels:0, force_levels:0, effect:2, bindable:0, style:"display: block; top: 82px; left: 204px;", description:"Illuminates nearby enemies<br>making them easier to hit<br>for you and your party", syn_title:"", syn_text:"", graytext:"", text:["Enemy Defense: ","<br>Radius: "," yards",""]},
+{data:d213, key:"213", code:17, name:"Lethal Strike", i:11, req:[], reqlvl:1, level:0, extra_levels:0, force_levels:0, effect:1, bindable:0, style:"display: block; top: 82px; left: 254px;", description:"Passive - Your attacks have a chance to do double damage", syn_title:"", syn_text:"", graytext:"", text:[""," percent critical strike chance",""]},
+{data:d221, key:"221", code:18, name:"Phase Run", i:12, req:[10], reqlvl:6, level:0, extra_levels:0, force_levels:0, effect:5, bindable:2, style:"display: block; top: 150px; left: 194px;", description:"Transcend to a heighten state, granting<br>faster movement and recovery speed", syn_title:"", syn_text:"", graytext:"", text:["Faster Hit Recovery: +30 percent<br>Walk/Run Speed: +30 percent<br>Duration: "," seconds<br>Mana Cost: ",""]},
+{data:d222, key:"222", code:19, name:"Dodge", i:13, req:[], reqlvl:6, level:0, extra_levels:0, force_levels:0, effect:1, bindable:0, style:"display: block; top: 150px; left: 234px;", description:"Passive - You have a chance to dodge<br>a melee attack when attacking<br>or standing still", syn_title:"", syn_text:"", graytext:"", text:[""," percent chance",""]},
+{data:d232, key:"232", code:20, name:"Avoid", i:14, req:[], reqlvl:12, level:0, extra_levels:0, force_levels:0, effect:1, bindable:0, style:"display: block; top: 218px; left: 194px;", description:"Passive - You have a chance to dodge enemy missiles<br>when attacking or standing still", syn_title:"", syn_text:"", graytext:"", text:[""," percent chance",""]},
+{data:d233, key:"233", code:21, name:"Penetrate", i:15, req:[11], reqlvl:12, level:0, extra_levels:0, force_levels:0, effect:1, bindable:0, style:"display: block; top: 218px; left: 334px;", description:"Passive - Increases your attack rating", syn_title:"", syn_text:"", graytext:"", text:["To Attack Rating: +"," percent",""]},
+{data:d242, key:"242", code:22, name:"Evade", i:16, req:[], reqlvl:18, level:0, extra_levels:0, force_levels:0, effect:1, bindable:0, style:"display: block; top: 286px; left: 254px;", description:"Passive - You have a chance to dodge<br>a melee or missile attack<br>when walking or running", syn_title:"", syn_text:"", graytext:"", text:[""," percent chance",""]},
+{data:d251, key:"251", code:23, name:"Decoy", i:17, req:[12,10], reqlvl:24, level:0, extra_levels:0, force_levels:0, bindable:1, style:"display: block; top: 354px; left: 134px;", description:"Creates a stationary duplicate of yourself that<br>draws fire from enemies and shoots arrows", syn_title:"<br>Decoy Receives Bonuses From:<br>", syn_text:"Pierce<br>Penetrate<br>Lethal Strike<br>Multiple Shot", graytext:"", text:["Decoy has 100% of your Bows Physical Damage<br>Decoy has 50% of your Maximum Life<br>Uses Multiple Shot Skill Level: ","<br>Damage: ","-","Damage: ","-","<br>Elemental Resistances: +","<br>Attack Rating: +","<br>Life: +"," percent<br>Duration: "," seconds<br>Mana Cost: ",""]},
+{data:d261, key:"261", code:24, name:"Valkyrie", i:18, req:[17,12,10], reqlvl:30, level:0, extra_levels:0, force_levels:0, bindable:1, style:"display: block; top: 422px; left: 134px;", description:"Summons a powerful Valkyrie ally<br><br>Mana Cost: 30", syn_title:"<br>Valkyrie Receives Bonuses From:<br>", syn_text:"Jab: +18% Damage Per Level<br>Lightning Strike: +20% Lightning Damage Per Level<br>Power Strike: +20% Lightning Damage Per Level<br>Phase Run<br>Penetrate<br>Lethal Strike<br>Dodge<br>Avoid<br>Evade", graytext:"", text:["Lightning Damage: ","-","<br>Damage: ","-","<br>Life: ","<br>Attack Rating: +","<br>Defense Bonus: +"," percent<br>Elemental Resistances: +",""]},
+{data:d263, key:"263", code:25, name:"Pierce", i:19, req:[15,11], reqlvl:30, level:0, extra_levels:0, force_levels:0, effect:1, bindable:0, style:"display: block; top: 422px; left: 324px;", description:"Passive - Your missiles have a chance to<br>pass through enemies that they hit", syn_title:"", syn_text:"", graytext:"", text:[""," percent pierce chance",""]},
 
-{data:d311, key:"311", name:"Cold Arrow", i:20, req:[], reqlvl:1, level:0, extra_levels:0, force_levels:0, bindable:2, style:"display: block; top: 82px; left: 216px;", description:"Magically enhances your arrows or bolts<br>by adding cold damage and a slowing effect", syn_title:"<br>Cold Arrow Receives Bonuses From:<br>", syn_text:"Ice Arrow: +12% Cold Damage per Level", graytext:"", text:["Converts ","Cold Damage: ","-","<br>Cold Length: "," seconds<br>Mana Cost: ",""]},
-{data:d312, key:"312", name:"Magic Arrow", i:21, req:[], reqlvl:1, level:0, extra_levels:0, force_levels:0, bindable:2, style:"display: block; top: 82px;  left: 326px;", description:"Creates a magical arrow or bolt<br>that does extra damage<br><br>Always Pierces", syn_title:"", syn_text:"", graytext:"", text:["Converts ","Damage: ","-","<br>Mana Cost: ",""]},
-{data:d322, key:"322", name:"Multiple Shot", i:22, req:[21], reqlvl:6, level:0, extra_levels:0, force_levels:0, bindable:2, style:"display: block; top: 150px; left: 406px;", description:"Magically splits one arrow<br>or bolt into many<br><br>Deals 100% of Weapon Damage", syn_title:"", syn_text:"", graytext:"", text:["Damage: ","-","<br>"," arrows<br>Mana Cost: ",""]},
-{data:d323, key:"323", name:"Fire Arrow", i:23, req:[21], reqlvl:6, level:0, extra_levels:0, force_levels:0, bindable:2, style:"display: block; top: 150px; left: 240px;", description:"Magically enhances your arrows or bolts<br>with fire, which leaves a burning trail behind it", syn_title:"<br>Fire Arrow Receives Bonuses From:<br>", syn_text:"Exploding Arrow: +12% Fire Damage per Level<br>Exploding Arrow: +12% Average Fire Damage per Second per Level", graytext:"", text:["Converts ","Average Fire Damage: ","-"," per second<br>To Attack Rating: +"," percent<br>Fire Damage: ","-","<br>Mana Cost: ",""]},
-{data:d341, key:"341", name:"Ice Arrow", i:24, req:[20], reqlvl:18, level:0, extra_levels:0, force_levels:0, bindable:2, style:"display: block; top: 286px; left: 266px;", description:"Magically enhances your arrow or bolt<br>to freeze your enemies", syn_title:"<br>Ice Arrow Receives Bonuses From:<br>", syn_text:"Cold Arrow: +10% Cold Damage per Level<br>Freezing Arrow: +5% Freeze Length per Level", graytext:"", text:["Cold Damage: ","-","<br>Freezes for "," seconds<br>Mana Cost: ",""]},
-{data:d342, key:"342", name:"Guided Arrow", i:25, req:[20,22,21], reqlvl:18, level:0, extra_levels:0, force_levels:0, bindable:2, style:"display: block; top: 286px; left: 416px;", description:"Enhances your arrows and bolts<br>to track your target<br>or seek one of its own<br><br>Always Hits<br><br>Deals 150% of Weapon Damage", syn_title:"", syn_text:"", graytext:"", text:["Damage: +"," percent<br>Mana Cost: ",""]},
-{data:d343, key:"343", name:"Exploding Arrow", i:26, req:[23,21], reqlvl:18, level:0, extra_levels:0, force_levels:0, bindable:2, style:"display: block; top: 286px; left: 398px;", description:"Enchants an arrow or bolt that explodes on<br>contact, damaging all nearby enemies", syn_title:"<br>Exploding Arrow Receives Bonuses From:<br>", syn_text:"Fire Arrow: +20% Fire Damage per Level<br>Magic Arrow: +20% Fire Damage per Level", graytext:"", text:["Fire Damage: ","-","<br>Mana Cost: ",""]},
-{data:d352, key:"352", name:"Strafe", i:27, req:[25,20,22,21], reqlvl:24, level:0, extra_levels:0, force_levels:0, bindable:2, style:"display: block; top: 354px; left: 376px;", description:"Magically splits one arrow into several<br>that target multiple nearby enemies<br><br>Deals 100% of Weapon Damage", syn_title:"", syn_text:"", graytext:"", text:["Damage: ","-","<br>Attacks up to "," targets<br>Damage: +"," percent<br>Mana Cost: ",""]},
-{data:d353, key:"353", name:"Immolation Arrow", i:28, req:[26,23,21], reqlvl:24, level:0, extra_levels:0, force_levels:0, bindable:2, style:"display: block; top: 354px; left: 281px;", description:"Enhances arrows or bolts to<br>cause severe fire damage and<br>creates a pyre upon impact", syn_title:"<br>Immolation Arrow Receives Bonuses From:<br>", syn_text:"Fire Arrow: +16% Average Fire Damage per Second per Level<br>Exploding Arrow: +15% Fire Damage per Level", graytext:"", text:["Fire Explosion Damage: ","-","<br>Fire Duration: 4 seconds<br>Average Fire Damage: ","-"," per second<br>Mana Cost: ",""]},
-{data:d361, key:"361", name:"Freezing Arrow", i:29, req:[24,20], reqlvl:30, level:0, extra_levels:0, force_levels:0, bindable:2, style:"display: block; top: 422px; left: 266px;", description:"Magically enhances an arrow or bolt<br>to freeze entire groups of monsters<br><br>Radius: 3.3 yards", syn_title:"<br>Freezing Arrow Receives Bonuses From:<br>", syn_text:"Cold Arrow: +21% Cold Damage per Level<br>Ice Arrow: +2% Cold Damage per Level<br>Ice Arrow: +5% Freeze Length per Level", graytext:"", text:["Cold Damage: ","-","<br>Freezes for "," seconds<br>Mana Cost: ",""]}
+{data:d311, key:"311", code:26, name:"Cold Arrow", i:20, req:[], reqlvl:1, level:0, extra_levels:0, force_levels:0, bindable:2, style:"display: block; top: 82px; left: 216px;", description:"Magically enhances your arrows or bolts<br>by adding cold damage and a slowing effect", syn_title:"<br>Cold Arrow Receives Bonuses From:<br>", syn_text:"Ice Arrow: +12% Cold Damage per Level", graytext:"", text:["Converts ","Cold Damage: ","-","<br>Cold Length: "," seconds<br>Mana Cost: ",""]},
+{data:d312, key:"312", code:27, name:"Magic Arrow", i:21, req:[], reqlvl:1, level:0, extra_levels:0, force_levels:0, bindable:2, style:"display: block; top: 82px;  left: 326px;", description:"Creates a magical arrow or bolt<br>that does extra damage<br><br>Always Pierces", syn_title:"", syn_text:"", graytext:"", text:["Converts ","Damage: ","-","<br>Mana Cost: ",""]},
+{data:d322, key:"322", code:28, name:"Multiple Shot", i:22, req:[21], reqlvl:6, level:0, extra_levels:0, force_levels:0, bindable:2, style:"display: block; top: 150px; left: 406px;", description:"Magically splits one arrow<br>or bolt into many<br><br>Deals 100% of Weapon Damage", syn_title:"", syn_text:"", graytext:"", text:["Damage: ","-","<br>"," arrows<br>Mana Cost: ",""]},
+{data:d323, key:"323", code:29, name:"Fire Arrow", i:23, req:[21], reqlvl:6, level:0, extra_levels:0, force_levels:0, bindable:2, style:"display: block; top: 150px; left: 240px;", description:"Magically enhances your arrows or bolts<br>with fire, which leaves a burning trail behind it", syn_title:"<br>Fire Arrow Receives Bonuses From:<br>", syn_text:"Exploding Arrow: +12% Fire Damage per Level<br>Exploding Arrow: +12% Average Fire Damage per Second per Level", graytext:"", text:["Converts ","Average Fire Damage: ","-"," per second<br>To Attack Rating: +"," percent<br>Fire Damage: ","-","<br>Mana Cost: ",""]},
+{data:d341, key:"341", code:30, name:"Ice Arrow", i:24, req:[20], reqlvl:18, level:0, extra_levels:0, force_levels:0, bindable:2, style:"display: block; top: 286px; left: 266px;", description:"Magically enhances your arrow or bolt<br>to freeze your enemies", syn_title:"<br>Ice Arrow Receives Bonuses From:<br>", syn_text:"Cold Arrow: +10% Cold Damage per Level<br>Freezing Arrow: +5% Freeze Length per Level", graytext:"", text:["Cold Damage: ","-","<br>Freezes for "," seconds<br>Mana Cost: ",""]},
+{data:d342, key:"342", code:31, name:"Guided Arrow", i:25, req:[20,22,21], reqlvl:18, level:0, extra_levels:0, force_levels:0, bindable:2, style:"display: block; top: 286px; left: 416px;", description:"Enhances your arrows and bolts<br>to track your target<br>or seek one of its own<br><br>Always Hits<br><br>Deals 150% of Weapon Damage", syn_title:"", syn_text:"", graytext:"", text:["Damage: +"," percent<br>Mana Cost: ",""]},
+{data:d343, key:"343", code:32, name:"Exploding Arrow", i:26, req:[23,21], reqlvl:18, level:0, extra_levels:0, force_levels:0, bindable:2, style:"display: block; top: 286px; left: 398px;", description:"Enchants an arrow or bolt that explodes on<br>contact, damaging all nearby enemies", syn_title:"<br>Exploding Arrow Receives Bonuses From:<br>", syn_text:"Fire Arrow: +20% Fire Damage per Level<br>Magic Arrow: +20% Fire Damage per Level", graytext:"", text:["Fire Damage: ","-","<br>Mana Cost: ",""]},
+{data:d352, key:"352", code:33, name:"Strafe", i:27, req:[25,20,22,21], reqlvl:24, level:0, extra_levels:0, force_levels:0, bindable:2, style:"display: block; top: 354px; left: 376px;", description:"Magically splits one arrow into several<br>that target multiple nearby enemies<br><br>Deals 100% of Weapon Damage", syn_title:"", syn_text:"", graytext:"", text:["Damage: ","-","<br>Attacks up to "," targets<br>Damage: +"," percent<br>Mana Cost: ",""]},
+{data:d353, key:"353", code:34, name:"Immolation Arrow", i:28, req:[26,23,21], reqlvl:24, level:0, extra_levels:0, force_levels:0, bindable:2, style:"display: block; top: 354px; left: 281px;", description:"Enhances arrows or bolts to<br>cause severe fire damage and<br>creates a pyre upon impact", syn_title:"<br>Immolation Arrow Receives Bonuses From:<br>", syn_text:"Fire Arrow: +16% Average Fire Damage per Second per Level<br>Exploding Arrow: +15% Fire Damage per Level", graytext:"", text:["Fire Explosion Damage: ","-","<br>Fire Duration: 4 seconds<br>Average Fire Damage: ","-"," per second<br>Mana Cost: ",""]},
+{data:d361, key:"361", code:35, name:"Freezing Arrow", i:29, req:[24,20], reqlvl:30, level:0, extra_levels:0, force_levels:0, bindable:2, style:"display: block; top: 422px; left: 266px;", description:"Magically enhances an arrow or bolt<br>to freeze entire groups of monsters<br><br>Radius: 3.3 yards", syn_title:"<br>Freezing Arrow Receives Bonuses From:<br>", syn_text:"Cold Arrow: +21% Cold Damage per Level<br>Ice Arrow: +2% Cold Damage per Level<br>Ice Arrow: +5% Freeze Length per Level", graytext:"", text:["Cold Damage: ","-","<br>Freezes for "," seconds<br>Mana Cost: ",""]}
 ];

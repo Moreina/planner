@@ -3,136 +3,164 @@
 var weapon_frames = {dagger:14, oneHand_sword:14, oneHand_axe:14, twoHand_sword:22, twoHand_axe:18, staff:18, polearm:18, oneHand_mace:14, scepter:14, wand:14, twoHand_mace:21, javelin:22, spear:22, bow:15, crossbow:20, claw:13.5}
 
 var character_assassin = {class_name:"Assassin", strength:20, dexterity:20, vitality:20, energy:25, life:50, mana:25, defense:5, ar:80, stamina:195, levelup_life:2, levelup_stamina:1.25, levelup_mana:1.5, ar_per_dexterity:5, defense_per_dexterity:0.25, life_per_vitality:3, stamina_per_vitality:1.25, mana_per_energy:1.75, starting_strength:20, starting_dexterity:20, starting_vitality:20, starting_energy:25, ar_const:15, skill_layout:"./images/assassin.png", tab1:"Martial Arts", tab2:"Shadow Disciplines", tab3:"Traps",
+	
+	// 
+	// ---------------------------------
 	updateSkill : function(skill, lvl, elem) {
-	var result = skill.data.values[elem][lvl];
-	var wisp = (1+Math.round(character.wisp/20,0)/10);
+		var result = skill.data.values[elem][lvl];
+		var wisp = (1+Math.round(character.wisp/20,0)/10);
+		
+		if (skill.name == "Dual Strike" && elem == 0) { 		result += (5*skills[9].level + 5*skills[13].level) }
+		if (skill.name == "Static Strike" && elem < 2) { 		result *= ((1 + (0.08*skills[21].level)) * (1+0.20*character.charge_thunder) * (1+character.lDamage/100) * wisp) }
+		if (skill.name == "Emberstorm" && elem < 2) { 			result *= ((1 + (0.18*skills[20].level)) * (1+0.20*character.charge_ember) * (1+character.fDamage/100) * wisp) }
+		if (skill.name == "Blades of Ice" && elem > 0 && elem < 3) { 	result *= ((1+0.20*character.charge_ice) * (1+character.cDamage/100) * wisp) }
+		if (skill.name == "Dragon Talon" && elem == 0) { 		result = character.kick_min }
+		if (skill.name == "Dragon Talon" && elem == 1) { 		result = Math.floor(1.5*character.kick_min) }
+		if (skill.name == "Dragon Talon" && elem == 3) { 		result += (15*skills[7].level) }
+		if (skill.name == "Dragon Flight" && elem == 0) { 		result = character.kick_min }
+		if (skill.name == "Dragon Flight" && elem == 1) { 		result = Math.floor(1.5*character.kick_min) }
+		if (skill.name == "Dragon Flight" && elem == 2) { 		result = Math.max(0.4, (6 - 0.5*character.charge_ember - 0.5*character.charge_thunder - 0.5*character.charge_ice)) }
+		
+		if (skill.name == "Psychic Hammer" && elem < 4) { 		result *= (1 + (0.25*skills[12].level + 0.25*skills[17].level)) }
+		if (skill.name == "Mind Blast" && elem > 0 && elem < 3) { 	result *= (1 + (0.21*skills[10].level + 0.21*skills[12].level)) }
+		if (skill.name == "Mind Blast" && elem == 0) { 			result = (2.6 + (0.7 * Math.floor(skills[14].level / 5))) }
+		if (skill.name == "Venom" && elem > 0 && elem < 3) { 		result *= ((1+character.pDamage/100) * wisp) }
+		
+		if (skill.name == "Fire Blast" && elem < 2) { 			result *= ((1 + (0.12*skills[21].level + 0.12*skills[23].level + 0.12*skills[24].level + 0.12*skills[27].level + 0.12*skills[28].level)) * (1+character.fDamage/100) * wisp) }
+		if (skill.name == "Shock Web" && elem == 0) { 			result = Math.max(6, (skill.data.values[elem][lvl] + Math.floor(skills[20].level / 3))) }
+		if (skill.name == "Shock Web" && elem < 3 && elem > 0) { 	result *= ((1 + (0.20*skills[21].level + 0.20*skills[26].level + 0.20*skills[28].level)) * (1+character.lDamage/100) * wisp) }
+		if (skill.name == "Blade Throw" && elem < 3 && elem > 0) { 	result *= ((1 + (0.16*skills[25].level + 0.16*skills[29].level)) * wisp) }
+		if (skill.name == "Charged Bolt Sentry" && elem == 0) { 	result = 5 + Math.floor(skills[26].level / 4) }
+		if (skill.name == "Charged Bolt Sentry" && elem == 1) { 	result = 5 + Math.floor(skills[21].level / 3) }
+		if (skill.name == "Charged Bolt Sentry" && elem < 4 && elem > 1) { result *= ((1 + (0.20*skills[20].level + 0.20*skills[26].level + 0.20*skills[28].level)) * (1+character.lDamage/100) * wisp) }
+		if (skill.name == "Wake of Fire" && elem < 2) { 		result *= ((1 + (0.20*skills[20].level + 0.20*skills[27].level)) * (1+character.fDamage/100) * wisp) }
+		if (skill.name == "Blade Fury" && elem < 3 && elem > 0) { 	result *= wisp }
+		if (skill.name == "Lightning Sentry" && elem < 2) { 		result *= ((1 + (0.21*skills[21].level + 0.21*skills[23].level + 0.21*skills[28].level)) * (1+character.lDamage/100) * wisp) }
+		if (skill.name == "Wake of Inferno" && elem == 0) { 		result = (1 + (0.04 * skills[24].level)) }
+		if (skill.name == "Wake of Inferno" && elem < 3 && elem > 0) { 	result *= ((1 + (0.13*skills[21].level + 0.13*skills[28].level + 0.20*skills[24].level)) * (1+character.fDamage/100) * wisp) }
+		if (skill.name == "Death Sentry" && elem == 0) { result = 5 + Math.floor(skills[20].level / 3) }
+		if (skill.name == "Death Sentry" && elem < 4 && elem > 1) { 	result *= ((1 + (0.15*skills[26].level)) * (1+character.lDamage/100) * wisp) }
+		if (skill.name == "Blade Shield" && elem < 4 && elem > 1) { 	result *= ((1 + (0.05*skills[22].level + 0.05*skills[25].level)) * wisp) }
+	return result
+	},
 	
-	if (skill.name == "Dual Strike" && elem == 0) { 		result += (5*skills[9].level + 5*skills[13].level) }
-	if (skill.name == "Static Strike" && elem < 2) { 		result *= ((1 + (0.08*skills[21].level)) * (1+0.20*character.charge_thunder) * (1+character.lDamage/100) * wisp) }
-	if (skill.name == "Emberstorm" && elem < 2) { 			result *= ((1 + (0.18*skills[20].level)) * (1+0.20*character.charge_ember) * (1+character.fDamage/100) * wisp) }
-	if (skill.name == "Blades of Ice" && elem > 0 && elem < 3) { 	result *= ((1+0.20*character.charge_ice) * (1+character.cDamage/100) * wisp) }
-	if (skill.name == "Dragon Talon" && elem == 0) { 		result = character.kick_min }
-	if (skill.name == "Dragon Talon" && elem == 1) { 		result = Math.floor(1.5*character.kick_min) }
-	if (skill.name == "Dragon Talon" && elem == 3) { 		result += (15*skills[7].level) }
-	if (skill.name == "Dragon Flight" && elem == 0) { 		result = character.kick_min }
-	if (skill.name == "Dragon Flight" && elem == 1) { 		result = Math.floor(1.5*character.kick_min) }
-	if (skill.name == "Dragon Flight" && elem == 2) { 		result = Math.max(0.4, (6 - 0.5*character.charge_ember - 0.5*character.charge_thunder - 0.5*character.charge_ice)) }
-	
-	if (skill.name == "Psychic Hammer" && elem < 4) { 		result *= (1 + (0.25*skills[12].level + 0.25*skills[17].level)) }
-	if (skill.name == "Mind Blast" && elem > 0 && elem < 3) { 	result *= (1 + (0.21*skills[10].level + 0.21*skills[12].level)) }
-	if (skill.name == "Mind Blast" && elem == 0) { 			result = (2.6 + (0.7 * Math.floor(skills[14].level / 5))) }
-	if (skill.name == "Venom" && elem > 0 && elem < 3) { 		result *= ((1+character.pDamage/100) * wisp) }
-	
-	if (skill.name == "Fire Blast" && elem < 2) { 			result *= ((1 + (0.12*skills[21].level + 0.12*skills[23].level + 0.12*skills[24].level + 0.12*skills[27].level + 0.12*skills[28].level)) * (1+character.fDamage/100) * wisp) }
-	if (skill.name == "Shock Web" && elem == 0) { 			result = Math.max(6, (skill.data.values[elem][lvl] + Math.floor(skills[20].level / 3))) }
-	if (skill.name == "Shock Web" && elem < 3 && elem > 0) { 	result *= ((1 + (0.20*skills[21].level + 0.20*skills[26].level + 0.20*skills[28].level)) * (1+character.lDamage/100) * wisp) }
-	if (skill.name == "Blade Throw" && elem < 3 && elem > 0) { 	result *= ((1 + (0.16*skills[25].level + 0.16*skills[29].level)) * wisp) }
-	if (skill.name == "Charged Bolt Sentry" && elem == 0) { 	result = 5 + Math.floor(skills[26].level / 4) }
-	if (skill.name == "Charged Bolt Sentry" && elem == 1) { 	result = 5 + Math.floor(skills[21].level / 3) }
-	if (skill.name == "Charged Bolt Sentry" && elem < 4 && elem > 1) { result *= ((1 + (0.20*skills[20].level + 0.20*skills[26].level + 0.20*skills[28].level)) * (1+character.lDamage/100) * wisp) }
-	if (skill.name == "Wake of Fire" && elem < 2) { 		result *= ((1 + (0.20*skills[20].level + 0.20*skills[27].level)) * (1+character.fDamage/100) * wisp) }
-	if (skill.name == "Blade Fury" && elem < 3 && elem > 0) { 	result *= wisp }
-	if (skill.name == "Lightning Sentry" && elem < 2) { 		result *= ((1 + (0.21*skills[21].level + 0.21*skills[23].level + 0.21*skills[28].level)) * (1+character.lDamage/100) * wisp) }
-	if (skill.name == "Wake of Inferno" && elem == 0) { 		result = (1 + (0.04 * skills[24].level)) }
-	if (skill.name == "Wake of Inferno" && elem < 3 && elem > 0) { 	result *= ((1 + (0.13*skills[21].level + 0.13*skills[28].level + 0.20*skills[24].level)) * (1+character.fDamage/100) * wisp) }
-	if (skill.name == "Death Sentry" && elem == 0) { result = 5 + Math.floor(skills[20].level / 3) }
-	if (skill.name == "Death Sentry" && elem < 4 && elem > 1) { 	result *= ((1 + (0.15*skills[26].level)) * (1+character.lDamage/100) * wisp) }
-	if (skill.name == "Blade Shield" && elem < 4 && elem > 1) { 	result *= ((1 + (0.05*skills[22].level + 0.05*skills[25].level)) * wisp) }
-	
-return result
-},
-	
-	//getBuffData : function(effect, selfbuff) {
+	// 
+	// ---------------------------------
 	getBuffData : function(effect) {
-	var skill = skills[effect.skill]
-	var lvl = skill.level + skill.extra_levels;
-	var result = {};
-	var charges = 5;
+		var skill = skills[effect.skill]
+		var lvl = skill.level + skill.extra_levels;
+		var result = {};
+		var charges = 5;
+		
+		if (skill.name == "Fists of Ember") {
+			result.charge_ember = charges;
+			result.fDamage_min = charges * skill.data.values[0][lvl];
+			result.fDamage_max = charges * skill.data.values[0][lvl];
+		}
+		if (skill.name == "Fists of Thunder") {
+			result.charge_thunder = charges;
+			result.lDamage_min = charges * skill.data.values[0][lvl];
+			result.lDamage_max = charges * skill.data.values[1][lvl];
+		}
+		if (skill.name == "Fists of Ice") {
+			result.charge_ice = charges;
+			result.cDamage_min = charges * skill.data.values[0][lvl];
+			result.cDamage_max = charges * skill.data.values[1][lvl];
+		}
+		if (skill.name == "Burst of Speed") {
+			if (document.getElementById("e"+skills[15].key) != null) { if (effects["e"+skills[15].key].enabled == 1) { disableEffect(15) } }	// disables Fade
+			result.ias = skill.data.values[0][lvl];
+			result.frw = skill.data.values[1][lvl];
+		}
+		if (skill.name == "Fade") {
+			if (document.getElementById("e"+skills[11].key) != null) { if (effects["e"+skills[11].key].enabled == 1) { disableEffect(11) } }	// disables Burst of Speed
+			result.curse_reduction = skill.data.values[0][lvl];
+			result.all_res = skill.data.values[1][lvl];
+			result.pdr = skill.data.values[2][lvl];
+		}
+		if (skill.name == "Venom") {
+			result.pDamage_min = skill.data.values[1][lvl];
+			result.pDamage_max = skill.data.values[2][lvl];
+			result.pDamage_duration = 0.4;
+		}
+		if (skill.name == "Cloak of Shadows") {
+			result.defense_bonus = skill.data.values[0][lvl];
+			result.enemy_defense = skill.data.values[1][lvl];
+		}
+		//if (skill.name == "Blade Shield") { result.ar_bonus = skill.data.values[4][lvl]; }
+	return result	
+	},
 	
-	if (skill.name == "Fists of Ember") {
-		result.charge_ember = charges;
-		result.fDamage_min = charges * skill.data.values[0][lvl];
-		result.fDamage_max = charges * skill.data.values[0][lvl];
-	}
-	if (skill.name == "Fists of Thunder") {
-		result.charge_thunder = charges;
-		result.lDamage_min = charges * skill.data.values[0][lvl];
-		result.lDamage_max = charges * skill.data.values[1][lvl];
-	}
-	if (skill.name == "Fists of Ice") {
-		result.charge_ice = charges;
-		result.cDamage_min = charges * skill.data.values[0][lvl];
-		result.cDamage_max = charges * skill.data.values[1][lvl];
-	}
-	if (skill.name == "Burst of Speed") {
-		if (document.getElementById("e"+skills[15].key) != null) { if (effects["e"+skills[15].key].enabled == 1) { disableEffect(15) } }	// disables Fade
-		result.ias = skill.data.values[0][lvl];
-		result.frw = skill.data.values[1][lvl];
-	}
-	if (skill.name == "Fade") {
-		if (document.getElementById("e"+skills[11].key) != null) { if (effects["e"+skills[11].key].enabled == 1) { disableEffect(11) } }	// disables Burst of Speed
-		result.curse_reduction = skill.data.values[0][lvl];
-		result.all_res = skill.data.values[1][lvl];
-		result.pdr = skill.data.values[2][lvl];
-	}
-	if (skill.name == "Venom") {
-		result.pDamage_min = skill.data.values[1][lvl];
-		result.pDamage_max = skill.data.values[2][lvl];
-		result.pDamage_duration = 0.4;
-	}
-	if (skill.name == "Cloak of Shadows") {
-		result.defense_bonus = skill.data.values[0][lvl];
-		result.enemy_defense = skill.data.values[1][lvl];
-	}
-	//if (skill.name == "Blade Shield") { result.ar_bonus = skill.data.values[4][lvl]; }
-	
-return result	
-},
-	
-	getFocusData : function(skill) {
-	var lvl = skill.level+skill.extra_levels;
-	var result = {};
-	
-	if (skill.name = "Dual Strike") { 	result = { ar_bonus:updateSkill(skill, lvl, 0), damage_bonus:updateSkill(skill, lvl, 1) } }
-	if (skill.name = "Fists of Ember") { 	result = { ar_bonus:updateSkill(skill, lvl, 0), fDamage_min:updateSkill(skill, lvl, 1), fDamage_max:updateSkill(skill, lvl, 2) } }
-	if (skill.name = "Fists of Thunder") {	result = { ar_bonus:updateSkill(skill, lvl, 0), lDamage_max:updateSkill(skill, lvl, 1), lDamage_max:updateSkill(skill, lvl, 2) } }
-	if (skill.name = "Fists of Ice") { 	result = { ar_bonus:updateSkill(skill, lvl, 0), cDamage_min:updateSkill(skill, lvl, 1), cDamage_max:updateSkill(skill, lvl, 2) } }
-	if (skill.name = "Static Strike") {	result = { lDamage_min:updateSkill(skill, lvl, 0), lDamage_max:updateSkill(skill, lvl, 1) } }
-	if (skill.name = "Dragon Talon") {	result = { kick_damage_min:updateSkill(skill, lvl, 0), kick_damage_max:updateSkill(skill, lvl, 1), ar_bonus:updateSkill(skill, lvl, 2), kick_bonus:updateSkill(skill, lvl, 3), damage_bonus:updateSkill(skill, lvl, 4) } }
-	if (skill.name = "Emberstorm") {	result = { fDamage_min:updateSkill(skill, lvl, 0), fDamage_max:updateSkill(skill, lvl, 1) } }
-	if (skill.name = "Dragon Flight") { 	result = { kick_damage_min:updateSkill(skill, lvl, 0), kick_damage_max:updateSkill(skill, lvl, 1), kick_bonus:updateSkill(skill, lvl, 3), ar_bonus:updateSkill(skill, lvl, 4) } }
-	if (skill.name = "Blades of Ice") {	result = { cDamage_min:updateSkill(skill, lvl, 1), cDamage_max:updateSkill(skill, lvl, 2), ar_bonus:updateSkill(skill, lvl, 0) } }
+	// 
+	// ---------------------------------
+	getFocusData : function(skill, num, ar, phys_min, phys_max, ele_min, ele_max, mag_min, mag_max, wisp) {
+		var lvl = skill.level+skill.extra_levels;
+		var ar_bonus = 0; var damage_bonus = 100;
+		var damage_min = 0; var damage_max = 0;
+		var fDamage_min = 0; var fDamage_max = 0;
+		var cDamage_min = 0; var cDamage_max = 0;
+		var lDamage_min = 0; var lDamage_max = 0;
+		var pDamage_min = 0; var pDamage_max = 0; var pDamage_duration = 0;
+		var mDamage_min = 0; var mDamage_max = 0;
+		var skillMin = ""; var skillMax = ""; var skillAr = "";
+		var spell = 0;
+		var kick_damage_min = 0; var kick_damage_max = 0;
+		
+		if (skill.name = "Dual Strike") { 		ar_bonus = updateSkill(skill, lvl, 0); damage_bonus = updateSkill(skill, lvl, 1); }
+		else if (skill.name = "Fists of Ember") { 	ar_bonus = updateSkill(skill, lvl, 0); fDamage_min = updateSkill(skill, lvl, 1); fDamage_max = updateSkill(skill, lvl, 2); spell = 2; }
+		else if (skill.name = "Fists of Thunder") {	ar_bonus = updateSkill(skill, lvl, 0); lDamage_max = updateSkill(skill, lvl, 1); lDamage_max = updateSkill(skill, lvl, 2); spell = 2; }
+		else if (skill.name = "Fists of Ice") { 	ar_bonus = updateSkill(skill, lvl, 0); cDamage_min = updateSkill(skill, lvl, 1); cDamage_max = updateSkill(skill, lvl, 2); spell = 2; }
+		else if (skill.name = "Static Strike") {	lDamage_min = updateSkill(skill, lvl, 0); lDamage_max = updateSkill(skill, lvl, 1); }
+		else if (skill.name = "Dragon Talon") {		kick_damage_min = updateSkill(skill, lvl, 0); kick_damage_max = updateSkill(skill, lvl, 1); ar_bonus = updateSkill(skill, lvl, 2); kick_bonus = updateSkill(skill, lvl, 3); damage_bonus = updateSkill(skill, lvl, 4); }
+		else if (skill.name = "Emberstorm") {		fDamage_min = updateSkill(skill, lvl, 0); fDamage_max = updateSkill(skill, lvl, 1); }
+		else if (skill.name = "Dragon Flight") { 	kick_damage_min = updateSkill(skill, lvl, 0); kick_damage_max = updateSkill(skill, lvl, 1); kick_bonus = updateSkill(skill, lvl, 3); ar_bonus = updateSkill(skill, lvl, 4); }
+		else if (skill.name = "Blades of Ice") {	cDamage_min = updateSkill(skill, lvl, 1); cDamage_max = updateSkill(skill, lvl, 2); ar_bonus = updateSkill(skill, lvl, 0); }
 
-	if (skill.name = "Psychic Hammer") {	result = { damage_min:updateSkill(skill, lvl, 0), damage_max:updateSkill(skill, lvl, 1), mDamage_min:updateSkill(skill, lvl, 2), mDamage_max:updateSkill(skill, lvl, 3) } }
-	if (skill.name = "Burst of Speed") {	result = { ias_bonus:updateSkill(skill, lvl, 0), frw_bonus:updateSkill(skill, lvl, 1) } }	// cannot be bound to left click
-	if (skill.name = "Cloak of Shadows") {	result = { defense:updateSkill(skill, lvl, 0), enemy_defense:updateSkill(skill, lvl, 1) } }	// cannot be bound to left click
-	if (skill.name = "Fade") {		result = { curse_length:updateSkill(skill, lvl, 0), all_res:updateSkill(skill, lvl, 1), pdr:updateSkill(skill, lvl, 2) } }	// cannot be bound to left click
-//	if (skill.name = "Shadow Warrior") {	result = { } }	// cannot be bound to left click
-	if (skill.name = "Mind Blast") {	result = { damage_min:updateSkill(skill, lvl, 0), damage_max:updateSkill(skill, lvl, 1) } }	// cannot be bound to left click
-	if (skill.name = "Venom") {		result = { pDamage_min:updateSkill(skill, lvl, 0), pDamage_max:updateSkill(skill, lvl, 1), pDamage_duration:0.4 } }	// cannot be bound to left click
-//	if (skill.name = "Shadow Master") {	result = { } }	// cannot be bound to left click
-		// Claw Mastery - not bindable
-		// Mind Barrier - not bindable
-		// Weapon Block - not bindable
+		else if (skill.name = "Psychic Hammer") {	damage_min = updateSkill(skill, lvl, 0); damage_max = updateSkill(skill, lvl, 1); mDamage_min = updateSkill(skill, lvl, 2); mDamage_max = updateSkill(skill, lvl, 3); }
+		else if (skill.name = "Burst of Speed") {	ias_bonus = updateSkill(skill, lvl, 0); frw_bonus = updateSkill(skill, lvl, 1); spell = 2; }	// cannot be bound to left click
+		else if (skill.name = "Cloak of Shadows") {	defense = updateSkill(skill, lvl, 0); enemy_defense = updateSkill(skill, lvl, 1); spell = 2; }	// cannot be bound to left click
+		else if (skill.name = "Fade") {			curse_length = updateSkill(skill, lvl, 0); all_res = updateSkill(skill, lvl, 1); pdr = updateSkill(skill, lvl, 2); spell = 2; }	// cannot be bound to left click
+	//	else if (skill.name = "Shadow Warrior") {	}	// cannot be bound to left click
+		else if (skill.name = "Mind Blast") {		damage_min = updateSkill(skill, lvl, 0); damage_max = updateSkill(skill, lvl, 1); }	// cannot be bound to left click
+	//	else if (skill.name = "Venom") {		pDamage_min = updateSkill(skill, lvl, 0); pDamage_max = updateSkill(skill, lvl, 1); pDamage_duration = 0.4; }	// cannot be bound to left click
+	//	else if (skill.name = "Shadow Master") {	}	// cannot be bound to left click
+			// Claw Mastery - not bindable
+			// Mind Barrier - not bindable
+			// Weapon Block - not bindable
 
-	if (skill.name = "Fire Blast") {	result = { fDamage_min:updateSkill(skill, lvl, 0), fDamage_max:updateSkill(skill, lvl, 1) } }
-	if (skill.name = "Shock Web") {	result = { lDamage_min:updateSkill(skill, lvl, 0), lDamage_max:updateSkill(skill, lvl, 1) } }
-	if (skill.name = "Blade Throw") {	result = { damage_min:updateSkill(skill, lvl, 0), damage_max:updateSkill(skill, lvl, 1), ar_bonus:updateSkill(skill, lvl, 2) } }
-	if (skill.name = "Charged Bolt Sentry") {result = { lDamage_min:updateSkill(skill, lvl, 2), lDamage_max:updateSkill(skill, lvl, 3) } }	// cannot be bound to left click
-	if (skill.name = "Wake of Fire") {	result = { fDamage_min:updateSkill(skill, lvl, 0), fDamage_max:updateSkill(skill, lvl, 1) } }	// cannot be bound to left click
-	if (skill.name = "Blade Fury") {	result = { ar_bonus:updateSkill(skill, lvl, 0), damage_min:updateSkill(skill, lvl, 1), damage_max:updateSkill(skill, lvl, 2) } }
-	if (skill.name = "Lightning Sentry") {	result = { lDamage_min:updateSkill(skill, lvl, 0), lDamage_max:updateSkill(skill, lvl, 1) } }	// cannot be bound to left click
-	if (skill.name = "Wake of Inferno") {	result = { fDamage_min:updateSkill(skill, lvl, 0), fDamage_max:updateSkill(skill, lvl, 1) } }	// cannot be bound to left click
-	if (skill.name = "Death Sentry") {	result = { lDamage_min:updateSkill(skill, lvl, 0), lDamage_max:updateSkill(skill, lvl, 1)} }	// cannot be bound to left click
-	if (skill.name = "Blade Shield") {	result = { damage_min:updateSkill(skill, lvl, 0), damage_max:updateSkill(skill, lvl, 1), ar_bonus:updateSkill(skill, lvl, 0) } }	// cannot be bound to left click
-	
-	// Attack
-	// Throw
-	// Move Only
-	// Unsummon	// cannot be bound to left click
-	
-	for (affix in result) { active[affix] = result[affix] }
-return result	}
+		else if (skill.name = "Fire Blast") {		fDamage_min = updateSkill(skill, lvl, 0); fDamage_max = updateSkill(skill, lvl, 1); }
+		else if (skill.name = "Shock Web") {		lDamage_min = updateSkill(skill, lvl, 0); lDamage_max = updateSkill(skill, lvl, 1); }
+		else if (skill.name = "Blade Throw") {		damage_min = updateSkill(skill, lvl, 0); damage_max = updateSkill(skill, lvl, 1); ar_bonus = updateSkill(skill, lvl, 2); }
+		else if (skill.name = "Charged Bolt Sentry") {	lDamage_min = updateSkill(skill, lvl, 2); lDamage_max = updateSkill(skill, lvl, 3); }	// cannot be bound to left click
+		else if (skill.name = "Wake of Fire") {		fDamage_min = updateSkill(skill, lvl, 0); fDamage_max = updateSkill(skill, lvl, 1); }	// cannot be bound to left click
+		else if (skill.name = "Blade Fury") {		ar_bonus = updateSkill(skill, lvl, 0); damage_min = updateSkill(skill, lvl, 1); damage_max = updateSkill(skill, lvl, 2); }
+		else if (skill.name = "Lightning Sentry") {	lDamage_min = updateSkill(skill, lvl, 0); lDamage_max = updateSkill(skill, lvl, 1); }	// cannot be bound to left click
+		else if (skill.name = "Wake of Inferno") {	fDamage_min = updateSkill(skill, lvl, 0); fDamage_max = updateSkill(skill, lvl, 1); }	// cannot be bound to left click
+		else if (skill.name = "Death Sentry") {		lDamage_min = updateSkill(skill, lvl, 0); lDamage_max = updateSkill(skill, lvl, 1); }	// cannot be bound to left click
+		else if (skill.name = "Blade Shield") {		damage_min = updateSkill(skill, lvl, 0); damage_max = updateSkill(skill, lvl, 1); ar_bonus = updateSkill(skill, lvl, 0); }	// cannot be bound to left click
+		else { spell = 2; }
+
+		ele_min += Math.floor(wisp*(fDamage_min*(c.fDamage+c.fDamage_skillup)+cDamage_min*(c.cDamage+c.cDamage_skillup)+lDamage_min*(c.lDamage+c.lDamage_skillup)))
+		ele_max += Math.floor(wisp*(fDamage_max*(c.fDamage+c.fDamage_skillup)+cDamage_max*(c.cDamage+c.cDamage_skillup)+lDamage_max*(c.lDamage+c.lDamage_skillup)+pDamage_max*c.pDamage))
+		phys_min = Math.floor((phys_min*damage_bonus/100) + (wisp*damage_min*damage_bonus/100))
+		phys_max = Math.floor((phys_max*damage_bonus/100) + (wisp*damage_max*damage_bonus/100))
+		
+		if (spell == 0) {
+			skillMin = Math.floor(mag_min+ele_min+phys_min); skillMax = Math.floor(mag_max+ele_max+phys_max); skillAr = Math.floor(ar*(1+ar_bonus/100));
+		} else if (spell == 1) {	// no attack rating
+			skillMin = Math.floor(mag_min+ele_min+phys_min); skillMax = Math.floor(mag_max+ele_max+phys_max); skillAr = ""
+		} else if (spell == 2) {	// not damaging
+			skillMin = ""; skillMax = ""; skillAr = "";
+		}
+		
+		if (num == 1) {
+			document.getElementById("skill1_info").innerHTML = ": " + skillMin + " - " + skillMax
+			document.getElementById("ar_skill1").innerHTML = "AR: " + skillAr
+		} else if (num == 2) {
+			document.getElementById("skill2_info").innerHTML = ": " + skillMin + " - " + skillMax
+			document.getElementById("ar_skill2").innerHTML = "AR: " + skillAr
+		}
+	}
 };
 
 /*[ 0] Dual Strike	*/ var d112 = {index:[0,""], values:[["damage",10,17,24,31,38,45,52,59,66,73,80,87,94,101,108,115,122,129,136,148,155,162,169,176,183,190,197,204,211,218,225,232,239,246,253,260,267,274,281,288,295,302,309,316,323,330,337,344,351,358,365,372,379,386,393,400,407,414,421,428], ["attack rating",40,65,90,115,140,165,190,215,240,265,290,315,340,365,390,415,440,465,490,515,540,565,590,615,640,665,690,715,740,765,790,815,840,865,890,915,940,965,990,1015,1040,1065,1090,1115,1140,1165,1190,1215,1240,1265,1290,1315,1340,1365,1390,1415,1440,1465,1490,1515], ["mana cost",1.3,1.4,1.5,1.5,1.6,1.6,1.7,1.8,1.8,1.9,2,2,2.1,2.1,2.2,2.3,2.3,2.4,2.5,2.5,2.6,2.7,2.7,2.8,2.9,2.9,3,3.1,3.1,3.2,3.3,3.3,3.4,3.5,3.5,3.6,3.7,3.7,3.8,3.9,3.9,4,4.1,4.1,4.2,4.3,4.3,4.4,4.5,4.5,4.6,4.7,4.7,4.8,4.9,4.9,5,5.1,5.1,5.2]]};
@@ -169,36 +197,36 @@ return result	}
 /*[29] Blade Shield	*/ var d363 = {index:[0,""], values:[["blades",1,1,1,1,1,1,1,1,1,2,2,2,2,2,2,2,2,2,2,3,3,3,3,3,3,3,3,3,3,4,4,4,4,4,4,4,4,4,4,5,5,5,5,5,5,5,5,5,5,6,6,6,6,6,6,6,6,6,6,7], ["duration",30,34,38,42,46,50,54,58,62,66,70,74,78,82,86,90,94,98,102,106,110,114,118,122,126,130,134,138,142,146,150,154,158,162,166,170,174,178,182,186,190,194,198,202,206,210,214,218,222,226,230,234,238,242,246,250,254,258,262,266], ["damage min",6,8,10,12,14,16,18,20,23,26,29,32,35,38,41,44,48,52,56,60,64,68,73,78,83,88,93,98,104,110,116,122,128,134,140,146,152,158,164,170,176,182,188,194,200,206,212,218,224,230,236,242,248,254,260,266,272,278,284,290], ["damage max",10,13,16,18,22,25,28,31,35,38,43,47,51,55,59,63,68,73,78,83,88,93,99,105,111,117,123,129,136,143,150,157,164,171,178,185,192,199,206,213,220,227,234,241,248,255,262,269,276,283,290,297,304,311,318,325,332,339,346,353], ["attack rating",10,20,30,40,50,60,70,80,90,100,110,120,130,140,150,160,170,180,190,200,210,220,230,240,250,260,270,280,290,300,310,320,330,340,350,360,370,380,390,400,410,420,430,440,450,460,470,480,490,500,510,520,530,540,550,560,570,580,590,600], ["mana cost",25,27,29,31,33,35,37,39,41,43,45,47,49,51,53,55,57,59,61,63,65,67,69,71,73,75,77,79,81,83,85,87,89,91,93,95,97,99,101,103,105,107,109,111,113,115,117,119,121,123,125,127,129,131,133,135,137,139,141,143]]};
 
 var skills_assassin = [
-{data:d112, key:"112", name:"Dual Strike", i:0, req:[], reqlvl:1, level:0, extra_levels:0, force_levels:0, bindable:2, style:"display: block; top: 82px; left: 72px;", description:"Slice and dice your enemies<br>while dual wielding weapons<br>[Requires Dual Claw Class Weapons]<br><br>Deals 110% of Weapon Damage", syn_title:"<br>Dual Strike Receives Bonuses From:<br>", syn_text:"Claw Mastery: +5% Damage per Level<br>Weapon Block: +5% Damage per Level", graytext:"", text:["Damage: +"," percent<br>Attack Rating: +"," percent<br>Mana Cost: ",""]},
-{data:d121, key:"121", name:"Fists of Ember", i:1, req:[0], reqlvl:6, level:0, extra_levels:0, force_levels:0, effect:4, bindable:2, style:"display: block; top: 150px; left: 2px;", description:"Charge-up attack which adds fire damage to your hits<br>[Requires Claw or Dagger Class Weapons]<br><br>Grants an Ember Charge on attack<br>Ember Charge: Your attacks deal fire damage.<br><br>Maximum Charges: 5", syn_title:"", syn_text:"", graytext:"", text:["Fire Damage: "," per charge<br>Charge Duration: "," seconds<br>Attack Rating: +"," percent<br>Mana Cost: ",""]},
-{data:d122, key:"122", name:"Fists of Thunder", i:2, req:[0], reqlvl:6, level:0, extra_levels:0, force_levels:0, effect:4, bindable:2, style:"display: block; top: 150px; left: 72px;", description:"Charge-up attack which adds lightning damage to your hits<br>[Requires Claw or Dagger Class Weapons]<br><br>Grants an Thunder Charge on attack<br>Thunder Charge: Your attacks deal lightning damage.<br><br>Maximum Charges: 5", syn_title:"", syn_text:"", graytext:"", text:["Lightning Damage: ","-"," per charge<br>Charge Duration: "," seconds<br>Attack Rating: +"," percent<br>Mana Cost: ",""]},
-{data:d123, key:"123", name:"Fists of Ice", i:3, req:[0], reqlvl:6, level:0, extra_levels:0, force_levels:0, effect:4, bindable:2, style:"display: block; top: 150px; left: 142px;", description:"Charge-up attack which adds cold damage to your hits<br>[Requires Claw or Dagger Class Weapons]<br><br>Grants an Ice Charge on attack<br>Ice Charge: Your attacks deal cold damage.<br><br>Maximum Charges: 5", syn_title:"", syn_text:"", graytext:"", text:["Cold Damage: ","-"," per charge<br>Charge Duration: "," seconds<br>Attack Rating: +"," percent<br>Cold Length: "," seconds<br>Mana Cost: ",""]},
-{data:d132, key:"132", name:"Static Strike", i:4, req:[2,0], reqlvl:12, level:0, extra_levels:0, force_levels:0, bindable:2, style:"display: block; top: 218px; left: 72px;", description:"Electrifies your attack and releases<br>a static discharge<br>[Requires Claw or Dagger Class Weapons]<br><br>Deals 80% of Weapon Damage<br>100% of Physical Damage converted to Lightning", syn_title:"<br>Static Strike Receives Bonuses From:<br>", syn_text:"Shock Web: +8% Lightning Damage per Level<br>+20% Lightning Damage per Thunder Charge", graytext:"", text:["Lightning Damage: ","-","<br>Mana Cost: ",""]},
-{data:d142, key:"142", name:"Dragon Talon", i:5, req:[], reqlvl:18, level:0, extra_levels:0, force_levels:0, bindable:2, style:"display: block; top: 286px; left: 72px;", description:"Triple kick your enemies<br>with deadly accuracy<br>[Requires One-Handed Melee Weapons]", syn_title:"<br>Dragon Talon Receives Bonuses From:<br>", syn_text:"Dragon Flight: +15% Kick Damage per Level", graytext:"", text:["Deals 100% of Weapon Damage<br>Kick Damage from Footwear: ","-","Attack Rating: +"," percent<br>Kick Damage: +"," percent<br>Damage: +"," percent<br>Mana Cost: ",""]},
-{data:d151, key:"151", name:"Emberstorm", i:6, req:[1,0], reqlvl:24, level:0, extra_levels:0, force_levels:0, bindable:2, style:"display: block; top: 354px; left: 2px;", description:"Flaming bolts rain down and explode on impact<br>[Requires Claw or Dagger Class Weapons]", syn_title:"<br>Emberstorm Receives Bonuses From:<br>", syn_text:"Fire Blast: +18% Fire Damage per Level<br>+20% Fire Damage per Ember Charge", graytext:"", text:["Fire Damage: ","-","<br>Mana Cost: ",""]},
-{data:d152, key:"152", name:"Dragon Flight", i:7, req:[5], reqlvl:24, level:0, extra_levels:0, force_levels:0, bindable:2, style:"display: block; top: 354px; left: 72px;", description:"Perform a teleporting kick attack that also<br>deals damage to enemies near your target<br>[Requires One-Handed Melee Weapons]", syn_title:"", syn_text:"", graytext:"", text:["Deals 100% of Weapon Damage<br>Kick Damage from Footwear: ","-","<br>Your Cold Damage Freezes Enemies<br><br>Cooldown Reduced by 0.5 seconds<br>per Thunder,Ice,Ember Charge<br><br>Minimum Cooldown: 0.4 seconds<br>Cooldown: ","Kick Damage: +"," percent<br>Attack Rating: +"," percent<br>Mana Cost: ",""]},
-{data:d163, key:"163", name:"Blades of Ice", i:8, req:[3,0], reqlvl:30, level:0, extra_levels:0, force_levels:0, bindable:2, style:"display: block; top: 422px; left: 142px;", description:"Create a flurry of ice shards which<br>seek out nearby enemies<br>[Requires Claw or Dagger Class Weapons]<br><br>Deals 50% of Weapon Damage<br>60% of Physical Damage converted to Cold", syn_title:"<br>Blades of Ice Receives Bonuses From:<br>", syn_text:"+20% Cold Damage per Ice Charge", graytext:"", text:["Attack Rating: +"," percent<br>Cold Damage: ","-","<br>Mana Cost: ",""]},
+{data:d112, key:"112", code:251, name:"Dual Strike", i:0, req:[], reqlvl:1, level:0, extra_levels:0, force_levels:0, bindable:2, style:"display: block; top: 82px; left: 72px;", description:"Slice and dice your enemies<br>while dual wielding weapons<br>[Requires Dual Claw Class Weapons]<br><br>Deals 110% of Weapon Damage", syn_title:"<br>Dual Strike Receives Bonuses From:<br>", syn_text:"Claw Mastery: +5% Damage per Level<br>Weapon Block: +5% Damage per Level", graytext:"", text:["Damage: +"," percent<br>Attack Rating: +"," percent<br>Mana Cost: ",""]},
+{data:d121, key:"121", code:252, name:"Fists of Ember", i:1, req:[0], reqlvl:6, level:0, extra_levels:0, force_levels:0, effect:4, bindable:2, style:"display: block; top: 150px; left: 2px;", description:"Charge-up attack which adds fire damage to your hits<br>[Requires Claw or Dagger Class Weapons]<br><br>Grants an Ember Charge on attack<br>Ember Charge: Your attacks deal fire damage.<br><br>Maximum Charges: 5", syn_title:"", syn_text:"", graytext:"", text:["Fire Damage: "," per charge<br>Charge Duration: "," seconds<br>Attack Rating: +"," percent<br>Mana Cost: ",""]},
+{data:d122, key:"122", code:253, name:"Fists of Thunder", i:2, req:[0], reqlvl:6, level:0, extra_levels:0, force_levels:0, effect:4, bindable:2, style:"display: block; top: 150px; left: 72px;", description:"Charge-up attack which adds lightning damage to your hits<br>[Requires Claw or Dagger Class Weapons]<br><br>Grants an Thunder Charge on attack<br>Thunder Charge: Your attacks deal lightning damage.<br><br>Maximum Charges: 5", syn_title:"", syn_text:"", graytext:"", text:["Lightning Damage: ","-"," per charge<br>Charge Duration: "," seconds<br>Attack Rating: +"," percent<br>Mana Cost: ",""]},
+{data:d123, key:"123", code:254, name:"Fists of Ice", i:3, req:[0], reqlvl:6, level:0, extra_levels:0, force_levels:0, effect:4, bindable:2, style:"display: block; top: 150px; left: 142px;", description:"Charge-up attack which adds cold damage to your hits<br>[Requires Claw or Dagger Class Weapons]<br><br>Grants an Ice Charge on attack<br>Ice Charge: Your attacks deal cold damage.<br><br>Maximum Charges: 5", syn_title:"", syn_text:"", graytext:"", text:["Cold Damage: ","-"," per charge<br>Charge Duration: "," seconds<br>Attack Rating: +"," percent<br>Cold Length: "," seconds<br>Mana Cost: ",""]},
+{data:d132, key:"132", code:255, name:"Static Strike", i:4, req:[2,0], reqlvl:12, level:0, extra_levels:0, force_levels:0, bindable:2, style:"display: block; top: 218px; left: 72px;", description:"Electrifies your attack and releases<br>a static discharge<br>[Requires Claw or Dagger Class Weapons]<br><br>Deals 80% of Weapon Damage<br>100% of Physical Damage converted to Lightning", syn_title:"<br>Static Strike Receives Bonuses From:<br>", syn_text:"Shock Web: +8% Lightning Damage per Level<br>+20% Lightning Damage per Thunder Charge", graytext:"", text:["Lightning Damage: ","-","<br>Mana Cost: ",""]},
+{data:d142, key:"142", code:256, name:"Dragon Talon", i:5, req:[], reqlvl:18, level:0, extra_levels:0, force_levels:0, bindable:2, style:"display: block; top: 286px; left: 72px;", description:"Triple kick your enemies<br>with deadly accuracy<br>[Requires One-Handed Melee Weapons]", syn_title:"<br>Dragon Talon Receives Bonuses From:<br>", syn_text:"Dragon Flight: +15% Kick Damage per Level", graytext:"", text:["Deals 100% of Weapon Damage<br>Kick Damage from Footwear: ","-","Attack Rating: +"," percent<br>Kick Damage: +"," percent<br>Damage: +"," percent<br>Mana Cost: ",""]},
+{data:d151, key:"151", code:257, name:"Emberstorm", i:6, req:[1,0], reqlvl:24, level:0, extra_levels:0, force_levels:0, bindable:2, style:"display: block; top: 354px; left: 2px;", description:"Flaming bolts rain down and explode on impact<br>[Requires Claw or Dagger Class Weapons]", syn_title:"<br>Emberstorm Receives Bonuses From:<br>", syn_text:"Fire Blast: +18% Fire Damage per Level<br>+20% Fire Damage per Ember Charge", graytext:"", text:["Fire Damage: ","-","<br>Mana Cost: ",""]},
+{data:d152, key:"152", code:258, name:"Dragon Flight", i:7, req:[5], reqlvl:24, level:0, extra_levels:0, force_levels:0, bindable:2, style:"display: block; top: 354px; left: 72px;", description:"Perform a teleporting kick attack that also<br>deals damage to enemies near your target<br>[Requires One-Handed Melee Weapons]", syn_title:"", syn_text:"", graytext:"", text:["Deals 100% of Weapon Damage<br>Kick Damage from Footwear: ","-","<br>Your Cold Damage Freezes Enemies<br><br>Cooldown Reduced by 0.5 seconds<br>per Thunder,Ice,Ember Charge<br><br>Minimum Cooldown: 0.4 seconds<br>Cooldown: ","Kick Damage: +"," percent<br>Attack Rating: +"," percent<br>Mana Cost: ",""]},
+{data:d163, key:"163", code:259, name:"Blades of Ice", i:8, req:[3,0], reqlvl:30, level:0, extra_levels:0, force_levels:0, bindable:2, style:"display: block; top: 422px; left: 142px;", description:"Create a flurry of ice shards which<br>seek out nearby enemies<br>[Requires Claw or Dagger Class Weapons]<br><br>Deals 50% of Weapon Damage<br>60% of Physical Damage converted to Cold", syn_title:"<br>Blades of Ice Receives Bonuses From:<br>", syn_text:"+20% Cold Damage per Ice Charge", graytext:"", text:["Attack Rating: +"," percent<br>Cold Damage: ","-","<br>Mana Cost: ",""]},
 
-{data:d212, key:"212", name:"Claw Mastery", i:9, req:[], reqlvl:1, level:0, extra_levels:0, force_levels:0, effect:1, bindable:0, style:"display: block; top: 82px; left: 234px;", description:"Passive - Improves your skill<br>with claw-class weapons", syn_title:"", syn_text:"", graytext:"", text:["Damage: +"," percent<br>Attack Rating: +"," percent<br>"," percent chance of Critical Strike",""]},
-{data:d213, key:"213", name:"Psychic Hammer", i:10, req:[], reqlvl:1, level:0, extra_levels:0, force_levels:0, bindable:2, style:"display: block; top: 82px; left: 234px;", description:"Use the power of your mind<br>to create a psychic blast<br>to crush and knock back your enemies", syn_title:"<br>Psychic Hammer Receives Bonuses From:<br>", syn_text:"Mind Blast: +25% Damage per Level<br>Mind Barrier: +25% Damage per Level<br>Mind Barrier: +25% Magic Damage per Level<br>Mind Blast: +25% Magic Damage per Level", graytext:"", text:["Damage: ","-","<br>Magic damage: ","-","<br>Mana Cost: ",""]},
-{data:d221, key:"221", name:"Burst of Speed", i:11, req:[9], reqlvl:6, level:0, extra_levels:0, force_levels:0, effect:5, bindable:1, style:"display: block; top: 150px; left: 194px;", description:"Increases attack and movement speed<br>for a period of time", syn_title:"", syn_text:"", graytext:"", text:["Attack Speed: +"," percent<br>Walk/Run Speed: +"," percent<br>Duration: "," seconds<br>Mana Cost: 10",""]},
-{data:d223, key:"223", name:"Mind Barrier", i:12, req:[10], reqlvl:6, level:0, extra_levels:0, force_levels:0, bindable:0, style:"display: block; top: 150px; left: 234px;", description:"Create a mental barrier around yourself<br>that disarms enemies", syn_title:"", syn_text:"", graytext:"", text:["Chance to stun in retaliation: ","%<br>Chance to retaliate with Psychic Hammer: ","%<br>Chance to stun on hit with attacks: ","%<br>Stun Length: "," seconds",""]},
-{data:d232, key:"232", name:"Weapon Block", i:13, req:[9], reqlvl:12, level:0, extra_levels:0, force_levels:0, effect:1, bindable:0, style:"display: block; top: 218px; left: 204px;", description:"Passive - Chance to block when<br>you are using dual claw-class weapons", syn_title:"", syn_text:"", graytext:"", text:[""," percent chance",""]},
-{data:d233, key:"233", name:"Cloak of Shadows", i:14, req:[12], reqlvl:12, level:0, extra_levels:0, force_levels:0, effect:4, bindable:1, style:"display: block; top: 218px; left: 284px;", description:"Cast a shadow to blind nearby enemies,<br>lowering their defenses for a period of time<br><br>Range: 20 yards<br>Mana Cost: 13", syn_title:"", syn_text:"", graytext:"", text:["Duration: 8 seconds<br>Defense Bonus: +"," percent<br>Enemy Defense: "," percent",""]},
-{data:d241, key:"241", name:"Fade", i:15, req:[11,9], reqlvl:18, level:0, extra_levels:0, force_levels:0, effect:5, bindable:1, style:"display: block; top: 286px; left: 204px;", description:"Raise all resistances and resist curses<br>for a period of time", syn_title:"", syn_text:"", graytext:"", text:["Reduces curse duration by "," percent<br>Resist All: "," percent<br>Physical Resistance: "," percent<br>Duration: "," seconds<br>Mana Cost: 10",""]},
-{data:d242, key:"242", name:"Shadow Warrior", i:16, req:[13,14,9,12,10], reqlvl:18, level:0, extra_levels:0, force_levels:0, bindable:1, style:"display: block; top: 286px; left: 194px;", description:"Summon a shadow of yourself that mimics<br>your skills and fights by your side", syn_title:"", syn_text:"", graytext:"", text:["Life: ","<br>Attack Rating: +","<br>Defense Bonus: +"," percent<br>Mana Cost: ",""]},
-{data:d253, key:"253", name:"Mind Blast", i:17, req:[14,12,10], reqlvl:24, level:0, extra_levels:0, force_levels:0, bindable:1, style:"display: block; top: 354px; left: 254px;", description:"Damage a group of enemies using<br>the power of your mind", syn_title:"<br>Mind Blast Receives Bonuses From:<br>", syn_text:"Psychic Hammer: +21% Damage per Level<br>Mind Barrier: +21% Damage per Level<br>Cloak of Shadows: +0.7 Radius per 5 Levels", graytext:"", text:["Radius: ","Damage: ","-",""]},
-{data:d261, key:"261", name:"Venom", i:18, req:[15,11,9], reqlvl:30, level:0, extra_levels:0, force_levels:0, effect:5, bindable:1, style:"display: block; top: 422px; left: 134px;", description:"Adds poison damage to your weapons<br><br>When active, poison damage<br>delivered by your weapon<br>always lasts for 0.4 seconds", syn_title:"", syn_text:"", graytext:"", text:["Duration: "," seconds<br>Poison Damage: ","-","<br>over 0.4 seconds<br>Mana Cost: 12",""]},
-{data:d262, key:"262", name:"Shadow Master", i:19, req:[16,13,14,9,12,10], reqlvl:30, level:0, extra_levels:0, force_levels:0, bindable:1, style:"display: block; top: 422px; left: 224px;", description:"Summon a powerful shadow of yourself<br>to fight by your side", syn_title:"", syn_text:"", graytext:"", text:["Life: ","<br>Attack Rating: +","<br>Resist All: +"," percent<br>Mana Cost: ",""]},
+{data:d212, key:"212", code:260, name:"Claw Mastery", i:9, req:[], reqlvl:1, level:0, extra_levels:0, force_levels:0, effect:1, bindable:0, style:"display: block; top: 82px; left: 234px;", description:"Passive - Improves your skill<br>with claw-class weapons", syn_title:"", syn_text:"", graytext:"", text:["Damage: +"," percent<br>Attack Rating: +"," percent<br>"," percent chance of Critical Strike",""]},
+{data:d213, key:"213", code:261, name:"Psychic Hammer", i:10, req:[], reqlvl:1, level:0, extra_levels:0, force_levels:0, bindable:2, style:"display: block; top: 82px; left: 234px;", description:"Use the power of your mind<br>to create a psychic blast<br>to crush and knock back your enemies", syn_title:"<br>Psychic Hammer Receives Bonuses From:<br>", syn_text:"Mind Blast: +25% Damage per Level<br>Mind Barrier: +25% Damage per Level<br>Mind Barrier: +25% Magic Damage per Level<br>Mind Blast: +25% Magic Damage per Level", graytext:"", text:["Damage: ","-","<br>Magic damage: ","-","<br>Mana Cost: ",""]},
+{data:d221, key:"221", code:262, name:"Burst of Speed", i:11, req:[9], reqlvl:6, level:0, extra_levels:0, force_levels:0, effect:5, bindable:1, style:"display: block; top: 150px; left: 194px;", description:"Increases attack and movement speed<br>for a period of time", syn_title:"", syn_text:"", graytext:"", text:["Attack Speed: +"," percent<br>Walk/Run Speed: +"," percent<br>Duration: "," seconds<br>Mana Cost: 10",""]},
+{data:d223, key:"223", code:263, name:"Mind Barrier", i:12, req:[10], reqlvl:6, level:0, extra_levels:0, force_levels:0, bindable:0, style:"display: block; top: 150px; left: 234px;", description:"Create a mental barrier around yourself<br>that disarms enemies", syn_title:"", syn_text:"", graytext:"", text:["Chance to stun in retaliation: ","%<br>Chance to retaliate with Psychic Hammer: ","%<br>Chance to stun on hit with attacks: ","%<br>Stun Length: "," seconds",""]},
+{data:d232, key:"232", code:264, name:"Weapon Block", i:13, req:[9], reqlvl:12, level:0, extra_levels:0, force_levels:0, effect:1, bindable:0, style:"display: block; top: 218px; left: 204px;", description:"Passive - Chance to block when<br>you are using dual claw-class weapons", syn_title:"", syn_text:"", graytext:"", text:[""," percent chance",""]},
+{data:d233, key:"233", code:265, name:"Cloak of Shadows", i:14, req:[12], reqlvl:12, level:0, extra_levels:0, force_levels:0, effect:4, bindable:1, style:"display: block; top: 218px; left: 284px;", description:"Cast a shadow to blind nearby enemies,<br>lowering their defenses for a period of time<br><br>Range: 20 yards<br>Mana Cost: 13", syn_title:"", syn_text:"", graytext:"", text:["Duration: 8 seconds<br>Defense Bonus: +"," percent<br>Enemy Defense: "," percent",""]},
+{data:d241, key:"241", code:266, name:"Fade", i:15, req:[11,9], reqlvl:18, level:0, extra_levels:0, force_levels:0, effect:5, bindable:1, style:"display: block; top: 286px; left: 204px;", description:"Raise all resistances and resist curses<br>for a period of time", syn_title:"", syn_text:"", graytext:"", text:["Reduces curse duration by "," percent<br>Resist All: "," percent<br>Physical Resistance: "," percent<br>Duration: "," seconds<br>Mana Cost: 10",""]},
+{data:d242, key:"242", code:267, name:"Shadow Warrior", i:16, req:[13,14,9,12,10], reqlvl:18, level:0, extra_levels:0, force_levels:0, bindable:1, style:"display: block; top: 286px; left: 194px;", description:"Summon a shadow of yourself that mimics<br>your skills and fights by your side", syn_title:"", syn_text:"", graytext:"", text:["Life: ","<br>Attack Rating: +","<br>Defense Bonus: +"," percent<br>Mana Cost: ",""]},
+{data:d253, key:"253", code:268, name:"Mind Blast", i:17, req:[14,12,10], reqlvl:24, level:0, extra_levels:0, force_levels:0, bindable:1, style:"display: block; top: 354px; left: 254px;", description:"Damage a group of enemies using<br>the power of your mind", syn_title:"<br>Mind Blast Receives Bonuses From:<br>", syn_text:"Psychic Hammer: +21% Damage per Level<br>Mind Barrier: +21% Damage per Level<br>Cloak of Shadows: +0.7 Radius per 5 Levels", graytext:"", text:["Radius: ","Damage: ","-",""]},
+{data:d261, key:"261", code:269, name:"Venom", i:18, req:[15,11,9], reqlvl:30, level:0, extra_levels:0, force_levels:0, effect:5, bindable:1, style:"display: block; top: 422px; left: 134px;", description:"Adds poison damage to your weapons<br><br>When active, poison damage<br>delivered by your weapon<br>always lasts for 0.4 seconds", syn_title:"", syn_text:"", graytext:"", text:["Duration: "," seconds<br>Poison Damage: ","-","<br>over 0.4 seconds<br>Mana Cost: 12",""]},
+{data:d262, key:"262", code:270, name:"Shadow Master", i:19, req:[16,13,14,9,12,10], reqlvl:30, level:0, extra_levels:0, force_levels:0, bindable:1, style:"display: block; top: 422px; left: 224px;", description:"Summon a powerful shadow of yourself<br>to fight by your side", syn_title:"", syn_text:"", graytext:"", text:["Life: ","<br>Attack Rating: +","<br>Resist All: +"," percent<br>Mana Cost: ",""]},
 
-{data:d312, key:"312", name:"Fire Blast", i:20, req:[], reqlvl:1, level:0, extra_levels:0, force_levels:0, bindable:2, style:"display: block; top: 82px; left: 326px;", description:"Throw a fire bomb<br>to blast your enemies to bits<br><br>Radius: 3.3 yards", syn_title:"<br>Fire Blast Receives Bonuses From:<br>", syn_text:"Shock Web: +12% Fire Damage per Level<br>Charged Bolt Sentry: +12% Fire Damage per Level<br>Wake of Fire: +12% Fire Damage per Level<br>Wake of Inferno: +12% Fire Damage per Level<br>Death Sentry: +12% Fire Damage per Level", graytext:"", text:["Fire Damage: ","-","<br>Mana Cost: ",""]},
-{data:d321, key:"321", name:"Shock Web", i:21, req:[20], reqlvl:6, level:0, extra_levels:0, force_levels:0, bindable:2, style:"display: block; top: 150px; left: 266px;", description:"Throw a web of lightning<br>to shock your enemies", syn_title:"<br>Shock Web Receives Bonuses From: <br>", syn_text:"Fire Blast: +1 Missile per 3 Levels<br>Charged Bolt Sentry: +20% Lightning Damage per Level<br>Lightning Sentry: +20% Lightning Damage per Level<br>Death Sentry: +20% Lightning Damage per Level", graytext:"", text:["Spikes: ","<br>Duration: 3.6 seconds<br>Lightning Damage: ","-"," per second<br>Mana Cost: 6",""]},
-{data:d323, key:"323", name:"Blade Throw", i:22, req:[], reqlvl:6, level:0, extra_levels:0, force_levels:0, bindable:2, style:"display: block; top: 150px; left: 416px;", description:"Set a spinning blade to patrol<br>between you and target point<br><br>Deals 50% of Weapon Damage<br>Mana Cost: 7", syn_title:"<br>Blade Throw Receives Bonuses From:<br>", syn_text:"Blade Shield: +16% Damage per Level<br>Blade Fury: +16% Damage per Level", graytext:"", text:["Attack Rating: +"," percent<br>Duration: 1 second<br>Damage: ","-",""]},
-{data:d331, key:"331", name:"Charged Bolt Sentry", i:23, req:[21,20], reqlvl:12, level:0, extra_levels:0, force_levels:0, bindable:1, style:"display: block; top: 218px; left: 266px;", description:"A trap that emits Charged Bolts<br>at enemies that pass near", syn_title:"<br>Charged Bolt Sentry Receives Bonuses From:<br>", syn_text:"Shock Web: +1 Bolt per 3 Levels<br>Lightning Sentry: +1 Shot per 4 Levels<br>Fire Blast: +20% Lightning Damage per Level<br>Lightning Sentry: +20% Lightning Damage per Level<br>Death Sentry: +20% Lightning Damage per Level", graytext:"", text:["Shoots "," times<br>Releases ","Lightning Damage: ","-",""]},
-{data:d332, key:"332", name:"Wake of Fire", i:24, req:[20], reqlvl:12, level:0, extra_levels:0, force_levels:0, bindable:1, style:"display: block; top: 218px; left: 316px;", description:"A trap that emits waves of fire<br><br>Shoots 5 Times", syn_title:"<br>Wake of Fire Receives Bonuses From:<br>", syn_text:"Fire Blast: +20% Fire Damage per Level<br>Wake of Inferno: +20% Fire Damage per Level", graytext:"", text:["Fire Damage: ","-","<br>Mana Cost: 13",""]},
-{data:d343, key:"343", name:"Blade Fury", i:25, req:[22,24,20], reqlvl:18, level:0, extra_levels:0, force_levels:0, bindable:2, style:"display: block; top: 286px; left: 436px;", description:"Throw spinning blades<br>to slice up your enemies<br><br>Deals 87% of Weapon Damage<br>Minimum Mana Required to Cast: 3", syn_title:"", syn_text:"", graytext:"", text:["Attack Rating: +"," percent<br>Damage: ","-","<br>Mana Cost: "," per blade",""]},
-{data:d351, key:"351", name:"Lightning Sentry", i:26, req:[23,21,20], reqlvl:24, level:0, extra_levels:0, force_levels:0, bindable:1, style:"display: block; top: 354px; left: 266px;", description:"A trap that shoots lightning<br>to scorch passing enemies<br><br>Shoots 10 Times", syn_title:"<br>Lightning Sentry Receives Bonuses From:<br>", syn_text:"Shock Web: +21% Lightning Damage per Level<br>Charged Bolt Sentry: +21% Lightning Damage per Level<br>Death Sentry: +21% Lightning Damage per Level", graytext:"", text:["Lightning Damage: ","-","<br>Mana Cost: 20",""]},
-{data:d352, key:"352", name:"Wake of Inferno", i:27, req:[24,20], reqlvl:24, level:0, extra_levels:0, force_levels:0, bindable:1, style:"display: block; top: 354px; left: 336px;", description:"Trap that sprays fire at passing enemies", syn_title:"<br>Wake of Inferno Receives Bonuses From:<br>", syn_text:"Wake of Fire: +0.04 seconds Channel Time per Level<br>Fire Blast: +13% Fire Damage per Level<br>Wake of Fire: +20% Fire Damage per Level<br>Death Sentry: +13% Fire Damage per Level", graytext:"", text:["Shoots 10 Times<br>Channel time: ","Fire Damage: ","-","<br>Mana Cost: 20",""]},
-{data:d361, key:"361", name:"Death Sentry", i:28, req:[26,23,21,20], reqlvl:30, level:0, extra_levels:0, force_levels:0, bindable:1, style:"display: block; top: 422px; left: 266px;", description:"Trap that shoots lightning at your enemies<br>or explodes nearby corpses laying waste to more enemies", syn_title:"<br>Death Sentry Receives Bonuses From:<br>", syn_text:"Fire Blast: +1 Shot per 3 Levels<br>Lightning Sentry: +15% Lightning Damage per Level", graytext:"", text:["Corpse Explosing Damage: 21-29 percent of corpse life<br>Shoots ","Radius: "," yards<br>Lightning Damage: ","-","<br>Mana Cost: 20",""]},
-{data:d363, key:"363", name:"Blade Shield", i:29, req:[25,22,24,20], reqlvl:30, level:0, extra_levels:0, force_levels:0, effect:3, bindable:1, style:"display: block; top: 422px; left: 436px;", description:"Spinning blades slice enemies<br>who stray too close<br><br>Deals 50% of Weapon Damage", syn_title:"<br>Blade Shield Receives Bonuses From:<br>", syn_text:"Blade Throw: +5% Damage per Level<br>Blade Fury: +5% Damage per Level", graytext:"", text:["Shoots "," blade(s)<br>Duration: "," seconds<br>Damage: ","-","<br>Attack Rating: +"," percent<br>Mana Cost: ",""]}
+{data:d312, key:"312", code:271, name:"Fire Blast", i:20, req:[], reqlvl:1, level:0, extra_levels:0, force_levels:0, bindable:2, style:"display: block; top: 82px; left: 326px;", description:"Throw a fire bomb<br>to blast your enemies to bits<br><br>Radius: 3.3 yards", syn_title:"<br>Fire Blast Receives Bonuses From:<br>", syn_text:"Shock Web: +12% Fire Damage per Level<br>Charged Bolt Sentry: +12% Fire Damage per Level<br>Wake of Fire: +12% Fire Damage per Level<br>Wake of Inferno: +12% Fire Damage per Level<br>Death Sentry: +12% Fire Damage per Level", graytext:"", text:["Fire Damage: ","-","<br>Mana Cost: ",""]},
+{data:d321, key:"321", code:272, name:"Shock Web", i:21, req:[20], reqlvl:6, level:0, extra_levels:0, force_levels:0, bindable:2, style:"display: block; top: 150px; left: 266px;", description:"Throw a web of lightning<br>to shock your enemies", syn_title:"<br>Shock Web Receives Bonuses From: <br>", syn_text:"Fire Blast: +1 Missile per 3 Levels<br>Charged Bolt Sentry: +20% Lightning Damage per Level<br>Lightning Sentry: +20% Lightning Damage per Level<br>Death Sentry: +20% Lightning Damage per Level", graytext:"", text:["Spikes: ","<br>Duration: 3.6 seconds<br>Lightning Damage: ","-"," per second<br>Mana Cost: 6",""]},
+{data:d323, key:"323", code:273, name:"Blade Throw", i:22, req:[], reqlvl:6, level:0, extra_levels:0, force_levels:0, bindable:2, style:"display: block; top: 150px; left: 416px;", description:"Set a spinning blade to patrol<br>between you and target point<br><br>Deals 50% of Weapon Damage<br>Mana Cost: 7", syn_title:"<br>Blade Throw Receives Bonuses From:<br>", syn_text:"Blade Shield: +16% Damage per Level<br>Blade Fury: +16% Damage per Level", graytext:"", text:["Attack Rating: +"," percent<br>Duration: 1 second<br>Damage: ","-",""]},
+{data:d331, key:"331", code:274, name:"Charged Bolt Sentry", i:23, req:[21,20], reqlvl:12, level:0, extra_levels:0, force_levels:0, bindable:1, style:"display: block; top: 218px; left: 266px;", description:"A trap that emits Charged Bolts<br>at enemies that pass near", syn_title:"<br>Charged Bolt Sentry Receives Bonuses From:<br>", syn_text:"Shock Web: +1 Bolt per 3 Levels<br>Lightning Sentry: +1 Shot per 4 Levels<br>Fire Blast: +20% Lightning Damage per Level<br>Lightning Sentry: +20% Lightning Damage per Level<br>Death Sentry: +20% Lightning Damage per Level", graytext:"", text:["Shoots "," times<br>Releases ","Lightning Damage: ","-",""]},
+{data:d332, key:"332", code:275, name:"Wake of Fire", i:24, req:[20], reqlvl:12, level:0, extra_levels:0, force_levels:0, bindable:1, style:"display: block; top: 218px; left: 316px;", description:"A trap that emits waves of fire<br><br>Shoots 5 Times", syn_title:"<br>Wake of Fire Receives Bonuses From:<br>", syn_text:"Fire Blast: +20% Fire Damage per Level<br>Wake of Inferno: +20% Fire Damage per Level", graytext:"", text:["Fire Damage: ","-","<br>Mana Cost: 13",""]},
+{data:d343, key:"343", code:276, name:"Blade Fury", i:25, req:[22,24,20], reqlvl:18, level:0, extra_levels:0, force_levels:0, bindable:2, style:"display: block; top: 286px; left: 436px;", description:"Throw spinning blades<br>to slice up your enemies<br><br>Deals 87% of Weapon Damage<br>Minimum Mana Required to Cast: 3", syn_title:"", syn_text:"", graytext:"", text:["Attack Rating: +"," percent<br>Damage: ","-","<br>Mana Cost: "," per blade",""]},
+{data:d351, key:"351", code:277, name:"Lightning Sentry", i:26, req:[23,21,20], reqlvl:24, level:0, extra_levels:0, force_levels:0, bindable:1, style:"display: block; top: 354px; left: 266px;", description:"A trap that shoots lightning<br>to scorch passing enemies<br><br>Shoots 10 Times", syn_title:"<br>Lightning Sentry Receives Bonuses From:<br>", syn_text:"Shock Web: +21% Lightning Damage per Level<br>Charged Bolt Sentry: +21% Lightning Damage per Level<br>Death Sentry: +21% Lightning Damage per Level", graytext:"", text:["Lightning Damage: ","-","<br>Mana Cost: 20",""]},
+{data:d352, key:"352", code:278, name:"Wake of Inferno", i:27, req:[24,20], reqlvl:24, level:0, extra_levels:0, force_levels:0, bindable:1, style:"display: block; top: 354px; left: 336px;", description:"Trap that sprays fire at passing enemies", syn_title:"<br>Wake of Inferno Receives Bonuses From:<br>", syn_text:"Wake of Fire: +0.04 seconds Channel Time per Level<br>Fire Blast: +13% Fire Damage per Level<br>Wake of Fire: +20% Fire Damage per Level<br>Death Sentry: +13% Fire Damage per Level", graytext:"", text:["Shoots 10 Times<br>Channel time: ","Fire Damage: ","-","<br>Mana Cost: 20",""]},
+{data:d361, key:"361", code:279, name:"Death Sentry", i:28, req:[26,23,21,20], reqlvl:30, level:0, extra_levels:0, force_levels:0, bindable:1, style:"display: block; top: 422px; left: 266px;", description:"Trap that shoots lightning at your enemies<br>or explodes nearby corpses laying waste to more enemies", syn_title:"<br>Death Sentry Receives Bonuses From:<br>", syn_text:"Fire Blast: +1 Shot per 3 Levels<br>Lightning Sentry: +15% Lightning Damage per Level", graytext:"", text:["Corpse Explosion Damage: 21-29 percent of corpse life<br>Shoots ","Radius: "," yards<br>Lightning Damage: ","-","<br>Mana Cost: 20",""]},
+{data:d363, key:"363", code:280, name:"Blade Shield", i:29, req:[25,22,24,20], reqlvl:30, level:0, extra_levels:0, force_levels:0, effect:3, bindable:1, style:"display: block; top: 422px; left: 436px;", description:"Spinning blades slice enemies<br>who stray too close<br><br>Deals 50% of Weapon Damage", syn_title:"<br>Blade Shield Receives Bonuses From:<br>", syn_text:"Blade Throw: +5% Damage per Level<br>Blade Fury: +5% Damage per Level", graytext:"", text:["Shoots "," blade(s)<br>Duration: "," seconds<br>Damage: ","-","<br>Attack Rating: +"," percent<br>Mana Cost: ",""]}
 ];

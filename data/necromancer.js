@@ -3,122 +3,151 @@
 var weapon_frames = {dagger:18, oneHand_sword:18, oneHand_axe:18, twoHand_sword:22, twoHand_axe:19, staff:19, polearm:19, oneHand_mace:18, scepter:18, wand:18, twoHand_mace:22, javelin:23, spear:23, bow:17, crossbow:19}
 
 var character_necromancer = {class_name:"Necromancer", strength:15, dexterity:25, vitality:15, energy:25, life:45, mana:25, defense:6, ar:80, stamina:179, levelup_life:2, levelup_stamina:1, levelup_mana:2, ar_per_dexterity:5, defense_per_dexterity:0.25, life_per_vitality:2, stamina_per_vitality:1, mana_per_energy:2, starting_strength:15, starting_dexterity:25, starting_vitality:15, starting_energy:25, ar_const:-10, skill_layout:"./images/necromancer.png", tab1:"Summoning", tab2:"Poison & Bone", tab3:"Curses",
+	
+	// 
+	// ---------------------------------
 	updateSkill : function(skill, lvl, elem) {
-	var result = skill.data.values[elem][lvl];
-	var sum_damage = 1; if (skills[0].level > 0 || skills[0].force_levels > 0) { sum_damage = (1+((~~skills[0].data.values[4][skills[0].level+skills[0].extra_levels]) / 100)); }
-	var sum_life = 1; if (skills[0].level > 0 || skills[0].force_levels > 0) { sum_life = (1+((~~skills[0].data.values[3][skills[0].level+skills[0].extra_levels]) / 100)); }
-	var diffResult = skill.data.values[elem][character.difficulty];
-	var wisp = (1+Math.round(character.wisp/20,0)/10);
-	
-	if (skill.name == "Raise Skeleton Warrior" && elem < 2) {	result *= (sum_damage * (1+character.skeleton_bonus/100)) }
-	if (skill.name == "Raise Skeleton Warrior" && elem == 2) {	result = (sum_life * (diffResult + (6 * skill.level))) }
-	if (skill.name == "Clay Golem" && elem < 2) {			result = (sum_damage * diffResult) }
-	if (skill.name == "Clay Golem" && elem == 2) {			result = (sum_life * diffResult) }
-	if (skill.name == "Raise Skeletal Mage" && elem < 7) {		result *= (sum_damage * (1+character.skeleton_bonus/100)) }
-	if (skill.name == "Raise Skeletal Mage" && elem == 7) {		result = (sum_life * (diffResult + (6 * skill.level))) }
-	if (skill.name == "Blood Golem" && elem < 2) {			result = (sum_damage * diffResult) }
-	if (skill.name == "Blood Golem" && elem == 2) {			result = (sum_life * diffResult) }
-	if (skill.name == "Iron Golem" && elem < 2) {			result = (sum_damage * diffResult) }
-	if (skill.name == "Iron Golem" && elem == 2) {			result = (sum_life * diffResult) }
-	if (skill.name == "Fire Golem" && elem < 2) {			result *= sum_damage }
-	if (skill.name == "Fire Golem" && elem == 2) {			result = (sum_life * diffResult + 0.01*skill.level*diffResult) }
-	if (skill.name == "Fire Golem" && elem > 3 && elem < 6) {	result *= sum_damage }
-	if (skill.name == "Revive" && elem == 0) {			result = (skill.data.values[elem][1] + ~~skills[0].data.values[0][skills[0].level+skills[0].extra_levels]) }
-	if (skill.name == "Revive" && elem == 1) {			result = (skill.data.values[elem][1] + ~~skills[0].data.values[1][skills[0].level+skills[0].extra_levels]) }
+		var result = skill.data.values[elem][lvl];
+		var sum_damage = 1; if (skills[0].level > 0 || skills[0].force_levels > 0) { sum_damage = (1+((~~skills[0].data.values[4][skills[0].level+skills[0].extra_levels]) / 100)); }
+		var sum_life = 1; if (skills[0].level > 0 || skills[0].force_levels > 0) { sum_life = (1+((~~skills[0].data.values[3][skills[0].level+skills[0].extra_levels]) / 100)); }
+		var diffResult = skill.data.values[elem][character.difficulty];
+		var wisp = (1+Math.round(character.wisp/20,0)/10);
+		
+		if (skill.name == "Raise Skeleton Warrior" && elem < 2) {	result *= (sum_damage * (1+character.skeleton_bonus/100)) }
+		if (skill.name == "Raise Skeleton Warrior" && elem == 2) {	result = (sum_life * (diffResult + (6 * skill.level))) }
+		if (skill.name == "Clay Golem" && elem < 2) {			result = (sum_damage * diffResult) }
+		if (skill.name == "Clay Golem" && elem == 2) {			result = (sum_life * diffResult) }
+		if (skill.name == "Raise Skeletal Mage" && elem < 7) {		result *= (sum_damage * (1+character.skeleton_bonus/100)) }
+		if (skill.name == "Raise Skeletal Mage" && elem == 7) {		result = (sum_life * (diffResult + (6 * skill.level))) }
+		if (skill.name == "Blood Golem" && elem < 2) {			result = (sum_damage * diffResult) }
+		if (skill.name == "Blood Golem" && elem == 2) {			result = (sum_life * diffResult) }
+		if (skill.name == "Iron Golem" && elem < 2) {			result = (sum_damage * diffResult) }
+		if (skill.name == "Iron Golem" && elem == 2) {			result = (sum_life * diffResult) }
+		if (skill.name == "Fire Golem" && elem < 2) {			result *= sum_damage }
+		if (skill.name == "Fire Golem" && elem == 2) {			result = (sum_life * diffResult + 0.01*skill.level*diffResult) }
+		if (skill.name == "Fire Golem" && elem > 3 && elem < 6) {	result *= sum_damage }
+		if (skill.name == "Revive" && elem == 0) {			result = (skill.data.values[elem][1] + ~~skills[0].data.values[0][skills[0].level+skills[0].extra_levels]) }
+		if (skill.name == "Revive" && elem == 1) {			result = (skill.data.values[elem][1] + ~~skills[0].data.values[1][skills[0].level+skills[0].extra_levels]) }
 
-	if (skill.name == "Corpse Explosion" && elem == 0) { if (skill.level == 0) { result = (21 )}} //+ ~~bonus_corpse_explosion) } else { result += ~~bonus_corpse_explosion } }
-	if (skill.name == "Corpse Explosion" && elem == 1) { if (skill.level == 0) { result = (27 )}} //+ ~~bonus_corpse_explosion) } else { result += ~~bonus_corpse_explosion } }
-	if (skill.name == "Bone Armor" && elem == 0) { 			result += 20*skills[17].level + 20*skills[18].level }
-	if (skill.name == "Bone Wall" && elem < 1) { 			result *= (1 + (0.10*skills[13].level)) }
-	if (skill.name == "Teeth" && elem > 0 && elem < 3) { 		result *= (1 + (0.17*skills[16].level + 0.17*skills[18].level)) }
-	if (skill.name == "Bone Spear" && elem < 2) { 			result *= (1 + (0.07*skills[12].level + 0.07*skills[18].level)) }
-	if (skill.name == "Bone Spirit" && elem < 2) { 			result *= (1 + (0.10*skills[12].level + 0.10*skills[16].level)) }
-	if (skill.name == "Deadly Poison" && elem > 0 && elem < 3) { 	result *= ((1 + (0.10*skills[15].level + 0.10*skills[19].level)) * (1+character.pDamage/100) * wisp) }
-	if (skill.name == "Desecrate" && elem > 0 && elem < 3) { 	result *= ((1 + (0.16*skills[11].level + 0.16*skills[19].level)) * (1+character.pDamage/100) * wisp) }
-	if (skill.name == "Poison Nova" && elem < 2) { 			result *= ((1 + (0.13*skills[11].level + 0.13*skills[15].level)) * (1+character.pDamage/100) * wisp) }
+		if (skill.name == "Corpse Explosion" && elem == 0) { if (skill.level == 0) { result = (21 )}} //+ ~~bonus_corpse_explosion) } else { result += ~~bonus_corpse_explosion } }
+		if (skill.name == "Corpse Explosion" && elem == 1) { if (skill.level == 0) { result = (27 )}} //+ ~~bonus_corpse_explosion) } else { result += ~~bonus_corpse_explosion } }
+		if (skill.name == "Bone Armor" && elem == 0) { 			result += 20*skills[17].level + 20*skills[18].level }
+		if (skill.name == "Bone Wall" && elem < 1) { 			result *= (1 + (0.10*skills[13].level)) }
+		if (skill.name == "Teeth" && elem > 0 && elem < 3) { 		result *= (1 + (0.17*skills[16].level + 0.17*skills[18].level)) }
+		if (skill.name == "Bone Spear" && elem < 2) { 			result *= (1 + (0.07*skills[12].level + 0.07*skills[18].level)) }
+		if (skill.name == "Bone Spirit" && elem < 2) { 			result *= (1 + (0.10*skills[12].level + 0.10*skills[16].level)) }
+		if (skill.name == "Deadly Poison" && elem > 0 && elem < 3) { 	result *= ((1 + (0.10*skills[15].level + 0.10*skills[19].level)) * (1+character.pDamage/100) * wisp) }
+		if (skill.name == "Desecrate" && elem > 0 && elem < 3) { 	result *= ((1 + (0.16*skills[11].level + 0.16*skills[19].level)) * (1+character.pDamage/100) * wisp) }
+		if (skill.name == "Poison Nova" && elem < 2) { 			result *= ((1 + (0.13*skills[11].level + 0.13*skills[15].level)) * (1+character.pDamage/100) * wisp) }
+		
+		if (skill.name == "Hemorrhage" && elem ) { result *= (1 + (0.20*skills[23].level + 0.20*skills[24].level + 0.20*skills[27].level)) }
+		
+	return result
+	},
 	
-	if (skill.name == "Hemorrhage" && elem ) { result *= (1 + (0.20*skills[23].level + 0.20*skills[24].level + 0.20*skills[27].level)) }
-	
-return result
-},
-	
-	//getBuffData : function(effect, selfbuff) {
+	// 
+	// ---------------------------------
 	getBuffData : function(effect) {
-	var skill = skills[effect.skill];
-	var lvl = skill.level + skill.extra_levels;
-	var result = {};
+		var skill = skills[effect.skill];
+		var lvl = skill.level + skill.extra_levels;
+		var result = {};
+		
+		if (skill.name == "Bone Offering") {
+			result.defense_bonus = skill.data.values[2][lvl];
+			result.skeleton_bonus = skill.data.values[3][lvl];
+			result.curse_length_reduced = skill.data.values[4][lvl];
+		}
+		if (skill.name == "Flesh Offering") {
+			result.fcr = skill.data.values[2][lvl];
+			result.ias = skill.data.values[3][lvl];
+			result.frw = skill.data.values[4][lvl];
+		}
+		if (skill.name == "Blood Golem") {
+			result.life_per_ranged_hit = skill.data.values[3][lvl];
+			result.life_per_hit = skill.data.values[4][lvl];
+		}
+		// Fire Golem aura?
+		if (skill.name == "Deadly Poison") {
+			result.pDamage_min = skill.data.values[1][lvl] * (1 + (0.10*skills[15].level + 0.10*skills[19].level));
+			result.pDamage_max = skill.data.values[2][lvl] * (1 + (0.10*skills[15].level + 0.10*skills[19].level));
+			result.pDamage_duration = 2;
+			result.enemy_pRes = skill.data.values[3][lvl];
+		}
+		if (skill.name == "Bone Armor") { result.absorb = skill.data.values[0][lvl] + 20*skills[17].level + 20*skills[18].level; }
+		
+	return result
+	},
 	
-	if (skill.name == "Bone Offering") {
-		result.defense_bonus = skill.data.values[2][lvl];
-		result.skeleton_bonus = skill.data.values[3][lvl];
-		result.curse_length_reduced = skill.data.values[4][lvl];
+	// 
+	// ---------------------------------
+	getFocusData : function(skill, num, ar, phys_min, phys_max, ele_min, ele_max, mag_min, mag_max, wisp) {
+		var lvl = skill.level+skill.extra_levels;
+		var ar_bonus = 0; var damage_bonus = 100;
+		var damage_min = 0; var damage_max = 0;
+		var fDamage_min = 0; var fDamage_max = 0;
+		var cDamage_min = 0; var cDamage_max = 0;
+		var lDamage_min = 0; var lDamage_max = 0;
+		var pDamage_min = 0; var pDamage_max = 0; var pDamage_duration = 0;
+		var mDamage_min = 0; var mDamage_max = 0;
+		var skillMin = ""; var skillMax = ""; var skillAr = "";
+		var spell = 0;
+		
+		if (skill.name = "Skeleton Warrior") { 	 }	// cannot be bound to left click
+		else if (skill.name = "Bone Offering") { spell = 2; }
+		else if (skill.name = "Clay Golem") { 	 }	// cannot be bound to left click
+		else if (skill.name = "Flesh Offering") { spell = 2; }
+		else if (skill.name = "Skeletal Mage") { 	 }	// cannot be bound to left click
+		else if (skill.name = "Blood Golem") { 	 }	// cannot be bound to left click
+	//	else if (skill.name = "Convocation") { spell = 2; }	// cannot be bound to left click
+		else if (skill.name = "Iron Golem") { 	 }	// cannot be bound to left click
+		else if (skill.name = "Fire Golem") { 	 }	// cannot be bound to left click
+		else if (skill.name = "Revive") { 		 }	// cannot be bound to left click
+		// Summon Mastery - not bindable
+		
+		else if (skill.name = "Deadly Poison") { 	 }	// cannot be bound to left click
+		else if (skill.name = "Teeth") { 		 }
+	//	else if (skill.name = "Bone Armor") { spell = 2; }	// cannot be bound to left click
+		else if (skill.name = "Corpse Explosion") { spell = 2; }
+		else if (skill.name = "Desecrate") { 	 }	// cannot be bound to left click
+		else if (skill.name = "Bone Spear") { 	 }
+	//	else if (skill.name = "Bone Wall") { spell = 2; }	// cannot be bound to left click
+		else if (skill.name = "Bone Spirit") { 	 }
+		else if (skill.name = "Poison Nova") { 	 }
+		
+	//	else if (skill.name = "Amplify Damage") { 	 }	// cannot be bound to left click
+	//	else if (skill.name = "Dim Vision") { 	 }	// cannot be bound to left click
+		else if (skill.name = "Hemorrhage") { 	 }	// cannot be bound to left click
+	//	else if (skill.name = "Weaken") { 		 }	// cannot be bound to left click
+	//	else if (skill.name = "Iron Maiden") { 	 }	// cannot be bound to left click
+	//	else if (skill.name = "Terror") { 		 }	// cannot be bound to left click
+	//	else if (skill.name = "Confuse") { 		 }	// cannot be bound to left click
+	//	else if (skill.name = "Life Tap") { 		 }	// cannot be bound to left click
+	//	else if (skill.name = "Attract") { 		 }	// cannot be bound to left click
+	//	else if (skill.name = "Decrepify") { 	 }	// cannot be bound to left click
+	//	else if (skill.name = "Lower Resist") { 	 }	// cannot be bound to left click
+		else { spell = 2; }
+
+		ele_min += Math.floor(wisp*(fDamage_min*(c.fDamage+c.fDamage_skillup)+cDamage_min*(c.cDamage+c.cDamage_skillup)+lDamage_min*(c.lDamage+c.lDamage_skillup)))
+		ele_max += Math.floor(wisp*(fDamage_max*(c.fDamage+c.fDamage_skillup)+cDamage_max*(c.cDamage+c.cDamage_skillup)+lDamage_max*(c.lDamage+c.lDamage_skillup)+pDamage_max*c.pDamage))
+		phys_min = Math.floor((phys_min*damage_bonus/100) + (wisp*damage_min*damage_bonus/100))
+		phys_max = Math.floor((phys_max*damage_bonus/100) + (wisp*damage_max*damage_bonus/100))
+		
+		if (spell == 0) {
+			skillMin = Math.floor(mag_min+ele_min+phys_min); skillMax = Math.floor(mag_max+ele_max+phys_max); skillAr = Math.floor(ar*(1+ar_bonus/100));
+		} else if (spell == 1) {	// no attack rating
+			skillMin = Math.floor(mag_min+ele_min+phys_min); skillMax = Math.floor(mag_max+ele_max+phys_max); skillAr = ""
+		} else if (spell == 2) {	// not damaging
+			skillMin = ""; skillMax = ""; skillAr = "";
+		}
+		
+		if (num == 1) {
+			document.getElementById("skill1_info").innerHTML = ": " + skillMin + " - " + skillMax
+			document.getElementById("ar_skill1").innerHTML = "AR: " + skillAr
+		} else if (num == 2) {
+			document.getElementById("skill2_info").innerHTML = ": " + skillMin + " - " + skillMax
+			document.getElementById("ar_skill2").innerHTML = "AR: " + skillAr
+		}
 	}
-	if (skill.name == "Flesh Offering") {
-		result.fcr = skill.data.values[2][lvl];
-		result.ias = skill.data.values[3][lvl];
-		result.frw = skill.data.values[4][lvl];
-	}
-	if (skill.name == "Blood Golem") {
-		result.life_per_ranged_hit = skill.data.values[3][lvl];
-		result.life_per_hit = skill.data.values[4][lvl];
-	}
-	// Fire Golem aura?
-	if (skill.name == "Deadly Poison") {
-		result.pDamage_min = skill.data.values[1][lvl] * (1 + (0.10*skills[15].level + 0.10*skills[19].level));
-		result.pDamage_max = skill.data.values[2][lvl] * (1 + (0.10*skills[15].level + 0.10*skills[19].level));
-		result.pDamage_duration = 2;
-		result.enemy_pRes = skill.data.values[3][lvl];
-	}
-	if (skill.name == "Bone Armor") { result.absorb = skill.data.values[0][lvl] + 20*skills[17].level + 20*skills[18].level; }
-	
-return result
-},
-	
-	getFocusData : function(skill) {
-	var lvl = skill.level+skill.extra_levels;
-	var result = {};
-	
-	if (skill.name = "Skeleton Warrior") { 	result = {  } }	// cannot be bound to left click
-	if (skill.name = "Bone Offering") { 	result = {  } }
-	if (skill.name = "Clay Golem") { 	result = {  } }	// cannot be bound to left click
-	if (skill.name = "Flesh Offering") { 	result = {  } }
-	if (skill.name = "Skeletal Mage") { 	result = {  } }	// cannot be bound to left click
-	if (skill.name = "Blood Golem") { 	result = {  } }	// cannot be bound to left click
-//	if (skill.name = "Convocation") { 	result = {  } }	// cannot be bound to left click
-	if (skill.name = "Iron Golem") { 	result = {  } }	// cannot be bound to left click
-	if (skill.name = "Fire Golem") { 	result = {  } }	// cannot be bound to left click
-	if (skill.name = "Revive") { 		result = {  } }	// cannot be bound to left click
-	// Summon Mastery - not bindable
-	
-	if (skill.name = "Deadly Poison") { 	result = {  } }	// cannot be bound to left click
-	if (skill.name = "Teeth") { 		result = {  } }
-//	if (skill.name = "Bone Armor") { 	result = {  } }	// cannot be bound to left click
-	if (skill.name = "Corpse Explosion") { 	result = {  } }
-	if (skill.name = "Desecrate") { 	result = {  } }	// cannot be bound to left click
-	if (skill.name = "Bone Spear") { 	result = {  } }
-//	if (skill.name = "Bone Wall") { 	result = {  } }	// cannot be bound to left click
-	if (skill.name = "Bone Spirit") { 	result = {  } }
-	if (skill.name = "Poison Nova") { 	result = {  } }
-	
-//	if (skill.name = "Amplify Damage") { 	result = {  } }	// cannot be bound to left click
-//	if (skill.name = "Dim Vision") { 	result = {  } }	// cannot be bound to left click
-	if (skill.name = "Hemorrhage") { 	result = {  } }	// cannot be bound to left click
-//	if (skill.name = "Weaken") { 		result = {  } }	// cannot be bound to left click
-//	if (skill.name = "Iron Maiden") { 	result = {  } }	// cannot be bound to left click
-//	if (skill.name = "Terror") { 		result = {  } }	// cannot be bound to left click
-//	if (skill.name = "Confuse") { 		result = {  } }	// cannot be bound to left click
-//	if (skill.name = "Life Tap") { 		result = {  } }	// cannot be bound to left click
-//	if (skill.name = "Attract") { 		result = {  } }	// cannot be bound to left click
-//	if (skill.name = "Decrepify") { 	result = {  } }	// cannot be bound to left click
-//	if (skill.name = "Lower Resist") { 	result = {  } }	// cannot be bound to left click
-	
-	// Attack
-	// Throw
-	// Move Only
-	// Unsummon	// cannot be bound to left click
-	
-	for (affix in result) { active[affix] = result[affix] }
-return result	}
 };
 
 /*[ 0] Summon Mastery	*/ var d111 = {index:[0,""], values:[["revive life",5,10,15,20,25,30,35,40,45,50,55,60,65,70,75,80,85,90,95,100,105,110,115,120,125,130,135,140,145,150,155,160,165,170,175,180,185,190,195,200,205,210,215,220,225,230,235,240,245,250,255,260,265,270,275,280,285,290,295,300], ["revive damage",9,14,19,24,29,34,39,44,49,54,59,64,69,74,79,84,89,94,99,104,109,114,119,124,129,134,139,144,149,154,159,164,169,174,179,184,189,194,199,204,209,214,219,224,229,234,239,244,249,254,259,264,269,274,279,284,289,294,299,304], ["defense",30,40,50,60,70,80,90,100,110,120,130,140,150,160,170,180,190,200,210,220,230,240,250,260,270,280,290,300,310,320,330,340,350,360,370,380,390,400,410,420,430,440,450,460,470,480,490,500,510,520,530,540,550,560,570,580,590,600,610,620], ["life",30,40,50,60,70,80,90,100,110,120,130,140,150,160,170,180,190,200,210,220,230,240,250,260,270,280,290,300,310,320,330,340,350,360,370,380,390,400,410,420,430,440,450,460,470,480,490,500,510,520,530,540,550,560,570,580,590,600,610,620], ["damage",15,25,35,45,55,65,75,85,95,105,115,125,135,145,155,165,175,185,195,205,215,225,235,245,255,265,275,285,295,305,315,325,335,345,355,365,375,385,395,405,415,425,435,445,455,465,475,485,495,505,515,525,535,545,555,565,575,585,595,605], ["attack rating",30,40,50,60,70,80,90,100,110,120,130,140,150,160,170,180,190,200,210,220,230,240,250,260,270,280,290,300,310,320,330,340,350,360,370,380,390,400,410,420,430,440,450,460,470,480,490,500,510,520,530,540,550,560,570,580,590,600,610,620], ["resistances",15,17,19,21,23,25,27,29,31,33,35,37,39,41,43,45,47,49,51,53,55,57,59,61,63,65,67,69,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70]]};
@@ -156,37 +185,37 @@ return result	}
 /*[30] Lower Resist	*/ var d362 = {index:[0,""], values:[["radius",4,4.6,5.3,6,6.6,7.3,8,8.6,9.3,10,10.6,11.3,12,12.6,13.3,14,14.6,15.3,16,16.6,17.3,17.9,18.6,19.3,19.9,20.6,21.3,21.9,22.6,23.3,23.9,24.6,25.3,25.9,26.6,27.3,27.9,28.6,29.3,29.9,30.6,31.3,31.9,32.6,33.3,33.9,34.6,35.3,35.9,36.6,37.3,37.9,38.6,39.3,39.9,40.6,41.3,41.9,42.6,43.3], ["duration",10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69], ["enemy resist",-52,-61,-68,-75,-80,-84,-87,-89,-92,-94,-96,-98,-100,-101,-102,-104,-104,-105,-106,-107,-108,-109,-110,-111,-112,-113,-114,-115,-116,-117,-118,-119,-120,-121,-122,-123,-124,-125,-126,-127,-128,-129,-130,-131,-132,-133,-134,-135,-136,-137,-138,-139,-140,-141,-142,-143,-144,-145,-146,-147]]};
 
 var skills_necromancer = [
-{data:d111, key:"111", name:"Summon Mastery", i:0, req:[], reqlvl:1, level:0, extra_levels:0, force_levels:0, bindable:0, style:"display: block; top: 82px; left: 2px;", description:"Passive - Increases the strength of your summons and revives", syn_title:"", syn_text:"", graytext:"", text:["Bonuses to Revives:<br>Revive Life: +","<br>Revive Damage: +","<br><br>Bonuses to Summons:<br>Defense: +"," percent<br>Life: +"," percent<br>Damage: +"," percent<br>Attack Rating: +"," percent<br>Resistances: +"," percent", ""]},
-{data:d113, key:"113", name:"Raise Skeleton Warrior", i:1, req:[], reqlvl:1, level:0, extra_levels:0, force_levels:0, bindable:1, style:"display: block; top: 82px; left: 142px;", description:"Cast on the corpse of a slain monster.<br>This raises a skeleton warrior that<br>fights for you", syn_title:"<br>Raise Skeleton Warrior Receives Bonuses From:<br>", syn_text:"Summon Mastery", graytext:"", text:["Damage: ","-","<br>Life: ",""," skeletons total<br>Mana Cost: ",""]},
-{data:d121, key:"121", name:"Bone Offering", i:2, req:[], reqlvl:6, level:0, extra_levels:0, force_levels:0, effect:4, bindable:2, style:"display: block; top: 150px; left: 2px;", description:"Consumes corpses to temporarily empower<br>your party with toughness", syn_title:"", syn_text:"", graytext:"", text:["Duration: "," seconds<br>Radius: "," yards<br>Defense: +"," percent<br>Raised Skeleton Damage: +"," percent<br>Reduces curse duration by "," percent<br>Mana Cost: ",""]},
-{data:d122, key:"122", name:"Clay Golem", i:3, req:[], reqlvl:6, level:0, extra_levels:0, force_levels:0, bindable:1, style:"display: block; top: 150px; left: 72px;", description:"Creates a golem from the earth<br>to fight by your side", syn_title:"<br>Clay Golem Receives Bonuses From:<br>", syn_text:"Summon Mastery", graytext:"", text:["Damage: ","-","<br>Life: ","Slows target by: "," percent<br>Mana Cost: ",""]},
-{data:d131, key:"131", name:"Flesh Offering", i:4, req:[], reqlvl:12, level:0, extra_levels:0, force_levels:0, effect:4, bindable:2, style:"display: block; top: 218px; left: 2px;", description:"Consumes corpses to temporarily empower<br>your party with swiftness", syn_title:"", syn_text:"", graytext:"", text:["Duration: "," seconds<br>Radius: "," yards<br>Faster Cast Rate: +"," percent<br>Attack Speed: +"," percent<br>Walk/Run Speed: +"," percent<br>Mana Cost: ",""]},
-{data:d133, key:"133", name:"Raise Skeletal Mage", i:5, req:[1], reqlvl:12, level:0, extra_levels:0, force_levels:0, bindable:1, style:"display: block; top: 218px; left: 142px;", description:"Cast on the corpse of a slain monster.<br>This raises a skeleton mage that fights for you", syn_title:"<br>Raise Skeletal Mage Receives Bonuses From:<br>", syn_text:"Summon Mastery", graytext:"", text:["Lightning Damage: ","-","<br>Cold Damage: ","-","<br>Fire Damage: ","-","<br>Poison Damage: ","Life: ","<br>"," skeleton magi<br>Mana Cost: ",""]},
-{data:d142, key:"142", name:"Blood Golem", i:6, req:[3], reqlvl:18, level:0, extra_levels:0, force_levels:0, effect:5, bindable:1, style:"display: block; top: 286px; left: 72px;", description:"A golem that steals the life of enemies<br>and shares it with you<br><br>1/4 of life stolen by golem is shared with you<br>Aura: Nearby Allies Gain Life on Hit", syn_title:"<br>Blood Golem Receives Bonuses From:<br>", syn_text:"Summon Mastery", graytext:"", text:["Damage: ","-","<br>Life: ","+"," Life Gained on Ranged Hit<br>+"," Life Gained on Melee hit<br>Radius: "," yards<br>","% Life Stolen per Hit<br>Mana Cost: ",""]},
-{data:d151, key:"151", name:"Convocation", i:7, req:[], reqlvl:24, level:0, extra_levels:0, force_levels:0, bindable:1, style:"display: block; top: 354px; left: 2px;", description:"Muster dark energies to warp<br>you and your minions to a location", syn_title:"", syn_text:"", graytext:"", text:["Cooldown: "," seconds<br>Mana Cost: 30",""]},
-{data:d152, key:"152", name:"Iron Golem", i:8, req:[6,3], reqlvl:24, level:0, extra_levels:0, force_levels:0, bindable:1, style:"display: block; top: 354px; left: 72px;", description:"Transforms a metallic item into a golem that gains<br>the properties of the item", syn_title:"<br>Iron Golem Receives Bonuses From:<br>", syn_text:"Summon Mastery", graytext:"", text:["Damage: ","-","<br>Life: ","Thorns Damage<br>"," percent damage returned<br>Mana Cost: 35",""]},
-{data:d162, key:"162", name:"Fire Golem", i:9, req:[8,6,3], reqlvl:30, level:0, extra_levels:0, force_levels:0, bindable:1, style:"display: block; top: 422px; left: 72px;", description:"Creates a golem that converts the damage<br>it receives from fire into life", syn_title:"<br>Fire Golem Receives Bonuses From:<br>", syn_text:"Summon Mastery", graytext:"", text:["Damage: ","-","<br>Life: ","Absorbs ","% of fire damage<br>Holy Fire: ","-","<br>Mana Cost: ",""]},
-{data:d163, key:"163", name:"Revive", i:10, req:[5,1], reqlvl:30, level:0, extra_levels:0, force_levels:0, bindable:1, style:"display: block; top: 422px; left: 142px;", description:"Returns a monster to life to fight by your side", syn_title:"<br>Revive Receives Bonuses From:<br>", syn_text:"Summon Mastery", graytext:"", text:["Duration: 600 seconds<br>Life: +"," percent<br>Damage: +","Monsters: ","<br>Mana Cost: 45",""]},
+{data:d111, key:"111", code:66, name:"Summon Mastery", i:0, req:[], reqlvl:1, level:0, extra_levels:0, force_levels:0, bindable:0, style:"display: block; top: 82px; left: 2px;", description:"Passive - Increases the strength of your summons and revives", syn_title:"", syn_text:"", graytext:"", text:["Bonuses to Revives:<br>Revive Life: +","<br>Revive Damage: +","<br><br>Bonuses to Summons:<br>Defense: +"," percent<br>Life: +"," percent<br>Damage: +"," percent<br>Attack Rating: +"," percent<br>Resistances: +"," percent", ""]},
+{data:d113, key:"113", code:67, name:"Raise Skeleton Warrior", i:1, req:[], reqlvl:1, level:0, extra_levels:0, force_levels:0, bindable:1, style:"display: block; top: 82px; left: 142px;", description:"Cast on the corpse of a slain monster.<br>This raises a skeleton warrior that<br>fights for you", syn_title:"<br>Raise Skeleton Warrior Receives Bonuses From:<br>", syn_text:"Summon Mastery", graytext:"", text:["Damage: ","-","<br>Life: ",""," skeletons total<br>Mana Cost: ",""]},
+{data:d121, key:"121", code:68, name:"Bone Offering", i:2, req:[], reqlvl:6, level:0, extra_levels:0, force_levels:0, effect:4, bindable:2, style:"display: block; top: 150px; left: 2px;", description:"Consumes corpses to temporarily empower<br>your party with toughness", syn_title:"", syn_text:"", graytext:"", text:["Duration: "," seconds<br>Radius: "," yards<br>Defense: +"," percent<br>Raised Skeleton Damage: +"," percent<br>Reduces curse duration by "," percent<br>Mana Cost: ",""]},
+{data:d122, key:"122", code:69, name:"Clay Golem", i:3, req:[], reqlvl:6, level:0, extra_levels:0, force_levels:0, bindable:1, style:"display: block; top: 150px; left: 72px;", description:"Creates a golem from the earth<br>to fight by your side", syn_title:"<br>Clay Golem Receives Bonuses From:<br>", syn_text:"Summon Mastery", graytext:"", text:["Damage: ","-","<br>Life: ","Slows target by: "," percent<br>Mana Cost: ",""]},
+{data:d131, key:"131", code:70, name:"Flesh Offering", i:4, req:[], reqlvl:12, level:0, extra_levels:0, force_levels:0, effect:4, bindable:2, style:"display: block; top: 218px; left: 2px;", description:"Consumes corpses to temporarily empower<br>your party with swiftness", syn_title:"", syn_text:"", graytext:"", text:["Duration: "," seconds<br>Radius: "," yards<br>Faster Cast Rate: +"," percent<br>Attack Speed: +"," percent<br>Walk/Run Speed: +"," percent<br>Mana Cost: ",""]},
+{data:d133, key:"133", code:71, name:"Raise Skeletal Mage", i:5, req:[1], reqlvl:12, level:0, extra_levels:0, force_levels:0, bindable:1, style:"display: block; top: 218px; left: 142px;", description:"Cast on the corpse of a slain monster.<br>This raises a skeleton mage that fights for you", syn_title:"<br>Raise Skeletal Mage Receives Bonuses From:<br>", syn_text:"Summon Mastery", graytext:"", text:["Lightning Damage: ","-","<br>Cold Damage: ","-","<br>Fire Damage: ","-","<br>Poison Damage: ","Life: ","<br>"," skeleton magi<br>Mana Cost: ",""]},
+{data:d142, key:"142", code:72, name:"Blood Golem", i:6, req:[3], reqlvl:18, level:0, extra_levels:0, force_levels:0, effect:5, bindable:1, style:"display: block; top: 286px; left: 72px;", description:"A golem that steals the life of enemies<br>and shares it with you<br><br>1/4 of life stolen by golem is shared with you<br>Aura: Nearby Allies Gain Life on Hit", syn_title:"<br>Blood Golem Receives Bonuses From:<br>", syn_text:"Summon Mastery", graytext:"", text:["Damage: ","-","<br>Life: ","+"," Life Gained on Ranged Hit<br>+"," Life Gained on Melee hit<br>Radius: "," yards<br>","% Life Stolen per Hit<br>Mana Cost: ",""]},
+{data:d151, key:"151", code:73, name:"Convocation", i:7, req:[], reqlvl:24, level:0, extra_levels:0, force_levels:0, bindable:1, style:"display: block; top: 354px; left: 2px;", description:"Muster dark energies to warp<br>you and your minions to a location", syn_title:"", syn_text:"", graytext:"", text:["Cooldown: "," seconds<br>Mana Cost: 30",""]},
+{data:d152, key:"152", code:74, name:"Iron Golem", i:8, req:[6,3], reqlvl:24, level:0, extra_levels:0, force_levels:0, bindable:1, style:"display: block; top: 354px; left: 72px;", description:"Transforms a metallic item into a golem that gains<br>the properties of the item", syn_title:"<br>Iron Golem Receives Bonuses From:<br>", syn_text:"Summon Mastery", graytext:"", text:["Damage: ","-","<br>Life: ","Thorns Damage<br>"," percent damage returned<br>Mana Cost: 35",""]},
+{data:d162, key:"162", code:75, name:"Fire Golem", i:9, req:[8,6,3], reqlvl:30, level:0, extra_levels:0, force_levels:0, bindable:1, style:"display: block; top: 422px; left: 72px;", description:"Creates a golem that converts the damage<br>it receives from fire into life", syn_title:"<br>Fire Golem Receives Bonuses From:<br>", syn_text:"Summon Mastery", graytext:"", text:["Damage: ","-","<br>Life: ","Absorbs ","% of fire damage<br>Holy Fire: ","-","<br>Mana Cost: ",""]},
+{data:d163, key:"163", code:76, name:"Revive", i:10, req:[5,1], reqlvl:30, level:0, extra_levels:0, force_levels:0, bindable:1, style:"display: block; top: 422px; left: 142px;", description:"Returns a monster to life to fight by your side", syn_title:"<br>Revive Receives Bonuses From:<br>", syn_text:"Summon Mastery", graytext:"", text:["Duration: 600 seconds<br>Life: +"," percent<br>Damage: +","Monsters: ","<br>Mana Cost: 45",""]},
 
-{data:d211, key:"211", name:"Deadly Poison", i:11, req:[], reqlvl:1, level:0, extra_levels:0, force_levels:0, effect:5, bindable:1, style:"display: block; top: 82px; left: 204px;", description:"Coats your weapon in deadly poison and<br>increases the potency of your poison skills<br><br>When active, poison damage<br>delivered by your weapon<br>always lasts for 2 seconds", syn_title:"<br>Deadly Poison Receives Bonuses From:<br>", syn_text:"Desecrate: +10% Poison Damage per Level<br>Poison Nova: +10% Poison Damage per Level", graytext:"", text:["Duration: "," seconds<br>Poison Damage: ","-","<br>over 2 seconds<br>Enemy Poison Resistance: "," percent<br>Mana Cost: ",""]},
-{data:d212, key:"212", name:"Teeth", i:12, req:[], reqlvl:1, level:0, extra_levels:0, force_levels:0, bindable:2, style:"display: block; top: 82px; left: 234px;", description:"Fires a barrage of summoned barbed teeth", syn_title:"<br>Teeth Receives Bonuses From:<br>", syn_text:"Bone Spear: +17% Magic Damage per Level<br>Bone Spirit: +17% Magic Damage per Level", graytext:"", text:[""," Teeth<br>Magic Damage: ","-","<br>Mana Cost: ",""]},
-{data:d213, key:"213", name:"Bone Armor", i:13, req:[], reqlvl:1, level:0, extra_levels:0, force_levels:0, effect:3, bindable:1, style:"display: block; top: 82px; left: 254px;", description:"Creates an orbiting shield of bone<br>that absorbs melee damage", syn_title:"<br>Bone Armor Receives Bonuses From:<br>", syn_text:"Bone Wall: +20 Damage Absorbed per Level<br>Bone Spirit: +20 Damage Absorbed per Level", graytext:"", text:["Absorbs "," damage<br>Mana Cost: ",""]},
-{data:d233, key:"233", name:"Corpse Explosion", i:14, req:[13], reqlvl:12, level:0, extra_levels:0, force_levels:0, bindable:2, style:"display: block; top: 218px; left: 234px;", description:"Cast on the corpse of a slain monster.<br>It explodes, damaging nearby enemies", syn_title:"", syn_text:"", graytext:"<br>Damage increases by 1% per Base Level", text:["Damage: ","-","Radius: "," yards<br>Mana Cost: ",""]},
-{data:d241, key:"241", name:"Desecrate", i:15, req:[11], reqlvl:18, level:0, extra_levels:0, force_levels:0, bindable:1, style:"display: block; top: 286px; left: 204px;", description:"Summons a pile of rotten corpses that release toxic fumes", syn_title:"<br>Desecrate Receives Bonuses From:<br>", syn_text:"Deadly Poison: +16% Poison Damage per Level<br>Poison Nova: +16% Poison Damage per Level", graytext:"", text:["Cooldown: "," seconds<br>Poison Damage: ","-","<br>over 2 seconds<br>Mana Cost: ",""]},
-{data:d242, key:"242", name:"Bone Spear", i:16, req:[12], reqlvl:18, level:0, extra_levels:0, force_levels:0, bindable:2, style:"display: block; top: 286px; left: 154px;", description:"Summons a deadly spike of bone to impale your enemies", syn_title:"<br>Bone Spear Receives Bonuses From:<br>", syn_text:"Teeth: +7% Magic Damage per Level<br>Bone Spirit: +7% Magic Damage per Level<br>+2 Additional Spears While having 100+ Total Energy", graytext:"", text:["Magic Damage: ","-","<br>Mana Cost: ",""]},
-{data:d243, key:"243", name:"Bone Wall", i:17, req:[14,13], reqlvl:18, level:0, extra_levels:0, force_levels:0, bindable:1, style:"display: block; top: 286px; left: 304px;", description:"Creates an impassable barrier<br>of bone and debris", syn_title:"<br>Bone Wall Receives Bonuses From:<br>", syn_text:"Bone Armor: +10% Life per Level", graytext:"", text:["Life: ","<br>Duration: 24 seconds<br>Mana Cost: 17",""]},
-{data:d253, key:"253", name:"Bone Spirit", i:18, req:[16,17,14,12,13], reqlvl:24, level:0, extra_levels:0, force_levels:0, bindable:2, style:"display: block; top: 354px; left: 254px;", description:"Releases a spirit of the restless undead that<br>tracks its target or finds one of its own", syn_title:"<br>Bone Spirit Receives Bonuses From:<br>", syn_text:"Teeth: +10% Magic Damage per Level<br>Bone Spear: +10% Magic Damage per Level", graytext:"", text:["Magic Damage: ","-","<br>Mana Cost: ",""]},
-{data:d261, key:"261", name:"Poison Nova", i:19, req:[15,11], reqlvl:30, level:0, extra_levels:0, force_levels:0, bindable:2, style:"display: block; top: 422px; left: 140px;", description:"Emits an expanding ring of concentrated poison", syn_title:"<br>Poison Nova Receives Bonuses From:<br>", syn_text:"Deadly Poison: +13% Poison Damage per Level<br>Desecrate: +13% Poison Damage per Level", graytext:"", text:["Poison Damage: ","-","<br>over 2 seconds<br>Mana Cost: 20",""]},
+{data:d211, key:"211", code:77, name:"Deadly Poison", i:11, req:[], reqlvl:1, level:0, extra_levels:0, force_levels:0, effect:5, bindable:1, style:"display: block; top: 82px; left: 204px;", description:"Coats your weapon in deadly poison and<br>increases the potency of your poison skills<br><br>When active, poison damage<br>delivered by your weapon<br>always lasts for 2 seconds", syn_title:"<br>Deadly Poison Receives Bonuses From:<br>", syn_text:"Desecrate: +10% Poison Damage per Level<br>Poison Nova: +10% Poison Damage per Level", graytext:"", text:["Duration: "," seconds<br>Poison Damage: ","-","<br>over 2 seconds<br>Enemy Poison Resistance: "," percent<br>Mana Cost: ",""]},
+{data:d212, key:"212", code:78, name:"Teeth", i:12, req:[], reqlvl:1, level:0, extra_levels:0, force_levels:0, bindable:2, style:"display: block; top: 82px; left: 234px;", description:"Fires a barrage of summoned barbed teeth", syn_title:"<br>Teeth Receives Bonuses From:<br>", syn_text:"Bone Spear: +17% Magic Damage per Level<br>Bone Spirit: +17% Magic Damage per Level", graytext:"", text:[""," Teeth<br>Magic Damage: ","-","<br>Mana Cost: ",""]},
+{data:d213, key:"213", code:79, name:"Bone Armor", i:13, req:[], reqlvl:1, level:0, extra_levels:0, force_levels:0, effect:3, bindable:1, style:"display: block; top: 82px; left: 254px;", description:"Creates an orbiting shield of bone<br>that absorbs melee damage", syn_title:"<br>Bone Armor Receives Bonuses From:<br>", syn_text:"Bone Wall: +20 Damage Absorbed per Level<br>Bone Spirit: +20 Damage Absorbed per Level", graytext:"", text:["Absorbs "," damage<br>Mana Cost: ",""]},
+{data:d233, key:"233", code:80, name:"Corpse Explosion", i:14, req:[13], reqlvl:12, level:0, extra_levels:0, force_levels:0, bindable:2, style:"display: block; top: 218px; left: 234px;", description:"Cast on the corpse of a slain monster.<br>It explodes, damaging nearby enemies", syn_title:"", syn_text:"", graytext:"<br>Damage increases by 1% per Base Level", text:["Damage: ","-","Radius: "," yards<br>Mana Cost: ",""]},
+{data:d241, key:"241", code:81, name:"Desecrate", i:15, req:[11], reqlvl:18, level:0, extra_levels:0, force_levels:0, bindable:1, style:"display: block; top: 286px; left: 204px;", description:"Summons a pile of rotten corpses that release toxic fumes", syn_title:"<br>Desecrate Receives Bonuses From:<br>", syn_text:"Deadly Poison: +16% Poison Damage per Level<br>Poison Nova: +16% Poison Damage per Level", graytext:"", text:["Cooldown: "," seconds<br>Poison Damage: ","-","<br>over 2 seconds<br>Mana Cost: ",""]},
+{data:d242, key:"242", code:82, name:"Bone Spear", i:16, req:[12], reqlvl:18, level:0, extra_levels:0, force_levels:0, bindable:2, style:"display: block; top: 286px; left: 154px;", description:"Summons a deadly spike of bone to impale your enemies", syn_title:"<br>Bone Spear Receives Bonuses From:<br>", syn_text:"Teeth: +7% Magic Damage per Level<br>Bone Spirit: +7% Magic Damage per Level<br>+2 Additional Spears While having 100+ Total Energy", graytext:"", text:["Magic Damage: ","-","<br>Mana Cost: ",""]},
+{data:d243, key:"243", code:83, name:"Bone Wall", i:17, req:[14,13], reqlvl:18, level:0, extra_levels:0, force_levels:0, bindable:1, style:"display: block; top: 286px; left: 304px;", description:"Creates an impassable barrier<br>of bone and debris", syn_title:"<br>Bone Wall Receives Bonuses From:<br>", syn_text:"Bone Armor: +10% Life per Level", graytext:"", text:["Life: ","<br>Duration: 24 seconds<br>Mana Cost: 17",""]},
+{data:d253, key:"253", code:84, name:"Bone Spirit", i:18, req:[16,17,14,12,13], reqlvl:24, level:0, extra_levels:0, force_levels:0, bindable:2, style:"display: block; top: 354px; left: 254px;", description:"Releases a spirit of the restless undead that<br>tracks its target or finds one of its own", syn_title:"<br>Bone Spirit Receives Bonuses From:<br>", syn_text:"Teeth: +10% Magic Damage per Level<br>Bone Spear: +10% Magic Damage per Level", graytext:"", text:["Magic Damage: ","-","<br>Mana Cost: ",""]},
+{data:d261, key:"261", code:85, name:"Poison Nova", i:19, req:[15,11], reqlvl:30, level:0, extra_levels:0, force_levels:0, bindable:2, style:"display: block; top: 422px; left: 140px;", description:"Emits an expanding ring of concentrated poison", syn_title:"<br>Poison Nova Receives Bonuses From:<br>", syn_text:"Deadly Poison: +13% Poison Damage per Level<br>Desecrate: +13% Poison Damage per Level", graytext:"", text:["Poison Damage: ","-","<br>over 2 seconds<br>Mana Cost: 20",""]},
 
-{data:d312, key:"312", name:"Amplify Damage", i:20, req:[], reqlvl:1, level:0, extra_levels:0, force_levels:0, bindable:1, style:"display: block; top: 82px; left: 366px;", description:"Curses a group of enemies, increasing<br>the non-magic damage they receive", syn_title:"", syn_text:"", graytext:"", text:["Radius: "," yards<br>Duration: "," seconds<br>Mana Cost: 4",""]},
-{data:d321, key:"321", name:"Dim Vision", i:21, req:[], reqlvl:6, level:0, extra_levels:0, force_levels:0, bindable:1, style:"display: block; top: 150px; left: 366px;", description:"Curses a group of monsters,<br>reducing their vision radius", syn_title:"", syn_text:"", graytext:"", text:["Radius: "," yards<br>Duration: "," seconds<br>Mana Cost: 9",""]},
-{data:d322, key:"322", name:"Hemorrhage", i:22, req:[], reqlvl:6, level:0, extra_levels:0, force_levels:0, bindable:1, style:"display: block; top: 150px; left: 404px;", description:"Curses a group of enemies to cause<br>bleeding which drains their life away<br><br>Ignores curse overrides/immunities", syn_title:"<br>Hemorrhage Receives Bonuses From:<br>", syn_text:"Life Tap: +20% Life Damage per Level<br>Weaken: +20% Life Damage per Level<br>Iron Maiden: +20% Life Damage per Level", graytext:"", text:["Life Damage: "," per second<br>Duration: "," seconds<br>Mana Cost: ",""]},
-{data:d323, key:"323", name:"Weaken", i:23, req:[], reqlvl:6, level:0, extra_levels:0, force_levels:0, bindable:1, style:"display: block; top: 150px; left: 406px;", description:"Curses a group of enemies,<br>reducing the amount of damage they inflict<br><br>Target's Damage: -33 percent", syn_title:"", syn_text:"", graytext:"", text:["Radius: "," yards<br>Duration: "," seconds<br>Mana Cost: 4",""]},
-{data:d332, key:"332", name:"Iron Maiden", i:24, req:[], reqlvl:12, level:0, extra_levels:0, force_levels:0, bindable:1, style:"display: block; top: 218px; left: 316px;", description:"Curses a group of enemies, causing them<br>to damage themselves when damaging others", syn_title:"", syn_text:"", graytext:"", text:[""," percent damage returned<br>Duration: "," seconds<br>Radius: "," yards<br>Mana Cost: 5",""]},
-{data:d333, key:"333", name:"Terror", i:25, req:[], reqlvl:12, level:0, extra_levels:0, force_levels:0, bindable:1, style:"display: block; top: 218px; left: 496px;", description:"Curses a group of monsters,<br>causing them to flee in terror", syn_title:"", syn_text:"", graytext:"", text:["Radius: "," yards<br>Duration: "," seconds<br>Mana Cost: 7",""]},
-{data:d341, key:"341", name:"Confuse", i:26, req:[], reqlvl:18, level:0, extra_levels:0, force_levels:0, bindable:1, style:"display: block; top: 286px; left: 266px;", description:"Curses a monster to force it to attack random targets", syn_title:"", syn_text:"", graytext:"", text:["Radius: "," yards<br>Duration: "," seconds<br>Mana Cost: 13",""]},
-{data:d342, key:"342", name:"Life Tap", i:27, req:[], reqlvl:18, level:0, extra_levels:0, force_levels:0, bindable:1, style:"display: block; top: 286px; left: 416px;", description:"Curses a group of monsters so that<br>damaging them gives the attacker life", syn_title:"", syn_text:"", graytext:"", text:["Heals: "," percent of attack damage<br>Radius: "," yards<br>Duration: "," seconds<br>Mana Cost: 9",""]},
-{data:d351, key:"351", name:"Attract", i:28, req:[], reqlvl:24, level:0, extra_levels:0, force_levels:0, bindable:1, style:"display: block; top: 354px; left: 266px;", description:"Curses a monster to become the<br>target of all nearby monsters<br>This curse may not be overridden by another curse<br><br>Radius: 5.3 yards", syn_title:"", syn_text:"", graytext:"", text:["Duration: "," seconds<br>Mana Cost: 17",""]},
-{data:d353, key:"353", name:"Decrepify", i:29, req:[], reqlvl:24, level:0, extra_levels:0, force_levels:0, bindable:1, style:"display: block; top: 354px; left: 421px;", description:"Curses a group of enemies to make them<br>slow, weak and take amplified damage<br><br>Duration: 10 seconds", syn_title:"", syn_text:"", graytext:"", text:["Radius: "," yards<br>Mana Cost: 11",""]},
-{data:d362, key:"362", name:"Lower Resist", i:30, req:[], reqlvl:30, level:0, extra_levels:0, force_levels:0, bindable:1, style:"display: block; top: 422px; left: 266px;", description:"Curses an enemy to take more damage from all magical attacks<br>Lowers resistances of monsters<br>Lowers maximum resistances of hostile players", syn_title:"", syn_text:"", graytext:"", text:["Radius: "," yards<br>Duration: "," seconds<br>Resist All: "," percent<br>Mana Cost: 22",""]}
+{data:d312, key:"312", code:86, name:"Amplify Damage", i:20, req:[], reqlvl:1, level:0, extra_levels:0, force_levels:0, bindable:1, style:"display: block; top: 82px; left: 366px;", description:"Curses a group of enemies, increasing<br>the non-magic damage they receive", syn_title:"", syn_text:"", graytext:"", text:["Radius: "," yards<br>Duration: "," seconds<br>Mana Cost: 4",""]},
+{data:d321, key:"321", code:87, name:"Dim Vision", i:21, req:[], reqlvl:6, level:0, extra_levels:0, force_levels:0, bindable:1, style:"display: block; top: 150px; left: 366px;", description:"Curses a group of monsters,<br>reducing their vision radius", syn_title:"", syn_text:"", graytext:"", text:["Radius: "," yards<br>Duration: "," seconds<br>Mana Cost: 9",""]},
+{data:d322, key:"322", code:88, name:"Hemorrhage", i:22, req:[], reqlvl:6, level:0, extra_levels:0, force_levels:0, bindable:1, style:"display: block; top: 150px; left: 404px;", description:"Curses a group of enemies to cause<br>bleeding which drains their life away<br><br>Ignores curse overrides/immunities", syn_title:"<br>Hemorrhage Receives Bonuses From:<br>", syn_text:"Life Tap: +20% Life Damage per Level<br>Weaken: +20% Life Damage per Level<br>Iron Maiden: +20% Life Damage per Level", graytext:"", text:["Life Damage: "," per second<br>Duration: "," seconds<br>Mana Cost: ",""]},
+{data:d323, key:"323", code:89, name:"Weaken", i:23, req:[], reqlvl:6, level:0, extra_levels:0, force_levels:0, bindable:1, style:"display: block; top: 150px; left: 406px;", description:"Curses a group of enemies,<br>reducing the amount of damage they inflict<br><br>Target's Damage: -33 percent", syn_title:"", syn_text:"", graytext:"", text:["Radius: "," yards<br>Duration: "," seconds<br>Mana Cost: 4",""]},
+{data:d332, key:"332", code:90, name:"Iron Maiden", i:24, req:[], reqlvl:12, level:0, extra_levels:0, force_levels:0, bindable:1, style:"display: block; top: 218px; left: 316px;", description:"Curses a group of enemies, causing them<br>to damage themselves when damaging others", syn_title:"", syn_text:"", graytext:"", text:[""," percent damage returned<br>Duration: "," seconds<br>Radius: "," yards<br>Mana Cost: 5",""]},
+{data:d333, key:"333", code:91, name:"Terror", i:25, req:[], reqlvl:12, level:0, extra_levels:0, force_levels:0, bindable:1, style:"display: block; top: 218px; left: 496px;", description:"Curses a group of monsters,<br>causing them to flee in terror", syn_title:"", syn_text:"", graytext:"", text:["Radius: "," yards<br>Duration: "," seconds<br>Mana Cost: 7",""]},
+{data:d341, key:"341", code:92, name:"Confuse", i:26, req:[], reqlvl:18, level:0, extra_levels:0, force_levels:0, bindable:1, style:"display: block; top: 286px; left: 266px;", description:"Curses a monster to force it to attack random targets", syn_title:"", syn_text:"", graytext:"", text:["Radius: "," yards<br>Duration: "," seconds<br>Mana Cost: 13",""]},
+{data:d342, key:"342", code:93, name:"Life Tap", i:27, req:[], reqlvl:18, level:0, extra_levels:0, force_levels:0, bindable:1, style:"display: block; top: 286px; left: 416px;", description:"Curses a group of monsters so that<br>damaging them gives the attacker life", syn_title:"", syn_text:"", graytext:"", text:["Heals: "," percent of attack damage<br>Radius: "," yards<br>Duration: "," seconds<br>Mana Cost: 9",""]},
+{data:d351, key:"351", code:94, name:"Attract", i:28, req:[], reqlvl:24, level:0, extra_levels:0, force_levels:0, bindable:1, style:"display: block; top: 354px; left: 266px;", description:"Curses a monster to become the<br>target of all nearby monsters<br>This curse may not be overridden by another curse<br><br>Radius: 5.3 yards", syn_title:"", syn_text:"", graytext:"", text:["Duration: "," seconds<br>Mana Cost: 17",""]},
+{data:d353, key:"353", code:95, name:"Decrepify", i:29, req:[], reqlvl:24, level:0, extra_levels:0, force_levels:0, bindable:1, style:"display: block; top: 354px; left: 421px;", description:"Curses a group of enemies to make them<br>slow, weak and take amplified damage<br><br>Duration: 10 seconds", syn_title:"", syn_text:"", graytext:"", text:["Radius: "," yards<br>Mana Cost: 11",""]},
+{data:d362, key:"362", code:96, name:"Lower Resist", i:30, req:[], reqlvl:30, level:0, extra_levels:0, force_levels:0, bindable:1, style:"display: block; top: 422px; left: 266px;", description:"Curses an enemy to take more damage from all magical attacks<br>Lowers resistances of monsters<br>Lowers maximum resistances of hostile players", syn_title:"", syn_text:"", graytext:"", text:["Radius: "," yards<br>Duration: "," seconds<br>Resist All: "," percent<br>Mana Cost: 22",""]}
 ];
