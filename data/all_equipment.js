@@ -7,7 +7,7 @@ var unequipped = {name:"none", strength:0, dexterity:0, vitality:0, energy:0, li
 /* stats		*/	cdr:0, fcr:0, fbr:0, fhr:0, frw:0, ias:0, pierce:0, cblow:0, dstrike:0, cstrike:0, owounds:0, fDamage:0, cDamage:0, lDamage:0, pDamage:0, fPierce:0, cPierce:0, lPierce:0, pPierce:0, pdr:0, damage_reduced:0, mDamage_reduced:0, mf:0, gf:0, life_leech:0, mana_leech:0, life_per_hit:0, mana_per_hit:0, life_per_ranged_hit:0, mana_per_ranged_hit:0, fAbsorb:0, cAbsorb:0, lAbsorb:0, mAbsorb:0, fAbsorb_flat:0, cAbsorb_flat:0, lAbsorb_flat:0, mAbsorb_flat:0, 
 /* stats (indirect)	*/	all_skills:0, all_attributes:0, all_res:0, velocity:0, max_life:0, max_mana:0, damage_bonus:0, defense_bonus:0, ar_bonus:0, ar_bonus_per_level:0,
 /* stats (per level)	*/	life_per_level:0, mana_per_level:0, defense_per_level:0, ar_per_level:0, stamina_per_level:0, strength_per_level:0, dexterity_per_level:0, vitality_per_level:0, energy_per_level:0, fRes_per_level:0, cRes_per_level:0, lRes_per_level:0, pRes_per_level:0, fAbsorb_flat_per_level:0, cAbsorb_flat_per_level:0, lAbsorb_flat_per_level:0, mAbsorb_flat_per_level:0, mf_per_level:0, gf_per_level:0, fcr_per_level:0, dstrike_per_level:0, e_def_per_level:0, 
-/* attack damage	*/	base_damage_min:0, base_damage_max:0, damage_min:0, damage_max:0, fDamage_min:0, fDamage_max:0, cDamage_min:0, cDamage_max:0, lDamage_min:0, lDamage_max:0, pDamage_min:0, pDamage_max:0, pDamage_all:0, pDamage_duration:0, mDamage_min:0, mDamage_max:0, min_damage_per_level:0, max_damage_per_level:0, kick_min:0, fDamage_max_per_level:0, cDamage_max_per_level:0, lDamage_max_per_level:0, pDamage_max_per_level:0, kick_damage_per_level:0, smite_min:0, smite_max:0, e_damage:0, e_damage_per_level:0, 
+/* attack damage	*/	base_damage_min:0, base_damage_max:0, damage_min:0, damage_max:0, fDamage_min:0, fDamage_max:0, cDamage_min:0, cDamage_max:0, lDamage_min:0, lDamage_max:0, pDamage_min:0, pDamage_max:0, pDamage_all:0, pDamage_duration:0, mDamage_min:0, mDamage_max:0, min_damage_per_level:0, max_damage_per_level:0, kick_min:0, fDamage_max_per_level:0, cDamage_max_per_level:0, lDamage_max_per_level:0, pDamage_max_per_level:0, kick_damage_per_level:0, smite_min:0, smite_max:0, e_damage:0, e_damage_per_level:0, e_max_damage_per_level:0, 
 /* other (not in-game)	*/	ibc:0, life_per_kill:0, mana_per_kill:0, damage_vs_demons:0, damage_vs_undead:0, ar_vs_demons:0, ar_vs_undead:0, damage_to_mana:0, life_replenish:0, life_regen:0, mana_regen:0, missile_defense:0, melee_defense:0, ar_vs_undead_per_level:0, damage_vs_undead_per_level:0, ar_vs_demons_per_level:0, damage_vs_demons_per_level:0, poison_length_reduced:0, thorns_lightning:0, life_per_demon_kill:0, light_radius:0, thorns:0, thorns_per_level:0, slower_stam_drain:0, heal_stam:0, heal_stam_per_level:0, 
 /* other, affects enemy	*/	enemy_fRes:0, enemy_cRes:0, enemy_lRes:0, enemy_pRes:0, slow_target:0, target_defense:0, flee_on_hit:0, blind_on_hit:0, monster_defense_per_hit:0, freezes_target:0,
 /* other, boolean	*/	itd:0, pmh:0, cbf:0, peace:0, knockback:0, half_freeze_duration:0,
@@ -575,14 +575,9 @@ var equipment = {
 //{limit:["amazon"], rw:1, name:"Edge ­ ­ - ­ ­ Ward Bow", req_level:25, ias:35, damage_vs_demons:380, damage_vs_undead:280, pDamage_all:75, pDamage_duration:5, life_leech:7, pmh:1, all_attributes:10, mana_per_kill:2, discount:15, twoHanded:1, type:"bow", base:"Ward Bow", aura:"Thorns", aura_lvl:15},
 {only:"amazon", rw:1, name:"Zephyr ­ ­ - ­ ­ Matriarchal Bow", req_level:21, e_damage:33, frw:25, ias:25, target_defense:-25, ar:66, lDamage_min:1, lDamage_max:50, defense:25, skill_Phase_Run:3, twoHanded:1, type:"bow", base:"Matriarchal Bow", pod_changes:1},
 {limit:["amazon"], rw:1, name:"Zephyr ­ ­ - ­ ­ Razor Bow", req_level:21, e_damage:33, frw:25, ias:25, target_defense:-25, ar:66, lDamage_min:1, lDamage_max:50, defense:25, skill_Phase_Run:3, twoHanded:1, type:"bow", base:"Razor Bow", pod_changes:1},
-{name:"Goldstrike Arch", req_level:46, e_damage:250, damage_vs_demons:200, damage_vs_undead:200, ias:50, life_replenish:12, ar_bonus:150, type:"bow", twoHanded:1, base:"Gothic Bow"},	// 5% ctc level 7 Fist of the Heavens on striking
-{name:"Kuko Shakaku", req_level:33, e_damage:180, pierce:50, fDamage_min:40, fDamage_max:180, skills_bows:3, skill_Immolation_Arrow:3, type:"bow", twoHanded:1, base:"Cedar Bow"},	// fires explosive arrows (level 7)
-{name:"Buriza-Do Kyanon", req_level:41, e_damage:200, max_damage_per_level:2.5, cDamage_min:32, cDamage_max:196, pierce:100, freezes_target:3, defense:150, dexterity:35, ias:80, twoHanded:1, type:"crossbow", base:"Ballista"},
-{name:"Windforce", twoHanded:1, req_level:73, type:"bow", ias:20, mana_leech:8, strength:10, dexterity:5, knockback:1, e_damage:250, max_damage_per_level:3.125, heal_stam:30, base:"Hydra Bow"},
-{name:"Doomslinger", req_level:28, e_damage:100, pierce:35, life:15, oskill_Multiple_Shot:1, twoHanded:1, type:"crossbow", base:"Repeating Crossbow", pod_changes:1},		// OSKILL
 // Other
-{only:"amazon", rw:1, name:"Breath of the Dying ­ ­ - ­ ­ Matriarchal Pike", req_level:69, twoHanded:1, indestructible:1, ias:60, e_damage:400, target_defense:-25, ar:50, damage_vs_undead:200, ar_vs_undead:50, mana_leech:7, life_leech:15, pmh:1, all_attributes:30, light_radius:1, req:-20, skills_spears:3, type:"Spear", base:"Matriarchal Pike"},
-{limit:["amazon"], rw:1, name:"Breath of the Dying ­ ­ - ­ ­ War Pike", req_level:69, twoHanded:1, indestructible:1, ias:60, e_damage:400, target_defense:-25, ar:50, damage_vs_undead:200, ar_vs_undead:50, mana_leech:7, life_leech:15, pmh:1, all_attributes:30, light_radius:1, req:-20, type:"Spear", base:"War Pike"},
+{only:"amazon", rw:1, name:"Breath of the Dying ­ ­ - ­ ­ Matriarchal Pike", req_level:69, twoHanded:1, indestructible:1, ias:60, e_damage:400, target_defense:-25, ar:50, damage_vs_undead:200, ar_vs_undead:50, mana_leech:7, life_leech:15, pmh:1, all_attributes:30, light_radius:1, req:-20, skills_spears:3, type:"spear", base:"Matriarchal Pike"},
+{limit:["amazon"], rw:1, name:"Breath of the Dying ­ ­ - ­ ­ War Pike", req_level:69, twoHanded:1, indestructible:1, ias:60, e_damage:400, target_defense:-25, ar:50, damage_vs_undead:200, ar_vs_undead:50, mana_leech:7, life_leech:15, pmh:1, all_attributes:30, light_radius:1, req:-20, type:"spear", base:"War Pike"},
 //{rw:1, name:"Pride ­ ­ - ­ ­ Giant Thresher", req_level:67, ar_bonus:300, damage_vs_demons_per_level:1, lDamage_min:50, lDamage_max:280, dstrike:20, blind_on_hit:1, freezes_target:3, vitality:10, life_replenish:8, gf_per_level:1.875, twoHanded:1, type:"polearm", base:"Giant Thresher", aura:"Concentration", aura_lvl:20},	// 25% ctc level 17 Fire Wall when struck
 //{rw:1, name:"Hand of Justice ­ ­ - ­ ­ Caduceus", req_level:67, ias:33, e_damage:330, itd:1, enemy_fRes:-20, life_leech:7, dstrike:20, blind_on_hit:1, freezes_target:3, type:"scepter", base:"Caduceus", aura:"Holy Fire", aura_lvl:16},	// 100% ctc level 36 Blaze when you level-up, 100% ctc level 48 Meteor when you die
 {rw:1, name:"Eternity ­ ­ - ­ ­ Colossus Sword", req_level:63, e_damage:310, indestructible:1, damage_min:9, life_leech:7, cblow:20, blind_on_hit:1, slows_target:33, mana_regen:16, cbf:1, mf:30, ethereal:1, twoHanded:1, type:"sword", base:"Colossus Sword"},	// level 8 Revive (88 charges)
@@ -620,6 +615,31 @@ var equipment = {
 {only:"sorceress", rw:1, name:"Memory ­ ­ - ­ ­ Shillelagh", req_level:37, skills_sorceress:3, fcr:33, damage_min:9, target_defense:-25, defense_bonus:50, vitality:10, energy:10, max_mana:20, skill_Lightning_Mastery:3, skill_Static_Field:2, skill_Lightning_Surge:3, skill_Energy_Shield:6, twoHanded:1, type:"staff", base:"Shillelagh", pod_changes:1},	// also has Lightning Surge deals 35% extra damage as physical
 {only:"necromancer", rw:1, name:"White ­ ­ - ­ ­ Ghost Wand", req_level:35, skills_poisonBone:3, fcr:20, flee_on_hit:25, vitality:10, mana:13, mDamage_reduced:4, skill_Summon_Mastery:4, skill_Bone_Spear:5, skill_Bone_Armor:3, skill_Desecrate:3, skill_Deadly_Poison:3, type:"wand", base:"Ghost Wand"},
 {only:"paladin", rw:1, name:"Holy Thunder ­ ­ - ­ ­ Divine Scepter", req_level:25, e_damage:60, damage_max:10, target_defense:-25, fDamage_min:5, fDamage_max:30, lDamage_min:21, lDamage_max:110, pDamage_all:75, pDamage_duration:5, lRes_max:5, lRes:60, skill_Fist_of_the_Heavens:3, skill_Vigor:3, skill_Holy_Shock:6, type:"scepter", base:"Divine Scepter", pod_changes:1},	// level 7 Teleport (60 charges)
+
+{name:"Bane Ash", req_level:5, e_damage:60, damage_vs_undead:50, ias:20, mana:30, fRes:50, fDamage_min:4, fDamage_max:6, skill_Fire_Bolt:5, skill_Warmth:2, twoHanded:1, type:"staff", base:"Short Staff"},
+{name:"Serpent Lord", req_level:9, e_damage:40, damage_vs_undead:50, pDamage_all:12, pDamage_duration:3, mana_leech:100, target_defense:-50, mana:10, pRes:50, light_radius:-1, twoHanded:1, type:"staff", base:"Long Staff"},
+{name:"Spire of Lazarus", req_level:18, damage_vs_undead:50, lDamage_min:1, lDamage_max:28, skills_sorceress:1, skill_Lightning_Surge:2, skill_Chain_Lightning:1, skill_Static_Field:3, mana_regen:43, energy:15, damage_reduced:5, lRes:75, twoHanded:1, type:"staff", base:"Gnarled Staff"},
+{name:"The Salamander", req_level:21, damage_vs_undead:50, fDamage_min:15, fDamage_max:32, fRes:30, skills_fire_all:2, skill_Warmth:3, skill_Fire_Ball:2, skill_Fire_Wall:1, twoHanded:1, type:"staff", base:"Battle Staff"},
+{name:"The Iron Jang Bong", req_level:28, e_damage:100, damage_vs_undead:50, ar_bonus:50, fcr:20, skills_sorceress:2, skill_Frost_Nova:3, skill_Blaze:2, skill_Nova:2, defense:30, twoHanded:1, type:"staff", base:"War Staff"},
+{name:"Razorswitch", req_level:28, all_skills:1, fcr:30, life:80, mana:175, all_res:50, mDamage_reduced:15, thorns:15, damage_vs_undead:50, twoHanded:1, type:"staff", base:"Jo Staff"},
+{name:"Ribcracker", req_level:31, damage_min:30, damage_max:65, e_damage:300, damage_vs_undead:50, cblow:50, ias:50, fhr:50, defense_bonus:100, defense:100, dexterity:15, twoHanded:1, type:"staff", base:"Quarterstaff"},
+{name:"Chromatic Ire", req_level:35, damage_vs_undead:50, fcr:20, skills_sorceress:3, max_life:25, all_res:40, thorns_lightning:20, skill_Cold_Mastery:1, skill_Lightning_Mastery:1, skill_Fire_Mastery:1, twoHanded:1, type:"staff", base:"Cedar Staff"},
+{name:"Warpspear", req_level:39, damage_vs_undead:50, itd:1, missile_defense:250, skills_sorceress:3, skill_Energy_Shield:3, skill_Telekinesis:3, skill_Teleport:3, twoHanded:1, type:"staff", base:"Gothic Staff"},
+{name:"Skull Collector", req_level:41, damage_vs_undead:50, mana_per_kill:20, max_mana:20, mf_per_level:1, all_skills:2, twoHanded:1, type:"staff", base:"Rune Staff"},
+//{name:"Ondal's Wisdom", req_level:66, damage_vs_undead:50, fcr:45, defense:550, energy:50, mDamage_reduced:8, all_skills:4, oskill_Ball_Lightning:20, type:"staff", twoHanded:1, base:"Elder Staff", pod_changes:1},	// OSKILL
+{name:"Mang Song's Lesson", req_level:82, all_skills:5, fcr:30, enemy_lRes:-15, enemy_cRes:-15, enemy_fRes:-15, mana_regen:10, damage_vs_undead:50, twoHanded:1, type:"staff", base:"Archon Staff"},
+
+{name:"Torch of Iro", req_level:5, damage_vs_undead:50, fDamage_min:5, fDamage_max:9, skills_necromancer:1, energy:10, mana_regen:5, life_leech:6, light_radius:3, type:"wand", base:"Wand"},
+{name:"Maelstrom", req_level:14, damage_vs_undead:50, lDamage_min:1, lDamage_max:9, mana:13, fcr:30, lRes:40, skill_Iron_Maiden:3, skill_Amplify_Damage:3, skill_Terror:3, skill_Corpse_Explosion:3, type:"wand", base:"Yew Wand"},
+{name:"Gravenspine", req_level:20, damage_vs_undead:50, skills_necromancer:2, cDamage_min:4, cDamage_max:8, mana_leech:5, mana:50, dexterity:10, strength:10, type:"wand", base:"Bone Wand"},
+{name:"Ume's Lament", req_level:28, damage_vs_undead:50, skills_necromancer:2, fcr:20, mana:40, flee_on_hit:50, skill_Decrepify:2, skill_Terror:3, type:"wand", base:"Grim Wand"},
+{name:"Suicide Branch", req_level:33, damage_vs_undead:50, all_skills:1, fcr:50, max_mana:10, all_res:10, life:40, thorns:25, type:"wand", base:"Burnt Wand"},
+{name:"Carin Shard", req_level:35, damage_vs_undead:50, mana_per_level:1.25, life_per_level:1.25, skills_necromancer:1, skills_summoning_necromancer:2, fcr:10, fhr:30, life_replenish:5, type:"wand", base:"Petrified Wand"},
+{name:"Arm of King Leoric", req_level:36, damage_vs_undead:50, mana_per_level:1.25, fcr:10, skill_Terror:2, skill_Raise_Skeletal_Mage:2, skill_Summon_Mastery:3, skill_Raise_Skeleton_Warrior:3, skills_summoning_necromancer:2, skills_poisonBone:2, type:"wand", base:"Tomb Wand"},	// 10% ctc level 2 Bone Prison when struck? 5% ctc level 10 Bone Spirit when struck
+{name:"Blackhand Key", req_level:41, damage_vs_undead:50, skills_necromancer:2, skills_curses:1, damage_to_mana:20, fcr:30, fRes:37, life:50, light_radius:-2, type:"wand", base:"Grave Wand"},	// level 13 Grim Ward (30 charges)
+{name:"Boneshade", req_level:79, damage_vs_undead:50, skills_necromancer:2, skill_Bone_Spirit:2, skill_Bone_Spear:3, skill_Bone_Wall:3, skill_Bone_Armor:5, skill_Teeth:5, fcr:25, type:"wand", base:"Lich Wand"},
+{name:"Death's Web", req_level:66, damage_vs_undead:50, enemy_pRes:-50, mana_per_kill:12, life_per_kill:12, all_skills:2, skills_poisonBone:2, type:"wand", base:"Unearthed Wand"},
+
 {name:"Knell Striker", req_level:5, e_damage:80, damage_vs_undead:50, cblow:25, ar:35, pRes:20, fRes:20, mana:15, type:"scepter", base:"Scepter"},
 {name:"Rusthandle", req_level:18, e_damage:60, damage_vs_undead:110, damage_min:3, damage_max:7, life_leech:8, skills_paladin:1, mDamage_reduced:1, skill_Precision:3, skill_Vengeance:3, type:"scepter", base:"Grand Scepter"},
 {name:"Stormeye", req_level:30, e_damage:120, damage_vs_undead:50, cDamage_min:3, cDamage_max:5, lDamage_min:1, lDamage_max:6, life_replenish:10, skill_Fist_of_the_Heavens:1, skill_Holy_Shock:3, skill_Resist_Lightning:5, type:"scepter", base:"War Scepter"},
@@ -655,6 +675,7 @@ var equipment = {
 {name:"Windhammer", req_level:68, e_damage:230, damage_vs_undead:50, cblow:50, ias:60, type:"hammer", twoHanded:1, base:"Ogre Maul"},	// 33% ctc level 22 Twister on striking
 {name:"Earth Shifter", req_level:69, e_damage:300, damage_vs_undead:50, skills_elemental:7, ias:10, cblow:33, fcr:10, type:"hammer", twoHanded:1, base:"Thunder Maul"},	// 25% ctc level 14 Fissure on striking, level 14 Volcano (30 charges)
 {name:"The Cranium Basher", twoHanded:1, req_level:87, type:"hammer", cblow:75, ias:20, all_res:25, strength:25, damage_min:20, e_damage:240, damage_vs_undead:50, ethereal:0, base:"Thunder Maul"},
+
 {name:"The Gnasher", req_level:5, e_damage:70, cblow:20, owounds:50, strength:8, type:"axe", base:"Hand Axe"},
 {name:"Deathspade", req_level:9, e_damage:70, damage_min:8, ar_bonus:15, blind_on_hit:1, mana_per_kill:4, type:"axe", base:"Axe"},
 {name:"Bladebone", req_level:15, e_damage:50, damage_vs_undead:100, fDamage_min:8, fDamage_max:12, ias:20, ar_vs_undead:40, defense:20, type:"axe", base:"Double Axe"},
@@ -683,6 +704,7 @@ var equipment = {
 {name:"Hellslayer", req_level:66, e_damage:100, max_damage_per_level:3, fDamage_min:150, fDamage_max:250, strength_per_level:0.5, dexterity_per_level:0.5, life:25, twoHanded:1, type:"axe", base:"Decapitator"},	// 10% ctc level 20 Fireball on attack
 {name:"Messerschmidt's Reaver", req_level:70, e_damage:200, max_damage_per_level:2.5, fDamage_min:20, fDamage_max:240, ar_bonus:100, all_attributes:15, twoHanded:1, type:"axe", base:"Champion Axe"},
 {name:"Executioner's Justice", twoHanded:1, type:"axe", req_level:75, cblow:25, ias:30, target_defense:-33, e_damage:290, base:"Glorious Axe"},
+
 {name:"Rixot's Keen", req_level:2, e_damage:100, damage_min:5, cblow:25, ar_bonus:20, defense:25, light_radius:2, type:"sword", base:"Short Sword"},
 {name:"Blood Crescent", req_level:7, e_damage:80, owounds:33, ias:15, life_leech:15, all_res:15, life:15, light_radius:4, type:"sword", base:"Scimitar"},
 {name:"Skewer of Krintiz", req_level:10, e_damage:50, damage_min:3, damage_max:7, itd:1, mana_leech:7, dexterity:10, strength:10, type:"sword", base:"Saber"},
@@ -718,6 +740,58 @@ var equipment = {
 {name:"The Grandfather", req_level:81, e_damage:250, max_damage_per_level:2.5, ar_bonus:50, life:80, all_attributes:20, indestructible:1, oskill_Edged_Weapon_Mastery:3, life_regen:2, ethereal:0, type:"sword", twoHanded:1, base:"Colossus Blade", pod_changes:1},
 {name:"Lightsabre", req_level:58, type:"sword", e_damage:200, mana_leech:7, ias:20, itd:1, lAbsorb:15, light_radius:7, damage_min:10, damage_max:30, mDamage_min:60, mDamage_max:120, lDamage_min:1, lDamage_max:200, ethereal:0, base:"Phase Blade", pod_changes:1},	// 5% ctc level 20 Chain Lightning on attack
 //{name:"Azurewrath", req_level:85, e_damage:270, ias:30, mDamage_min:250, mDamage_max:500, cDamage_min:250, cDamage_max:500, all_skills:1, all_attributes:10, light_radius:3, type:"sword", ethereal:0, base:"Phase Blade", aura:"Sanctuary", aura_lvl:13},
+
+{name:"Gull", req_level:4, damage_min:1, damage_max:15, mf:100, mana:-5, type:"dagger", base:"Dagger"},
+{name:"The Diggler", req_level:11, e_damage:50, itd:1, ias:30, cRes:25, fRes:25, dexterity:10, type:"dagger", base:"Dirk"},
+{name:"The Jade Tan Do", req_level:19, ar:150, pDamage_all:180, pDamage_duration:4, pRes:95, pRes_max:20, cbf:1, type:"dagger", base:"Kriss"},
+{name:"Spectral Shard", req_level:25, fcr:50, ar:55, all_res:10, mana:50, type:"dagger", base:"Blade"},
+{name:"Spineripper", req_level:32, e_damage:240, damage_min:15, damage_max:27, ias:15, skills_necromancer:1, pmh:1, itd:1, life_leech:8, dexterity:10, type:"dagger", base:"Poignard"},
+{name:"Heart Carver", req_level:36, e_damage:240, damage_min:15, damage_max:35, dstrike:35, itd:1, skill_Grim_Ward:4, skill_Find_Item:4, skill_Find_Potion:4, type:"dagger", base:"Rondel"},
+{name:"Blackbog's Sharp", req_level:38, pDamage_all:488, pDamage_duration:10, damage_min:15, damage_max:45, ias:30, slows_target:50, defense:50, skill_Poison_Nova:4, skill_Desecrate:4, skill_Deadly_Poison:5, type:"dagger", base:"Cinquedeas"},
+{name:"Stormspike", req_level:41, e_damage:150, lDamage_min:1, lDamage_max:120, lRes_per_level:1, thorns_lightning:20, type:"dagger", base:"Stilleto", pod_changes:1},	// 25% ctc level 3 Charged Bolt when struck
+{name:"Wizardspike", req_level:61, mana_per_level:2, fcr:50, mana_regen:15, max_mana:15, all_res:75, indestructible:1, ethereal:0, type:"dagger", base:"Bone Knife"},
+{name:"Fleshripper", req_level:68, e_damage:300, target_defense:-50, cblow:25, dstrike:33, owounds:50, pmh:1, slows_target:20, type:"dagger", base:"Fanged Knife"},
+{name:"Ghostflame", req_level:66, e_damage:240, itd:1, mDamage_min:108, mDamage_max:108, mana_leech:15, light_radius:2, type:"dagger", indestructible:1, ethereal:1, base:"Legend Spike"},
+
+{name:"Dimoak's Hew", req_level:8, e_damage:100, ias:20, dexterity:15, defense:-8, twoHanded:1, type:"polearm", base:"Bardiche"},
+{name:"Steelgoad", req_level:14, e_damage:80, dstrike:30, ar:30, all_res:5, flee_on_hit:75, twoHanded:1, type:"polearm", base:"Voulge"},
+{name:"Soul Harvest", req_level:19, e_damage:90, owounds:30, mana_leech:10, ar:45, energy:5, all_res:20, twoHanded:1, type:"polearm", base:"Scythe"},
+{name:"The Battlebranch", req_level:25, e_damage:70, ias:30, ar:100, life_leech:7, dexterity:10, twoHanded:1, type:"polearm", base:"Poleaxe"},
+{name:"Woestave", req_level:28, e_damage:40, owounds:50, slows_target:50, blind_on_hit:3, monster_defense_per_hit:-50, freezes_target:1, pmh:1, light_radius:-3, twoHanded:1, type:"polearm", base:"Halberd"},
+{name:"The Grim Reaper", req_level:29, e_damage:20, damage_min:15, dstrike:100, mana_leech:5, pmh:1, twoHanded:1, type:"polearm", base:"War Scythe"},
+{name:"The Meat Scraper", req_level:41, e_damage:200, owounds:50, ias:30, life_leech:10, mf:25, skills_masteries:3, twoHanded:1, type:"polearm", base:"Lochaber Axe"},
+{name:"Blackleach Blade", req_level:41, e_damage:140, max_damage_per_level:1.25, req:-25, light_radius:-2, life_leech:8, twoHanded:1, type:"polearm", base:"Bill"},	// 5% ctc level 5 Weaken on striking
+{name:"Athena's Wrath", req_level:42, e_damage:180, max_damage_per_level:1, life_per_level:1, ias:30, skills_druid:3, dexterity:15, twoHanded:1, type:"polearm", base:"Battle Scythe"},
+{name:"Pierre Tombale Couant", req_level:43, e_damage:220, damage_min:12, damage_max:20, dstrike:55, ar:200, skills_barbarian:3, mana_leech:6, fhr:30, twoHanded:1, type:"polearm", base:"Partizan"},
+{name:"Husoldal Evo", req_level:44, e_damage:200, damage_min:20, damage_max:32, ias:20, ar:250, pmh:1, life_replenish:20, twoHanded:1, type:"polearm", base:"Bec-de-Corbin"},
+{name:"Grim's Burning Dead", req_level:45, e_damage:180, fDamage_min:131, fDamage_max:232, skills_necromancer:3, target_defense:-50, defense_bonus:20, ar:250, fRes:50, req:-50, thorns:8, twoHanded:1, type:"polearm", base:"Grim Scythe"},
+{name:"Bonehew", req_level:64, e_damage:320, pmh:1, ias:30, sockets:3, twoHanded:1, type:"polearm", base:"Ogre Axe", pod_changes:1},	// level 14 Corpse Explosion (30 charges), 50% ctc level 16 Bone Spear on striking
+{name:"Stormspire", req_level:70, e_damage:250, lDamage_min:1, lDamage_max:237, ias:30, lRes:50, strength:10, thorns_lightning:27, indestructible:1, ethereal:0, twoHanded:1, type:"polearm", base:"Giant Thresher", pod_changes:1},	// 2% ctc level 20 Charged Bolt when struck, 5% ctc level 5 Chain Lightning when struck
+{name:"The Reaper's Toll", req_level:75, e_damage:240, itd:1, cDamage_min:4, cDamage_max:44, life_leech:15, dstrike:33, req:-25, type:"polearm", twoHanded:1, base:"Thresher"},	// 33% ctc level 1 Decrepify on striking
+{name:"Tomb Reaver", req_level:84, e_damage:280, damage_vs_undead:230, ias:60, ar_vs_undead:350, all_res:50, life_per_kill:14, mf:80, light_radius:4, sockets:3, twoHanded:1, type:"polearm", base:"Cryptic Axe"},	// 10% Reanimate as: Returned (EFFECT)
+{name:"The Dragon Chang", req_level:8, damage_vs_undead:100, damage_min:10, fDamage_min:3, fDamage_max:6, ar:35, light_radius:2, twoHanded:1, type:"spear", base:"Spear"},
+{name:"Razortine", req_level:12, e_damage:50, slows_target:25, ias:30, target_defense:-50, dexterity:8, strength:15, twoHanded:1, type:"spear", base:"Trident"},
+{name:"Bloodthief", req_level:17, e_damage:70, owounds:35, life_leech:12, life:26, strength:10, twoHanded:1, type:"spear", base:"Brandistock"},
+{name:"Lance of Yaggai", req_level:22, lDamage_min:1, lDamage_max:60, all_res:15, ias:40, thorns:8, twoHanded:1, type:"spear", base:"Spetum"},
+{name:"The Tannr Gorerod", req_level:27, e_damage:100, fDamage_min:23, fDamage_max:54, ar:60, fRes:15, fRes_max:15, life:30, light_radius:3, twoHanded:1, type:"spear", base:"Pike"},
+{name:"The Impaler", req_level:31, e_damage:170, owounds:40, ias:20, itd:1, ar:150, pmh:1, skill_Impale:5, skill_Power_Strike:3, twoHanded:1, type:"spear", base:"War Spear"},
+{name:"Kelpie Snare", req_level:33, e_damage:180, damage_min:30, damage_max:50, slows_target:75, life_per_level:1.25, fRes:50, strength:10, twoHanded:1, type:"spear", base:"Fuscina"},
+{name:"Soulfeast Time", req_level:35, e_damage:190, ar:250, req:-20, life_leech:7, mana_leech:7, slower_stam_drain:20, twoHanded:1, type:"spear", base:"War Fork"},
+{name:"Hone Sundan", req_level:37, e_damage:200, damage_min:20, damage_max:40, cblow:45, autorepair:1, sockets:3, twoHanded:1, type:"spear", base:"Yari"},
+{name:"Spire of Honor", req_level:39, e_damage:200, damage_min:20, damage_max:40, damage_vs_demons_per_level:1.5, fhr:20, life_replenish:20, ar_bonus:25, defense_bonus:25, skills_combat_paladin:3, light_radius:3, twoHanded:1, type:"spear", base:"Lance"},
+{name:"Arioc's Needle", req_level:81, e_damage:230, dstrike:50, pDamage_all:394, pDamage_duration:10, ias:30, all_skills:4, itd:1, twoHanded:1, type:"spear", base:"Hyperion Spear"},
+{name:"Viperfork", req_level:71, e_damage:240, ar:250, pDamage_all:325, pDamage_duration:10, ias:50, pRes:50, twoHanded:1, type:"spear", base:"Mancatcher", pod_changes:1},	// 15% ctc level 9 Desecrate on striking
+{name:"Steel Pillar", req_level:69, e_damage:260, cblow:25, target_defense:-20, ias:25, defense_bonus:80, indestructible:1, ethereal:0, twoHanded:1, type:"spear", base:"War Pike"},
+
+{name:"Demon's Arch", req_level:68, e_damage:210, fDamage_min:232, fDamage_max:323, lDamage_min:23, lDamage_max:333, ias:30, life_leech:12, autoreplenish:1, type:"javelin", base:"Balrog Spear"},
+{name:"Wraith Flight", req_level:76, e_damage:190, life_leech:13, mana_per_kill:15, autoreplenish:1, ethereal:1, type:"javelin", base:"Ghost Glaive"},
+{name:"Gargoyle's Bite", req_level:70, e_damage:230, pDamage_all:293, pDamage_duration:10, life_leech:15, autoreplenish:1, type:"javelin", base:"Winged Harpoon"},	// level 11 Plague Javelin (60 charges)
+{name:"Deathbit", req_level:44, e_damage:180, dstrike:40, ar:450, life_leech:9, mana_leech:6, autoreplenish:1, type:"thrown", base:"Battle Dart"},
+{name:"The Scalper", req_level:57, e_damage:200, owounds:33, mana_per_kill:4, ias:20, ar_bonus:25, life_leech:6, autoreplenish:1, type:"thrown", base:"Francisca"},
+{name:"Gimmershred", req_level:70, e_damage:210, fDamage_min:218, fDamage_max:483, lDamage_min:29, lDamage_max:501, cDamage_min:176, cDamage_max:397, ias:30, stack_size:1, type:"thrown", base:"Flying Axe"},
+{name:"Lacerator", req_level:68, e_damage:210, ias:30, owounds:33, pmh:1, flee_on_hit:50, autoreplenish:1, type:"thrown", base:"Winged Axe"},	// 33% ctc level 3 Amplify Damage on striking
+{name:"Warshrike", req_level:75, type:"thrown", e_damage:250, dstrike:50, ias:30, autoreplenish:1, lDamage_min:1, lDamage_max:80, base:"Winged Knife", pod_changes:1},
+
 {set_IK:1, name:"Immortal King's Stone Crusher", twoHanded:1, type:"mace", req_level:76, e_damage:200, damage_vs_demons:200, damage_vs_undead:250, ias:40, indestuctible:1, cblow:40, sockets:2, base:"Ogre Maul", set_bonuses:["set_IK",{},{fDamage_min:211, fDamage_max:397},{lDamage_min:7, lDamage_max:477},{cDamage_min:127, cDamage_max:364},{pDamage_all:204, pDamage_duration:6},{mDamage_min:250, mDamage_max:361}]},
 {set_Gris:1, name:"Griswold's Redemption", type:"scepter", req_level:66, e_damage:240, damage_vs_undead:250, req:-20, ias:40, sockets:4, base:"Caduceus", set_bonuses:["set_Gris",{},{skills_combat_paladin:2},{damage_min:10, damage_max:20},{damage_min:10, damage_max:20}]},
 {set_Ald:1, name:"Aldur's Rhythm", type:"mace", req_level:42, damage_min:40, damage_max:62, damage_vs_demons:200, damage_vs_undead:50, lDamage_min:50, lDamage_max:75, ias:30, life_leech:10, mana_leech:5, sockets:3, base:"Jagged Star", set_bonuses:["set_Ald",{},{strength:15},{strength:15},{strength:15}]},
@@ -741,29 +815,35 @@ var equipment = {
 {set_Cleglaw:1, name:"Cleglaw's Tooth", req_level:4, dstrike:50, ar_bonus:30, type:"sword", base:"Long Sword", set_bonuses:["set_Cleglaw",{},{max_damage_per_level:1.25},{}]},
 {set_Berserker:1, name:"Berserker's Hatchet", req_level:3, ar_bonus:30, mana_leech:5, type:"axe", base:"Double Axe", set_bonuses:["set_Berserker",{},{e_damage:50},{}]},
 {set_Arctic:1, name:"Arctic Horn", twoHanded:1, req_level:2, e_damage:50, ar_bonus:20, type:"bow", base:"Short War Bow", set_bonuses:["set_Arctic",{},{ar_per_level:8},{cDamage_min:20, cDamage_max:30},{}], pod_changes:1},	// Cold Arrow fires 2 additional projectiles
-
-{name:"Lacerator", req_level:68, e_damage:210, ias:30, owounds:33, pmh:1, flee_on_hit:50, autoreplenish:1, type:"thrown", base:"Winged Axe"},	// 33% ctc level 3 Amplify Damage on striking
-{name:"Warshrike", req_level:75, type:"thrown", e_damage:250, dstrike:50, ias:30, autoreplenish:1, lDamage_min:1, lDamage_max:80, base:"Winged Knife", pod_changes:1},
-
-{name:"The Reaper's Toll", req_level:75, e_damage:240, itd:1, cDamage_min:4, cDamage_max:44, life_leech:15, dstrike:33, req:-25, type:"polearm", twoHanded:1, base:"Thresher"},	// 33% ctc level 1 Decrepify on striking
-
-{name:"Razorswitch", req_level:28, all_skills:1, fcr:30, life:80, mana:175, all_res:50, mDamage_reduced:15, thorns:15, damage_vs_undead:50, twoHanded:1, type:"staff", base:"Jo Staff"},
-{name:"Ribcracker", req_level:31, damage_min:30, damage_max:65, e_damage:300, damage_vs_undead:50, cblow:50, ias:50, fhr:50, defense_bonus:100, defense:100, dexterity:15, twoHanded:1, type:"staff", base:"Quarterstaff"},
-{name:"Chromatic Ire", req_level:35, damage_vs_undead:50, fcr:20, skills_sorceress:3, max_life:25, all_res:40, thorns_lightning:20, skill_Cold_Mastery:1, skill_Lightning_Mastery:1, skill_Fire_Mastery:1, twoHanded:1, type:"staff", base:"Cedar Staff"},
-{name:"Warpspear", req_level:39, damage_vs_undead:50, itd:1, missile_defense:250, skills_sorceress:3, skill_Energy_Shield:3, skill_Telekinesis:3, skill_Teleport:3, twoHanded:1, type:"staff", base:"Gothic Staff"},
-{name:"Skull Collector", req_level:41, damage_vs_undead:50, mana_per_kill:20, max_mana:20, mf_per_level:1, all_skills:2, twoHanded:1, type:"staff", base:"Rune Staff"},
-//{name:"Ondal's Wisdom", req_level:66, damage_vs_undead:50, fcr:45, defense:550, energy:50, mDamage_reduced:8, all_skills:4, oskill_Ball_Lightning:20, type:"staff", twoHanded:1, base:"Elder Staff", pod_changes:1},	// OSKILL
-{name:"Mang Song's Lesson", req_level:82, all_skills:5, fcr:30, enemy_lRes:-15, enemy_cRes:-15, enemy_fRes:-15, mana_regen:10, damage_vs_undead:50, twoHanded:1, type:"staff", base:"Archon Staff"},
-{name:"Torch of Iro", req_level:5, damage_vs_undead:50, fDamage_min:5, fDamage_max:9, skills_necromancer:1, energy:10, mana_regen:5, life_leech:6, light_radius:3, type:"wand", base:"Wand"},
-{name:"Maelstrom", req_level:14, damage_vs_undead:50, lDamage_min:1, lDamage_max:9, mana:13, fcr:30, lRes:40, skill_Iron_Maiden:3, skill_Amplify_Damage:3, skill_Terror:3, skill_Corpse_Explosion:3, type:"wand", base:"Yew Wand"},
-{name:"Gravenspine", req_level:20, damage_vs_undead:50, skills_necromancer:2, cDamage_min:4, cDamage_max:8, mana_leech:5, mana:50, dexterity:10, strength:10, type:"wand", base:"Bone Wand"},
-{name:"Ume's Lament", req_level:28, damage_vs_undead:50, skills_necromancer:2, fcr:20, mana:40, flee_on_hit:50, skill_Decrepify:2, skill_Terror:3, type:"wand", base:"Grim Wand"},
-{name:"Suicide Branch", req_level:33, damage_vs_undead:50, all_skills:1, fcr:50, max_mana:10, all_res:10, life:40, thorns:25, type:"wand", base:"Burnt Wand"},
-{name:"Carin Shard", req_level:35, damage_vs_undead:50, mana_per_level:1.25, life_per_level:1.25, skills_necromancer:1, skills_summoning_necromancer:2, fcr:10, fhr:30, life_replenish:5, type:"wand", base:"Petrified Wand"},
-{name:"Arm of King Leoric", req_level:36, damage_vs_undead:50, mana_per_level:1.25, fcr:10, skill_Terror:2, skill_Raise_Skeletal_Mage:2, skill_Summon_Mastery:3, skill_Raise_Skeleton_Warrior:3, skills_summoning_necromancer:2, skills_poisonBone:2, type:"wand", base:"Tomb Wand"},	// 10% ctc level 2 Bone Prison when struck? 5% ctc level 10 Bone Spirit when struck
-{name:"Blackhand Key", req_level:41, damage_vs_undead:50, skills_necromancer:2, skills_curses:1, damage_to_mana:20, fcr:30, fRes:37, life:50, light_radius:-2, type:"wand", base:"Grave Wand"},	// level 13 Grim Ward (30 charges)
-{name:"Boneshade", req_level:79, damage_vs_undead:50, skills_necromancer:2, skill_Bone_Spirit:2, skill_Bone_Spear:3, skill_Bone_Wall:3, skill_Bone_Armor:5, skill_Teeth:5, fcr:25, type:"wand", base:"Lich Wand"},
-{name:"Death's Web", req_level:66, damage_vs_undead:50, enemy_pRes:-50, mana_per_kill:12, life_per_kill:12, all_skills:2, skills_poisonBone:2, type:"wand", base:"Unearthed Wand"},
+{name:"Pluckeye", req_level:7, e_damage:100, ar:28, mana_leech:3, life:10, mana_per_kill:2, light_radius:2, twoHanded:1, type:"bow", base:"Short Bow"},
+{name:"Witherstring", req_level:13, e_damage:50, damage_min:1, damage_max:3, ias:30, ar:50, twoHanded:1, type:"bow", base:"Hunter's Bow", pod_changes:1},	// level 3 Magic Arrow
+{name:"Raven Claw", req_level:15, e_damage:70, ar_bonus:50, dexterity:3, strength:3, twoHanded:1, type:"bow", base:"Long Bow"},	// fires Explosive Arrows
+{name:"Rogue's Bow", req_level:20, e_damage:60, damage_vs_undead:100, dstrike:30, ias:50, ar:60, all_res:10, twoHanded:1, type:"bow", base:"Composite Bow"},
+{name:"Stormstrike", req_level:25, e_damage:90, lDamage_min:1, lDamage_max:30, pierce:25, ar:28, lRes:25, strength:8, twoHanded:1, type:"bow", base:"Short Battle Bow"},
+{name:"Wizendraw", req_level:26, e_damage:80, ar:100, ias:20, cRes:26, energy:15, mana:30, enemy_cRes:-35, twoHanded:1, type:"bow", base:"Long Battle Bow", pod_changes:1},	// level 5 Magic Arrow
+{name:"Hellclap", req_level:27, e_damage:90, fDamage_min:15, fDamage_max:50, ias:10, ar:75, skills_fire_all:1, fRes:40, dexterity:12, twoHanded:1, type:"bow", base:"Short War Bow"},
+{name:"Blastbark", req_level:28, e_damage:130, skills_amazon:1, mana_leech:3, strength:5, skill_Exploding_Arrow:2, twoHanded:1, type:"bow", base:"Long War Bow"},
+{name:"Skystrike", req_level:28, e_damage:200, lDamage_min:1, lDamage_max:250, ias:30, ar:100, skills_amazon:1, energy:10, twoHanded:1, type:"bow", base:"Edge Bow"},	// 2% ctc level 6 Meteor on striking
+{name:"Riphook", req_level:31, e_damage:220, slows_target:30, owounds:30, ias:30, life_leech:10, mana:35, twoHanded:1, type:"bow", base:"Razor Bow"},
+{name:"Kuko Shakaku", req_level:33, e_damage:180, pierce:50, fDamage_min:40, fDamage_max:180, skills_bows:3, skill_Immolation_Arrow:3, type:"bow", twoHanded:1, base:"Cedar Bow"},	// fires explosive arrows (level 7)
+{name:"Endlesshail", req_level:36, e_damage:220, cDamage_min:15, cDamage_max:30, cRes:35, missile_defense:50, mana:40, skill_Strafe:5, twoHanded:1, type:"bow", base:"Double Bow"},
+{name:"Witchwild String", req_level:39, e_damage:170, dstrike_per_level:1, all_res:40, sockets:2, twoHanded:1, type:"bow", base:"Short Siege Bow", pod_changes:1},	// level 20 Magic Arrow, 2% ctc level 5 Amplify Damage on striking
+{name:"Cliffkiller", req_level:41, e_damage:230, damage_min:10, damage_max:30, skills_amazon:2, missile_defense:80, life:50, knockback:1, twoHanded:1, type:"bow", base:"Long Siege Bow"},
+{name:"Magewrath", req_level:43, e_damage:150, damage_min:25, damage_max:50, ar:250, skills_amazon:1, blind_on_hit:1, mana_leech:15, mDamage_reduced:13, dexterity:10, skill_Guided_Arrow:3, twoHanded:1, type:"bow", base:"Rune Bow", pod_changes:1},
+{name:"Goldstrike Arch", req_level:46, e_damage:250, damage_vs_demons:200, damage_vs_undead:200, ias:50, life_replenish:12, ar_bonus:150, type:"bow", twoHanded:1, base:"Gothic Bow"},	// 5% ctc level 7 Fist of the Heavens on striking
+{name:"Eaglehorn", req_level:69, e_damage:200, e_max_damage_per_level:2, skills_amazon:1, ar_per_level:6, dexterity:25, itd:1, twoHanded:1, type:"bow", base:"Crusader Bow"},	// e_max_damage_per_level implement
+{name:"Widowmaker", req_level:65, e_damage:200, itd:1, dstrike:33, skill_Guided_Arrow:5, twoHanded:1, type:"bow", base:"Ward Bow", pod_changes:1},	// level 11 Magic Arrow
+{name:"Windforce", req_level:73, type:"bow", ias:20, mana_leech:8, strength:10, dexterity:5, knockback:1, e_damage:250, max_damage_per_level:3.125, heal_stam:30, twoHanded:1, base:"Hydra Bow"},
+{name:"Leadcrow", req_level:9, e_damage:70, dstrike:25, ar:40, pRes:30, life:10, dexterity:10, twoHanded:1, type:"crossbow", base:"Light Crossbow"},
+{name:"Ichorsting", req_level:18, e_damage:50, pDamage_all:30, pDamage_duration:3, ias:20, pierce:50, ar:50, dexterity:20, twoHanded:1, type:"crossbow", base:"Crossbow"},
+{name:"Hellcast", req_level:27, e_damage:80, fDamage_min:15, fDamage_max:35, ias:20, ar:70, fRes_max:15, fRes:15, twoHanded:1, type:"crossbow", base:"Heavy Crossbow"},	// fires Explosive Bolts
+{name:"Doomslinger", req_level:28, e_damage:100, pierce:35, life:15, oskill_Multiple_Shot:1, twoHanded:1, type:"crossbow", base:"Repeating Crossbow", pod_changes:1},		// OSKILL
+{name:"Langer Briser", req_level:33, e_damage:200, damage_max:30, owounds:33, lDamage_min:1, lDamage_max:212, life:30, knockback:1, mf:60, twoHanded:1, type:"crossbow", base:"Arbalest"},
+{name:"Pus Spitter", req_level:36, e_damage:220, pDamage_all:150, pDamage_duration:8, req:-60, ar_per_level:5, ias:10, skills_necromancer:2, twoHanded:1, type:"crossbow", base:"Siege Crossbow", pod_changes:1},	// 9% ctc level 6 Poison Nova when struck, 4% ctc level 1 Lower Resist on striking
+{name:"Buriza-Do Kyanon", req_level:41, e_damage:200, max_damage_per_level:2.5, cDamage_min:32, cDamage_max:196, pierce:100, freezes_target:3, defense:150, dexterity:35, ias:80, twoHanded:1, type:"crossbow", base:"Ballista"},
+{name:"Demon Machine", req_level:49, e_damage:123, damage_max:66, ar:632, pierce:66, defense:321, mana:36, twoHanded:1, type:"crossbow", base:"Chu-Ko-Nu"},	// level 6 Explosive Bolt
+{name:"Hellrack", req_level:76, e_damage:230, ar_bonus:150, fDamage_min:63, fDamage_max:324, cDamage_min:63, cDamage_max:324, lDamage_min:63, lDamage_max:324, ias:20, sockets:2, twoHanded:1, type:"crossbow", base:"Colossus Crossbow"},	// level 18 Immolation Arrow (150 charges)
+{name:"Gut Siphon", req_level:71, e_damage:220, pierce:33, life_leech:18, owounds:33, slows_target:25, twoHanded:1, type:"crossbow", base:"Demon Crossbow"},
 	],
     offhand: [
 {name:"Offhand"},
@@ -774,10 +854,10 @@ var equipment = {
 {only:"assassin", name:"Shadow Killer", type:"claw", req_level:78, e_damage:220, target_defense:-25, freezes_target:2, mana_per_kill:15, indestructible:1, ethereal:1, base:"Battle Cestus", pod_changes:1},
 {only:"assassin", name:"Firelizard's Talons", type:"claw", req_level:67, e_damage:270, fDamage_min:236, fDamage_max:480, ias:15, skills_martial:3, skills_fire_all:2, skill_Fists_of_Ember:2, fRes:70, base:"Feral Claws", pod_changes:1},
 {only:"assassin", set_Nat:1, name:"Natalya's Mark", type:"claw", req_level:79, e_damage:200, damage_vs_undead:200, damage_vs_demons:200, fDamage_min:12, fDamage_max:17, itd:1, ias:40, cDamage_min:50, cDamage_max:50, base:"Scissors Suwayyah", set_bonuses:["set_Nat",{},{},{},{}]},
-{only:"necromancer", name:"Homunculus", req_level:42, block:72, e_def:200, mana_per_kill:5, ibc:40, fbr:30, skills_necromancer:2, energy:20, mana_regen:33, all_res:40, skills_curses:2, base:"Heirophant Trophy"},
-{only:"necromancer", name:"Darkforce Spawn", req_level:65, block:32, e_def:180, skills_summoning_necromancer:3, skills_poisonBone:3, skills_curses:3, fcr:30, max_mana:10, base:"Bloodlord Skull"},
-{only:"necromancer", name:"Boneflame", req_level:72, block:30, e_def:150, frw:20, skills_necromancer:3, all_res:30, base:"Succubae Skull"},
-{only:"necromancer", set_TO:1, name:"Trang-Oul's Wing", req_level:54, defense:125, block:60, ibc:30, pRes:40, fRes:45, dexterity:15, strength:25, skills_poisonBone:2, base:"Cantor Trophy", set_bonuses:["set_TO",{},{},{enemy_pRes:-25},{life_replenish:15},{}]},
+{only:"necromancer", name:"Homunculus", req_level:42, block:72, e_def:200, mana_per_kill:5, ibc:40, fbr:30, skills_necromancer:2, energy:20, mana_regen:33, all_res:40, skills_curses:2, type:"shield", base:"Heirophant Trophy"},
+{only:"necromancer", name:"Darkforce Spawn", req_level:65, block:32, e_def:180, skills_summoning_necromancer:3, skills_poisonBone:3, skills_curses:3, fcr:30, max_mana:10, type:"shield", base:"Bloodlord Skull"},
+{only:"necromancer", name:"Boneflame", req_level:72, block:30, e_def:150, frw:20, skills_necromancer:3, all_res:30, type:"shield", base:"Succubae Skull"},
+{only:"necromancer", set_TO:1, name:"Trang-Oul's Wing", req_level:54, defense:125, block:60, ibc:30, pRes:40, fRes:45, dexterity:15, strength:25, skills_poisonBone:2, type:"shield", base:"Cantor Trophy", set_bonuses:["set_TO",{},{},{enemy_pRes:-25},{life_replenish:15},{}]},
 {only:"paladin", name:"Herald of Zakarum", req_level:42, block:82, e_def:200, ibc:30, fbr:30, ar_bonus:20, strength:20, vitality:20, all_res:50, skills_paladin:2, skills_combat_paladin:2, smite_min:20, smite_max:28, type:"shield", base:"Gilded Shield"},
 {only:"paladin", name:"Alma Negra", req_level:77, block:78, e_def:210, cdr:30, skills_paladin:2, ibc:20, fbr:30, e_damage:75, ar_bonus:75, mDamage_reduced:9, smite_min:35, smite_max:58, type:"shield", base:"Sacred Rondache", pod_changes:1},
 {only:"paladin", name:"Dragonscale", req_level:80, block:52, e_def:200, fDamage_min:211, fDamage_max:371, fDamage:15, oskill_Hydra:10, fRes_max:5, strength:25, fAbsorb:20, smite_min:46, smite_max:46, type:"shield", base:"Zakarum Shield"},
@@ -786,13 +866,19 @@ var equipment = {
 //{only:"paladin", rw:1, name:"Phoenix ­ ­ - ­ ­ Sacred Targe", req_level:65, defense:158, block:60, e_damage:400, enemy_fRes:-28, missile_defense:400, fAbsorb_flat:21, life:50, lRes_max:5, fRes_max:10, aura:"Redemption", aura_lvl:10, smite_min:22, smite_max:70, all_res:45, type:"shield", base:"Sacred Targe", pod_changes:1},	// 100% ctc level 40 Blaze on level-up, 40% ctc level 22 Fire Ball on striking
 {limit:["paladin"], rw:1, name:"Spirit ­ ­ - ­ ­ Monarch", req_level:54, defense:148, block:52, all_skills:2, fcr:35, fhr:55, vitality:22, mana:112, cRes:35, lRes:35, pRes:35, missile_defense:250, thorns:14, mAbsorb_flat:8, smite_min:12, smite_max:34, type:"shield", base:"Monarch"},
 //{limit:["paladin"], rw:1, name:"Phoenix ­ ­ - ­ ­ Monarch", req_level:65, defense:148, block:52, e_damage:400, enemy_fRes:-28, missile_defense:400, fAbsorb_flat:21, life:50, lRes_max:5, fRes_max:10, aura:"Redemption", aura_lvl:10, smite_min:12, smite_max:34, type:"shield", base:"Monarch", pod_changes:1},	// 100% ctc level 40 Blaze on level-up, 40% ctc level 22 Fire Ball on striking
-//{only:"paladin", rw:1, name:"Dream ­ ­ - ­ ­ Sacred Targe", req_level:65, e_def:30, defense:220, fhr:30, vitality:10, mana_per_level:0.625, all_res:20, mf:25, max_life:5, type:"shield", base:"Sacred Targe", pod_changes:1, aura:"Holy Shock", aura_lvl:15},	// 10% ctc level 15 Confuse when struck
-//{only:"paladin", rw:1, name:"Dragon ­ ­ - ­ ­ Sacred Targe", req_level:61, defense:360, missile_defense:230, all_attributes:5, strength_per_level:0.375, lRes_max:5, damage_reduced:7, mana:50, type:"shield", base:"Sacred Targe", aura:"Holy Fire", aura_level:14},	// 20% ctc level 18 Venom when struck, 12% ctc level 15 Hydra on striking
-//{only:"paladin", rw:1, name:"Exile ­ ­ - ­ ­ Sacred Targe", req_level:57, fbr:30, freezes_target:1, e_def:260, life_replenish:7, cRes_max:5, fRes_max:5, mf:25, autorepair:1, ethereal:1, type:"shield", base:"Sacred Targe", aura:"Defiance", aura_lvl:16},	// 15% ctc level 5 Life Tap on striking
-{rw:1, name:"Sanctuary ­ ­ - ­ ­ Troll Nest", req_level:49, fhr:20, fbr:20, ibc:20, e_def:160, missile_defense:250, dexterity:20, all_res:70, mDamage_reduced:7, type:"shield", base:"Troll Nest"},	// level 12 Slow Missiles (60 charges)
-{rw:1, name:"Splendor ­ ­ - ­ ­ Troll Nest", req_level:37, all_skills:1, fcr:10, fbr:20, e_def:100, energy:10, mana_regen:15, gf:50, mf:20, light_radius:3, type:"shield", base:"Troll Nest"},
-{rw:1, name:"Rhyme ­ ­ - ­ ­ Grim Shield", req_level:29, fbr:40, ibc:20, mana_regen:15, all_res:25, cbf:1, gf:50, mf:25, type:"shield", base:"Grim Shield"},
-{rw:1, name:"Ancient's Pledge ­ ­ - ­ ­ Grim Shield", req_level:21, e_def:50, cRes:43, lRes:48, fRes:48, pRes:48, damage_to_mana:10, type:"shield", base:"Grim Shield"},
+//{only:"paladin", rw:1, name:"Dream ­ ­ - ­ ­ Sacred Targe", req_level:65, e_def:30, defense:220, fhr:30, vitality:10, mana_per_level:0.625, all_res:20, mf:25, max_life:5, block:30, type:"shield", base:"Sacred Targe", pod_changes:1, aura:"Holy Shock", aura_lvl:15},	// 10% ctc level 15 Confuse when struck
+//{only:"paladin", rw:1, name:"Dragon ­ ­ - ­ ­ Sacred Targe", req_level:61, defense:360, missile_defense:230, all_attributes:5, strength_per_level:0.375, lRes_max:5, damage_reduced:7, mana:50, block:30, type:"shield", base:"Sacred Targe", aura:"Holy Fire", aura_level:14},	// 20% ctc level 18 Venom when struck, 12% ctc level 15 Hydra on striking
+//{only:"paladin", rw:1, name:"Exile ­ ­ - ­ ­ Sacred Targe", req_level:57, fbr:30, freezes_target:1, e_def:260, life_replenish:7, cRes_max:5, fRes_max:5, mf:25, autorepair:1, ethereal:1, block:30, type:"shield", base:"Sacred Targe", aura:"Defiance", aura_lvl:16},	// 15% ctc level 5 Life Tap on striking
+{only:"paladin", rw:1, name:"Sanctuary ­ ­ - ­ ­ Sacred Targe", req_level:49, fhr:20, fbr:20, ibc:20, e_def:160, missile_defense:250, dexterity:20, all_res:115, mDamage_reduced:7, smite_min:22, smite_max:70, block:50, type:"shield", base:"Sacred Targe"},	// level 12 Slow Missiles (60 charges)
+{limit:["paladin"], rw:1, name:"Sanctuary ­ ­ - ­ ­ Troll Nest", req_level:49, fhr:20, fbr:20, ibc:20, e_def:160, missile_defense:250, dexterity:20, all_res:70, mDamage_reduced:7, block:40, type:"shield", base:"Troll Nest"},	// level 12 Slow Missiles (60 charges)
+{only:"paladin", rw:1, name:"Splendor ­ ­ - ­ ­ Gilded Shield", req_level:38, all_skills:1, fcr:10, fbr:20, e_def:100, energy:10, mana_regen:15, gf:50, mf:20, light_radius:3, smite_min:20, smite_max:28, block:22, type:"shield", all_res:45, base:"Gilded Shield"},
+{only:"necromancer", rw:1, name:"Splendor ­ ­ - ­ ­ Hierophant Trophy", req_level:40, all_skills:1, fcr:10, fbr:20, e_def:100, energy:10, mana_regen:15, gf:50, mf:20, light_radius:3, skill_Summon_Mastery:3, skill_Bone_Armor:3, skill_Bone_Spear:3, block:17, type:"shield", base:"Hierophant Trophy"},
+{limit:["paladin","necromancer"], rw:1, name:"Splendor ­ ­ - ­ ­ Troll Nest", req_level:37, all_skills:1, fcr:10, fbr:20, e_def:100, energy:10, mana_regen:15, gf:50, mf:20, light_radius:3, block:20, type:"shield", base:"Troll Nest"},
+{only:"paladin", rw:1, name:"Rhyme ­ ­ - ­ ­ Protector Shield", req_level:34, fbr:40, ibc:20, mana_regen:15, all_res:70, cbf:1, gf:50, mf:25, smite_min:18, smite_max:24, block:40, type:"shield", base:"Protector Shield"},
+{only:"necromancer", rw:1, name:"Rhyme ­ ­ - ­ ­ Demon Head", req_level:29, fbr:40, ibc:20, mana_regen:15, all_res:25, cbf:1, gf:50, mf:25, skill_Summon_Mastery:3, skill_Bone_Armor:3, skill_Blood_Golem:3, block:37, type:"shield", base:"Demon Head"},
+{limit:["paladin","necromancer"], rw:1, name:"Rhyme ­ ­ - ­ ­ Grim Shield", req_level:29, fbr:40, ibc:20, mana_regen:15, all_res:25, cbf:1, gf:50, mf:25, block:40, type:"shield", base:"Grim Shield"},
+{only:"paladin", rw:1, name:"Ancient's Pledge ­ ­ - ­ ­ Crown Shield", req_level:21, e_def:50, cRes:43, lRes:48, fRes:48, pRes:48, damage_to_mana:10, all_res:45, smite_min:4, smite_max:12, block:25, type:"shield", base:"Crown Shield"},
+{limit:["paladin"], rw:1, name:"Ancient's Pledge ­ ­ - ­ ­ Grim Shield", req_level:21, e_def:50, cRes:43, lRes:48, fRes:48, pRes:48, damage_to_mana:10, block:20, type:"shield", base:"Grim Shield"},
 {name:"Pelta Lunata", req_level:2, block:50, e_def:40, defense:30, ibc:20, fbr:40, energy:10, vitality:10, strength:2, type:"shield", base:"Buckler"},
 {name:"Umbral Disk", req_level:9, block:65, e_def:50, defense:30, ibc:30, blind_on_hit:1, life:20, dexterity:10, light_radius:-2, durability:15, type:"shield", base:"Small Shield"},
 {name:"Stormguild", req_level:13, block:72, e_def:60, defense:30, ibc:30, lRes:25, lDamage_min:1, lDamage_max:6, thorns:3, mDamage_reduced:1, type:"shield", base:"Large Shield"},
@@ -817,12 +903,12 @@ var equipment = {
 {name:"Spirit Ward", req_level:68, block:84, e_def:180, fbr:25, ibc:30, all_res:40, cAbsorb_flat:11, type:"shield", base:"Ward"},	// 5% ctc level 8 Fade when struck
 {set_Brethren:1, name:"Taebaek's Glory", req_level:81, defense:50, block:79, indestructible:1, ibc:25, lRes:30, fbr:30, mana:100, thorns:30, smite_min:0, smite_max:0, type:"shield", base:"Ward", set_bonuses:["set_Brethren",{},{},{},{}]},
 {set_Orphan:1, name:"Whitstan's Guard", req_level:29, block:97, e_def:175, half_freeze:1, fbr:40, ibc:55, light_radius:5, smite_min:0, smite_max:0, type:"shield", base:"Round Shield", set_bonuses:["set_Orphan",{},{},{},{}]},
-{set_Milabrega:1, name:"Milabrega's Orb", req_level:17, defense:25, mf:20, type:"shield", base:"Kite Shield", set_bonuses:["set_Milabrega",{},{life:50},{e_def:50},{}]},
-{set_Civerb:1, name:"Civerb's Ward", req_level:9, defense:15, ibc:15, type:"shield", base:"Large Shield", set_bonuses:["set_Civerb",{},{mana:22},{pRes:26}]},	// bonuses depend on which other items are equipped?
-{set_Isenhart:1, name:"Isenhart's Parry", req_level:8, defense:40, thorns:4, type:"shield", base:"Gothic Shield", set_bonuses:["set_Isenhart",{},{all_res:8},{},{}]},
+{set_Milabrega:1, name:"Milabrega's Orb", req_level:17, block:38, defense:25, mf:20, type:"shield", base:"Kite Shield", set_bonuses:["set_Milabrega",{},{life:50},{e_def:50},{}]},
+{set_Civerb:1, name:"Civerb's Ward", req_level:9, block:57, defense:15, ibc:15, type:"shield", base:"Large Shield", set_bonuses:["set_Civerb",{},{mana:22},{pRes:26}]},	// bonuses depend on which other items are equipped?
+{set_Isenhart:1, name:"Isenhart's Parry", req_level:8, block:46, defense:40, thorns:4, type:"shield", base:"Gothic Shield", set_bonuses:["set_Isenhart",{},{all_res:8},{},{}]},
 {set_Sigon:1, name:"Sigon's Guard", req_level:6, block:74, all_skills:1, ibc:20, smite_min:1, smite_max:5, type:"shield", base:"Tower Shield", set_bonuses:["set_Sigon",{},{},{},{},{},{}]},
-{set_Cleglaw:1, name:"Cleglaw's Claw", req_level:4, defense:17, poison_length_reduced:75, type:"shield", base:"Small Shield", set_bonuses:["set_Cleglaw",{},{all_res:15},{}]},
-{set_Hsarus:1, name:"Hsarus' Iron Fist", req_level:3, damage_reduced:2, strength:10, type:"shield", base:"Buckler", set_bonuses:["set_Hsarus",{},{defense_per_level:2.5},{}]},
+{set_Cleglaw:1, name:"Cleglaw's Claw", req_level:4, block:35, defense:17, poison_length_reduced:75, type:"shield", base:"Small Shield", set_bonuses:["set_Cleglaw",{},{all_res:15},{}]},
+{set_Hsarus:1, name:"Hsarus' Iron Fist", req_level:3, block:30, damage_reduced:2, strength:10, type:"shield", base:"Buckler", set_bonuses:["set_Hsarus",{},{defense_per_level:2.5},{}]},
 {only:"paladin", rarity:"crafted", name:"Priest's Safety Monarch", req_level:54, damage_reduced:4, mDamage_reduced:2, mRes:10, e_def:230, all_res:20, skills_paladin:2, block:72, ibc:20, fbr:30, req:-30, fhr:17, type:"shield", base:"Monarch"},	// check required level of affixes
 {limit:["paladin"], rarity:"crafted", name:"Safety Monarch", req_level:54, damage_reduced:4, mDamage_reduced:2, mRes:10, e_def:230, all_res:20, defense_per_level:3, block:72, ibc:20, fbr:30, req:-30, fhr:17, type:"shield", base:"Monarch"},		// check required level of affixes
 // Quivers
@@ -872,92 +958,6 @@ var equipment = {
 {debug:20, name:"+20 skills", req_level:100, all_skills:20},
 	],
 };
-
-// UNIQUE WEAPONS
-/*
-{name:"Gull", req_level:0, e_damage:0, type:"dagger", base:"Dagger"},
-{name:"The Diggler", req_level:0, e_damage:0, type:"dagger", base:"Dirk"},
-{name:"The Jade Tan Do", req_level:0, e_damage:0, type:"dagger", base:"Kriss"},
-{name:"Spectral Shard", req_level:0, e_damage:0, type:"dagger", base:"Blade"},
-{name:"Spineripper", req_level:0, e_damage:0, type:"dagger", base:"Poignard"},
-{name:"Heart Carver", req_level:0, e_damage:0, type:"dagger", base:"Rondel"},
-{name:"Blackbog's Sharp", req_level:0, e_damage:0, type:"dagger", base:"Cinquedeas"},
-{name:"Stormspike", req_level:0, e_damage:0, type:"dagger", base:"Stilleto", pod_changes:1},
-{name:"Wizardspike", req_level:0, e_damage:0, ethereal:0, type:"dagger", base:"Bone Knife"},
-{name:"Fleshripper", req_level:0, e_damage:0, type:"dagger", base:"Fanged Knife"},
-{name:"Ghostflame", req_level:0, e_damage:0, type:"dagger", indestructible:1, ethereal:1, base:"Legend Spike"},
-
-{name:"Dimoak's Hew", req_level:0, e_damage:0, twoHanded:1, type:"polearm", base:"Bardiche"},
-{name:"Steelgoad", req_level:0, e_damage:0, twoHanded:1, type:"polearm", base:"Voulge"},
-{name:"Soul Harvest", req_level:0, e_damage:0, twoHanded:1, type:"polearm", base:"Scythe"},
-{name:"The Battlebranch", req_level:0, e_damage:0, twoHanded:1, type:"polearm", base:"Poleaxe"},
-{name:"Woestave", req_level:0, e_damage:0, twoHanded:1, type:"polearm", base:"Halberd"},
-{name:"The Grim Reaper", req_level:0, e_damage:0, twoHanded:1, type:"polearm", base:"War Scythe"},
-{name:"The Meat Scraper", req_level:0, e_damage:0, twoHanded:1, type:"polearm", base:"Lochaber Axe"},
-{name:"Blackleach Blade", req_level:0, e_damage:0, twoHanded:1, type:"polearm", base:"Bill"},
-{name:"Athena's Wrath", req_level:0, e_damage:0, twoHanded:1, type:"polearm", base:"Battle Scythe"},
-{name:"Pierre Tombale Couant", req_level:0, e_damage:0, twoHanded:1, type:"polearm", base:"Partizan"},
-{name:"Husoldal Evo", req_level:0, e_damage:0, twoHanded:1, type:"polearm", base:"Bec-de-Corbin"},
-{name:"Grim's Burning Dead", req_level:0, e_damage:0, twoHanded:1, type:"polearm", base:"Grim Scythe"},
-{name:"Bonehew", req_level:0, e_damage:0, sockets:3, twoHanded:1, type:"polearm", base:"Ogre Axe", pod_changes:1},
-
-{name:"Tomb Reaver", req_level:0, e_damage:0, sockets:3, twoHanded:1, type:"polearm", base:"Cryptic Axe"},
-{name:"Stormspire", req_level:0, e_damage:0, ethereal:0, twoHanded:1, type:"polearm", base:"Giant Thresher", pod_changes:1},
-{name:"The Dragon Chang", req_level:0, e_damage:0, twoHanded:1, type:"spear", base:"Spear"},
-{name:"Razortine", req_level:0, e_damage:0, twoHanded:1, type:"spear", base:"Trident"},
-{name:"Bloodthief", req_level:0, e_damage:0, twoHanded:1, type:"spear", base:"Brandistock"},
-{name:"Lance of Yaggai", req_level:0, e_damage:0, twoHanded:1, type:"spear", base:"Spetum"},
-{name:"The Tannr Gorerod", req_level:0, e_damage:0, twoHanded:1, type:"spear", base:"Pike"},
-{name:"The Impaler", req_level:0, e_damage:0, twoHanded:1, type:"spear", base:"War Spear"},
-{name:"Kelpie Snare", req_level:0, e_damage:0, twoHanded:1, type:"spear", base:"Fuscina"},
-{name:"Soulfeast Time", req_level:0, e_damage:0, twoHanded:1, type:"spear", base:"War Fork"},
-{name:"Hone Sundan", req_level:0, e_damage:0, sockets:3, twoHanded:1, type:"spear", base:"Yari"},
-{name:"Spire of Honor", req_level:0, e_damage:0, twoHanded:1, type:"spear", base:"Lance"},
-{name:"Arioc's Needle", req_level:0, e_damage:0, twoHanded:1, type:"spear", base:"Hyperion Spear"},
-{name:"Viperfork", req_level:0, e_damage:0, twoHanded:1, type:"spear", base:"Mancatcher", pod_changes:1},
-{name:"Steel Pillar", req_level:0, e_damage:0, ethereal:0, twoHanded:1, type:"spear", base:"War Pike"},
-{name:"Demon's Arch", req_level:0, e_damage:0, autoreplenish:1, type:"javelin", base:"Balrog Spear"},
-{name:"Wraith Flight", req_level:0, e_damage:0, autoreplenish:1, ethereal:1, type:"javelin", base:"Ghost Glaive"},
-{name:"Gargoyle's Bite", req_level:0, e_damage:0, type:"javelin", base:"Winged Harpoon"},
-{name:"The Scalper", req_level:0, e_damage:0, type:"thrown", base:"Francisca"},
-{name:"Deathbit", req_level:0, e_damage:0, type:"thrown", base:"Battle Dart"},
-{name:"Gimmershred", req_level:0, e_damage:0, type:"thrown", base:"Flying Axe"},
-
-{name:"Pluckeye", req_level:0, e_damage:0, twoHanded:1, type:"bow", base:"Short Bow"},
-{name:"Witherstring", req_level:0, e_damage:0, twoHanded:1, type:"bow", base:"Hunter's Bow", pod_changes:1},
-{name:"Raven Claw", req_level:0, e_damage:0, twoHanded:1, type:"bow", base:"Long Bow"},
-{name:"Rogue's Bow", req_level:0, e_damage:0, twoHanded:1, type:"bow", base:"Composite Bow"},
-{name:"Stormstrike", req_level:0, e_damage:0, twoHanded:1, type:"bow", base:"Short Battle Bow"},
-{name:"Wizendraw", req_level:26, e_damage:80, ar:100, ias:20, cRes:26, energy:15, mana:30, enemy_cRes:-35, twoHanded:1, type:"bow", base:"Long Battle Bow", pod_changes:1},	// level 5 Magic Arrow
-{name:"Hellclap", req_level:0, e_damage:0, twoHanded:1, type:"bow", base:"Short War Bow"},
-{name:"Blastbark", req_level:0, e_damage:0, twoHanded:1, type:"bow", base:"Long War Bow"},
-{name:"Skystrike", req_level:0, e_damage:0, twoHanded:1, type:"bow", base:"Edge Bow"},
-{name:"Riphook", req_level:0, e_damage:0, twoHanded:1, type:"bow", base:"Razor Bow"},
-
-{name:"Endlesshail", req_level:0, e_damage:0, twoHanded:1, type:"bow", base:"Double Bow"},
-{name:"Witchwild String", req_level:0, e_damage:0, sockets:2, twoHanded:1, type:"bow", base:"Short Siege Bow", pod_changes:1},
-{name:"Cliffkiller", req_level:0, e_damage:0, twoHanded:1, type:"bow", base:"Long Siege Bow"},
-{name:"Magewrath", req_level:0, e_damage:0, twoHanded:1, type:"bow", base:"Rune Bow", pod_changes:1},
-
-{name:"Eaglehorn", req_level:0, e_damage:0, twoHanded:1, type:"bow", base:"Crusader Bow"},
-{name:"Widowmaker", req_level:0, e_damage:0, twoHanded:1, type:"bow", base:"Ward Bow", pod_changes:1},
-
-{name:"Leadcrow", req_level:0, e_damage:0, twoHanded:1, type:"crossbow", base:"Light Crossbow"},
-{name:"Ichorsting", req_level:0, e_damage:0, twoHanded:1, type:"crossbow", base:"Crossbow"},
-{name:"Hellcast", req_level:0, e_damage:0, twoHanded:1, type:"crossbow", base:"Heavy Crossbow"},
-{name:"Langer Briser", req_level:0, e_damage:0, twoHanded:1, type:"crossbow", base:"Arbalest"},
-{name:"Pus Spitter", req_level:0, e_damage:0, twoHanded:1, type:"crossbow", base:"Siege Crossbow", pod_changes:1},
-
-{name:"Demon Machine", req_level:49, e_damage:123, damage_max:66, ar:632, pierce:66, defense:321, mana:36, twoHanded:1, type:"crossbow", base:"Chu-Ko-Nu"},	// level 6 Explosive Bolt
-{name:"Hellrack", req_level:0, e_damage:0, sockets:2, twoHanded:1, type:"crossbow", base:"Colossus Crossbow"},
-{name:"Gut Siphon", req_level:0, e_damage:0, twoHanded:1, type:"crossbow", base:"Demon Crossbow"},
-
-{name:"Bane Ash", req_level:0, e_damage:0, twoHanded:1, type:"staff", base:"Short Staff"},
-{name:"Serpent Lord", req_level:0, e_damage:0, twoHanded:1, type:"staff", base:"Long Staff"},
-{name:"Spire of Lazarus", req_level:0, e_damage:0, twoHanded:1, type:"staff", base:"Gnarled Staff"},
-{name:"The Salamander", req_level:0, e_damage:0, twoHanded:1, type:"staff", base:"Battle Staff"},
-{name:"The Iron Jang Bong", req_level:0, e_damage:0, twoHanded:1, type:"staff", base:"War Staff"},
-*/
 
 var sets = {
 	set_IK:[0,{},{ar:50},{ar:75},{ar:125},{ar:200},{skills_barbarian:3, life:150, all_res:50, mDamage_reduced:10}],
