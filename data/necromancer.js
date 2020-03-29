@@ -116,16 +116,16 @@ var character_necromancer = {class_name:"Necromancer", strength:15, dexterity:25
 	//	else if (skill.name == "Bone Wall") {		spell = 2; }	// cannot be bound to left click
 		
 		else if (skill.name == "Hemorrhage") {		mDamage_min = character.updateSkill(skill, lvl, 0); mDamage_max = character.updateSkill(skill, lvl, 0); spell = 1; }		// cannot be bound to left click
-	//	else if (skill.name == "Amplify Damage") { 	 }	// cannot be bound to left click
-	//	else if (skill.name == "Dim Vision") { 	 }		// cannot be bound to left click
-	//	else if (skill.name == "Weaken") { 		 }	// cannot be bound to left click
-	//	else if (skill.name == "Iron Maiden") { 	 }	// cannot be bound to left click
-	//	else if (skill.name == "Terror") { 		 }	// cannot be bound to left click
-	//	else if (skill.name == "Confuse") { 		 }	// cannot be bound to left click
-	//	else if (skill.name == "Life Tap") { 		 }	// cannot be bound to left click
-	//	else if (skill.name == "Attract") { 		 }	// cannot be bound to left click
-	//	else if (skill.name == "Decrepify") { 	 }		// cannot be bound to left click
-	//	else if (skill.name == "Lower Resist") { 	 }	// cannot be bound to left click
+	//	else if (skill.name == "Amplify Damage") {	}	// cannot be bound to left click
+	//	else if (skill.name == "Dim Vision") {		}	// cannot be bound to left click
+	//	else if (skill.name == "Weaken") {		}	// cannot be bound to left click
+	//	else if (skill.name == "Iron Maiden") {		}	// cannot be bound to left click
+	//	else if (skill.name == "Terror") {		}	// cannot be bound to left click
+	//	else if (skill.name == "Confuse") {		}	// cannot be bound to left click
+	//	else if (skill.name == "Life Tap") {		}	// cannot be bound to left click
+	//	else if (skill.name == "Attract") {		}	// cannot be bound to left click
+	//	else if (skill.name == "Decrepify") {		}	// cannot be bound to left click
+	//	else if (skill.name == "Lower Resist") {	}	// cannot be bound to left click
 		else { spell = 2; }
 
 		if (typeof(skill.reqWeapon) != 'undefined') { var match = 0; for (let w = 0; w < skill.reqWeapon.length; w++) {

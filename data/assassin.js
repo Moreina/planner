@@ -121,9 +121,9 @@ var character_assassin = {class_name:"Assassin", strength:20, dexterity:20, vita
 	//	else if (skill.name == "Burst of Speed") {	ias_bonus = character.updateSkill(skill, lvl, 0); frw_bonus = character.updateSkill(skill, lvl, 1); spell = 2; }	// cannot be bound to left click
 	//	else if (skill.name == "Cloak of Shadows") {	defense = character.updateSkill(skill, lvl, 0); enemy_defense = character.updateSkill(skill, lvl, 1); spell = 2; }	// cannot be bound to left click
 	//	else if (skill.name == "Fade") {		curse_length = character.updateSkill(skill, lvl, 0); all_res = character.updateSkill(skill, lvl, 1); pdr = character.updateSkill(skill, lvl, 2); spell = 2; }	// cannot be bound to left click
-	//	else if (skill.name == "Shadow Warrior") {}	// cannot be bound to left click
+	//	else if (skill.name == "Shadow Warrior") {	}	// cannot be bound to left click
 	//	else if (skill.name == "Venom") {		pDamage_min = character.updateSkill(skill, lvl, 0); pDamage_max = character.updateSkill(skill, lvl, 1); pDamage_duration = 0.4; }	// cannot be bound to left click
-	//	else if (skill.name == "Shadow Master") {}	// cannot be bound to left click
+	//	else if (skill.name == "Shadow Master") {	}	// cannot be bound to left click
 			// Claw Mastery - not bindable
 			// Mind Barrier - not bindable
 			// Weapon Block - not bindable

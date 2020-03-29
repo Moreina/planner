@@ -767,15 +767,12 @@ function updateStats() {
 	if (basic_min > 0 || basic_max > 0) { document.getElementById("basic_attack").innerHTML = basic_min + "-" + basic_max }
 	else { document.getElementById("basic_attack").innerHTML = "" }
 
-	//testing
-	//document.getElementById("skill1").innerHTML = wisp +" * "+ phys_max +" "+ c.fDamage_max +" "+ c.cDamage_max +" "+ c.lDamage_max +" "+ c.pDamage_max +" "+ c.pDamage_all +" "+ c.mDamage_max
-	//document.getElementById("skill2").innerHTML = "( "+ 1 +" + "+ statBonus +" + "+ c.e_damage/100 +" + "+ c.damage_bonus/100 +" + "+ weapon_skillup/100 +" ) * ( "+ ((c.level-1)*c.max_damage_per_level) +" + "+ c.base_damage_max +" ) + "+ c.damage_max
-	/*
+/*
 	TODO: DPS calculations
 /**/
 	var block = c.block;
 	if (c.class_name != "Paladin") { block -= 5; if (c.class_name == "Druid" || c.class_name == "Necromancer" || c.class_name == "Sorceress") { block -= 5 } }
-	block = (block + c.block_skillup)*(dexTotal-15)/(c.level*2)
+	block = (Math.max(0,block) + c.block_skillup)*(dexTotal-15)/(c.level*2)
 	if (c.running > 0) { block = block / 3 }
 	if (c.block > 0) { document.getElementById("block").innerHTML = Math.floor(Math.min(75,c.block,block))+"%" }
 	else { document.getElementById("block").innerHTML = "" }
@@ -823,9 +820,9 @@ function updateSecondaryStats() {
 	document.getElementById("fbr").innerHTML = c.fbr
 	document.getElementById("fhr").innerHTML = c.fhr
 	
-	// effective movespeed (includes penalties from armor & diminishing returns)
-	//var movespeed = ((c.frw+c.frw_skillup)*150/(c.frw+c.frw_skillup+150))
-	//movespeed = (100 + c.velocity_skillup + movespeed + c.velocity /* - holy freeze, cold, decrep... */)
+// effective movespeed (includes penalties from armor & diminishing returns)
+//	var movespeed = ((c.frw+c.frw_skillup)*150/(c.frw+c.frw_skillup+150))
+//	movespeed = (100 + c.velocity_skillup + movespeed + c.velocity /* - holy freeze, cold, decrep... */)
 	document.getElementById("frw").innerHTML = Math.floor(c.frw + c.frw_skillup) //+ " ­ (" + Math.floor(movespeed) + "%)"
 
 //	var weapon_speed = Math.ceil(256 * (charWpnSpeed + 1) / Math.floor(256 * (100 + wpnIAS + Math.floor(charIAS /(1 + charIAS/120)))/100)) - 1
