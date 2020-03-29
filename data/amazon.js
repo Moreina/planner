@@ -59,7 +59,6 @@ var character_amazon = {class_name:"Amazon", strength:20, dexterity:25, vitality
 		var mDamage_min = 0; var mDamage_max = 0;
 		var skillMin = ""; var skillMax = ""; var skillAr = "";
 		var spell = 0;
-		var reqWeapon = [""];
 
 		if (skill.name == "Jab") { 			ar_bonus = character.updateSkill(skill, lvl, 0); damage_bonus = 100+character.updateSkill(skill, lvl, 1); }
 		else if (skill.name == "Power Strike") { 	ar_bonus = character.updateSkill(skill, lvl, 0); lDamage_min = character.updateSkill(skill, lvl, 1); lDamage_max = character.updateSkill(skill, lvl, 2); }	// regular damage (non-throw) + 1-22 lightning (yellow)
@@ -72,9 +71,9 @@ var character_amazon = {class_name:"Amazon", strength:20, dexterity:25, vitality
 		else if (skill.name == "Lightning Strike") {	lDamage_min = character.updateSkill(skill, lvl, 1); lDamage_max = character.updateSkill(skill, lvl, 2); spell = 1; }	// non-throw, separate: 1-32 lightning (yellow)
 		else if (skill.name == "Lightning Fury") {	lDamage_min = character.updateSkill(skill, lvl, 1); lDamage_max = character.updateSkill(skill, lvl, 2); spell = 1; }	// [JAVELIN ONLY]	throw damage, separate: 1-42 lightning (yellow)
 		
-		// Phase Run	// 0-1 damage?
-		// Decoy
-		// Valkyrie
+		// else if (skill.name == "Phase Run") {	}	// 0-1 damage?
+		// else if (skill.name == "Decoy") {		}
+		// else if (skill.name == "Valkyrie") {		}
 		
 		else if (skill.name == "Cold Arrow") {		cDamage_min = character.updateSkill(skill, lvl, 1); cDamage_max = character.updateSkill(skill, lvl, 2); }	// regular + 2-3 cold (blue)	...lvl 1 = +6% ar
 		else if (skill.name == "Magic Arrow") {		mDamage_min = character.updateSkill(skill, lvl, 1); mDamage_max = character.updateSkill(skill, lvl, 2); }	// regular + 1-2 (blue... but should be colored differently for magic damage)	...lvl 1 = +6% ar

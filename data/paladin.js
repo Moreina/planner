@@ -174,39 +174,39 @@ var character_paladin = {class_name:"Paladin", strength:25, dexterity:20, vitali
 		var skillMin = ""; var skillMax = ""; var skillAr = "";
 		var spell = 0;
 		
-	//	if (skill.name == "Prayer") { 		 }	// cannot be bound to left click
-	//	else if (skill.name == "Resist Fire") { 	 }	// cannot be bound to left click
-	//	else if (skill.name == "Defiance") { 		 }	// cannot be bound to left click
-	//	else if (skill.name == "Resist Cold") { 	 }	// cannot be bound to left click
-	//	else if (skill.name == "Cleansing") { 	 }	// cannot be bound to left click
-	//	else if (skill.name == "Resist Lightning") { 	 }	// cannot be bound to left click
-	//	else if (skill.name == "Vigor") { 		 }	// cannot be bound to left click
-	//	else if (skill.name == "Meditation") { 	 }	// cannot be bound to left click
-	//	else if (skill.name == "Redemption") {	 }	// cannot be bound to left click
-	//	else if (skill.name == "Salvation") { 	 }	// cannot be bound to left click
+		if (skill.name == "Prayer") {			spell = 2; }	// cannot be bound to left click
+	//	else if (skill.name == "Resist Fire") {		}	// cannot be bound to left click
+	//	else if (skill.name == "Defiance") {		}	// cannot be bound to left click
+	//	else if (skill.name == "Resist Cold") {		}	// cannot be bound to left click
+	//	else if (skill.name == "Cleansing") {		}	// cannot be bound to left click
+	//	else if (skill.name == "Resist Lightning") {	}	// cannot be bound to left click
+	//	else if (skill.name == "Vigor") {		}	// cannot be bound to left click
+	//	else if (skill.name == "Meditation") {		}	// cannot be bound to left click
+	//	else if (skill.name == "Redemption") {		}	// cannot be bound to left click
+	//	else if (skill.name == "Salvation") {		}	// cannot be bound to left click
 		
-	//	else if (skill.name == "Might") { 		 }	// cannot be bound to left click
-	//	else if (skill.name == "Holy Fire") { 	 }	// cannot be bound to left click
-	//	else if (skill.name == "Precision") { 	 }	// cannot be bound to left click
-	//	else if (skill.name == "Blessed Aim") { 	 }	// cannot be bound to left click
-	//	else if (skill.name == "Concentration") { 	 }	// cannot be bound to left click
-	//	else if (skill.name == "Holy Freeze") { 	 }	// cannot be bound to left click
-	//	else if (skill.name == "Holy Shock") { 	 }	// cannot be bound to left click
-	//	else if (skill.name == "Sanctuary") { 	 }	// cannot be bound to left click
-	//	else if (skill.name == "Fanaticism") { 	 }	// cannot be bound to left click
-	//	else if (skill.name == "Conviction") { 	 }	// cannot be bound to left click
+	//	else if (skill.name == "Might") {		}	// cannot be bound to left click
+	//	else if (skill.name == "Holy Fire") {		}	// cannot be bound to left click
+	//	else if (skill.name == "Precision") {		}	// cannot be bound to left click
+	//	else if (skill.name == "Blessed Aim") {		}	// cannot be bound to left click
+	//	else if (skill.name == "Concentration") {	}	// cannot be bound to left click
+	//	else if (skill.name == "Holy Freeze") {		}	// cannot be bound to left click
+	//	else if (skill.name == "Holy Shock") {		}	// cannot be bound to left click
+	//	else if (skill.name == "Sanctuary") {		}	// cannot be bound to left click
+	//	else if (skill.name == "Fanaticism") {		}	// cannot be bound to left click
+	//	else if (skill.name == "Conviction") {		}	// cannot be bound to left click
 		
-		if (skill.name == "Sacrifice") { 	 }
-		else if (skill.name == "Smite") { 		 }
-		else if (skill.name == "Holy Bolt") { 	 }
-		else if (skill.name == "Zeal") { 		 }
-		else if (skill.name == "Charge") { 		 }
-		else if (skill.name == "Vengeance") { 	 }
-		else if (skill.name == "Blessed Hammer") { 	 }
-		else if (skill.name == "Conversion") { spell = 2; }
-		else if (skill.name == "Holy Shield") { spell = 2; }	// cannot be bound to left click
-		else if (skill.name == "Fist of the Heavens"){ }
-		else if (skill.name == "Dashing Strike") { 	 }
+		else if (skill.name == "Sacrifice") {		ar_bonus = character.updateSkill(skill, lvl, 0); damage_bonus = 150+character.updateSkill(skill, lvl, 1); }
+		else if (skill.name == "Smite") {		damage_bonus = character.updateSkill(skill, lvl, 0); }
+		else if (skill.name == "Holy Bolt") {		mDamage_min = character.updateSkill(skill, lvl, 0); mDamage_max = character.updateSkill(skill, lvl, 1); damage_bonus = 0; }
+		else if (skill.name == "Zeal") {		ar_bonus = character.updateSkill(skill, lvl, 0); damage_bonus = 100+character.updateSkill(skill, lvl, 1); }
+		else if (skill.name == "Charge") {		ar_bonus = character.updateSkill(skill, lvl, 1); damage_bonus = 100+character.updateSkill(skill, lvl, 0); }
+		else if (skill.name == "Vengeance") {		fDamage_min = character.updateSkill(skill, lvl, 2); fDamage_max = character.updateSkill(skill, lvl, 3); cDamage_min = character.updateSkill(skill, lvl, 4); cDamage_max = character.updateSkill(skill, lvl, 5); lDamage_min = character.updateSkill(skill, lvl, 6); lDamage_max = character.updateSkill(skill, lvl, 7); ar_bonus = character.updateSkill(skill, lvl, 11); damage_bonus = 100; }
+		else if (skill.name == "Blessed Hammer") {	mDamage_min = character.updateSkill(skill, lvl, 0); mDamage_max = character.updateSkill(skill, lvl, 1); damage_bonus = 0; }
+		else if (skill.name == "Fist of the Heavens"){	mDamage_min = character.updateSkill(skill, lvl, 0); mDamage_max = character.updateSkill(skill, lvl, 1); lDamage_min = character.updateSkill(skill, lvl, 2); lDamage_max = character.updateSkill(skill, lvl, 3); damage_bonus = 0; }
+		else if (skill.name == "Dashing Strike") {	mDamage_min = character.updateSkill(skill, lvl, 1); mDamage_max = character.updateSkill(skill, lvl, 2); damage_bonus = 100; }
+	//	else if (skill.name == "Conversion") {		spell = 2; }
+	//	else if (skill.name == "Holy Shield") {		spell = 2; }	// cannot be bound to left click
 		else { spell = 2; }
 
 		if (typeof(skill.reqWeapon) != 'undefined') { var match = 0; for (let w = 0; w < skill.reqWeapon.length; w++) {
@@ -304,15 +304,15 @@ var skills_paladin = [
 {data:d261, key:"261", code:115, name:"Fanaticism", i:18, req:[14,13,10], reqlvl:30, level:0, extra_levels:0, force_levels:0, effect:5, bindable:1, style:"display: block; top: 422px; left: 134px;", description:"When active, aura increases damage, attack speed,<br>and attack rating for you and your party<br><br>Radius: 12 yards", syn_title:"", syn_text:"", graytext:"", text:["Party Damage: +"," percent<br>Your Damage: +"," percent<br>Attack Speed: +"," percent<br>Attack Rating: +"," percent",""]},
 {data:d263, key:"263", code:116, name:"Conviction", i:19, req:[17,12,15,11,10], reqlvl:30, level:0, extra_levels:0, force_levels:0, effect:5, bindable:1, style:"display: block; top: 422px; left: 284px;", description:"When active, aura reduces the defenses<br>and resistances of nearby enemies<br><br>Radius: 21.3 yards", syn_title:"", syn_text:"", graytext:"", text:["Defense: "," percent<br>Resistances: "," percent",""]},
 
-{data:d311, key:"311", code:117, name:"Sacrifice", i:20, req:[], reqlvl:1, reqWeapon:["axe","mace","sword","dagger","thrown","javelin","scepter","wand","spear","polearm"], level:0, extra_levels:0, force_levels:0, bindable:2, style:"display: block; top: 82px; left: 336px;", description:"Increased accuracy and damage<br>at the cost of life<br><br>Deals 150% of Weapon damage<br>4 percent damage to self", syn_title:"<br>Sacrifice Receives Bonuses From:<br>", syn_text:"Redemption: +10% Damage per Level<br>Fanaticism: +5% Damage per Level", graytext:"", text:["To Attack Rating: +"," percent<br>Damage: +"," percent",""]},
+{data:d311, key:"311", code:117, name:"Sacrifice", i:20, req:[], reqlvl:1, reqWeapon:["axe","mace","club","hammer","sword","dagger","thrown","javelin","scepter","wand","spear","polearm"], level:0, extra_levels:0, force_levels:0, bindable:2, style:"display: block; top: 82px; left: 336px;", description:"Increased accuracy and damage<br>at the cost of life<br><br>Deals 150% of Weapon damage<br>4 percent damage to self", syn_title:"<br>Sacrifice Receives Bonuses From:<br>", syn_text:"Redemption: +10% Damage per Level<br>Fanaticism: +5% Damage per Level", graytext:"", text:["To Attack Rating: +"," percent<br>Damage: +"," percent",""]},
 {data:d313, key:"313", code:118, name:"Smite", i:21, req:[], reqlvl:1, reqWeapon:[""], level:0, extra_levels:0, force_levels:0, bindable:2, style:"display: block; top: 82px; left: 346px;", description:"Temporarily stun your enemy<br>by bashing it with your shield<br><br>Gains additional damage while Holy Shield is active", syn_title:"<br>Smite Receives Bonuses From:<br>", syn_text:"Defiance: +8% Damage per Level", graytext:"", text:["Damage: +"," percent<br>Stun Length: "," seconds<br>Mana Cost: 4",""]},
 {data:d322, key:"322", code:119, name:"Holy Bolt", i:22, req:[], reqlvl:6, level:0, extra_levels:0, force_levels:0, bindable:2, style:"display: block; top: 150px; left: 326px;", description:"A bolt of Divine energy that<br>damages enemies and heals allies<br><br>Heal Duration: 1 second", syn_title:"<br>Holy Bolt Receives Bonuses From:<br>", syn_text:"Sanctuary: +35% Magic Damage per Level<br>Fist of the Heavens: +35% Magic Damage per Level<br>Prayer: +35% Life Healed per Level<br>+2 Additional Bolts while having 100+ Total Energy", graytext:"", text:["Magic Damage: ","-","<br>Heals: "," per second<br>Mana Cost: ",""]},
-{data:d331, key:"331", code:120, name:"Zeal", i:23, req:[20], reqlvl:12, reqWeapon:["axe","mace","sword","dagger","thrown","javelin","scepter","wand","spear","polearm"], level:0, extra_levels:0, force_levels:0, bindable:2, style:"display: block; top: 218px; left: 266px;", description:"Allows you to attack multiple adjacent enemies<br>with a single attack<br><br>Deals 100% of Weapon Damage", syn_title:"<br>Zeal Receives Bonuses From:<br>", syn_text:"Sacrifice: +10% Damage per Level", graytext:"", text:["Attack Bonus: +"," percent<br>Damage: +"," percent<br>"," hits<br>Mana Cost: 2",""]},
-{data:d333, key:"333", code:121, name:"Charge", i:24, req:[21], reqlvl:12, reqWeapon:["axe","mace","sword","dagger","thrown","javelin","scepter","wand","spear","polearm"], level:0, extra_levels:0, force_levels:0, bindable:2, style:"display: block; top: 218px; left: 426px;", description:"Charge into battle and attack an enemy<br><br>Deals 100% of weapon Damage", syn_title:"<br>Charge Receives Bonuses From:<br>", syn_text:"Vigor: +26% Damage per Level<br>Might: +26% Damage per Level", graytext:"", text:["Damage: +"," percent<br>Attack Rating: +"," percent<br>Mana Cost: 8",""]},
-{data:d341, key:"341", code:122, name:"Vengeance", i:25, req:[23,20], reqlvl:18, reqWeapon:["axe","mace","sword","dagger","thrown","javelin","scepter","wand","spear","polearm"], level:0, extra_levels:0, force_levels:0, bindable:2, style:"display: block; top: 286px; left: 266px;", description:"Fire, lightning, and cold damage are added<br>to each successful attack", syn_title:"<br>Vengeance Receives Bonuses From:<br>", syn_text:"Resist Fire: +12% Fire Damage per Level<br>Resist Cold: +12% Cold Damage per Level<br>Resist Lightning: +12% Lightning Damage per Level<br>Salvation: +2% Elemental Damage per Level", graytext:"", text:["Damage from Weapon: ","-","<br>Fire damage: ","-","<br>Cold Damage: ","-","<br>Lightning Damage: ","-","Fire Damage: +"," percent<br>Cold Damage: +"," percent<br>Lightning Damage: +"," percent<br>Attack Rating: +"," percent<br>Mana Cost: ",""]},
+{data:d331, key:"331", code:120, name:"Zeal", i:23, req:[20], reqlvl:12, reqWeapon:["axe","mace","club","hammer","sword","dagger","thrown","javelin","scepter","wand","spear","polearm"], level:0, extra_levels:0, force_levels:0, bindable:2, style:"display: block; top: 218px; left: 266px;", description:"Allows you to attack multiple adjacent enemies<br>with a single attack<br><br>Deals 100% of Weapon Damage", syn_title:"<br>Zeal Receives Bonuses From:<br>", syn_text:"Sacrifice: +10% Damage per Level", graytext:"", text:["Attack Bonus: +"," percent<br>Damage: +"," percent<br>"," hits<br>Mana Cost: 2",""]},
+{data:d333, key:"333", code:121, name:"Charge", i:24, req:[21], reqlvl:12, reqWeapon:["axe","mace","club","hammer","sword","dagger","thrown","javelin","scepter","wand","spear","polearm"], level:0, extra_levels:0, force_levels:0, bindable:2, style:"display: block; top: 218px; left: 426px;", description:"Charge into battle and attack an enemy<br><br>Deals 100% of weapon Damage", syn_title:"<br>Charge Receives Bonuses From:<br>", syn_text:"Vigor: +26% Damage per Level<br>Might: +26% Damage per Level", graytext:"", text:["Damage: +"," percent<br>Attack Rating: +"," percent<br>Mana Cost: 8",""]},
+{data:d341, key:"341", code:122, name:"Vengeance", i:25, req:[23,20], reqlvl:18, reqWeapon:["axe","mace","club","hammer","sword","dagger","thrown","javelin","scepter","wand","spear","polearm"], level:0, extra_levels:0, force_levels:0, bindable:2, style:"display: block; top: 286px; left: 266px;", description:"Fire, lightning, and cold damage are added<br>to each successful attack", syn_title:"<br>Vengeance Receives Bonuses From:<br>", syn_text:"Resist Fire: +12% Fire Damage per Level<br>Resist Cold: +12% Cold Damage per Level<br>Resist Lightning: +12% Lightning Damage per Level<br>Salvation: +2% Elemental Damage per Level", graytext:"", text:["Damage from Weapon: ","-","<br>Fire damage: ","-","<br>Cold Damage: ","-","<br>Lightning Damage: ","-","Fire Damage: +"," percent<br>Cold Damage: +"," percent<br>Lightning Damage: +"," percent<br>Attack Rating: +"," percent<br>Mana Cost: ",""]},
 {data:d342, key:"342", code:123, name:"Blessed Hammer", i:26, req:[22], reqlvl:18, level:0, extra_levels:0, force_levels:0, bindable:2, style:"display: block; top: 286px; left: 366px;", description:"Summons an ethereal hammer that<br>spirals outwards damaging enemies it hits<br><br>150 percent Damage to Undead", syn_title:"<br>Blessed Hammer Receives Bonuses From:<br>", syn_text:"Blessed Aim: +14% Magic Damage per Level<br>Vigor: +14% Magic Damage per Level", graytext:"", text:["Magic Damage: ","-","<br>Mana Cost: ",""]},
-{data:d351, key:"351", code:124, name:"Conversion", i:27, req:[25,23,20], reqlvl:24, reqWeapon:["axe","mace","sword","dagger","thrown","javelin","scepter","wand","spear","polearm"], level:0, extra_levels:0, force_levels:0, bindable:2, style:"display: block; top: 354px; left: 366px;", description:"Converts monsters to fight against<br>other foul demons and beasts", syn_title:"", syn_text:"", graytext:"", text:["Chance to convert: "," percent<br>Duration: "," seconds<br>Mana Cost: 20",""]},
+{data:d351, key:"351", code:124, name:"Conversion", i:27, req:[25,23,20], reqlvl:24, reqWeapon:["axe","mace","club","hammer","sword","dagger","thrown","javelin","scepter","wand","spear","polearm"], level:0, extra_levels:0, force_levels:0, bindable:2, style:"display: block; top: 354px; left: 366px;", description:"Converts monsters to fight against<br>other foul demons and beasts", syn_title:"", syn_text:"", graytext:"", text:["Chance to convert: "," percent<br>Duration: "," seconds<br>Mana Cost: 20",""]},
 {data:d353, key:"353", code:125, name:"Holy Shield", i:28, req:[24,26,21,22], reqlvl:24, reqWeapon:[""], level:0, extra_levels:0, force_levels:0, effect:5, bindable:1, style:"display: block; top: 354px; left: 416px;", description:"Enhances your shield with divine power", syn_title:"<br>Holy Shield Receives Bonuses From:<br>", syn_text:"Defiance: +15% Defense per Level", graytext:"", text:["Smite Damage: +","-","<br>Duration: "," seconds<br>Defense Bonus: +"," percent<br>Successful Block: +"," percent<br>Mana Cost: 35",""]},
 {data:d362, key:"362", code:126, name:"Fist of the Heavens", i:29, req:[26,27,22,25,23,20], reqlvl:30, level:0, extra_levels:0, force_levels:0, bindable:2, style:"display: block; top: 422px; left: 326px;", description:"Lightning Strikes your target as holy bolts<br>seek out nearby enemies", syn_title:"<br>Fist of the Heavens Receives Bonuses From:<br>", syn_text:"Holy Bolt: +15% Holy Bolt Damage per Level<br>Holy Shock: +8% Lightning damage per Level", graytext:"", text:["Holy Bolt Magic Damage: ","-","<br>Lightning Damage: ","-","<br>Mana Cost: ",""]},
-{data:d363, key:"363", code:127, name:"Dashing Strike", i:30, req:[28,24,26,21,22], reqlvl:30, reqWeapon:["axe","mace","sword","dagger","thrown","javelin","scepter","wand","spear","polearm"], level:0, extra_levels:0, force_levels:0, bindable:2, style:"display: block; top: 422px; left: 366px;", description:"Instantly dash forward to the target enemy or ally<br>stunning and damaging enemies nearby<br><br>Cooldown: 5 seconds", syn_title:"<br>Dashing Strike Receives Bonuses From:<br>", syn_text:"Smite: +12% Magic Damage per Level<br>Charge: +12% Magic Damage per Level<br>Holy Shield: +12% Magic Damage per Level", graytext:"", text:["Stun Length: "," seconds<br>Magic Damage: ","-","<br>Mana Cost: ",""]}
+{data:d363, key:"363", code:127, name:"Dashing Strike", i:30, req:[28,24,26,21,22], reqlvl:30, reqWeapon:["axe","mace","club","hammer","sword","dagger","thrown","javelin","scepter","wand","spear","polearm"], level:0, extra_levels:0, force_levels:0, bindable:2, style:"display: block; top: 422px; left: 366px;", description:"Instantly dash forward to the target enemy or ally<br>stunning and damaging enemies nearby<br><br>Cooldown: 5 seconds", syn_title:"<br>Dashing Strike Receives Bonuses From:<br>", syn_text:"Smite: +12% Magic Damage per Level<br>Charge: +12% Magic Damage per Level<br>Holy Shield: +12% Magic Damage per Level", graytext:"", text:["Stun Length: "," seconds<br>Magic Damage: ","-","<br>Mana Cost: ",""]}
 ];

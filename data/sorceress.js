@@ -88,7 +88,7 @@ var character_sorceress = {class_name:"Sorceress", strength:10, dexterity:25, vi
 	// ---------------------------------
 	getFocusData : function(skill, num, ar, phys_min, phys_max, ele_min, ele_max, mag_min, mag_max, wisp) {
 		var lvl = skill.level+skill.extra_levels;
-		var ar_bonus = 0; var damage_bonus = 100;
+		var ar_bonus = 0; var damage_bonus = 0;
 		var damage_min = 0; var damage_max = 0;
 		var fDamage_min = 0; var fDamage_max = 0;
 		var cDamage_min = 0; var cDamage_max = 0;
@@ -96,39 +96,39 @@ var character_sorceress = {class_name:"Sorceress", strength:10, dexterity:25, vi
 		var pDamage_min = 0; var pDamage_max = 0; var pDamage_duration = 0;
 		var mDamage_min = 0; var mDamage_max = 0;
 		var skillMin = ""; var skillMax = ""; var skillAr = "";
-		var spell = 0;
+		var spell = 1;
 		
-		if (skill.name == "Ice Bolt") { 		 }
-		else if (skill.name == "Frost Nova") { 	 }
-		else if (skill.name == "Ice Blast") { 	 }
-		else if (skill.name == "Shiver Armor") { spell = 2; }	// cannot be bound to left click
-		else if (skill.name == "Glacial Spike") { 	 }
-		else if (skill.name == "Blizzard") { 		 }	// cannot be bound to left click
-		else if (skill.name == "Freezing Pulse") { 	 }
-		else if (skill.name == "Chilling Armor") { spell = 2; }	// cannot be bound to left click
-		else if (skill.name == "Frozen Orb") { 	 }
+		if (skill.name == "Ice Bolt") {			cDamage_min = character.updateSkill(skill, lvl, 0); cDamage_max = character.updateSkill(skill, lvl, 1); }
+		else if (skill.name == "Frost Nova") {		cDamage_min = character.updateSkill(skill, lvl, 0); cDamage_max = character.updateSkill(skill, lvl, 1); }
+		else if (skill.name == "Ice Blast") {		cDamage_min = character.updateSkill(skill, lvl, 0); cDamage_max = character.updateSkill(skill, lvl, 1); }
+		else if (skill.name == "Glacial Spike") {	cDamage_min = character.updateSkill(skill, lvl, 0); cDamage_max = character.updateSkill(skill, lvl, 1); }
+		else if (skill.name == "Blizzard") {		cDamage_min = character.updateSkill(skill, lvl, 0); cDamage_max = character.updateSkill(skill, lvl, 1); }	// cannot be bound to left click
+		else if (skill.name == "Freezing Pulse") {	cDamage_min = character.updateSkill(skill, lvl, 1); cDamage_max = character.updateSkill(skill, lvl, 2); }
+		else if (skill.name == "Frozen Orb") {		cDamage_min = character.updateSkill(skill, lvl, 0); cDamage_max = character.updateSkill(skill, lvl, 1); }
+	//	else if (skill.name == "Shiver Armor") {	spell = 2; }	// cannot be bound to left click
+	//	else if (skill.name == "Chilling Armor") {	spell = 2; }	// cannot be bound to left click
 		// Frigerate - not bindable
 		// Cold Mastery - not bindable
 		
-		else if (skill.name == "Charged Bolt") { 	 }
-	//	else if (skill.name == "Static Field") { spell = 2; }
-		else if (skill.name == "Telekinesis") { 	 }	// cannot be bound to left click
-		else if (skill.name == "Nova") { 		 }
-		else if (skill.name == "Lightning Surge") { 	 }
-		else if (skill.name == "Chain Lightning") { 	 }
-	//	else if (skill.name == "Teleport") { spell = 2; }	// cannot be bound to left click
-		else if (skill.name == "Discharge") { 	 }
-	//	else if (skill.name == "Energy Shield") { spell = 2; }	// cannot be bound to left click
-		else if (skill.name == "Thunder Storm") { 	 }	// cannot be bound to left click
+		else if (skill.name == "Charged Bolt") {	lDamage_min = character.updateSkill(skill, lvl, 1); lDamage_max = character.updateSkill(skill, lvl, 2); }
+		else if (skill.name == "Telekinesis") {		lDamage_min = character.updateSkill(skill, lvl, 0); lDamage_max = character.updateSkill(skill, lvl, 1); }	// cannot be bound to left click
+		else if (skill.name == "Nova") {		lDamage_min = character.updateSkill(skill, lvl, 0); lDamage_max = character.updateSkill(skill, lvl, 1); }
+		else if (skill.name == "Lightning Surge") {	lDamage_min = character.updateSkill(skill, lvl, 0); lDamage_max = character.updateSkill(skill, lvl, 1); }
+		else if (skill.name == "Chain Lightning") {	lDamage_min = character.updateSkill(skill, lvl, 1); lDamage_max = character.updateSkill(skill, lvl, 2); }
+		else if (skill.name == "Discharge") {		lDamage_min = character.updateSkill(skill, lvl, 1); lDamage_max = character.updateSkill(skill, lvl, 2); }
+		else if (skill.name == "Thunder Storm") {	lDamage_min = character.updateSkill(skill, lvl, 2); lDamage_max = character.updateSkill(skill, lvl, 3); }	// cannot be bound to left click
+	//	else if (skill.name == "Static Field") {	spell = 2; }
+	//	else if (skill.name == "Teleport") {		spell = 2; }	// cannot be bound to left click
+	//	else if (skill.name == "Energy Shield") {	spell = 2; }	// cannot be bound to left click
 		// Lightning Mastery - not bindable
 		
-		else if (skill.name == "Fire Bolt") { 	 }
-		else if (skill.name == "Blaze") { 		 }	// cannot be bound to left click
-		else if (skill.name == "Immolate") { 		 }
-		else if (skill.name == "Fire Ball") { 	 }
-		else if (skill.name == "Fire Wall") { 	 }	// cannot be bound to left click
-		else if (skill.name == "Meteor") { 		 }
-		else if (skill.name == "Hydra") { 		 }
+		else if (skill.name == "Fire Bolt") {		fDamage_min = character.updateSkill(skill, lvl, 0); fDamage_max = character.updateSkill(skill, lvl, 1); }
+		else if (skill.name == "Blaze") {		fDamage_min = character.updateSkill(skill, lvl, 1); fDamage_max = character.updateSkill(skill, lvl, 2); }	// cannot be bound to left click
+		else if (skill.name == "Immolate") {		fDamage_min = character.updateSkill(skill, lvl, 0); fDamage_max = character.updateSkill(skill, lvl, 1); }
+		else if (skill.name == "Fire Ball") {		fDamage_min = character.updateSkill(skill, lvl, 0); fDamage_max = character.updateSkill(skill, lvl, 1); }
+		else if (skill.name == "Fire Wall") {		fDamage_min = character.updateSkill(skill, lvl, 0); fDamage_max = character.updateSkill(skill, lvl, 1); }	// cannot be bound to left click
+		else if (skill.name == "Meteor") {		fDamage_min = character.updateSkill(skill, lvl, 0); fDamage_max = character.updateSkill(skill, lvl, 1); }
+		else if (skill.name == "Hydra") {		fDamage_min = character.updateSkill(skill, lvl, 1); fDamage_max = character.updateSkill(skill, lvl, 2); }
 		// Warmth - not bindable
 		// Enflame - not bindable
 		// Fire Mastery - not bindable

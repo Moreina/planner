@@ -21,6 +21,7 @@ Character Skill Planner for Diablo 2: Path of Diablo
 ### Features So Far:
 * all skill info up to level 60
 * synergy calculation for all skills
+* display section for active skill(s)
 * stat display with:
   * class-specific differences
   * stats gained from quests
@@ -32,7 +33,6 @@ Character Skill Planner for Diablo 2: Path of Diablo
 * character validation
 
 ### Upcoming Plans:
-* display section for active skill(s)
 * more items (all uniques, etc)
 * tracking of more effects (item auras, debuffs)
 * breakpoints
