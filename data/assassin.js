@@ -95,7 +95,7 @@ var character_assassin = {class_name:"Assassin", strength:20, dexterity:20, vita
 	// ---------------------------------
 	getFocusData : function(skill, num, ar, phys_min, phys_max, ele_min, ele_max, mag_min, mag_max, wisp) {
 		var lvl = skill.level+skill.extra_levels;
-		var ar_bonus = 0; var damage_bonus = 100;
+		var ar_bonus = 0; var damage_bonus = 0;
 		var damage_min = 0; var damage_max = 0;
 		var fDamage_min = 0; var fDamage_max = 0;
 		var cDamage_min = 0; var cDamage_max = 0;
@@ -107,14 +107,14 @@ var character_assassin = {class_name:"Assassin", strength:20, dexterity:20, vita
 		var kick_damage_min = 0; var kick_damage_max = 0; var kick_bonus = 0;
 
 		if (skill.name == "Dual Strike") { 		damage_bonus = 110+character.updateSkill(skill, lvl, 0); ar_bonus = character.updateSkill(skill, lvl, 1); }
-		else if (skill.name == "Fists of Ember") { 	ar_bonus = character.updateSkill(skill, lvl, 2); damage_min = 1; damage_max = 1; }
-		else if (skill.name == "Fists of Thunder") {	ar_bonus = character.updateSkill(skill, lvl, 3); damage_min = 1; damage_max = 1; }
-		else if (skill.name == "Fists of Ice") { 	ar_bonus = character.updateSkill(skill, lvl, 3); damage_min = 1; damage_max = 1; }
+		else if (skill.name == "Fists of Ember") { 	ar_bonus = character.updateSkill(skill, lvl, 2); damage_min = 1; damage_max = 1; damage_bonus = 100; }
+		else if (skill.name == "Fists of Thunder") {	ar_bonus = character.updateSkill(skill, lvl, 3); damage_min = 1; damage_max = 1; damage_bonus = 100; }
+		else if (skill.name == "Fists of Ice") { 	ar_bonus = character.updateSkill(skill, lvl, 3); damage_min = 1; damage_max = 1; damage_bonus = 100; }
 		else if (skill.name == "Static Strike") {	lDamage_min = 0.8*phys_min+character.updateSkill(skill, lvl, 0); lDamage_max = 0.8*phys_max+character.updateSkill(skill, lvl, 1); damage_bonus = 0; }
 		else if (skill.name == "Dragon Talon") {	kick_damage_min = character.updateSkill(skill, lvl, 0); kick_damage_max = character.updateSkill(skill, lvl, 1); ar_bonus = character.updateSkill(skill, lvl, 2); kick_bonus = character.updateSkill(skill, lvl, 3); damage_bonus = 100+character.updateSkill(skill, lvl, 4); }
-		else if (skill.name == "Emberstorm") {		fDamage_min = character.updateSkill(skill, lvl, 0); fDamage_max = character.updateSkill(skill, lvl, 1); spell = 1; }	// separated
-		else if (skill.name == "Dragon Flight") { 	kick_damage_min = character.updateSkill(skill, lvl, 0); kick_damage_max = character.updateSkill(skill, lvl, 1); kick_bonus = character.updateSkill(skill, lvl, 3); ar_bonus = character.updateSkill(skill, lvl, 4); }
-		else if (skill.name == "Blades of Ice") {	cDamage_min = 0.5*0.6*phys_min+character.updateSkill(skill, lvl, 1); cDamage_max = 0.5*0.6*phys_max+character.updateSkill(skill, lvl, 2); ar_bonus = character.updateSkill(skill, lvl, 0); }
+		else if (skill.name == "Emberstorm") {		fDamage_min = character.updateSkill(skill, lvl, 0); fDamage_max = character.updateSkill(skill, lvl, 1); damage_bonus = 100; spell = 1; }	// separated
+		else if (skill.name == "Dragon Flight") { 	kick_damage_min = character.updateSkill(skill, lvl, 0); kick_damage_max = character.updateSkill(skill, lvl, 1); kick_bonus = character.updateSkill(skill, lvl, 3); ar_bonus = character.updateSkill(skill, lvl, 4); damage_bonus = 100; }
+		else if (skill.name == "Blades of Ice") {	cDamage_min = 0.5*0.6*phys_min+character.updateSkill(skill, lvl, 1); cDamage_max = 0.5*0.6*phys_max+character.updateSkill(skill, lvl, 2); ar_bonus = character.updateSkill(skill, lvl, 0); damage_bonus = 0.4*50; }
 
 		else if (skill.name == "Psychic Hammer") {	damage_min = character.updateSkill(skill, lvl, 0); damage_max = character.updateSkill(skill, lvl, 1); mDamage_min = character.updateSkill(skill, lvl, 2); mDamage_max = character.updateSkill(skill, lvl, 3); spell = 1; }
 		else if (skill.name == "Mind Blast") {		damage_min = character.updateSkill(skill, lvl, 0); damage_max = character.updateSkill(skill, lvl, 1); spell = 1; }	// cannot be bound to left click

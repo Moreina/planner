@@ -54,7 +54,7 @@ var character_barbarian = {class_name:"Barbarian", strength:30, dexterity:20, vi
 	// ---------------------------------
 	getFocusData : function(skill, num, ar, phys_min, phys_max, ele_min, ele_max, mag_min, mag_max, wisp) {
 		var lvl = skill.level+skill.extra_levels;
-		var ar_bonus = 0; var damage_bonus = 100;
+		var ar_bonus = 0; var damage_bonus = 0;
 		var damage_min = 0; var damage_max = 0;
 		var fDamage_min = 0; var fDamage_max = 0;
 		var cDamage_min = 0; var cDamage_max = 0;
@@ -64,7 +64,7 @@ var character_barbarian = {class_name:"Barbarian", strength:30, dexterity:20, vi
 		var skillMin = ""; var skillMax = ""; var skillAr = "";
 		var spell = 0;
 		
-		if (skill.name == "War Cry") {			damage_min = character.updateSkill(skill, lvl, 0); damage_max = character.updateSkill(skill, lvl, 1); }
+		if (skill.name == "War Cry") {			damage_min = character.updateSkill(skill, lvl, 0); damage_max = character.updateSkill(skill, lvl, 1); spell = 1; }
 	//	else if (skill.name == "Howl") {		distance = character.updateSkill(skill, lvl, 0); duration = character.updateSkill(skill, lvl, 1); }	// cannot be bound to left click
 	//	else if (skill.name == "Find Potion") {		chance = character.updateSkill(skill, lvl, 0); }	// cannot be bound to left click
 	//	else if (skill.name == "Taunt") { 		ar_bonus = character.updateSkill(skill, lvl, 0); damage_bonus = character.updateSkill(skill, lvl, 1); }	// cannot be bound to left click

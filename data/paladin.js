@@ -164,7 +164,7 @@ var character_paladin = {class_name:"Paladin", strength:25, dexterity:20, vitali
 	// ---------------------------------
 	getFocusData : function(skill, num, ar, phys_min, phys_max, ele_min, ele_max, mag_min, mag_max, wisp) {
 		var lvl = skill.level+skill.extra_levels;
-		var ar_bonus = 0; var damage_bonus = 100;
+		var ar_bonus = 0; var damage_bonus = 0;
 		var damage_min = 0; var damage_max = 0;
 		var fDamage_min = 0; var fDamage_max = 0;
 		var cDamage_min = 0; var cDamage_max = 0;
@@ -197,13 +197,13 @@ var character_paladin = {class_name:"Paladin", strength:25, dexterity:20, vitali
 	//	else if (skill.name == "Conviction") {		}	// cannot be bound to left click
 		
 		else if (skill.name == "Sacrifice") {		ar_bonus = character.updateSkill(skill, lvl, 0); damage_bonus = 150+character.updateSkill(skill, lvl, 1); }
-		else if (skill.name == "Smite") {		damage_bonus = character.updateSkill(skill, lvl, 0); }
-		else if (skill.name == "Holy Bolt") {		mDamage_min = character.updateSkill(skill, lvl, 0); mDamage_max = character.updateSkill(skill, lvl, 1); damage_bonus = 0; }
+		else if (skill.name == "Smite") {		damage_bonus = 100+character.updateSkill(skill, lvl, 0); }
+		else if (skill.name == "Holy Bolt") {		mDamage_min = character.updateSkill(skill, lvl, 0); mDamage_max = character.updateSkill(skill, lvl, 1); }
 		else if (skill.name == "Zeal") {		ar_bonus = character.updateSkill(skill, lvl, 0); damage_bonus = 100+character.updateSkill(skill, lvl, 1); }
 		else if (skill.name == "Charge") {		ar_bonus = character.updateSkill(skill, lvl, 1); damage_bonus = 100+character.updateSkill(skill, lvl, 0); }
 		else if (skill.name == "Vengeance") {		fDamage_min = character.updateSkill(skill, lvl, 2); fDamage_max = character.updateSkill(skill, lvl, 3); cDamage_min = character.updateSkill(skill, lvl, 4); cDamage_max = character.updateSkill(skill, lvl, 5); lDamage_min = character.updateSkill(skill, lvl, 6); lDamage_max = character.updateSkill(skill, lvl, 7); ar_bonus = character.updateSkill(skill, lvl, 11); damage_bonus = 100; }
-		else if (skill.name == "Blessed Hammer") {	mDamage_min = character.updateSkill(skill, lvl, 0); mDamage_max = character.updateSkill(skill, lvl, 1); damage_bonus = 0; }
-		else if (skill.name == "Fist of the Heavens"){	mDamage_min = character.updateSkill(skill, lvl, 0); mDamage_max = character.updateSkill(skill, lvl, 1); lDamage_min = character.updateSkill(skill, lvl, 2); lDamage_max = character.updateSkill(skill, lvl, 3); damage_bonus = 0; }
+		else if (skill.name == "Blessed Hammer") {	mDamage_min = character.updateSkill(skill, lvl, 0); mDamage_max = character.updateSkill(skill, lvl, 1); }
+		else if (skill.name == "Fist of the Heavens") {	mDamage_min = character.updateSkill(skill, lvl, 0); mDamage_max = character.updateSkill(skill, lvl, 1); lDamage_min = character.updateSkill(skill, lvl, 2); lDamage_max = character.updateSkill(skill, lvl, 3); }
 		else if (skill.name == "Dashing Strike") {	mDamage_min = character.updateSkill(skill, lvl, 1); mDamage_max = character.updateSkill(skill, lvl, 2); damage_bonus = 100; }
 	//	else if (skill.name == "Conversion") {		spell = 2; }
 	//	else if (skill.name == "Holy Shield") {		spell = 2; }	// cannot be bound to left click
