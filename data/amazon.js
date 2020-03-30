@@ -2,7 +2,7 @@
 // frames per attack with a base weapon speed of 0 and no IAS
 var weapon_frames = {dagger:12, oneHand_sword:13, oneHand_axe:13, twoHand_sword:17, twoHand_axe:17, staff:17, polearm:17, oneHand_mace:13, scepter:13, wand:13, twoHand_mace:20, javelin:15, spear:15, bow:13, crossbow:19}
 
-var character_amazon = {class_name:"Amazon", strength:20, dexterity:25, vitality:20, energy:15, life:50, mana:15, defense:6, ar:100, stamina:184, levelup_life:2.5, levelup_stamina:1, levelup_mana:1.5, ar_per_dexterity:5, defense_per_dexterity:0.25, life_per_vitality:3, stamina_per_vitality:1, mana_per_energy:1.5, starting_strength:20, starting_dexterity:25, starting_vitality:20, starting_energy:15, ar_const:10, skill_layout:"./images/amazon.png", tab1:"Javelins & Spears", tab2:"Passives", tab3:"Bows & Crossbows",
+var character_amazon = {class_name:"Amazon", strength:20, dexterity:25, vitality:20, energy:15, life:50, mana:15, defense:6, ar:100, stamina:184, levelup_life:2.5, levelup_stamina:1, levelup_mana:1.5, ar_per_dexterity:5, defense_per_dexterity:0.25, life_per_vitality:3, stamina_per_vitality:1, mana_per_energy:1.5, starting_strength:20, starting_dexterity:25, starting_vitality:20, starting_energy:15, ar_const:10, skill_layout:"./images/amazon.png", //tab1:"Javelins & Spears", tab2:"Passives", tab3:"Bows & Crossbows",
 	
 	// 
 	// ---------------------------------

@@ -2,7 +2,7 @@
 // frames per attack with a base weapon speed of 0 and no IAS
 var weapon_frames = {dagger:14, oneHand_sword:14, oneHand_axe:14, twoHand_sword:22, twoHand_axe:18, staff:18, polearm:18, oneHand_mace:14, scepter:14, wand:14, twoHand_mace:21, javelin:22, spear:22, bow:15, crossbow:20, claw:13.5}
 
-var character_assassin = {class_name:"Assassin", strength:20, dexterity:20, vitality:20, energy:25, life:50, mana:25, defense:5, ar:80, stamina:195, levelup_life:2, levelup_stamina:1.25, levelup_mana:1.5, ar_per_dexterity:5, defense_per_dexterity:0.25, life_per_vitality:3, stamina_per_vitality:1.25, mana_per_energy:1.75, starting_strength:20, starting_dexterity:20, starting_vitality:20, starting_energy:25, ar_const:15, skill_layout:"./images/assassin.png", tab1:"Martial Arts", tab2:"Shadow Disciplines", tab3:"Traps",
+var character_assassin = {class_name:"Assassin", strength:20, dexterity:20, vitality:20, energy:25, life:50, mana:25, defense:5, ar:80, stamina:195, levelup_life:2, levelup_stamina:1.25, levelup_mana:1.5, ar_per_dexterity:5, defense_per_dexterity:0.25, life_per_vitality:3, stamina_per_vitality:1.25, mana_per_energy:1.75, starting_strength:20, starting_dexterity:20, starting_vitality:20, starting_energy:25, ar_const:15, skill_layout:"./images/assassin.png", //tab1:"Martial Arts", tab2:"Shadow Disciplines", tab3:"Traps",
 	
 	// 
 	// ---------------------------------

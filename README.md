@@ -1,16 +1,19 @@
-<!-- Path of Diablo Planner
+<!------------------------------------------
+Path of Diablo Planner
 
 * Click on the character's level or class to change them
 * Use right click to remove points or items
 * Shift and ctrl modify the amount of points added or removed
 
-To report a bug, edit the planner wiki or post on the reddit thread. Direct messages work too.
-
 Current Known Bugs:
 * Charms can't be moved into a new space below the original space if they overlap eachother
 * Shift + Right Click in Firefox doesn't work (and still opens the default menu)
+* No testing has been done on IE, Safari, or mobile
 
-https://github.com/Moreina/planner#planner -->
+To report a bug - edit the planner wiki, post in the reddit thread, or send a direct message.
+
+https://github.com/Moreina/planner#planner
+------------------------------------------>
 
 # [Planner](https://moreina.github.io/planner/)
 
@@ -28,7 +31,7 @@ Character Skill Planner for Diablo 2: Path of Diablo
   * difficulty differences (character resistances, summon skills)
   * stats gained from items
   * stats gained from effects (buffs, minions, auras, shrines, etc)
-* equipment selection with most uniques/sets
+* equipment selection with most items
 * charm inventory
 * character validation
 

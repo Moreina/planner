@@ -2,7 +2,7 @@
 // frames per attack with a base weapon speed of 0 and no IAS
 var weapon_frames = {dagger:13, oneHand_sword:13, oneHand_axe:13, twoHand_sword:17, twoHand_axe:18, staff:18, polearm:18, oneHand_mace:13, scepter:13, wand:13, twoHand_mace:21, javelin:18, spear:18, bow:14, crossbow:19}
 
-var character_barbarian = {class_name:"Barbarian", strength:30, dexterity:20, vitality:25, energy:10, life:55, mana:10, defense:5, ar:85, stamina:192, levelup_life:2, levelup_stamina:1, levelup_mana:1, ar_per_dexterity:5, defense_per_dexterity:0.25, life_per_vitality:4, stamina_per_vitality:1, mana_per_energy:1, starting_strength:30, starting_dexterity:20, starting_vitality:25, starting_energy:10, ar_const:20, skill_layout:"./images/barbarian.png", tab1:"Warcries", tab2:"Masteries", tab3:"Combat",
+var character_barbarian = {class_name:"Barbarian", strength:30, dexterity:20, vitality:25, energy:10, life:55, mana:10, defense:5, ar:85, stamina:192, levelup_life:2, levelup_stamina:1, levelup_mana:1, ar_per_dexterity:5, defense_per_dexterity:0.25, life_per_vitality:4, stamina_per_vitality:1, mana_per_energy:1, starting_strength:30, starting_dexterity:20, starting_vitality:25, starting_energy:10, ar_const:20, skill_layout:"./images/barbarian.png", //tab1:"Warcries", tab2:"Masteries", tab3:"Combat",
 	
 	// 
 	// ---------------------------------

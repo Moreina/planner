@@ -2,7 +2,7 @@
 // frames per attack with a base weapon speed of 0 and no IAS
 var weapon_frames = {dagger:16, oneHand_sword:17, oneHand_axe:17, twoHand_sword:21, twoHand_axe:15, staff:15, polearm:15, oneHand_mace:17, scepter:17, wand:17, twoHand_mace:20, javelin:20, spear:20, bow:16, crossbow:19, orb:17}
 
-var character_sorceress = {class_name:"Sorceress", strength:10, dexterity:25, vitality:10, energy:35, life:40, mana:35, defense:6, ar:75, stamina:174, levelup_life:1.5, levelup_stamina:1, levelup_mana:2, ar_per_dexterity:5, defense_per_dexterity:0.25, life_per_vitality:2, stamina_per_vitality:1, mana_per_energy:2, starting_strength:10, starting_dexterity:25, starting_vitality:10, starting_energy:35, ar_const:-15, skill_layout:"./images/sorceress.png", tab1:"Cold", tab2:"Lightning", tab3:"Fire",
+var character_sorceress = {class_name:"Sorceress", strength:10, dexterity:25, vitality:10, energy:35, life:40, mana:35, defense:6, ar:75, stamina:174, levelup_life:1.5, levelup_stamina:1, levelup_mana:2, ar_per_dexterity:5, defense_per_dexterity:0.25, life_per_vitality:2, stamina_per_vitality:1, mana_per_energy:2, starting_strength:10, starting_dexterity:25, starting_vitality:10, starting_energy:35, ar_const:-15, skill_layout:"./images/sorceress.png", //tab1:"Cold", tab2:"Lightning", tab3:"Fire",
 	
 	// 
 	// ---------------------------------
@@ -134,9 +134,9 @@ var character_sorceress = {class_name:"Sorceress", strength:10, dexterity:25, vi
 		// Fire Mastery - not bindable
 		else { spell = 2; }
 
-		if (typeof(skill.reqWeapon) != 'undefined') { var match = 0; for (let w = 0; w < skill.reqWeapon.length; w++) {
-			if (equipped.weapon.type == skill.reqWeapon[w]) { match = 1 }
-		} if (match == 0) { spell = 2 } }
+	//	if (typeof(skill.reqWeapon) != 'undefined') { var match = 0; for (let w = 0; w < skill.reqWeapon.length; w++) {
+	//		if (equipped.weapon.type == skill.reqWeapon[w]) { match = 1 }
+	//	} if (match == 0) { spell = 2 } }
 		
 		ele_min += Math.floor(wisp*(fDamage_min*(1+(character.fDamage+character.fDamage_skillup)/100) + cDamage_min*(1+(character.cDamage+character.cDamage_skillup)/100) + lDamage_min*(1+(character.lDamage+character.lDamage_skillup)/100)));
 		ele_max += Math.floor(wisp*(fDamage_max*(1+(character.fDamage+character.fDamage_skillup)/100) + cDamage_max*(1+(character.cDamage+character.cDamage_skillup)/100) + lDamage_max*(1+(character.lDamage+character.lDamage_skillup)/100) + pDamage_max*(1+character.pDamage/100)));

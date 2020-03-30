@@ -2,35 +2,38 @@
 
 character = {};
 var skill_bonuses = {stamina_skillup:0, frw_skillup:0, defense_skillup:0, resistance_skillup:0, cstrike_skillup:0, ar_skillup:0, pierce_skillup:0, fRes_skillup:0, cRes_skillup:0, lRes_skillup:0, edged_skillup:[0,0,0], pole_skillup:[0,0,0], blunt_skillup:[0,0,0], thrown_skillup:[0,0,0], claw_skillup:[0,0,0], mana_regen_skillup:0, cPierce_skillup:0, lPierce_skillup:0, fPierce_skillup:0, cDamage_skillup:0, lDamage_skillup:0, fDamage_skillup:0, block_skillup:0, velocity_skillup:0};
-//var buffs = {stamina_buff:0, max_life_buff:0, max_mana_buff:0, defense_buff:0, all_skills_buff:0, fhr_buff:0, frw_buff:0, ias_buff:0, ar_buff:0, damage_buff:0, all_res_buff:0, pdr_buff:0, curses_reduced_buff:0, pDamage_min_buff:0, pDamage_max_buff:0, pDamage_duration_buff:0, thorns_buff:0, life_per_hit_buff:0, life_per_ranged_hit_buff:0, enemy_pRes_buff:0, fcr_buff:0, skeleton_damage_buff:0, block_buff:0, smite_min_buff:0, smite_max_buff:0, absorb_buff:0, absorb_flat_buff:0, life_regen_buff:0, fDamage_min_buff:0, fDamage_max_buff:0, cDamage_min_buff:0, cDamage_max_buff:0, enemy_defense_buff:0, pDamage_cutoff:0, velocity_aura:0, fRes_aura:0, cRes_aura:0, lRes_aura:0, defense_aura:0, life_regen_aura:0, poison_reduced_aura:0, fRes_max_aura:0, cRes_max_aura:0, lRes_max_aura:0, stam_recovery_aura:0, mana_regen_aura:0, elemental_damage_aura:0, lDamage_min_aura:0, lDamage_max_aura:0, pierce_aura:0, cstrike_aura:0, enemy_defense_aura:0, enemy_resists_aura:0, damage_vs_undead_aura:0};
 var base_stats = {level:1, skillpoints:0, statpoints:0, quests_completed:-1, running:-1, difficulty:3, strength_added:0, dexterity_added:0, vitality_added:0, energy_added:0, fRes_penalty:100, cRes_penalty:100, lRes_penalty:100, pRes_penalty:100, mRes_penalty:100, fRes:0, cRes:0, lRes:0, pRes:0, mRes:0, fRes_max_base:75, cRes_max_base:75, lRes_max_base:75, pRes_max_base:75, mRes_max_base:75, set_bonuses:[0,0,{},{},{},{},{}]}
 
 var effects = {};
 var skillList = []; var skillOptions = []; var skillList1 = []; var skillList2 = [];
 var selectedSkill = [" ­ ­ ­ ­ Skill 1", " ­ ­ ­ ­ Skill 2"];
-var active = {};
-var oskills = {basicAttack:{},basicThrow:{}};
-var abilities = {basicAttack:{},basicThrow:{}};
+
 var lastCharm = "";
 var lastSelected = "";
-var gear = {req_level:0, req_strength:0, req_dexterity:0};
 var settings = {coupling:1, autocast:1}
 var MAX = 20;	// Highest Skill Hardpoints
 var LIMIT = 60; // Highest Skill Data
 var RES_CAP = 95;
 
-var offskills = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-		0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-		0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+//var offskills = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+//		0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+//		0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
 
-var oskills = {
-/* oskills  amazon	*/	oskill_Multiple_Shot:0, oskill_Magic_Arrow:0, oskill_Guided_Arrow:0, oskill_Inner_Sight:0, oskill_Lethal_Strike:0, oskill_Valkyrie:0, 
-/* oskills  barbarian	*/	oskill_Battle_Orders:0, oskill_Battle_Command:0, oskill_Battle_Cry:0, oskill_Edged_Weapon_Mastery:0, oskill_Bash:0, 
-/* oskills  druid	*/	oskill_Werewolf:0, oskill_Werebear:0, oskill_Lycanthropy:0, oskill_Feral_Rage:0, oskill_Summon_Dire_Wolf:0, oskill_Flame_Dash:0, 
-/* oskills  necromancer	*/	oskill_Summon_Mastery:0, oskill_Desecrate:0, 
-/* oskills  paladin	*/	oskill_Zeal:0, oskill_Vengeance:0, 
-/* oskills  sorceress	*/	oskill_Fire_Ball:0, oskill_Fire_Wall:0, oskill_Meteor:0, oskill_Frigerate:0, oskill_Hydra:0, oskill_Shiver_Armor:0, oskill_Fire_Mastery:0, oskill_Cold_Mastery:0, 
-}
+// UNUSED
+//var buffs = {stamina_buff:0, max_life_buff:0, max_mana_buff:0, defense_buff:0, all_skills_buff:0, fhr_buff:0, frw_buff:0, ias_buff:0, ar_buff:0, damage_buff:0, all_res_buff:0, pdr_buff:0, curses_reduced_buff:0, pDamage_min_buff:0, pDamage_max_buff:0, pDamage_duration_buff:0, thorns_buff:0, life_per_hit_buff:0, life_per_ranged_hit_buff:0, enemy_pRes_buff:0, fcr_buff:0, skeleton_damage_buff:0, block_buff:0, smite_min_buff:0, smite_max_buff:0, absorb_buff:0, absorb_flat_buff:0, life_regen_buff:0, fDamage_min_buff:0, fDamage_max_buff:0, cDamage_min_buff:0, cDamage_max_buff:0, enemy_defense_buff:0, pDamage_cutoff:0, velocity_aura:0, fRes_aura:0, cRes_aura:0, lRes_aura:0, defense_aura:0, life_regen_aura:0, poison_reduced_aura:0, fRes_max_aura:0, cRes_max_aura:0, lRes_max_aura:0, stam_recovery_aura:0, mana_regen_aura:0, elemental_damage_aura:0, lDamage_min_aura:0, lDamage_max_aura:0, pierce_aura:0, cstrike_aura:0, enemy_defense_aura:0, enemy_resists_aura:0, damage_vs_undead_aura:0};
+//var active = {};
+//var oskills = {basicAttack:{},basicThrow:{}};
+//var abilities = {basicAttack:{},basicThrow:{}};
+//var gear = {req_level:0, req_strength:0, req_dexterity:0};
+
+//var oskills = {
+/* oskills  amazon	*///	oskill_Multiple_Shot:0, oskill_Magic_Arrow:0, oskill_Guided_Arrow:0, oskill_Inner_Sight:0, oskill_Lethal_Strike:0, oskill_Valkyrie:0, 
+/* oskills  barbarian	*///	oskill_Battle_Orders:0, oskill_Battle_Command:0, oskill_Battle_Cry:0, oskill_Edged_Weapon_Mastery:0, oskill_Bash:0, 
+/* oskills  druid	*///	oskill_Werewolf:0, oskill_Werebear:0, oskill_Lycanthropy:0, oskill_Feral_Rage:0, oskill_Summon_Dire_Wolf:0, oskill_Flame_Dash:0, 
+/* oskills  necromancer	*///	oskill_Summon_Mastery:0, oskill_Desecrate:0, 
+/* oskills  paladin	*///	oskill_Zeal:0, oskill_Vengeance:0, 
+/* oskills  sorceress	*///	oskill_Fire_Ball:0, oskill_Fire_Wall:0, oskill_Meteor:0, oskill_Frigerate:0, oskill_Hydra:0, oskill_Shiver_Armor:0, oskill_Fire_Mastery:0, oskill_Cold_Mastery:0, 
+//}
 
 // Charm Inventory
 var inv = [
@@ -382,10 +385,7 @@ function equip(type, val) {
 
 // 
 // ---------------------------------
-function addAura(aura, aura_lvl) {
-	name = aura
-	i = aura_lvl
-//	document.getElementById("f4").innerHTML = "addAura("+name+","+i+")"
+function addAura(name, lvl) {
 //	if (document.getElementById(name) == null) {
 		var newEffect = document.createElement("img")
 		var effectIcon = "./images/more/"+name+".png"
@@ -394,8 +394,8 @@ function addAura(aura, aura_lvl) {
 		var eId = document.createAttribute("id");	eId.value = name;		newEffect.setAttributeNode(eId);
 		var eSrc = document.createAttribute("src");	eSrc.value = effectIcon;	newEffect.setAttributeNode(eSrc);
 		
-		var eToggle = document.createAttribute("onclick");		eToggle.value = "toggleAura("+aura+", "+aura_lvl+")";	newEffect.setAttributeNode(eToggle);
-		var eRemove = document.createAttribute("oncontextmenu");	eRemove.value = "removeAura("+aura+", "+aura_lvl+")";	newEffect.setAttributeNode(eRemove);
+		var eToggle = document.createAttribute("onclick");		eToggle.value = "toggleAura("+name+", "+lvl+")";	newEffect.setAttributeNode(eToggle);
+		var eRemove = document.createAttribute("oncontextmenu");	eRemove.value = "removeAura("+name+", "+lvl+")";	newEffect.setAttributeNode(eRemove);
 		
 		var effectGUI = document.getElementById("side");
 		effectGUI.appendChild(newEffect);
@@ -403,7 +403,7 @@ function addAura(aura, aura_lvl) {
 		if (typeof(effects[name]) == 'undefined') { effects[name] = {} }
 		effects[name]["enabled"] = 0
 		if (settings.autocast == 1) {
-			toggleAura(name, i)
+			toggleAura(name, lvl)
 		}
 //	}
 	calculateSkillAmounts()
@@ -413,7 +413,6 @@ function addAura(aura, aura_lvl) {
 // 
 // ---------------------------------
 function removeAura(name, i) {
-//	document.getElementById("f4").innerHTML = "begin: removeAura("+name+","+i+")"
 	var data = getAuraData(name, i)
 	for (affix in data) {
 		character[affix] -= data[affix]
@@ -443,7 +442,6 @@ function resetSkills() {
 		document.getElementById("s"+skills[s].key).onclick = function() {mouseOut};
 		document.getElementById("s"+skills[s].key).oncontextmenu = function() {mouseOut};
 	}
-	
 	document.getElementById("dropdown_skill1").innerHTML = "<option class='gray' disabled selected>" + " ­ ­ ­ ­ Skill 1" + "</option>"
 	document.getElementById("dropdown_skill2").innerHTML = "<option class='gray' disabled selected>" + " ­ ­ ­ ­ Skill 2" + "</option>"
 }
@@ -479,7 +477,7 @@ function resetCharms() {
 	}
 }
 
-// Adds a charm to the inventory		// TODO: Too large, split
+// Adds a charm to the inventory
 // val: the name of the charm
 // ---------------------------------
 function addCharm(val) {
@@ -502,9 +500,9 @@ function addCharm(val) {
 	else if (type == "large") { charmHeight = "59"; charmImage = charm_img.prefix+charm_img.large[r]; charm_y = 2; }
 	else if (type == "small") { charmHeight = "29"; charmImage = charm_img.prefix+charm_img.small[r]; charm_y = 1; }
 	if (typeof(charmItem.debug) != 'undefined') {
-		if (val == "+20 skills") { charmHeight = "29"; charmImage = charm_img.prefix+"debug1.png"; charm_y = 1; }
-		else if (val == "+1 skill") { charmHeight = "29"; charmImage = charm_img.prefix+"debug3.png"; charm_y = 1; }
-		else { charmHeight = "29"; charmImage = charm_img.prefix+"debug2.png"; charm_y = 1; }
+		if (val == "+20 skills") { charmHeight = "29"; charmImage = charm_img.prefix+"debug_II.png"; charm_y = 1; }
+		else if (val == "+1 skill") { charmHeight = "29"; charmImage = charm_img.prefix+"debug_D.png"; charm_y = 1; }
+		else { charmHeight = "29"; charmImage = charm_img.prefix+"debug_skull.png"; charm_y = 1; }
 	}
 	
 	var allow = 1;
@@ -595,7 +593,7 @@ function initiateMiscEffect(name, i) {
 	//	if (non_items[i].name == "Mercenary: "+name.split('_').join(' ')) { auraLevel = getMercenaryAuraLevel(character.level-1) }
 	//	auraEffects = character_paladin.getBuffData(effects[name], selfbuff)
 	//	//skills_all["paladin"]
-		character.heal =  100
+	//	character.heal = 100
 
 		var newEffect = document.createElement("img")
 		var effectIcon = "./images/misc/dark/"+name+".png";
@@ -616,7 +614,6 @@ function initiateMiscEffect(name, i) {
 			toggleMiscEffect(name, i)
 		}
 	}
-
 }
 
 // 
@@ -676,9 +673,6 @@ function toggleQuests(quests) {
 		updateStats()
 		updateMisc()
 	}
-	// testing
-	document.getElementById("find3").innerHTML = ""
-	document.getElementById("find4").innerHTML = ""
 }
 
 // Toggles whether the character is running or walking/standing
@@ -901,12 +895,12 @@ function calculateSkillAmounts() {
 		skills[s].extra_levels = 0
 		skills[s].extra_levels += character.all_skills
 		var display = skills[s].level;
-		var temp = 0;
+	//	var temp = 0;
 		var skillSolo = "skill_" + skills[s].name.split(" ").join("_");
 		skills[s].force_levels = character[skillSolo]
 		var oskillSolo = "oskill_" + skills[s].name.split(" ").join("_");
 		skills[s].force_levels += character[oskillSolo]
-		offskills[skills[s].code] = skills[s].level + skills[s].extra_levels + skills[s].force_levels
+	//	offskills[skills[s].code] = skills[s].level + skills[s].extra_levels + skills[s].force_levels
 		if (character.class_name == "Amazon") {
 			skills[s].extra_levels += character.skills_amazon
 			if (s < 10) { skills[s].extra_levels += character.skills_javelins
@@ -1069,12 +1063,11 @@ function updateEffect(skill) {
 				effects[eff] = {}
 				effects[eff]["enabled"] = 0
 				effects[eff]["skill"] = skill.i
-				// if () ... calculate passive effects here instead of passing them forward (if they are shown as effects)
-				
+
 				if (settings.autocast == 1) { enableEffect(skill.i) }
 			}
 		} else {
-			if (effectElem != null) {	// && effects[eff].enabled == 1
+			if (effectElem != null) {
 				effects[eff].enabled = 0
 				effectElem.remove();
 			}
@@ -1160,7 +1153,6 @@ function modifyEffect(skill) {
 	} }
 }
 
-
 // Get highest mercenary aura level
 // hlvl: level of mercenary (maximum is clvl - 1)
 // ---------------------------------
@@ -1171,7 +1163,6 @@ function getMercenaryAuraLevel(hlvl) {
 	else if (hlvl > 54) { result = 18 }
 	return result;
 }
-
 
 // Recolors stats/skills based on unmet item/skill/level requirements
 // ---------------------------------
@@ -1472,7 +1463,6 @@ function updateSkills(skill) {
 	document.getElementById("dropdown_skill2").selectedIndex = selectedIndex[1]
 	if (selectedSkill[0] == " ­ ­ ­ ­ Skill 1") { document.getElementById("skill1_info").innerHTML = ":"; document.getElementById("ar_skill1").innerHTML = ""; }
 	if (selectedSkill[1] == " ­ ­ ­ ­ Skill 2") { document.getElementById("skill2_info").innerHTML = ":"; document.getElementById("ar_skill2").innerHTML = ""; }
-	//updateStats()
 }
 
 // 
@@ -1526,15 +1516,11 @@ function round(num) {
 	// TODO: Always round damage/life numbers
 	var temp = num;
 	var decimals = (toString(num) + ".");
-	if (num >= 33) { 
-		temp = Math.round(num)
-	} else {
+	if (num >= 33) { temp = Math.round(num) }
+	else {
 		decimals = decimals.split(".");
-		if (decimals[1].length > 1) {
-			temp = num.toFixed(1)
-		} else {
-			temp = (Math.round((num + Number.EPSILON) * 10) / 10)
-		}
+		if (decimals[1].length > 1) { temp = num.toFixed(1) }
+		else { temp = (Math.round((num + Number.EPSILON) * 10) / 10) }
 	}
 	return temp;
 }
@@ -1630,10 +1616,8 @@ function drag(ev) {
 	for (s = 1; s < inv[0]["in"].length; s++) {
 		if (inv[0].in[s] == inv[0].onpickup) {
 			document.getElementById(inv[s].id).style = "position: absolute; width: 29px; height: 29px; z-index: 5;";
-		
 		}
 	}
-
 }
 
 // Handles item dropping for Charm Inventory
@@ -1652,12 +1636,8 @@ function drop(ev,cell) {
 	}
 	inv[cell].empty = 0
 	inv[0].in[cell] = inv[0].onpickup
-	if (inv[0].pickup_y > 1) { inv[cell+10].empty = 0; inv[0].in[cell+10] = inv[0].onpickup; 
-		inv[cell].y = 2;
-	}
-	if (inv[0].pickup_y > 2) { inv[cell+20].empty = 0; inv[0].in[cell+20] = inv[0].onpickup; 
-		inv[cell].y = 3;
-	}
+	if (inv[0].pickup_y > 1) { inv[cell+10].empty = 0; inv[0].in[cell+10] = inv[0].onpickup; inv[cell].y = 2; }
+	if (inv[0].pickup_y > 2) { inv[cell+20].empty = 0; inv[0].in[cell+20] = inv[0].onpickup; inv[cell].y = 3; }
 	inv[0].onpickup = "none"
 }
 
@@ -1696,21 +1676,21 @@ function trash(ev) {
 
 // 
 // ---------------------------------
-function itemDrag(ev, x, y) {
+//function itemDrag(ev, x, y) {
 /*	var cell = (y-1)*10+x
 	var id = inv[0].in[cell]
 	ev_new = document.getElementById(id)
 	drag(ev_new)
-*/	return;	
-}
+*///	return;	
+//}
 
 // 
 // ---------------------------------
-function itemRemove(ev, x, y) {
+//function itemRemove(ev, x, y) {
 /*	var cell = (y-1)*10+x
 	var id = inv[0].in[cell]
 	ev_new = document.getElementById(id)
 	trash(ev)
 	trash(ev_new)
-*/	return;
-}
+*///	return;
+//}

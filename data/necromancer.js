@@ -2,7 +2,7 @@
 // frames per attack with a base weapon speed of 0 and no IAS
 var weapon_frames = {dagger:18, oneHand_sword:18, oneHand_axe:18, twoHand_sword:22, twoHand_axe:19, staff:19, polearm:19, oneHand_mace:18, scepter:18, wand:18, twoHand_mace:22, javelin:23, spear:23, bow:17, crossbow:19}
 
-var character_necromancer = {class_name:"Necromancer", strength:15, dexterity:25, vitality:15, energy:25, life:45, mana:25, defense:6, ar:80, stamina:179, levelup_life:2, levelup_stamina:1, levelup_mana:2, ar_per_dexterity:5, defense_per_dexterity:0.25, life_per_vitality:2, stamina_per_vitality:1, mana_per_energy:2, starting_strength:15, starting_dexterity:25, starting_vitality:15, starting_energy:25, ar_const:-10, skill_layout:"./images/necromancer.png", tab1:"Summoning", tab2:"Poison & Bone", tab3:"Curses",
+var character_necromancer = {class_name:"Necromancer", strength:15, dexterity:25, vitality:15, energy:25, life:45, mana:25, defense:6, ar:80, stamina:179, levelup_life:2, levelup_stamina:1, levelup_mana:2, ar_per_dexterity:5, defense_per_dexterity:0.25, life_per_vitality:2, stamina_per_vitality:1, mana_per_energy:2, starting_strength:15, starting_dexterity:25, starting_vitality:15, starting_energy:25, ar_const:-10, skill_layout:"./images/necromancer.png", //tab1:"Summoning", tab2:"Poison & Bone", tab3:"Curses",
 	
 	// 
 	// ---------------------------------
@@ -128,9 +128,9 @@ var character_necromancer = {class_name:"Necromancer", strength:15, dexterity:25
 	//	else if (skill.name == "Lower Resist") {	}	// cannot be bound to left click
 		else { spell = 2; }
 
-		if (typeof(skill.reqWeapon) != 'undefined') { var match = 0; for (let w = 0; w < skill.reqWeapon.length; w++) {
-			if (equipped.weapon.type == skill.reqWeapon[w]) { match = 1 }
-		} if (match == 0) { spell = 2 } }
+	//	if (typeof(skill.reqWeapon) != 'undefined') { var match = 0; for (let w = 0; w < skill.reqWeapon.length; w++) {
+	//		if (equipped.weapon.type == skill.reqWeapon[w]) { match = 1 }
+	//	} if (match == 0) { spell = 2 } }
 		
 		if (minion_min > 0 || skill.name == "Raise Skeletal Mage") { phys_min = 0; phys_max = 0; ele_min = 0; ele_max = 0; mag_min = 0; mag_max = 0; }
 		
