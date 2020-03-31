@@ -37,10 +37,14 @@ var unequipped = {name:"none", strength:0, dexterity:0, vitality:0, energy:0, li
 /* oskills		*///	oskill_Warp:0, oskill_Ball_Lightning:0, 
 /* oskills  amazon	*///	oskill_Inner_Sight:0, oskill_Lethal_Strike:0, oskill_Valkyrie:0, oskill_Magic_Arrow:0, oskill_Guided_Arrow:0, oskill_Multiple_Shot:0, 
 /* oskills  barbarian	*///	oskill_Battle_Command:0, oskill_Battle_Orders:0, oskill_Battle_Cry:0, oskill_Edged_Weapon_Mastery:0, oskill_Bash:0, 
-/* oskills  druid	*///	oskill_Lycanthropy:0, oskill_Werebear:0, oskill_Werewolf:0, oskill_Feral_Rage:0, oskill_Flame_Dash:0, 
+/* oskills  druid	*///	oskill_Lycanthropy:0, oskill_Werebear:0, oskill_Werewolf:0, oskill_Feral_Rage:0, oskill_Flame_Dash:0, oskill_Summon_Dire_Wolf:0, 
 /* oskills  necromancer	*///	oskill_Desecrate:0, 
 /* oskills  paladin	*///	oskill_Zeal:0, oskill_Vengeance:0, 
 /* oskills  sorceress	*///	oskill_Frigerate:0, oskill_Shiver_Armor:0, oskill_Cold_Mastery:0, oskill_Hydra:0, oskill_Fire_Ball:0, oskill_Fire_Wall:0, oskill_Meteor:0, oskill_Fire_Mastery:0, 
+// ...to confirm: 
+//	oskill_Summon_Mastery (Corpsemourn)
+//	oskill_Guided_Arrow (Widowmaker)
+//	oskill_Two_Handed_Weapon_Mastery (The Grandfather)
 };
 
 var non_items = [
@@ -316,7 +320,7 @@ var equipment = {
 {name:"Venom Ward", req_level:20, e_def:100, light_radius:2, pRes_max:15, pRes:90, poison_length_reduced:50, base:"Breast Plate"},
 {name:"Sparking Mail", req_level:17, e_def:85, lRes:30, thorns_lightning:14, lDamage_min:1, lDamage_max:20, base:"Chain Mail"},
 {name:"Iceblink", req_level:22, e_def:80, freezes_target:1, cRes:30, mDamage_reduced:1, light_radius:4, base:"Splint Mail"},
-{name:"Boneflesh", req_level:26, e_def:120, life_leech:5, owounds:25, ar:35, skill_Summon_Dire_Wolf:3, base:"Plate Mail", pod_changes:1},
+{name:"Boneflesh", req_level:26, e_def:120, life_leech:5, owounds:25, ar:35, oskill_Summon_Dire_Wolf:3, base:"Plate Mail", pod_changes:1},
 {name:"Rockfleece", req_level:28, e_def:130, req:-10, pdr:10, strength:5, damage_reduced:5, base:"Field Plate"},
 {name:"Rattlecage", req_level:29, defense:200, cblow:25, flee_on_hit:40, ar:45, base:"Gothic Plate"},
 {name:"Heavenly Garb", req_level:29, e_def:100, mana_regen:25, all_res:10, energy:15, damage_vs_undead:50, ar_vs_undead:100, base:"Light Plate"},
@@ -564,6 +568,7 @@ var equipment = {
 //{only:"sorceress", rw:1, name:"Plague ­ ­ - ­ ­ Jared's Stone", req_level:67, damage_vs_demons:380, enemy_pRes:-23, dstrike_per_level:0.375, owounds:25, freezes_target:3, strength:10, all_skills:2, skill_Cold_Mastery:3, skill_Frozen_Orb:3, skill_Hydra:3, type:"orb", base:"Jared's Stone", pod_changes:1, aura:"Cleansing", aura_lvl:17},	// 25% ctc level 15 Poison Nova on striking, 20% ctc level 12 Lower Resist when struck
 //{only:"assassin", rw:1, name:"Plague ­ ­ - ­ ­ Suwayyah", req_level:67, damage_vs_demons:380, enemy_pRes:-23, dstrike_per_level:0.375, owounds:25, freezes_target:3, strength:10, all_skills:2, skill_Blade_Shield:3, skill_Venom:3, skill_Fade:3, type:"claw", base:"Suwayyah", pod_changes:1, aura:"Cleansing", aura_lvl:17},	// 25% ctc level 15 Poison Nova on striking, 20% ctc level 12 Lower Resist when struck
 {only:"assassin", rarity:"magic", name:"Cunning Suwayyah of Evisceration", type:"claw", req_level:65, damage_max:63, skills_traps:3, skill_Wake_of_Fire:3, skill_Blade_Shield:3, skill_Lightning_Sentry:3, base:"Suwayyah"},
+//{only:"sorceress", rarity:"magic", name:"Volcanic Vortex Orb of the Magus", type:"orb", req_level:67, life:60, fcr:20, skills_fire:3, skill_Enflame:3, skill_Fire_Mastery:3, skill_Immolate:3, base:"Vortex Orb"},
 //{only:"necromancer", rarity:"magic", name:"Cursing Lich Wand", type:"wand", req_level:65, skills_curses:3, skill_Hemorrhage:3, skill_Amplify_Damage:3, skill_Summon_Mastery:3, base:"Lich Wand"},
 // Bows
 {only:"amazon", rw:1, name:"Brand ­ ­ - ­ ­ Matriarchal Bow", req_level:65, e_damage:340, itd:1, ar_bonus:20, damage_vs_demons:330, dstrike:20, pmh:1, knockback:1, skills_bows:3, twoHanded:1, type:"bow", base:"Matriarchal Bow"},	// 35% ctc level 14 Amplify Damage when struck, 100% ctc level 18 Bone Spear on striking, Fires explosive arrows/bolts (15)
@@ -867,7 +872,7 @@ var equipment = {
 {only:"necromancer", name:"Darkforce Spawn", req_level:65, block:32, e_def:180, skills_summoning_necromancer:3, skills_poisonBone:3, skills_curses:3, fcr:30, max_mana:10, type:"shield", base:"Bloodlord Skull"},
 {only:"necromancer", name:"Boneflame", req_level:72, block:30, e_def:150, frw:20, skills_necromancer:3, all_res:30, type:"shield", base:"Succubae Skull"},
 {only:"necromancer", set_TO:1, name:"Trang-Oul's Wing", req_level:54, defense:125, block:60, ibc:30, pRes:40, fRes:45, dexterity:15, strength:25, skills_poisonBone:2, type:"shield", base:"Cantor Trophy", set_bonuses:["set_TO",{},{},{enemy_pRes:-25},{life_replenish:15},{}]},
-//{only:"necromancer", rarity:"magic", name:"Cursing Bloodlord Skull of Deflecting", ibc:20, fbr:30, type:"shield", req_level:65, skills_curses:3, skill_Hemorrhage:3, skill_Amplify_Damage:3, skill_Summon_Mastery:3, block:37, base:"Bloodlord Skull"},
+//{only:"necromancer", rarity:"magic", name:"Cursing Bloodlord Skull of Deflecting", ibc:20, fbr:30, pDamage_min:13, pDamage_max:28, pDamage_duration:4, type:"shield", req_level:65, skills_curses:3, skill_Hemorrhage:3, skill_Amplify_Damage:3, skill_Summon_Mastery:3, block:37, base:"Bloodlord Skull"},
 {only:"paladin", name:"Herald of Zakarum", req_level:42, block:82, e_def:200, ibc:30, fbr:30, ar_bonus:20, strength:20, vitality:20, all_res:50, skills_paladin:2, skills_combat_paladin:2, smite_min:20, smite_max:28, type:"shield", base:"Gilded Shield"},
 {only:"paladin", name:"Alma Negra", req_level:77, block:78, e_def:210, cdr:30, skills_paladin:2, ibc:20, fbr:30, e_damage:75, ar_bonus:75, mDamage_reduced:9, smite_min:35, smite_max:58, type:"shield", base:"Sacred Rondache", pod_changes:1},
 {only:"paladin", name:"Dragonscale", req_level:80, block:52, e_def:200, fDamage_min:211, fDamage_max:371, fDamage:15, oskill_Hydra:10, fRes_max:5, strength:25, fAbsorb:20, smite_min:46, smite_max:46, type:"shield", base:"Zakarum Shield"},

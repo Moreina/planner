@@ -388,7 +388,7 @@ function equip(type, val) {
 function addAura(name, lvl) {
 //	if (document.getElementById(name) == null) {
 		var newEffect = document.createElement("img")
-		var effectIcon = "./images/more/"+name+".png"
+		var effectIcon = "./images/effects/"+name+".png"
 		
 		var eClass = document.createAttribute("class");	eClass.value = "effect";	newEffect.setAttributeNode(eClass);
 		var eId = document.createAttribute("id");	eId.value = name;		newEffect.setAttributeNode(eId);
