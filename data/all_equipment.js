@@ -41,8 +41,7 @@ var unequipped = {name:"none", strength:0, dexterity:0, vitality:0, energy:0, li
 /* oskills  necromancer	*///	oskill_Desecrate:0, 
 /* oskills  paladin	*///	oskill_Zeal:0, oskill_Vengeance:0, 
 /* oskills  sorceress	*///	oskill_Frigerate:0, oskill_Shiver_Armor:0, oskill_Cold_Mastery:0, oskill_Hydra:0, oskill_Fire_Ball:0, oskill_Fire_Wall:0, oskill_Meteor:0, oskill_Fire_Mastery:0, 
-// ...to confirm: 
-//	oskill_Summon_Mastery (Corpsemourn)
+// ...to confirm:
 //	oskill_Guided_Arrow (Widowmaker)
 //	oskill_Two_Handed_Weapon_Mastery (The Grandfather)
 };
@@ -227,6 +226,25 @@ var equipment = {
 {only:"druid", name:"Spirit Keeper", req_level:67, e_def:190, skills_druid:2, fhr:20, pRes_max:10, fRes:40, lAbsorb_flat:14, cAbsorb:25, base:"Earth Spirit"},
 {only:"druid", name:"Ravenlore", req_level:74, e_def:150, energy:30, enemy_fRes:-20, all_res:25, skills_elemental:3, skill_Raven:7, base:"Sky Spirit"},
 {only:"druid", set_Ald:1, name:"Aldur's Stony Gaze", req_level:36, defense:90, fhr:25, mana_regen:17, cRes:50, light_radius:5, sockets:2, base:"Hunter's Guise", set_bonuses:["set_Ald",{},{energy:15},{energy:15},{energy:15}]},
+{only:"amazon", rarity:"magic", name:"Athlete's Diadem of Speed", req_level:64, frw:30, skills_passives:3},
+{only:"assassin", rarity:"magic", name:"Kenshi's Diadem of Speed", req_level:64, frw:30, skills_martial:3},
+{only:"assassin", rarity:"magic", name:"Shadow Diadem of Speed", req_level:64, frw:30, skills_shadow:3},
+{only:"assassin", rarity:"magic", name:"Cunning Diadem of Speed", req_level:64, frw:30, skills_traps:3},
+{only:"barbarian", rarity:"magic", name:"Echoing Carnage Helm of the Magus", req_level:64, fcr:20, skills_warcries:3, skill_War_Cry:3, skill_Battle_Orders:3, skill_Find_Item:3},
+{only:"barbarian", rarity:"magic", name:"Furious Carnage Helm of Speed", req_level:64, frw:30, skills_masteries:3, skill_Battle_Orders:3, skill_Increased_Speed:3, skill_Whirlwind:3},
+{only:"barbarian", rarity:"magic", name:"Master's Carnage Helm of Speed", req_level:64, frw:30, skills_combat_barbarian:3, skill_Edged_Weapon_Mastery:3, skill_Frenzy:3, skill_Find_Item:3},
+{only:"druid", rarity:"magic", name:"Gaea's Sun Spirit of the Magus", req_level:64, fcr:20, skills_elemental:3, skill_Hurricane:3, skill_Armageddon:3, skill_Tornado:3},
+{only:"druid", rarity:"magic", name:"Communal Sun Spirit of Speed", req_level:64, frw:30, skills_shapeshifting:3, skill_Lycanthropy:3, skill_Werewolf:3, skill_Rabies:3},
+{only:"druid", rarity:"magic", name:"Keeper's Sun Spirit of Speed", req_level:64, frw:30, skills_summoning_druid:3, skill_Summon_Grizzly:3, skill_Summon_Dire_Wolf:3, skill_Hurricane:3},
+{only:"necromancer", rarity:"magic", name:"Golemlord's Diadem of the Magus", req_level:64, fcr:20, skills_summoning_necromancer:3},
+{only:"necromancer", rarity:"magic", name:"Venomous Diadem of the Magus", req_level:64, fcr:20, skills_poisonBone:3},
+{only:"necromancer", rarity:"magic", name:"Cursing Diadem of the Magus", req_level:64, fcr:20, skills_curses:3},
+{only:"paladin", rarity:"magic", name:"Guardian's Diadem of Speed", req_level:64, frw:30, skills_defensive:3},
+{only:"paladin", rarity:"magic", name:"Marshal's Diadem of Speed", req_level:64, frw:30, skills_offensive:3},
+{only:"paladin", rarity:"magic", name:"Rose Branded Diadem of Speed", req_level:64, frw:30, skills_combat_paladin:3},
+{only:"sorceress", rarity:"magic", name:"Glacial Diadem of the Magus", req_level:64, fcr:20, skills_cold:3},
+{only:"sorceress", rarity:"magic", name:"Powered Diadem of the Magus", req_level:64, fcr:20, skills_lightning:3},
+{only:"sorceress", rarity:"magic", name:"Volcanic Diadem of the Magus", req_level:64, fcr:20, skills_fire:3},
 {limit:["barbarian","druid"], rw:1, name:"Delirium ­ ­ - ­ ­ Diadem", req_level:51, defense:261, vitality:10, gf:50, mf:25, all_skills:2, base:"Diadem"},	// also has other ctc effects, and Attract charges
 {limit:["barbarian","druid"], rw:1, name:"Lore ­ ­ - ­ ­ War Hat", req_level:27, all_skills:1, energy:10, lRes:30, damage_reduced:7, mana_per_kill:2, light_radius:2, base:"War Hat"},
 {limit:["barbarian","druid"], rw:1, name:"Radiance ­ ­ - ­ ­ Death Mask", req_level:27, e_def:75, missile_defense:30, vitality:10, energy:10, mana:33, damage_reduced:7, mDamage_reduced:3, damage_to_mana:15, light_radius:5, base:"Death Mask"},
@@ -374,6 +392,10 @@ var equipment = {
 	],
     gloves: [
 {name:"Gloves"},
+{only:"amazon", rarity:"magic", name:"Lancer's Mitts of Quickness", req_level:42, skills_javelins:3, ias:20, base:"Bramble Mitts"},
+{only:"amazon", rarity:"magic", name:"Athlete's Mitts of Quickness", req_level:42, skills_passives:3, ias:20, base:"Bramble Mitts"},
+{only:"amazon", rarity:"magic", name:"Archer's Mitts of Quickness", req_level:42, skills_bows:3, ias:20, base:"Bramble Mitts"},
+{only:"assassin", rarity:"magic", name:"Kenshi's Mitts of Quickness", req_level:42, skills_martial:3, ias:20, base:"Bramble Mitts"},
 {name:"The Hand of Broc", req_level:5, defense:10, e_def:20, life_leech:3, mana_leech:3, pRes:10, mana:20, base:"Leather Gloves"},
 {name:"Bloodfist", req_level:9, defense:10, e_def:20, ias:10, fhr:30, life:40, damage_min:5, base:"Heavy Gloves"},
 {name:"Chance Guards", req_level:15, defense:15, e_def:30, ar:25, mf:40, gf:200, light_radius:2, base:"Chain Gloves"},
@@ -398,7 +420,6 @@ var equipment = {
 {set_Death:1, name:"Death's Hand", req_level:6, poison_length_reduced:75, pRes:50, base:"Leather Gloves", set_bonuses:["set_Death",{},{ias:30},{}]},
 {set_Cleglaw:1, name:"Cleglaw's Pincers", req_level:4, slows_target:25, knockback:1, base:"Chain Gloves", set_bonuses:["set_Cleglaw",{},{ar_per_level:10},{}]},
 {set_Arctic:1, name:"Arctic Mitts", req_level:2, life:20, ias:10, base:"Light Gauntlets", set_bonuses:["set_Arctic",{},{ar:50},{dexterity:10},{}]},
-{rarity:"magic", only:"amazon", name:"Lancer's Mitts of Quickness", req_level:42, skills_javelins:3, ias:20, base:"Bramble Mitts"},
 {only:"amazon", rarity:"crafted", name:"Bowyer's Hitpower Vambraces", req_level:51, thorns:7, knockback:1, life_leech:5, mana_leech:5, ias:20, fRes:30, cRes:30, skills_bows:2, base:"Vambraces"},	// 5% ctc level 4 Frost Nova when hit
 {only:"assassin", rarity:"crafted", name:"Sensei's Blood Gloves", req_level:51, life:20, life_leech:8, mana_leech:5, cblow:10, ias:20, fRes:30, cRes:30, skills_martial:2, base:"Vampirebone Gloves"},	// 5% ctc level 4 Frost Nova when hit
 {limit:["assassin"], rarity:"crafted", name:"Blood Gloves", req_level:47, life:20, life_leech:8, mana_leech:5, cblow:10, ias:20, fRes:30, cRes:30, lRes:30, base:"Vampirebone Gloves"},	// check Inner Sight aura from charges? Deadly Poison?
@@ -568,8 +589,8 @@ var equipment = {
 //{only:"sorceress", rw:1, name:"Plague ­ ­ - ­ ­ Jared's Stone", req_level:67, damage_vs_demons:380, enemy_pRes:-23, dstrike_per_level:0.375, owounds:25, freezes_target:3, strength:10, all_skills:2, skill_Cold_Mastery:3, skill_Frozen_Orb:3, skill_Hydra:3, type:"orb", base:"Jared's Stone", pod_changes:1, aura:"Cleansing", aura_lvl:17},	// 25% ctc level 15 Poison Nova on striking, 20% ctc level 12 Lower Resist when struck
 //{only:"assassin", rw:1, name:"Plague ­ ­ - ­ ­ Suwayyah", req_level:67, damage_vs_demons:380, enemy_pRes:-23, dstrike_per_level:0.375, owounds:25, freezes_target:3, strength:10, all_skills:2, skill_Blade_Shield:3, skill_Venom:3, skill_Fade:3, type:"claw", base:"Suwayyah", pod_changes:1, aura:"Cleansing", aura_lvl:17},	// 25% ctc level 15 Poison Nova on striking, 20% ctc level 12 Lower Resist when struck
 {only:"assassin", rarity:"magic", name:"Cunning Suwayyah of Evisceration", type:"claw", req_level:65, damage_max:63, skills_traps:3, skill_Wake_of_Fire:3, skill_Blade_Shield:3, skill_Lightning_Sentry:3, base:"Suwayyah"},
-//{only:"sorceress", rarity:"magic", name:"Volcanic Vortex Orb of the Magus", type:"orb", req_level:67, life:60, fcr:20, skills_fire:3, skill_Enflame:3, skill_Fire_Mastery:3, skill_Immolate:3, base:"Vortex Orb"},
-//{only:"necromancer", rarity:"magic", name:"Cursing Lich Wand", type:"wand", req_level:65, skills_curses:3, skill_Hemorrhage:3, skill_Amplify_Damage:3, skill_Summon_Mastery:3, base:"Lich Wand"},
+{only:"sorceress", rarity:"magic", name:"Volcanic Vortex Orb of the Magus", type:"orb", req_level:67, life:60, fcr:20, skills_fire:3, skill_Enflame:3, skill_Fire_Mastery:3, skill_Immolate:3, base:"Vortex Orb"},
+{only:"necromancer", rarity:"magic", name:"Golemlord's Lich Wand", type:"wand", req_level:65, skills_summoning_necromancer:3, skill_Summon_Mastery:3, skill_Raise_Skeleton_Warrior:3, skill_Raise_Skeletal_Mage:3, base:"Lich Wand"},
 // Bows
 {only:"amazon", rw:1, name:"Brand ­ ­ - ­ ­ Matriarchal Bow", req_level:65, e_damage:340, itd:1, ar_bonus:20, damage_vs_demons:330, dstrike:20, pmh:1, knockback:1, skills_bows:3, twoHanded:1, type:"bow", base:"Matriarchal Bow"},	// 35% ctc level 14 Amplify Damage when struck, 100% ctc level 18 Bone Spear on striking, Fires explosive arrows/bolts (15)
 {limit:["amazon"], rw:1, name:"Brand ­ ­ - ­ ­ Hydra Bow", req_level:65, e_damage:340, itd:1, ar_bonus:20, damage_vs_demons:330, dstrike:20, pmh:1, knockback:1, twoHanded:1, type:"bow", base:"Hydra Bow"},	// 35% ctc level 14 Amplify Damage when struck, 100% ctc level 18 Bone Spear on striking, Fires explosive arrows/bolts (15)
@@ -872,7 +893,7 @@ var equipment = {
 {only:"necromancer", name:"Darkforce Spawn", req_level:65, block:32, e_def:180, skills_summoning_necromancer:3, skills_poisonBone:3, skills_curses:3, fcr:30, max_mana:10, type:"shield", base:"Bloodlord Skull"},
 {only:"necromancer", name:"Boneflame", req_level:72, block:30, e_def:150, frw:20, skills_necromancer:3, all_res:30, type:"shield", base:"Succubae Skull"},
 {only:"necromancer", set_TO:1, name:"Trang-Oul's Wing", req_level:54, defense:125, block:60, ibc:30, pRes:40, fRes:45, dexterity:15, strength:25, skills_poisonBone:2, type:"shield", base:"Cantor Trophy", set_bonuses:["set_TO",{},{},{enemy_pRes:-25},{life_replenish:15},{}]},
-//{only:"necromancer", rarity:"magic", name:"Cursing Bloodlord Skull of Deflecting", ibc:20, fbr:30, pDamage_min:13, pDamage_max:28, pDamage_duration:4, type:"shield", req_level:65, skills_curses:3, skill_Hemorrhage:3, skill_Amplify_Damage:3, skill_Summon_Mastery:3, block:37, base:"Bloodlord Skull"},
+{only:"necromancer", rarity:"magic", name:"Golemlord's Bloodlord Skull of Deflecting", ibc:20, fbr:30, pDamage_min:13, pDamage_max:28, pDamage_duration:4, type:"shield", req_level:65, skills_summoning_necromancer:3, skill_Summon_Mastery:3, skill_Raise_Skeleton_Warrior:3, skill_Raise_Skeletal_Mage:3, block:37, base:"Bloodlord Skull"},
 {only:"paladin", name:"Herald of Zakarum", req_level:42, block:82, e_def:200, ibc:30, fbr:30, ar_bonus:20, strength:20, vitality:20, all_res:50, skills_paladin:2, skills_combat_paladin:2, smite_min:20, smite_max:28, type:"shield", base:"Gilded Shield"},
 {only:"paladin", name:"Alma Negra", req_level:77, block:78, e_def:210, cdr:30, skills_paladin:2, ibc:20, fbr:30, e_damage:75, ar_bonus:75, mDamage_reduced:9, smite_min:35, smite_max:58, type:"shield", base:"Sacred Rondache", pod_changes:1},
 {only:"paladin", name:"Dragonscale", req_level:80, block:52, e_def:200, fDamage_min:211, fDamage_max:371, fDamage:15, oskill_Hydra:10, fRes_max:5, strength:25, fAbsorb:20, smite_min:46, smite_max:46, type:"shield", base:"Zakarum Shield"},

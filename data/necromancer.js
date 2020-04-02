@@ -13,21 +13,21 @@ var character_necromancer = {class_name:"Necromancer", strength:15, dexterity:25
 		var diffResult = skill.data.values[elem][character.difficulty];
 		var wisp = (1+Math.round(character.wisp/20,0)/10);
 		
-		if (skill.name == "Raise Skeleton Warrior" && elem < 2) {	result *= (sum_damage * (1+character.skeleton_bonus/100)) }
+		if (skill.name == "Raise Skeleton Warrior" && elem < 2) {	result *= (sum_damage * (1+character.skeleton_bonus/100) * wisp) }
 		if (skill.name == "Raise Skeleton Warrior" && elem == 2) {	result = (sum_life * (diffResult + (6 * skill.level))) }
-		if (skill.name == "Clay Golem" && elem < 2) {			result = (sum_damage * diffResult) }
+		if (skill.name == "Clay Golem" && elem < 2) {			result = (sum_damage * diffResult * wisp) }
 		if (skill.name == "Clay Golem" && elem == 2) {			result = (sum_life * diffResult) }
-		if (skill.name == "Raise Skeletal Mage" && elem < 7) {		result *= (sum_damage * (1+character.skeleton_bonus/100)) }
+		if (skill.name == "Raise Skeletal Mage" && elem < 7) {		result *= (sum_damage * (1+character.skeleton_bonus/100) * wisp) }
 		if (skill.name == "Raise Skeletal Mage" && elem == 7) {		result = (sum_life * (diffResult + (6 * skill.level))) }
-		if (skill.name == "Blood Golem" && elem < 2) {			result = (sum_damage * diffResult) }
+		if (skill.name == "Blood Golem" && elem < 2) {			result = (sum_damage * diffResult * wisp) }
 		if (skill.name == "Blood Golem" && elem == 2) {			result = (sum_life * diffResult) }
-		if (skill.name == "Iron Golem" && elem < 2) {			result = (sum_damage * diffResult) }
+		if (skill.name == "Iron Golem" && elem < 2) {			result = (sum_damage * diffResult * wisp) }
 		if (skill.name == "Iron Golem" && elem == 2) {			result = (sum_life * diffResult) }
-		if (skill.name == "Fire Golem" && elem < 2) {			result *= sum_damage }
+		if (skill.name == "Fire Golem" && elem < 2) {			result *= (sum_damage * wisp) }
 		if (skill.name == "Fire Golem" && elem == 2) {			result = (sum_life * diffResult + 0.01*skill.level*diffResult) }
-		if (skill.name == "Fire Golem" && elem > 3 && elem < 6) {	result *= sum_damage }
+		if (skill.name == "Fire Golem" && elem > 3 && elem < 6) {	result *= (sum_damage * wisp) }
 		if (skill.name == "Revive" && elem == 0) {			result = (skill.data.values[elem][1] + ~~skills[0].data.values[0][skills[0].level+skills[0].extra_levels]) }
-		if (skill.name == "Revive" && elem == 1) {			result = (skill.data.values[elem][1] + ~~skills[0].data.values[1][skills[0].level+skills[0].extra_levels]) }
+		if (skill.name == "Revive" && elem == 1) {			result = (skill.data.values[elem][1] + ~~skills[0].data.values[1][skills[0].level+skills[0].extra_levels]) }	// wisp excluded from tooltip
 
 		if (skill.name == "Corpse Explosion" && elem == 0) { if (skill.level == 0) { result = (21 )}} //+ ~~bonus_corpse_explosion) } else { result += ~~bonus_corpse_explosion } }
 		if (skill.name == "Corpse Explosion" && elem == 1) { if (skill.level == 0) { result = (27 )}} //+ ~~bonus_corpse_explosion) } else { result += ~~bonus_corpse_explosion } }
