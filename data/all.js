@@ -324,8 +324,8 @@ function equip(type, val) {
 						character[affix] += Math.floor(multEth*multED*bases[base][affix])
 					}
 					if (affix == "req_strength" || affix == "req_dexterity") {
-						equipped[type][affix] += Math.floor(multReq*bases[base][affix])
-						character[affix] += Math.floor(multReq*bases[base][affix])
+						equipped[type][affix] += Math.ceil(multReq*bases[base][affix])
+						character[affix] += Math.ceil(multReq*bases[base][affix])
 					}
 				} } }
 			} }

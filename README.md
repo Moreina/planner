@@ -19,7 +19,7 @@ https://github.com/Moreina/planner#planner
 
 Character Skill Planner for Diablo 2: Path of Diablo
 
-### [Download](https://github.com/Moreina/planner/archive/v1.14.zip)
+### [Download](https://github.com/Moreina/planner/archive/v1.15.zip)
 
 ### Features So Far:
 * all skill info up to level 60
@@ -36,10 +36,10 @@ Character Skill Planner for Diablo 2: Path of Diablo
 * character validation
 
 ### Upcoming Plans:
-* tracking of more effects (item auras, debuffs)
 * breakpoints
 * mercenary info
 * item socketing/corrupting
+* tracking of more effects (debuffs)
 * interface niceties
 
 ### Longterm Goals:

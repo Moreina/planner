@@ -431,7 +431,7 @@ var equipment = {
 {name:"Sandstorm Trek", req_level:64, e_def:170, kick_min:60, frw:20, fhr:20, stamina_per_level:1, strength:15, vitality:15, slower_stam_drain:50, pRes:70, base:"Scarabshell Boots"},
 {name:"Marrowwalk (Flesh)", req_level:66, e_def:200, kick_min:69, frw:20, e_def:200, strength:20, dexterity:17, mana_regen:10, heal_stam:10, half_freeze:1, skill_Summon_Mastery:2, skill_Flesh_Offering:1, skill_Bone_Offering:0, base:"Boneweave Boots", pod_changes:1},	// level 12 Life Tap (10 charges)
 {only:"necromancer", name:"Marrowwalk (Bone)", req_level:66, e_def:200, kick_min:69, frw:20, e_def:200, strength:20, dexterity:17, mana_regen:10, heal_stam:10, half_freeze:1, skill_Summon_Mastery:2, skill_Flesh_Offering:0, skill_Bone_Offering:1, base:"Boneweave Boots", pod_changes:1},	// level 12 Life Tap (10 charges)
-{name:"Shadow Dancer", req_level:71, e_def:100, kick_min:83, skills_shadow:2, frw:30, fhr:30, dexterity:25, base:"Myrmidon Greaves"},
+{name:"Shadow Dancer", req_level:71, e_def:100, kick_min:83, skills_shadow:2, frw:30, fhr:30, dexterity:25, req:-20, base:"Myrmidon Greaves"},
 {set_IK:1, name:"Immortal King's Pillar", req_level:31, defense:75, kick_min:39, frw:40, ar:110, life:44, base:"War Boots", set_bonuses:["set_IK",{},{mf:25},{skills_combat_barbarian:2},{defense:140},{half_freeze:1},{}]},
 {set_Nat:1, name:"Natalya's Soul", req_level:25, defense:125, kick_min:23, frw:40, heal_stam_per_level:0.25, cRes:25, lRes:25, base:"Mesh Boots", set_bonuses:["set_Nat",{},{},{},{}]},
 {set_Ald:1, name:"Aldur's Advance", req_level:45, kick_min:37, frw:40, stamina:180, damage_to_mana:10, heal_stam:32, life:50, fRes:50, indestructible:1, base:"Battle Boots", set_bonuses:["set_Ald",{},{dexterity:15},{dexterity:15},{dexterity:15}]},
