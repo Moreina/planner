@@ -60,8 +60,10 @@ var character_paladin = {class_name:"Paladin", strength:25, dexterity:20, vitali
 		skill = skills[effect.skill]
 		var lvl = skill.level + skill.extra_levels;
 		var result = {};
-		var selfbuff = 1;
-		if (selfbuff == 1) { disableAuras(skill) }
+	//	var selfbuff = 1;
+	//	if (selfbuff == 1) { 
+		disableAuras(skill)
+	//	}
 		
 	    // Defensive Auras	
 		if (skill.name == "Prayer") {

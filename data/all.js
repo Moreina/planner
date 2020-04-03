@@ -241,7 +241,7 @@ function equip(type, val) {
 	if (set_bonuses != "") { set = set_bonuses[0]; set_before = character[set]; }
 	if (old_set_bonuses != "") { old_set = old_set_bonuses[0]; old_set_before = character[old_set]; }
 	// remove effects
-	for (old_affix in equipped[type]) {
+	for (old_affix in equipped[type]) {			// old_affix isn't used...?
 		for (let s = 0; s < skills.length; s++) {
 			if (skills[s].level == 0 && skills[s].force_levels > 0) {
 				disableEffect(s)
@@ -250,7 +250,7 @@ function equip(type, val) {
 	}
 	// if replacing an item, previous item's affixes are removed from character
 	for (old_affix in equipped[type]) {
-		var aura_lvl = 0;
+	//	var aura_lvl = 0;	// unused?
 		character[old_affix] -= equipped[type][old_affix]
 		if (old_affix == "aura") {
 			removeAura(equipped[type][old_affix], equipped[type].aura_lvl)
@@ -306,18 +306,6 @@ function equip(type, val) {
 	// add affixes to character
 	if (allow == 1) { for (item in equipment[type]) {
 		if (equipment[type][item].name == val) {
-			// add regular affixes
-			for (affix in equipment[type][item]) {
-				character[affix] += equipment[type][item][affix]
-				equipped[type][affix] = equipment[type][item][affix]
-			//	for (skill in oskills) {
-			//		if (oskills.skill == affix) {offskills[skills[s].code] = ... }
-			//	}
-				if (affix == "aura") {
-					equipped[type].aura_lvl = equipment[type][item].aura_lvl
-					addAura(equipment[type][item][affix], equipment[type][item].aura_lvl)
-				}
-			}
 			// add affixes from base item
 			if (typeof(equipment[type][item]["base"]) != 'undefined') { if (equipment[type][item]["base"] != "") {
 				var base = equipment[type][item].base; base = base.split(' ').join('_'); base = base.split('-').join('_'); base = base.split("'s").join("s");	// spaces, hypens, and apostrophes converted to match named entry in bases{}
@@ -341,6 +329,20 @@ function equip(type, val) {
 					}
 				} } }
 			} }
+			// add regular affixes
+			for (affix in equipment[type][item]) {
+				equipped[type][affix] = equipment[type][item][affix]
+			//	for (skill in oskills) {
+			//		if (oskills.skill == affix) {offskills[skills[s].code] = ... }
+			//	}
+				if (affix == "aura" || affix == "name" || affix == "type" || affix == "base" || affix == "only" || affix == "limit" || affix == "rw") {
+					if (affix == "aura") {
+			//			equipped[type].aura_lvl = equipment[type][item].aura_lvl	// redundant?
+						addAura(equipment[type][item][affix], equipment[type][item].aura_lvl, type)
+					}
+				}
+				else { character[affix] += equipment[type][item][affix] }
+			}
 		}
 	} }
 	// add set bonuses
@@ -385,49 +387,74 @@ function equip(type, val) {
 
 // 
 // ---------------------------------
-function addAura(name, lvl) {
-//	if (document.getElementById(name) == null) {
+function addAura(name, lvl, type) {
+	if (document.getElementById(name) == null) {
 		var newEffect = document.createElement("img")
-		var effectIcon = "./images/effects/"+name+".png"
+		var effectIcon = "./images/effects/dark/"+name+" dark.png"
 		
 		var eClass = document.createAttribute("class");	eClass.value = "effect";	newEffect.setAttributeNode(eClass);
-		var eId = document.createAttribute("id");	eId.value = name;		newEffect.setAttributeNode(eId);
+		var eId = document.createAttribute("id");	eId.value = name;		newEffect.setAttributeNode(eId);	// should the name be codified, without spaces?
 		var eSrc = document.createAttribute("src");	eSrc.value = effectIcon;	newEffect.setAttributeNode(eSrc);
 		
-		var eToggle = document.createAttribute("onclick");		eToggle.value = "toggleAura("+name+", "+lvl+")";	newEffect.setAttributeNode(eToggle);
-		var eRemove = document.createAttribute("oncontextmenu");	eRemove.value = "removeAura("+name+", "+lvl+")";	newEffect.setAttributeNode(eRemove);
+		var eHoverOn = document.createAttribute("onmouseover");		eHoverOn.value = "hoverAura("+name+")";		newEffect.setAttributeNode(eHoverOn);
+		var eHoverOff = document.createAttribute("onmouseout");		eHoverOff.value = "auraOut("+name+")";		newEffect.setAttributeNode(eHoverOff);
+		var eToggle = document.createAttribute("onclick");		eToggle.value = "toggleAura("+name+")";		newEffect.setAttributeNode(eToggle);
+		var eRemove = document.createAttribute("oncontextmenu");	eRemove.value = "removeAura("+name+")";		newEffect.setAttributeNode(eRemove);
 		
 		var effectGUI = document.getElementById("side");
 		effectGUI.appendChild(newEffect);
 		
 		if (typeof(effects[name]) == 'undefined') { effects[name] = {} }
+		var data = getAuraData(name, lvl);
+		for (affix in data) { effects[name][affix] = data[affix] }
 		effects[name]["enabled"] = 0
-		if (settings.autocast == 1) {
-			toggleAura(name, lvl)
-		}
-//	}
+		toggleAura(name) 	// settings.autocast ignored
+	}
 	calculateSkillAmounts()
 	updateAll()
 }
 
 // 
 // ---------------------------------
-function removeAura(name, i) {
-	var data = getAuraData(name, i)
-	for (affix in data) {
-		character[affix] -= data[affix]
-	}
-	if (i > 0) { name = non_items[i].effect } else { i = non_items[i].i }
+function removeAura(name) {
 	if (typeof(effects[name]) != 'undefined') {
-		if (document.getElementById(name) != null) { document.getElementById(name).remove(); }
-		for (affix in effects[name]) {
-			character[affix] -= effects[name][affix]
-			effects[name][affix] = 0
+		if (document.getElementById(name) != null) {
+//			for (affix in effects[name]) { effects[name][affix] = 0 }
+			if (effects[name].enabled == 1) { toggleAura(name) }
+			document.getElementById(name).remove();
 		}
-		calculateSkillAmounts()
-		updateAll()
 	}
 }
+
+// 
+// ---------------------------------
+function toggleAura(name) {
+	if (effects[name].enabled == 1) {
+		for (affix in effects[name]) {
+			character[affix] -= effects[name][affix]
+		}
+		effects[name].enabled = 0
+		document.getElementById(name).src = "./images/effects/dark/"+name+" dark.png"
+	} else {
+		for (affix in effects[name]) {
+			character[affix] += effects[name][affix]
+		}
+		effects[name]["enabled"] = 1
+		document.getElementById(name).src = "./images/effects/"+name+".png"
+	}
+	calculateSkillAmounts()
+	updateAll()
+	if (selectedSkill[0] != " ­ ­ ­ ­ Skill 1") { checkSkill(selectedSkill[0], 1) }
+	if (selectedSkill[1] != " ­ ­ ­ ­ Skill 2") { checkSkill(selectedSkill[1], 2) }
+}
+
+// 
+// ---------------------------------
+function hoverAura(name) {}
+
+// 
+// ---------------------------------
+function auraOut(name) {}
 
 // Resets functionality for skills
 // ---------------------------------
@@ -751,7 +778,6 @@ function updateStats() {
 	
 	//var _ar = Math.floor((c.ar + (c.level-1)*c.ar_per_level + ar_addon) * (1 + (c.ar_skillup + c.ar_bonus + c.level*c.ar_bonus_per_level)/100));			// OLD
 	var ar = Math.floor((((dexTotal - 7) * 5 + c.ar + (c.level-1)*c.ar_per_level + c.ar_const)/2) * (1+(c.ar_skillup + c.ar_bonus + c.level*c.ar_bonus_per_level)/100) * (1+c.ar_shrine_bonus/100));
-	
 	var wisp = 1+~~Math.round(c.wisp/20,0)/10
 	var phys_min = ((1+statBonus+(c.e_damage+c.damage_bonus+weapon_skillup)/100)*((c.level-1)*c.min_damage_per_level+c.base_damage_min))+c.damage_min;
 	var phys_max = ((1+statBonus+(c.e_damage+c.damage_bonus+weapon_skillup)/100)*((c.level-1)*c.max_damage_per_level+c.base_damage_max))+c.damage_max;
@@ -1049,7 +1075,7 @@ function updateEffect(skill) {
 				var effectIcon = "./images/skills/"+character.class_name.toLowerCase()+"/dark/"+skill.name+" dark.png";
 				
 				var eClass = document.createAttribute("class");	eClass.value = "effect";	newEffect.setAttributeNode(eClass);
-				var eId = document.createAttribute("id");	eId.value = eff;	newEffect.setAttributeNode(eId);
+				var eId = document.createAttribute("id");	eId.value = eff;		newEffect.setAttributeNode(eId);
 				var eSrc = document.createAttribute("src");	eSrc.value = effectIcon;	newEffect.setAttributeNode(eSrc);
 				
 				var eHoverOn = document.createAttribute("onmouseover");		eHoverOn.value = "hoverEffect("+skill.i+")";	newEffect.setAttributeNode(eHoverOn);
