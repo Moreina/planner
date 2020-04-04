@@ -219,7 +219,7 @@ var character_paladin = {class_name:"Paladin", strength:25, dexterity:20, vitali
 		
 		if (already_calculated == 1) {
 			ele_min += Math.floor(fDamage_min + cDamage_min + lDamage_min);
-			ele_max += Math.floor(fDamage_min + cDamage_min + lDamage_min + pDamage_max);
+			ele_max += Math.floor(fDamage_max + cDamage_max + lDamage_max + pDamage_max);
 			phys_min = Math.floor(phys_min + damage_min);
 			phys_max = Math.floor(phys_max + damage_max);
 		} else {
