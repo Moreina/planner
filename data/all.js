@@ -121,6 +121,8 @@ function startup(choice) {
 	clearIconSources()
 	resetSkills()
 	resetEquipment()
+	resetMisc()
+	calculateSkillAmounts()
 	updateEffectList()
 	document.getElementById("quests").checked = 0
 	document.getElementById("running").checked = 0
@@ -600,8 +602,16 @@ function addMisc(val) {
 	document.getElementById("dropdown_misc").selectedIndex = 0
 	for (let m = 1; m < non_items.length; m++) {
 		if (val == non_items[m].name) {
-			if (typeof(effects[non_items[m].effect]) == 'undefined') { effects[non_items[m].effect] = {} }
-			initiateMiscEffect(non_items[m].effect, m)
+			if (typeof(non_items[m].aura) != 'undefined') {
+				// TODO: Only allow 1 mercenary aura
+				var merc_lvl = character.level - 1;
+				var diff = 0.23;
+				var aura_lvl = Math.min(18,Math.floor((1-diff)+diff*merc_lvl))
+				addAura(non_items[m].aura, aura_lvl, "mercenary")
+			} else {
+				if (typeof(effects[non_items[m].effect]) == 'undefined') { effects[non_items[m].effect] = {} }
+				initiateMiscEffect(non_items[m].effect, m)
+			}
 			calculateSkillAmounts()
 			updateAll()
 		}
@@ -681,6 +691,14 @@ function toggleMiscEffect(name, i) {
 	}
 	calculateSkillAmounts()
 	updateAll()
+}
+
+// 
+// ---------------------------------
+function resetMisc() {
+	for (name in effects) {
+		removeMiscEffect(name, 0)
+	}
 }
 
 // Toggles the completion of all quests and their rewards
@@ -794,8 +812,13 @@ function updateStats() {
 	if (c.class_name != "Paladin") { block -= 5; if (c.class_name == "Druid" || c.class_name == "Necromancer" || c.class_name == "Sorceress") { block -= 5 } }
 	block = (Math.max(0,block) + c.block_skillup)*(dexTotal-15)/(c.level*2)
 	if (c.running > 0) { block = block / 3 }
-	if (c.block > 0) { document.getElementById("block").innerHTML = Math.floor(Math.min(75,c.block,block))+"%" }
-	else { document.getElementById("block").innerHTML = "" }
+	if (c.block > 0) {
+		document.getElementById("block_label").style.visibility = "visible"
+		document.getElementById("block").innerHTML = Math.floor(Math.min(75,c.block,block))+"%"
+	} else {
+		document.getElementById("block_label").style.visibility = "hidden"
+		document.getElementById("block").innerHTML = ""
+	}
 /*
 	TODO: Hit chance calculations
 	var monsterDefense = def;

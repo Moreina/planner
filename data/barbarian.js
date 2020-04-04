@@ -10,7 +10,7 @@ var character_barbarian = {class_name:"Barbarian", strength:30, dexterity:20, vi
 		var result = skill.data.values[elem][lvl];
 		var wisp = (1+Math.round(character.wisp/20,0)/10);
 		
-		if (skill.name == "War Cry" && elem < 2) { 		result *= ((1 + (0.16*skills[2].level + 0.16*skills[8].level)) * wisp) }
+		if (skill.name == "War Cry" && elem < 2) { 		result *= ((1 + (0.16*skills[2].level + 0.16*skills[8].level))) }
 		if (skill.name == "Battle Command" && elem == 0) { 	result = Math.floor(1+(lvl / 10)) }
 		
 		if (skill.name == "Frenzy" && elem == 0) { 		result = skills[24].level }
@@ -63,6 +63,7 @@ var character_barbarian = {class_name:"Barbarian", strength:30, dexterity:20, vi
 		var mDamage_min = 0; var mDamage_max = 0; //var mag_bonus = 0;
 		var skillMin = ""; var skillMax = ""; var skillAr = "";
 		var spell = 0;
+		var already_calculated = 0;
 		
 		if (skill.name == "War Cry") {			damage_min = character.updateSkill(skill, lvl, 0); damage_max = character.updateSkill(skill, lvl, 1); spell = 1; }
 	//	else if (skill.name == "Howl") {		distance = character.updateSkill(skill, lvl, 0); duration = character.updateSkill(skill, lvl, 1); }	// cannot be bound to left click
@@ -99,11 +100,18 @@ var character_barbarian = {class_name:"Barbarian", strength:30, dexterity:20, vi
 			}
 		} if (match == 0) { spell = 2 } }
 		
-		ele_min += Math.floor(wisp*(fDamage_min*(1+(character.fDamage+character.fDamage_skillup)/100) + cDamage_min*(1+(character.cDamage+character.cDamage_skillup)/100) + lDamage_min*(1+(character.lDamage+character.lDamage_skillup)/100)));
-		ele_max += Math.floor(wisp*(fDamage_max*(1+(character.fDamage+character.fDamage_skillup)/100) + cDamage_max*(1+(character.cDamage+character.cDamage_skillup)/100) + lDamage_max*(1+(character.lDamage+character.lDamage_skillup)/100) + pDamage_max*(1+character.pDamage/100)));
-		phys_min = Math.floor((phys_min*damage_bonus/100) + (wisp*damage_min*damage_bonus/100))
-		phys_max = Math.floor((phys_max*damage_bonus/100) + (wisp*damage_max*damage_bonus/100))
-
+		if (already_calculated == 1) {
+			ele_min += Math.floor(fDamage_min + cDamage_min + lDamage_min);
+			ele_max += Math.floor(fDamage_min + cDamage_min + lDamage_min + pDamage_max);
+			phys_min = Math.floor(phys_min + damage_min);
+			phys_max = Math.floor(phys_max + damage_max);
+		} else {
+			ele_min += Math.floor(wisp*(fDamage_min*(1+(character.fDamage+character.fDamage_skillup)/100) + cDamage_min*(1+(character.cDamage+character.cDamage_skillup)/100) + lDamage_min*(1+(character.lDamage+character.lDamage_skillup)/100)));
+			ele_max += Math.floor(wisp*(fDamage_max*(1+(character.fDamage+character.fDamage_skillup)/100) + cDamage_max*(1+(character.cDamage+character.cDamage_skillup)/100) + lDamage_max*(1+(character.lDamage+character.lDamage_skillup)/100) + pDamage_max*(1+character.pDamage/100)));
+			phys_min = Math.floor((phys_min*damage_bonus/100) + (wisp*damage_min*damage_bonus/100));
+			phys_max = Math.floor((phys_max*damage_bonus/100) + (wisp*damage_max*damage_bonus/100));
+		}
+		
 		if (spell == 0) {
 			skillMin = Math.floor(mag_min+mDamage_min+ele_min+phys_min); skillMax = Math.floor(mag_max+mDamage_max+ele_max+phys_max); skillAr = Math.floor(ar*(1+ar_bonus/100));
 		} else if (spell == 1) {	// no attack rating

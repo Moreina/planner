@@ -104,6 +104,7 @@ var character_assassin = {class_name:"Assassin", strength:20, dexterity:20, vita
 		var mDamage_min = 0; var mDamage_max = 0;
 		var skillMin = ""; var skillMax = ""; var skillAr = "";
 		var spell = 0;
+		var already_calculated = 1;
 		var kick_damage_min = 0; var kick_damage_max = 0; var kick_bonus = 0;
 
 		if (skill.name == "Dual Strike") { 		damage_bonus = 110+character.updateSkill(skill, lvl, 0); ar_bonus = character.updateSkill(skill, lvl, 1); }
@@ -148,10 +149,18 @@ var character_assassin = {class_name:"Assassin", strength:20, dexterity:20, vita
 			}
 		} if (match == 0) { spell = 2 } }
 
-		ele_min += Math.floor(wisp*(fDamage_min*(1+(character.fDamage+character.fDamage_skillup)/100) + cDamage_min*(1+(character.cDamage+character.cDamage_skillup)/100) + lDamage_min*(1+(character.lDamage+character.lDamage_skillup)/100)));
-		ele_max += Math.floor(wisp*(fDamage_max*(1+(character.fDamage+character.fDamage_skillup)/100) + cDamage_max*(1+(character.cDamage+character.cDamage_skillup)/100) + lDamage_max*(1+(character.lDamage+character.lDamage_skillup)/100) + pDamage_max*(1+character.pDamage/100)));
-		phys_min = Math.floor((phys_min*damage_bonus/100) + (wisp*damage_min*damage_bonus/100))
-		phys_max = Math.floor((phys_max*damage_bonus/100) + (wisp*damage_max*damage_bonus/100))
+		if (already_calculated == 1) {
+			ele_min += Math.floor(fDamage_min + cDamage_min + lDamage_min);
+			ele_max += Math.floor(fDamage_min + cDamage_min + lDamage_min + pDamage_max);
+			phys_min = Math.floor(phys_min + damage_min);
+			phys_max = Math.floor(phys_max + damage_max);
+		} else {
+			ele_min += Math.floor(wisp*(fDamage_min*(1+(character.fDamage+character.fDamage_skillup)/100) + cDamage_min*(1+(character.cDamage+character.cDamage_skillup)/100) + lDamage_min*(1+(character.lDamage+character.lDamage_skillup)/100)));
+			ele_max += Math.floor(wisp*(fDamage_max*(1+(character.fDamage+character.fDamage_skillup)/100) + cDamage_max*(1+(character.cDamage+character.cDamage_skillup)/100) + lDamage_max*(1+(character.lDamage+character.lDamage_skillup)/100) + pDamage_max*(1+character.pDamage/100)));
+			phys_min = Math.floor((phys_min*damage_bonus/100) + (wisp*damage_min*damage_bonus/100));
+			phys_max = Math.floor((phys_max*damage_bonus/100) + (wisp*damage_max*damage_bonus/100));
+		}
+		
 		var kick_min = kick_damage_min*(1+kick_bonus/100);
 		var kick_max = kick_damage_max*(1+kick_bonus/100);
 

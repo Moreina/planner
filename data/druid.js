@@ -112,7 +112,8 @@ var character_druid = {class_name:"Druid", strength:15, dexterity:20, vitality:2
 		var pDamage_min = 0; var pDamage_max = 0; var pDamage_duration = 0;
 		var mDamage_min = 0; var mDamage_max = 0;
 		var skillMin = ""; var skillMax = ""; var skillAr = "";
-		var spell = 0;
+		var spell = 1;
+		var already_calculated = 1;
 		var minion_min = 0; var minion_max = 0; var minion_bonus = 0;
 		
 		if (skill.name == "Firestorm") { 		fDamage_min = character.updateSkill(skill, lvl, 1); fDamage_max = character.updateSkill(skill, lvl, 2); }
@@ -127,13 +128,13 @@ var character_druid = {class_name:"Druid", strength:15, dexterity:20, vitality:2
 		else if (skill.name == "Hurricane") {		cDamage_min = character.updateSkill(skill, lvl, 1); cDamage_max = character.updateSkill(skill, lvl, 2); }
 	//	else if (skill.name == "Cyclone Armor") { 	spell = 2; }	// cannot be bound to left click
 		
-		else if (skill.name == "Feral Rage") {		ar_bonus = character.updateSkill(skill, lvl, 5); damage_bonus = 100+character.updateSkill(skill, lvl, 4); }
-		else if (skill.name == "Maul") { 		ar_bonus = character.updateSkill(skill, lvl, 3); damage_bonus = 100+character.updateSkill(skill, lvl, 2); }
-		else if (skill.name == "Rabies") { 		ar_bonus = character.updateSkill(skill, lvl, 0); pDamage_min = character.updateSkill(skill, lvl, 1); pDamage_max = character.updateSkill(skill, lvl, 2); pDamage_duration = 4; damage_bonus = 100; }
-		else if (skill.name == "Fire Claws") {		ar_bonus = character.updateSkill(skill, lvl, 2); fDamage_min = character.updateSkill(skill, lvl, 0); fDamage_max = character.updateSkill(skill, lvl, 1); damage_bonus = 100; }
-		else if (skill.name == "Hunger") { 		ar_bonus = character.updateSkill(skill, lvl, 2); damage_bonus = 25; }
-		else if (skill.name == "Shock Wave") {		damage_min = character.updateSkill(skill, lvl, 0); damage_max = character.updateSkill(skill, lvl, 1); damage_bonus = 25; }
-		else if (skill.name == "Fury") { 		ar_bonus = character.updateSkill(skill, lvl, 1); damage_bonus = 100+character.updateSkill(skill, lvl, 2); }
+		else if (skill.name == "Feral Rage") {		ar_bonus = character.updateSkill(skill, lvl, 5); damage_bonus = 100+character.updateSkill(skill, lvl, 4); spell = 0; }
+		else if (skill.name == "Maul") { 		ar_bonus = character.updateSkill(skill, lvl, 3); damage_bonus = 100+character.updateSkill(skill, lvl, 2); spell = 0; }
+		else if (skill.name == "Rabies") { 		ar_bonus = character.updateSkill(skill, lvl, 0); pDamage_min = character.updateSkill(skill, lvl, 1); pDamage_max = character.updateSkill(skill, lvl, 2); pDamage_duration = 4; damage_bonus = 100; spell = 0; }
+		else if (skill.name == "Fire Claws") {		ar_bonus = character.updateSkill(skill, lvl, 2); fDamage_min = character.updateSkill(skill, lvl, 0); fDamage_max = character.updateSkill(skill, lvl, 1); damage_bonus = 100; spell = 0; }
+		else if (skill.name == "Hunger") { 		ar_bonus = character.updateSkill(skill, lvl, 2); damage_bonus = 25; spell = 0; }
+		else if (skill.name == "Shock Wave") {		damage_min = character.updateSkill(skill, lvl, 0); damage_max = character.updateSkill(skill, lvl, 1); damage_bonus = 25; spell = 0; }
+		else if (skill.name == "Fury") { 		ar_bonus = character.updateSkill(skill, lvl, 1); damage_bonus = 100+character.updateSkill(skill, lvl, 2); spell = 0; }
 	//	else if (skill.name == "Werewolf") {		spell = 2; }	// cannot be bound to left click
 	//	else if (skill.name == "Werebear") {		spell = 2; }	// cannot be bound to left click
 		// Lycanthropy - not bindable
@@ -156,10 +157,18 @@ var character_druid = {class_name:"Druid", strength:15, dexterity:20, vitality:2
 		
 		if (minion_min > 0 || skill.name == "Poison Creeper") { phys_min = 0; phys_max = 0; ele_min = 0; ele_max = 0; mag_min = 0; mag_max = 0; }
 		
-		ele_min += Math.floor(wisp*(fDamage_min*(1+(character.fDamage+character.fDamage_skillup)/100) + cDamage_min*(1+(character.cDamage+character.cDamage_skillup)/100) + lDamage_min*(1+(character.lDamage+character.lDamage_skillup)/100)));
-		ele_max += Math.floor(wisp*(fDamage_max*(1+(character.fDamage+character.fDamage_skillup)/100) + cDamage_max*(1+(character.cDamage+character.cDamage_skillup)/100) + lDamage_max*(1+(character.lDamage+character.lDamage_skillup)/100) + pDamage_max*(1+character.pDamage/100)));
-		phys_min = Math.floor((phys_min*damage_bonus/100) + (wisp*damage_min*damage_bonus/100))
-		phys_max = Math.floor((phys_max*damage_bonus/100) + (wisp*damage_max*damage_bonus/100))
+		if (already_calculated == 1) {
+			ele_min += Math.floor(fDamage_min + cDamage_min + lDamage_min);
+			ele_max += Math.floor(fDamage_min + cDamage_min + lDamage_min + pDamage_max);
+			phys_min = Math.floor(phys_min + damage_min);
+			phys_max = Math.floor(phys_max + damage_max);
+		} else {
+			ele_min += Math.floor(wisp*(fDamage_min*(1+(character.fDamage+character.fDamage_skillup)/100) + cDamage_min*(1+(character.cDamage+character.cDamage_skillup)/100) + lDamage_min*(1+(character.lDamage+character.lDamage_skillup)/100)));
+			ele_max += Math.floor(wisp*(fDamage_max*(1+(character.fDamage+character.fDamage_skillup)/100) + cDamage_max*(1+(character.cDamage+character.cDamage_skillup)/100) + lDamage_max*(1+(character.lDamage+character.lDamage_skillup)/100) + pDamage_max*(1+character.pDamage/100)));
+			phys_min = Math.floor((phys_min*damage_bonus/100) + (wisp*damage_min*damage_bonus/100));
+			phys_max = Math.floor((phys_max*damage_bonus/100) + (wisp*damage_max*damage_bonus/100));
+		}
+		
 		var min_min = minion_min*(1+minion_bonus/100);
 		var min_max = minion_max*(1+minion_bonus/100);
 

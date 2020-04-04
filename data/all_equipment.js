@@ -35,14 +35,14 @@ var unequipped = {name:"none", strength:0, dexterity:0, vitality:0, energy:0, li
 // O-SKILLS
 /* oskills		*///	oskill_Warp:0, oskill_Ball_Lightning:0, 
 /* oskills  amazon	*///	oskill_Inner_Sight:0, oskill_Lethal_Strike:0, oskill_Valkyrie:0, oskill_Magic_Arrow:0, oskill_Guided_Arrow:0, oskill_Multiple_Shot:0, 
-/* oskills  barbarian	*///	oskill_Battle_Command:0, oskill_Battle_Orders:0, oskill_Battle_Cry:0, oskill_Edged_Weapon_Mastery:0, oskill_Bash:0, 
+/* oskills  barbarian	*///	oskill_Battle_Command:0, oskill_Battle_Orders:0, oskill_Battle_Cry:0, oskill_Bash:0, oskill_Edged_Weapon_Mastery:0, 
 /* oskills  druid	*///	oskill_Lycanthropy:0, oskill_Werebear:0, oskill_Werewolf:0, oskill_Feral_Rage:0, oskill_Flame_Dash:0, oskill_Summon_Dire_Wolf:0, 
 /* oskills  necromancer	*///	oskill_Desecrate:0, 
 /* oskills  paladin	*///	oskill_Zeal:0, oskill_Vengeance:0, 
 /* oskills  sorceress	*///	oskill_Frigerate:0, oskill_Shiver_Armor:0, oskill_Cold_Mastery:0, oskill_Hydra:0, oskill_Fire_Ball:0, oskill_Fire_Wall:0, oskill_Meteor:0, oskill_Fire_Mastery:0, 
 // ...to confirm:
 //	oskill_Guided_Arrow (Widowmaker)
-//	oskill_Two_Handed_Weapon_Mastery (The Grandfather)
+//	oskill_Two_Handed_Weapon_Mastery / oskill_Edged_Weapon_Mastery (The Grandfather)
 };
 
 var non_items = [
@@ -58,14 +58,14 @@ var non_items = [
 {i:9, name:"Potion: Thawing", cRes:50, duration:30, effect:"Thawing"},							// stackable duration
 {i:10, name:"Potion: Antitode", pRes:50, duration:30, effect:"Antidote"},						// stackable duration
 /*
-{i:11, name:"Mercenary: Inner Sight", enemy_defense:0, effect:"Inner_Sight"},
-{i:12, name:"Mercenary: Blessed Aim", ar_bonus:0, blessed_hammer_on_hit:0, effect:"Blessed_Aim"},
-{i:13, name:"Mercenary: Defiance", defense_bonus:0, effect:"Defiance"},
-{i:14, name:"Mercenary: Prayer", life_regen:0, life_replenish:0, effect:"Prayer"},
-{i:15, name:"Mercenary: Meditation", mana_regen:0, effect:"Meditation"},
-{i:16, name:"Mercenary: Cleansing", poison_length_reduced:0, curse_length_reduced:0, effect:"Cleansing"},
-{i:17, name:"Mercenary: Thorns", thorns_reflect:0, effect:"Thorns"},
-{i:18, name:"Mercenary: Might", damage_bonus:0, effect:"Might"},
+{i:11, name:"Mercenary: Inner Sight", aura:"Inner_Sight"},	//enemy_defense:0, 
+{i:12, name:"Mercenary: Blessed Aim", aura:"Blessed_Aim"},	//ar_bonus:0, blessed_hammer_on_hit:0, 
+{i:13, name:"Mercenary: Defiance", aura:"Defiance"},	//defense_bonus:0, 
+{i:14, name:"Mercenary: Prayer", aura:"Prayer"},	//life_regen:0, life_replenish:0, 
+{i:15, name:"Mercenary: Meditation", aura:"Meditation"},	//mana_regen:0, 
+{i:16, name:"Mercenary: Cleansing", aura:"Cleansing"},	//poison_length_reduced:0, curse_length_reduced:0, 
+{i:17, name:"Mercenary: Thorns", aura:"Thorns"},	//thorns_reflect:0, 
+{i:18, name:"Mercenary: Might", aura:"Might"},		//damage_bonus:0, 
 */
 ];
 
@@ -394,7 +394,7 @@ var equipment = {
 {name:"Venom Grip", req_level:29, defense:25, e_def:160, cblow:5, pDamage_all:60, pDamage_duration:4, life_leech:5, pRes_max:5, pRes:30, base:"Demonhide Gloves"},
 {name:"Gravepalm", req_level:32, e_def:180, damage_vs_undead:200, ar_vs_undead:200, energy:10, strength:10, base:"Sharkskin Gloves"},
 {name:"Ghoulhide", req_level:36, e_def:190, ar_vs_undead_per_level:8, damage_vs_undead_per_level:2, mana_leech:5, life:20, base:"Heavy Bracers"},
-{name:"Lava Gout", req_level:42, e_def:200, half_freeze:1, fDamage_min:13, fDamage_max:46, ias:20, fRes:24, base:"Battle Gauntlets"},	// 2% ctc Level 10 Enchant on striking(EFFECT) ...TODO: add effect
+{name:"Lava Gout", req_level:42, e_def:200, half_freeze:1, fDamage_min:13, fDamage_max:46, ias:20, fRes:24, oskill_Enflame:10, base:"Battle Gauntlets", pod_changes:1},
 {name:"Hellmouth", req_level:47, e_def:200, fAbsorb_flat:15, fDamage_min:15, fDamage_max:72, base:"War Gauntlets"},	// 4% ctc level 12 Firestorm on striking, 2% ctc level 4 Meteor on striking
 {name:"Dracul's Grasp", req_level:76, e_def:120, strength:15, life_per_kill:10, owounds:25, life_leech:10, base:"Vampirebone Gloves"},	// 5% ctc level 10 Life Tap on striking	...TODO: add effect
 {name:"Soul Drainer", req_level:74, e_def:120, pierce:7, life_leech:7, mana_leech:7, monster_defense_per_hit:-50, dexterity:7, base:"Vambraces", pod_changes:1},	// level 8 Weaken (34 charges)
@@ -411,9 +411,11 @@ var equipment = {
 {set_Cleglaw:1, name:"Cleglaw's Pincers", req_level:4, slows_target:25, knockback:1, base:"Chain Gloves", set_bonuses:["set_Cleglaw",{},{ar_per_level:10},{}]},
 {set_Arctic:1, name:"Arctic Mitts", req_level:2, life:20, ias:10, base:"Light Gauntlets", set_bonuses:["set_Arctic",{},{ar:50},{dexterity:10},{}]},
 {only:"amazon", rarity:"crafted", name:"Bowyer's Hitpower Vambraces", req_level:51, thorns:7, knockback:1, life_leech:5, mana_leech:5, ias:20, fRes:30, cRes:30, skills_bows:2, base:"Vambraces"},	// 5% ctc level 4 Frost Nova when hit
+{only:"amazon", rarity:"crafted", name:"Spearmaiden's Blood Gloves", req_level:47, life:20, life_leech:8, mana_leech:5, cblow:10, ias:20, fRes:30, cRes:30, skills_javelins:2, base:"Vampirebone Gloves"},
+{only:"amazon", rarity:"crafted", name:"Gymnast's Caster Mitts", req_level:42, mana_regen:10, mana:20, mana_per_kill:3, mana_leech:5, ias:20, mf:25, fRes:30, lRes:30, skills_passives:2, base:"Bramble Mitts"},
 {only:"assassin", rarity:"crafted", name:"Sensei's Blood Gloves", req_level:51, life:20, life_leech:8, mana_leech:5, cblow:10, ias:20, fRes:30, cRes:30, skills_martial:2, base:"Vampirebone Gloves"},	// 5% ctc level 4 Frost Nova when hit
-{limit:["assassin"], rarity:"crafted", name:"Blood Gloves", req_level:47, life:20, life_leech:8, mana_leech:5, cblow:10, ias:20, fRes:30, cRes:30, lRes:30, base:"Vampirebone Gloves"},
-{rarity:"crafted", name:"Caster Mitts", req_level:42, mana_regen:10, mana:20, mana_per_kill:3, mana_leech:5, ias:20, mf:25, fRes:30, cRes:30, lRes:30, base:"Bramble Mitts"},
+{limit:["assassin","amazon"], rarity:"crafted", name:"Blood Gloves", req_level:47, life:20, life_leech:8, mana_leech:5, cblow:10, ias:20, fRes:30, cRes:30, lRes:30, base:"Vampirebone Gloves"},
+{limit:["amazon"], rarity:"crafted", name:"Caster Mitts", req_level:42, mana_regen:10, mana:20, mana_per_kill:3, mana_leech:5, ias:20, mf:25, fRes:30, cRes:30, lRes:30, base:"Bramble Mitts"},
 	],
     boots: [
     // remove kick_min and use data from base items?
@@ -581,6 +583,7 @@ var equipment = {
 {only:"assassin", rw:1, name:"Plague ­ ­ - ­ ­ Suwayyah", req_level:67, damage_vs_demons:380, enemy_pRes:-23, dstrike_per_level:0.375, owounds:25, freezes_target:3, strength:10, all_skills:2, skill_Blade_Shield:3, skill_Venom:3, skill_Fade:3, type:"claw", base:"Suwayyah", pod_changes:1, aura:"Cleansing", aura_lvl:17},	// 25% ctc level 15 Poison Nova on striking, 20% ctc level 12 Lower Resist when struck
 {only:"assassin", rarity:"magic", name:"Cunning Suwayyah of Evisceration", type:"claw", req_level:65, damage_max:63, skills_traps:3, skill_Wake_of_Fire:3, skill_Blade_Shield:3, skill_Lightning_Sentry:3, base:"Suwayyah"},
 {only:"sorceress", rarity:"magic", name:"Volcanic Vortex Orb of the Magus", type:"orb", req_level:67, life:60, fcr:20, skills_fire:3, skill_Enflame:3, skill_Fire_Mastery:3, skill_Immolate:3, base:"Vortex Orb"},
+{only:"sorceress", rarity:"magic", name:"Glacial Vortex Orb of the Magus", type:"orb", req_level:67, life:60, fcr:20, skills_cold:3, skill_Freezing_Pulse:3, skill_Cold_Mastery:3, skill_Frozen_Orb:3, base:"Vortex Orb"},
 {only:"necromancer", rarity:"magic", name:"Golemlord's Lich Wand", type:"wand", req_level:65, skills_summoning_necromancer:3, skill_Summon_Mastery:3, skill_Raise_Skeleton_Warrior:3, skill_Raise_Skeletal_Mage:3, base:"Lich Wand"},
 // Bows
 {only:"amazon", rw:1, name:"Brand ­ ­ - ­ ­ Matriarchal Bow", req_level:65, e_damage:340, itd:1, ar_bonus:20, damage_vs_demons:330, dstrike:20, pmh:1, knockback:1, skills_bows:3, twoHanded:1, type:"bow", base:"Matriarchal Bow"},	// 35% ctc level 14 Amplify Damage when struck, 100% ctc level 18 Bone Spear on striking, Fires explosive arrows/bolts (15)
@@ -626,7 +629,7 @@ var equipment = {
 {rw:1, name:"Lawbringer ­ ­ - ­ ­ Legend Sword", req_level:43, target_defense:-50, fDamage_min:150, fDamage_max:210, cDamage_min:130, cDamage_max:180, life_leech:7, peace:1, missile_defense:250, dexterity:10, gf:75, twoHanded:1, type:"sword", base:"Legend Sword", pod_changes:1, aura:"Sanctuary", aura_lvl:18},	// 20% ctc level 7 Decrepify on striking
 {rw:1, name:"Voice of Reason ­ ­ - ­ ­ Champion Sword", req_level:43, ar:50, damage_vs_demons:350, damage_vs_undead:375, ar_vs_undead:50, cDamage_min:100, cDamage_max:220, enemy_cRes:-24, dexterity:10, cbf:1, gf:75, light_radius:1, twoHanded:1, type:"sword", base:"Champion Sword"},	// 15% ctc level 13 Frozen Orb on striking, 18% ctc level 20 Ice Blast on striking
 {rw:1, name:"Passion ­ ­ - ­ ­ Berserker Axe", req_level:43, e_damage:210, ias:25, ar_bonus:80, damage_vs_undead:75, ar_vs_undead:50, lDamage_min:1, lDamage_max:50, oskill_Bash:1, oskill_Zeal:1, blind_on_hit:10, flee_on_hit:25, gf:75, twoHanded:1, type:"axe", base:"Berserker Axe", pod_changes:1},	// level 3 Heart of Wolverine (12 charges)
-{rw:1, name:"Obedience ­ ­ - ­ ­ Great Poleaxe", req_level:41, e_damage:370, fhr:40, target_defense:-25, cDamage_min:3, cDamage_max:14, enemy_fRes:-25, cblow:40, defense:300, strength:10, dexterity:10, all_res:30, req:-20, twoHanded:1, type:"polearm", base:"Great Poleaxe"},	// 30% ctc level 21 Enchant on kill
+{rw:1, name:"Obedience ­ ­ - ­ ­ Great Poleaxe", req_level:41, e_damage:370, fhr:40, target_defense:-25, cDamage_min:3, cDamage_max:14, enemy_fRes:-25, cblow:40, defense:300, strength:10, dexterity:10, all_res:30, req:-20, twoHanded:1, type:"polearm", base:"Great Poleaxe"},	// 30% ctc level 21 Enflame on kill	TEST: Enflame oskill?
 {rw:1, name:"Black ­ ­ - ­ ­ Tyrant Club", req_level:35, e_damage:120, ias:15, ar:200, cDamage_min:3, cDamage_max:14, cblow:40, knockback:1, vitality:10, mDamage_reduced:2, type:"mace", base:"Tyrant Club"},	// level 4 Corpse Explosion (12 charges)
 {rw:1, name:"Honor ­ ­ - ­ ­ Scourge", req_level:27, e_damage:160, all_skills:1, damage_min:9, damage_max:9, ar:250, life_leech:7, dstrike:25, strength:10, life_replenish:10, mana_per_kill:2, light_radius:1, type:"mace", base:"Scourge"},
 {rw:1, name:"Insight ­ ­ - ­ ­ Thresher", req_level:27, e_damage:260, fcr:35, damage_min:9, ar_bonus:250, fDamage_min:5, fDamage_max:30, pDamage_all:75, pDamage_duration:5, oskill_Lethal_Strike:6, all_attributes:5, mana_per_kill:2, mf:23, twoHanded:1, type:"polearm", base:"Thresher", aura:"Meditation", aura_lvl:17},
@@ -637,8 +640,8 @@ var equipment = {
 {rw:1, name:"Steel ­ ­ - ­ ­ Scimitar", req_level:13, e_damage:20, ias:25, damage_min:3, damage_max:3, ar:50, owounds:50, mana_per_kill:2, light_radius:1, type:"sword", base:"Scimitar"},
 {rw:1, name:"Holy Thunder ­ ­ - ­ ­ Divine Scepter", req_level:25, e_damage:60, damage_max:10, target_defense:-25, fDamage_min:5, fDamage_max:30, lDamage_min:21, lDamage_max:110, pDamage_all:75, pDamage_duration:5, lRes_max:5, lRes:60, skill_Fist_of_the_Heavens:3, skill_Vigor:3, skill_Holy_Shock:6, type:"scepter", base:"Divine Scepter", pod_changes:1},	// level 7 Teleport (60 charges)
 {rw:1, name:"Leaf ­ ­ - ­ ­ Short Staff", req_level:19, skills_fire_all:3, fDamage_min:5, fDamage_max:30, skill_Blaze:6, skill_Warmth:6, skill_Fire_Bolt:6, defense_per_level:2, cRes:33, mana_per_kill:2, twoHanded:1, type:"staff", base:"Short Staff", pod_changes:1},
-{only:"sorceress", rw:1, name:"Memory ­ ­ - ­ ­ Shillelagh", req_level:37, skills_sorceress:3, fcr:33, damage_min:9, target_defense:-25, defense_bonus:50, vitality:10, energy:10, max_mana:20, skill_Lightning_Mastery:3, skill_Static_Field:2, skill_Lightning_Surge:3, skill_Energy_Shield:6, twoHanded:1, type:"staff", base:"Shillelagh", pod_changes:1},	// (also has Lightning Surge deals 35% extra damage as physical) TODO: implement
-{only:"necromancer", rw:1, name:"White ­ ­ - ­ ­ Ghost Wand", req_level:35, skills_poisonBone:3, fcr:20, flee_on_hit:25, vitality:10, mana:13, mDamage_reduced:4, skill_Summon_Mastery:4, skill_Bone_Spear:5, skill_Bone_Armor:3, skill_Desecrate:3, skill_Deadly_Poison:3, type:"wand", base:"Ghost Wand"},
+{rw:1, name:"Memory ­ ­ - ­ ­ Shillelagh", req_level:37, skills_sorceress:3, fcr:33, damage_min:9, target_defense:-25, defense_bonus:50, vitality:10, energy:10, max_mana:20, skill_Lightning_Mastery:3, skill_Static_Field:2, skill_Lightning_Surge:3, skill_Energy_Shield:6, twoHanded:1, type:"staff", base:"Shillelagh", pod_changes:1},	// (also has Lightning Surge deals 35% extra damage as physical) TODO: implement
+{rw:1, name:"White ­ ­ - ­ ­ Ghost Wand", req_level:35, skills_poisonBone:3, fcr:20, flee_on_hit:25, vitality:10, mana:13, mDamage_reduced:4, skill_Summon_Mastery:4, skill_Bone_Spear:5, skill_Bone_Armor:3, skill_Desecrate:3, skill_Deadly_Poison:3, type:"wand", base:"Ghost Wand"},
 
 {name:"Horadric Malus", type:"hammer", req_strength:15, req_dexterity:15, damage_vs_undead:150, damage_min:6, damage_max:15},
 {name:"Staff of Kings", type:"staff", twoHanded:1, req_strength:25, damage_vs_undead:50, damage_min:10, damage_max:15, ias:50, all_res:10},
@@ -877,6 +880,7 @@ var equipment = {
 {name:"Gut Siphon", req_level:71, e_damage:220, pierce:33, life_leech:18, owounds:33, slows_target:25, twoHanded:1, type:"crossbow", base:"Demon Crossbow"},
 	],
     offhand: [
+    // remove smite_min/smite_max, block, and use data from base items?
 {name:"Offhand"},
 {only:"assassin", rw:1, name:"Chaos ­ ­ - ­ ­ Scissors Suwayyah", req_level:57, e_damage:290, ias:35, mDamage_min:216, mDamage_max:471, owounds:25, oskill_Zeal:1, strength:10, life_per_demon_kill:15, skill_Wake_of_Fire:3, skill_Blade_Shield:3, skill_Fade:3, type:"claw", base:"Scissors Suwayyah", pod_changes:1},	// 9% ctc level 11 Frozen Orb on striking, 11% ctc level 9 Charged Bolt on striking
 {only:"assassin", rw:1, name:"Pattern ­ ­ - ­ ­ Greater Claws", req_level:21, e_damage:80, fbr:30, ar_bonus:10, fDamage_min:12, fDamage_max:32, lDamage_min:1, lDamage_max:50, pDamage_all:75, pDamage_duration:5, strength:6, dexterity:6, all_res:15, mana_per_kill:2, skill_Wake_of_Fire:3, skill_Blade_Fury:3, skill_Fade:3, type:"claw", base:"Greater Claws", pod_changes:1},
@@ -988,8 +992,24 @@ var equipment = {
 {rarity:"magic", name:"Life,AR,Damage Small Charm", type:"small", req_level:39, life:20, ar:20, damage_max:3},
 {rarity:"magic", name:"Life,AR,Damage Large Charm", type:"large", req_level:66, life:35, ar:48, damage_max:6},
 {rarity:"magic", name:"Life,AR,Damage Grand Charm", type:"grand", req_level:83, life:45, ar:76, damage_max:10},
+{debug:1, name:"+1 (each) skill", req_level:100,
+	/* amazon	*/	skill_Jab:1, skill_Power_Strike:1, skill_Poison_Javelin:1, skill_Fend:1, skill_Lightning_Bolt:1, skill_Charged_Strike:1, skill_Plague_Javelin:1, skill_Ground_Slam:1, skill_Lightning_Strike:1, skill_Lightning_Fury:1, skill_Inner_Sight:1, skill_Lethal_Strike:1, skill_Phase_Run:1, skill_Dodge:1, skill_Avoid:1, skill_Penetrate:1, skill_Evade:1, skill_Decoy:1, skill_Valkyrie:1, skill_Pierce:1, skill_Cold_Arrow:1, skill_Magic_Arrow:1, skill_Multiple_Shot:1, skill_Fire_Arrow:1, skill_Ice_Arrow:1, skill_Guided_Arrow:1, skill_Exploding_Arrow:1, skill_Strafe:1, skill_Immolation_Arrow:1, skill_Freezing_Arrow:1,
+	/* assassin	*/	skill_Dual_Strike:1, skill_Fists_of_Ember:1, skill_Fists_of_Thunder:1, skill_Fists_of_Ice:1, skill_Static_Strike:1, skill_Dragon_Talon:1, skill_Emberstorm:1, skill_Dragon_Flight:1, skill_Blades_of_Ice:1, skill_Claw_Mastery:1, skill_Psychic_Hammer:1, skill_Burst_of_Speed:1, skill_Mind_Barrier:1, skill_Weapon_Block:1, skill_Cloak_of_Shadows:1, skill_Fade:1, skill_Shadow_Warrior:1, skill_Mind_Blast:1, skill_Venom:1, skill_Shadow_Master:1, skill_Fire_Blast:1, skill_Shock_Web:1, skill_Blade_Throw:1, skill_Charged_Bolt_Sentry:1, skill_Wake_of_Fire:1, skill_Blade_Fury:1, skill_Lightning_Sentry:1, skill_Wake_of_Inferno:1, skill_Death_Sentry:1, skill_Blade_Shield:1, skill_Dragon_Tail:1,
+	/* barbarian	*/	skill_Howl:1, skill_Find_Potion:1, skill_Taunt:1, skill_Shout:1, skill_Find_Item:1, skill_Battle_Cry:1, skill_Battle_Orders:1, skill_Grim_Ward:1, skill_War_Cry:1, skill_Battle_Command:1, skill_Edged_Weapon_Mastery:1, skill_Pole_Weapon_Mastery:1, skill_Blunt_Weapon_Mastery:1, skill_Thrown_Weapon_Mastery:1, skill_Increased_Stamina:1, skill_Iron_Skin:1, skill_Increased_Speed:1, skill_Natural_Resistance:1, skill_Frenzy:1, skill_Concentrate:1, skill_Cleave:1, skill_Stun:1, skill_Leap:1, skill_Power_Throw:1, skill_Bash:1, skill_Leap_Attack:1, skill_Ethereal_Throw:1, skill_Whirlwind:1, skill_One_Handed_Weapon_Mastery:1, skill_Two_Handed_Weapon_Mastery:1,
+	/* druid	*/	skill_Firestorm:1, skill_Molten_Boulder:1, skill_Flame_Dash:1, skill_Arctic_Blast:1, skill_Fissure:1, skill_Cyclone_Armor:1, skill_Twister:1, skill_Volcano:1, skill_Tornado:1, skill_Armageddon:1, skill_Hurricane:1, skill_Werewolf:1, skill_Lycanthropy:1, skill_Werebear:1, skill_Feral_Rage:1, skill_Maul:1, skill_Rabies:1, skill_Fire_Claws:1, skill_Hunger:1, skill_Shock_Wave:1, skill_Fury:1, skill_Raven:1, skill_Poison_Creeper:1, skill_Heart_of_Wolverine:1, skill_Summon_Spirit_Wolf:1, skill_Carrion_Vine:1, skill_Oak_Sage:1, skill_Summon_Dire_Wolf:1, skill_Solar_Creeper:1, skill_Spirit_of_Barbs:1, skill_Summon_Grizzly:1,
+	/* necromancer	*/	skill_Summon_Mastery:1, skill_Raise_Skeleton_Warrior:1, skill_Bone_Offering:1, skill_Clay_Golem:1, skill_Flesh_Offering:1, skill_Raise_Skeletal_Mage:1, skill_Blood_Golem:1, skill_Convocation:1, skill_Iron_Golem:1, skill_Fire_Golem:1, skill_Revive:1, skill_Deadly_Poison:1, skill_Teeth:1, skill_Bone_Armor:1, skill_Corpse_Explosion:1, skill_Desecrate:1, skill_Bone_Spear:1, skill_Bone_Wall:1, skill_Bone_Spirit:1, skill_Poison_Nova:1, skill_Amplify_Damage:1, skill_Dim_Vision:1, skill_Hemorrhage:1, skill_Weaken:1, skill_Iron_Maiden:1, skill_Terror:1, skill_Confuse:1, skill_Life_Tap:1, skill_Attract:1, skill_Decrepify:1, skill_Lower_Resist:1,
+	/* paladin	*/	skill_Prayer:1, skill_Resist_Fire:1, skill_Defiance:1, skill_Resist_Cold:1, skill_Cleansing:1, skill_Resist_Lightning:1, skill_Vigor:1, skill_Meditation:1, skill_Redemption:1, skill_Salvation:1, skill_Might:1, skill_Holy_Fire:1, skill_Precision:1, skill_Blessed_Aim:1, skill_Concentration:1, skill_Holy_Freeze:1, skill_Holy_Shock:1, skill_Sanctuary:1, skill_Fanaticism:1, skill_Conviction:1, skill_Sacrifice:1, skill_Smite:1, skill_Holy_Bolt:1, skill_Zeal:1, skill_Charge:1, skill_Vengeance:1, skill_Blessed_Hammer:1, skill_Conversion:1, skill_Holy_Shield:1, skill_Fist_of_the_Heavens:1, skill_Dashing_Strike:1,
+	/* sorceress	*/	skill_Ice_Bolt:1, skill_Frigerate:1, skill_Frost_Nova:1, skill_Ice_Blast:1, skill_Shiver_Armor:1, skill_Glacial_Spike:1, skill_Blizzard:1, skill_Freezing_Pulse:1, skill_Chilling_Armor:1, skill_Frozen_Orb:1, skill_Cold_Mastery:1, skill_Charged_Bolt:1, skill_Static_Field:1, skill_Telekinesis:1, skill_Nova:1, skill_Lightning_Surge:1, skill_Chain_Lightning:1, skill_Teleport:1, skill_Discharge:1, skill_Energy_Shield:1, skill_Lightning_Mastery:1, skill_Thunder_Storm:1, skill_Fire_Bolt:1, skill_Warmth:1, skill_Blaze:1, skill_Immolate:1, skill_Fire_Ball:1, skill_Fire_Wall:1, skill_Enflame:1, skill_Meteor:1, skill_Fire_Mastery:1, skill_Hydra:1	},
+//{debug:0, name:"+1 O-skills", req_level:100,
+			//	oskill_Warp:1, oskill_Ball_Lightning:1,
+	/* amazon	*///	oskill_Inner_Sight:1, oskill_Lethal_Strike:1, oskill_Valkyrie:1, oskill_Magic_Arrow:1, oskill_Guided_Arrow:1, oskill_Multiple_Shot:1,
+	/* barbarian	*///	oskill_Battle_Command:1, oskill_Battle_Orders:1, oskill_Battle_Cry:1, oskill_Bash:1, oskill_Edged_Weapon_Mastery:1,
+	/* druid	*///	oskill_Lycanthropy:1, oskill_Werebear:1, oskill_Werewolf:1, oskill_Feral_Rage:1, oskill_Flame_Dash:1, oskill_Summon_Dire_Wolf:1,
+	/* necromancer	*///	oskill_Desecrate:1,
+	/* paladin	*///	oskill_Zeal:1, oskill_Vengeance:1,
+	/* sorceress	*///	oskill_Frigerate:1, oskill_Shiver_Armor:1, oskill_Cold_Mastery:1, oskill_Hydra:1, oskill_Fire_Ball:1, oskill_Fire_Wall:1, oskill_Meteor:1, oskill_Fire_Mastery:1, oskill_Enflame:1	},
 {debug:1, name:"+1 skill", req_level:100, all_skills:1},
-{debug:20, name:"+20 skills", req_level:100, all_skills:20},
+{debug:1, name:"+20 skills", req_level:100, all_skills:20},
 	],
 };
 

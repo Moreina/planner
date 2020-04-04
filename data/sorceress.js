@@ -97,6 +97,7 @@ var character_sorceress = {class_name:"Sorceress", strength:10, dexterity:25, vi
 		var mDamage_min = 0; var mDamage_max = 0;
 		var skillMin = ""; var skillMax = ""; var skillAr = "";
 		var spell = 1;
+		var already_calculated = 1;
 		
 		if (skill.name == "Ice Bolt") {			cDamage_min = character.updateSkill(skill, lvl, 0); cDamage_max = character.updateSkill(skill, lvl, 1); }
 		else if (skill.name == "Frost Nova") {		cDamage_min = character.updateSkill(skill, lvl, 0); cDamage_max = character.updateSkill(skill, lvl, 1); }
@@ -138,11 +139,18 @@ var character_sorceress = {class_name:"Sorceress", strength:10, dexterity:25, vi
 	//		if (equipped.weapon.type == skill.reqWeapon[w]) { match = 1 }
 	//	} if (match == 0) { spell = 2 } }
 		
-		ele_min += Math.floor(wisp*(fDamage_min*(1+(character.fDamage+character.fDamage_skillup)/100) + cDamage_min*(1+(character.cDamage+character.cDamage_skillup)/100) + lDamage_min*(1+(character.lDamage+character.lDamage_skillup)/100)));
-		ele_max += Math.floor(wisp*(fDamage_max*(1+(character.fDamage+character.fDamage_skillup)/100) + cDamage_max*(1+(character.cDamage+character.cDamage_skillup)/100) + lDamage_max*(1+(character.lDamage+character.lDamage_skillup)/100) + pDamage_max*(1+character.pDamage/100)));
-		phys_min = Math.floor((phys_min*damage_bonus/100) + (wisp*damage_min*damage_bonus/100))
-		phys_max = Math.floor((phys_max*damage_bonus/100) + (wisp*damage_max*damage_bonus/100))
-
+		if (already_calculated == 1) {
+			ele_min += Math.floor(fDamage_min + cDamage_min + lDamage_min);
+			ele_max += Math.floor(fDamage_min + cDamage_min + lDamage_min + pDamage_max);
+			phys_min = Math.floor(phys_min + damage_min);
+			phys_max = Math.floor(phys_max + damage_max);
+		} else {
+			ele_min += Math.floor(wisp*(fDamage_min*(1+(character.fDamage+character.fDamage_skillup)/100) + cDamage_min*(1+(character.cDamage+character.cDamage_skillup)/100) + lDamage_min*(1+(character.lDamage+character.lDamage_skillup)/100)));
+			ele_max += Math.floor(wisp*(fDamage_max*(1+(character.fDamage+character.fDamage_skillup)/100) + cDamage_max*(1+(character.cDamage+character.cDamage_skillup)/100) + lDamage_max*(1+(character.lDamage+character.lDamage_skillup)/100) + pDamage_max*(1+character.pDamage/100)));
+			phys_min = Math.floor((phys_min*damage_bonus/100) + (wisp*damage_min*damage_bonus/100));
+			phys_max = Math.floor((phys_max*damage_bonus/100) + (wisp*damage_max*damage_bonus/100));
+		}
+		
 		if (spell == 0) {
 			skillMin = Math.floor(mag_min+mDamage_min+ele_min+phys_min); skillMax = Math.floor(mag_max+mDamage_max+ele_max+phys_max); skillAr = Math.floor(ar*(1+ar_bonus/100));
 		} else if (spell == 1) {	// no attack rating

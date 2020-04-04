@@ -59,15 +59,16 @@ var character_amazon = {class_name:"Amazon", strength:20, dexterity:25, vitality
 		var mDamage_min = 0; var mDamage_max = 0;
 		var skillMin = ""; var skillMax = ""; var skillAr = "";
 		var spell = 0;
+		var already_calculated = 1;
 
-		if (skill.name == "Jab") { 			ar_bonus = character.updateSkill(skill, lvl, 0); damage_bonus = 100+character.updateSkill(skill, lvl, 1); }
+		if (skill.name == "Jab") { 			ar_bonus = character.updateSkill(skill, lvl, 0); damage_bonus = 100+character.updateSkill(skill, lvl, 1); already_calculated = 0; }
 		else if (skill.name == "Power Strike") { 	ar_bonus = character.updateSkill(skill, lvl, 0); lDamage_min = character.updateSkill(skill, lvl, 1); lDamage_max = character.updateSkill(skill, lvl, 2); }	// regular damage (non-throw) + 1-22 lightning (yellow)
-		else if (skill.name == "Poison Javelin") {	pDamage_min = character.updateSkill(skill, lvl, 0); pDamage_max = character.updateSkill(skill, lvl, 1); pDamage_duration = 5; spell = 0; }	// [JAVELIN ONLY]	throw damage, separate: 33-49 poison (green)
-		else if (skill.name == "Fend") { 		ar_bonus = character.updateSkill(skill, lvl, 0); damage_bonus = 125+character.updateSkill(skill, lvl, 1); }	// non-throw
+		else if (skill.name == "Poison Javelin") {	pDamage_min = character.updateSkill(skill, lvl, 0); pDamage_max = character.updateSkill(skill, lvl, 1); pDamage_duration = 5; }	// [JAVELIN ONLY]	throw damage, separate: 33-49 poison (green)
+		else if (skill.name == "Fend") { 		ar_bonus = character.updateSkill(skill, lvl, 0); damage_bonus = 125+character.updateSkill(skill, lvl, 1); already_calculated = 0; }	// non-throw
 		else if (skill.name == "Lightning Bolt") {	lDamage_min = phys_min+character.updateSkill(skill, lvl, 0); lDamage_max = phys_max+character.updateSkill(skill, lvl, 1); damage_bonus = 0; spell = 1; }	// [JAVELIN ONLY]	throw damage + 1-49 lightning (yellow)
 		else if (skill.name == "Charged Strike") {	lDamage_min = character.updateSkill(skill, lvl, 1); lDamage_max = character.updateSkill(skill, lvl, 2); spell = 1; }	// regular (non-throw), separate: 1-42 lightning (yellow)
 		else if (skill.name == "Plague Javelin") {	ar_bonus = character.updateSkill(skill, lvl, 0); pDamage_min = character.updateSkill(skill, lvl, 1); pDamage_max = character.updateSkill(skill, lvl, 2); pDamage_duration = 5; }	// [JAVELIN ONLY]	throw damage, separate: 47-76 poison (green)
-		else if (skill.name == "Ground Slam") { 	damage_bonus = 85; spell = 1; }
+		else if (skill.name == "Ground Slam") { 	damage_bonus = 85; spell = 1; already_calculated = 0; }
 		else if (skill.name == "Lightning Strike") {	lDamage_min = character.updateSkill(skill, lvl, 1); lDamage_max = character.updateSkill(skill, lvl, 2); spell = 1; }	// non-throw, separate: 1-32 lightning (yellow)
 		else if (skill.name == "Lightning Fury") {	lDamage_min = character.updateSkill(skill, lvl, 1); lDamage_max = character.updateSkill(skill, lvl, 2); spell = 1; }	// [JAVELIN ONLY]	throw damage, separate: 1-42 lightning (yellow)
 		
@@ -77,12 +78,12 @@ var character_amazon = {class_name:"Amazon", strength:20, dexterity:25, vitality
 		
 		else if (skill.name == "Cold Arrow") {		cDamage_min = character.updateSkill(skill, lvl, 1); cDamage_max = character.updateSkill(skill, lvl, 2); }	// regular + 2-3 cold (blue)	...lvl 1 = +6% ar
 		else if (skill.name == "Magic Arrow") {		mDamage_min = character.updateSkill(skill, lvl, 1); mDamage_max = character.updateSkill(skill, lvl, 2); }	// regular + 1-2 (blue... but should be colored differently for magic damage)	...lvl 1 = +6% ar
-		else if (skill.name == "Multiple Shot") {	damage_min = character.updateSkill(skill, lvl, 0); damage_max = character.updateSkill(skill, lvl, 1); }	// regular + 2-3
+		else if (skill.name == "Multiple Shot") {	damage_min = character.updateSkill(skill, lvl, 0); damage_max = character.updateSkill(skill, lvl, 1); already_calculated = 0; }	// regular + 2-3
 		else if (skill.name == "Fire Arrow") {		fDamage_min = character.updateSkill(skill, lvl, 4); fDamage_max = character.updateSkill(skill, lvl, 5); ar_bonus = character.updateSkill(skill, lvl, 3); }	// regular + 3-6 (average fire damage not shown) (red)	...lvl 1 = +6% ar
 		else if (skill.name == "Ice Arrow") {		cDamage_min = character.updateSkill(skill, lvl, 0); cDamage_max = character.updateSkill(skill, lvl, 1); }	// regular + 6-11 cold (blue)	...lvl 1 = +11% ar
-		else if (skill.name == "Guided Arrow") {	damage_bonus = 150+character.updateSkill(skill, lvl, 0); spell = 1; }	// regular + 3-6
+		else if (skill.name == "Guided Arrow") {	damage_bonus = 150+character.updateSkill(skill, lvl, 0); spell = 1; already_calculated = 0; }	// regular + 3-6
 		else if (skill.name == "Exploding Arrow") {	fDamage_min = character.updateSkill(skill, lvl, 0); fDamage_max = character.updateSkill(skill, lvl, 1); }	// regular, separate: 12-19 fire (red)	...lvl 1 = +11% ar
-		else if (skill.name == "Strafe") {		damage_min = character.updateSkill(skill, lvl, 0); damage_max = character.updateSkill(skill, lvl, 1); damage_bonus = 100+character.updateSkill(skill, lvl, 3); }	// regular + 3-4
+		else if (skill.name == "Strafe") {		damage_min = character.updateSkill(skill, lvl, 0); damage_max = character.updateSkill(skill, lvl, 1); damage_bonus = 100+character.updateSkill(skill, lvl, 3); already_calculated = 0; }	// regular + 3-4
 		else if (skill.name == "Immolation Arrow") {	fDamage_min = character.updateSkill(skill, lvl, 0); fDamage_max = character.updateSkill(skill, lvl, 1); fDamage_min = character.updateSkill(skill, lvl, 3); fDamage_max = character.updateSkill(skill, lvl, 4); }	// regular, separate: 18-31 fire (red)	...+ ~11% ar per level
 		else if (skill.name == "Freezing Arrow") {	cDamage_min = character.updateSkill(skill, lvl, 0); cDamage_max = character.updateSkill(skill, lvl, 1); }	// regular, separate: 49-61 cold (blue)	...lvl 1 = +23% ar
 		else { spell = 2; }
@@ -91,11 +92,18 @@ var character_amazon = {class_name:"Amazon", strength:20, dexterity:25, vitality
 			if (equipped.weapon.type == skill.reqWeapon[w]) { match = 1 }
 		} if (match == 0) { spell = 2 } }
 		
-		ele_min += Math.floor(wisp*(fDamage_min*(1+(character.fDamage+character.fDamage_skillup)/100) + cDamage_min*(1+(character.cDamage+character.cDamage_skillup)/100) + lDamage_min*(1+(character.lDamage+character.lDamage_skillup)/100)));
-		ele_max += Math.floor(wisp*(fDamage_max*(1+(character.fDamage+character.fDamage_skillup)/100) + cDamage_max*(1+(character.cDamage+character.cDamage_skillup)/100) + lDamage_max*(1+(character.lDamage+character.lDamage_skillup)/100) + pDamage_max*(1+character.pDamage/100)));
-		phys_min = Math.floor((phys_min*damage_bonus/100) + (wisp*damage_min*damage_bonus/100))
-		phys_max = Math.floor((phys_max*damage_bonus/100) + (wisp*damage_max*damage_bonus/100))
-
+		if (already_calculated == 1) {
+			ele_min += Math.floor(fDamage_min + cDamage_min + lDamage_min);
+			ele_max += Math.floor(fDamage_min + cDamage_min + lDamage_min + pDamage_max);
+			phys_min = Math.floor(phys_min + damage_min);
+			phys_max = Math.floor(phys_max + damage_max);
+		} else {
+			ele_min += Math.floor(wisp*(fDamage_min*(1+(character.fDamage+character.fDamage_skillup)/100) + cDamage_min*(1+(character.cDamage+character.cDamage_skillup)/100) + lDamage_min*(1+(character.lDamage+character.lDamage_skillup)/100)));
+			ele_max += Math.floor(wisp*(fDamage_max*(1+(character.fDamage+character.fDamage_skillup)/100) + cDamage_max*(1+(character.cDamage+character.cDamage_skillup)/100) + lDamage_max*(1+(character.lDamage+character.lDamage_skillup)/100) + pDamage_max*(1+character.pDamage/100)));
+			phys_min = Math.floor((phys_min*damage_bonus/100) + (wisp*damage_min*damage_bonus/100));
+			phys_max = Math.floor((phys_max*damage_bonus/100) + (wisp*damage_max*damage_bonus/100));
+		}
+		
 		if (spell == 0) {
 			skillMin = Math.floor(mag_min+mDamage_min+ele_min+phys_min); skillMax = Math.floor(mag_max+mDamage_max+ele_max+phys_max); skillAr = Math.floor(ar*(1+ar_bonus/100));
 		} else if (spell == 1) {	// no attack rating
