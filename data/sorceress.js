@@ -138,6 +138,9 @@ var character_sorceress = {class_name:"Sorceress", strength:10, dexterity:25, vi
 	//	if (typeof(skill.reqWeapon) != 'undefined') { var match = 0; for (let w = 0; w < skill.reqWeapon.length; w++) {
 	//		if (equipped.weapon.type == skill.reqWeapon[w]) { match = 1 }
 	//	} if (match == 0) { spell = 2 } }
+	
+		// disable spells until issues are fixed
+		if (spell == 1) { spell = 2; }
 		
 		if (already_calculated == 1) {
 			ele_min += Math.floor(fDamage_min + cDamage_min + lDamage_min);

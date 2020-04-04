@@ -149,6 +149,9 @@ var character_assassin = {class_name:"Assassin", strength:20, dexterity:20, vita
 			}
 		} if (match == 0) { spell = 2 } }
 
+		// disable spells until issues are fixed
+		if (spell == 1) { spell = 2; }
+		
 		if (already_calculated == 1) {
 			ele_min += Math.floor(fDamage_min + cDamage_min + lDamage_min);
 			ele_max += Math.floor(fDamage_max + cDamage_max + lDamage_max + pDamage_max);

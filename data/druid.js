@@ -157,6 +157,9 @@ var character_druid = {class_name:"Druid", strength:15, dexterity:20, vitality:2
 		
 		if (minion_min > 0 || skill.name == "Poison Creeper") { phys_min = 0; phys_max = 0; ele_min = 0; ele_max = 0; mag_min = 0; mag_max = 0; }
 		
+		// disable spells until issues are fixed
+		if (spell == 1) { spell = 2; }
+		
 		if (already_calculated == 1) {
 			ele_min += Math.floor(fDamage_min + cDamage_min + lDamage_min);
 			ele_max += Math.floor(fDamage_max + cDamage_max + lDamage_max + pDamage_max);

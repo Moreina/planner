@@ -92,6 +92,9 @@ var character_amazon = {class_name:"Amazon", strength:20, dexterity:25, vitality
 			if (equipped.weapon.type == skill.reqWeapon[w]) { match = 1 }
 		} if (match == 0) { spell = 2 } }
 		
+		// disable spells until issues are fixed
+		if (spell == 1) { spell = 2; }
+		
 		if (already_calculated == 1) {
 			ele_min += Math.floor(fDamage_min + cDamage_min + lDamage_min);
 			ele_max += Math.floor(fDamage_max + cDamage_max + lDamage_max + pDamage_max);
