@@ -283,9 +283,13 @@ function equip(type, val) {
 						}
 					}
 				}
-				// TODO: what is this doing? Isn't it the same as the above code for removing other set bonuses?
+				// remove shared set bonuses
 				for (affix in sets[old_set][before]) {
-					character[affix] -= sets[old_set][before][affix]
+					if (character.class_name == "Sorceress" && (affix == "oskill_Fire_Ball" || affix == "oskill_Fire_Wall" || affix == "oskill_Meteor")) {
+						character[affix] -= 3
+					} else {
+						character[affix] -= sets[old_set][before][affix]
+					}
 				}
 			}
 		}
@@ -322,8 +326,8 @@ function equip(type, val) {
 					
 					if (typeof(equipped[type][affix]) == 'undefined') { equipped[type][affix] = 0 }	// undefined (new) affixes get initialized to zero
 					if (affix == "base_damage_min" || affix == "base_damage_max" || affix == "base_defense") {
-						equipped[type][affix] = Math.floor(multEth*multED*bases[base][affix])
-						character[affix] += Math.floor(multEth*multED*bases[base][affix])
+						equipped[type][affix] = Math.ceil(multEth*multED*bases[base][affix])
+						character[affix] += Math.ceil(multEth*multED*bases[base][affix])
 					}
 					if (affix == "req_strength" || affix == "req_dexterity") {
 						equipped[type][affix] += Math.ceil(multReq*bases[base][affix])
@@ -334,16 +338,18 @@ function equip(type, val) {
 			// add regular affixes
 			for (affix in equipment[type][item]) {
 				equipped[type][affix] = equipment[type][item][affix]
-			//	for (skill in oskills) {
-			//		if (oskills.skill == affix) {offskills[skills[s].code] = ... }
-			//	}
 				if (affix == "aura" || affix == "name" || affix == "type" || affix == "base" || affix == "only" || affix == "limit" || affix == "rw") {
 					if (affix == "aura") {
 			//			equipped[type].aura_lvl = equipment[type][item].aura_lvl	// redundant?
 						addAura(equipment[type][item][affix], equipment[type][item].aura_lvl, type)
 					}
+				} else {
+					for (let s = 0; s < skills.length; s++) {
+						var skillSolo = "oskill_" + skills[s].name.split(" ").join("_");
+						if (affix == skillSolo) { if (equipment[type][item][affix] > 3) { equipped[type][affix] -= (equipment[type][item][affix]-3) } }		// oskills are capped at 3 for 'native' classes
+					}
+					character[affix] += equipped[type][affix]
 				}
-				else { character[affix] += equipment[type][item][affix] }
 			}
 		}
 	} }
@@ -371,9 +377,13 @@ function equip(type, val) {
 						}
 					}
 				}
-				// TODO: what is this doing? Isn't it the same as the above code for adding other set bonuses?
+				// add shared set bonuses
 				for (affix in sets[set][after]) {
-					character[affix] += sets[set][after][affix]
+					if (character.class_name == "Sorceress" && (affix == "oskill_Fire_Ball" || affix == "oskill_Fire_Wall" || affix == "oskill_Meteor")) {
+						character[affix] += 3
+					} else {
+						character[affix] += sets[set][after][affix]
+					}
 				}
 			}
 		}
@@ -947,8 +957,10 @@ function calculateSkillAmounts() {
 	//	var temp = 0;
 		var skillSolo = "skill_" + skills[s].name.split(" ").join("_");
 		skills[s].force_levels = character[skillSolo]
-		var oskillSolo = "oskill_" + skills[s].name.split(" ").join("_");
-		skills[s].force_levels += character[oskillSolo]
+	//	var oskillSolo = "oskill_" + skills[s].name.split(" ").join("_");
+	//	skills[s].force_levels += character[oskillSolo]
+		var oskillSolo = "o"+skillSolo;
+		if (typeof(character[oskillSolo]) != 'undefined') { skills[s].force_levels += character[oskillSolo] }
 	//	offskills[skills[s].code] = skills[s].level + skills[s].extra_levels + skills[s].force_levels
 		if (character.class_name == "Amazon") {
 			skills[s].extra_levels += character.skills_amazon
