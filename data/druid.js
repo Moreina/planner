@@ -104,7 +104,7 @@ var character_druid = {class_name:"Druid", strength:15, dexterity:20, vitality:2
 	// ---------------------------------
 	getFocusData : function(skill, num, ar, phys_min, phys_max, ele_min, ele_max, mag_min, mag_max, wisp) {
 		var lvl = skill.level+skill.extra_levels;
-		var ar_bonus = 0; var damage_bonus = 0;
+		var ar_bonus = 0; var damage_bonus = 100;
 		var damage_min = 0; var damage_max = 0;
 		var fDamage_min = 0; var fDamage_max = 0;
 		var cDamage_min = 0; var cDamage_max = 0;
@@ -112,76 +112,67 @@ var character_druid = {class_name:"Druid", strength:15, dexterity:20, vitality:2
 		var pDamage_min = 0; var pDamage_max = 0; var pDamage_duration = 0;
 		var mDamage_min = 0; var mDamage_max = 0;
 		var skillMin = ""; var skillMax = ""; var skillAr = "";
-		var spell = 1;
-		var already_calculated = 1;
-		var minion_min = 0; var minion_max = 0; var minion_bonus = 0;
+		var attack = 1;	// 0 = no basic damage, 1 = includes basic attack damage, 2 = includes basic throw damage
+		var spell = 1;	// 0 = uses attack rating, 1 = no attack rating, 2 = non-damaging
 		
-		if (skill.name == "Firestorm") { 		fDamage_min = character.updateSkill(skill, lvl, 1); fDamage_max = character.updateSkill(skill, lvl, 2); }
-		else if (skill.name == "Molten Boulder") { 	phys_min = 0; phys_max = 0; damage_bonus = 100; damage_min = character.updateSkill(skill, lvl, 0); damage_max = character.updateSkill(skill, lvl, 1); fDamage_min = character.updateSkill(skill, lvl, 2); fDamage_max = character.updateSkill(skill, lvl, 3); }
-		else if (skill.name == "Flame Dash") { 		fDamage_min = character.updateSkill(skill, lvl, 1); fDamage_max = character.updateSkill(skill, lvl, 2); }	// cannot be bound to left click
-		else if (skill.name == "Arctic Blast") { 	cDamage_min = character.updateSkill(skill, lvl, 0); cDamage_max = character.updateSkill(skill, lvl, 1); }
-		else if (skill.name == "Fissure") { 		fDamage_min = character.updateSkill(skill, lvl, 0); fDamage_max = character.updateSkill(skill, lvl, 1); }	// cannot be bound to left click
-		else if (skill.name == "Twister") { 		phys_min = 0; phys_max = 0; damage_bonus = 100; damage_min = character.updateSkill(skill, lvl, 0); damage_max = character.updateSkill(skill, lvl, 1); }
-		else if (skill.name == "Volcano") { 		phys_min = 0; phys_max = 0; damage_bonus = 100; damage_min = character.updateSkill(skill, lvl, 0); damage_max = character.updateSkill(skill, lvl, 1); fDamage_min = character.updateSkill(skill, lvl, 2); fDamage_max = character.updateSkill(skill, lvl, 3); }	// cannot be bound to left click
-		else if (skill.name == "Tornado") { 		phys_min = 0; phys_max = 0; damage_bonus = 100; damage_min = character.updateSkill(skill, lvl, 0); damage_max = character.updateSkill(skill, lvl, 1); }
-		else if (skill.name == "Armageddon") {		phys_min = 0; phys_max = 0; damage_bonus = 100; damage_min = character.updateSkill(skill, lvl, 1); damage_max = character.updateSkill(skill, lvl, 2); fDamage_min = character.updateSkill(skill, lvl, 3); fDamage_max = character.updateSkill(skill, lvl, 4); }
-		else if (skill.name == "Hurricane") {		cDamage_min = character.updateSkill(skill, lvl, 1); cDamage_max = character.updateSkill(skill, lvl, 2); }
-	//	else if (skill.name == "Cyclone Armor") { 	spell = 2; }	// cannot be bound to left click
+		if (skill.name == "Firestorm") { 		attack = 0; spell = 1; fDamage_min = character.updateSkill(skill, lvl, 1); fDamage_max = character.updateSkill(skill, lvl, 2); }
+		else if (skill.name == "Molten Boulder") { 	attack = 0; spell = 1; damage_bonus = 100; damage_min = character.updateSkill(skill, lvl, 0); damage_max = character.updateSkill(skill, lvl, 1); fDamage_min = character.updateSkill(skill, lvl, 2); fDamage_max = character.updateSkill(skill, lvl, 3); }
+		else if (skill.name == "Flame Dash") { 		attack = 0; spell = 1; fDamage_min = character.updateSkill(skill, lvl, 1); fDamage_max = character.updateSkill(skill, lvl, 2); }	// cannot be bound to left click
+		else if (skill.name == "Arctic Blast") { 	attack = 0; spell = 1; cDamage_min = character.updateSkill(skill, lvl, 0); cDamage_max = character.updateSkill(skill, lvl, 1); }
+		else if (skill.name == "Fissure") { 		attack = 0; spell = 1; fDamage_min = character.updateSkill(skill, lvl, 0); fDamage_max = character.updateSkill(skill, lvl, 1); }	// cannot be bound to left click
+		else if (skill.name == "Twister") { 		attack = 0; spell = 1; damage_bonus = 100; damage_min = character.updateSkill(skill, lvl, 0); damage_max = character.updateSkill(skill, lvl, 1); }
+		else if (skill.name == "Volcano") { 		attack = 0; spell = 1; damage_bonus = 100; damage_min = character.updateSkill(skill, lvl, 0); damage_max = character.updateSkill(skill, lvl, 1); fDamage_min = character.updateSkill(skill, lvl, 2); fDamage_max = character.updateSkill(skill, lvl, 3); }	// cannot be bound to left click
+		else if (skill.name == "Tornado") { 		attack = 0; spell = 1; damage_bonus = 100; damage_min = character.updateSkill(skill, lvl, 0); damage_max = character.updateSkill(skill, lvl, 1); }
+		else if (skill.name == "Armageddon") {		attack = 0; spell = 1; damage_bonus = 100; damage_min = character.updateSkill(skill, lvl, 1); damage_max = character.updateSkill(skill, lvl, 2); fDamage_min = character.updateSkill(skill, lvl, 3); fDamage_max = character.updateSkill(skill, lvl, 4); }
+		else if (skill.name == "Hurricane") {		attack = 0; spell = 1; cDamage_min = character.updateSkill(skill, lvl, 1); cDamage_max = character.updateSkill(skill, lvl, 2); }
+	//	else if (skill.name == "Cyclone Armor") { 	}	// cannot be bound to left click
 		
-		else if (skill.name == "Feral Rage") {		ar_bonus = character.updateSkill(skill, lvl, 5); damage_bonus = 100+character.updateSkill(skill, lvl, 4); spell = 0; }
-		else if (skill.name == "Maul") { 		ar_bonus = character.updateSkill(skill, lvl, 3); damage_bonus = 100+character.updateSkill(skill, lvl, 2); spell = 0; }
-		else if (skill.name == "Rabies") { 		ar_bonus = character.updateSkill(skill, lvl, 0); pDamage_min = character.updateSkill(skill, lvl, 1); pDamage_max = character.updateSkill(skill, lvl, 2); pDamage_duration = 4; damage_bonus = 100; spell = 0; }
-		else if (skill.name == "Fire Claws") {		ar_bonus = character.updateSkill(skill, lvl, 2); fDamage_min = character.updateSkill(skill, lvl, 0); fDamage_max = character.updateSkill(skill, lvl, 1); damage_bonus = 100; spell = 0; }
-		else if (skill.name == "Hunger") { 		ar_bonus = character.updateSkill(skill, lvl, 2); damage_bonus = 25; spell = 0; }
-		else if (skill.name == "Shock Wave") {		damage_min = character.updateSkill(skill, lvl, 0); damage_max = character.updateSkill(skill, lvl, 1); damage_bonus = 25; spell = 0; }
-		else if (skill.name == "Fury") { 		ar_bonus = character.updateSkill(skill, lvl, 1); damage_bonus = 100+character.updateSkill(skill, lvl, 2); spell = 0; }
-	//	else if (skill.name == "Werewolf") {		spell = 2; }	// cannot be bound to left click
-	//	else if (skill.name == "Werebear") {		spell = 2; }	// cannot be bound to left click
+		else if (skill.name == "Feral Rage") {		attack = 1; spell = 0; ar_bonus = character.updateSkill(skill, lvl, 5); damage_bonus = 100+character.updateSkill(skill, lvl, 4); }
+		else if (skill.name == "Maul") { 		attack = 1; spell = 0; ar_bonus = character.updateSkill(skill, lvl, 3); damage_bonus = 100+character.updateSkill(skill, lvl, 2); }
+		else if (skill.name == "Rabies") { 		attack = 1; spell = 0; ar_bonus = character.updateSkill(skill, lvl, 0); pDamage_min = character.updateSkill(skill, lvl, 1); pDamage_max = character.updateSkill(skill, lvl, 2); pDamage_duration = 4; damage_bonus = 100; }
+		else if (skill.name == "Fire Claws") {		attack = 1; spell = 0; ar_bonus = character.updateSkill(skill, lvl, 2); fDamage_min = character.updateSkill(skill, lvl, 0); fDamage_max = character.updateSkill(skill, lvl, 1); damage_bonus = 100; }
+		else if (skill.name == "Hunger") { 		attack = 1; spell = 0; ar_bonus = character.updateSkill(skill, lvl, 2); damage_bonus = 25; }
+		else if (skill.name == "Shock Wave") {		attack = 1; spell = 0; damage_min = character.updateSkill(skill, lvl, 0); damage_max = character.updateSkill(skill, lvl, 1); damage_bonus = 25; }
+		else if (skill.name == "Fury") { 		attack = 1; spell = 0; ar_bonus = character.updateSkill(skill, lvl, 1); damage_bonus = 100+character.updateSkill(skill, lvl, 2); }
+	//	else if (skill.name == "Werewolf") {		}	// cannot be bound to left click
+	//	else if (skill.name == "Werebear") {		}	// cannot be bound to left click
 		// Lycanthropy - not bindable
 		
-		else if (skill.name == "Raven") { 		minion_min = character.updateSkill(skill, lvl, 1); minion_max = character.updateSkill(skill, lvl, 2); cDamage_min = character.updateSkill(skill, lvl, 3); cDamage_max = character.updateSkill(skill, lvl, 4); }	// cannot be bound to left click
-		else if (skill.name == "Poison Creeper") { 	pDamage_min = character.updateSkill(skill, lvl, 1); pDamage_max = character.updateSkill(skill, lvl, 2); pDamage_duration = 5; }	// cannot be bound to left click
-		else if (skill.name == "Summon Spirit Wolf") {	minion_min = character.updateSkill(skill, lvl, 2); minion_max = character.updateSkill(skill, lvl, 3); ar_bonus = character.updateSkill(skill, lvl, 4); }	// cannot be bound to left click
-		else if (skill.name == "Summon Dire Wolf") {	minion_min = character.updateSkill(skill, lvl, 4); minion_max = character.updateSkill(skill, lvl, 5); ar_bonus = character.updateSkill(skill, lvl, 1); }	// cannot be bound to left click
-		else if (skill.name == "Summon Grizzly") { 	minion_min = character.updateSkill(skill, lvl, 3); minion_max = character.updateSkill(skill, lvl, 4); ar_bonus = character.updateSkill(skill, lvl, 1); minion_bonus = character.updateSkill(skill, lvl, 5); }	// cannot be bound to left click
-	//	else if (skill.name == "Heart of Woverine") {	spell = 2; }	// cannot be bound to left click
-	//	else if (skill.name == "Carrion Vine") { 	spell = 2; }	// cannot be bound to left click
-	//	else if (skill.name == "Oak Sage") { 		spell = 2; }	// cannot be bound to left click
-	//	else if (skill.name == "Solar Creeper") { 	spell = 2; }	// cannot be bound to left click
-	//	else if (skill.name == "Spirit of Barbs") { 	spell = 2; }	// cannot be bound to left click
-		else { spell = 2; }
+		else if (skill.name == "Raven") { 		attack = 0; spell = 1; damage_min = character.updateSkill(skill, lvl, 1); damage_max = character.updateSkill(skill, lvl, 2); cDamage_min = character.updateSkill(skill, lvl, 3); cDamage_max = character.updateSkill(skill, lvl, 4); }	// cannot be bound to left click
+		else if (skill.name == "Poison Creeper") { 	attack = 0; spell = 1; pDamage_min = character.updateSkill(skill, lvl, 1); pDamage_max = character.updateSkill(skill, lvl, 2); pDamage_duration = 5; }	// cannot be bound to left click
+		else if (skill.name == "Summon Spirit Wolf") {	attack = 0; spell = 1; damage_min = character.updateSkill(skill, lvl, 2); damage_max = character.updateSkill(skill, lvl, 3); ar_bonus = character.updateSkill(skill, lvl, 4); }	// cannot be bound to left click
+		else if (skill.name == "Summon Dire Wolf") {	attack = 0; spell = 1; damage_min = character.updateSkill(skill, lvl, 4); damage_max = character.updateSkill(skill, lvl, 5); ar_bonus = character.updateSkill(skill, lvl, 1); }	// cannot be bound to left click
+		else if (skill.name == "Summon Grizzly") { 	attack = 0; spell = 1; damage_min = character.updateSkill(skill, lvl, 3); damage_max = character.updateSkill(skill, lvl, 4); ar_bonus = character.updateSkill(skill, lvl, 1); damage_bonus = character.updateSkill(skill, lvl, 5); }	// cannot be bound to left click
+	//	else if (skill.name == "Heart of Woverine") {	}	// cannot be bound to left click
+	//	else if (skill.name == "Carrion Vine") { 	}	// cannot be bound to left click
+	//	else if (skill.name == "Oak Sage") { 		}	// cannot be bound to left click
+	//	else if (skill.name == "Solar Creeper") { 	}	// cannot be bound to left click
+	//	else if (skill.name == "Spirit of Barbs") { 	}	// cannot be bound to left click
+		else { attack = 0; spell = 2; }
 
 	//	if (typeof(skill.reqWeapon) != 'undefined') { var match = 0; for (let w = 0; w < skill.reqWeapon.length; w++) {
 	//		if (equipped.weapon.type == skill.reqWeapon[w]) { match = 1 }
 	//	} if (match == 0) { spell = 2 } }
-		
-		if (minion_min > 0 || skill.name == "Poison Creeper") { phys_min = 0; phys_max = 0; ele_min = 0; ele_max = 0; mag_min = 0; mag_max = 0; }
-		
-		// disable spells until issues are fixed
-		if (spell == 1) { spell = 2; }
-		
-		if (already_calculated == 1) {
+
+		if (attack == 0) {
+			ele_min = Math.floor(fDamage_min + cDamage_min + lDamage_min);
+			ele_max = Math.floor(fDamage_max + cDamage_max + lDamage_max + pDamage_max);
+			phys_min = Math.floor(damage_min);
+			phys_max = Math.floor(damage_max);
+		} else {
 			ele_min += Math.floor(fDamage_min + cDamage_min + lDamage_min);
 			ele_max += Math.floor(fDamage_max + cDamage_max + lDamage_max + pDamage_max);
-			phys_min = Math.floor(phys_min + damage_min);
-			phys_max = Math.floor(phys_max + damage_max);
-		} else {
-			ele_min += Math.floor(wisp*(fDamage_min*(1+(character.fDamage+character.fDamage_skillup)/100) + cDamage_min*(1+(character.cDamage+character.cDamage_skillup)/100) + lDamage_min*(1+(character.lDamage+character.lDamage_skillup)/100)));
-			ele_max += Math.floor(wisp*(fDamage_max*(1+(character.fDamage+character.fDamage_skillup)/100) + cDamage_max*(1+(character.cDamage+character.cDamage_skillup)/100) + lDamage_max*(1+(character.lDamage+character.lDamage_skillup)/100) + pDamage_max*(1+character.pDamage/100)));
-			phys_min = Math.floor((phys_min*damage_bonus/100) + (wisp*damage_min*damage_bonus/100));
-			phys_max = Math.floor((phys_max*damage_bonus/100) + (wisp*damage_max*damage_bonus/100));
+			phys_min = Math.floor((phys_min + damage_min) * damage_bonus/100);
+			phys_max = Math.floor((phys_max + damage_max) * damage_bonus/100);
 		}
-		
-		var min_min = minion_min*(1+minion_bonus/100);
-		var min_max = minion_max*(1+minion_bonus/100);
-
-		if (spell == 0) {
-			skillMin = Math.floor(mag_min+mDamage_min+ele_min+phys_min+min_min); skillMax = Math.floor(mag_max+mDamage_max+ele_max+phys_max+min_max); skillAr = Math.floor(ar*(1+ar_bonus/100));
+		if (spell == 0) {		// uses attack rating
+			skillMin = Math.floor(mag_min+mDamage_min+ele_min+phys_min); skillMax = Math.floor(mag_max+mDamage_max+ele_max+phys_max); skillAr = Math.floor(ar*(1+ar_bonus/100));
 		} else if (spell == 1) {	// no attack rating
-			skillMin = Math.floor(mag_min+mDamage_min+ele_min+phys_min+min_min); skillMax = Math.floor(mag_max+mDamage_max+ele_max+phys_max+min_max); skillAr = "";
+			skillMin = Math.floor(mag_min+mDamage_min+ele_min+phys_min); skillMax = Math.floor(mag_max+mDamage_max+ele_max+phys_max); skillAr = "";
 		} else if (spell == 2) {	// not damaging
 			skillMin = ""; skillMax = ""; skillAr = "";
 		}
+
 		var output = ": " + skillMin + " - " + skillMax;
 		if (num == 1) {
 			if (output != ": 0 - 0" && output != ":  - ") { document.getElementById("skill1_info").innerHTML = output } else { document.getElementById("skill1_info").innerHTML = ":" }
