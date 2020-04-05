@@ -153,6 +153,7 @@ var character_druid = {class_name:"Druid", strength:15, dexterity:20, vitality:2
 	//	if (typeof(skill.reqWeapon) != 'undefined') { var match = 0; for (let w = 0; w < skill.reqWeapon.length; w++) {
 	//		if (equipped.weapon.type == skill.reqWeapon[w]) { match = 1 }
 	//	} if (match == 0) { spell = 2 } }
+	//	TODO: check werewolf/werebear form instead of weapon types
 
 		if (attack == 0) {
 			ele_min = Math.floor(fDamage_min + cDamage_min + lDamage_min);

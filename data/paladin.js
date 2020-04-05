@@ -176,7 +176,20 @@ var character_paladin = {class_name:"Paladin", strength:25, dexterity:20, vitali
 		var skillMin = ""; var skillMax = ""; var skillAr = "";
 		var attack = 1;	// 0 = no basic damage, 1 = includes basic attack damage, 2 = includes basic throw damage
 		var spell = 1;	// 0 = uses attack rating, 1 = no attack rating, 2 = non-damaging
+		var smite_min = 0; var smite_max = 0;
 		
+		if (skill.name == "Sacrifice") {		attack = 1; spell = 0; ar_bonus = character.updateSkill(skill, lvl, 0); damage_bonus = 150+character.updateSkill(skill, lvl, 1); }
+		else if (skill.name == "Smite") {		attack = 1; spell = 1; ele_min = 0; ele_max = 0; damage_bonus = 100+character.updateSkill(skill, lvl, 0); smite_min = ~~character.updateSkill(skills[28], skills[28].level, 0) + equipped.offhand.smite_min; smite_max = ~~character.updateSkill(skills[28], skills[28].level, 1) + equipped.offhand.smite_max; }
+		else if (skill.name == "Holy Bolt") {		attack = 0; spell = 1; mDamage_min = character.updateSkill(skill, lvl, 0); mDamage_max = character.updateSkill(skill, lvl, 1); }
+		else if (skill.name == "Zeal") {		attack = 1; spell = 0; ar_bonus = character.updateSkill(skill, lvl, 0); damage_bonus = 100+character.updateSkill(skill, lvl, 1); }
+		else if (skill.name == "Charge") {		attack = 1; spell = 0; ar_bonus = character.updateSkill(skill, lvl, 1); damage_bonus = 100+character.updateSkill(skill, lvl, 0); }
+		else if (skill.name == "Vengeance") {		attack = 1; spell = 0; fDamage_min = character.updateSkill(skill, lvl, 2); fDamage_max = character.updateSkill(skill, lvl, 3); cDamage_min = character.updateSkill(skill, lvl, 4); cDamage_max = character.updateSkill(skill, lvl, 5); lDamage_min = character.updateSkill(skill, lvl, 6); lDamage_max = character.updateSkill(skill, lvl, 7); ar_bonus = character.updateSkill(skill, lvl, 11); }
+		else if (skill.name == "Blessed Hammer") {	attack = 0; spell = 1; mDamage_min = character.updateSkill(skill, lvl, 0); mDamage_max = character.updateSkill(skill, lvl, 1); }
+		else if (skill.name == "Fist of the Heavens") {	attack = 0; spell = 1; mDamage_min = character.updateSkill(skill, lvl, 0); mDamage_max = character.updateSkill(skill, lvl, 1); lDamage_min = character.updateSkill(skill, lvl, 2); lDamage_max = character.updateSkill(skill, lvl, 3); }
+		else if (skill.name == "Dashing Strike") {	attack = 1; spell = 1; mDamage_min = character.updateSkill(skill, lvl, 1); mDamage_max = character.updateSkill(skill, lvl, 2); }
+		else if (skill.name == "Conversion") {		attack = 1; spell = 0; }
+	//	else if (skill.name == "Holy Shield") {		}	// cannot be bound to left click
+	
 	//	else if (skill.name == "Prayer") {		}	// cannot be bound to left click
 	//	else if (skill.name == "Resist Fire") {		}	// cannot be bound to left click
 	//	else if (skill.name == "Defiance") {		}	// cannot be bound to left click
@@ -198,18 +211,6 @@ var character_paladin = {class_name:"Paladin", strength:25, dexterity:20, vitali
 	//	else if (skill.name == "Sanctuary") {		}	// cannot be bound to left click
 	//	else if (skill.name == "Fanaticism") {		}	// cannot be bound to left click
 	//	else if (skill.name == "Conviction") {		}	// cannot be bound to left click
-		
-		if (skill.name == "Sacrifice") {		attack = 1; spell = 0; ar_bonus = character.updateSkill(skill, lvl, 0); damage_bonus = 150+character.updateSkill(skill, lvl, 1); }
-		else if (skill.name == "Smite") {		attack = 1; spell = 1; damage_bonus = 100+character.updateSkill(skill, lvl, 0); }
-		else if (skill.name == "Holy Bolt") {		attack = 0; spell = 1; mDamage_min = character.updateSkill(skill, lvl, 0); mDamage_max = character.updateSkill(skill, lvl, 1); }
-		else if (skill.name == "Zeal") {		attack = 1; spell = 0; ar_bonus = character.updateSkill(skill, lvl, 0); damage_bonus = 100+character.updateSkill(skill, lvl, 1); }
-		else if (skill.name == "Charge") {		attack = 1; spell = 0; ar_bonus = character.updateSkill(skill, lvl, 1); damage_bonus = 100+character.updateSkill(skill, lvl, 0); }
-		else if (skill.name == "Vengeance") {		attack = 1; spell = 0; fDamage_min = character.updateSkill(skill, lvl, 2); fDamage_max = character.updateSkill(skill, lvl, 3); cDamage_min = character.updateSkill(skill, lvl, 4); cDamage_max = character.updateSkill(skill, lvl, 5); lDamage_min = character.updateSkill(skill, lvl, 6); lDamage_max = character.updateSkill(skill, lvl, 7); ar_bonus = character.updateSkill(skill, lvl, 11); }
-		else if (skill.name == "Blessed Hammer") {	attack = 0; spell = 1; mDamage_min = character.updateSkill(skill, lvl, 0); mDamage_max = character.updateSkill(skill, lvl, 1); }
-		else if (skill.name == "Fist of the Heavens") {	attack = 0; spell = 1; mDamage_min = character.updateSkill(skill, lvl, 0); mDamage_max = character.updateSkill(skill, lvl, 1); lDamage_min = character.updateSkill(skill, lvl, 2); lDamage_max = character.updateSkill(skill, lvl, 3); }
-		else if (skill.name == "Dashing Strike") {	attack = 1; spell = 1; mDamage_min = character.updateSkill(skill, lvl, 1); mDamage_max = character.updateSkill(skill, lvl, 2); }
-	//	else if (skill.name == "Conversion") {		spell = 2; }
-	//	else if (skill.name == "Holy Shield") {		}	// cannot be bound to left click
 		else { attack = 0; spell = 2; }
 
 		if (typeof(skill.reqWeapon) != 'undefined') { var match = 0; for (let w = 0; w < skill.reqWeapon.length; w++) {
@@ -225,8 +226,8 @@ var character_paladin = {class_name:"Paladin", strength:25, dexterity:20, vitali
 		} else {
 			ele_min += Math.floor(fDamage_min + cDamage_min + lDamage_min);
 			ele_max += Math.floor(fDamage_max + cDamage_max + lDamage_max + pDamage_max);
-			phys_min = Math.floor((phys_min + damage_min) * damage_bonus/100);
-			phys_max = Math.floor((phys_max + damage_max) * damage_bonus/100);
+			phys_min = Math.floor((phys_min + damage_min + smite_min) * damage_bonus/100);
+			phys_max = Math.floor((phys_max + damage_max + smite_max) * damage_bonus/100);
 		}
 		if (spell == 0) {		// uses attack rating
 			skillMin = Math.floor(mag_min+mDamage_min+ele_min+phys_min); skillMax = Math.floor(mag_max+mDamage_max+ele_max+phys_max); skillAr = Math.floor(ar*(1+ar_bonus/100));

@@ -108,19 +108,19 @@ var character_assassin = {class_name:"Assassin", strength:20, dexterity:20, vita
 		var kick_damage_min = 0; var kick_damage_max = 0; var kick_bonus = 0;
 
 		if (skill.name == "Dual Strike") { 		attack = 1; spell = 0; damage_bonus = 110+character.updateSkill(skill, lvl, 0); ar_bonus = character.updateSkill(skill, lvl, 1); }
-		else if (skill.name == "Fists of Ember") { 	attack = 1; spell = 0; ar_bonus = character.updateSkill(skill, lvl, 2); damage_min = 1; damage_max = 1; damage_bonus = 100; }
-		else if (skill.name == "Fists of Thunder") {	attack = 1; spell = 0; ar_bonus = character.updateSkill(skill, lvl, 3); damage_min = 1; damage_max = 1; damage_bonus = 100; }
-		else if (skill.name == "Fists of Ice") { 	attack = 1; spell = 0; ar_bonus = character.updateSkill(skill, lvl, 3); damage_min = 1; damage_max = 1; damage_bonus = 100; }
-		else if (skill.name == "Static Strike") {	attack = 1; spell = 0; lDamage_min = 0.8*phys_min+character.updateSkill(skill, lvl, 0); lDamage_max = 0.8*phys_max+character.updateSkill(skill, lvl, 1); damage_bonus = 0; }
+		else if (skill.name == "Fists of Ember") { 	attack = 1; spell = 0; ar_bonus = character.updateSkill(skill, lvl, 2); damage_min = 1; damage_max = 1; }
+		else if (skill.name == "Fists of Thunder") {	attack = 1; spell = 0; ar_bonus = character.updateSkill(skill, lvl, 3); damage_min = 1; damage_max = 1; }
+		else if (skill.name == "Fists of Ice") { 	attack = 1; spell = 0; ar_bonus = character.updateSkill(skill, lvl, 3); damage_min = 1; damage_max = 1; }
+		else if (skill.name == "Static Strike") {	attack = 1; spell = 0; damage_bonus = 0; lDamage_min = 0.8*phys_min+character.updateSkill(skill, lvl, 0); lDamage_max = 0.8*phys_max+character.updateSkill(skill, lvl, 1); }
 		else if (skill.name == "Dragon Talon") {	attack = 1; spell = 0; kick_damage_min = character.updateSkill(skill, lvl, 0); kick_damage_max = character.updateSkill(skill, lvl, 1); ar_bonus = character.updateSkill(skill, lvl, 2); kick_bonus = character.updateSkill(skill, lvl, 3); damage_bonus = 100+character.updateSkill(skill, lvl, 4); }
-		else if (skill.name == "Emberstorm") {		attack = 1; spell = 1; fDamage_min = character.updateSkill(skill, lvl, 0); fDamage_max = character.updateSkill(skill, lvl, 1); damage_bonus = 100; }	// separated
-		else if (skill.name == "Dragon Flight") { 	attack = 1; spell = 0; kick_damage_min = character.updateSkill(skill, lvl, 0); kick_damage_max = character.updateSkill(skill, lvl, 1); kick_bonus = character.updateSkill(skill, lvl, 3); ar_bonus = character.updateSkill(skill, lvl, 4); damage_bonus = 100; }
+		else if (skill.name == "Emberstorm") {		attack = 1; spell = 1; fDamage_min = character.updateSkill(skill, lvl, 0); fDamage_max = character.updateSkill(skill, lvl, 1); }	// separated
+		else if (skill.name == "Dragon Flight") { 	attack = 1; spell = 0; kick_damage_min = character.updateSkill(skill, lvl, 0); kick_damage_max = character.updateSkill(skill, lvl, 1); kick_bonus = character.updateSkill(skill, lvl, 3); ar_bonus = character.updateSkill(skill, lvl, 4); }
 		else if (skill.name == "Blades of Ice") {	attack = 1; spell = 0; cDamage_min = 0.5*0.6*phys_min+character.updateSkill(skill, lvl, 1); cDamage_max = 0.5*0.6*phys_max+character.updateSkill(skill, lvl, 2); ar_bonus = character.updateSkill(skill, lvl, 0); damage_bonus = 0.4*50; }
 
 		else if (skill.name == "Psychic Hammer") {	attack = 0; spell = 1; damage_min = character.updateSkill(skill, lvl, 0); damage_max = character.updateSkill(skill, lvl, 1); mDamage_min = character.updateSkill(skill, lvl, 2); mDamage_max = character.updateSkill(skill, lvl, 3); }
 		else if (skill.name == "Mind Blast") {		attack = 0; spell = 1; damage_min = character.updateSkill(skill, lvl, 0); damage_max = character.updateSkill(skill, lvl, 1); }	// cannot be bound to left click
-	//	else if (skill.name == "Shadow Warrior") {	spell = 2; }	// cannot be bound to left click
-	//	else if (skill.name == "Shadow Master") {	spell = 2; }	// cannot be bound to left click
+	//	else if (skill.name == "Shadow Warrior") {	attack = 0; spell = 2; }	// cannot be bound to left click
+	//	else if (skill.name == "Shadow Master") {	attack = 0; spell = 2; }	// cannot be bound to left click
 	//	else if (skill.name == "Burst of Speed") {	}	// cannot be bound to left click
 	//	else if (skill.name == "Cloak of Shadows") {	}	// cannot be bound to left click
 	//	else if (skill.name == "Fade") {		}	// cannot be bound to left click

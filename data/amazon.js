@@ -66,15 +66,15 @@ var character_amazon = {class_name:"Amazon", strength:20, dexterity:25, vitality
 		else if (skill.name == "Poison Javelin") {	attack = 2; spell = 0; pDamage_min = character.updateSkill(skill, lvl, 0); pDamage_max = character.updateSkill(skill, lvl, 1); pDamage_duration = 5; }	// [JAVELIN ONLY]	throw damage, separate: 33-49 poison (green)
 		else if (skill.name == "Fend") { 		attack = 1; spell = 0; ar_bonus = character.updateSkill(skill, lvl, 0); damage_bonus = 125+character.updateSkill(skill, lvl, 1); }	// non-throw
 		else if (skill.name == "Lightning Bolt") {	attack = 2; spell = 1; lDamage_min = phys_min+character.updateSkill(skill, lvl, 0); lDamage_max = phys_max+character.updateSkill(skill, lvl, 1); }	// [JAVELIN ONLY]	throw damage + 1-49 lightning (yellow)
-		else if (skill.name == "Charged Strike") {	attack = 1; spell = 1; lDamage_min = character.updateSkill(skill, lvl, 1); lDamage_max = character.updateSkill(skill, lvl, 2); spell = 1; }	// regular (non-throw), separate: 1-42 lightning (yellow)
+		else if (skill.name == "Charged Strike") {	attack = 1; spell = 1; lDamage_min = character.updateSkill(skill, lvl, 1); lDamage_max = character.updateSkill(skill, lvl, 2); }	// regular (non-throw), separate: 1-42 lightning (yellow)
 		else if (skill.name == "Plague Javelin") {	attack = 2; spell = 0; ar_bonus = character.updateSkill(skill, lvl, 0); pDamage_min = character.updateSkill(skill, lvl, 1); pDamage_max = character.updateSkill(skill, lvl, 2); pDamage_duration = 5; }	// [JAVELIN ONLY]	throw damage, separate: 47-76 poison (green)
 		else if (skill.name == "Ground Slam") { 	attack = 1; spell = 1; damage_bonus = 85; }
 		else if (skill.name == "Lightning Strike") {	attack = 1; spell = 1; lDamage_min = character.updateSkill(skill, lvl, 1); lDamage_max = character.updateSkill(skill, lvl, 2); }	// non-throw, separate: 1-32 lightning (yellow)
 		else if (skill.name == "Lightning Fury") {	attack = 2; spell = 1; lDamage_min = character.updateSkill(skill, lvl, 1); lDamage_max = character.updateSkill(skill, lvl, 2); }	// [JAVELIN ONLY]	throw damage, separate: 1-42 lightning (yellow)
 		
-		// else if (skill.name == "Phase Run") {	spell = 2; }	// 0-1 damage?
-		// else if (skill.name == "Decoy") {		spell = 2; }
-		// else if (skill.name == "Valkyrie") {		spell = 2; }
+		// else if (skill.name == "Phase Run") {	attack = 0; spell = 2; damage_max = 1; }	// 0-1 damage?
+		// else if (skill.name == "Decoy") {		attack = 0; spell = 2; }
+		// else if (skill.name == "Valkyrie") {		attack = 0; spell = 2; }
 		
 		else if (skill.name == "Cold Arrow") {		attack = 1; spell = 0; cDamage_min = character.updateSkill(skill, lvl, 1); cDamage_max = character.updateSkill(skill, lvl, 2); }	// regular + 2-3 cold (blue)	...lvl 1 = +6% ar
 		else if (skill.name == "Magic Arrow") {		attack = 1; spell = 0; mDamage_min = character.updateSkill(skill, lvl, 1); mDamage_max = character.updateSkill(skill, lvl, 2); }	// regular + 1-2 (blue... but should be colored differently for magic damage)	...lvl 1 = +6% ar

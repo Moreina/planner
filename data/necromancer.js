@@ -92,7 +92,6 @@ var character_necromancer = {class_name:"Necromancer", strength:15, dexterity:25
 		var skillMin = ""; var skillMax = ""; var skillAr = "";
 		var attack = 1;	// 0 = no basic damage, 1 = includes basic attack damage, 2 = includes basic throw damage
 		var spell = 1;	// 0 = uses attack rating, 1 = no attack rating, 2 = non-damaging
-		var minion_min = 0; var minion_max = 0; var minion_bonus = 0;
 		
 		if (skill.name == "Raise Skeleton Warrior") {	attack = 0; spell = 1; damage_min = character.updateSkill(skill, lvl, 0); damage_max = character.updateSkill(skill, lvl, 1); }	// cannot be bound to left click
 		else if (skill.name == "Clay Golem") {		attack = 0; spell = 1; damage_min = character.updateSkill(skill, lvl, 0); damage_max = character.updateSkill(skill, lvl, 1); }	// cannot be bound to left click
@@ -100,7 +99,7 @@ var character_necromancer = {class_name:"Necromancer", strength:15, dexterity:25
 		else if (skill.name == "Blood Golem") {		attack = 0; spell = 1; damage_min = character.updateSkill(skill, lvl, 0); damage_max = character.updateSkill(skill, lvl, 1); }	// cannot be bound to left click
 		else if (skill.name == "Iron Golem") {		attack = 0; spell = 1; damage_min = character.updateSkill(skill, lvl, 0); damage_max = character.updateSkill(skill, lvl, 1); }	// cannot be bound to left click
 		else if (skill.name == "Fire Golem") {		attack = 0; spell = 1; damage_min = character.updateSkill(skill, lvl, 0); damage_max = character.updateSkill(skill, lvl, 1); }	// cannot be bound to left click
-	//	else if (skill.name == "Revive") {		spell = 2; }	// cannot be bound to left click
+	//	else if (skill.name == "Revive") {		attack = 0; spell = 2; }	// cannot be bound to left click
 	//	else if (skill.name == "Bone Offering") {	}
 	//	else if (skill.name == "Flesh Offering") {	}
 	//	else if (skill.name == "Convocation") {		}	// cannot be bound to left click
@@ -111,7 +110,7 @@ var character_necromancer = {class_name:"Necromancer", strength:15, dexterity:25
 		else if (skill.name == "Bone Spear") {		attack = 0; spell = 1; mDamage_min = character.updateSkill(skill, lvl, 0); mDamage_max = character.updateSkill(skill, lvl, 1); }
 		else if (skill.name == "Bone Spirit") {		attack = 0; spell = 1; mDamage_min = character.updateSkill(skill, lvl, 0); mDamage_max = character.updateSkill(skill, lvl, 1); }
 		else if (skill.name == "Poison Nova") {		attack = 0; spell = 1; pDamage_min = character.updateSkill(skill, lvl, 0); pDamage_max = character.updateSkill(skill, lvl, 1); pDamage_duration = 2; }
-	//	else if (skill.name == "Corpse Explosion") {	spell = 2; }
+	//	else if (skill.name == "Corpse Explosion") {	attack = 0; spell = 2; }
 	//	else if (skill.name == "Deadly Poison") {	}	// cannot be bound to left click
 	//	else if (skill.name == "Bone Armor") {		}	// cannot be bound to left click
 	//	else if (skill.name == "Bone Wall") {		}	// cannot be bound to left click

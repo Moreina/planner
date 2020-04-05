@@ -118,7 +118,7 @@ var character_sorceress = {class_name:"Sorceress", strength:10, dexterity:25, vi
 		else if (skill.name == "Chain Lightning") {	attack = 0; spell = 1; lDamage_min = character.updateSkill(skill, lvl, 1); lDamage_max = character.updateSkill(skill, lvl, 2); }
 		else if (skill.name == "Discharge") {		attack = 0; spell = 1; lDamage_min = character.updateSkill(skill, lvl, 1); lDamage_max = character.updateSkill(skill, lvl, 2); }
 		else if (skill.name == "Thunder Storm") {	attack = 0; spell = 1; lDamage_min = character.updateSkill(skill, lvl, 2); lDamage_max = character.updateSkill(skill, lvl, 3); }	// cannot be bound to left click
-	//	else if (skill.name == "Static Field") {	spell = 2; }
+	//	else if (skill.name == "Static Field") {	attack = 0; spell = 2; }
 	//	else if (skill.name == "Teleport") {		}	// cannot be bound to left click
 	//	else if (skill.name == "Energy Shield") {	}	// cannot be bound to left click
 		// Lightning Mastery - not bindable
