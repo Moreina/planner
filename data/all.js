@@ -85,6 +85,8 @@ function loadItems(type, dropdown, className) {
 						choices += "<option class='dropdown-rare'>" + equipment[type][item].name + "</option>"
 					} else if (typeof(equipment[type][item].rarity) != 'undefined' && equipment[type][item].rarity == "crafted"){
 						choices += "<option class='dropdown-crafted'>" + equipment[type][item].name + "</option>"
+					} else if (typeof(equipment[type][item].rarity) != 'undefined' && equipment[type][item].rarity == "common"){
+						choices += "<option class='dropdown-common'>" + equipment[type][item].name + "</option>"
 					} else if (typeof(equipment[type][item].rw) != 'undefined'){
 						choices += "<option class='dropdown-runeword'>" + equipment[type][item].name + "</option>"
 					} else {

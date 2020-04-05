@@ -135,6 +135,11 @@
   color: orange;
   z-index: 6;
 }
+.dropdown-common {
+  background-color: #222;
+  color: white;
+  z-index: 6;
+}
 .dropdown-runeword {
   background-color: #222;
   color: #b2a992;

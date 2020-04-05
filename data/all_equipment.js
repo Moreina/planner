@@ -52,12 +52,12 @@ var non_items = [
 /*
 {i:11, name:"Mercenary: Inner Sight", aura:"Inner_Sight"},	//enemy_defense:0, 
 {i:12, name:"Mercenary: Blessed Aim", aura:"Blessed_Aim"},	//ar_bonus:0, blessed_hammer_on_hit:0, 
-{i:13, name:"Mercenary: Defiance", aura:"Defiance"},	//defense_bonus:0, 
-{i:14, name:"Mercenary: Prayer", aura:"Prayer"},	//life_regen:0, life_replenish:0, 
+{i:13, name:"Mercenary: Defiance", aura:"Defiance"},		//defense_bonus:0, 
+{i:14, name:"Mercenary: Prayer", aura:"Prayer"},		//life_regen:0, life_replenish:0, 
 {i:15, name:"Mercenary: Meditation", aura:"Meditation"},	//mana_regen:0, 
-{i:16, name:"Mercenary: Cleansing", aura:"Cleansing"},	//poison_length_reduced:0, curse_length_reduced:0, 
-{i:17, name:"Mercenary: Thorns", aura:"Thorns"},	//thorns_reflect:0, 
-{i:18, name:"Mercenary: Might", aura:"Might"},		//damage_bonus:0, 
+{i:16, name:"Mercenary: Cleansing", aura:"Cleansing"},		//poison_length_reduced:0, curse_length_reduced:0, 
+{i:17, name:"Mercenary: Thorns", aura:"Thorns"},		//thorns_reflect:0, 
+{i:18, name:"Mercenary: Might", aura:"Might"},			//damage_bonus:0, 
 */
 ];
 
@@ -643,6 +643,7 @@ var equipment = {
 {name:"Khalim's Flail", req_strength:41, req_dexterity:35, type:"mace", ias:50, ar:40, damage_vs_undead:50, damage_min:1, damage_max:15, lDamage_min:1, lDamage_max:20},
 {name:"Khalim's Will", type:"mace", ias:50, ar:40, life_leech:6, mana_leech:6, damage_vs_undead:50, damage_min:1, damage_max:15, lDamage_min:1, lDamage_max:40},
 {name:"Hellforge Hammer", type:"hammer", defense:35, fRes:40, damage_vs_undead:50, damage_min:6, damage_max:15, fDamage_min:5, fDamage_max:20},
+{rarity:"common", name:"Wirt's Leg", type:"mace", damage_vs_undead:50, damage_min:2, damage_max:8},
 
 {name:"Bane Ash", req_level:5, e_damage:60, damage_vs_undead:50, ias:20, mana:30, fRes:50, fDamage_min:4, fDamage_max:6, skill_Fire_Bolt:5, skill_Warmth:2, twoHanded:1, type:"staff", base:"Short Staff"},
 {name:"Serpent Lord", req_level:9, e_damage:40, damage_vs_undead:50, pDamage_all:12, pDamage_duration:3, mana_leech:100, target_defense:-50, mana:10, pRes:50, light_radius:-1, twoHanded:1, type:"staff", base:"Long Staff"},
@@ -654,7 +655,7 @@ var equipment = {
 {name:"Chromatic Ire", req_level:35, damage_vs_undead:50, fcr:20, skills_sorceress:3, max_life:25, all_res:40, thorns_lightning:20, skill_Cold_Mastery:1, skill_Lightning_Mastery:1, skill_Fire_Mastery:1, twoHanded:1, type:"staff", base:"Cedar Staff"},
 {name:"Warpspear", req_level:39, damage_vs_undead:50, itd:1, missile_defense:250, skills_sorceress:3, skill_Energy_Shield:3, skill_Telekinesis:3, skill_Teleport:3, twoHanded:1, type:"staff", base:"Gothic Staff"},
 {name:"Skull Collector", req_level:41, damage_vs_undead:50, mana_per_kill:20, max_mana:20, mf_per_level:1, all_skills:2, twoHanded:1, type:"staff", base:"Rune Staff"},
-//{name:"Ondal's Wisdom", req_level:66, damage_vs_undead:50, fcr:45, defense:550, energy:50, mDamage_reduced:8, all_skills:4, oskill_Ball_Lightning:20, type:"staff", twoHanded:1, base:"Elder Staff", pod_changes:1},	// OSKILL
+{name:"Ondal's Wisdom", req_level:66, damage_vs_undead:50, fcr:45, defense:550, energy:50, mDamage_reduced:8, all_skills:4, oskill_Ball_Lightning:20, type:"staff", twoHanded:1, base:"Elder Staff", pod_changes:1},	// OSKILL
 {name:"Mang Song's Lesson", req_level:82, all_skills:5, fcr:30, enemy_lRes:-15, enemy_cRes:-15, enemy_fRes:-15, mana_regen:10, damage_vs_undead:50, twoHanded:1, type:"staff", base:"Archon Staff"},
 
 {name:"Torch of Iro", req_level:5, damage_vs_undead:50, fDamage_min:5, fDamage_max:9, skills_necromancer:1, energy:10, mana_regen:5, life_leech:6, light_radius:3, type:"wand", base:"Wand"},
@@ -864,7 +865,7 @@ var equipment = {
 {name:"Leadcrow", req_level:9, e_damage:70, dstrike:25, ar:40, pRes:30, life:10, dexterity:10, twoHanded:1, type:"crossbow", base:"Light Crossbow"},
 {name:"Ichorsting", req_level:18, e_damage:50, pDamage_all:30, pDamage_duration:3, ias:20, pierce:50, ar:50, dexterity:20, twoHanded:1, type:"crossbow", base:"Crossbow"},
 {name:"Hellcast", req_level:27, e_damage:80, fDamage_min:15, fDamage_max:35, ias:20, ar:70, fRes_max:15, fRes:15, twoHanded:1, type:"crossbow", base:"Heavy Crossbow"},	// fires Explosive Bolts
-//{name:"Doomslinger", req_level:28, e_damage:100, pierce:35, life:15, oskill_Multiple_Shot:1, twoHanded:1, type:"crossbow", base:"Repeating Crossbow", pod_changes:1},		// OSKILL
+{name:"Doomslinger", req_level:28, e_damage:100, pierce:35, life:15, oskill_Multiple_Shot:1, twoHanded:1, type:"crossbow", base:"Repeating Crossbow", pod_changes:1},		// OSKILL
 {name:"Langer Briser", req_level:33, e_damage:200, damage_max:30, owounds:33, lDamage_min:1, lDamage_max:212, life:30, knockback:1, mf:60, twoHanded:1, type:"crossbow", base:"Arbalest"},
 {name:"Pus Spitter", req_level:36, e_damage:220, pDamage_all:150, pDamage_duration:3, req:-60, ar_per_level:5, ias:10, all_skills:1, twoHanded:1, type:"crossbow", base:"Siege Crossbow", pod_changes:1},	// 9% ctc level 6 Terror when struck, 4% ctc level 10 Lower Resist on striking
 {name:"Buriza-Do Kyanon", req_level:41, e_damage:200, max_damage_per_level:2.5, cDamage_min:32, cDamage_max:196, pierce:100, freezes_target:3, defense:150, dexterity:35, ias:80, twoHanded:1, type:"crossbow", base:"Ballista"},
@@ -977,14 +978,20 @@ var equipment = {
 {only:"sorceress", rarity:"magic", name:"+1 Chilling Grand Charm", type:"grand", req_level:42, skills_cold:1},
 {only:"sorceress", rarity:"magic", name:"+1 Sparking Grand Charm", type:"grand", req_level:42, skills_lightning:1},
 {only:"sorceress", rarity:"magic", name:"+1 Burning Grand Charm", type:"grand", req_level:42, skills_fire:1},
-{rarity:"magic", name:"Life,Mana Small Charm", type:"small", req_level:40, life:20, mana:17},
-{rarity:"magic", name:"Res,MF Small Charm", type:"small", req_level:33, all_res:5, mf:7},
-{rarity:"magic", name:"Res,FRW Small Charm", type:"small", req_level:33, all_res:5, frw:3},
-{rarity:"magic", name:"FHR,AR,Damage Small Charm", type:"small", req_level:39, fhr:5, ar:20, damage_max:3},
+{rarity:"magic", name:"Mana,Life Small Charm", type:"small", req_level:40, mana:17, life:20},			// Serpent's Small Charm of Vita
+{rarity:"magic", name:"Res,FRW Small Charm", type:"small", req_level:36, all_res:5, frw:3},			// Shimmering Small Charm of Inertia
+{rarity:"magic", name:"Res,MF Small Charm", type:"small", req_level:33, all_res:5, mf:7},			// Shimmering Small Charm of Good Luck
+{rarity:"magic", name:"Res,Life Small Charm", type:"small", req_level:39, all_res:5, life:20},			// Shimmering Small Charm of Vita
+{rarity:"magic", name:"F-Res,Life Small Charm", type:"small", req_level:39, fRes:11, life:20},			// Ruby Small Charm of Vita
+{rarity:"magic", name:"C-Res,Life Small Charm", type:"small", req_level:39, cRes:11, life:20},			// Sapphire Small Charm of Vita
+{rarity:"magic", name:"L-Res,Life Small Charm", type:"small", req_level:39, lRes:11, life:20},			// Amber Small Charm of Vita
+{rarity:"magic", name:"P-Res,Life Small Charm", type:"small", req_level:39, pRes:11, life:20},			// Emerald Small Charm of Vita
+{rarity:"magic", name:"AR,Damage,FHR Small Charm", type:"small", req_level:29, ar:20, damage_max:3, fhr:5},	// Fine Small Charm of Balance
+{rarity:"magic", name:"AR,Damage,FRW Small Charm", type:"small", req_level:36, ar:20, damage_max:3, frw:3},	// Fine Small Charm of Inertia
 {rarity:"magic", name:"Pestilent Small Charm of Anthrax", type:"small", req_level:80, pDamage_all:451, pDamage_duration:12},
-{rarity:"magic", name:"Life,AR,Damage Small Charm", type:"small", req_level:39, life:20, ar:20, damage_max:3},
-{rarity:"magic", name:"Life,AR,Damage Large Charm", type:"large", req_level:66, life:35, ar:48, damage_max:6},
-{rarity:"magic", name:"Life,AR,Damage Grand Charm", type:"grand", req_level:83, life:45, ar:76, damage_max:10},
+{rarity:"magic", name:"AR,Damage,Life Small Charm", type:"small", req_level:39, ar:20, damage_max:3, life:20},	// Fine Small Charm of Vita
+{rarity:"magic", name:"AR,Damage,Life Large Charm", type:"large", req_level:66, ar:48, damage_max:6, life:35},	// Sharp Large Charm of Vita
+{rarity:"magic", name:"AR,Damage,Life Grand Charm", type:"grand", req_level:83, ar:76, damage_max:10, life:45},	// Sharp Grand Charm of Vita
 //{debug:1, name:"+1 (each) skill", req_level:100,
 	/* amazon	*///	skill_Jab:1, skill_Power_Strike:1, skill_Poison_Javelin:1, skill_Fend:1, skill_Lightning_Bolt:1, skill_Charged_Strike:1, skill_Plague_Javelin:1, skill_Ground_Slam:1, skill_Lightning_Strike:1, skill_Lightning_Fury:1, skill_Inner_Sight:1, skill_Lethal_Strike:1, skill_Phase_Run:1, skill_Dodge:1, skill_Avoid:1, skill_Penetrate:1, skill_Evade:1, skill_Decoy:1, skill_Valkyrie:1, skill_Pierce:1, skill_Cold_Arrow:1, skill_Magic_Arrow:1, skill_Multiple_Shot:1, skill_Fire_Arrow:1, skill_Ice_Arrow:1, skill_Guided_Arrow:1, skill_Exploding_Arrow:1, skill_Strafe:1, skill_Immolation_Arrow:1, skill_Freezing_Arrow:1,
 	/* assassin	*///	skill_Dual_Strike:1, skill_Fists_of_Ember:1, skill_Fists_of_Thunder:1, skill_Fists_of_Ice:1, skill_Static_Strike:1, skill_Dragon_Talon:1, skill_Emberstorm:1, skill_Dragon_Flight:1, skill_Blades_of_Ice:1, skill_Claw_Mastery:1, skill_Psychic_Hammer:1, skill_Burst_of_Speed:1, skill_Mind_Barrier:1, skill_Weapon_Block:1, skill_Cloak_of_Shadows:1, skill_Fade:1, skill_Shadow_Warrior:1, skill_Mind_Blast:1, skill_Venom:1, skill_Shadow_Master:1, skill_Fire_Blast:1, skill_Shock_Web:1, skill_Blade_Throw:1, skill_Charged_Bolt_Sentry:1, skill_Wake_of_Fire:1, skill_Blade_Fury:1, skill_Lightning_Sentry:1, skill_Wake_of_Inferno:1, skill_Death_Sentry:1, skill_Blade_Shield:1, skill_Dragon_Tail:1,
