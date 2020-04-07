@@ -105,7 +105,7 @@ var character_assassin = {class_name:"Assassin", strength:20, dexterity:20, vita
 	// ---------------------------------
 	updateSelectedSkill : function(skill, num, ar, phys_min, phys_max, ele_min, ele_max, mag_min, mag_max, wisp) {
 		var lvl = skill.level+skill.extra_levels;
-		var ar_bonus = 0; var damage_bonus = 100;
+		var ar_bonus = 0; var damage_bonus = 0; var weapon_damage = 100;
 		var damage_min = 0; var damage_max = 0;
 		var fDamage_min = 0; var fDamage_max = 0;
 		var cDamage_min = 0; var cDamage_max = 0;
@@ -117,29 +117,29 @@ var character_assassin = {class_name:"Assassin", strength:20, dexterity:20, vita
 		var spell = 1;	// 0 = uses attack rating, 1 = no attack rating, 2 = non-damaging
 		var kick_damage_min = 0; var kick_damage_max = 0; var kick_bonus = 0;
 
-		if (skill.name == "Dual Strike") { 		attack = 1; spell = 0; damage_bonus = 110+character.getSkillData(skill, lvl, 0); ar_bonus = character.getSkillData(skill, lvl, 1); }
+		if (skill.name == "Dual Strike") { 		attack = 1; spell = 0; weapon_damage = 110; damage_bonus = character.getSkillData(skill, lvl, 0); ar_bonus = character.getSkillData(skill, lvl, 1); }
 		else if (skill.name == "Fists of Ember") { 	attack = 1; spell = 0; ar_bonus = character.getSkillData(skill, lvl, 2); damage_min = 1; damage_max = 1; }
 		else if (skill.name == "Fists of Thunder") {	attack = 1; spell = 0; ar_bonus = character.getSkillData(skill, lvl, 3); damage_min = 1; damage_max = 1; }
 		else if (skill.name == "Fists of Ice") { 	attack = 1; spell = 0; ar_bonus = character.getSkillData(skill, lvl, 3); damage_min = 1; damage_max = 1; }
-		else if (skill.name == "Static Strike") {	attack = 1; spell = 0; damage_bonus = 0; lDamage_min = 0.8*phys_min+character.getSkillData(skill, lvl, 0); lDamage_max = 0.8*phys_max+character.getSkillData(skill, lvl, 1); }
-		else if (skill.name == "Dragon Talon") {	attack = 1; spell = 0; kick_damage_min = character.getSkillData(skill, lvl, 0); kick_damage_max = character.getSkillData(skill, lvl, 1); ar_bonus = character.getSkillData(skill, lvl, 2); kick_bonus = character.getSkillData(skill, lvl, 3); damage_bonus = 100+character.getSkillData(skill, lvl, 4); }
+		else if (skill.name == "Static Strike") {	attack = 1; spell = 0; weapon_damage = 0; lDamage_min = 0.8*phys_min+character.getSkillData(skill, lvl, 0); lDamage_max = 0.8*phys_max+character.getSkillData(skill, lvl, 1); }
+		else if (skill.name == "Dragon Talon") {	attack = 1; spell = 0; kick_damage_min = character.getSkillData(skill, lvl, 0); kick_damage_max = character.getSkillData(skill, lvl, 1); ar_bonus = character.getSkillData(skill, lvl, 2); kick_bonus = character.getSkillData(skill, lvl, 3); damage_bonus = character.getSkillData(skill, lvl, 4); }
 		else if (skill.name == "Emberstorm") {		attack = 1; spell = 1; fDamage_min = character.getSkillData(skill, lvl, 0); fDamage_max = character.getSkillData(skill, lvl, 1); }	// separated
 		else if (skill.name == "Dragon Flight") { 	attack = 1; spell = 0; kick_damage_min = character.getSkillData(skill, lvl, 0); kick_damage_max = character.getSkillData(skill, lvl, 1); kick_bonus = character.getSkillData(skill, lvl, 3); ar_bonus = character.getSkillData(skill, lvl, 4); }
-		else if (skill.name == "Blades of Ice") {	attack = 1; spell = 0; cDamage_min = 0.5*0.6*phys_min+character.getSkillData(skill, lvl, 1); cDamage_max = 0.5*0.6*phys_max+character.getSkillData(skill, lvl, 2); ar_bonus = character.getSkillData(skill, lvl, 0); damage_bonus = 0.4*50; }
+		else if (skill.name == "Blades of Ice") {	attack = 1; spell = 0; weapon_damage = 0.4*50; cDamage_min = 0.5*0.6*phys_min+character.getSkillData(skill, lvl, 1); cDamage_max = 0.5*0.6*phys_max+character.getSkillData(skill, lvl, 2); ar_bonus = character.getSkillData(skill, lvl, 0); }
 		else if (skill.name == "Psychic Hammer") {	attack = 0; spell = 1; damage_min = character.getSkillData(skill, lvl, 0); damage_max = character.getSkillData(skill, lvl, 1); mDamage_min = character.getSkillData(skill, lvl, 2); mDamage_max = character.getSkillData(skill, lvl, 3); }
 		else if (skill.name == "Mind Blast") {		attack = 0; spell = 1; damage_min = character.getSkillData(skill, lvl, 0); damage_max = character.getSkillData(skill, lvl, 1); }
 	//	else if (skill.name == "Shadow Warrior") {	attack = 0; spell = 2; }
 	//	else if (skill.name == "Shadow Master") {	attack = 0; spell = 2; }
 		else if (skill.name == "Fire Blast") {		attack = 0; spell = 1; fDamage_min = character.getSkillData(skill, lvl, 0); fDamage_max = character.getSkillData(skill, lvl, 1); }
 		else if (skill.name == "Shock Web") {		attack = 0; spell = 1; lDamage_min = character.getSkillData(skill, lvl, 1); lDamage_max = character.getSkillData(skill, lvl, 2); }
-		else if (skill.name == "Blade Throw") {		attack = 1; spell = 0; ar_bonus = character.getSkillData(skill, lvl, 0); damage_min = character.getSkillData(skill, lvl, 1); damage_max = character.getSkillData(skill, lvl, 2); }
+		else if (skill.name == "Blade Throw") {		attack = 1; spell = 0; weapon_damage = 50; ar_bonus = character.getSkillData(skill, lvl, 0); damage_min = character.getSkillData(skill, lvl, 1); damage_max = character.getSkillData(skill, lvl, 2); }
 		else if (skill.name == "Charged Bolt Sentry") {	attack = 0; spell = 1; lDamage_min = character.getSkillData(skill, lvl, 2); lDamage_max = character.getSkillData(skill, lvl, 3); }
 		else if (skill.name == "Wake of Fire") {	attack = 0; spell = 1; fDamage_min = character.getSkillData(skill, lvl, 0); fDamage_max = character.getSkillData(skill, lvl, 1); }
-		else if (skill.name == "Blade Fury") {		attack = 1; spell = 0; ar_bonus = character.getSkillData(skill, lvl, 0); damage_min = character.getSkillData(skill, lvl, 1); damage_max = character.getSkillData(skill, lvl, 2); }
+		else if (skill.name == "Blade Fury") {		attack = 1; spell = 0; weapon_damage = 87; ar_bonus = character.getSkillData(skill, lvl, 0); damage_min = character.getSkillData(skill, lvl, 1); damage_max = character.getSkillData(skill, lvl, 2); }
 		else if (skill.name == "Lightning Sentry") {	attack = 0; spell = 1; lDamage_min = character.getSkillData(skill, lvl, 0); lDamage_max = character.getSkillData(skill, lvl, 1); }
 		else if (skill.name == "Wake of Inferno") {	attack = 0; spell = 1; fDamage_min = character.getSkillData(skill, lvl, 1); fDamage_max = character.getSkillData(skill, lvl, 2); }
 		else if (skill.name == "Death Sentry") {	attack = 0; spell = 1; lDamage_min = character.getSkillData(skill, lvl, 1); lDamage_max = character.getSkillData(skill, lvl, 2); }
-		else if (skill.name == "Blade Shield") {	attack = 1; spell = 0; damage_min = character.getSkillData(skill, lvl, 2); damage_max = character.getSkillData(skill, lvl, 3); ar_bonus = character.getSkillData(skill, lvl, 4); }
+		else if (skill.name == "Blade Shield") {	attack = 1; spell = 0; weapon_damage = 50; damage_min = character.getSkillData(skill, lvl, 2); damage_max = character.getSkillData(skill, lvl, 3); ar_bonus = character.getSkillData(skill, lvl, 4); }
 		else { attack = 0; spell = 2; }
 
 		if (typeof(skill.reqWeapon) != 'undefined') { var match = 0; for (let w = 0; w < skill.reqWeapon.length; w++) {
@@ -155,8 +155,8 @@ var character_assassin = {class_name:"Assassin", strength:20, dexterity:20, vita
 		if (attack == 0) { phys_min = 0; phys_max = 0; ele_min = 0; ele_max = 0; mag_min = 0; mag_max = 0; }
 		ele_min += Math.floor(fDamage_min + cDamage_min + lDamage_min);
 		ele_max += Math.floor(fDamage_max + cDamage_max + lDamage_max + pDamage_max);
-		phys_min = Math.floor((phys_min + damage_min) * damage_bonus/100 + kick_min);
-		phys_max = Math.floor((phys_max + damage_max) * damage_bonus/100 + kick_max);
+		phys_min = Math.floor((phys_min*weapon_damage/100 + damage_min) * 1+damage_bonus/100 + kick_min);
+		phys_max = Math.floor((phys_max*weapon_damage/100 + damage_max) * 1+damage_bonus/100 + kick_max);
 		if (spell == 0) { skillMin = Math.floor(mag_min+mDamage_min+ele_min+phys_min); skillMax = Math.floor(mag_max+mDamage_max+ele_max+phys_max); skillAr = Math.floor(ar*(1+ar_bonus/100));
 		} else if (spell == 1) { skillMin = Math.floor(mag_min+mDamage_min+ele_min+phys_min); skillMax = Math.floor(mag_max+mDamage_max+ele_max+phys_max); skillAr = "";
 		} else if (spell == 2) { skillMin = ""; skillMax = ""; skillAr = ""; }

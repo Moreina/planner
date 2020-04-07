@@ -172,7 +172,7 @@ var character_paladin = {class_name:"Paladin", strength:25, dexterity:20, vitali
 	// ---------------------------------
 	updateSelectedSkill : function(skill, num, ar, phys_min, phys_max, ele_min, ele_max, mag_min, mag_max, wisp) {
 		var lvl = skill.level+skill.extra_levels;
-		var ar_bonus = 0; var damage_bonus = 100;
+		var ar_bonus = 0; var damage_bonus = 0; var weapon_damage = 100;
 		var damage_min = 0; var damage_max = 0;
 		var fDamage_min = 0; var fDamage_max = 0;
 		var cDamage_min = 0; var cDamage_max = 0;
@@ -184,11 +184,11 @@ var character_paladin = {class_name:"Paladin", strength:25, dexterity:20, vitali
 		var spell = 1;	// 0 = uses attack rating, 1 = no attack rating, 2 = non-damaging
 		var smite_min = 0; var smite_max = 0;
 		
-		if (skill.name == "Sacrifice") {		attack = 1; spell = 0; ar_bonus = character.getSkillData(skill, lvl, 0); damage_bonus = 150+character.getSkillData(skill, lvl, 1); }
-		else if (skill.name == "Smite") {		attack = 1; spell = 1; ele_min = 0; ele_max = 0; damage_bonus = 100+character.getSkillData(skill, lvl, 0); smite_min = ~~character.getSkillData(skills[28], skills[28].level, 0) + equipped.offhand.smite_min; smite_max = ~~character.getSkillData(skills[28], skills[28].level, 1) + equipped.offhand.smite_max; }
+		if (skill.name == "Sacrifice") {		attack = 1; spell = 0; weapon_damage = 150; ar_bonus = character.getSkillData(skill, lvl, 0); damage_bonus = character.getSkillData(skill, lvl, 1); }
+		else if (skill.name == "Smite") {		attack = 1; spell = 1; ele_min = 0; ele_max = 0; damage_bonus = character.getSkillData(skill, lvl, 0); smite_min = ~~character.getSkillData(skills[28], skills[28].level, 0) + equipped.offhand.smite_min; smite_max = ~~character.getSkillData(skills[28], skills[28].level, 1) + equipped.offhand.smite_max; }
 		else if (skill.name == "Holy Bolt") {		attack = 0; spell = 1; mDamage_min = character.getSkillData(skill, lvl, 0); mDamage_max = character.getSkillData(skill, lvl, 1); }
-		else if (skill.name == "Zeal") {		attack = 1; spell = 0; ar_bonus = character.getSkillData(skill, lvl, 0); damage_bonus = 100+character.getSkillData(skill, lvl, 1); }
-		else if (skill.name == "Charge") {		attack = 1; spell = 0; ar_bonus = character.getSkillData(skill, lvl, 1); damage_bonus = 100+character.getSkillData(skill, lvl, 0); }
+		else if (skill.name == "Zeal") {		attack = 1; spell = 0; ar_bonus = character.getSkillData(skill, lvl, 0); damage_bonus = character.getSkillData(skill, lvl, 1); }
+		else if (skill.name == "Charge") {		attack = 1; spell = 0; ar_bonus = character.getSkillData(skill, lvl, 1); damage_bonus = character.getSkillData(skill, lvl, 0); }
 		else if (skill.name == "Vengeance") {		attack = 1; spell = 0; fDamage_min = character.getSkillData(skill, lvl, 2); fDamage_max = character.getSkillData(skill, lvl, 3); cDamage_min = character.getSkillData(skill, lvl, 4); cDamage_max = character.getSkillData(skill, lvl, 5); lDamage_min = character.getSkillData(skill, lvl, 6); lDamage_max = character.getSkillData(skill, lvl, 7); ar_bonus = character.getSkillData(skill, lvl, 11); }
 		else if (skill.name == "Blessed Hammer") {	attack = 0; spell = 1; mDamage_min = character.getSkillData(skill, lvl, 0); mDamage_max = character.getSkillData(skill, lvl, 1); }
 		else if (skill.name == "Fist of the Heavens") {	attack = 0; spell = 1; mDamage_min = character.getSkillData(skill, lvl, 0); mDamage_max = character.getSkillData(skill, lvl, 1); lDamage_min = character.getSkillData(skill, lvl, 2); lDamage_max = character.getSkillData(skill, lvl, 3); }
@@ -204,8 +204,8 @@ var character_paladin = {class_name:"Paladin", strength:25, dexterity:20, vitali
 		if (attack == 0) { phys_min = 0; phys_max = 0; ele_min = 0; ele_max = 0; mag_min = 0; mag_max = 0; }
 		ele_min += Math.floor(fDamage_min + cDamage_min + lDamage_min);
 		ele_max += Math.floor(fDamage_max + cDamage_max + lDamage_max + pDamage_max);
-		phys_min = Math.floor((phys_min + damage_min + smite_min) * damage_bonus/100);
-		phys_max = Math.floor((phys_max + damage_max + smite_max) * damage_bonus/100);
+		phys_min = Math.floor((phys_min*weapon_damage/100 + damage_min + smite_min) * 1+damage_bonus/100);
+		phys_max = Math.floor((phys_max*weapon_damage/100 + damage_max + smite_max) * 1+damage_bonus/100);
 		if (spell == 0) { skillMin = Math.floor(mag_min+mDamage_min+ele_min+phys_min); skillMax = Math.floor(mag_max+mDamage_max+ele_max+phys_max); skillAr = Math.floor(ar*(1+ar_bonus/100));
 		} else if (spell == 1) { skillMin = Math.floor(mag_min+mDamage_min+ele_min+phys_min); skillMax = Math.floor(mag_max+mDamage_max+ele_max+phys_max); skillAr = "";
 		} else if (spell == 2) { skillMin = ""; skillMax = ""; skillAr = ""; }

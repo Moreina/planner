@@ -61,7 +61,7 @@ var character_barbarian = {class_name:"Barbarian", strength:30, dexterity:20, vi
 	// ---------------------------------
 	updateSelectedSkill : function(skill, num, ar, phys_min, phys_max, ele_min, ele_max, mag_min, mag_max, wisp) {
 		var lvl = skill.level+skill.extra_levels;
-		var ar_bonus = 0; var damage_bonus = 100;
+		var ar_bonus = 0; var damage_bonus = 0; var weapon_damage = 100;
 		var damage_min = 0; var damage_max = 0;
 		var fDamage_min = 0; var fDamage_max = 0;
 		var cDamage_min = 0; var cDamage_max = 0;
@@ -73,15 +73,15 @@ var character_barbarian = {class_name:"Barbarian", strength:30, dexterity:20, vi
 		var spell = 1;	// 0 = uses attack rating, 1 = no attack rating, 2 = non-damaging
 
 		if (skill.name == "War Cry") {			attack = 0; spell = 1; damage_min = character.getSkillData(skill, lvl, 0); damage_max = character.getSkillData(skill, lvl, 1); }
-		else if (skill.name == "Frenzy") { 		attack = 1; spell = 0; mDamage_min = phys_min*character.getSkillData(skill, lvl, 0)/100; mDamage_max = phys_max*character.getSkillData(skill, lvl, 0)/100; damage_bonus = 115+character.getSkillData(skill, lvl, 1); ar_bonus = character.getSkillData(skill, lvl, 2); }
-		else if (skill.name == "Concentrate") {		attack = 1; spell = 0; ar_bonus = character.getSkillData(skill, lvl, 1); damage_bonus = 160+character.getSkillData(skill, lvl, 2); }
-		else if (skill.name == "Cleave") { 		attack = 1; spell = 1; damage_min = character.getSkillData(skill, lvl, 0); damage_max = character.getSkillData(skill, lvl, 1); damage_bonus = 60; }
-		else if (skill.name == "Stun") { 		attack = 1; spell = 0; ar_bonus = character.getSkillData(skill, lvl, 1); damage_bonus = 100+character.getSkillData(skill, lvl, 0); }
-		else if (skill.name == "Power Throw") {		attack = 1; spell = 0; ar_bonus = character.getSkillData(skill, lvl, 1); damage_bonus = 120+character.getSkillData(skill, lvl, 0); }
-		else if (skill.name == "Bash") { 		attack = 1; spell = 0; ar_bonus = character.getSkillData(skill, lvl, 2); damage_bonus = 110+character.getSkillData(skill, lvl, 3); }	/*mag_bonus = character.getSkillData(skill, lvl, 0);*/ 
-		else if (skill.name == "Leap Attack") {		attack = 1; spell = 0; ar_bonus = character.getSkillData(skill, lvl, 1); damage_bonus = 175+character.getSkillData(skill, lvl, 0); }
-		else if (skill.name == "Ethereal Throw") { 	attack = 1; spell = 0; mDamage_min = character.getSkillData(skill, lvl, 0); mDamage_max = character.getSkillData(skill, lvl, 1); damage_bonus = 60; }
-		else if (skill.name == "Whirlwind") {		attack = 1; spell = 0; ar_bonus = character.getSkillData(skill, lvl, 1); damage_bonus = 90+character.getSkillData(skill, lvl, 0); }
+		else if (skill.name == "Frenzy") { 		attack = 1; spell = 0; weapon_damage = 115; mDamage_min = phys_min*character.getSkillData(skill, lvl, 0)/100; mDamage_max = phys_max*character.getSkillData(skill, lvl, 0)/100; damage_bonus = character.getSkillData(skill, lvl, 1); ar_bonus = character.getSkillData(skill, lvl, 2); }
+		else if (skill.name == "Concentrate") {		attack = 1; spell = 0; weapon_damage = 160; ar_bonus = character.getSkillData(skill, lvl, 1); damage_bonus = character.getSkillData(skill, lvl, 2); }
+		else if (skill.name == "Cleave") { 		attack = 1; spell = 1; weapon_damage = 60; damage_min = character.getSkillData(skill, lvl, 0); damage_max = character.getSkillData(skill, lvl, 1); }
+		else if (skill.name == "Stun") { 		attack = 1; spell = 0; weapon_damage = 100+character.getSkillData(skill, lvl, 0); ar_bonus = character.getSkillData(skill, lvl, 1); }
+		else if (skill.name == "Power Throw") {		attack = 1; spell = 0; weapon_damage = 120; ar_bonus = character.getSkillData(skill, lvl, 1); damage_bonus = character.getSkillData(skill, lvl, 0); }	
+		else if (skill.name == "Bash") { 		attack = 1; spell = 0; weapon_damage = 110; ar_bonus = character.getSkillData(skill, lvl, 2); damage_bonus = character.getSkillData(skill, lvl, 3); }	// TODO: X% Physical Damage converted to Magic
+		else if (skill.name == "Leap Attack") {		attack = 1; spell = 0; weapon_damage = 175; ar_bonus = character.getSkillData(skill, lvl, 1); damage_bonus = character.getSkillData(skill, lvl, 0); }
+		else if (skill.name == "Ethereal Throw") { 	attack = 1; spell = 0; weapon_damage = 60; mDamage_min = character.getSkillData(skill, lvl, 0); mDamage_max = character.getSkillData(skill, lvl, 1); }
+		else if (skill.name == "Whirlwind") {		attack = 1; spell = 0; weapon_damage = 90; ar_bonus = character.getSkillData(skill, lvl, 1); damage_bonus = character.getSkillData(skill, lvl, 0); }
 		else { attack = 0; spell = 2; }
 
 		if (typeof(skill.reqWeapon) != 'undefined') { var match = 0; for (let w = 0; w < skill.reqWeapon.length; w++) {
@@ -98,8 +98,8 @@ var character_barbarian = {class_name:"Barbarian", strength:30, dexterity:20, vi
 		if (attack == 0) { phys_min = 0; phys_max = 0; ele_min = 0; ele_max = 0; mag_min = 0; mag_max = 0; }
 		ele_min += Math.floor(fDamage_min + cDamage_min + lDamage_min);
 		ele_max += Math.floor(fDamage_max + cDamage_max + lDamage_max + pDamage_max);
-		phys_min = Math.floor((phys_min + damage_min) * damage_bonus/100);
-		phys_max = Math.floor((phys_max + damage_max) * damage_bonus/100);
+		phys_min = Math.floor((phys_min*weapon_damage/100 + damage_min) * 1+damage_bonus/100);
+		phys_max = Math.floor((phys_max*weapon_damage/100 + damage_max) * 1+damage_bonus/100);
 		if (spell == 0) { skillMin = Math.floor(mag_min+mDamage_min+ele_min+phys_min); skillMax = Math.floor(mag_max+mDamage_max+ele_max+phys_max); skillAr = Math.floor(ar*(1+ar_bonus/100));
 		} else if (spell == 1) { skillMin = Math.floor(mag_min+mDamage_min+ele_min+phys_min); skillMax = Math.floor(mag_max+mDamage_max+ele_max+phys_max); skillAr = "";
 		} else if (spell == 2) { skillMin = ""; skillMax = ""; skillAr = ""; }
