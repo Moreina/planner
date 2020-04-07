@@ -19,7 +19,7 @@ https://github.com/Moreina/planner#planner
 
 Character Skill Planner for Diablo 2: Path of Diablo
 
-### [Download](https://github.com/Moreina/planner/archive/v1.16.zip)
+### [Download](https://github.com/Moreina/planner/archive/v1.17.zip)
 
 ### Features So Far:
 * all skill info up to level 60
@@ -74,5 +74,5 @@ For anyone curious about the program code, the files can be edited with any text
   * Holds most of the program logic
 * **all_equipment.js**
   * Contains item data
-* **class .js files**  *(amazon, assassin, barbarian, druid, necromancer, paladin, sorceress)*
+* **class .js files**  *(amazon, assassin, barbarian, druid, necromancer, paladin, sorceress, universal_skills)*
   * Contains skill data

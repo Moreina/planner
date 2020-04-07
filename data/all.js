@@ -5,35 +5,16 @@ var skill_bonuses = {stamina_skillup:0, frw_skillup:0, defense_skillup:0, resist
 var base_stats = {level:1, skillpoints:0, statpoints:0, quests_completed:-1, running:-1, difficulty:3, strength_added:0, dexterity_added:0, vitality_added:0, energy_added:0, fRes_penalty:100, cRes_penalty:100, lRes_penalty:100, pRes_penalty:100, mRes_penalty:100, fRes:0, cRes:0, lRes:0, pRes:0, mRes:0, fRes_max_base:75, cRes_max_base:75, lRes_max_base:75, pRes_max_base:75, mRes_max_base:75, set_bonuses:[0,0,{},{},{},{},{}]}
 
 var effects = {};
-var skillList = []; var skillOptions = []; var skillList1 = []; var skillList2 = [];
+var skillList = []; var skillOptions = [];
 var selectedSkill = [" ­ ­ ­ ­ Skill 1", " ­ ­ ­ ­ Skill 2"];
 
+var mercAura = 0;
 var lastCharm = "";
 var lastSelected = "";
 var settings = {coupling:1, autocast:1}
 var MAX = 20;	// Highest Skill Hardpoints
 var LIMIT = 60; // Highest Skill Data
 var RES_CAP = 95;
-
-//var offskills = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-//		0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-//		0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
-
-// UNUSED
-//var buffs = {stamina_buff:0, max_life_buff:0, max_mana_buff:0, defense_buff:0, all_skills_buff:0, fhr_buff:0, frw_buff:0, ias_buff:0, ar_buff:0, damage_buff:0, all_res_buff:0, pdr_buff:0, curses_reduced_buff:0, pDamage_min_buff:0, pDamage_max_buff:0, pDamage_duration_buff:0, thorns_buff:0, life_per_hit_buff:0, life_per_ranged_hit_buff:0, enemy_pRes_buff:0, fcr_buff:0, skeleton_damage_buff:0, block_buff:0, smite_min_buff:0, smite_max_buff:0, absorb_buff:0, absorb_flat_buff:0, life_regen_buff:0, fDamage_min_buff:0, fDamage_max_buff:0, cDamage_min_buff:0, cDamage_max_buff:0, enemy_defense_buff:0, pDamage_cutoff:0, velocity_aura:0, fRes_aura:0, cRes_aura:0, lRes_aura:0, defense_aura:0, life_regen_aura:0, poison_reduced_aura:0, fRes_max_aura:0, cRes_max_aura:0, lRes_max_aura:0, stam_recovery_aura:0, mana_regen_aura:0, elemental_damage_aura:0, lDamage_min_aura:0, lDamage_max_aura:0, pierce_aura:0, cstrike_aura:0, enemy_defense_aura:0, enemy_resists_aura:0, damage_vs_undead_aura:0};
-//var active = {};
-//var oskills = {basicAttack:{},basicThrow:{}};
-//var abilities = {basicAttack:{},basicThrow:{}};
-//var gear = {req_level:0, req_strength:0, req_dexterity:0};
-
-//var oskills = {
-/* oskills  amazon	*///	oskill_Multiple_Shot:0, oskill_Magic_Arrow:0, oskill_Guided_Arrow:0, oskill_Inner_Sight:0, oskill_Lethal_Strike:0, oskill_Valkyrie:0, 
-/* oskills  barbarian	*///	oskill_Battle_Orders:0, oskill_Battle_Command:0, oskill_Battle_Cry:0, oskill_Edged_Weapon_Mastery:0, oskill_Bash:0, 
-/* oskills  druid	*///	oskill_Werewolf:0, oskill_Werebear:0, oskill_Lycanthropy:0, oskill_Feral_Rage:0, oskill_Summon_Dire_Wolf:0, oskill_Flame_Dash:0, 
-/* oskills  necromancer	*///	oskill_Summon_Mastery:0, oskill_Desecrate:0, 
-/* oskills  paladin	*///	oskill_Zeal:0, oskill_Vengeance:0, 
-/* oskills  sorceress	*///	oskill_Fire_Ball:0, oskill_Fire_Wall:0, oskill_Meteor:0, oskill_Frigerate:0, oskill_Hydra:0, oskill_Shiver_Armor:0, oskill_Fire_Mastery:0, oskill_Cold_Mastery:0, 
-//}
 
 // Charm Inventory
 var inv = [
@@ -44,7 +25,8 @@ var inv = [
 {x:1,y:1,empty:1,id:"h14"},{x:1,y:1,empty:1,id:"h24"},{x:1,y:1,empty:1,id:"h34"},{x:1,y:1,empty:1,id:"h44"},{x:1,y:1,empty:1,id:"h54"},{x:1,y:1,empty:1,id:"h64"},{x:1,y:1,empty:1,id:"h74"},{x:1,y:1,empty:1,id:"h84"},{x:1,y:1,empty:1,id:"h94"},{x:1,y:1,empty:1,id:"h04"}
 ];
 
-// Loads equipment/charm info to the appropriate dropdowns
+// loadEquipment - Loads equipment/charm info to the appropriate dropdowns
+//	className: name of character class
 // ---------------------------------
 function loadEquipment(className) {
 	var equipmentTypes = ["helm", "armor", "gloves", "boots", "belt", "amulet", "ring1", "ring2", "weapon", "offhand", "charms"];
@@ -55,10 +37,10 @@ function loadEquipment(className) {
 	loadMisc()
 }
 
-// Creates a dropdown menu option
-// type: equipment type (string)
-// dropdown: string name of the dropdown to edit
-// called by: loadEquipment()
+// loadItems - Creates a dropdown menu option
+//	type: equipment type
+//	dropdown: name of the dropdown to edit
+//	className: name of the character class
 // ---------------------------------
 function loadItems(type, dropdown, className) {
 	if (type.length == 0) { document.getElementById(dropdown).innerHTML = "<option></option>" }
@@ -107,7 +89,7 @@ function loadItems(type, dropdown, className) {
 	}
 }
 
-// Loads non-item effects
+// loadMisc - Loads non-item effects to the 'Miscellaneous' dropdown menu
 // ---------------------------------
 function loadMisc() {
 	var choices = "<option class='gray' disabled selected>­ ­ ­ ­ Miscellaneous</option>";
@@ -115,8 +97,8 @@ function loadMisc() {
 	document.getElementById("dropdown_misc").innerHTML = choices
 }
 
-// Resets everything and starts a new character
-// choice: character class to use (string)
+// startup - Resets everything and starts a new character
+//	choice: name of new character class
 // ---------------------------------
 function startup(choice) {
 	loadEquipment(choice)
@@ -141,12 +123,12 @@ function startup(choice) {
 	init()
 }
 
-// Calls startup() with the specified class
-// name: string class name
+// reset - Calls startup() with the specified class name
+//	name: string class name
 // ---------------------------------
 function reset(name) { startup(name.toLowerCase()); }
 
-// Initiates mouse functions
+// init - Initiates mouse functions
 // ---------------------------------
 function init() {
 	var stats = ["btn_strength", "btn_dexterity", "btn_vitality", "btn_energy"];
@@ -164,7 +146,7 @@ function init() {
 	document.getElementById("quests").onchange = function() {toggleQuests()};
 }
 
-// Removes all active skill icons
+// clearIconSources - Removes all active skill icons
 // ---------------------------------
 function clearIconSources() {
 	for (let s = 0; s < skills.length; s++) {
@@ -174,8 +156,8 @@ function clearIconSources() {
 	}
 }
 
-// Sets new active skill icons based on character class
-// className: character class (string)
+// setIconSources - Sets new active skill icons based on character class
+//	className: name of character class
 // ---------------------------------
 function setIconSources(className) {
 	var prefix = "./images/skills/"+className+"/";
@@ -185,7 +167,7 @@ function setIconSources(className) {
 	}
 }
 
-// Handles whether active skill icons are hidden or shown
+// updateSkillIcons - Handles whether active skill icons are hidden or shown
 // ---------------------------------
 function updateSkillIcons() {
 	for (let s = 0; s < skills.length; s++) {
@@ -200,8 +182,8 @@ function updateSkillIcons() {
 	}
 }
 
-// Modifies the character's level
-// input: positive or negative change (-1, 1)
+// changeLevel - Modifies the character's level
+//	input: positive or negative change (-1 or 1)
 // ---------------------------------
 function changeLevel(input) {
 	var levels = 1
@@ -226,9 +208,9 @@ function changeLevel(input) {
 	updateAll()
 }
 
-// Equips an item by adding its stats to the character, or unequips it if it's already equipped		// TODO: consider renaming... switchItem()?  ...or splitting into different functions
-// type: equipment type (string)
-// val: string name of item
+// equip - Equips an item by adding its stats to the character, or unequips it if it's already equipped			// TODO: consider renaming... switchItem()?  Also, split into multiple smaller functions
+//	type: name of equipment type
+//	val: name of item
 // ---------------------------------
 function equip(type, val) {
 	//var selected = document.getElementById("dropdown_"+type).selectedIndex;	// consider using if unequipping weapon/offhand due to equipping a new incompatible item
@@ -254,10 +236,10 @@ function equip(type, val) {
 	}
 	// if replacing an item, previous item's affixes are removed from character
 	for (old_affix in equipped[type]) {
-	//	var aura_lvl = 0;	// unused?
+		// TODO: delete buff effect if oskill removed
 		character[old_affix] -= equipped[type][old_affix]
 		if (old_affix == "aura") {
-			removeAura(equipped[type][old_affix], equipped[type].aura_lvl)
+			removeAura(equipped[type][old_affix])
 		}
 		if (old_affix != "set_bonuses") { equipped[type][old_affix] = unequipped[old_affix] }
 	}
@@ -346,9 +328,23 @@ function equip(type, val) {
 						addAura(equipment[type][item][affix], equipment[type][item].aura_lvl, type)
 					}
 				} else {
-					for (let s = 0; s < skills.length; s++) {
-						var skillSolo = "oskill_" + skills[s].name.split(" ").join("_");
-						if (affix == skillSolo) { if (equipment[type][item][affix] > 3) { equipped[type][affix] -= (equipment[type][item][affix]-3) } }		// oskills are capped at 3 for 'native' classes
+					var oskill_info = "";
+					for (let o = 0; o < oskills.length; o++) {
+						if (affix == oskills[o]) {
+							oskill_info = oskills_info[oskills[o]]
+						}
+					}
+					if (oskill_info != "") {
+						if (oskill_info.native_class == character.class_name.toLowerCase()) {
+							if (equipment[type][item][affix] > 3) { equipped[type][affix] -= (equipment[type][item][affix]-3) }	// oskills are capped at 3 for 'native' classes
+						} else { if (oskill_info.native_class != "none") {
+							var skill = skills_all[oskill_info.native_class][oskill_info.i];
+							if (typeof(skill.effect) != 'undefined') { if (skill.effect > 3) {
+								if (character[affix] == 0 && typeof(effects["e"+skill.key]) == 'undefined') {
+									// TODO: create new buff effect for oskill
+								}
+							} }
+						} }
 					}
 					character[affix] += equipped[type][affix]
 				}
@@ -399,7 +395,10 @@ function equip(type, val) {
 	if (selectedSkill[1] != " ­ ­ ­ ­ Skill 2") { checkSkill(selectedSkill[1], 2) }
 }
 
-// 
+// addAura - Adds an aura of the specified level to the character
+//	name: aura name
+//	lvl: aura level
+//	type: item type which the aura is granted by
 // ---------------------------------
 function addAura(name, lvl, type) {
 	if (document.getElementById(name) == null) {
@@ -428,7 +427,8 @@ function addAura(name, lvl, type) {
 	updateAll()
 }
 
-// 
+// removeAura - Removes an aura from the character
+//	name: aura name
 // ---------------------------------
 function removeAura(name) {
 	if (typeof(effects[name]) != 'undefined') {
@@ -440,7 +440,8 @@ function removeAura(name) {
 	}
 }
 
-// 
+// toggleAura - Enable or disable an aura without removing it from the character
+//	name: aura name
 // ---------------------------------
 function toggleAura(name) {
 	if (effects[name].enabled == 1) {
@@ -462,15 +463,17 @@ function toggleAura(name) {
 	if (selectedSkill[1] != " ­ ­ ­ ­ Skill 2") { checkSkill(selectedSkill[1], 2) }
 }
 
-// 
+// hoverAura - display aura info on mouseover
+//	name: aura name
 // ---------------------------------
-function hoverAura(name) {}
+function hoverAura(name) {}	// TODO: implement
 
-// 
+// auraOut - remove mouseover info
+//	name: aura name
 // ---------------------------------
-function auraOut(name) {}
+function auraOut(name) {}	// TODO: implement
 
-// Resets functionality for skills
+// resetSkills - Resets functionality for skills
 // ---------------------------------
 function resetSkills() {
 	for (bonus in skill_bonuses) { character[bonus] = skill_bonuses[bonus] }
@@ -487,7 +490,7 @@ function resetSkills() {
 	document.getElementById("dropdown_skill2").innerHTML = "<option class='gray' disabled selected>" + " ­ ­ ­ ­ Skill 2" + "</option>"
 }
 
-// Resets all items
+// resetEquipment - Resets all items
 // ---------------------------------
 function resetEquipment() {
 	var equipmentTypes = ["helm", "armor", "gloves", "boots", "belt", "amulet", "ring1", "ring2", "weapon", "offhand"];
@@ -499,8 +502,7 @@ function resetEquipment() {
 	resetCharms()
 }
 
-// Resets all charms
-// called by: resetEquipment()
+// resetCharms - Resets all charms
 // ---------------------------------
 function resetCharms() {
 	var type = "charms"
@@ -518,8 +520,8 @@ function resetCharms() {
 	}
 }
 
-// Adds a charm to the inventory
-// val: the name of the charm
+// addCharm - Adds a charm to the inventory
+//	val: the name of the charm
 // ---------------------------------
 function addCharm(val) {
 	var charm_img = {prefix:"./images/items/charms/", small:["charm1_paw.png","charm1_disc.png","charm1_coin.png"], large:["charm2_page.png","charm2_horn.png","charm2_lantern.png"], grand:["charm3_lace.png","charm3_eye.png","charm3_monster.png"]};
@@ -607,20 +609,20 @@ function addCharm(val) {
 	document.getElementById("dropdown_charms").selectedIndex = 0
 }
 
-// Adds miscellaneous effect
-// val: the chosen effect
+// addMisc - Adds miscellaneous effect
+//	val: name of the chosen effect
 // ---------------------------------
 function addMisc(val) {
 	document.getElementById("dropdown_misc").selectedIndex = 0
 	for (let m = 1; m < non_items.length; m++) {
 		if (val == non_items[m].name) {
-			if (typeof(non_items[m].aura) != 'undefined') {
-				// TODO: Only allow 1 mercenary aura
+			if (typeof(non_items[m].aura) != 'undefined') { if (mercAura == 0) {
 				var merc_lvl = character.level - 1;
 				var diff = 0.23;
 				var aura_lvl = Math.min(18,Math.floor((1-diff)+diff*merc_lvl))
 				addAura(non_items[m].aura, aura_lvl, "mercenary")
-			} else {
+				mercAura = 1;
+			} } else {
 				if (typeof(effects[non_items[m].effect]) == 'undefined') { effects[non_items[m].effect] = {} }
 				initiateMiscEffect(non_items[m].effect, m)
 			}
@@ -630,7 +632,9 @@ function addMisc(val) {
 	}
 }
 
-// 
+// initiateMiscEffect - Handles adding of miscellaneous effects
+//	name: name of the effect
+//	i: array index for the effect
 // ---------------------------------
 function initiateMiscEffect(name, i) {
 	if (document.getElementById(name) == null) {
@@ -665,11 +669,15 @@ function initiateMiscEffect(name, i) {
 	}
 }
 
-// 
+// removeMiscEffect - Removes miscellaneous effect
+//	name: name of the effect
+//	i: array index for the effect
 // ---------------------------------
 function removeMiscEffect(name, i) {
 	if (i > 0) { name = non_items[i].effect } else { i = non_items[i].i }
 	if (typeof(effects[name]) != 'undefined') {
+		// TODO: Make mercenary auras work
+		if (non_items[i].aura != 'undefined') { removeAura(non_items[i].aura); mercAura = 0; }
 		if (document.getElementById(name) != null) { document.getElementById(name).remove(); }
 		for (affix in effects[name]) {
 			character[affix] -= effects[name][affix]
@@ -680,7 +688,9 @@ function removeMiscEffect(name, i) {
 	}
 }
 
-// 
+// toggleMiscEffect - Enables or disables miscellaneous effects without removing them from the character
+//	name: name of the effect
+//	i: array index for the effect
 // ---------------------------------
 function toggleMiscEffect(name, i) {
 	if (i > 0) { name = non_items[i].effect } else { i = non_items[i].i }
@@ -705,7 +715,7 @@ function toggleMiscEffect(name, i) {
 	updateAll()
 }
 
-// 
+// resetMisc - Removes all miscellaneous effects
 // ---------------------------------
 function resetMisc() {
 	for (name in effects) {
@@ -713,7 +723,8 @@ function resetMisc() {
 	}
 }
 
-// Toggles the completion of all quests and their rewards
+// toggleQuests - Toggles the completion of all quests and their rewards
+//	quests: name identifier for 'Quests Completed' checkbox element
 // ---------------------------------
 function toggleQuests(quests) {
 	if (quests.checked == false && (character.skillpoints < 12 || character.statpoints < 15)) { quests.checked = true }
@@ -732,15 +743,16 @@ function toggleQuests(quests) {
 	}
 }
 
-// Toggles whether the character is running or walking/standing
+// toggleRunning - Toggles whether the character is running or walking/standing
+//	running: name identifier for 'Running' checkbox element
 // ---------------------------------
 function toggleRunning(running) {
 	if (running.checked) { character.running = 1 } else { character.running = 0 }
 	updateAll()
 }
 
-// Changes the game difficulty
-// diff: game difficulty (1-3)
+// changeDifficulty - Changes the game difficulty
+//	diff: game difficulty (1-3)
 // ---------------------------------
 function changeDifficulty(diff) {
 	character.difficulty = diff
@@ -754,23 +766,25 @@ function changeDifficulty(diff) {
 	updateMisc()
 }
 
-// Changes whether adding/removing skill points can affect character level
+// toggleCoupling - Changes whether adding/removing skill points can affect character level
+//	coupling: name identifier for 'Skill Level Coupling' checkbox element
 // ---------------------------------
 function toggleCoupling(coupling) {
 	if (coupling.checked) { settings.coupling = 1 } else { settings.coupling = 0 }
 }
 
-// 
+// toggleAutocast - Changes whether buffs and auras are automatically enabled when added
+//	autocast: name identifier for 'New Effects Begin Enabled' checkbox element
 // ---------------------------------
 function toggleAutocast(autocast) {
 	if (autocast.checked) { settings.autocast = 1 } else { settings.autocast = 0 }
 }
 
-// Updates all stats
+// updateAll - Updates all stats
 // ---------------------------------
 function updateAll() { updateStats(); updateMisc(); updateSecondaryStats(); }
 
-// Updates stats shown by the default (original D2) stat page
+// updateStats - Updates stats shown by the default (original D2) stat page
 // ---------------------------------
 function updateStats() {
 	var c = character;
@@ -860,7 +874,7 @@ function updateStats() {
 	document.getElementById("mres").innerHTML = (c.mRes - c.mRes_penalty) + "%  +" + c.mDamage_reduced
 }
 
-// Updates stats shown on the secondary (Path of Diablo) stat page
+// updateSecondaryStats - Updates stats shown on the secondary (Path of Diablo) stat page
 // ---------------------------------
 function updateSecondaryStats() {
 	var c = character;
@@ -926,6 +940,8 @@ function updateSecondaryStats() {
 	document.getElementById("enemy_pres").innerHTML = c.enemy_pRes
 }
 
+// updateMisc - Updates other interface elements
+// ---------------------------------
 function updateMisc() {
 	var c = character;
 	if (c.statpoints == 0) {
@@ -949,7 +965,7 @@ function updateMisc() {
 	checkRequirements()
 }
 
-// Updates skill levels
+// calculateSkillAmounts - Updates skill levels
 // ---------------------------------
 function calculateSkillAmounts() {
 	for (s = 0; s < skills.length; s++) {
@@ -1031,8 +1047,8 @@ function calculateSkillAmounts() {
 	}
 }
 
-// Updates passive skills
-// className: the character class
+// calculateSkillPassives - Updates passive skills
+//	className: name of the character class
 // ---------------------------------
 function calculateSkillPassives(className) {
 	if (className == "Amazon") {
@@ -1092,14 +1108,12 @@ function calculateSkillPassives(className) {
 	}
 }
 
-// does updateEffect() for each skill
+// updateEffectList - Updates all effects based on their levels
 // ---------------------------------
 function updateEffectList() { for (let s = 0; s < skills.length; s++) { updateEffect(skills[s]); } }
 
-//function checkEffectSkill(skill) { var valid = 0; if (typeof(skill.effect) != 'undefined') { if (skill.effect > 3) { valid = 1 } } return valid }
-//function checkEffectItem(type) { var valid = 0; if (typeof(skill.effect) != 'undefined') { if (skill.effect > 3) { valid = 1 } } return valid }
-
-// 
+// updateEffect - Creates or deletes effects corresponding to a skill, based on the skill's level
+//	skill: skill object in question
 // ---------------------------------
 function updateEffect(skill) {
 	if (typeof(skill.effect) != 'undefined') { if (skill.effect > 3) {
@@ -1141,15 +1155,18 @@ function updateEffect(skill) {
 	} }
 }
 
-// 
+// hoverEffect - display effect info on mouseover
+//	s: skill effect element
 // ---------------------------------
 function hoverEffect(s) {}
 
-// 
+// effectOut - hide mouseover info
+//	s: skill effect element
 // ---------------------------------
 function effectOut(s) {}
 
-// 
+// disableEffect - 
+//	s: 
 // ---------------------------------
 function disableEffect(s) {
 	var eff = "e"+skills[s].key;
@@ -1165,7 +1182,8 @@ function disableEffect(s) {
 	}
 }
 
-// 
+// enableEffect - 
+//	s: 
 // ---------------------------------
 function enableEffect(s) {
 	var eff = "e"+skills[s].key;
@@ -1180,8 +1198,8 @@ function enableEffect(s) {
 	}
 }
 
-// 
-// effect: the effects[] element being removed
+// removeEffect - 
+//	effect: the effects[] element being removed
 // ---------------------------------
 function removeEffect(effect) {
 	for (affix in effect) {
@@ -1190,19 +1208,21 @@ function removeEffect(effect) {
 	}
 }
 
-// 
-// effect: the effects[] element being added
+// addEffect - 
+//	effect: the effects[] element being added
 // ---------------------------------
 function addEffect(effect) {
-	var selfbuff = 1;
-	buffData = character.getBuffData(effect, selfbuff)
+//	var selfbuff = 1;
+//	buffData = character.getBuffData(effect, selfbuff)
+	buffData = character.getBuffData(effect)
 	for (affix in buffData) {
 		character[affix] += buffData[affix]
 		if (effect[affix] != "enabled" && affix != "skill") { effect[affix] = buffData[affix] }
 	}
 }
 
-// 
+// modifyEffect - 
+//	skill: skill object
 // ---------------------------------
 function modifyEffect(skill) {
 	if (typeof(skill.effect) != 'undefined') { if (skill.effect > 3) {
@@ -1216,8 +1236,8 @@ function modifyEffect(skill) {
 	} }
 }
 
-// Get highest mercenary aura level
-// hlvl: level of mercenary (maximum is clvl - 1)
+// getMercenaryAuraLevel - Get highest mercenary aura level
+//	hlvl: level of mercenary (maximum is clvl - 1)
 // ---------------------------------
 function getMercenaryAuraLevel(hlvl) {
 	result = 0;
@@ -1227,7 +1247,7 @@ function getMercenaryAuraLevel(hlvl) {
 	return result;
 }
 
-// Recolors stats/skills based on unmet item/skill/level requirements
+// checkRequirements - Recolors stats/skills based on unmet item/skill/level requirements
 // ---------------------------------
 function checkRequirements() {
 	var highest_level = 1; var highest_str = 1; var highest_dex = 1;
@@ -1270,8 +1290,8 @@ function checkRequirements() {
 	}
 }
 
-// Raises the selected stat
-// stat: button identifier (string) for corresponding stat
+// addStat - Raises the selected stat
+//	stat: button identifier (string) for corresponding stat
 // ---------------------------------
 function addStat(event, stat) {
 	var points = 1
@@ -1291,8 +1311,8 @@ function addStat(event, stat) {
 	}
 }
 
-// Lowers the selected stat
-// stat: button identifier (string) for corresponding stat
+// removeStat - Lowers the selected stat
+//	stat: button identifier (string) for corresponding stat
 // ---------------------------------
 function removeStat(event, stat) {
 	var points = 1
@@ -1322,8 +1342,8 @@ function removeStat(event, stat) {
 	if (selectedSkill[1] != " ­ ­ ­ ­ Skill 2") { checkSkill(selectedSkill[1], 2) }
 }
 
-// Raises the skill level
-// skill: the skill to modify
+// skillUp - Raises the skill level
+//	skill: the skill to modify
 // ---------------------------------
 function skillUp(event, skill) {
 	if (typeof(skill.effect) != 'undefined') { if (skill.effect > 3) {
@@ -1370,8 +1390,8 @@ function skillUp(event, skill) {
     }
 }
 
-// Lowers the skill level
-// skill: the skill to modify
+// skillDown - Lowers the skill level
+//	skill: the skill to modify
 // ---------------------------------
 function skillDown(event, skill) {
 	var old_level = skill.level
@@ -1423,8 +1443,8 @@ function skillDown(event, skill) {
     }
 }
 
-// Shows skill description tooltip on mouse-over
-// skill: the mouse-over'ed skill
+// skillHover - Shows skill description tooltip on mouse-over
+//	skill: the mouse-over'ed skill
 // ---------------------------------
 function skillHover(skill) {
 	document.getElementById("title").innerHTML = skill.name
@@ -1442,9 +1462,9 @@ function skillHover(skill) {
 	for (let i = 0, len = skill.data.values.length; i < len; i++) {
 		next_display += skill.text[i]
 		if (skill.level == 0 && skill.force_levels == 0) {
-			next_value = character.updateSkill(skill, skill.level+1, i)
+			next_value = character.getSkillData(skill, skill.level+1, i)
 		} else {
-			next_value = character.updateSkill(skill, (skill.level+skill.extra_levels+1), i)
+			next_value = character.getSkillData(skill, (skill.level+skill.extra_levels+1), i)
 		}
 		next_value = round(next_value)
 		next_display += next_value
@@ -1452,7 +1472,7 @@ function skillHover(skill) {
 		current_display += skill.text[i]
 		//if (skill.level+skill.extra_levels <= LIMIT) { levels = skill.level+skill.extra_levels } else { levels = LIMIT }
 		levels = skill.level+skill.extra_levels
-		current_value = character.updateSkill(skill, (levels), i)
+		current_value = character.getSkillData(skill, levels, i)
 		current_value = round(current_value)
 		current_display += current_value
 		
@@ -1487,9 +1507,8 @@ function skillHover(skill) {
 	showBaseLevels(skill)
 }
 
-// Shows base levels for a skill
-// skill: the skill to use
-// called by: skillHover()
+// showBaseLevels - Shows base levels for a skill
+//	skill: the skill to use
 // ---------------------------------
 function showBaseLevels(skill) {
 	if ((skill.extra_levels > 0 && skill.level > 0) || skill.force_levels > 0) {
@@ -1498,11 +1517,32 @@ function showBaseLevels(skill) {
 	}
 }
 
-// 
+// updateSkills - 
+//	skill: skill object
 // ---------------------------------
 function updateSkills(skill) {
 	var choices = "";
 	var k = 1;
+	var oskillList = [];
+	var oskillOptions = [];
+	for (let o = 0; o < oskills.length; o++) {
+		if (character[oskills[o]] > 0) {
+			var natClass = oskills_info[oskills[o]].native_class;
+			if (character.class_name.toLowerCase() != natClass) {
+				var natIndex = oskills_info[oskills[o]].i;
+				var addSkill = 0;
+				if (natClass != "none") { if (skills_all[natClass][natIndex].bindable > 0) { addSkill = 1 } } else { addSkill = 1 }
+				if (addSkill == 1) {
+					oskillList[k] = oskills_info[oskills[o]].name
+					oskillOptions[k] = "<option>" + oskills_info[oskills[o]].name + "</option>"
+					choices += oskillOptions[k]
+					k++
+				}
+			}
+		}
+	}
+	skillList = oskillList;
+	skillOptions = oskillOptions;
 	for (let s = 0; s < skills.length; s++) {
 		if (skills[s].bindable > 0 && (skills[s].level > 0 || skills[s].force_levels > 0)) {
 			skillList[k] = skills[s].name
@@ -1510,11 +1550,16 @@ function updateSkills(skill) {
 			choices += skillOptions[k]
 			k++
 		}
+	}
+	
+	// TODO: make less inefficient, include oskills
+	for (let s = 0; s < skills.length; s++) {
 		if (skills[s].level == 0 && skills[s].force_levels == 0) {
 			if (selectedSkill[0] == skills[s].name) { selectedSkill[0] = " ­ ­ ­ ­ Skill 1" }
 			if (selectedSkill[1] == skills[s].name) { selectedSkill[1] = " ­ ­ ­ ­ Skill 2" }
 		}
 	}
+
 	document.getElementById("dropdown_skill1").innerHTML = "<option class='gray' disabled>" + " ­ ­ ­ ­ Skill 1" + "</option>" + choices
 	document.getElementById("dropdown_skill2").innerHTML = "<option class='gray' disabled>" + " ­ ­ ­ ­ Skill 2" + "</option>" + choices
 	var selectedIndex = [0,0];
@@ -1528,10 +1573,16 @@ function updateSkills(skill) {
 	if (selectedSkill[1] == " ­ ­ ­ ­ Skill 2") { document.getElementById("skill2_info").innerHTML = ":"; document.getElementById("ar_skill2").innerHTML = ""; }
 }
 
-// 
+// checkSkill - 
+//	skillName: skill name displayed in dropdown
+//	num: 1 or 2 (for skill1 or skill2)
 // ---------------------------------
 function checkSkill(skillName, num) {
 	selectedSkill[num-1] = skillName
+	var native_skill = 0;
+	for (let s = 0; s < skills.length; s++) {
+		if (skillName == skills[s].name) { native_skill = 1 }
+	}
 	var c = character;
 	var strTotal = (c.strength + c.all_attributes + (c.level-1)*c.strength_per_level);
 	var dexTotal = (c.dexterity + c.all_attributes + (c.level-1)*c.dexterity_per_level);
@@ -1561,18 +1612,19 @@ function checkSkill(skillName, num) {
 	var phys_max = Math.floor(wisp*(((1+statBonus+(c.e_damage+c.damage_bonus+weapon_skillup)/100)*((c.level-1)*c.max_damage_per_level+c.base_damage_max))+c.damage_max));
 	var ele_min = Math.floor(wisp*(c.fDamage_min*(1+(c.fDamage+c.fDamage_skillup)/100) + c.cDamage_min*(1+(c.cDamage+c.cDamage_skillup)/100) + c.lDamage_min*(1+(c.lDamage+c.lDamage_skillup)/100)));
 	var ele_max = Math.floor(wisp*(c.fDamage_max*(1+(c.fDamage+c.fDamage_skillup)/100) + c.cDamage_max*(1+(c.cDamage+c.cDamage_skillup)/100) + c.lDamage_max*(1+(c.lDamage+c.lDamage_skillup)/100) + (c.pDamage_all+c.pDamage_max)*(1+c.pDamage/100)));
-
 	var skill = "";
 	for (let s = 0; s < skills.length; s++) {
 		if (skills[s].name == skillName) { 
 			skill = skills[s]
 		}
 	}
-	c.getFocusData(skill, num, ar, phys_min, phys_max, ele_min, ele_max, c.mDamage_min, c.mDamage_max, wisp);
+	if (native_skill == 0) { character_any.updateSelectedSkill(skillName, num, ar, phys_min, phys_max, ele_min, ele_max, c.mDamage_min, c.mDamage_max, wisp); }
+	else { c.updateSelectedSkill(skill, num, ar, phys_min, phys_max, ele_min, ele_max, c.mDamage_min, c.mDamage_max, wisp); }
 	updateSkills(skill)
 }	
 
-// num: number to round
+// round - Rounds and returns a number
+//	num: number to round
 // return: rounded number (no decimals if above 33 or ending in ".0")
 // ---------------------------------
 function round(num) {
@@ -1588,19 +1640,19 @@ function round(num) {
 	return temp;
 }
 
-// Hides skill tooltip
+// skillOut - Hides skill tooltip
 // ---------------------------------
 function skillOut() {
 	document.getElementById("tooltip").style.display="none"
 	checkRequirements()
 }
 
-// hides item tooltip for Charm Inventory
+// itemOut - hides item tooltip for Charm Inventory
 // ---------------------------------
 function itemOut() { document.getElementById("item_tooltip").style.display="none" }
 
-// Shows item tooltip on mouse-over for Charm Inventory
-// id: unique string identifier for item
+// itemHover - Shows item tooltip on mouse-over for Charm Inventory
+//	id: unique string identifier for item
 // ---------------------------------
 function itemHover(ev, id) {
 	var name = "";
@@ -1633,8 +1685,8 @@ function itemHover(ev, id) {
 	
 }
 
-// Duplicates the selected charm
-// id: unique string identifier for charm
+// itemSelect - Duplicates the selected charm
+//	id: unique string identifier for charm
 // ---------------------------------
 function itemSelect(ev) {
 	var dup = 0;
@@ -1649,8 +1701,9 @@ function itemSelect(ev) {
 	}
 }
 
-// Handles placement validation for Charm Inventory
-// cell: position of item in 10x4 inventory (1-40), y: height of item (1-3)
+// allowDrop - Handles placement validation for Charm Inventory
+//	cell: position of item in 10x4 inventory (1-40)
+//	y: height of item (1-3)
 // ---------------------------------
 function allowDrop(ev, cell, y) {
 	if (inv[0].pickup_y + y <= 5) {
@@ -1667,7 +1720,7 @@ function allowDrop(ev, cell, y) {
 	}
 }
 
-// Handles item dragging for Charm Inventory
+// drag - Handles item dragging for Charm Inventory
 // ---------------------------------
 function drag(ev) {
 	ev.dataTransfer.setData("text", ev.target.id);
@@ -1683,8 +1736,8 @@ function drag(ev) {
 	}
 }
 
-// Handles item dropping for Charm Inventory
-// cell: 1-40 (upper left position of item in 10x4 inventory)
+// drop - Handles item dropping for Charm Inventory
+//	cell: 1-40 (upper left position of item in 10x4 inventory)
 // ---------------------------------
 function drop(ev,cell) {
 	ev.preventDefault();
@@ -1704,7 +1757,7 @@ function drop(ev,cell) {
 	inv[0].onpickup = "none"
 }
 
-// Handles item removal for Charm Inventory
+// trash - Handles item removal for Charm Inventory
 // ---------------------------------
 function trash(ev) {
 	var val = ev.target.id;

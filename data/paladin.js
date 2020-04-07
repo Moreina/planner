@@ -2,11 +2,15 @@
 // frames per attack with a base weapon speed of 0 and no IAS
 var weapon_frames = {dagger:16, oneHand_sword:14, oneHand_axe:14, twoHand_sword:17.5, twoHand_axe:17, staff:17, polearm:17, oneHand_mace:14, scepter:14, wand:14, twoHand_mace:20, javelin:19, spear:19, bow:15, crossbow:19}
 
-var character_paladin = {class_name:"Paladin", strength:25, dexterity:20, vitality:25, energy:15, life:55, mana:15, defense:5, ar:85, stamina:189, levelup_life:2.5, levelup_stamina:1, levelup_mana:1.5, ar_per_dexterity:5, defense_per_dexterity:0.25, life_per_vitality:3, stamina_per_vitality:1, mana_per_energy:1.5, starting_strength:25, starting_dexterity:20, starting_vitality:25, starting_energy:15, ar_const:20, skill_layout:"./images/paladin.png", //tab1:"Defensive Auras", tab2:"Offensive Auras", tab3:"Combat",
+var character_paladin = {class_name:"Paladin", strength:25, dexterity:20, vitality:25, energy:15, life:55, mana:15, defense:5, ar:85, stamina:189, levelup_life:2.5, levelup_stamina:1, levelup_mana:1.5, ar_per_dexterity:5, defense_per_dexterity:0.25, life_per_vitality:3, stamina_per_vitality:1, mana_per_energy:1.5, starting_strength:25, starting_dexterity:20, starting_vitality:25, starting_energy:15, ar_const:20, skill_layout:"./images/paladin.png",
 	
-	// 
+	// getSkillData - gets skill info from the skills data table
+	//	skill: skill object for the skill in question
+	//	lvl: level of the skill
+	//	elem: which element of the skill to return
+	// result: value of the skill element at the specified level
 	// ---------------------------------
-	updateSkill : function(skill, lvl, elem) {
+	getSkillData : function(skill, lvl, elem) {
 		var result = skill.data.values[elem][lvl]
 		var wisp = (1+Math.round(character.wisp/20,0)/10);
 		
@@ -52,18 +56,15 @@ var character_paladin = {class_name:"Paladin", strength:25, dexterity:20, vitali
 	return result
 	},
 	
-	// 
+	// getBuffData - gets a list of stats corresponding to a persisting buff
+	//	effect: array element object for the buff
+	// result: indexed array including stats affected and their values
 	// ---------------------------------
 	getBuffData : function(effect) {
-	//	var skill = 0;
-	//	if (selfbuff) {skill == skills[]}
-		skill = skills[effect.skill]
+		var skill = skills[effect.skill]
 		var lvl = skill.level + skill.extra_levels;
 		var result = {};
-	//	var selfbuff = 1;
-	//	if (selfbuff == 1) { 
 		disableAuras(skill)
-	//	}
 		
 	    // Defensive Auras	
 		if (skill.name == "Prayer") {
@@ -162,9 +163,14 @@ var character_paladin = {class_name:"Paladin", strength:25, dexterity:20, vitali
 	return result
 	},
 	
-	// 
+	// updateSelectedSkill - updates and displays the damage and attack rating for the selected skill
+	//	skill: skill object for the selected skill
+	//	num: 1 or 2 (skill1 or skill2)
+	//	ar: base attack rating
+	//	min/max parameters: base damage of different types
+	//	wisp: multiplier for Wisp Projector (Lifted Spirit aura)
 	// ---------------------------------
-	getFocusData : function(skill, num, ar, phys_min, phys_max, ele_min, ele_max, mag_min, mag_max, wisp) {
+	updateSelectedSkill : function(skill, num, ar, phys_min, phys_max, ele_min, ele_max, mag_min, mag_max, wisp) {
 		var lvl = skill.level+skill.extra_levels;
 		var ar_bonus = 0; var damage_bonus = 100;
 		var damage_min = 0; var damage_max = 0;
@@ -178,39 +184,16 @@ var character_paladin = {class_name:"Paladin", strength:25, dexterity:20, vitali
 		var spell = 1;	// 0 = uses attack rating, 1 = no attack rating, 2 = non-damaging
 		var smite_min = 0; var smite_max = 0;
 		
-		if (skill.name == "Sacrifice") {		attack = 1; spell = 0; ar_bonus = character.updateSkill(skill, lvl, 0); damage_bonus = 150+character.updateSkill(skill, lvl, 1); }
-		else if (skill.name == "Smite") {		attack = 1; spell = 1; ele_min = 0; ele_max = 0; damage_bonus = 100+character.updateSkill(skill, lvl, 0); smite_min = ~~character.updateSkill(skills[28], skills[28].level, 0) + equipped.offhand.smite_min; smite_max = ~~character.updateSkill(skills[28], skills[28].level, 1) + equipped.offhand.smite_max; }
-		else if (skill.name == "Holy Bolt") {		attack = 0; spell = 1; mDamage_min = character.updateSkill(skill, lvl, 0); mDamage_max = character.updateSkill(skill, lvl, 1); }
-		else if (skill.name == "Zeal") {		attack = 1; spell = 0; ar_bonus = character.updateSkill(skill, lvl, 0); damage_bonus = 100+character.updateSkill(skill, lvl, 1); }
-		else if (skill.name == "Charge") {		attack = 1; spell = 0; ar_bonus = character.updateSkill(skill, lvl, 1); damage_bonus = 100+character.updateSkill(skill, lvl, 0); }
-		else if (skill.name == "Vengeance") {		attack = 1; spell = 0; fDamage_min = character.updateSkill(skill, lvl, 2); fDamage_max = character.updateSkill(skill, lvl, 3); cDamage_min = character.updateSkill(skill, lvl, 4); cDamage_max = character.updateSkill(skill, lvl, 5); lDamage_min = character.updateSkill(skill, lvl, 6); lDamage_max = character.updateSkill(skill, lvl, 7); ar_bonus = character.updateSkill(skill, lvl, 11); }
-		else if (skill.name == "Blessed Hammer") {	attack = 0; spell = 1; mDamage_min = character.updateSkill(skill, lvl, 0); mDamage_max = character.updateSkill(skill, lvl, 1); }
-		else if (skill.name == "Fist of the Heavens") {	attack = 0; spell = 1; mDamage_min = character.updateSkill(skill, lvl, 0); mDamage_max = character.updateSkill(skill, lvl, 1); lDamage_min = character.updateSkill(skill, lvl, 2); lDamage_max = character.updateSkill(skill, lvl, 3); }
-		else if (skill.name == "Dashing Strike") {	attack = 1; spell = 1; mDamage_min = character.updateSkill(skill, lvl, 1); mDamage_max = character.updateSkill(skill, lvl, 2); }
+		if (skill.name == "Sacrifice") {		attack = 1; spell = 0; ar_bonus = character.getSkillData(skill, lvl, 0); damage_bonus = 150+character.getSkillData(skill, lvl, 1); }
+		else if (skill.name == "Smite") {		attack = 1; spell = 1; ele_min = 0; ele_max = 0; damage_bonus = 100+character.getSkillData(skill, lvl, 0); smite_min = ~~character.getSkillData(skills[28], skills[28].level, 0) + equipped.offhand.smite_min; smite_max = ~~character.getSkillData(skills[28], skills[28].level, 1) + equipped.offhand.smite_max; }
+		else if (skill.name == "Holy Bolt") {		attack = 0; spell = 1; mDamage_min = character.getSkillData(skill, lvl, 0); mDamage_max = character.getSkillData(skill, lvl, 1); }
+		else if (skill.name == "Zeal") {		attack = 1; spell = 0; ar_bonus = character.getSkillData(skill, lvl, 0); damage_bonus = 100+character.getSkillData(skill, lvl, 1); }
+		else if (skill.name == "Charge") {		attack = 1; spell = 0; ar_bonus = character.getSkillData(skill, lvl, 1); damage_bonus = 100+character.getSkillData(skill, lvl, 0); }
+		else if (skill.name == "Vengeance") {		attack = 1; spell = 0; fDamage_min = character.getSkillData(skill, lvl, 2); fDamage_max = character.getSkillData(skill, lvl, 3); cDamage_min = character.getSkillData(skill, lvl, 4); cDamage_max = character.getSkillData(skill, lvl, 5); lDamage_min = character.getSkillData(skill, lvl, 6); lDamage_max = character.getSkillData(skill, lvl, 7); ar_bonus = character.getSkillData(skill, lvl, 11); }
+		else if (skill.name == "Blessed Hammer") {	attack = 0; spell = 1; mDamage_min = character.getSkillData(skill, lvl, 0); mDamage_max = character.getSkillData(skill, lvl, 1); }
+		else if (skill.name == "Fist of the Heavens") {	attack = 0; spell = 1; mDamage_min = character.getSkillData(skill, lvl, 0); mDamage_max = character.getSkillData(skill, lvl, 1); lDamage_min = character.getSkillData(skill, lvl, 2); lDamage_max = character.getSkillData(skill, lvl, 3); }
+		else if (skill.name == "Dashing Strike") {	attack = 1; spell = 1; mDamage_min = character.getSkillData(skill, lvl, 1); mDamage_max = character.getSkillData(skill, lvl, 2); }
 		else if (skill.name == "Conversion") {		attack = 1; spell = 0; }
-	//	else if (skill.name == "Holy Shield") {		}	// cannot be bound to left click
-	
-	//	else if (skill.name == "Prayer") {		}	// cannot be bound to left click
-	//	else if (skill.name == "Resist Fire") {		}	// cannot be bound to left click
-	//	else if (skill.name == "Defiance") {		}	// cannot be bound to left click
-	//	else if (skill.name == "Resist Cold") {		}	// cannot be bound to left click
-	//	else if (skill.name == "Cleansing") {		}	// cannot be bound to left click
-	//	else if (skill.name == "Resist Lightning") {	}	// cannot be bound to left click
-	//	else if (skill.name == "Vigor") {		}	// cannot be bound to left click
-	//	else if (skill.name == "Meditation") {		}	// cannot be bound to left click
-	//	else if (skill.name == "Redemption") {		}	// cannot be bound to left click
-	//	else if (skill.name == "Salvation") {		}	// cannot be bound to left click
-		
-	//	else if (skill.name == "Might") {		}	// cannot be bound to left click
-	//	else if (skill.name == "Holy Fire") {		}	// cannot be bound to left click
-	//	else if (skill.name == "Precision") {		}	// cannot be bound to left click
-	//	else if (skill.name == "Blessed Aim") {		}	// cannot be bound to left click
-	//	else if (skill.name == "Concentration") {	}	// cannot be bound to left click
-	//	else if (skill.name == "Holy Freeze") {		}	// cannot be bound to left click
-	//	else if (skill.name == "Holy Shock") {		}	// cannot be bound to left click
-	//	else if (skill.name == "Sanctuary") {		}	// cannot be bound to left click
-	//	else if (skill.name == "Fanaticism") {		}	// cannot be bound to left click
-	//	else if (skill.name == "Conviction") {		}	// cannot be bound to left click
 		else { attack = 0; spell = 2; }
 
 		if (typeof(skill.reqWeapon) != 'undefined') { var match = 0; for (let w = 0; w < skill.reqWeapon.length; w++) {
@@ -218,24 +201,14 @@ var character_paladin = {class_name:"Paladin", strength:25, dexterity:20, vitali
 			else { if (equipped.weapon.type == skill.reqWeapon[w]) { match = 1 } }
 		} if (match == 0) { spell = 2 } }
 		
-		if (attack == 0) {
-			ele_min = Math.floor(fDamage_min + cDamage_min + lDamage_min);
-			ele_max = Math.floor(fDamage_max + cDamage_max + lDamage_max + pDamage_max);
-			phys_min = Math.floor(damage_min);
-			phys_max = Math.floor(damage_max);
-		} else {
-			ele_min += Math.floor(fDamage_min + cDamage_min + lDamage_min);
-			ele_max += Math.floor(fDamage_max + cDamage_max + lDamage_max + pDamage_max);
-			phys_min = Math.floor((phys_min + damage_min + smite_min) * damage_bonus/100);
-			phys_max = Math.floor((phys_max + damage_max + smite_max) * damage_bonus/100);
-		}
-		if (spell == 0) {		// uses attack rating
-			skillMin = Math.floor(mag_min+mDamage_min+ele_min+phys_min); skillMax = Math.floor(mag_max+mDamage_max+ele_max+phys_max); skillAr = Math.floor(ar*(1+ar_bonus/100));
-		} else if (spell == 1) {	// no attack rating
-			skillMin = Math.floor(mag_min+mDamage_min+ele_min+phys_min); skillMax = Math.floor(mag_max+mDamage_max+ele_max+phys_max); skillAr = "";
-		} else if (spell == 2) {	// not damaging
-			skillMin = ""; skillMax = ""; skillAr = "";
-		}
+		if (attack == 0) { phys_min = 0; phys_max = 0; ele_min = 0; ele_max = 0; mag_min = 0; mag_max = 0; }
+		ele_min += Math.floor(fDamage_min + cDamage_min + lDamage_min);
+		ele_max += Math.floor(fDamage_max + cDamage_max + lDamage_max + pDamage_max);
+		phys_min = Math.floor((phys_min + damage_min + smite_min) * damage_bonus/100);
+		phys_max = Math.floor((phys_max + damage_max + smite_max) * damage_bonus/100);
+		if (spell == 0) { skillMin = Math.floor(mag_min+mDamage_min+ele_min+phys_min); skillMax = Math.floor(mag_max+mDamage_max+ele_max+phys_max); skillAr = Math.floor(ar*(1+ar_bonus/100));
+		} else if (spell == 1) { skillMin = Math.floor(mag_min+mDamage_min+ele_min+phys_min); skillMax = Math.floor(mag_max+mDamage_max+ele_max+phys_max); skillAr = "";
+		} else if (spell == 2) { skillMin = ""; skillMax = ""; skillAr = ""; }
 		
 		var output = ": " + skillMin + " - " + skillMax;
 		if (num == 1) {
@@ -248,7 +221,8 @@ var character_paladin = {class_name:"Paladin", strength:25, dexterity:20, vitali
 	}
 };
 
-// 
+// disableAuras - disable all auras except the specified aura
+//	skill: skill object for the specified aura
 // ---------------------------------
 function disableAuras(skill) {
 	for (let s = 0; s < 20; s++) {
