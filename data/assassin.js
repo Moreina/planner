@@ -150,8 +150,8 @@ var character_assassin = {class_name:"Assassin", strength:20, dexterity:20, vita
 			}
 		} if (match == 0) { spell = 2 } }
 
-		var kick_min = kick_damage_min*(1+kick_bonus/100);
-		var kick_max = kick_damage_max*(1+kick_bonus/100);
+		var kick_min = (kick_damage_min+(character.level*character.kick_damage_per_level))*(1+kick_bonus/100);
+		var kick_max = (kick_damage_max+(character.level*character.kick_damage_per_level))*(1+kick_bonus/100);
 		if (attack == 0) { phys_min = 0; phys_max = 0; ele_min = 0; ele_max = 0; mag_min = 0; mag_max = 0; }
 		ele_min += Math.floor(fDamage_min + cDamage_min + lDamage_min);
 		ele_max += Math.floor(fDamage_max + cDamage_max + lDamage_max + pDamage_max);

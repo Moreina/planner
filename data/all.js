@@ -49,20 +49,20 @@ function loadItems(type, dropdown, className) {
 			if (typeof(equipment[type][item].only) == 'undefined' || equipment[type][item].only == className) {
 			var halt = 0;
 			if (className == "clear") { halt = 1 }
-			if (typeof(equipment[type][item].limit) != 'undefined') {
-				for (let l = 0; l < equipment[type][item].limit.length; l++) {
-					if (equipment[type][item].limit[l] == className) { halt = 1 }
+			if (typeof(equipment[type][item].not) != 'undefined') {
+				for (let l = 0; l < equipment[type][item].not.length; l++) {
+					if (equipment[type][item].not[l] == className) { halt = 1 }
 				}
 			}
 			if (className == mercenaries[1].name) {
 				if (type == "offhand") { halt = 1 }
 				if (type == "weapon" && equipment[type][item].type != "bow" && equipment[type][item].type != "crossbow" && equipment[type][item].name != "Weapon") { halt = 1 }
 			}
-			if (className == mercenaries[2].name || className == mercenaries[3].name || className == mercenaries[4].name) {
+			if (className == "Desert Guard") {
 				if (type == "offhand") { halt = 1 }
 				if (type == "weapon" && equipment[type][item].type != "polearm" && equipment[type][item].type != "spear" && equipment[type][item].name != "Weapon") { halt = 1 }
 			}
-			if (className == mercenaries[5].name || className == mercenaries[6].name || className == mercenaries[7].name) {
+			if (className == "Iron Wolf") {
 				if (type == "offhand" && equipment[type][item].type != "shield" && equipment[type][item].name != "Offhand") { halt = 1 }
 				if (type == "weapon" && (equipment[type][item].type != "sword" || typeof(equipment[type][item].twoHanded) != 'undefined') && equipment[type][item].name != "Weapon") { halt = 1 }
 			}
@@ -135,7 +135,10 @@ function setMercenary(merc) {
 		for (let i = 0; i < mercEquipmentTypes.length; i++) { loadItems(mercEquipmentTypes[i], mercEquipmentDropdowns[i], "clear") }
 		document.getElementById("dropdown_mercenary").selectedIndex = 0;
 	} else {
-		for (let i = 0; i < mercEquipmentTypes.length; i++) { loadItems(mercEquipmentTypes[i], mercEquipmentDropdowns[i], merc) }
+		var mercType = merc;
+		if (merc == mercenaries[2].name || merc == mercenaries[3].name || merc == mercenaries[4].name) { mercType = "Desert Guard" }
+		if (merc == mercenaries[5].name || merc == mercenaries[6].name || merc == mercenaries[7].name) { mercType = "Iron Wolf" }
+		for (let i = 0; i < mercEquipmentTypes.length; i++) { loadItems(mercEquipmentTypes[i], mercEquipmentDropdowns[i], mercType) }
 		for (let m = 1; m < mercenaries.length; m++) {
 			if (merc == mercenaries[m].name) { if (mercenary.base_aura == "") {
 				mercenary.level = Math.max(1,character.level-1)
@@ -302,7 +305,7 @@ function equipMerc(type, val) {
 						if (affix == "base_defense") { if (typeof(equipment[type][item]["e_def"]) != 'undefined') { multED += (equipment[type][item]["e_def"]/100) } }
 						if (affix == "base_damage_min" || affix == "base_damage_max") { if (typeof(equipment[type][item]["e_damage"]) != 'undefined') { multED += (equipment[type][item]["e_damage"]/100) } }
 						if (affix == "req_strength" || affix == "req_dexterity") { if (typeof(equipment[type][item]["req"]) != 'undefined') { multReq += (equipment[type][item]["req"]/100) } }
-						
+						//TODO: ethereal reduces strength/dexterity requirements by 10
 						if (typeof(mercEquipped[type][affix]) == 'undefined') { mercEquipped[type][affix] = 0 }	// undefined (new) affixes get initialized to zero
 						if (affix == "base_damage_min" || affix == "base_damage_max" || affix == "base_defense") {
 							mercEquipped[type][affix] = Math.ceil(multEth*multED*bases[base][affix])
@@ -316,7 +319,7 @@ function equipMerc(type, val) {
 				} }
 				// add regular affixes
 				for (affix in equipment[type][item]) {
-					if (affix == "aura" || affix == "name" || affix == "type" || affix == "base" || affix == "only" || affix == "limit" || affix == "rw") {
+					if (affix == "aura" || affix == "name" || affix == "type" || affix == "base" || affix == "only" || affix == "not" || affix == "rw") {
 						if (affix == "aura" && equipment[type][item][affix] != mercenary.base_aura) {
 							mercEquipped[type][affix] = equipment[type][item][affix]
 							addAura(equipment[type][item][affix], equipment[type][item].aura_lvl, type)
@@ -431,7 +434,7 @@ function equip(type, val) {
 					if (affix == "base_defense") { if (typeof(equipment[type][item]["e_def"]) != 'undefined') { multED += (equipment[type][item]["e_def"]/100) } }
 					if (affix == "base_damage_min" || affix == "base_damage_max" || affix == "throw_min" || affix == "throw_max") { if (typeof(equipment[type][item]["e_damage"]) != 'undefined') { multED += (equipment[type][item]["e_damage"]/100) } }
 					if (affix == "req_strength" || affix == "req_dexterity") { if (typeof(equipment[type][item]["req"]) != 'undefined') { multReq += (equipment[type][item]["req"]/100) } }
-					
+					//TODO: ethereal reduces strength/dexterity requirements by 10
 					if (typeof(equipped[type][affix]) == 'undefined') { equipped[type][affix] = 0 }	// undefined (new) affixes get initialized to zero
 					if (affix == "base_damage_min" || affix == "base_damage_max" || affix == "throw_min" || affix == "throw_max" || affix == "base_defense") {
 						equipped[type][affix] = Math.ceil(multEth*multED*bases[base][affix])
@@ -446,7 +449,7 @@ function equip(type, val) {
 			// add regular affixes
 			for (affix in equipment[type][item]) {
 				equipped[type][affix] = equipment[type][item][affix]
-				if (affix == "aura" || affix == "name" || affix == "type" || affix == "base" || affix == "only" || affix == "limit" || affix == "rw") {
+				if (affix == "aura" || affix == "name" || affix == "type" || affix == "base" || affix == "only" || affix == "not" || affix == "rw") {
 					if (affix == "aura") {
 			//			equipped[type].aura_lvl = equipment[type][item].aura_lvl	// redundant?
 						addAura(equipment[type][item][affix], equipment[type][item].aura_lvl, type)
