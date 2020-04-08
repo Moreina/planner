@@ -67,7 +67,7 @@ var character_barbarian = {class_name:"Barbarian", strength:30, dexterity:20, vi
 		var cDamage_min = 0; var cDamage_max = 0;
 		var lDamage_min = 0; var lDamage_max = 0;
 		var pDamage_min = 0; var pDamage_max = 0; var pDamage_duration = 0;
-		var mDamage_min = 0; var mDamage_max = 0; //var mag_bonus = 0;
+		var mDamage_min = 0; var mDamage_max = 0;
 		var skillMin = ""; var skillMax = ""; var skillAr = "";
 		var attack = 1;	// 0 = no basic damage, 1 = includes basic attack damage, 2 = includes basic throw damage
 		var spell = 1;	// 0 = uses attack rating, 1 = no attack rating, 2 = non-damaging
@@ -92,9 +92,7 @@ var character_barbarian = {class_name:"Barbarian", strength:30, dexterity:20, vi
 				else { match = 1 }
 			}
 		} if (match == 0) { spell = 2 } }
-
-	//	TODO: ensure basic thrown damage is used (instead of melee damage) if needed
-	
+		
 		if (attack == 0) { phys_min = 0; phys_max = 0; ele_min = 0; ele_max = 0; mag_min = 0; mag_max = 0; }
 		ele_min += Math.floor(fDamage_min + cDamage_min + lDamage_min);
 		ele_max += Math.floor(fDamage_max + cDamage_max + lDamage_max + pDamage_max);

@@ -123,7 +123,7 @@ var character_assassin = {class_name:"Assassin", strength:20, dexterity:20, vita
 		else if (skill.name == "Fists of Ice") { 	attack = 1; spell = 0; ar_bonus = character.getSkillData(skill, lvl, 3); damage_min = 1; damage_max = 1; }
 		else if (skill.name == "Static Strike") {	attack = 1; spell = 0; weapon_damage = 0; lDamage_min = 0.8*phys_min+character.getSkillData(skill, lvl, 0); lDamage_max = 0.8*phys_max+character.getSkillData(skill, lvl, 1); }
 		else if (skill.name == "Dragon Talon") {	attack = 1; spell = 0; kick_damage_min = character.getSkillData(skill, lvl, 0); kick_damage_max = character.getSkillData(skill, lvl, 1); ar_bonus = character.getSkillData(skill, lvl, 2); kick_bonus = character.getSkillData(skill, lvl, 3); damage_bonus = character.getSkillData(skill, lvl, 4); }
-		else if (skill.name == "Emberstorm") {		attack = 1; spell = 1; fDamage_min = character.getSkillData(skill, lvl, 0); fDamage_max = character.getSkillData(skill, lvl, 1); }	// separated
+		else if (skill.name == "Emberstorm") {		attack = 1; spell = 1; fDamage_min = character.getSkillData(skill, lvl, 0); fDamage_max = character.getSkillData(skill, lvl, 1); }
 		else if (skill.name == "Dragon Flight") { 	attack = 1; spell = 0; kick_damage_min = character.getSkillData(skill, lvl, 0); kick_damage_max = character.getSkillData(skill, lvl, 1); kick_bonus = character.getSkillData(skill, lvl, 3); ar_bonus = character.getSkillData(skill, lvl, 4); }
 		else if (skill.name == "Blades of Ice") {	attack = 1; spell = 0; weapon_damage = 0.4*50; cDamage_min = 0.5*0.6*phys_min+character.getSkillData(skill, lvl, 1); cDamage_max = 0.5*0.6*phys_max+character.getSkillData(skill, lvl, 2); ar_bonus = character.getSkillData(skill, lvl, 0); }
 		else if (skill.name == "Psychic Hammer") {	attack = 0; spell = 1; damage_min = character.getSkillData(skill, lvl, 0); damage_max = character.getSkillData(skill, lvl, 1); mDamage_min = character.getSkillData(skill, lvl, 2); mDamage_max = character.getSkillData(skill, lvl, 3); }
@@ -138,7 +138,7 @@ var character_assassin = {class_name:"Assassin", strength:20, dexterity:20, vita
 		else if (skill.name == "Blade Fury") {		attack = 1; spell = 0; weapon_damage = 87; ar_bonus = character.getSkillData(skill, lvl, 0); damage_min = character.getSkillData(skill, lvl, 1); damage_max = character.getSkillData(skill, lvl, 2); }
 		else if (skill.name == "Lightning Sentry") {	attack = 0; spell = 1; lDamage_min = character.getSkillData(skill, lvl, 0); lDamage_max = character.getSkillData(skill, lvl, 1); }
 		else if (skill.name == "Wake of Inferno") {	attack = 0; spell = 1; fDamage_min = character.getSkillData(skill, lvl, 1); fDamage_max = character.getSkillData(skill, lvl, 2); }
-		else if (skill.name == "Death Sentry") {	attack = 0; spell = 1; lDamage_min = character.getSkillData(skill, lvl, 1); lDamage_max = character.getSkillData(skill, lvl, 2); }
+		else if (skill.name == "Death Sentry") {	attack = 0; spell = 1; lDamage_min = character.getSkillData(skill, lvl, 2); lDamage_max = character.getSkillData(skill, lvl, 3); }
 		else if (skill.name == "Blade Shield") {	attack = 1; spell = 0; weapon_damage = 50; damage_min = character.getSkillData(skill, lvl, 2); damage_max = character.getSkillData(skill, lvl, 3); ar_bonus = character.getSkillData(skill, lvl, 4); }
 		else { attack = 0; spell = 2; }
 

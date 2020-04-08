@@ -1,6 +1,7 @@
 
 
 var equipped = { helm:{name:"none"}, armor:{name:"none"}, gloves:{name:"none"}, boots:{name:"none"}, belt:{name:"none"}, amulet:{name:"none"}, ring1:{name:"none"}, ring2:{name:"none"}, weapon:{name:"none", twoHanded:0, type:""}, offhand:{name:"none", type:""}, charms:{name:"none"}};
+var mercEquipped = { helm:{name:"none"}, armor:{name:"none"}, weapon:{name:"none"}, offhand:{name:"none"} };
 
 var unequipped = {name:"none", strength:0, dexterity:0, vitality:0, energy:0, life:0, mana:0, defense:0, ar:0, stamina:0, block:0, base_defense:0, 
 /* main stats		*/	fRes_max:0, cRes_max:0, lRes_max:0, pRes_max:0, mRes_max:0, fRes:0, cRes:0, lRes:0, pRes:0, mRes:0,
@@ -58,16 +59,18 @@ var non_items = [
 {i:8, name:"Shrine: Poison Resist", pRes:75, duration:144, recharge:240, effect:"Resist_Poison"},
 {i:9, name:"Potion: Thawing", cRes:50, duration:30, effect:"Thawing"},							// stackable duration
 {i:10, name:"Potion: Antitode", pRes:50, duration:30, effect:"Antidote"},						// stackable duration
-/*
-{i:11, name:"Mercenary: Inner Sight", aura:"Inner Sight"},	//enemy_defense:0, 
-{i:12, name:"Mercenary: Blessed Aim", aura:"Blessed Aim"},	//ar_bonus:0, blessed_hammer_on_hit:0, 
-{i:13, name:"Mercenary: Defiance", aura:"Defiance"},		//defense_bonus:0, 
-{i:14, name:"Mercenary: Prayer", aura:"Prayer"},		//life_regen:0, life_replenish:0, 
-{i:15, name:"Mercenary: Meditation", aura:"Meditation"},	//mana_regen:0, 
-{i:16, name:"Mercenary: Cleansing", aura:"Cleansing"},		//poison_length_reduced:0, curse_length_reduced:0, 
-{i:17, name:"Mercenary: Thorns", aura:"Thorns"},		//thorns_reflect:0, 
-{i:18, name:"Mercenary: Might", aura:"Might"},			//damage_bonus:0, 
-*/
+];
+
+var mercenaries = [
+{name:"Mercenary"},
+{i:1, name:"Rogue Scout (Inner Sight)", aura:"Inner Sight"},
+{i:2, name:"Desert Guard (Blessed Aim)", aura:"Blessed Aim"},
+{i:3, name:"Desert Guard (Defiance)", aura:"Defiance"},
+{i:4, name:"Desert Guard (Prayer)", aura:"Prayer"},
+{i:5, name:"Iron Wolf (Meditation)", aura:"Meditation"},
+{i:6, name:"Iron Wolf (Cleansing)", aura:"Cleansing"},
+{i:7, name:"Iron Wolf (Thorns)", aura:"Thorns"},
+{i:8, name:"Barbarian (Might)", aura:"Might"},
 ];
 
 var auras = [
@@ -93,12 +96,12 @@ var auras = [
 /*18*/	{name:"Fanaticism", values:[["party damage",25,30,35,40,45,50,55,60,65,70,75,80,85,90,95,100,105,110,115,120,125,130,135,140,145,150,155,160,165,170,175,180,185,190,195,200,205,210,215,220,225,230,235,240,245,250,255,260,265,270,275,280,285,290,295,300,305,310,315,320], ["damage",50,60,70,80,90,100,110,120,130,140,150,160,170,180,190,200,210,220,230,240,250,260,270,280,290,300,310,320,330,340,350,360,370,380,390,400,410,420,430,440,450,460,470,480,490,500,510,520,530,540,550,560,570,580,590,600,610,620,630,640], ["attack speed",14,18,20,23,25,26,27,28,29,30,31,31,32,33,33,34,34,34,34,35,35,35,36,36,36,36,37,37,37,37,37,37,37,37,37,38,38,38,38,38,38,38,38,38,39,39,39,39,39,39,39,39,39,39,39,39,39,39,39,40], ["attack rating",40,45,50,55,60,65,70,75,80,85,90,95,100,105,110,115,120,125,130,135,140,145,150,155,160,165,170,175,180,185,190,195,200,205,210,215,220,225,230,235,240,245,250,255,260,265,270,275,280,285,290,295,300,305,310,315,320,325,330,335]]},
 /*19*/	{name:"Conviction", values:[["defense",-32,-38,-43,-47,-50,-52,-54,-56,-58,-59,-60,-61,-62,-63,-64,-65,-65,-66,-66,-67,-67,-68,-68,-69,-69,-69,-70,-70,-70,-70,-71,-71,-71,-71,-71,-72,-72,-72,-72,-72,-72,-73,-73,-73,-73,-73,-73,-73,-74,-74,-74,-74,-74,-74,-74,-74,-74,-74,-74,-75], ["resist",-30,-35,-40,-45,-50,-55,-60,-65,-70,-75,-80,-85,-90,-95,-100,-105,-110,-115,-120,-125,-130,-135,-140,-145,-150,-150,-150,-150,-150,-150,-150,-150,-150,-150,-150,-150,-150,-150,-150,-150,-150,-150,-150,-150,-150,-150,-150,-150,-150,-150,-150,-150,-150,-150,-150,-150,-150,-150,-150,-150]]},
 
-/*20^*/	{name:"Thorns", values:[["thorns",250,290,330,370,410,450,490,530,570,610,650,690,730,770,810,850,890,930,970,1010,1050,1090,1130,1170,1210,1250,1290,1330,1370,1410,1450,1490,1530,1570,1610,1650,1690,1730,1770,1810,1850,1890,1930,1970,2010,2050,2090,2130,2170,2210,2250,2290,2330,2370,2410,2450,2490,2530]]},
+/*20*/	{name:"Thorns", values:[["thorns",250,290,330,370,410,450,490,530,570,610,650,690,730,770,810,850,890,930,970,1010,1050,1090,1130,1170,1210,1250,1290,1330,1370,1410,1450,1490,1530,1570,1610,1650,1690,1730,1770,1810,1850,1890,1930,1970,2010,2050,2090,2130,2170,2210,2250,2290,2330,2370,2410,2450,2490,2530]]},
+/*21*/	{name:"Inner Sight", values:[["enemy defense",-40,-65,-90,-115,-140,-165,-190,-215,-260,-305,-350,-395,-440,-485,-530,-575,-635,-695,-755,-815,-875,-935,-1015,-1095,-1175,-1255,-1335,-1415,-1515,-1615,-1715,-1815,-1915,-2015,-2115,-2215,-2315,-2415,-2515,-2615,-2715,-2815,-2915,-3015,-3115,-3215,-3315,-3415,-3515,-3615,-3715,-3815,-3915,-4015,-4115,-4215,-4315,-4415,-4515,-4615], ["radius",6,6.6,7.3,8,8.6,9.3,10,10.6,11.3,12,12.6,13.3,14,14.6,15.3,16,16.6,17.3,18,18.6,19.3,19.3,19.3,19.3,19.3,19.3,19.3,19.3,19.3,19.3,19.3,19.3,19.3,19.3,19.3,19.3,19.3,19.3,19.3,19.3,19.3,19.3,19.3,19.3,19.3,19.3,19.3,19.3,19.3,19.3,19.3,19.3,19.3,19.3,19.3,19.3,19.3,19.3,19.3,19.3]]},
 
-// TODO: Should these be added the same as item auras, or implemented differently?
-/**/	{name:"Inner Sight", values:[["enemy defense",-40,-65,-90,-115,-140,-165,-190,-215,-260,-305,-350,-395,-440,-485,-530,-575,-635,-695,-755,-815,-875,-935,-1015,-1095,-1175,-1255,-1335,-1415,-1515,-1615,-1715,-1815,-1915,-2015,-2115,-2215,-2315,-2415,-2515,-2615,-2715,-2815,-2915,-3015,-3115,-3215,-3315,-3415,-3515,-3615,-3715,-3815,-3915,-4015,-4115,-4215,-4315,-4415,-4515,-4615], ["radius",6,6.6,7.3,8,8.6,9.3,10,10.6,11.3,12,12.6,13.3,14,14.6,15.3,16,16.6,17.3,18,18.6,19.3,19.3,19.3,19.3,19.3,19.3,19.3,19.3,19.3,19.3,19.3,19.3,19.3,19.3,19.3,19.3,19.3,19.3,19.3,19.3,19.3,19.3,19.3,19.3,19.3,19.3,19.3,19.3,19.3,19.3,19.3,19.3,19.3,19.3,19.3,19.3,19.3,19.3,19.3,19.3]]},
-/**/	{name:"Frigerate", values:[["damage min",4,5,6,7,8,9,10,11,14,17,20,23,26,29,32,35,41,47,53,59,65,71,80,89,98,107,116,125,141,157,173,189,205,221,237,253,269,285,301,317,333,349,365,381,397,413,429,445,461,477,493,509,525,541,557,573,589,605,621,637], ["damage max",6,8,10,12,14,16,18,20,25,30,35,40,45,50,55,60,69,78,87,96,105,114,129,144,159,174,189,204,228,252,276,300,324,348,372,396,420,444,468,492,516,540,564,588,612,636,660,684,708,732,756,780,804,828,852,876,900,924,948,972], ["enemy defense",-8,-10,-12,-13,-15,-16,-16,-17,-18,-18,-19,-19,-20,-20,-20,-21,-21,-21,-21,-21,-22,-22,-22,-22,-22,-22,-23,-23,-23,-23,-23,-23,-23,-23,-23,-23,-23,-24,-24,-24,-24,-24,-24,-24,-24,-24,-24,-24,-24,-24,-24,-24,-24,-24,-24,-24,-24,-24,-24,-25], ["mana cost",25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84]]},
-/**/	{name:"Enflame", values:[["duration",320,322,324,326,328,330,332,334,336,338,340,342,344,346,348,350,352,354,356,358,360,362,364,366,368,370,372,374,376,378,380,382,384,386,388,390,392,394,396,398,400,402,404,406,408,410,412,414,416,418,420,422,424,426,428,430,432,434,436,438], ["fire min",9,13,17,21,25,29,32,37,45,53,61,69,77,85,93,101,121,141,161,180,201,221,250,279,307,337,365,395,429,463,496,530,564,598,632,667,701,735,769,803,837,871,904,938,972,1006,1040,1074,1108,1142,1176,1210,1244,1278,1312,1346,1379,1413,1447,1481], ["fire max",12,18,23,29,36,42,47,54,63,73,84,94,104,113,123,134,160,186,212,238,264,290,320,350,379,410,439,470,504,539,575,610,645,679,714,750,785,820,854,889,925,960,995,1029,1064,1100,1135,1170,1204,1239,1275,1310,1345,1379,1414,1450,1485,1520,1554,1589], ["attack rating",50,55,60,65,70,75,80,85,90,95,100,105,110,115,120,125,130,135,140,145,150,155,160,165,170,175,180,185,190,195,200,205,210,215,220,225,230,235,240,245,250,255,260,265,270,275,280,285,290,295,300,305,310,315,320,325,330,335,340,345], ["mana cost",25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84]]},
+	// TODO: Should these be added the same as item auras, or implemented differently?
+	//{name:"Frigerate", values:[["damage min",4,5,6,7,8,9,10,11,14,17,20,23,26,29,32,35,41,47,53,59,65,71,80,89,98,107,116,125,141,157,173,189,205,221,237,253,269,285,301,317,333,349,365,381,397,413,429,445,461,477,493,509,525,541,557,573,589,605,621,637], ["damage max",6,8,10,12,14,16,18,20,25,30,35,40,45,50,55,60,69,78,87,96,105,114,129,144,159,174,189,204,228,252,276,300,324,348,372,396,420,444,468,492,516,540,564,588,612,636,660,684,708,732,756,780,804,828,852,876,900,924,948,972], ["enemy defense",-8,-10,-12,-13,-15,-16,-16,-17,-18,-18,-19,-19,-20,-20,-20,-21,-21,-21,-21,-21,-22,-22,-22,-22,-22,-22,-23,-23,-23,-23,-23,-23,-23,-23,-23,-23,-23,-24,-24,-24,-24,-24,-24,-24,-24,-24,-24,-24,-24,-24,-24,-24,-24,-24,-24,-24,-24,-24,-24,-25], ["mana cost",25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84]]},
+	//{name:"Enflame", values:[["duration",320,322,324,326,328,330,332,334,336,338,340,342,344,346,348,350,352,354,356,358,360,362,364,366,368,370,372,374,376,378,380,382,384,386,388,390,392,394,396,398,400,402,404,406,408,410,412,414,416,418,420,422,424,426,428,430,432,434,436,438], ["fire min",9,13,17,21,25,29,32,37,45,53,61,69,77,85,93,101,121,141,161,180,201,221,250,279,307,337,365,395,429,463,496,530,564,598,632,667,701,735,769,803,837,871,904,938,972,1006,1040,1074,1108,1142,1176,1210,1244,1278,1312,1346,1379,1413,1447,1481], ["fire max",12,18,23,29,36,42,47,54,63,73,84,94,104,113,123,134,160,186,212,238,264,290,320,350,379,410,439,470,504,539,575,610,645,679,714,750,785,820,854,889,925,960,995,1029,1064,1100,1135,1170,1204,1239,1275,1310,1345,1379,1414,1450,1485,1520,1554,1589], ["attack rating",50,55,60,65,70,75,80,85,90,95,100,105,110,115,120,125,130,135,140,145,150,155,160,165,170,175,180,185,190,195,200,205,210,215,220,225,230,235,240,245,250,255,260,265,270,275,280,285,290,295,300,305,310,315,320,325,330,335,340,345], ["mana cost",25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84]]},
 	// Righteous Fire (Todesfaelle Flamme)
 	// Lifted Spirit (Wisp Projector)
 ];
@@ -109,8 +112,9 @@ var auras = [
 // result: indexed array of stats granted and their values
 // ---------------------------------
 function getAuraData(aura, lvl) {
+	if (lvl < 1) { lvl = 1 }	// may not be necessary
 	var result = {};
-	var a = 0;
+	var a = -1;
 	for (let u = 0; u < auras.length; u++) {
 		if (auras[u].name == aura) { a = u }
 	}
@@ -150,8 +154,6 @@ function getAuraData(aura, lvl) {
 		result.cDamage = auras[a].values[0][lvl];
 		result.lDamage = auras[a].values[0][lvl];
 		result.all_res = auras[a].values[1][lvl]; }
-	else if (aura == "Thorns") {
-		result.thorns_reflect = auras[a].values[0][lvl]; }
     // Offensive Auras
 	else if (aura == "Might") {
 		result.damage_bonus = auras[a].values[0][lvl]; }
@@ -191,22 +193,25 @@ function getAuraData(aura, lvl) {
 		result.enemy_lRes = auras[a].values[1][lvl];
 		result.enemy_pRes = auras[a].values[1][lvl]; }
     // Others
+	else if (aura == "Thorns") {
+		result.thorns_reflect = auras[a].values[0][lvl]; }
 	else if (aura == "Inner Sight") {
-		result.enemy_defense = skills_all["amazon"][10].data.values[0][lvl]; }
-	else if (aura == "Frigerate") {
-		result.cDamage_min = auras[a].values[0][lvl];
-		result.cDamage_max = auras[a].values[1][lvl];
-		result.enemy_defense = auras[a].values[2][lvl]; }
-	else if (aura == "Enflame") {
-		result.fDamage_min = auras[a].values[1][lvl];
-		result.fDamage_max = auras[a].values[2][lvl];
-		result.ar_bonus = auras[a].values[3][lvl]; }
-	else if (aura == "Righteous Fire") {
-		//similar to holy fire?		TODO: calculate
-		result.light_radius = 0; }
-	else if (aura == "Lifted Spirit") {
-		// wisp				TODO: calculate
-		result.light_radius = 0; }
+		result.enemy_defense = auras[a].values[0][lvl]; }
+
+//	else if (aura == "Frigerate") {
+//		result.cDamage_min = auras[a].values[0][lvl];
+//		result.cDamage_max = auras[a].values[1][lvl];
+//		result.enemy_defense = auras[a].values[2][lvl]; }
+//	else if (aura == "Enflame") {
+//		result.fDamage_min = auras[a].values[1][lvl];
+//		result.fDamage_max = auras[a].values[2][lvl];
+//		result.ar_bonus = auras[a].values[3][lvl]; }
+//	else if (aura == "Righteous Fire") {
+//		//similar to holy fire?		TODO: calculate
+//		result.light_radius = 0; }
+//	else if (aura == "Lifted Spirit") {
+//		// wisp				TODO: calculate
+//		result.light_radius = 0; }
 	
 	return result;
 };
@@ -214,6 +219,11 @@ function getAuraData(aura, lvl) {
 var equipment = {
     helm: [
 {name:"Helm"},
+{only:"Barbarian (Might)", name:"Arreat's Face", req_level:42, e_def:200, skills_barbarian:2, fhr:30, ar_bonus:20, life_leech:6, all_res:30, strength:20, dexterity:20, skills_combat_barbarian:2, base:"Slayer Guard"},
+{only:"Barbarian (Might)", name:"Wolfhowl", req_level:79, e_def:150, skills_warcries:3, oskill_Lycanthropy:6, oskill_Werewolf:6, oskill_Feral_Rage:6, strength:15, dexterity:15, vitality:15, charges_summon_dire_wolf:15, base:"Fury Visor"},
+{only:"Barbarian (Might)", name:"Demonhorn's Edge", req_level:61, e_def:160, ias:10, life_leech:6, thorns:77, skills_warcries:3, skills_masteries:3, skills_combat_barbarian:3, base:"Destroyer Helm"},
+{only:"Barbarian (Might)", name:"Halaberd's Reign", req_level:77, e_def:170, life_replenish:23, fhr:20, skills_barbarian:2, skills_masteries:1, skill_Battle_Command:2, skill_Battle_Orders:2},
+{only:"Barbarian (Might)", set_IK:1, name:"Immortal King's Will", req_level:47, defense:125, light_radius:4, gf:37, mf:40, skills_warcries:2, sockets:2, base:"Avenger Guard", set_bonuses:["set_IK",{},{},{},{},{},{}]},
 {only:"barbarian", name:"Arreat's Face", req_level:42, e_def:200, skills_barbarian:2, fhr:30, ar_bonus:20, life_leech:6, all_res:30, strength:20, dexterity:20, skills_combat_barbarian:2, base:"Slayer Guard"},
 {only:"barbarian", name:"Wolfhowl", req_level:79, e_def:150, skills_warcries:3, oskill_Lycanthropy:6, oskill_Werewolf:6, oskill_Feral_Rage:6, strength:15, dexterity:15, vitality:15, charges_summon_dire_wolf:15, base:"Fury Visor"},
 {only:"barbarian", name:"Demonhorn's Edge", req_level:61, e_def:160, ias:10, life_leech:6, thorns:77, skills_warcries:3, skills_masteries:3, skills_combat_barbarian:3, base:"Destroyer Helm"},
@@ -1391,34 +1401,34 @@ var bases = {
 	Fanged_Knife:{group:"weapon", type:"dagger", base_damage_min:15, base_damage_max:57, req_level:62, req_strength:42, req_dexterity:86, durability:36, speed:-20, max_sockets:3, downgrade:"Cinquedeas"},
 	Legend_Spike:{group:"weapon", type:"dagger", base_damage_min:31, base_damage_max:47, req_level:66, req_strength:65, req_dexterity:67, durability:47, speed:-10, max_sockets:2, downgrade:"Stilleto"},
 	// thrown
-	Throwing_Knife:{group:"weapon", type:"thrown", base_damage_min:2, base_damage_max:3, req_dexterity:21, durability:4, speed:0, upgrade:"Battle Dart", subtype:"dagger", throw_min:4, throw_max:9},
-	Throwing_Axe:{group:"weapon", type:"thrown", base_damage_min:4, base_damage_max:7, req_dexterity:40, durability:6, speed:10, upgrade:"Francisca", subtype:"axe", throw_min:8, throw_max:12},
-	Balanced_Knife:{group:"weapon", type:"thrown", base_damage_min:1, base_damage_max:8, req_dexterity:51, durability:8, speed:-20, upgrade:"War Dart", subtype:"dagger", throw_min:6, throw_max:11},
-	Balanced_Axe:{group:"weapon", type:"thrown", base_damage_min:5, base_damage_max:10, req_dexterity:57, durability:10, speed:-10, upgrade:"Hurlbat", subtype:"axe", throw_min:12, throw_max:15},
-	Battle_Dart:{group:"weapon", type:"thrown", base_damage_min:8, base_damage_max:16, req_level:19, req_strength:25, req_dexterity:52, durability:6, speed:0, upgrade:"Flying Knife", downgrade:"Throwing Knife", subtype:"dagger", throw_min:11, throw_max:24},
-	Francisca:{group:"weapon", type:"thrown", base_damage_min:11, base_damage_max:22, req_level:22, req_strength:25, req_dexterity:80, durability:15, speed:10, upgrade:"Flying Axe", downgrade:"Throwing Axe", subtype:"axe", throw_min:18, throw_max:33},
-	War_Dart:{group:"weapon", type:"thrown", base_damage_min:6, base_damage_max:24, req_level:25, req_strength:25, req_dexterity:97, durability:20, speed:-20, upgrade:"Winged Knife", downgrade:"Balanced Knife", subtype:"dagger", throw_min:14, throw_max:27},
-	Hurlbat:{group:"weapon", type:"thrown", base_damage_min:13, base_damage_max:27, req_level:25, req_strength:25, req_dexterity:106, durability:16, speed:-10, upgrade:"Winged Axe", downgrade:"Balanced Axe", subtype:"axe", throw_min:24, throw_max:34},
-	Flying_Knife:{group:"weapon", type:"thrown", base_damage_min:23, base_damage_max:54, req_level:48, req_strength:48, req_dexterity:141, durability:6, speed:0, downgrade:"Battle Dart", subtype:"dagger", throw_min:23, throw_max:54},
-	Flying_Axe:{group:"weapon", type:"thrown", base_damage_min:17, base_damage_max:65, req_level:42, req_strength:88, req_dexterity:108, durability:15, speed:10, downgrade:"Francisca", subtype:"axe", throw_min:15, throw_max:66},
-	Winged_Knife:{group:"weapon", type:"thrown", base_damage_min:27, base_damage_max:35, req_level:57, req_strength:45, req_dexterity:142, durability:20, speed:-20, downgrade:"War Dart", subtype:"dagger", throw_min:23, throw_max:39},
-	Winged_Axe:{group:"weapon", type:"thrown", base_damage_min:11, base_damage_max:56, req_level:60, req_strength:96, req_dexterity:122, durability:16, speed:-10, downgrade:"Hurlbat", subtype:"axe", throw_min:7, throw_max:60},
+	Throwing_Knife:{group:"weapon", type:"thrown", base_damage_min:2, base_damage_max:3, throw_min:4, throw_max:9, req_dexterity:21, durability:4, speed:0, upgrade:"Battle Dart", subtype:"dagger"},
+	Throwing_Axe:{group:"weapon", type:"thrown", base_damage_min:4, base_damage_max:7, throw_min:8, throw_max:12, req_dexterity:40, durability:6, speed:10, upgrade:"Francisca", subtype:"axe"},
+	Balanced_Knife:{group:"weapon", type:"thrown", base_damage_min:1, base_damage_max:8, throw_min:6, throw_max:11, req_dexterity:51, durability:8, speed:-20, upgrade:"War Dart", subtype:"dagger"},
+	Balanced_Axe:{group:"weapon", type:"thrown", base_damage_min:5, base_damage_max:10, throw_min:12, throw_max:15, req_dexterity:57, durability:10, speed:-10, upgrade:"Hurlbat", subtype:"axe"},
+	Battle_Dart:{group:"weapon", type:"thrown", base_damage_min:8, base_damage_max:16, throw_min:11, throw_max:24, req_level:19, req_strength:25, req_dexterity:52, durability:6, speed:0, upgrade:"Flying Knife", downgrade:"Throwing Knife", subtype:"dagger"},
+	Francisca:{group:"weapon", type:"thrown", base_damage_min:11, base_damage_max:22, throw_min:18, throw_max:33, req_level:22, req_strength:25, req_dexterity:80, durability:15, speed:10, upgrade:"Flying Axe", downgrade:"Throwing Axe", subtype:"axe"},
+	War_Dart:{group:"weapon", type:"thrown", base_damage_min:6, base_damage_max:24, throw_min:14, throw_max:27, req_level:25, req_strength:25, req_dexterity:97, durability:20, speed:-20, upgrade:"Winged Knife", downgrade:"Balanced Knife", subtype:"dagger"},
+	Hurlbat:{group:"weapon", type:"thrown", base_damage_min:13, base_damage_max:27, throw_min:24, throw_max:34, req_level:25, req_strength:25, req_dexterity:106, durability:16, speed:-10, upgrade:"Winged Axe", downgrade:"Balanced Axe", subtype:"axe"},
+	Flying_Knife:{group:"weapon", type:"thrown", base_damage_min:23, base_damage_max:54, throw_min:23, throw_max:54, req_level:48, req_strength:48, req_dexterity:141, durability:6, speed:0, downgrade:"Battle Dart", subtype:"dagger"},
+	Flying_Axe:{group:"weapon", type:"thrown", base_damage_min:17, base_damage_max:65, throw_min:15, throw_max:66, req_level:42, req_strength:88, req_dexterity:108, durability:15, speed:10, downgrade:"Francisca", subtype:"axe"},
+	Winged_Knife:{group:"weapon", type:"thrown", base_damage_min:27, base_damage_max:35, throw_min:23, throw_max:39, req_level:57, req_strength:45, req_dexterity:142, durability:20, speed:-20, downgrade:"War Dart", subtype:"dagger"},
+	Winged_Axe:{group:"weapon", type:"thrown", base_damage_min:11, base_damage_max:56, throw_min:7, throw_max:60, req_level:60, req_strength:96, req_dexterity:122, durability:16, speed:-10, downgrade:"Hurlbat", subtype:"axe"},
 	// javelin
-	Javelin:{group:"weapon", type:"javelin", base_damage_min:1, base_damage_max:5, durability:2, speed:-10, range:2, upgrade:"War Javelin"},
-	Pilum:{group:"weapon", type:"javelin", base_damage_min:4, base_damage_max:9, req_dexterity:45, durability:3, speed:0, range:2, upgrade:"Great Pilum"},
-	Short_Spear:{group:"weapon", type:"javelin", base_damage_min:2, base_damage_max:13, req_strength:40, req_dexterity:40, durability:4, speed:10, range:2, upgrade:"Simbilan"},
-	Glaive:{group:"weapon", type:"javelin", base_damage_min:5, base_damage_max:17, req_strength:52, req_dexterity:35, durability:5, speed:20, range:2, upgrade:"Spiculum"},
-	Throwing_Spear:{group:"weapon", type:"javelin", base_damage_min:5, base_damage_max:15, req_dexterity:65, durability:6, speed:-10, range:2, upgrade:"Harpoon"},
-	War_Javelin:{group:"weapon", type:"javelin", base_damage_min:6, base_damage_max:19, req_level:18, req_strength:25, req_dexterity:25, durability:10, speed:-10, range:2, upgrade:"Hyperion Javelin", downgrade:"Javelin"},
-	Great_Pilum:{group:"weapon", type:"javelin", base_damage_min:11, base_damage_max:26, req_level:25, req_strength:25, req_dexterity:88, durability:12, speed:0, range:2, upgrade:"Stygian Pilum", downgrade:"Pilum"},
-	Simbilan:{group:"weapon", type:"javelin", base_damage_min:8, base_damage_max:32, req_level:25, req_strength:80, req_dexterity:80, durability:14, speed:10, range:2, upgrade:"Balrog Spear", downgrade:"Short Spear"},
-	Spiculum:{group:"weapon", type:"javelin", base_damage_min:13, base_damage_max:38, req_level:25, req_strength:98, req_dexterity:73, durability:16, speed:20, range:2, upgrade:"Ghost Glaive", downgrade:"Glaive"},
-	Harpoon:{group:"weapon", type:"javelin", base_damage_min:13, base_damage_max:35, req_level:25, req_strength:25, req_dexterity:118, durability:18, speed:-10, range:2, upgrade:"Winged Harpoon", downgrade:"Throwing Spear"},
-	Hyperion_Javelin:{group:"weapon", type:"javelin", base_damage_min:21, base_damage_max:57, req_level:40, req_strength:98, req_dexterity:123, durability:10, speed:-10, range:2, downgrade:"War Javelin"},
-	Stygian_Pilum:{group:"weapon", type:"javelin", base_damage_min:14, base_damage_max:64, req_level:46, req_strength:118, req_dexterity:112, durability:12, speed:0, range:2, downgrade:"Great Pilum"},
-	Balrog_Spear:{group:"weapon", type:"javelin", base_damage_min:33, base_damage_max:63, req_level:53, req_strength:127, req_dexterity:95, durability:14, speed:10, range:2, downgrade:"Simbilan"},
-	Ghost_Glaive:{group:"weapon", type:"javelin", base_damage_min:19, base_damage_max:60, req_level:59, req_strength:89, req_dexterity:137, durability:16, speed:20, range:2, downgrade:"Spiculum"},
-	Winged_Harpoon:{group:"weapon", type:"javelin", base_damage_min:27, base_damage_max:35, req_level:65, req_strength:76, req_dexterity:145, durability:18, speed:-10, range:2, downgrade:"Harpoon"},
+	Javelin:{group:"weapon", type:"javelin", base_damage_min:1, base_damage_max:5, throw_min:6, throw_max:14, durability:2, speed:-10, range:2, upgrade:"War Javelin"},
+	Pilum:{group:"weapon", type:"javelin", base_damage_min:4, base_damage_max:9, throw_min:7, throw_max:20, req_dexterity:45, durability:3, speed:0, range:2, upgrade:"Great Pilum"},
+	Short_Spear:{group:"weapon", type:"javelin", base_damage_min:2, base_damage_max:13, throw_min:10, throw_max:22, req_strength:40, req_dexterity:40, durability:4, speed:10, range:2, upgrade:"Simbilan"},
+	Glaive:{group:"weapon", type:"javelin", base_damage_min:5, base_damage_max:17, throw_min:16, throw_max:22, req_strength:52, req_dexterity:35, durability:5, speed:20, range:2, upgrade:"Spiculum"},
+	Throwing_Spear:{group:"weapon", type:"javelin", base_damage_min:5, base_damage_max:15, throw_min:12, throw_max:30, req_dexterity:65, durability:6, speed:-10, range:2, upgrade:"Harpoon"},
+	War_Javelin:{group:"weapon", type:"javelin", base_damage_min:6, base_damage_max:19, throw_min:14, throw_max:32, req_level:18, req_strength:25, req_dexterity:25, durability:10, speed:-10, range:2, upgrade:"Hyperion Javelin", downgrade:"Javelin"},
+	Great_Pilum:{group:"weapon", type:"javelin", base_damage_min:11, base_damage_max:26, throw_min:16, throw_max:42, req_level:25, req_strength:25, req_dexterity:88, durability:12, speed:0, range:2, upgrade:"Stygian Pilum", downgrade:"Pilum"},
+	Simbilan:{group:"weapon", type:"javelin", base_damage_min:8, base_damage_max:32, throw_min:27, throw_max:50, req_level:25, req_strength:80, req_dexterity:80, durability:14, speed:10, range:2, upgrade:"Balrog Spear", downgrade:"Short Spear"},
+	Spiculum:{group:"weapon", type:"javelin", base_damage_min:13, base_damage_max:38, throw_min:32, throw_max:60, req_level:25, req_strength:98, req_dexterity:73, durability:16, speed:20, range:2, upgrade:"Ghost Glaive", downgrade:"Glaive"},
+	Harpoon:{group:"weapon", type:"javelin", base_damage_min:13, base_damage_max:35, throw_min:18, throw_max:54, req_level:25, req_strength:25, req_dexterity:118, durability:18, speed:-10, range:2, upgrade:"Winged Harpoon", downgrade:"Throwing Spear"},
+	Hyperion_Javelin:{group:"weapon", type:"javelin", base_damage_min:21, base_damage_max:57, throw_min:28, throw_max:55, req_level:40, req_strength:98, req_dexterity:123, durability:10, speed:-10, range:2, downgrade:"War Javelin"},
+	Stygian_Pilum:{group:"weapon", type:"javelin", base_damage_min:14, base_damage_max:64, throw_min:21, throw_max:75, req_level:46, req_strength:118, req_dexterity:112, durability:12, speed:0, range:2, downgrade:"Great Pilum"},
+	Balrog_Spear:{group:"weapon", type:"javelin", base_damage_min:33, base_damage_max:63, throw_min:40, throw_max:62, req_level:53, req_strength:127, req_dexterity:95, durability:14, speed:10, range:2, downgrade:"Simbilan"},
+	Ghost_Glaive:{group:"weapon", type:"javelin", base_damage_min:19, base_damage_max:60, throw_min:30, throw_max:85, req_level:59, req_strength:89, req_dexterity:137, durability:16, speed:20, range:2, downgrade:"Spiculum"},
+	Winged_Harpoon:{group:"weapon", type:"javelin", base_damage_min:27, base_damage_max:35, throw_min:11, throw_max:77, req_level:65, req_strength:76, req_dexterity:145, durability:18, speed:-10, range:2, downgrade:"Harpoon"},
 	// spear
 	Spear:{group:"weapon", type:"spear", base_damage_min:3, base_damage_max:15, req_dexterity:20, durability:30, speed:-10, range:3, max_sockets:3, upgrade:"War Spear", twoHands:1},
 	Trident:{group:"weapon", type:"spear", base_damage_min:9, base_damage_max:15, req_strength:38, req_dexterity:24, durability:35, speed:0, range:3, max_sockets:4, upgrade:"Fuscina", twoHands:1},

@@ -73,34 +73,32 @@ var character_amazon = {class_name:"Amazon", strength:20, dexterity:25, vitality
 		var spell = 1;	// 0 = uses attack rating, 1 = no attack rating, 2 = non-damaging
 
 		if (skill.name == "Jab") { 			attack = 1; spell = 0; ar_bonus = character.getSkillData(skill, lvl, 0); damage_bonus = character.getSkillData(skill, lvl, 1); }
-		else if (skill.name == "Power Strike") { 	attack = 1; spell = 0; ar_bonus = character.getSkillData(skill, lvl, 0); lDamage_min = character.getSkillData(skill, lvl, 1); lDamage_max = character.getSkillData(skill, lvl, 2); }	// regular damage (non-throw) + 1-22 lightning (yellow)
-		else if (skill.name == "Poison Javelin") {	attack = 2; spell = 0; pDamage_min = character.getSkillData(skill, lvl, 0); pDamage_max = character.getSkillData(skill, lvl, 1); pDamage_duration = 5; }	// [JAVELIN ONLY]	throw damage, separate: 33-49 poison (green)
-		else if (skill.name == "Fend") { 		attack = 1; spell = 0; weapon_damage = 125; ar_bonus = character.getSkillData(skill, lvl, 0); damage_bonus = character.getSkillData(skill, lvl, 1); }	// non-throw
-		else if (skill.name == "Lightning Bolt") {	attack = 2; spell = 1; lDamage_min = phys_min+character.getSkillData(skill, lvl, 0); lDamage_max = phys_max+character.getSkillData(skill, lvl, 1); }	// [JAVELIN ONLY]	throw damage + 1-49 lightning (yellow)
-		else if (skill.name == "Charged Strike") {	attack = 1; spell = 1; lDamage_min = character.getSkillData(skill, lvl, 1); lDamage_max = character.getSkillData(skill, lvl, 2); }	// regular (non-throw), separate: 1-42 lightning (yellow)
-		else if (skill.name == "Plague Javelin") {	attack = 2; spell = 0; ar_bonus = character.getSkillData(skill, lvl, 0); pDamage_min = character.getSkillData(skill, lvl, 1); pDamage_max = character.getSkillData(skill, lvl, 2); pDamage_duration = 5; }	// [JAVELIN ONLY]	throw damage, separate: 47-76 poison (green)
+		else if (skill.name == "Power Strike") { 	attack = 1; spell = 0; ar_bonus = character.getSkillData(skill, lvl, 0); lDamage_min = character.getSkillData(skill, lvl, 1); lDamage_max = character.getSkillData(skill, lvl, 2); }
+		else if (skill.name == "Poison Javelin") {	attack = 2; spell = 0; pDamage_min = character.getSkillData(skill, lvl, 0); pDamage_max = character.getSkillData(skill, lvl, 1); pDamage_duration = 5; }
+		else if (skill.name == "Fend") { 		attack = 1; spell = 0; weapon_damage = 125; ar_bonus = character.getSkillData(skill, lvl, 0); damage_bonus = character.getSkillData(skill, lvl, 1); }
+		else if (skill.name == "Lightning Bolt") {	attack = 2; spell = 1; lDamage_min = phys_min+character.getSkillData(skill, lvl, 0); lDamage_max = phys_max+character.getSkillData(skill, lvl, 1); }
+		else if (skill.name == "Charged Strike") {	attack = 1; spell = 1; lDamage_min = character.getSkillData(skill, lvl, 1); lDamage_max = character.getSkillData(skill, lvl, 2); }
+		else if (skill.name == "Plague Javelin") {	attack = 2; spell = 0; ar_bonus = character.getSkillData(skill, lvl, 0); pDamage_min = character.getSkillData(skill, lvl, 1); pDamage_max = character.getSkillData(skill, lvl, 2); pDamage_duration = 5; }
 		else if (skill.name == "Ground Slam") { 	attack = 1; spell = 1; weapon_damage = 85; }
-		else if (skill.name == "Lightning Strike") {	attack = 1; spell = 1; lDamage_min = character.getSkillData(skill, lvl, 1); lDamage_max = character.getSkillData(skill, lvl, 2); }	// non-throw, separate: 1-32 lightning (yellow)
-		else if (skill.name == "Lightning Fury") {	attack = 2; spell = 1; lDamage_min = character.getSkillData(skill, lvl, 1); lDamage_max = character.getSkillData(skill, lvl, 2); }	// [JAVELIN ONLY]	throw damage, separate: 1-42 lightning (yellow)
+		else if (skill.name == "Lightning Strike") {	attack = 1; spell = 1; lDamage_min = character.getSkillData(skill, lvl, 1); lDamage_max = character.getSkillData(skill, lvl, 2); }
+		else if (skill.name == "Lightning Fury") {	attack = 2; spell = 1; lDamage_min = character.getSkillData(skill, lvl, 1); lDamage_max = character.getSkillData(skill, lvl, 2); }
 	//	else if (skill.name == "Decoy") {		attack = 0; spell = 1; }
 	//	else if (skill.name == "Valkyrie") {		attack = 0; spell = 1; }
-		else if (skill.name == "Cold Arrow") {		attack = 1; spell = 0; cDamage_min = character.getSkillData(skill, lvl, 1); cDamage_max = character.getSkillData(skill, lvl, 2); }	// regular + 2-3 cold (blue)	...lvl 1 = +6% ar
-		else if (skill.name == "Magic Arrow") {		attack = 1; spell = 0; mDamage_min = character.getSkillData(skill, lvl, 1); mDamage_max = character.getSkillData(skill, lvl, 2); }	// regular + 1-2 (blue... but should be colored differently for magic damage)	...lvl 1 = +6% ar
-		else if (skill.name == "Multiple Shot") {	attack = 1; spell = 0; damage_min = character.getSkillData(skill, lvl, 0); damage_max = character.getSkillData(skill, lvl, 1); }	// regular + 2-3
-		else if (skill.name == "Fire Arrow") {		attack = 1; spell = 0; fDamage_min = character.getSkillData(skill, lvl, 4); fDamage_max = character.getSkillData(skill, lvl, 5); ar_bonus = character.getSkillData(skill, lvl, 3); }	// regular + 3-6 (average fire damage not shown) (red)	...lvl 1 = +6% ar
-		else if (skill.name == "Ice Arrow") {		attack = 1; spell = 0; cDamage_min = character.getSkillData(skill, lvl, 0); cDamage_max = character.getSkillData(skill, lvl, 1); }	// regular + 6-11 cold (blue)	...lvl 1 = +11% ar
-		else if (skill.name == "Guided Arrow") {	attack = 1; spell = 1; weapon_damage = 150; damage_bonus = character.getSkillData(skill, lvl, 0); }	// regular + 3-6
-		else if (skill.name == "Exploding Arrow") {	attack = 1; spell = 0; fDamage_min = character.getSkillData(skill, lvl, 0); fDamage_max = character.getSkillData(skill, lvl, 1); }	// regular, separate: 12-19 fire (red)	...lvl 1 = +11% ar
-		else if (skill.name == "Strafe") {		attack = 1; spell = 0; damage_min = character.getSkillData(skill, lvl, 0); damage_max = character.getSkillData(skill, lvl, 1); damage_bonus = character.getSkillData(skill, lvl, 3); }	// regular + 3-4
-		else if (skill.name == "Immolation Arrow") {	attack = 1; spell = 0; fDamage_min = character.getSkillData(skill, lvl, 0); fDamage_max = character.getSkillData(skill, lvl, 1); }	// regular, separate: 18-31 fire (red)	...+ ~11% ar per level		// fire damage per second... fDamage_min = character.getSkillData(skill, lvl, 3); fDamage_max = character.getSkillData(skill, lvl, 4);
-		else if (skill.name == "Freezing Arrow") {	attack = 1; spell = 0; cDamage_min = character.getSkillData(skill, lvl, 0); cDamage_max = character.getSkillData(skill, lvl, 1); }	// regular, separate: 49-61 cold (blue)	...lvl 1 = +23% ar
+		else if (skill.name == "Cold Arrow") {		attack = 1; spell = 0; cDamage_min = character.getSkillData(skill, lvl, 1); cDamage_max = character.getSkillData(skill, lvl, 2); }
+		else if (skill.name == "Magic Arrow") {		attack = 1; spell = 0; mDamage_min = character.getSkillData(skill, lvl, 1); mDamage_max = character.getSkillData(skill, lvl, 2); }
+		else if (skill.name == "Multiple Shot") {	attack = 1; spell = 0; damage_min = character.getSkillData(skill, lvl, 0); damage_max = character.getSkillData(skill, lvl, 1); }
+		else if (skill.name == "Fire Arrow") {		attack = 1; spell = 0; fDamage_min = character.getSkillData(skill, lvl, 4); fDamage_max = character.getSkillData(skill, lvl, 5); ar_bonus = character.getSkillData(skill, lvl, 3); }
+		else if (skill.name == "Ice Arrow") {		attack = 1; spell = 0; cDamage_min = character.getSkillData(skill, lvl, 0); cDamage_max = character.getSkillData(skill, lvl, 1); }
+		else if (skill.name == "Guided Arrow") {	attack = 1; spell = 1; weapon_damage = 150; damage_bonus = character.getSkillData(skill, lvl, 0); }
+		else if (skill.name == "Exploding Arrow") {	attack = 1; spell = 0; fDamage_min = character.getSkillData(skill, lvl, 0); fDamage_max = character.getSkillData(skill, lvl, 1); }
+		else if (skill.name == "Strafe") {		attack = 1; spell = 0; damage_min = character.getSkillData(skill, lvl, 0); damage_max = character.getSkillData(skill, lvl, 1); damage_bonus = character.getSkillData(skill, lvl, 3); }
+		else if (skill.name == "Immolation Arrow") {	attack = 1; spell = 0; fDamage_min = character.getSkillData(skill, lvl, 0); fDamage_max = character.getSkillData(skill, lvl, 1); }
+		else if (skill.name == "Freezing Arrow") {	attack = 1; spell = 0; cDamage_min = character.getSkillData(skill, lvl, 0); cDamage_max = character.getSkillData(skill, lvl, 1); }
 		else { attack = 0; spell = 2; }
 
 		if (typeof(skill.reqWeapon) != 'undefined') { var match = 0; for (let w = 0; w < skill.reqWeapon.length; w++) {
 			if (equipped.weapon.type == skill.reqWeapon[w]) { match = 1 }
 		} if (match == 0) { spell = 2 } }
-		
-	//	TODO: ensure basic thrown damage is used (instead of melee damage) if needed
 		
 		if (attack == 0) { phys_min = 0; phys_max = 0; ele_min = 0; ele_max = 0; mag_min = 0; mag_max = 0; }
 		ele_min += Math.floor(fDamage_min + cDamage_min + lDamage_min);

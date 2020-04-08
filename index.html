@@ -134,7 +134,7 @@
 <img class="I Ic1 Iy6" id="i361"><img class="I Ic2 Iy6" id="i362"><img class="I Ic3 Iy6" id="i363">
 
 <!--	Equipment Menus 	-->
-<div class="dropdown" id="equipment" style="display: block; float: right; width: 200px; height: 300px; position: relative; z-index: 6;">
+<div class="dropdown" id="equipment" style="float: right; width:200px; height:200px; position: relative; z-index: 6;">
 <select class="dropdown" id="dropdown_helm" onChange="equip('helm', this.value)" onContextMenu="equip('helm', 'helm')"></select>
 <select class="dropdown" id="dropdown_armor" onChange="equip('armor', this.value)" onContextMenu="equip('armor', 'armor')"></select>
 <select class="dropdown" id="dropdown_gloves" onChange="equip('gloves', this.value)" onContextMenu="equip('gloves', 'gloves')"></select>
@@ -145,10 +145,32 @@
 <select class="dropdown" id="dropdown_ring2" onChange="equip('ring2', this.value)" onContextMenu="equip('ring2', 'ring2')"></select>
 <select class="dropdown" id="dropdown_weapon" onChange="equip('weapon', this.value)" onContextMenu="equip('weapon', 'weapon')"></select>
 <select class="dropdown" id="dropdown_offhand" onChange="equip('offhand', this.value)" onContextMenu="equip('offhand', 'offhand')"></select>
-<select class="dropdown" id="dropdown_charms" onChange="addCharm(this.value)"><option class="gray" disabled selected>­ ­ ­ ­ Charms</option></select>
 <br><br>
-<select class="dropdown" id="dropdown_misc" onChange="addMisc(this.value)"><option class="gray" disabled selected>­ ­ ­ ­ Miscellaneous</option></select>
+<select class="dropdown" id="dropdown_charms" onChange="addCharm(this.value)"></select>
+<br><br>
+<select class="dropdown" id="dropdown_misc" onChange="addMisc(this.value)"></select>
+<br><br>
+<select class="dropdown" id="dropdown_mercenary" onChange="setMercenary(this.value)" onContextMenu="setMercenary('­ ­ ­ ­ Mercenary')"></select>
+<select class="dropdown" id="dropdown_merc_helm" onChange="equipMerc('helm', this.value)" onContextMenu="equipMerc('helm', 'helm')"></select>
+<select class="dropdown" id="dropdown_merc_armor" onChange="equipMerc('armor', this.value)" onContextMenu="equipMerc('armor', 'armor')"></select>
+<select class="dropdown" id="dropdown_merc_weapon" onChange="equipMerc('weapon', this.value)" onContextMenu="equipMerc('weapon', 'weapon')"></select>
+<select class="dropdown" id="dropdown_merc_offhand" onChange="equipMerc('offhand', this.value)" onContextMenu="equipMerc('offhand', 'offhand')"></select>
 </div>
+<!--	Corruption Options?	-->
+<!--
+<div class="dropdown" id="equipment_corruptions" style="float: right; width:20px; height:200px; z-index: 7;">
+<select class="dropdown" id="corruptions_helm" onChange="setCorruption('helm', this.value)" onContextMenu="setCorruption('helm', 'none')"></select>
+<select class="dropdown" id="corruptions_armor" onChange="setCorruption('armor', this.value)" onContextMenu="setCorruption('armor', 'none')"></select>
+<select class="dropdown" id="corruptions_gloves" onChange="setCorruption('gloves', this.value)" onContextMenu="setCorruption('gloves', 'none')"></select>
+<select class="dropdown" id="corruptions_boots" onChange="setCorruption('boots', this.value)" onContextMenu="setCorruption('boots', 'none')"></select>
+<select class="dropdown" id="corruptions_belt" onChange="setCorruption('belt', this.value)" onContextMenu="setCorruption('belt', 'none')"></select>
+<select class="dropdown" id="corruptions_amulet" onChange="setCorruption('amulet', this.value)" onContextMenu="setCorruption('amulet', 'none')"></select>
+<select class="dropdown" id="corruptions_ring1" onChange="setCorruption('ring1', this.value)" onContextMenu="setCorruption('ring1', 'none')"></select>
+<select class="dropdown" id="corruptions_ring2" onChange="setCorruption('ring2', this.value)" onContextMenu="setCorruption('ring2', 'none')"></select>
+<select class="dropdown" id="corruptions_weapon" onChange="setCorruption('weapon', this.value)" onContextMenu="setCorruption('weapon', 'none')"></select>
+<select class="dropdown" id="corruptions_offhand" onChange="setCorruption('offhand', this.value)" onContextMenu="setCorruption('offhand', 'none')"></select>
+</div>
+-->
 
 <!--	skill hover text	-->
 <div class="hover" style="display: none;" id="tooltip">
@@ -200,7 +222,7 @@
 
 </div>		<!--	/gui	-->
 
-<div class="no-selection" style="display: block; height:118px; width: 650px; position: relative;">
+<div class="no-selection" style="display: block; height:118px; width: 649px; position: relative;">
 <div class="gray" style="display: block; width: 250px;" id="stats">
 	<a>Life: </a><a id="life"></a><br>
 	<a>Mana: </a><a id="mana"></a><br>

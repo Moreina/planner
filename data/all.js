@@ -8,7 +8,7 @@ var effects = {};
 var skillList = []; var skillOptions = [];
 var selectedSkill = [" ­ ­ ­ ­ Skill 1", " ­ ­ ­ ­ Skill 2"];
 
-var mercAura = 0;
+var mercenary = {name:"",level:1,base_aura:"",base_aura_level:""};
 var lastCharm = "";
 var lastSelected = "";
 var settings = {coupling:1, autocast:1}
@@ -31,10 +31,9 @@ var inv = [
 function loadEquipment(className) {
 	var equipmentTypes = ["helm", "armor", "gloves", "boots", "belt", "amulet", "ring1", "ring2", "weapon", "offhand", "charms"];
 	var equipmentDropdowns = ["dropdown_helm", "dropdown_armor", "dropdown_gloves", "dropdown_boots", "dropdown_belt", "dropdown_amulet", "dropdown_ring1", "dropdown_ring2", "dropdown_weapon", "dropdown_offhand", "dropdown_charms"]
-	for (let i = 0; i < equipmentTypes.length; i++) {
-		loadItems(equipmentTypes[i], equipmentDropdowns[i], className)
-	}
+	for (let i = 0; i < equipmentTypes.length; i++) { loadItems(equipmentTypes[i], equipmentDropdowns[i], className) }
 	loadMisc()
+	loadMerc()
 }
 
 // loadItems - Creates a dropdown menu option
@@ -48,13 +47,30 @@ function loadItems(type, dropdown, className) {
 		var choices = "";
 		for (item in equipment[type]) {
 			if (typeof(equipment[type][item].only) == 'undefined' || equipment[type][item].only == className) {
-			if (typeof(equipment[type][item].not) == 'undefined' || (typeof(equipment[type][item].not) == String && equipment[type][item].not != className)) {
 			var halt = 0;
+			if (className == "clear") { halt = 1 }
 			if (typeof(equipment[type][item].limit) != 'undefined') {
 				for (let l = 0; l < equipment[type][item].limit.length; l++) {
 					if (equipment[type][item].limit[l] == className) { halt = 1 }
 				}
 			}
+			if (className == mercenaries[1].name) {
+				if (type == "offhand") { halt = 1 }
+				if (type == "weapon" && equipment[type][item].type != "bow" && equipment[type][item].type != "crossbow" && equipment[type][item].name != "Weapon") { halt = 1 }
+			}
+			if (className == mercenaries[2].name || className == mercenaries[3].name || className == mercenaries[4].name) {
+				if (type == "offhand") { halt = 1 }
+				if (type == "weapon" && equipment[type][item].type != "polearm" && equipment[type][item].type != "spear" && equipment[type][item].name != "Weapon") { halt = 1 }
+			}
+			if (className == mercenaries[5].name || className == mercenaries[6].name || className == mercenaries[7].name) {
+				if (type == "offhand" && equipment[type][item].type != "shield" && equipment[type][item].name != "Offhand") { halt = 1 }
+				if (type == "weapon" && (equipment[type][item].type != "sword" || typeof(equipment[type][item].twoHanded) != 'undefined') && equipment[type][item].name != "Weapon") { halt = 1 }
+			}
+			if (className == mercenaries[8].name) {
+				if (type == "offhand") { halt = 1 }
+				if (type == "weapon" && equipment[type][item].type != "sword" && equipment[type][item].name != "Weapon") { halt = 1 }
+			}
+
 			if (halt == 0) {
 				if (item > 0) {
 					if (typeof(equipment[type][item].set_bonuses) != 'undefined') {
@@ -83,7 +99,6 @@ function loadItems(type, dropdown, className) {
 				}
 			}
 			}
-			}
 		}
 		document.getElementById(dropdown).innerHTML = choices
 	}
@@ -97,10 +112,62 @@ function loadMisc() {
 	document.getElementById("dropdown_misc").innerHTML = choices
 }
 
+// loadMerc - Loads mercenaries to the 'Mercenary' dropdown menu
+// ---------------------------------
+function loadMerc() {
+	var choices = "<option>­ ­ ­ ­ Mercenary</option>";
+	for (let m = 1; m < mercenaries.length; m++) { choices += "<option>" + mercenaries[m].name + "</option>" }
+	document.getElementById("dropdown_mercenary").innerHTML = choices
+}
+
+// setMercenary - Handles mercenary selection, including adding auras and loading mercenary items to the appropriate dropdown menus
+//	merc: selected mercenary name
+// ---------------------------------
+function setMercenary(merc) {
+	var mercEquipmentTypes = ["helm", "armor", "weapon", "offhand"];
+	var mercEquipmentDropdowns = ["dropdown_merc_helm", "dropdown_merc_armor", "dropdown_merc_weapon", "dropdown_merc_offhand"];
+	if (document.getElementById("dropdown_merc_helm").innerHTML != "") { equipMerc('helm', 'helm'); }
+	if (document.getElementById("dropdown_merc_armor").innerHTML != "") { equipMerc('armor', 'armor'); }
+	if (document.getElementById("dropdown_merc_weapon").innerHTML != "") { equipMerc('weapon', 'weapon'); }
+	if (document.getElementById("dropdown_merc_offhand").innerHTML != "") { equipMerc('offhand', 'offhand'); }
+	if (mercenary.base_aura != "") { removeAura(mercenary.base_aura); mercenary.base_aura = ""; }
+	if (merc == "­ ­ ­ ­ Mercenary") {
+		for (let i = 0; i < mercEquipmentTypes.length; i++) { loadItems(mercEquipmentTypes[i], mercEquipmentDropdowns[i], "clear") }
+		document.getElementById("dropdown_mercenary").selectedIndex = 0;
+	} else {
+		for (let i = 0; i < mercEquipmentTypes.length; i++) { loadItems(mercEquipmentTypes[i], mercEquipmentDropdowns[i], merc) }
+		for (let m = 1; m < mercenaries.length; m++) {
+			if (merc == mercenaries[m].name) { if (mercenary.base_aura == "") {
+				mercenary.level = Math.max(1,character.level-1)
+				mercenary.base_aura_level = getMercenaryAuraLevel(mercenary.level)
+				mercenary.base_aura = mercenaries[m].aura
+				addAura(mercenary.base_aura, mercenary.base_aura_level, "mercenary")
+			} }
+		}
+	}
+	mercenary.name = merc
+}
+
+// getMercenaryAuraLevel - Get mercenary aura level
+//	hlvl: level of mercenary (must be lower than clvl)
+// return: aura level of mercenary
+// ---------------------------------
+function getMercenaryAuraLevel(hlvl) {
+	var result = 1;
+	var diff = 0.23;
+	result = Math.min(18,Math.floor((1-diff)+diff*hlvl));
+//	old calculation for aura level:
+//	if (hlvl > 9 && hlvl < 31) { result = (3+((hlvl-9)*10/32)) }
+//	else if (hlvl > 30 && hlvl < 55) { result = (10+((hlvl-31)*10/32)) }
+//	else if (hlvl > 54) { result = 18 }
+	return result;
+}
+
 // startup - Resets everything and starts a new character
 //	choice: name of new character class
 // ---------------------------------
 function startup(choice) {
+	setMercenary("­ ­ ­ ­ Mercenary")
 	loadEquipment(choice)
 	clearIconSources()
 	resetSkills()
@@ -208,6 +275,63 @@ function changeLevel(input) {
 	updateAll()
 }
 
+// mercEquip - Equips or unequips a mercenary item
+//	type: name of item's type
+//	val: name of item
+// ---------------------------------
+function equipMerc(type, val) {
+	for (old_affix in mercEquipped[type]) {
+		mercenary[old_affix] -= mercEquipped[type][old_affix]
+		if (old_affix == "aura") {
+			removeAura(mercEquipped[type][old_affix])
+		}
+		if (old_affix != "set_bonuses") { mercEquipped[type][old_affix] = unequipped[old_affix] }
+	}
+	if (type == val) { document.getElementById(("dropdown_merc_"+type)).selectedIndex = 0 }
+	else {
+		for (item in equipment[type]) {
+			if (equipment[type][item].name == val) {
+				// add affixes from base item
+				if (typeof(equipment[type][item]["base"]) != 'undefined') { if (equipment[type][item]["base"] != "") {
+					var base = equipment[type][item].base; base = base.split(' ').join('_'); base = base.split('-').join('_'); base = base.split("'s").join("s");	// spaces, hypens, and apostrophes converted to match named entry in bases{}
+					if (typeof(bases[base]) != 'undefined') { for (affix in bases[base]) { if (affix == "base_damage_min" || affix == "base_damage_max" || affix == "base_defense" || affix == "req_strength" || affix == "req_dexterity") {
+						var multEth = 1;
+						var multED = 1;
+						var multReq = 1;
+						if (typeof(equipment[type][item]["ethereal"]) != 'undefined') { if (equipment[type][item]["ethereal"] == 1) { multEth = 1.5; } }
+						if (affix == "base_defense") { if (typeof(equipment[type][item]["e_def"]) != 'undefined') { multED += (equipment[type][item]["e_def"]/100) } }
+						if (affix == "base_damage_min" || affix == "base_damage_max") { if (typeof(equipment[type][item]["e_damage"]) != 'undefined') { multED += (equipment[type][item]["e_damage"]/100) } }
+						if (affix == "req_strength" || affix == "req_dexterity") { if (typeof(equipment[type][item]["req"]) != 'undefined') { multReq += (equipment[type][item]["req"]/100) } }
+						
+						if (typeof(mercEquipped[type][affix]) == 'undefined') { mercEquipped[type][affix] = 0 }	// undefined (new) affixes get initialized to zero
+						if (affix == "base_damage_min" || affix == "base_damage_max" || affix == "base_defense") {
+							mercEquipped[type][affix] = Math.ceil(multEth*multED*bases[base][affix])
+							mercenary[affix] += Math.ceil(multEth*multED*bases[base][affix])
+						}
+						if (affix == "req_strength" || affix == "req_dexterity") {
+							mercEquipped[type][affix] += Math.ceil(multReq*bases[base][affix])
+							mercenary[affix] += Math.ceil(multReq*bases[base][affix])
+						}
+					} } }
+				} }
+				// add regular affixes
+				for (affix in equipment[type][item]) {
+					if (affix == "aura" || affix == "name" || affix == "type" || affix == "base" || affix == "only" || affix == "limit" || affix == "rw") {
+						if (affix == "aura" && equipment[type][item][affix] != mercenary.base_aura) {
+							mercEquipped[type][affix] = equipment[type][item][affix]
+							addAura(equipment[type][item][affix], equipment[type][item].aura_lvl, type)
+						}
+					} else {
+						mercEquipped[type][affix] = equipment[type][item][affix]
+						mercenary[affix] += mercEquipped[type][affix]
+					}
+				}
+			}
+		}
+	}
+	updateAll()
+}
+	
 // equip - Equips an item by adding its stats to the character, or unequips it if it's already equipped			// TODO: consider renaming... switchItem()?  Also, split into multiple smaller functions
 //	type: name of equipment type
 //	val: name of item
@@ -299,17 +423,17 @@ function equip(type, val) {
 			// add affixes from base item
 			if (typeof(equipment[type][item]["base"]) != 'undefined') { if (equipment[type][item]["base"] != "") {
 				var base = equipment[type][item].base; base = base.split(' ').join('_'); base = base.split('-').join('_'); base = base.split("'s").join("s");	// spaces, hypens, and apostrophes converted to match named entry in bases{}
-				if (typeof(bases[base]) != 'undefined') { for (affix in bases[base]) { if (affix == "base_damage_min" || affix == "base_damage_max" || affix == "base_defense" || affix == "req_strength" || affix == "req_dexterity") {			// if (~~bases[base][affix] != 0) {	...use to check undefined?
+				if (typeof(bases[base]) != 'undefined') { for (affix in bases[base]) { if (affix == "base_damage_min" || affix == "base_damage_max" || affix == "throw_min" || affix == "throw_max" || affix == "base_defense" || affix == "req_strength" || affix == "req_dexterity") {
 					var multEth = 1;
 					var multED = 1;
 					var multReq = 1;
 					if (typeof(equipment[type][item]["ethereal"]) != 'undefined') { if (equipment[type][item]["ethereal"] == 1) { multEth = 1.5; } }
 					if (affix == "base_defense") { if (typeof(equipment[type][item]["e_def"]) != 'undefined') { multED += (equipment[type][item]["e_def"]/100) } }
-					if (affix == "base_damage_min" || affix == "base_damage_max") { if (typeof(equipment[type][item]["e_damage"]) != 'undefined') { multED += (equipment[type][item]["e_damage"]/100) } }
+					if (affix == "base_damage_min" || affix == "base_damage_max" || affix == "throw_min" || affix == "throw_max") { if (typeof(equipment[type][item]["e_damage"]) != 'undefined') { multED += (equipment[type][item]["e_damage"]/100) } }
 					if (affix == "req_strength" || affix == "req_dexterity") { if (typeof(equipment[type][item]["req"]) != 'undefined') { multReq += (equipment[type][item]["req"]/100) } }
 					
 					if (typeof(equipped[type][affix]) == 'undefined') { equipped[type][affix] = 0 }	// undefined (new) affixes get initialized to zero
-					if (affix == "base_damage_min" || affix == "base_damage_max" || affix == "base_defense") {
+					if (affix == "base_damage_min" || affix == "base_damage_max" || affix == "throw_min" || affix == "throw_max" || affix == "base_defense") {
 						equipped[type][affix] = Math.ceil(multEth*multED*bases[base][affix])
 						character[affix] += Math.ceil(multEth*multED*bases[base][affix])
 					}
@@ -401,7 +525,7 @@ function equip(type, val) {
 //	type: item type which the aura is granted by
 // ---------------------------------
 function addAura(name, lvl, type) {
-	if (document.getElementById(name) == null) {
+	if (document.getElementById(name) == null && lvl > 0) {
 		var newEffect = document.createElement("img")
 		var effectIcon = "./images/effects/dark/"+name+" dark.png"
 		
@@ -616,16 +740,8 @@ function addMisc(val) {
 	document.getElementById("dropdown_misc").selectedIndex = 0
 	for (let m = 1; m < non_items.length; m++) {
 		if (val == non_items[m].name) {
-			if (typeof(non_items[m].aura) != 'undefined') { if (mercAura == 0) {
-				var merc_lvl = character.level - 1;
-				var diff = 0.23;
-				var aura_lvl = Math.min(18,Math.floor((1-diff)+diff*merc_lvl))
-				addAura(non_items[m].aura, aura_lvl, "mercenary")
-				mercAura = 1;
-			} } else {
-				if (typeof(effects[non_items[m].effect]) == 'undefined') { effects[non_items[m].effect] = {} }
-				initiateMiscEffect(non_items[m].effect, m)
-			}
+			if (typeof(effects[non_items[m].effect]) == 'undefined') { effects[non_items[m].effect] = {} }
+			initiateMiscEffect(non_items[m].effect, m)
 			calculateSkillAmounts()
 			updateAll()
 		}
@@ -676,8 +792,6 @@ function initiateMiscEffect(name, i) {
 function removeMiscEffect(name, i) {
 	if (i > 0) { name = non_items[i].effect } else { i = non_items[i].i }
 	if (typeof(effects[name]) != 'undefined') {
-		// TODO: Make mercenary auras work
-		if (non_items[i].aura != 'undefined') { removeAura(non_items[i].aura); mercAura = 0; }
 		if (document.getElementById(name) != null) { document.getElementById(name).remove(); }
 		for (affix in effects[name]) {
 			character[affix] -= effects[name][affix]
@@ -1236,17 +1350,6 @@ function modifyEffect(skill) {
 	} }
 }
 
-// getMercenaryAuraLevel - Get highest mercenary aura level
-//	hlvl: level of mercenary (maximum is clvl - 1)
-// ---------------------------------
-function getMercenaryAuraLevel(hlvl) {
-	result = 0;
-	if (hlvl > 9 && hlvl < 31) { result = (3+((hlvl-9)*10/32)) }
-	else if (hlvl > 30 && hlvl < 55) { result = (10+((hlvl-31)*10/32)) }
-	else if (hlvl > 54) { result = 18 }
-	return result;
-}
-
 // checkRequirements - Recolors stats/skills based on unmet item/skill/level requirements
 // ---------------------------------
 function checkRequirements() {
@@ -1612,6 +1715,11 @@ function checkSkill(skillName, num) {
 	var phys_max = Math.floor(wisp*(((1+statBonus+(c.e_damage+c.damage_bonus+weapon_skillup)/100)*((c.level-1)*c.max_damage_per_level+c.base_damage_max))+c.damage_max));
 	var ele_min = Math.floor(wisp*(c.fDamage_min*(1+(c.fDamage+c.fDamage_skillup)/100) + c.cDamage_min*(1+(c.cDamage+c.cDamage_skillup)/100) + c.lDamage_min*(1+(c.lDamage+c.lDamage_skillup)/100)));
 	var ele_max = Math.floor(wisp*(c.fDamage_max*(1+(c.fDamage+c.fDamage_skillup)/100) + c.cDamage_max*(1+(c.cDamage+c.cDamage_skillup)/100) + c.lDamage_max*(1+(c.lDamage+c.lDamage_skillup)/100) + (c.pDamage_all+c.pDamage_max)*(1+c.pDamage/100)));
+	if (skillName == "Poison Javelin" || skillName == "Lightning Bolt" || skillName == "Plague Javelin" || skillName == "Lightning Fury" || skillName == "Power Throw" || skillName == "Ethereal Throw") {
+		phys_min = Math.floor(wisp*(((1+statBonus+(c.e_damage+c.damage_bonus+weapon_skillup)/100)*((c.level-1)*c.min_damage_per_level+~~c.throw_min))+c.damage_min));
+		phys_max = Math.floor(wisp*(((1+statBonus+(c.e_damage+c.damage_bonus+weapon_skillup)/100)*((c.level-1)*c.max_damage_per_level+~~c.throw_max))+c.damage_max));
+	}
+	
 	var skill = "";
 	for (let s = 0; s < skills.length; s++) {
 		if (skills[s].name == skillName) { 
