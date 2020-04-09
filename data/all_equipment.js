@@ -27,24 +27,24 @@ var unequipped = {name:"none", strength:0, dexterity:0, vitality:0, energy:0, li
 /* oskills		*/	oskill_Warp:0, oskill_Ball_Lightning:0,	// Enigma, Ondal's Wisdom
 /* oskills  amazon	*/	oskill_Inner_Sight:0, oskill_Lethal_Strike:0, oskill_Valkyrie:0, oskill_Magic_Arrow:0, oskill_Guided_Arrow:0, oskill_Multiple_Shot:0,	// Blackoak Shield, Insight, Harmony, Witherstring, Wizendraw, Witchwild String, Widowmaker, Doomslinger
 /* oskills  barbarian	*/	oskill_Battle_Command:0, oskill_Battle_Orders:0, oskill_Battle_Cry:0, oskill_Bash:0, oskill_Edged_Weapon_Mastery:0,	// Call to Arms, Passion, The Grandfather
-/* oskills  druid	*/	oskill_Lycanthropy:0, oskill_Werebear:0, oskill_Werewolf:0, oskill_Feral_Rage:0, oskill_Flame_Dash:0, oskill_Summon_Dire_Wolf:0,	// Wolfhowl, Beast, Flamebellow, Boneflesh, (Frostwind)
+/* oskills  druid	*/	oskill_Arctic_Blast:0, oskill_Lycanthropy:0, oskill_Werebear:0, oskill_Werewolf:0, oskill_Feral_Rage:0, oskill_Flame_Dash:0, oskill_Summon_Dire_Wolf:0,	// Frostwind, Wolfhowl, Beast, Flamebellow, Boneflesh, (Frostwind)
 /* oskills  necromancer	*/	oskill_Desecrate:0,	// Radament's Sphere
 /* oskills  paladin	*/	oskill_Zeal:0, oskill_Vengeance:0,	// Chaos, Passion, Kingslayer
-/* oskills  sorceress	*/	oskill_Frigerate:0, oskill_Shiver_Armor:0, oskill_Cold_Mastery:0, oskill_Hydra:0, oskill_Fire_Ball:0, oskill_Fire_Wall:0, oskill_Meteor:0, oskill_Fire_Mastery:0, oskill_Enflame:0,	// Frostwind, Medusa's Gaze, Bing Sz Wang, Dragonscale, Trang-Oul's Set, Lava Gout
+/* oskills  sorceress	*/	oskill_Shiver_Armor:0, oskill_Cold_Mastery:0, oskill_Hydra:0, oskill_Fire_Ball:0, oskill_Fire_Wall:0, oskill_Meteor:0, oskill_Fire_Mastery:0, oskill_Enflame:0,	// Medusa's Gaze, Bing Sz Wang, Dragonscale, Trang-Oul's Set, Lava Gout
 // ...to confirm:
 //	oskill_Guided_Arrow (Widowmaker)
 //	oskill_Two_Handed_Weapon_Mastery / oskill_Edged_Weapon_Mastery (The Grandfather)
 };
 
-var oskills = ["oskill_Warp","oskill_Ball_Lightning","oskill_Inner_Sight","oskill_Lethal_Strike","oskill_Valkyrie","oskill_Magic_Arrow","oskill_Guided_Arrow","oskill_Multiple_Shot","oskill_Battle_Command","oskill_Battle_Orders","oskill_Battle_Cry","oskill_Bash","oskill_Edged_Weapon_Mastery","oskill_Lycanthropy","oskill_Werebear","oskill_Werewolf","oskill_Feral_Rage","oskill_Flame_Dash","oskill_Summon_Dire_Wolf","oskill_Desecrate","oskill_Zeal","oskill_Vengeance","oskill_Frigerate","oskill_Shiver_Armor","oskill_Cold_Mastery","oskill_Hydra","oskill_Fire_Ball","oskill_Fire_Wall","oskill_Meteor","oskill_Fire_Mastery","oskill_Enflame"];
+var oskills = ["oskill_Warp","oskill_Ball_Lightning","oskill_Inner_Sight","oskill_Lethal_Strike","oskill_Valkyrie","oskill_Magic_Arrow","oskill_Guided_Arrow","oskill_Multiple_Shot","oskill_Battle_Command","oskill_Battle_Orders","oskill_Battle_Cry","oskill_Bash","oskill_Edged_Weapon_Mastery","oskill_Arctic_Blast","oskill_Lycanthropy","oskill_Werebear","oskill_Werewolf","oskill_Feral_Rage","oskill_Flame_Dash","oskill_Summon_Dire_Wolf","oskill_Desecrate","oskill_Zeal","oskill_Vengeance","oskill_Shiver_Armor","oskill_Cold_Mastery","oskill_Hydra","oskill_Fire_Ball","oskill_Fire_Wall","oskill_Meteor","oskill_Fire_Mastery","oskill_Enflame"];
 var oskills_info = {
 	oskill_Warp:{name:"Warp",native_class:"none",i:0}, oskill_Ball_Lightning:{name:"Ball Lightning",native_class:"none",i:1},
 	oskill_Inner_Sight:{name:"Inner Sight",native_class:"amazon",i:10}, oskill_Lethal_Strike:{name:"Lethal Strike",native_class:"amazon",i:11}, oskill_Valkyrie:{name:"Valkyrie",native_class:"amazon",i:18}, oskill_Magic_Arrow:{name:"Magic Arrow",native_class:"amazon",i:21}, oskill_Guided_Arrow:{name:"Guided Arrow",native_class:"amazon",i:25}, oskill_Multiple_Shot:{name:"Multiple Shot",native_class:"amazon",i:22},
 	oskill_Battle_Command:{name:"Battle Command",native_class:"barbarian",i:9}, oskill_Battle_Orders:{name:"Battle Orders",native_class:"barbarian",i:6}, oskill_Battle_Cry:{name:"Battle Cry",native_class:"barbarian",i:5}, oskill_Bash:{name:"Bash",native_class:"barbarian",i:24}, oskill_Edged_Weapon_Mastery:{name:"Edged Weapon Mastery",native_class:"barbarian",i:10},
-	oskill_Lycanthropy:{name:"Lycanthropy",native_class:"druid",i:12}, oskill_Werebear:{name:"Werebear",native_class:"druid",i:13}, oskill_Werewolf:{name:"Werewolf",native_class:"druid",i:11}, oskill_Feral_Rage:{name:"Feral Rage",native_class:"druid",i:14}, oskill_Flame_Dash:{name:"Flame Dash",native_class:"druid",i:2}, oskill_Summon_Dire_Wolf:{name:"Summon Dire Wolf",native_class:"druid",i:27}, 
+	oskill_Arctic_Blast:{name:"Arctic Blast",native_class:"druid",i:3}, oskill_Lycanthropy:{name:"Lycanthropy",native_class:"druid",i:12}, oskill_Werebear:{name:"Werebear",native_class:"druid",i:13}, oskill_Werewolf:{name:"Werewolf",native_class:"druid",i:11}, oskill_Feral_Rage:{name:"Feral Rage",native_class:"druid",i:14}, oskill_Flame_Dash:{name:"Flame Dash",native_class:"druid",i:2}, oskill_Summon_Dire_Wolf:{name:"Summon Dire Wolf",native_class:"druid",i:27}, 
 	oskill_Desecrate:{name:"Desecrate",native_class:"necromancer",i:15}, 
 	oskill_Zeal:{name:"Zeal",native_class:"paladin",i:23}, oskill_Vengeance:{name:"Vengeance",native_class:"paladin",i:25}, 
-	oskill_Frigerate:{name:"Frigerate",native_class:"sorceress",i:1}, oskill_Shiver_Armor:{name:"Shiver Armor",native_class:"sorceress",i:4}, oskill_Cold_Mastery:{name:"Cold Mastery",native_class:"sorceress",i:10}, oskill_Hydra:{name:"Hydra",native_class:"sorceress",i:31}, oskill_Fire_Ball:{name:"Fire Ball",native_class:"sorceress",i:26}, oskill_Fire_Wall:{name:"Fire Wall",native_class:"sorceress",i:27}, oskill_Meteor:{name:"Meteor",native_class:"sorceress",i:29}, oskill_Fire_Mastery:{name:"Fire Mastery",native_class:"sorceress",i:30}, oskill_Enflame:{name:"Enflame",native_class:"sorceress",i:28}, 
+	oskill_Shiver_Armor:{name:"Shiver Armor",native_class:"sorceress",i:4}, oskill_Cold_Mastery:{name:"Cold Mastery",native_class:"sorceress",i:10}, oskill_Hydra:{name:"Hydra",native_class:"sorceress",i:31}, oskill_Fire_Ball:{name:"Fire Ball",native_class:"sorceress",i:26}, oskill_Fire_Wall:{name:"Fire Wall",native_class:"sorceress",i:27}, oskill_Meteor:{name:"Meteor",native_class:"sorceress",i:29}, oskill_Fire_Mastery:{name:"Fire Mastery",native_class:"sorceress",i:30}, oskill_Enflame:{name:"Enflame",native_class:"sorceress",i:28}, 
 };
 
 var non_items = [
@@ -100,7 +100,6 @@ var auras = [
 /*21*/	{name:"Inner Sight", values:[["enemy defense",-40,-65,-90,-115,-140,-165,-190,-215,-260,-305,-350,-395,-440,-485,-530,-575,-635,-695,-755,-815,-875,-935,-1015,-1095,-1175,-1255,-1335,-1415,-1515,-1615,-1715,-1815,-1915,-2015,-2115,-2215,-2315,-2415,-2515,-2615,-2715,-2815,-2915,-3015,-3115,-3215,-3315,-3415,-3515,-3615,-3715,-3815,-3915,-4015,-4115,-4215,-4315,-4415,-4515,-4615], ["radius",6,6.6,7.3,8,8.6,9.3,10,10.6,11.3,12,12.6,13.3,14,14.6,15.3,16,16.6,17.3,18,18.6,19.3,19.3,19.3,19.3,19.3,19.3,19.3,19.3,19.3,19.3,19.3,19.3,19.3,19.3,19.3,19.3,19.3,19.3,19.3,19.3,19.3,19.3,19.3,19.3,19.3,19.3,19.3,19.3,19.3,19.3,19.3,19.3,19.3,19.3,19.3,19.3,19.3,19.3,19.3,19.3]]},
 
 	// TODO: Should these be added the same as item auras, or implemented differently?
-	//{name:"Frigerate", values:[["damage min",4,5,6,7,8,9,10,11,14,17,20,23,26,29,32,35,41,47,53,59,65,71,80,89,98,107,116,125,141,157,173,189,205,221,237,253,269,285,301,317,333,349,365,381,397,413,429,445,461,477,493,509,525,541,557,573,589,605,621,637], ["damage max",6,8,10,12,14,16,18,20,25,30,35,40,45,50,55,60,69,78,87,96,105,114,129,144,159,174,189,204,228,252,276,300,324,348,372,396,420,444,468,492,516,540,564,588,612,636,660,684,708,732,756,780,804,828,852,876,900,924,948,972], ["enemy defense",-8,-10,-12,-13,-15,-16,-16,-17,-18,-18,-19,-19,-20,-20,-20,-21,-21,-21,-21,-21,-22,-22,-22,-22,-22,-22,-23,-23,-23,-23,-23,-23,-23,-23,-23,-23,-23,-24,-24,-24,-24,-24,-24,-24,-24,-24,-24,-24,-24,-24,-24,-24,-24,-24,-24,-24,-24,-24,-24,-25], ["mana cost",25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84]]},
 	//{name:"Enflame", values:[["duration",320,322,324,326,328,330,332,334,336,338,340,342,344,346,348,350,352,354,356,358,360,362,364,366,368,370,372,374,376,378,380,382,384,386,388,390,392,394,396,398,400,402,404,406,408,410,412,414,416,418,420,422,424,426,428,430,432,434,436,438], ["fire min",9,13,17,21,25,29,32,37,45,53,61,69,77,85,93,101,121,141,161,180,201,221,250,279,307,337,365,395,429,463,496,530,564,598,632,667,701,735,769,803,837,871,904,938,972,1006,1040,1074,1108,1142,1176,1210,1244,1278,1312,1346,1379,1413,1447,1481], ["fire max",12,18,23,29,36,42,47,54,63,73,84,94,104,113,123,134,160,186,212,238,264,290,320,350,379,410,439,470,504,539,575,610,645,679,714,750,785,820,854,889,925,960,995,1029,1064,1100,1135,1170,1204,1239,1275,1310,1345,1379,1414,1450,1485,1520,1554,1589], ["attack rating",50,55,60,65,70,75,80,85,90,95,100,105,110,115,120,125,130,135,140,145,150,155,160,165,170,175,180,185,190,195,200,205,210,215,220,225,230,235,240,245,250,255,260,265,270,275,280,285,290,295,300,305,310,315,320,325,330,335,340,345], ["mana cost",25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84]]},
 	// Righteous Fire (Todesfaelle Flamme)
 	// Lifted Spirit (Wisp Projector)
@@ -198,10 +197,6 @@ function getAuraData(aura, lvl) {
 	else if (aura == "Inner Sight") {
 		result.enemy_defense = auras[a].values[0][lvl]; }
 
-//	else if (aura == "Frigerate") {
-//		result.cDamage_min = auras[a].values[0][lvl];
-//		result.cDamage_max = auras[a].values[1][lvl];
-//		result.enemy_defense = auras[a].values[2][lvl]; }
 //	else if (aura == "Enflame") {
 //		result.fDamage_min = auras[a].values[1][lvl];
 //		result.fDamage_max = auras[a].values[2][lvl];
@@ -317,7 +312,7 @@ var equipment = {
 	],
     armor: [
 {name:"Armor"},
-{rw:1, name:"Bramble ­ ­ - ­ ­ Archon Plate", req_level:63, defense:300, fhr:50, pDamage:50, max_mana:5, mana_regen:15, cRes_max:5, fRes:30, pRes:100, life_per_kill:13, base:"Archon Plate", aura:"Thorns", aura_level:21},	// level 13 Spirit of Barbs (33 charges)
+{rw:1, name:"Bramble ­ ­ - ­ ­ Archon Plate", req_level:63, defense:300, fhr:50, pDamage:50, max_mana:5, mana_regen:15, cRes_max:5, fRes:30, pRes:100, life_per_kill:13, base:"Archon Plate", aura:"Thorns", aura_lvl:21},	// level 13 Spirit of Barbs (33 charges)
 {rw:1, name:"Chains of Honor ­ ­ - ­ ­ Archon Plate", req_level:65, e_def:70, all_skills:2, strength:20, life_leech:8, pdr:8, all_res:65, life_replenish:7, damage_vs_demons:200, damage_vs_undead:100, mf:25, base:"Archon Plate"},
 {rw:1, name:"Enigma ­ ­ - ­ ­ Archon Plate", req_level:65, defense:775, all_skills:2, frw:45, strength_per_level:0.75, max_life:5, pdr:8, life_per_kill:14, damage_to_mana:15, mf_per_level:1, oskill_Warp:1, base:"Archon Plate", pod_changes:1},
 {rw:1, name:"Fortitude ­ ­ - ­ ­ Archon Plate", req_level:63, defense:15, e_def:200, fcr:25, life_per_level:1.5, life_replenish:7, lRes_max:5, all_res:30, damage_to_mana:12, light_radius:1, damage_reduced:7, damage_bonus:300, base:"Archon Plate"},
@@ -848,11 +843,11 @@ var equipment = {
 {name:"Bing Sz Wang", req_level:43, e_damage:160, skills_cold_all:2, oskill_Cold_Mastery:5, ias:20, cDamage_min:50, cDamage_max:140, strength:20, req:-30, freezes_target:2, twoHanded:1, type:"sword", base:"Dacian Falx", pod_changes:1},	// 5% ctc level 3 Frozen Orb on striking
 {name:"The Vile Husk", req_level:44, e_damage:200, damage_vs_undead_per_level:7.5, ar_vs_undead_per_level:10, pDamage_all:250, pDamage_duration:6, pRes:50, twoHanded:1, type:"sword", base:"Tusk Sword"},	// 6% ctc level 1 Amplify Damage on striking
 {name:"Cloudcrack", req_level:45, e_damage:200, lDamage_min:1, lDamage_max:240, lRes_max:10, defense:30, thorns:15, skills_defensive:2, skills_offensive:2, light_radius:2, twoHanded:1, type:"sword", base:"Gothic Sword"},	// 6% ctc level 7 Fist of the Heavens on striking
-{name:"Todesfaelle Flamme", req_level:46, e_damage:160, fDamage_min:150, fDamage_max:300, enemy_fRes:-5, fRes:40, twoHanded:1, type:"sword", base:"Zweihander", pod_changes:1, aura:"Righteous Fire", aura_level:1},	// 10% ctc level 11 Fire Ball on attack, level 15 Enflame (45 charges), Righteous Fire aura
+{name:"Todesfaelle Flamme", req_level:46, e_damage:160, fDamage_min:150, fDamage_max:300, enemy_fRes:-5, fRes:40, twoHanded:1, type:"sword", base:"Zweihander", pod_changes:1},	// 10% ctc level 11 Fire Ball on attack, level 15 Enflame (45 charges), Righteous Fire aura:	, aura:"Righteous Fire", aura_lvl:1
 {name:"Swordguard", req_level:48, e_damage:180, defense_per_level:5, damage_to_mana:30, req:-50, all_res:20, fhr:20, ibc:20, missile_defense:100, melee_defense:200, twoHanded:1, type:"sword", base:"Executioner Sword"},
 {name:"Djinn Slayer", req_level:65, e_damage:240, damage_vs_demons:150, ar_vs_demons:300, fDamage_min:250, fDamage_max:500, mana_leech:6, lAbsorb_flat:7, sockets:2, type:"sword", base:"Ataghan"},
 {name:"Bloodmoon", req_level:61, e_damage:260, life_leech:15, owounds:50, life_per_kill:13, type:"sword", base:"Elegant Blade"},	// level 15 Blood Golem (9 charges)
-{name:"Frostwind", req_level:70, e_damage:230, ias:25, cDamage_min:237, cDamage_max:486, oskill_Frigerate:14, freezes_target:4, cAbsorb:15, half_freeze:1, type:"sword", base:"Cryptic Sword", pod_changes:1},
+{name:"Frostwind", req_level:70, e_damage:230, ias:25, cDamage_min:237, cDamage_max:486, oskill_Arctic_Blast:14, freezes_target:4, cAbsorb:15, half_freeze:1, type:"sword", base:"Cryptic Sword", pod_changes:1},
 {name:"Flamebellow", req_level:71, e_damage:240, fDamage_min:233, fDamage_max:482, skills_fire_all:3, oskill_Flame_Dash:18, strength:20, vitality:10, fAbsorb:30, twoHanded:1, type:"sword", base:"Balrog Blade", pod_changes:1},	// 12% ctc level 16 Firestorm on striking
 {name:"Doombringer", req_level:69, e_damage:250, damage_min:30, damage_max:100, ar_bonus:40, max_life:20, life_leech:7, indestructible:1, ethereal:0, twoHanded:1, type:"sword", base:"Champion Sword"},	// 8% ctc level 3 Weaken on striking
 {name:"The Grandfather", req_level:81, e_damage:250, max_damage_per_level:2.5, ar_bonus:50, life:80, all_attributes:20, indestructible:1, oskill_Edged_Weapon_Mastery:3, life_regen:2, ethereal:0, type:"sword", twoHanded:1, base:"Colossus Blade", pod_changes:1},
@@ -989,7 +984,7 @@ var equipment = {
 {not:["paladin"], rw:1, name:"Spirit ­ ­ - ­ ­ Monarch", req_level:54, defense:148, block:52, all_skills:2, fcr:35, fhr:55, vitality:22, mana:112, cRes:35, lRes:35, pRes:35, missile_defense:250, thorns:14, mAbsorb_flat:8, type:"shield", base:"Monarch"},
 {not:["paladin"], rw:1, name:"Phoenix ­ ­ - ­ ­ Monarch", req_level:65, defense:148, block:52, e_damage:400, enemy_fRes:-28, missile_defense:400, fAbsorb_flat:21, life:50, lRes_max:5, fRes_max:10, aura:"Redemption", aura_lvl:10, type:"shield", base:"Monarch", pod_changes:1},	// 100% ctc level 40 Blaze on level-up, 40% ctc level 22 Fire Ball on striking
 {only:"paladin", rw:1, name:"Dream ­ ­ - ­ ­ Sacred Targe", req_level:65, e_def:30, defense:220, fhr:30, vitality:10, mana_per_level:0.625, all_res:20, mf:25, max_life:5, block:30, smite_min:22, smite_max:70, type:"shield", base:"Sacred Targe", pod_changes:1, aura:"Holy Shock", aura_lvl:15},	// 10% ctc level 15 Confuse when struck
-{only:"paladin", rw:1, name:"Dragon ­ ­ - ­ ­ Sacred Targe", req_level:61, defense:360, missile_defense:230, all_attributes:5, strength_per_level:0.375, lRes_max:5, damage_reduced:7, mana:50, block:30, smite_min:22, smite_max:70, type:"shield", base:"Sacred Targe", aura:"Holy Fire", aura_level:14},	// 20% ctc level 18 Venom when struck, 12% ctc level 15 Hydra on striking
+{only:"paladin", rw:1, name:"Dragon ­ ­ - ­ ­ Sacred Targe", req_level:61, defense:360, missile_defense:230, all_attributes:5, strength_per_level:0.375, lRes_max:5, damage_reduced:7, mana:50, block:30, smite_min:22, smite_max:70, type:"shield", base:"Sacred Targe", aura:"Holy Fire", aura_lvl:14},	// 20% ctc level 18 Venom when struck, 12% ctc level 15 Hydra on striking
 {only:"paladin", rw:1, name:"Exile ­ ­ - ­ ­ Sacred Targe", req_level:57, fbr:30, freezes_target:1, e_def:260, life_replenish:7, cRes_max:5, fRes_max:5, mf:25, autorepair:1, ethereal:1, block:30, smite_min:22, smite_max:70, type:"shield", base:"Sacred Targe", aura:"Defiance", aura_lvl:16},	// 15% ctc level 5 Life Tap on striking
 {only:"paladin", rw:1, name:"Sanctuary ­ ­ - ­ ­ Sacred Targe", req_level:49, fhr:20, fbr:20, ibc:20, e_def:160, missile_defense:250, dexterity:20, all_res:115, mDamage_reduced:7, smite_min:22, smite_max:70, block:50, type:"shield", base:"Sacred Targe"},	// level 12 Slow Missiles (60 charges)	...TODO: check if this still has Slow Missile charges?
 {not:["paladin"], rw:1, name:"Sanctuary ­ ­ - ­ ­ Troll Nest", req_level:49, fhr:20, fbr:20, ibc:20, e_def:160, missile_defense:250, dexterity:20, all_res:70, mDamage_reduced:7, block:40, type:"shield", base:"Troll Nest"},	// level 12 Slow Missiles (60 charges)
@@ -1094,10 +1089,10 @@ var equipment = {
 			//	oskill_Warp:1, oskill_Ball_Lightning:1,
 	/* amazon	*///	oskill_Inner_Sight:1, oskill_Lethal_Strike:1, oskill_Valkyrie:1, oskill_Magic_Arrow:1, oskill_Guided_Arrow:1, oskill_Multiple_Shot:1,
 	/* barbarian	*///	oskill_Battle_Command:1, oskill_Battle_Orders:1, oskill_Battle_Cry:1, oskill_Bash:1, oskill_Edged_Weapon_Mastery:1,
-	/* druid	*///	oskill_Lycanthropy:1, oskill_Werebear:1, oskill_Werewolf:1, oskill_Feral_Rage:1, oskill_Flame_Dash:1, oskill_Summon_Dire_Wolf:1,
+	/* druid	*///	oskill_Arctic_Blast:1, oskill_Lycanthropy:1, oskill_Werebear:1, oskill_Werewolf:1, oskill_Feral_Rage:1, oskill_Flame_Dash:1, oskill_Summon_Dire_Wolf:1,
 	/* necromancer	*///	oskill_Desecrate:1,
 	/* paladin	*///	oskill_Zeal:1, oskill_Vengeance:1,
-	/* sorceress	*///	oskill_Frigerate:1, oskill_Shiver_Armor:1, oskill_Cold_Mastery:1, oskill_Hydra:1, oskill_Fire_Ball:1, oskill_Fire_Wall:1, oskill_Meteor:1, oskill_Fire_Mastery:1, oskill_Enflame:1	},
+	/* sorceress	*///	oskill_Shiver_Armor:1, oskill_Cold_Mastery:1, oskill_Hydra:1, oskill_Fire_Ball:1, oskill_Fire_Wall:1, oskill_Meteor:1, oskill_Fire_Mastery:1, oskill_Enflame:1	},
 {debug:1, name:"+1 skill", req_level:100, all_skills:1},
 {debug:1, name:"+20 skills", req_level:100, all_skills:20},
 	],

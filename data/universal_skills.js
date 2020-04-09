@@ -33,7 +33,7 @@ var character_any = {
 	// Druid
 		if (skillName == "Flame Dash" && elem == 0) {			result = 8 }
 		if (skillName == "Flame Dash" && elem < 3 && elem > 0) {	result *= ((1 + 0.01*(character.energy + character.all_attributes + character.level*character.energy_per_level)) * (1+character.fDamage/100) * wisp) }
-		//if (skillName == "Arctic Blast" && elem < 2) { 		result *= ((1+character.cDamage/100) * wisp) }
+		if (skillName == "Arctic Blast" && elem < 2) {			result *= ((1+character.cDamage/100) * wisp) }
 		if (skillName == "Werewolf" && elem == 0) {			result = (15 + skills[12].data.values[1][lycan_lvl]) }
 		if (skillName == "Werewolf" && elem == 3) {			result = (skills[12].data.values[0][lycan_lvl]) }
 		if (skillName == "Werebear" && elem == 0) {			result = (25 + skills[12].data.values[1][lycan_lvl]) }
@@ -49,7 +49,6 @@ var character_any = {
 		if (skillName == "Vengeance" && elem == 6) {			result = Math.floor(phys_min * (1+(skill.data.values[10][lvl])/100)) }
 		if (skillName == "Vengeance" && elem == 7) {			result = Math.floor(phys_max * (1+(skill.data.values[10][lvl])/100)) }
 	// Sorceress
-		//if (skillName == "Frigerate" && elem < 2) { 			result *= ((1 + (character.cDamage+character.cDamage_skillup)/100) * wisp) }
 		//if (skillName == "Shiver Armor" && elem < 4 && elem > 1) { 	result *= ((1 + (character.cDamage+character.cDamage_skillup)/100) * wisp) }
 		if (skillName == "Fire Ball" && elem < 2) { 			result *= ((1 + (character.fDamage+character.fDamage_skillup)/100) * wisp) }
 		if (skillName == "Fire Wall" && elem < 2) { 			result *= ((1 + (character.fDamage+character.fDamage_skillup)/100) * wisp) }
@@ -98,11 +97,6 @@ var character_any = {
 			if (document.getElementById("e"+skills[8].key) != null) { if (effects["e"+skills[8].key].enabled == 1) { disableEffect(8) } }	// disables Shiver Armor
 			result.defense_bonus = skill.data.values[1][lvl];
 		}
-		if (skillName == "Frigerate") {
-			result.cDamage_min = skill.data.values[0][lvl] * (1 + (0.15*skills[4].level)) * (1 + (~~skills[10].data.values[1][skills[10].level+skills[10].extra_levels])/100);
-			result.cDamage_max = skill.data.values[1][lvl] * (1 + (0.15*skills[4].level)) * (1 + (~~skills[10].data.values[1][skills[10].level+skills[10].extra_levels])/100);
-			result.enemy_defense = skill.data.values[2][lvl];
-		}
 		if (skillName == "Enflame") {
 			result.fDamage_min = skill.data.values[1][lvl] * (1 + (0.12*skills[23].level)) * (1 + (~~skills[30].data.values[1][skills[30].level+skills[30].extra_levels])/100);
 			result.fDamage_max = skill.data.values[2][lvl] * (1 + (0.12*skills[23].level)) * (1 + (~~skills[30].data.values[1][skills[30].level+skills[30].extra_levels])/100);
@@ -140,7 +134,7 @@ var character_any = {
 		else if (skillName == "Guided Arrow") {		attack = 1; spell = 1; weapon_damage = 150; damage_bonus = character_any.getSkillData(skillName, lvl, 0); }
 		else if (skillName == "Bash") { 		attack = 1; spell = 0; weapon_damage = 110; ar_bonus = character_any.getSkillData(skillName, lvl, 2); damage_bonus = character_any.getSkillData(skillName, lvl, 3); }
 		else if (skillName == "Flame Dash") { 		attack = 0; spell = 1; lvl += character.skills_fire_all; fDamage_min = character_any.getSkillData(skillName, lvl, 1); fDamage_max = character_any.getSkillData(skillName, lvl, 2); }
-		//else if (skillName == "Arctic Blast") { 	attack = 0; spell = 1; lvl += character.skills_cold_all; cDamage_min = character_any.getSkillData(skillName, lvl, 0); cDamage_max = character_any.getSkillData(skillName, lvl, 1); }	// TODO: confirm whether Frostwind was changed from Arctic Blast to Frigerate
+		else if (skillName == "Arctic Blast") { 	attack = 0; spell = 1; lvl += character.skills_cold_all; cDamage_min = character_any.getSkillData(skillName, lvl, 0); cDamage_max = character_any.getSkillData(skillName, lvl, 1); }
 		else if (skillName == "Feral Rage") {		attack = 1; spell = 0; ar_bonus = character_any.getSkillData(skillName, lvl, 5); damage_bonus = character_any.getSkillData(skillName, lvl, 4); }
 		else if (skillName == "Summon Dire Wolf") {	attack = 0; spell = 1; damage_min = character_any.getSkillData(skillName, lvl, 4); damage_max = character_any.getSkillData(skillName, lvl, 5); ar_bonus = character_any.getSkillData(skillName, lvl, 1); }
 		else if (skillName == "Desecrate") {		attack = 0; spell = 1; lvl += character.skills_poison_all; pDamage_min = character_any.getSkillData(skillName, lvl, 1); pDamage_max = character_any.getSkillData(skillName, lvl, 2); pDamage_duration = 2; }
@@ -163,7 +157,7 @@ var character_any = {
 		} else if (spell == 1) { skillMin = Math.floor(mag_min+mDamage_min+ele_min+phys_min); skillMax = Math.floor(mag_max+mDamage_max+ele_max+phys_max); skillAr = "";
 		} else if (spell == 2) { skillMin = ""; skillMax = ""; skillAr = ""; }
 		
-		var output = ": " + skillMin + " - " + skillMax;
+		var output = ": " + ~~skillMin + " - " + ~~skillMax;
 		if (num == 1) {
 			if (output != ": 0 - 0" && output != ":  - ") { document.getElementById("skill1_info").innerHTML = output } else { document.getElementById("skill1_info").innerHTML = ":" }
 			if (skillAr != "") { document.getElementById("ar_skill1").innerHTML = "AR: " + skillAr } else { document.getElementById("ar_skill1").innerHTML = "" }

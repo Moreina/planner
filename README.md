@@ -3,12 +3,13 @@ Path of Diablo Planner
 
 * Click on the character's level or class to change them
 * Use right click to remove points or items
-* Shift and ctrl modify the amount of points added or removed
+* Shift and ctrl modify the amount added or removed
 
 Current Known Bugs:
 * Charms can't be moved into a new space below the original space if they overlap eachother
 * Shift + Right Click in Firefox doesn't work (and still opens the default menu)
-* No testing has been done on IE, Safari, or mobile
+* Auras may override eachother if multiples of the same one are added
+* Buffs from oskills aren't added (eg Battle Command from CtA, Enflame from Lava Gout)
 
 To report a bug - edit the planner wiki, post in the reddit thread, or send a direct message.
 
@@ -19,7 +20,7 @@ https://github.com/Moreina/planner#planner
 
 Character Skill Planner for Diablo 2: Path of Diablo
 
-### [Download](https://github.com/Moreina/planner/archive/v1.17.zip)
+### [Download](https://github.com/Moreina/planner/archive/v1.18.zip)
 
 ### Features So Far:
 * all skill info up to level 60
@@ -28,18 +29,18 @@ Character Skill Planner for Diablo 2: Path of Diablo
 * stat display with:
   * class-specific differences
   * stats gained from quests
-  * difficulty differences (character resistances, summon skills)
+  * game difficulty differences
   * stats gained from items
   * stats gained from effects (buffs, minions, auras, shrines, etc)
-* equipment selection with most items
+* mercenary selection
+* equipment selection (all unique/set/runeword items)
 * charm inventory
 * character validation
 
 ### Upcoming Plans:
-* breakpoints
-* mercenary info
 * item socketing/corrupting
-* tracking of more effects (debuffs)
+* breakpoints
+* mercenary stats & validation
 * interface niceties
 
 ### Longterm Goals:
@@ -52,6 +53,7 @@ Character Skill Planner for Diablo 2: Path of Diablo
 * character importing
 * custom item-pool saving
 * monster stat calculations
+* debuff tracking
 * pvp info
 * character comparison tool
 * comparison to original D2 skills/stats
@@ -63,7 +65,7 @@ Character Skill Planner for Diablo 2: Path of Diablo
 
 [Planner Wiki](https://github.com/Moreina/planner/wiki) (report bugs or add suggestions)
 
-If you'd like to to help develop, or just have an idea for a different design/implementation, let's chat.
+If you'd like to to help develop, or just have an idea for a different design/implementation, let's chat. Should the project be made public?
 
 For anyone curious about the program code, the files can be edited with any text editor:
 * **index.html**

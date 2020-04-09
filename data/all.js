@@ -518,6 +518,7 @@ function equip(type, val) {
 	updateEffectList()
 	updateAll()
 	checkRequirements()
+	updateSkills(0)
 	if (selectedSkill[0] != " ­ ­ ­ ­ Skill 1") { checkSkill(selectedSkill[0], 1) }
 	if (selectedSkill[1] != " ­ ­ ­ ­ Skill 2") { checkSkill(selectedSkill[1], 2) }
 }
@@ -1624,7 +1625,7 @@ function showBaseLevels(skill) {
 }
 
 // updateSkills - 
-//	skill: skill object
+//	skill: skill object? (unused)
 // ---------------------------------
 function updateSkills(skill) {
 	var choices = "";
