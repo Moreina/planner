@@ -1,6 +1,17 @@
 
 // frames per attack with a base weapon speed of 0 and no IAS
 var weapon_frames = {dagger:16, oneHand_sword:14, oneHand_axe:14, twoHand_sword:17.5, twoHand_axe:17, staff:17, polearm:17, oneHand_mace:14, scepter:14, wand:14, twoHand_mace:20, javelin:19, spear:19, bow:15, crossbow:19}
+// FCR breakpoints
+//	base frames: 15
+//	var fcr_bp = [0, 9, 30, 48, 75, 125]
+// FHR breakpoints
+//	base frames: 9 or 13 (with Spears or Staves)
+//	var fhr_bp = [0, 7, 15, 27, 48, 86, 200]
+//	var fhr_bp = [0, 3, 7, 13, 20, 32, 48, 75, 129, 280]	(with Spears or Staves)
+// FBR breakpoints
+//	base frames: 5 or 2 (if Holy Shield is active)
+//	var fcr_bp = [0, 13, 32, 86, 200]
+//	var fcr_bp = [0, 86]	(with Holy Shield active)
 
 var character_paladin = {class_name:"Paladin", strength:25, dexterity:20, vitality:25, energy:15, life:55, mana:15, defense:5, ar:85, stamina:189, levelup_life:2.5, levelup_stamina:1, levelup_mana:1.5, ar_per_dexterity:5, defense_per_dexterity:0.25, life_per_vitality:3, stamina_per_vitality:1, mana_per_energy:1.5, starting_strength:25, starting_dexterity:20, starting_vitality:25, starting_energy:15, ar_const:20, skill_layout:"./images/paladin.png",
 	
@@ -36,14 +47,14 @@ var character_paladin = {class_name:"Paladin", strength:25, dexterity:20, vitali
 		
 		var phys_min = ((1+(character.e_damage+character.damage_bonus)/100)*((character.level-1)*character.min_damage_per_level+character.base_damage_min))+character.damage_min;
 		var phys_max = ((1+(character.e_damage+character.damage_bonus)/100)*((character.level-1)*character.max_damage_per_level+character.base_damage_max))+character.damage_max;
-		if (skill.name == "Vengeance" && elem == 0) { 	result = phys_min }
-		if (skill.name == "Vengeance" && elem == 1) { 	result = phys_max }
-		if (skill.name == "Vengeance" && elem == 2) { 	result = Math.floor(phys_min * (1+(skill.data.values[8][lvl] + 12*skills[1].level + 2*skills[9].level)/100)) }
-		if (skill.name == "Vengeance" && elem == 3) { 	result = Math.floor(phys_max * (1+(skill.data.values[8][lvl] + 12*skills[1].level + 2*skills[9].level)/100)) }
-		if (skill.name == "Vengeance" && elem == 4) { 	result = Math.floor(phys_min * (1+(skill.data.values[9][lvl] + 12*skills[3].level + 2*skills[9].level)/100)) }
-		if (skill.name == "Vengeance" && elem == 5) { 	result = Math.floor(phys_max * (1+(skill.data.values[9][lvl] + 12*skills[3].level + 2*skills[9].level)/100)) }
-		if (skill.name == "Vengeance" && elem == 6) { 	result = Math.floor(phys_min * (1+(skill.data.values[10][lvl] + 12*skills[5].level + 2*skills[9].level)/100)) }
-		if (skill.name == "Vengeance" && elem == 7) { 	result = Math.floor(phys_max * (1+(skill.data.values[10][lvl] + 12*skills[5].level + 2*skills[9].level)/100)) }
+		if (skill.name == "Vengeance" && elem == 0) { 	result = phys_min * wisp }
+		if (skill.name == "Vengeance" && elem == 1) { 	result = phys_max * wisp }
+		if (skill.name == "Vengeance" && elem == 2) { 	result = Math.floor(phys_min * (1+(skill.data.values[8][lvl] + 12*skills[1].level + 2*skills[9].level)/100) * (1+character.fDamage/100) * wisp) }
+		if (skill.name == "Vengeance" && elem == 3) { 	result = Math.floor(phys_max * (1+(skill.data.values[8][lvl] + 12*skills[1].level + 2*skills[9].level)/100) * (1+character.fDamage/100) * wisp) }
+		if (skill.name == "Vengeance" && elem == 4) { 	result = Math.floor(phys_min * (1+(skill.data.values[9][lvl] + 12*skills[3].level + 2*skills[9].level)/100) * (1+character.cDamage/100) * wisp) }
+		if (skill.name == "Vengeance" && elem == 5) { 	result = Math.floor(phys_max * (1+(skill.data.values[9][lvl] + 12*skills[3].level + 2*skills[9].level)/100) * (1+character.cDamage/100) * wisp) }
+		if (skill.name == "Vengeance" && elem == 6) { 	result = Math.floor(phys_min * (1+(skill.data.values[10][lvl] + 12*skills[5].level + 2*skills[9].level)/100) * (1+character.lDamage/100) * wisp) }
+		if (skill.name == "Vengeance" && elem == 7) { 	result = Math.floor(phys_max * (1+(skill.data.values[10][lvl] + 12*skills[5].level + 2*skills[9].level)/100) * (1+character.lDamage/100) * wisp) }
 		if (skill.name == "Vengeance" && elem == 8) { 	result += (12*skills[1].level + 2*skills[9].level) }
 		if (skill.name == "Vengeance" && elem == 9) { 	result += (12*skills[3].level + 2*skills[9].level) }
 		if (skill.name == "Vengeance" && elem == 10) { 	result += (12*skills[5].level + 2*skills[9].level) }

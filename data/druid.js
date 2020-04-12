@@ -2,6 +2,22 @@
 // frames per attack with a base weapon speed of 0 and no IAS
 var weapon_frames = {dagger:20, oneHand_sword:20, oneHand_axe:20, twoHand_sword:21, twoHand_axe:17, staff:17, polearm:17, oneHand_mace:20, scepter:20, wand:20, twoHand_mace:20, javelin:23, spear:23, bow:15, crossbow:19}
 var wereform_frames = {dagger:22, oneHand_sword:22, oneHand_axe:22, twoHand_sword:25, twoHand_axe:20, staff:20, polearm:20, oneHand_mace:22, scepter:22, wand:22, twoHand_mace:23, javelin:27, spear:27, bow:19, crossbow:24}
+// FCR breakpoints
+//	base frames: 18, 16 (Werebear or Werewolf)
+//	var fcr_bp = [0, 4, 10, 19, 30, 46, 68, 99, 163]
+//	var fcr_bp = [0, 7, 15, 26, 40, 63, 99, 163]	(Werebear)
+//	var fcr_bp = [0, 6, 14, 26, 40, 60, 95, 157]	(Werewolf)
+// FHR breakpoints
+//	base frames: 13, 14 (1-hand swinging weapons), 13 (Werebear), 7 (Werewolf)
+//	var fhr_bp = [0, 5, 10, 16, 26, 39, 56, 86, 152, 377]
+//	var fhr_bp = [0, 3, 7, 13, 19, 29, 42, 63, 99, 174, 456]	(1-hand swinging weapons: axes, maces, sword, throwing axes, wands)
+//	var fhr_bp = [0, 5, 10, 16, 24, 37, 54, 86, 152, 360]	(Werebear)
+//	var fhr_bp = [0, 9, 20, 42, 86, 280]	(Werewolf)
+// FBR breakpoints
+//	base frames: 11, 12 (Werebear), 9 (Werewolf)
+//	var fcr_bp = [0, 6, 13, 20, 32, 52, 86, 174, 600]
+//	var fcr_bp = [0, 5, 10, 16, 27, 40, 65, 109, 223]	(Werebear)
+//	var fcr_bp = [0, 7, 15, 27, 48, 86, 200]	(Werewolf)
 
 var character_druid = {class_name:"Druid", strength:15, dexterity:20, vitality:25, energy:20, life:55, mana:20, defense:5, ar:70, stamina:184, levelup_life:1.5, levelup_stamina:1, levelup_mana:2, ar_per_dexterity:5, defense_per_dexterity:0.25, life_per_vitality:2, stamina_per_vitality:1, mana_per_energy:2, starting_strength:15, starting_dexterity:20, starting_vitality:25, starting_energy:20, ar_const:5, skill_layout:"./images/druid.png",
 	

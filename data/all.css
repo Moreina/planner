@@ -25,7 +25,7 @@
   background-color: black;
   opacity: 0.85;
   padding: 5px;
-  z-index: 6;
+  z-index: 7;
 }
 .hover-item {
   position: absolute;
@@ -34,7 +34,7 @@
   background-color: black;
   opacity: 0.85;
   padding: 5px;
-  z-index: 5;
+  z-index: 6;
   width: 288px;
 }
 .point {
@@ -45,6 +45,7 @@
 }
 .inventory {
   position: relative;
+  margin-left:11px;
   width: 323px;
   height: 434px;
   float: left;

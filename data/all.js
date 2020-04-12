@@ -8,7 +8,7 @@ var effects = {};
 var skillList = []; var skillOptions = [];
 var selectedSkill = [" ­ ­ ­ ­ Skill 1", " ­ ­ ­ ­ Skill 2"];
 
-var mercenary = {name:"",level:1,base_aura:"",base_aura_level:""};
+var mercenary = {name:"",level:1,base_aura:"",base_aura_level:1};
 var lastCharm = "";
 var lastSelected = "";
 var settings = {coupling:1, autocast:1}
@@ -54,7 +54,7 @@ function loadItems(type, dropdown, className) {
 					if (equipment[type][item].not[l] == className) { halt = 1 }
 				}
 			}
-			if (className == mercenaries[1].name) {
+			if (className == "Rogue Scout") {
 				if (type == "offhand") { halt = 1 }
 				if (type == "weapon" && equipment[type][item].type != "bow" && equipment[type][item].type != "crossbow" && equipment[type][item].name != "Weapon") { halt = 1 }
 			}
@@ -66,7 +66,7 @@ function loadItems(type, dropdown, className) {
 				if (type == "offhand" && equipment[type][item].type != "shield" && equipment[type][item].name != "Offhand") { halt = 1 }
 				if (type == "weapon" && (equipment[type][item].type != "sword" || typeof(equipment[type][item].twoHanded) != 'undefined') && equipment[type][item].name != "Weapon") { halt = 1 }
 			}
-			if (className == mercenaries[8].name) {
+			if (className == "Barb (merc)") {
 				if (type == "offhand") { halt = 1 }
 				if (type == "weapon" && equipment[type][item].type != "sword" && equipment[type][item].name != "Weapon") { halt = 1 }
 			}
@@ -136,8 +136,10 @@ function setMercenary(merc) {
 		document.getElementById("dropdown_mercenary").selectedIndex = 0;
 	} else {
 		var mercType = merc;
+		if (merc == mercenaries[1].name) { mercType = "Rogue Scout" }
 		if (merc == mercenaries[2].name || merc == mercenaries[3].name || merc == mercenaries[4].name) { mercType = "Desert Guard" }
 		if (merc == mercenaries[5].name || merc == mercenaries[6].name || merc == mercenaries[7].name) { mercType = "Iron Wolf" }
+		if (merc == mercenaries[8].name) { mercType = "Barb (merc)" }
 		for (let i = 0; i < mercEquipmentTypes.length; i++) { loadItems(mercEquipmentTypes[i], mercEquipmentDropdowns[i], mercType) }
 		for (let m = 1; m < mercenaries.length; m++) {
 			if (merc == mercenaries[m].name) { if (mercenary.base_aura == "") {
@@ -177,6 +179,7 @@ function startup(choice) {
 	resetEquipment()
 	resetMisc()
 	calculateSkillAmounts()
+	updateSkills()
 	updateEffectList()
 	document.getElementById("quests").checked = 0
 	document.getElementById("running").checked = 0
@@ -518,7 +521,7 @@ function equip(type, val) {
 	updateEffectList()
 	updateAll()
 	checkRequirements()
-	updateSkills(0)
+	updateSkills()
 	if (selectedSkill[0] != " ­ ­ ­ ­ Skill 1") { checkSkill(selectedSkill[0], 1) }
 	if (selectedSkill[1] != " ­ ­ ­ ­ Skill 2") { checkSkill(selectedSkill[1], 2) }
 }
@@ -653,7 +656,7 @@ function resetCharms() {
 // ---------------------------------
 function addCharm(val) {
 	var charm_img = {prefix:"./images/items/charms/", small:["charm1_paw.png","charm1_disc.png","charm1_coin.png"], large:["charm2_page.png","charm2_horn.png","charm2_lantern.png"], grand:["charm3_lace.png","charm3_eye.png","charm3_monster.png"]};
-	var charmImage = "";
+	var charmImage = charm_img.prefix+"debug_plus.png";
 	var charmHeight = "";
 	var charmWidth = "29";
 	var type = "";
@@ -673,6 +676,7 @@ function addCharm(val) {
 	if (typeof(charmItem.debug) != 'undefined') {
 		if (val == "+20 skills") { charmHeight = "29"; charmImage = charm_img.prefix+"debug_II.png"; charm_y = 1; }
 		else if (val == "+1 skill") { charmHeight = "29"; charmImage = charm_img.prefix+"debug_D.png"; charm_y = 1; }
+		else if (val == "+1 (each) skill") { charmHeight = "29"; charmImage = charm_img.prefix+"debug_P.png"; charm_y = 1; }
 		else { charmHeight = "29"; charmImage = charm_img.prefix+"debug_skull.png"; charm_y = 1; }
 	}
 	
@@ -686,9 +690,10 @@ function addCharm(val) {
 			var append = "" + Math.floor((Math.random() * 999) + 1);	// generate "unique" ID for charm
 			val = val + "_" + append
 		}
-		if (nameVal == "Annihilus") { charmImage = "./images/items/charms/charm1u.png"; }
-		if (nameVal == "Hellfire Torch") { charmImage = "./images/items/charms/charm2u.png"; }
-		if (nameVal == "Gheed's Fortune") { charmImage = "./images/items/charms/charm3u.png"; }
+		if (nameVal == "Annihilus") { charmImage = charm_img.prefix+"charm1u.png"; }
+		if (nameVal == "Hellfire Torch") { charmImage = charm_img.prefix+"charm2u.png"; }
+		if (nameVal == "Gheed's Fortune") { charmImage = charm_img.prefix+"charm3u.png"; }
+		if (nameVal == "Horadric Sigil") { charmImage = charm_img.prefix+"charm3s.png"; }
 		var charmHTML = '<img style="width: ' + charmWidth + '; height: ' + charmHeight + '; pointer-events: auto;" id="' + val + '" src="' + charmImage + '" draggable="true" ondragstart="drag(event)" width="' + charmWidth + '" height="' + charmHeight + '" oncontextmenu="trash(event)" onmouseover="itemHover(event, this.value)" onmouseout="itemOut()" onclick="itemSelect(event)">';
 		var insertion = "";
 		var space_found = 0;
@@ -735,6 +740,8 @@ function addCharm(val) {
 		}
 	}
 	document.getElementById("dropdown_charms").selectedIndex = 0
+	updateEffectList()
+	updateSkills()
 }
 
 // addMisc - Adds miscellaneous effect
@@ -1295,6 +1302,9 @@ function disableEffect(s) {
 		removeEffect(effects[eff])
 	//	if (document.getElementById(eff) != null) { document.getElementById(eff).remove(); }
 		calculateSkillAmounts()
+		updateSkills()
+		if (selectedSkill[0] != " ­ ­ ­ ­ Skill 1") { checkSkill(selectedSkill[0], 1) }
+		if (selectedSkill[1] != " ­ ­ ­ ­ Skill 2") { checkSkill(selectedSkill[1], 2) }
 		updateAll()
 	}
 	}
@@ -1311,6 +1321,9 @@ function enableEffect(s) {
 		document.getElementById(eff).src = "./images/skills/"+character.class_name.toLowerCase()+"/"+skills[s].name+".png";	
 		addEffect(effects[eff])
 		calculateSkillAmounts()
+		updateSkills()
+		if (selectedSkill[0] != " ­ ­ ­ ­ Skill 1") { checkSkill(selectedSkill[0], 1) }
+		if (selectedSkill[1] != " ­ ­ ­ ­ Skill 2") { checkSkill(selectedSkill[1], 2) }
 		updateAll()
 	}
 	}
@@ -1488,7 +1501,7 @@ function skillUp(event, skill) {
 	} }
 	skillHover(skill)
     if (skill.bindable > 0 && (old_level == 0 || (old_level > 0 && skill.level == 0 && skill.force_levels == 0))) {
-	updateSkills(skill)
+	updateSkills()
 	if (selectedSkill[0] != " ­ ­ ­ ­ Skill 1") { checkSkill(selectedSkill[0], 1) }
 	if (selectedSkill[1] != " ­ ­ ­ ­ Skill 2") { checkSkill(selectedSkill[1], 2) }
     } else {
@@ -1541,7 +1554,7 @@ function skillDown(event, skill) {
 	} }
 	skillHover(skill)
     if (skill.bindable > 0 && (old_level == 0 || (old_level > 0 && skill.level == 0 && skill.force_levels == 0))) {
-	updateSkills(skill)
+	updateSkills()
 	if (selectedSkill[0] != " ­ ­ ­ ­ Skill 1") { checkSkill(selectedSkill[0], 1) }
 	if (selectedSkill[1] != " ­ ­ ­ ­ Skill 2") { checkSkill(selectedSkill[1], 2) }
     } else {
@@ -1625,9 +1638,8 @@ function showBaseLevels(skill) {
 }
 
 // updateSkills - 
-//	skill: skill object? (unused)
 // ---------------------------------
-function updateSkills(skill) {
+function updateSkills() {
 	var choices = "";
 	var k = 1;
 	var oskillList = [];
@@ -1732,7 +1744,7 @@ function checkSkill(skillName, num) {
 	}
 	if (native_skill == 0) { character_any.updateSelectedSkill(skillName, num, ar, phys_min, phys_max, ele_min, ele_max, c.mDamage_min, c.mDamage_max, wisp); }
 	else { c.updateSelectedSkill(skill, num, ar, phys_min, phys_max, ele_min, ele_max, c.mDamage_min, c.mDamage_max, wisp); }
-	updateSkills(skill)
+	updateSkills()
 }	
 
 // round - Rounds and returns a number
@@ -1779,7 +1791,7 @@ function itemHover(ev, id) {
 	}
 	var style = "display: block; color: #634db0;"
 	var display = name //+ "<br>" + stats
-	if (name == "Annihilus" || name == "Hellfire Torch" || name == "Gheed's Fortune") { style = "display: block; color: #928068;" }
+	if (name == "Annihilus" || name == "Hellfire Torch" || name == "Gheed's Fortune" || name == "Horadric Sigil") { style = "display: block; color: #928068;" }
 	if (equipped["charms"][val].type != "small" && equipped["charms"][val].type != "large" && equipped["charms"][val].type != "grand") { style = "display: block; color: #ff8080;" }
 	document.getElementById("item_tooltip").innerHTML = display
 	document.getElementById("item_tooltip").style = style
@@ -1886,6 +1898,8 @@ function trash(ev) {
 	}
 	ev.target.remove();
 	calculateSkillAmounts()
+	updateEffectList()
+	updateSkills()
 	if (selectedSkill[0] != " ­ ­ ­ ­ Skill 1") { checkSkill(selectedSkill[0], 1) }
 	if (selectedSkill[1] != " ­ ­ ­ ­ Skill 2") { checkSkill(selectedSkill[1], 2) }
 	updateAll()
@@ -1922,3 +1936,20 @@ function trash(ev) {
 	trash(ev_new)
 *///	return;
 //}
+
+// equipmentHover - 
+//	slot: equipment slot name
+// ---------------------------------
+function equipmentHover(event, slot) {
+	document.getElementById("equipment_tooltip").innerHTML = "selecting: " + slot
+	document.getElementById("equipment_tooltip").visibility = "visible"
+	document.getElementById("equipment_tooltip").style.display = "block"
+}
+
+// equipmentOut - 
+// ---------------------------------
+function equipmentOut() {
+	document.getElementById("equipment_tooltip").innerHTML = ""
+	document.getElementById("equipment_tooltip").visibility = "hidden"
+	document.getElementById("equipment_tooltip").style.display = "none"
+}
