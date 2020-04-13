@@ -50,6 +50,7 @@ function loadEquipment(className) {
 	loadMisc()
 	loadMerc()
 	loadCorruptions()
+	loadSocketables()
 }
 
 // loadItems - Creates a dropdown menu option
@@ -126,6 +127,20 @@ function loadMisc() {
 	var choices = "<option class='gray' disabled selected>­ ­ ­ ­ Miscellaneous</option>";
 	for (let m = 1; m < non_items.length; m++) { choices += "<option>" + non_items[m].name + "</option>" }
 	document.getElementById("dropdown_misc").innerHTML = choices
+}
+
+// loadSocketables - Loads jewels, runes, and gems to the 'Socketables' dropdown menu
+// ---------------------------------
+function loadSocketables() {
+	var choices = "<option class='gray' disabled selected>­ ­ ­ ­ Socketables</option>";
+	for (let m = 1; m < socketables.length; m++) {
+		if (socketables[m].type == "rune") { choices += "<option class='dropdown-crafted'>" + socketables[m].name + "</option>" }
+		else if (socketables[m].rarity == "unique") { choices += "<option class='dropdown-unique'>" + socketables[m].name + "</option>" }
+		else if (socketables[m].rarity == "magic") { choices += "<option class='dropdown-magic'>" + socketables[m].name + "</option>" }
+		else if (socketables[m].rarity == "rare") { choices += "<option class='dropdown-rare'>" + socketables[m].name + "</option>" }
+		else { choices += "<option>" + socketables[m].name + "</option>" }
+	}
+	document.getElementById("dropdown_socketables").innerHTML = choices
 }
 
 // loadMerc - Loads mercenaries to the 'Mercenary' dropdown menu
@@ -779,6 +794,58 @@ function addCharm(val) {
 	updateSkills()
 }
 
+// addSocketable - Adds a jewel, rune, or gem to the inventory
+//	val: the name of the socketable item
+// ---------------------------------
+function addSocketable(val) {
+	var prefix = "./images/items/socketables/";
+	var jewels = ["Jewel_blue.gif","Jewel_green.gif","Jewel_peach.gif","Jewel_purple.gif","Jewel_red.gif","Jewel_white.gif",];
+	var itemImage = "";
+	var height = "29";
+	var width = "29";
+	var type = "";
+	var nameVal = val;
+	var item = "";
+	for (sock in socketables) {
+		if (socketables[sock].name == val) {
+			item = socketables[sock]
+			type = item.type
+		}
+	}
+	var r = Math.floor((Math.random() * 6));
+	if (type == "jewel") { itemImage = prefix + "jewel/" + jewels[r] }
+	else if (type == "rune") { itemImage = prefix + "rune/" + item.name.split(' ').join('_') + ".png" }
+	else if (type == "gem") { itemImage = prefix + "gem/" + item.name.split(' ').join('_') + ".gif" }
+	else { itemImage = prefix + "debug_plus.png" }
+	
+	var append = "" + Math.floor((Math.random() * 999) + 1);	// generate "unique" ID for item
+	val = val + "_val" + append
+	
+	var itemHTML = '<img style="width: ' + width + '; height: ' + height + '; pointer-events: auto;" id="' + val + '" src="' + itemImage + '" draggable="true" ondragstart="drag(event)" width="' + width + '" height="' + height + '" oncontextmenu="trash(event)" onmouseover="itemHover(event, this.value)" onmouseout="itemOut()" onclick="itemSelect(event)">';
+	var insertion = "";
+	var space_found = 0;
+	var empty = 1;
+	var i = 0;
+	for (let x = 1; x <= 10; x++) {
+		for (let y = 0; y < 4; y++) {
+			i = y*10 + x
+			empty = 1
+			if (space_found == 0 && 1 + (y+1) <= 5) {
+				if (inv[i].empty == 0) { empty = 0 }
+			} else { empty = 0 }
+			if (empty == 1) { space_found = i }
+		}
+	}
+	if (space_found > 0) {
+		var i = space_found;
+		insertion = inv[i].id;
+		inv[i].empty = 0
+		inv[0].in[i] = val
+		document.getElementById(insertion).innerHTML += itemHTML;
+	}
+	document.getElementById("dropdown_socketables").selectedIndex = 0
+}
+
 // addMisc - Adds miscellaneous effect
 //	val: name of the chosen effect
 // ---------------------------------
@@ -1075,7 +1142,7 @@ function updateSecondaryStats() {
 	document.getElementById("ar_vs_demons").innerHTML = c.ar_vs_demons
 	document.getElementById("ar_vs_undead").innerHTML = Math.floor(c.ar_vs_undead + c.level*c.ar_vs_undead_per_level)
 	
-	document.getElementById("life_per_kill").innerHTML = c.life_per_kill
+	if (c.life_per_demon_kill > 0) { document.getElementById("life_per_kill").innerHTML = c.life_per_kill + " , " + c.life_per_demon_kill + " (demons)" } else { document.getElementById("life_per_kill").innerHTML = c.life_per_kill }
 	document.getElementById("mana_per_kill").innerHTML = c.mana_per_kill
 	document.getElementById("life_replenish").innerHTML = c.life_replenish
 	document.getElementById("mana_regen").innerHTML = c.mana_regen + c.mana_regen_skillup
@@ -1101,14 +1168,13 @@ function updateTertiaryStats() {
 	document.getElementById("light_radius").innerHTML = c.light_radius
 	document.getElementById("slower_stam_drain").innerHTML = c.slower_stam_drain
 	document.getElementById("heal_stam").innerHTML = ~~(c.heal_stam + c.level*c.heal_stam_per_level)
-	document.getElementById("life_per_demon_kill").innerHTML = c.life_per_demon_kill
 	document.getElementById("slow_target").innerHTML = ~~(c.slow_target + c.slow_enemies)
 	document.getElementById("enemy_defense").innerHTML = ~~(c.enemy_defense + c.target_defense)
 	document.getElementById("monster_defense_per_hit").innerHTML = c.monster_defense_per_hit
 	document.getElementById("flee_on_hit").innerHTML = Math.min(100,c.flee_on_hit) + "%"
 	document.getElementById("blind_on_hit").innerHTML = Math.min(100,c.blind_on_hit) + "%"
 	document.getElementById("freezes_target").innerHTML = c.freezes_target
-	document.getElementById("discount").innerHTML = "-" + c.discount + "%"
+	if (discount > 0) { document.getElementById("discount").innerHTML = "-" + c.discount + "%" } else { document.getElementById("discount").innerHTML = "" }
 	
 	if (c.itd > 0) { document.getElementById("itd").innerHTML = "Ignore Target Defense" } else { document.getElementById("itd").innerHTML = "" }
 	if (c.pmh > 0) { document.getElementById("pmh").innerHTML = "Prevent Monster Heal" } else { document.getElementById("pmh").innerHTML = "" }
@@ -1840,23 +1906,32 @@ function itemOut() { document.getElementById("item_tooltip").style.display="none
 //	id: unique string identifier for item
 // ---------------------------------
 function itemHover(ev, id) {
+	var type = "charm";
 	var name = "";
 	var stats = "";
-	var transfer = 0;
-	for (let i = 1; i < inv.length; i++) { if (inv[i].id == id) { transfer = i } }
-	var val = inv[0]["in"][transfer];
-	for (affix in equipped["charms"][val]) {
-		if (affix == "name") { name = equipped["charms"][val][affix] }
-		else if (affix == "type") {}
-		else { stats += affix + ": " + equipped["charms"][val][affix] + "<br>" }
-	}
-	var style = "display: block; color: #634db0;"
+	var style = "display: block;"
+		var transfer = 0;
+		for (let i = 1; i < inv.length; i++) { if (inv[i].id == id) { transfer = i } }
+		var val = inv[0]["in"][transfer];
+//	for (item in socketables) { if (socketables[item].name == id) { type = socketables[item].type; name = id; } }
+
+//	if (type != "charm") {
+//		
+//		lastCharm = name
+//	} else {
+		for (affix in equipped["charms"][val]) {
+			if (affix == "name") { name = equipped["charms"][val][affix] }
+			else if (affix == "type") {}
+			else { stats += affix + ": " + equipped["charms"][val][affix] + "<br>" }
+		}
+		style = "display: block; color: #634db0;"
+		if (name == "Annihilus" || name == "Hellfire Torch" || name == "Gheed's Fortune" || name == "Horadric Sigil") { style = "display: block; color: #928068;" }
+		if (equipped["charms"][val].type != "small" && equipped["charms"][val].type != "large" && equipped["charms"][val].type != "grand") { style = "display: block; color: #ff8080;" }
+		lastCharm = name
+//	}
 	var display = name //+ "<br>" + stats
-	if (name == "Annihilus" || name == "Hellfire Torch" || name == "Gheed's Fortune" || name == "Horadric Sigil") { style = "display: block; color: #928068;" }
-	if (equipped["charms"][val].type != "small" && equipped["charms"][val].type != "large" && equipped["charms"][val].type != "grand") { style = "display: block; color: #ff8080;" }
 	document.getElementById("item_tooltip").innerHTML = display
 	document.getElementById("item_tooltip").style = style
-	lastCharm = name
 	
 	// TODO better system:
 	

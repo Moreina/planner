@@ -1132,10 +1132,10 @@ var equipment = {
 
 var socketables = [
 {name:"Socketables"},
-{name:"Rainbow Facet (Fire)", type:"jewel", req_level:49, fDamage:5, enemy_fRes:-5, fDamage_min:17, fDamage_max:45},	// 100% ctc level 29 Blaze when you level up, OR 100% ctc level 31 Meteor when you die
-{name:"Rainbow Facet (Cold)", type:"jewel", req_level:49, cDamage:5, enemy_cRes:-5, cDamage_min:24, cDamage_max:38},	// 100% ctc level 43 Frost Nova when you level up, OR 100% ctc level 37 Blizzard when you die
-{name:"Rainbow Facet (Lightning)", type:"jewel", req_level:49, lDamage:5, enemy_lRes:-5, lDamage_min:1, lDamage_max:74},	// 100% ctc level 41 Nova when you level up, OR 100% ctc level 47 Chain Lightning when you die
-{name:"Rainbow Facet (Poison)", type:"jewel", req_level:49, pDamage:5, enemy_pRes:-5, pDamage_all:37, pDamage_duration:2},	// 100% ctc level 23 Venom when you level up, OR 100% ctc level 51 Poison Nova when you die
+{name:"Rainbow Facet (Fire)", type:"jewel", rarity:"unique", req_level:49, fDamage:5, enemy_fRes:-5, fDamage_min:17, fDamage_max:45, img:"Jewel_red.gif"},	// 100% ctc level 29 Blaze when you level up, OR 100% ctc level 31 Meteor when you die
+{name:"Rainbow Facet (Cold)", type:"jewel", rarity:"unique", req_level:49, cDamage:5, enemy_cRes:-5, cDamage_min:24, cDamage_max:38, img:"Jewel_blue.gif"},	// 100% ctc level 43 Frost Nova when you level up, OR 100% ctc level 37 Blizzard when you die
+{name:"Rainbow Facet (Lightning)", type:"jewel", rarity:"unique", req_level:49, lDamage:5, enemy_lRes:-5, lDamage_min:1, lDamage_max:74, img:"Jewel_white.gif"},	// 100% ctc level 41 Nova when you level up, OR 100% ctc level 47 Chain Lightning when you die
+{name:"Rainbow Facet (Poison)", type:"jewel", rarity:"unique", req_level:49, pDamage:5, enemy_pRes:-5, pDamage_all:37, pDamage_duration:2, img:"Jewel_green.gif"},	// 100% ctc level 23 Venom when you level up, OR 100% ctc level 51 Poison Nova when you die
 {name:"Ruby Jewel of Fervor", type:"jewel", rarity:"magic", req_level:50, damage_bonus:40, ias:15},
 {name:"Scintillating Jewel of Fervor", type:"jewel", rarity:"magic", req_level:29, all_res:15, ias:15},
 {name:"Brute's Jewel of Fervor", type:"jewel", rarity:"magic", req_level:29, ias:15, melee_splash:1},
@@ -1202,7 +1202,7 @@ var socketables = [
 {name:"Perfect Diamond", type:"gem", rarity:"common", req_level:18, weapon:{damage_min:8,damage_max:9}, armor:{ar:100}, shield:{all_res:19}},
 {name:"Perfect Skull", type:"gem", rarity:"common", req_level:18, weapon:{life_leech:4,mana_leech:3}, armor:{life_replenish:5,mana_regen:19}, shield:{damage_reduced:17}},
 //{name:"", type:"gem", rarity:"common", req_level:1, weapon:{}, armor:{}, shield:{}},
-{name:"Standard of Heroes", type:"other", req_level:90, glow:1},	// causes the character to glow (same as full class set)
+{name:"Standard of Heroes", type:"other", rarity:"unique", req_level:90, glow:1},	// causes the character to glow (same as full class set)
 ];
 
 var corruptions = {
@@ -1284,20 +1284,18 @@ var corruptions = {
 	offhand: [
 		{name:"Offhand"},
 		// shield
-		//{name:"<option class='gray' disabled selected>­ ­ ­ ­ Shields</option>"},
-		{name:"+ Sockets", sockets:4},
-		{name:"+ Block Chance", ibc:10},
-		{name:"+ Fire Damage", fDamage:10},
-		{name:"+ Cold Damage", cDamage:10},
-		{name:"+ Lightning Damage", lDamage:10},
-		{name:"+ Poison Damage", pDamage:10},
+		{name:"+ Sockets", base:"shield", sockets:4},
+		{name:"+ Block Chance", base:"shield", ibc:10},
+		{name:"+ Fire Damage", base:"shield", fDamage:10},
+		{name:"+ Cold Damage", base:"shield", cDamage:10},
+		{name:"+ Lightning Damage", base:"shield", lDamage:10},
+		{name:"+ Poison Damage", base:"shield", pDamage:10},
 		// quiver
-		//{name:"<option class='gray' disabled selected>­ ­ ­ ­ Quivers</option>"},
-		{name:"+ All Resistances", all_res:5},
-		{name:"+ Life per Hit", life_per_ranged_hit:6},
-		{name:"+ Mana per Hit", mana_per_ranged_hit:4},
-		{name:"+ Increased Attack Speed", ias:10},
-		{name:"+ Vitality", vitality:10},
+		{name:"+ All Resistances", base:"quiver", all_res:5},
+		{name:"+ Life per Hit", base:"quiver", life_per_ranged_hit:6},
+		{name:"+ Mana per Hit", base:"quiver", mana_per_ranged_hit:4},
+		{name:"+ Increased Attack Speed", base:"quiver", ias:10},
+		{name:"+ Vitality", base:"quiver", vitality:10},
 	],
 }
 
