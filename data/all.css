@@ -103,6 +103,18 @@
   -moz-appearance: none;
   appearance: none;
 }
+.dropdown-corruption select {
+  color: #ddd;
+  background-color: black;
+  padding-left: 7px;
+  width: 20px;
+  height: 29px;
+  border-color: #333;
+  z-index: 5;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
 .dropdown-option {
   background-color: #222;
   z-index: 6;

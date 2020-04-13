@@ -6,15 +6,15 @@ var mercEquipped = { helm:{name:"none"}, armor:{name:"none"}, weapon:{name:"none
 var unequipped = {name:"none", strength:0, dexterity:0, vitality:0, energy:0, life:0, mana:0, defense:0, ar:0, stamina:0, block:0, base_defense:0, 
 /* main stats		*/	fRes_max:0, cRes_max:0, lRes_max:0, pRes_max:0, mRes_max:0, fRes:0, cRes:0, lRes:0, pRes:0, mRes:0,
 /* stats		*/	cdr:0, fcr:0, fbr:0, fhr:0, frw:0, ias:0, pierce:0, cblow:0, dstrike:0, cstrike:0, owounds:0, fDamage:0, cDamage:0, lDamage:0, pDamage:0, fPierce:0, cPierce:0, lPierce:0, pPierce:0, pdr:0, damage_reduced:0, mDamage_reduced:0, mf:0, gf:0, life_leech:0, mana_leech:0, life_per_hit:0, mana_per_hit:0, life_per_ranged_hit:0, mana_per_ranged_hit:0, fAbsorb:0, cAbsorb:0, lAbsorb:0, mAbsorb:0, fAbsorb_flat:0, cAbsorb_flat:0, lAbsorb_flat:0, mAbsorb_flat:0, 
-/* stats (indirect)	*/	all_skills:0, all_attributes:0, all_res:0, velocity:0, max_life:0, max_mana:0, damage_bonus:0, defense_bonus:0, ar_bonus:0, ar_bonus_per_level:0, ias_per_8_dexterity:0, max_energy:0, ar_per_socketed:0, 
+/* stats (indirect)	*/	all_skills:0, all_attributes:0, all_res:0, velocity:0, max_life:0, max_mana:0, max_stamina:0, damage_bonus:0, defense_bonus:0, ar_bonus:0, ar_bonus_per_level:0, ias_per_8_dexterity:0, max_energy:0, ar_per_socketed:0, 
 /* stats (per level)	*/	life_per_level:0, mana_per_level:0, defense_per_level:0, ar_per_level:0, stamina_per_level:0, strength_per_level:0, dexterity_per_level:0, vitality_per_level:0, energy_per_level:0, fRes_per_level:0, cRes_per_level:0, lRes_per_level:0, pRes_per_level:0, fAbsorb_flat_per_level:0, cAbsorb_flat_per_level:0, lAbsorb_flat_per_level:0, mAbsorb_flat_per_level:0, mf_per_level:0, gf_per_level:0, fcr_per_level:0, dstrike_per_level:0, e_def_per_level:0, 
 /* attack damage	*/	base_damage_min:0, base_damage_max:0, damage_min:0, damage_max:0, fDamage_min:0, fDamage_max:0, cDamage_min:0, cDamage_max:0, lDamage_min:0, lDamage_max:0, pDamage_min:0, pDamage_max:0, pDamage_all:0, pDamage_duration:0, mDamage_min:0, mDamage_max:0, min_damage_per_level:0, max_damage_per_level:0, kick_min:0, fDamage_max_per_level:0, cDamage_max_per_level:0, lDamage_max_per_level:0, pDamage_max_per_level:0, kick_damage_per_level:0, smite_min:0, smite_max:0, e_damage:0, e_damage_per_level:0, e_max_damage_per_level:0, lDamage_max_per_2_energy:0,
 /* other (not in-game)	*/	ibc:0, life_per_kill:0, mana_per_kill:0, damage_vs_demons:0, damage_vs_undead:0, ar_vs_demons:0, ar_vs_undead:0, damage_to_mana:0, life_replenish:0, life_regen:0, mana_regen:0, missile_defense:0, melee_defense:0, ar_vs_undead_per_level:0, damage_vs_undead_per_level:0, ar_vs_demons_per_level:0, damage_vs_demons_per_level:0, poison_length_reduced:0, thorns_lightning:0, life_per_demon_kill:0, light_radius:0, thorns:0, thorns_per_level:0, slower_stam_drain:0, heal_stam:0, heal_stam_per_level:0, 
 /* other, affects enemy	*/	enemy_fRes:0, enemy_cRes:0, enemy_lRes:0, enemy_pRes:0, slow_target:0, target_defense:0, flee_on_hit:0, blind_on_hit:0, monster_defense_per_hit:0, freezes_target:0,
-/* other, boolean	*/	itd:0, pmh:0, cbf:0, peace:0, knockback:0, half_freeze_duration:0, melee_splash:0, 
+/* other, boolean	*/	itd:0, pmh:0, cbf:0, peace:0, knockback:0, half_freeze_duration:0, melee_splash:0, glow:0, 
 /* item qualities	*/	indestructible:0, req:0, autorepair:0, autoreplenish:0, stack_size:0, sockets:0, e_def:0, group:"", tier:0, type:"", def_low:0, def_high:0, durability:0, max_sockets:0, upgrade:"", downgrade:"", 
 /* sets			*/	set_IK:0, set_Mav:0, set_Gris:0, set_TO:0, set_TR:0, set_Nat:0, set_Ald:0, set_Disciple:0, set_Angelic:0, set_Cathan:0, set_Cow:0, set_Brethren:0, set_Hwanin:0, set_Naj:0, set_Orphan:0, set_Sander:0, set_Sazabi:0, set_Arcanna:0, set_Arctic:0, set_Berserker:0, set_Civerb:0, set_Cleglaw:0, set_Death:0, set_Hsarus:0, set_Infernal:0, set_Iratha:0, set_Isenhart:0, set_Milabrega:0, set_Sigon:0, set_Tancred:0, set_Vidala:0,
-/* misc			*/	ar_shrine_bonus:0, bonus_corpse_explosion:0, skill_random_sorc:0, max_stamina:0, thorns_reflect:0, absorb:0, curse_length_reduced:0, enemy_defense:0, slow_enemies:0, hammer_bonus:0, skeleton_bonus:0, stun_length:0, charge_ember:0, charge_thunder:0, charge_ice:0, wisp:0, blessed_hammer_on_hit:0, discount:15, 
+/* misc			*/	ar_shrine_bonus:0, bonus_corpse_explosion:0, skill_random_sorc:0, thorns_reflect:0, curse_length_reduced:0, enemy_defense:0, slow_enemies:0, hammer_bonus:0, skeleton_bonus:0, stun_length:0, charge_ember:0, charge_thunder:0, charge_ice:0, wisp:0, blessed_hammer_on_hit:0, discount:0, 
 
 /* skill tabs		*/	skills_javelins:0, skills_passives:0, skills_bows:0, skills_martial:0, skills_shadow:0, skills_traps:0, skills_warcries:0, skills_masteries:0, skills_combat_barbarian:0, skills_elemental:0, skills_shapeshifting:0, skills_summoning_druid:0, skills_summoning_necromancer:0, skills_poisonBone:0, skills_curses:0, skills_offensive:0, skills_defensive:0, skills_combat_paladin:0, skills_cold:0, skills_lightning:0, skills_fire:0, skills_amazon:0, skills_assassin:0, skills_barbarian:0, skills_druid:0, skills_necromancer:0, skills_paladin:0, skills_sorceress:0, skills_fire_all:0, skills_cold_all:0, skills_poison_all:0,
 /* skills   amazon	*/	skill_Jab:0, skill_Power_Strike:0, skill_Poison_Javelin:0, skill_Fend:0, skill_Lightning_Bolt:0, skill_Charged_Strike:0, skill_Plague_Javelin:0, skill_Ground_Slam:0, skill_Lightning_Strike:0, skill_Lightning_Fury:0, skill_Inner_Sight:0, skill_Lethal_Strike:0, skill_Phase_Run:0, skill_Dodge:0, skill_Avoid:0, skill_Penetrate:0, skill_Evade:0, skill_Decoy:0, skill_Valkyrie:0, skill_Pierce:0, skill_Cold_Arrow:0, skill_Magic_Arrow:0, skill_Multiple_Shot:0, skill_Fire_Arrow:0, skill_Ice_Arrow:0, skill_Guided_Arrow:0, skill_Exploding_Arrow:0, skill_Strafe:0, skill_Immolation_Arrow:0, skill_Freezing_Arrow:0, 
@@ -78,7 +78,7 @@ var auras = [
 /* 1*/	{name:"Resist Fire", values:[[], ["resist",65,77,86,94,100,105,109,112,116,118,121,123,125,127,128,130,131,132,133,134,135,136,137,138,138,139,140,140,141,141,142,142,143,143,143,144,144,145,145,145,145,146,146,146,147,147,147,147,148,148,148,148,148,149,149,149,149,149,149,150], ["max resist",1,1,2,2,3,3,4,4,5,5,6,6,7,7,8,8,9,9,10,10,11,11,12,12,13,13,14,14,15,15,16,16,17,17,18,18,19,19,20,20,21,21,22,22,23,23,24,24,25,25,26,26,27,27,28,28,29,29,30,30]]},
 /* 2*/	{name:"Defiance", values:[["defense",80,90,100,110,120,130,140,150,160,170,180,190,200,210,220,230,240,250,260,270,280,290,300,310,320,330,340,350,360,370,380,390,400,410,420,430,440,450,460,470,480,490,500,510,520,530,540,550,560,570,580,590,600,610,620,630,640,650,660,670]]},
 /* 3*/	{name:"Resist Cold", values:[[], ["resist",65,77,86,94,100,105,109,112,116,118,121,123,125,127,128,130,131,132,133,134,135,136,137,138,138,139,140,140,141,141,142,142,143,143,143,144,144,145,145,145,145,146,146,146,147,147,147,147,148,148,148,148,148,149,149,149,149,149,149,150], ["max resist",1,1,2,2,3,3,4,4,5,5,6,6,7,7,8,8,9,9,10,10,11,11,12,12,13,13,14,14,15,15,16,16,17,17,18,18,19,19,20,20,21,21,22,22,23,23,24,24,25,25,26,26,27,27,28,28,29,29,30,30]]},
-/* 4*/	{name:"Cleansing", values:[[], ["duration reduction",39,46,51,56,60,63,65,67,69,70,72,73,75,76,76,78,78,79,79,80,81,81,82,82,82,83,84,84,84,84,85,85,85,85,85,86,86,87,87,87,87,87,87,87,88,88,88,88,88,88,88,88,88,89,89,89,89,89,89,90]]},
+/* 4*/	{name:"Cleansing", values:[[], [], ["duration reduction",39,46,51,56,60,63,65,67,69,70,72,73,75,76,76,78,78,79,79,80,81,81,82,82,82,83,84,84,84,84,85,85,85,85,85,86,86,87,87,87,87,87,87,87,88,88,88,88,88,88,88,88,88,89,89,89,89,89,89,90]]},
 /* 5*/	{name:"Resist Lightning", values:[[], ["resist",65,77,86,94,100,105,109,112,116,118,121,123,125,127,128,130,131,132,133,134,135,136,137,138,138,139,140,140,141,141,142,142,143,143,143,144,144,145,145,145,145,146,146,146,147,147,147,147,148,148,148,148,148,149,149,149,149,149,149,150], ["max resist",1,1,2,2,3,3,4,4,5,5,6,6,7,7,8,8,9,9,10,10,11,11,12,12,13,13,14,14,15,15,16,16,17,17,18,18,19,19,20,20,21,21,22,22,23,23,24,24,25,25,26,26,27,27,28,28,29,29,30,30]]},
 /* 6*/	{name:"Vigor", values:[["velocity",13,18,22,25,28,30,32,33,35,36,37,38,39,40,40,41,41,42,42,43,43,43,44,44,44,45,45,45,46,46,46,46,46,46,46,47,47,47,47,47,47,48,48,48,48,48,48,48,49,49,49,49,49,49,49,49,49,49,49,50], ["stamina",50,75,100,125,150,175,200,225,250,275,300,325,350,375,400,425,450,475,500,525,550,575,600,625,650,675,700,725,750,775,800,825,850,875,900,925,950,975,1000,1025,1050,1075,1100,1125,1150,1175,1200,1225,1250,1275,1300,1325,1350,1375,1400,1425,1450,1475,1500,1525], ["stamina recovery",50,75,100,125,150,175,200,225,250,275,300,325,350,375,400,425,450,475,500,525,550,575,600,625,650,675,700,725,750,775,800,825,850,875,900,925,950,975,1000,1025,1050,1075,1100,1125,1150,1175,1200,1225,1250,1275,1300,1325,1350,1375,1400,1425,1450,1475,1500,1525]]},
 /* 7*/	{name:"Meditation", values:[[], ["mana recovery",80,88,96,104,112,120,128,136,144,152,160,168,176,184,192,200,208,216,224,232,240,248,256,264,272,280,288,296,304,312,320,328,336,344,352,360,368,376,384,392,400,408,416,424,432,440,448,456,464,472,480,488,496,504,512,520,528,536,544,552]]},
@@ -129,9 +129,9 @@ function getAuraData(aura, lvl) {
 		result.cRes = auras[a].values[1][lvl];
 		result.cRes_max = auras[a].values[2][lvl]; }
 	else if (aura == "Cleansing") {
-		//result.life_replenish = ~~auras[0].data.values[0][auras[0].level];
-		result.poison_length_reduced = auras[a].values[1][lvl];
-		result.curse_length_reduced = auras[a].values[1][lvl]; }
+	//	result.life_replenish = ~~auras[0].data.values[0][auras[0].level];	// check: is 'life replenish' the same as 'life regenerated per 2 seconds'?
+		result.poison_length_reduced = auras[a].values[2][lvl];
+		result.curse_length_reduced = auras[a].values[2][lvl]; }
 	else if (aura == "Resist Lightning") {
 		result.lRes = auras[a].values[1][lvl];
 		result.lRes_max = auras[a].values[2][lvl]; }
@@ -140,7 +140,7 @@ function getAuraData(aura, lvl) {
 		result.max_stamina = auras[a].values[1][lvl];
 		result.heal_stam = auras[a].values[2][lvl]; }
 	else if (aura == "Meditation") {
-		//result.life_replenish = ~~auras[0].data.values[0][auras[0].level];
+	//	result.life_replenish = ~~auras[0].data.values[0][auras[0].level];	// check: is 'life replenish' the same as 'life regenerated per 2 seconds'?
 		result.mana_regen = auras[a].values[1][lvl]; }
 	else if (aura == "Redemption") {
 		//result. = auras[a].values[0][lvl];		// redeem soul
@@ -174,8 +174,6 @@ function getAuraData(aura, lvl) {
 	else if (aura == "Holy Shock") {
 		result.lDamage_min = auras[a].values[0][lvl];
 		result.lDamage_max = auras[a].values[1][lvl];
-	//	result.lDamage_max_aura = auras[a].values[2][lvl];
-	//	result.lDamage_max_aura = auras[a].values[3][lvl];
 	}
 	else if (aura == "Sanctuary") {
 		result.damage_vs_undead = auras[a].values[0][lvl]; }
@@ -296,7 +294,7 @@ var equipment = {
 {set_Sigon:1, name:"Sigon's Visor", req_level:6, defense:25, mana:30, base:"Great Helm", set_bonuses:["set_Sigon",{},{ar_per_level:8},{},{},{},{}]},
 {set_Infernal:1, name:"Infernal Cranium", req_level:5, damage_to_mana:20, all_res:10, base:"Cap", set_bonuses:["set_Infernal",{},{defense_per_level:2},{}]},
 {set_Berserker:1, name:"Berserker's Headgear", req_level:3, defense:15, fRes:25, base:"Helm", set_bonuses:["set_Berserker",{},{ar_per_level:8},{}]},
-{not:["Rogue Scout","Desert Guard","Iron Wolf","Barb (merc)"], rarity:"rare", name:"Diadem of Acceleration", req_level:64, frw:30, fcr:20, strength:30, all_res:20, damage_bonus:30, skills_amazon:2, skills_assassin:2, skills_barbarian:2, skills_druid:2, skills_necromancer:2, skills_paladin:2, skills_sorceress:2, base:"Diadem"},	// check level requirement of affixes?
+{not:["Rogue Scout","Desert Guard","Iron Wolf","Barb (merc)"], rarity:"rare", name:"Vanguard's Diadem", req_level:64, frw:30, fcr:20, strength:30, all_res:20, damage_bonus:30, skills_amazon:2, skills_assassin:2, skills_barbarian:2, skills_druid:2, skills_necromancer:2, skills_paladin:2, skills_sorceress:2, base:"Diadem"},	// check level requirement of affixes?
 {only:"assassin", rarity:"crafted", name:"Psychic Caster Demonhead", req_level:55, mana_regen:10, mana:20, mana_leech:4, skills_shadow:2, mana_per_level:0.75, life:60, e_def:200, fhr:10, ar_bonus:5, light_radius:5, base:"Demonhead"},
 {only:"assassin", rarity:"crafted", name:"Sensei's Blood Armet", req_level:51, dstrike:10, life:80, life_leech:4, skills_martial:2, ar_bonus_per_level:1, e_def:200, fhr:10, ar_bonus:5, light_radius:5, base:"Armet"},
 {only:"barbarian", rarity:"crafted", name:"Veteran's Blood Armet", req_level:51, dstrike:10, life:80, life_leech:4, skills_combat_barbarian:2, ar_bonus_per_level:1, e_def:200, fhr:10, ar_bonus:5, light_radius:5, base:"Armet"},
@@ -1035,7 +1033,7 @@ var equipment = {
 {name:"Charms"},
 {name:"Annihilus", type:"small", req_level:80, all_res:20, all_attributes:20, all_skills:1},
 {name:"Hellfire Torch", type:"large", req_level:75,  all_res:20, all_attributes:20, light_radius:8, skills_amazon:3, skills_assassin:3, skills_barbarian:3, skills_druid:3, skills_necromancer:3, skills_paladin:3, skills_sorceress:3, pod_changes:1},
-{name:"Gheed's Fortune", type:"grand", req_level:62, gf:160, mf:40},
+{name:"Gheed's Fortune", type:"grand", req_level:62, gf:160, mf:40, discount:15},
 {only:"amazon", rarity:"magic", name:"+1 Harpoonist's Grand Charm", type:"grand", req_level:42, skills_javelins:1},
 {only:"amazon", rarity:"magic", name:"+1 Acrobat's Grand Charm", type:"grand", req_level:42, skills_passives:1},
 {only:"amazon", rarity:"magic", name:"+1 Fletcher's Grand Charm", type:"grand", req_level:42, skills_bows:1},
@@ -1204,17 +1202,113 @@ var socketables = [
 {name:"Perfect Diamond", type:"gem", rarity:"common", req_level:18, weapon:{damage_min:8,damage_max:9}, armor:{ar:100}, shield:{all_res:19}},
 {name:"Perfect Skull", type:"gem", rarity:"common", req_level:18, weapon:{life_leech:4,mana_leech:3}, armor:{life_replenish:5,mana_regen:19}, shield:{damage_reduced:17}},
 //{name:"", type:"gem", rarity:"common", req_level:1, weapon:{}, armor:{}, shield:{}},
-{name:"Standard of Heroes", type:"other", req_level:90},	// causes the character to glow (same as full class set)
+{name:"Standard of Heroes", type:"other", req_level:90, glow:1},	// causes the character to glow (same as full class set)
 ];
 
+var corruptions = {
+	helm: [
+		{name:"Helm"},
+		{name:"+ Sockets", sockets:3},
+		{name:"+ Strength", strength:10},
+		{name:"+ Energy", energy:10},
+		{name:"+ Life/Mana per Hit", life_per_hit:14, life_per_ranged_hit:10},
+		{name:"+ Life", life:15},
+		{name:"+ Enhanced Defense", e_def:25},
+	],
+	armor: [
+		{name:"Armor"},
+		{name:"+ Sockets", sockets:4},
+		{name:"+ Increased Attack Speed", ias:10},
+		{name:"+ Enhanced Defense", e_def:20},
+		{name:"+ Attack Rating", ar_bonus:20},
+		{name:"+ Faster Cast Rate", fcr:10},
+		{name:"+ Max Life", max_life:2},
+	],
+	gloves: [
+		{name:"Gloves"},
+		{name:"+ Increased Attack Speed", ias:10},
+		{name:"+ Cold Resistance", cRes:20},
+		{name:"+ All Resistances", all_res:10},
+		{name:"+ Life/Mana per Hit", life_per_hit:10, life_per_ranged_hit:10},
+		{name:"+ Poison Resistance", pRes:20},
+	],
+	boots: [
+		{name:"Boots"},
+		{name:"+ Fire Resistance", fRes:20},
+		{name:"+ All Resistances", all_res:10},
+		{name:"+ Dexterity", dexterity:10},
+		{name:"+ Lightning Resistance", lRes:20},
+		{name:"+ Cooldown Reduction", cdr:10},
+	],
+	belt: [
+		{name:"Belt"},
+		{name:"+ Pierce", pierce:8},
+		{name:"+ Max Fire Resist", fRes_max:2},
+		{name:"+ Max Cold Resist", cRes_max:2},
+		{name:"+ Max Lightning Resist", lRes_max:2},
+		{name:"+ Max Poison Resist", pRes_max:2},
+	],
+	amulet: [
+		{name:"Amulet"},
+		{name:"+ All Resistances", all_res:5},
+		{name:"+ All Skills", all_skills:1},
+		{name:"+ Mana Regen", mana_regen:15},
+		{name:"+ Magic Find", mf:10},
+		{name:"+ Life", life:18},
+	],
+	ring1: [
+		{name:"Ring"},
+		{name:"+ Faster Cast Rate", fcr:10},
+		{name:"+ Faster Run/Walk", frw:10},
+		{name:"+ Life", life:15},
+		{name:"+ Damage Reduction", pdr:6},
+		{name:"+ Magic Find", mf:10},
+	],
+	ring2: [
+		{name:"Ring"},
+		{name:"+ Faster Cast Rate", fcr:10},
+		{name:"+ Faster Run/Walk", frw:10},
+		{name:"+ Life", life:15},
+		{name:"+ Damage Reduction", pdr:6},
+		{name:"+ Magic Find", mf:10},
+	],
+	weapon: [
+		{name:"Weapon"},
+		{name:"+ Sockets", sockets:6},
+		{name:"+ Enhanced Damage", e_damage:50},
+		{name:"+ Deadly Strike", dstrike:10},
+		{name:"+ Damage per Level", max_damage_per_level:1},
+		{name:"+ Crushing Blow", cblow:10},
+		{name:"+ Increased Attack Speed", ias:15},
+	],
+	offhand: [
+		{name:"Offhand"},
+		// shield
+		//{name:"<option class='gray' disabled selected>­ ­ ­ ­ Shields</option>"},
+		{name:"+ Sockets", sockets:4},
+		{name:"+ Block Chance", ibc:10},
+		{name:"+ Fire Damage", fDamage:10},
+		{name:"+ Cold Damage", cDamage:10},
+		{name:"+ Lightning Damage", lDamage:10},
+		{name:"+ Poison Damage", pDamage:10},
+		// quiver
+		//{name:"<option class='gray' disabled selected>­ ­ ­ ­ Quivers</option>"},
+		{name:"+ All Resistances", all_res:5},
+		{name:"+ Life per Hit", life_per_ranged_hit:6},
+		{name:"+ Mana per Hit", mana_per_ranged_hit:4},
+		{name:"+ Increased Attack Speed", ias:10},
+		{name:"+ Vitality", vitality:10},
+	],
+}
+
 var sets = {
-	set_IK:[0,{},{ar:50},{ar:75},{ar:125},{ar:200},{skills_barbarian:3, life:150, all_res:50, mDamage_reduced:10}],
-	set_Mav:[0,{},{strength:20},{dexterity:30},{},{skills_amazon:3, all_res:50, defense:100, ar:100, mf:100}],
-	set_Ald:[0,{},{ar_bonus:150},{mf:50},{skills_druid:3, e_damage:350, mana_leech:10, all_res:50, defense:150, mana:150}],
-	set_TO:[0,{},{oskill_Fire_Ball:18, mana_regen:15},{oskill_Fire_Wall:13, mana_regen:15},{oskill_Meteor:10, mana_regen:15},{skills_necromancer:3, life_leech:20, oskill_Fire_Mastery:3, defense:200, mana:100, mana_regen:15, life_replenish:5, all_res:50}],
-	set_Gris:[0,{},{strength:20},{dexterity:30},{skills_paladin:3, fhr:30, ar:200, life:150, all_res:50}],
-	set_Nat:[0,{},{mDamage_reduced:15},{defense:200},{skills_assassin:3, defense:150, life_leech:14, mana_leech:14, all_res:50, pdr:30}],
-	set_TR:[0,{},{life_replenish:10},{mf:65},{fhr:25},{skills_sorceress:3, life:150, all_res:50, missile_defense:50, defense:150}],
+	set_IK:[0,{},{ar:50},{ar:75},{ar:125},{ar:200},{skills_barbarian:3, life:150, all_res:50, mDamage_reduced:10, glow:1}],
+	set_Mav:[0,{},{strength:20},{dexterity:30},{},{skills_amazon:3, all_res:50, defense:100, ar:100, mf:100, glow:1}],
+	set_Ald:[0,{},{ar_bonus:150},{mf:50},{skills_druid:3, e_damage:350, mana_leech:10, all_res:50, defense:150, mana:150, glow:1}],
+	set_TO:[0,{},{oskill_Fire_Ball:18, mana_regen:15},{oskill_Fire_Wall:13, mana_regen:15},{oskill_Meteor:10, mana_regen:15},{skills_necromancer:3, life_leech:20, oskill_Fire_Mastery:3, defense:200, mana:100, mana_regen:15, life_replenish:5, all_res:50, glow:1}],
+	set_Gris:[0,{},{strength:20},{dexterity:30},{skills_paladin:3, fhr:30, ar:200, life:150, all_res:50, glow:1}],
+	set_Nat:[0,{},{mDamage_reduced:15},{defense:200},{skills_assassin:3, defense:150, life_leech:14, mana_leech:14, all_res:50, pdr:30, glow:1}],
+	set_TR:[0,{},{life_replenish:10},{mf:65},{fhr:25},{skills_sorceress:3, life:150, all_res:50, missile_defense:50, defense:150, glow:1}],
 	
 	set_BK:[0,{},{all_skills:2, ar:200, damage_vs_demons:200}],
 	set_Disciple:[0,{},{defense:150},{skills_poison_all:1},{strength:10},{skills_all:2, all_res:50, mana:100}],
@@ -1246,30 +1340,30 @@ var sets = {
 
 var bases = {
 	// helm
-	Cap:{group:"armor", type:"helm", base_defense:5, def_low:3, def_high:5, durability:12, max_sockets:2, upgrade:"War_Hat"},
+	Cap:{group:"armor", type:"helm", base_defense:5, def_low:3, def_high:5, durability:12, max_sockets:2, upgrade:"War Hat"},
 	Skull_Cap:{group:"armor", type:"helm", base_defense:11, def_low:8, def_high:11, req_strength:15, durability:18, max_sockets:2, upgrade:"Sallet"},
 	Helm:{group:"armor", type:"helm", base_defense:18, def_low:15, def_high:18, req_strength:26, durability:24, max_sockets:2, upgrade:"Casque"},
 	Full_Helm:{group:"armor", type:"helm", base_defense:26, def_low:23, def_high:26, req_strength:41, durability:30, max_sockets:2, upgrade:"Basinet"},
-	Mask:{group:"armor", type:"helm", base_defense:27, def_low:9, def_high:27, req_strength:23, durability:20, max_sockets:3, upgrade:"Death_Mask"},
-	Bone_Helm:{group:"armor", type:"helm", base_defense:36, def_low:33, def_high:36, req_strength:25, durability:40, max_sockets:2, upgrade:"Grim_Helm"},
-	Great_Helm:{group:"armor", type:"helm", base_defense:35, def_low:30, def_high:35, req_strength:63, durability:40, max_sockets:3, upgrade:"Winged_Helm"},
-	Crown:{group:"armor", type:"helm", base_defense:45, def_low:25, def_high:45, req_strength:55, durability:50, max_sockets:3, upgrade:"Grand_Crown"},
+	Mask:{group:"armor", type:"helm", base_defense:27, def_low:9, def_high:27, req_strength:23, durability:20, max_sockets:3, upgrade:"Death Mask"},
+	Bone_Helm:{group:"armor", type:"helm", base_defense:36, def_low:33, def_high:36, req_strength:25, durability:40, max_sockets:2, upgrade:"Grim Helm"},
+	Great_Helm:{group:"armor", type:"helm", base_defense:35, def_low:30, def_high:35, req_strength:63, durability:40, max_sockets:3, upgrade:"Winged Helm"},
+	Crown:{group:"armor", type:"helm", base_defense:45, def_low:25, def_high:45, req_strength:55, durability:50, max_sockets:3, upgrade:"Grand Crown"},
 	War_Hat:{group:"armor", type:"helm", base_defense:53, def_low:45, def_high:53, req_level:22, req_strength:20, durability:12, max_sockets:2, upgrade:"Shako", downgrade:"Cap"},
-	Sallet:{group:"armor", type:"helm", base_defense:62, def_low:52, def_high:62, req_level:25, req_strength:43, durability:18, max_sockets:2, upgrade:"Hydraskull", downgrade:"Skull_Cap"},
+	Sallet:{group:"armor", type:"helm", base_defense:62, def_low:52, def_high:62, req_level:25, req_strength:43, durability:18, max_sockets:2, upgrade:"Hydraskull", downgrade:"Skull Cap"},
 	Casque:{group:"armor", type:"helm", base_defense:72, def_low:63, def_high:72, req_level:25, req_strength:59, durability:24, max_sockets:2, upgrade:"Armet", downgrade:"Helm"},
-	Basinet:{group:"armor", type:"helm", base_defense:84, def_low:75, def_high:84, req_level:25, req_strength:82, durability:30, max_sockets:2, upgrade:"Giant_Conch", downgrade:"Full_Helm"},
+	Basinet:{group:"armor", type:"helm", base_defense:84, def_low:75, def_high:84, req_level:25, req_strength:82, durability:30, max_sockets:2, upgrade:"Giant Conch", downgrade:"Full Helm"},
 	Death_Mask:{group:"armor", type:"helm", base_defense:86, def_low:54, def_high:86, req_level:25, req_strength:55, durability:20, max_sockets:3, upgrade:"Demonhead", downgrade:"Mask"},
-	Grim_Helm:{group:"armor", type:"helm", base_defense:125, def_low:60, def_high:125, req_level:25, req_strength:58, durability:40, max_sockets:2, upgrade:"Bone_Visage", downgrade:"Bone_Helm"},
-	Winged_Helm:{group:"armor", type:"helm", base_defense:98, def_low:85, def_high:98, req_level:25, req_strength:115, durability:40, max_sockets:3, upgrade:"Spired_Helm", downgrade:"Great_Helm"},
+	Grim_Helm:{group:"armor", type:"helm", base_defense:125, def_low:60, def_high:125, req_level:25, req_strength:58, durability:40, max_sockets:2, upgrade:"Bone Visage", downgrade:"Bone Helm"},
+	Winged_Helm:{group:"armor", type:"helm", base_defense:98, def_low:85, def_high:98, req_level:25, req_strength:115, durability:40, max_sockets:3, upgrade:"Spired Helm", downgrade:"Great Helm"},
 	Grand_Crown:{group:"armor", type:"helm", base_defense:113, def_low:78, def_high:113, req_level:25, req_strength:103, durability:50, max_sockets:3, upgrade:"Corona", downgrade:"Crown"},
-	Shako:{group:"armor", type:"helm", base_defense:141, def_low:98, def_high:141, req_level:43, req_strength:50, durability:12, max_sockets:2, downgrade:"War_Hat"},
+	Shako:{group:"armor", type:"helm", base_defense:141, def_low:98, def_high:141, req_level:43, req_strength:50, durability:12, max_sockets:2, downgrade:"War Hat"},
 	Hydraskull:{group:"armor", type:"helm", base_defense:145, def_low:101, def_high:145, req_level:47, req_strength:84, durability:18, max_sockets:2, downgrade:"Sallet"},
 	Armet:{group:"armor", type:"helm", base_defense:149, def_low:105, def_high:149, req_level:51, req_strength:109, durability:24, max_sockets:2, downgrade:"Casque"},
 	Giant_Conch:{group:"armor", type:"helm", base_defense:154, def_low:110, def_high:154, req_level:40, req_strength:142, durability:30, max_sockets:2, downgrade:"Basinet"},
-	Demonhead:{group:"armor", type:"helm", base_defense:154, def_low:101, def_high:154, req_level:55, req_strength:102, durability:20, max_sockets:3, downgrade:"Death_Mask"},
-	Bone_Visage:{group:"armor", type:"helm", base_defense:157, def_low:100, def_high:157, req_level:63, req_strength:106, durability:40, max_sockets:3, downgrade:"Grim_Helm"},
-	Spired_Helm:{group:"armor", type:"helm", base_defense:159, def_low:114, def_high:159, req_level:59, req_strength:192, durability:40, max_sockets:3, downgrade:"Winged_Helm"},
-	Corona:{group:"armor", type:"helm", base_defense:165, def_low:111, def_high:165, req_level:66, req_strength:174, durability:50, max_sockets:3, downgrade:"Grand_Crown"},
+	Demonhead:{group:"armor", type:"helm", base_defense:154, def_low:101, def_high:154, req_level:55, req_strength:102, durability:20, max_sockets:3, downgrade:"Death Mask"},
+	Bone_Visage:{group:"armor", type:"helm", base_defense:157, def_low:100, def_high:157, req_level:63, req_strength:106, durability:40, max_sockets:3, downgrade:"Grim Helm"},
+	Spired_Helm:{group:"armor", type:"helm", base_defense:159, def_low:114, def_high:159, req_level:59, req_strength:192, durability:40, max_sockets:3, downgrade:"Winged Helm"},
+	Corona:{group:"armor", type:"helm", base_defense:165, def_low:111, def_high:165, req_level:66, req_strength:174, durability:50, max_sockets:3, downgrade:"Grand Crown"},
 	Circlet:{group:"armor", type:"helm", base_defense:30, def_low:20, def_high:30, req_level:16, durability:35, max_sockets:2, upgrade:"Tiara"},
 	Coronet:{group:"armor", type:"helm", base_defense:40, def_low:30, def_high:40, req_level:39, durability:30, max_sockets:2, upgrade:"Tiara"},
 	Tiara:{group:"armor", type:"helm", base_defense:50, def_low:40, def_high:50, req_level:52, durability:25, max_sockets:3, upgrade:"Diadem", downgrade:"Coronet"},

@@ -1,7 +1,7 @@
 
 
 character = {};
-var skill_bonuses = {stamina_skillup:0, frw_skillup:0, defense_skillup:0, resistance_skillup:0, cstrike_skillup:0, ar_skillup:0, pierce_skillup:0, fRes_skillup:0, cRes_skillup:0, lRes_skillup:0, edged_skillup:[0,0,0], pole_skillup:[0,0,0], blunt_skillup:[0,0,0], thrown_skillup:[0,0,0], claw_skillup:[0,0,0], mana_regen_skillup:0, cPierce_skillup:0, lPierce_skillup:0, fPierce_skillup:0, cDamage_skillup:0, lDamage_skillup:0, fDamage_skillup:0, block_skillup:0, velocity_skillup:0};
+var skill_bonuses = {stamina_skillup:0, frw_skillup:0, defense_skillup:0, resistance_skillup:0, cstrike_skillup:0, ar_skillup:0, pierce_skillup:0, fRes_skillup:0, cRes_skillup:0, lRes_skillup:0, pRes_skillup:0, edged_skillup:[0,0,0], pole_skillup:[0,0,0], blunt_skillup:[0,0,0], thrown_skillup:[0,0,0], claw_skillup:[0,0,0], mana_regen_skillup:0, cPierce_skillup:0, lPierce_skillup:0, fPierce_skillup:0, cDamage_skillup:0, lDamage_skillup:0, fDamage_skillup:0, block_skillup:0, velocity_skillup:0};
 var base_stats = {level:1, skillpoints:0, statpoints:0, quests_completed:-1, running:-1, difficulty:3, strength_added:0, dexterity_added:0, vitality_added:0, energy_added:0, fRes_penalty:100, cRes_penalty:100, lRes_penalty:100, pRes_penalty:100, mRes_penalty:100, fRes:0, cRes:0, lRes:0, pRes:0, mRes:0, fRes_max_base:75, cRes_max_base:75, lRes_max_base:75, pRes_max_base:75, mRes_max_base:75, set_bonuses:[0,0,{},{},{},{},{}]}
 
 var effects = {};
@@ -25,6 +25,21 @@ var inv = [
 {x:1,y:1,empty:1,id:"h14"},{x:1,y:1,empty:1,id:"h24"},{x:1,y:1,empty:1,id:"h34"},{x:1,y:1,empty:1,id:"h44"},{x:1,y:1,empty:1,id:"h54"},{x:1,y:1,empty:1,id:"h64"},{x:1,y:1,empty:1,id:"h74"},{x:1,y:1,empty:1,id:"h84"},{x:1,y:1,empty:1,id:"h94"},{x:1,y:1,empty:1,id:"h04"}
 ];
 
+// updateAll - updates everything
+// ---------------------------------
+function updateAll() {
+	// TODO: Implement. Use parameter(s) if needed updates are known?
+	
+	// character level changed
+		// update mercenary
+		mercenary.level = Math.max(1,character.level-1)
+		if (mercenary.base_aura != "") {
+			removeAura(mercenary.base_aura)
+			mercenary.base_aura_level = getMercenaryAuraLevel(mercenary.level)
+			addAura(mercenary.base_aura, mercenary.base_aura_level, "mercenary")
+		}
+}
+
 // loadEquipment - Loads equipment/charm info to the appropriate dropdowns
 //	className: name of character class
 // ---------------------------------
@@ -34,6 +49,7 @@ function loadEquipment(className) {
 	for (let i = 0; i < equipmentTypes.length; i++) { loadItems(equipmentTypes[i], equipmentDropdowns[i], className) }
 	loadMisc()
 	loadMerc()
+	loadCorruptions()
 }
 
 // loadItems - Creates a dropdown menu option
@@ -168,6 +184,17 @@ function getMercenaryAuraLevel(hlvl) {
 	return result;
 }
 
+// loadCorruptions - Loads corruption options
+// ---------------------------------
+function loadCorruptions() {
+	var types = ["helm", "armor", "gloves", "boots", "belt", "amulet", "ring1", "ring2", "weapon", "offhand"];
+	for (let i = 0; i < types.length; i++) {
+		var choices = "<option>­ ­ ­ ­ Corruption</option>";
+		for (let m = 1; m < corruptions[types[i]].length; m++) { choices += "<option>" + corruptions[types[i]][m].name + "</option>" }
+		document.getElementById("corruptions_"+types[i]).innerHTML = choices
+	}
+}
+
 // startup - Resets everything and starts a new character
 //	choice: name of new character class
 // ---------------------------------
@@ -191,7 +218,7 @@ function startup(choice) {
 	for (stat in character_setup) { character[stat] = character_setup[stat] }
 	setIconSources(choice)
 	updateSkillIcons()
-	updateAll()
+	updateStats()
 	document.getElementById("skill_tree").src = character_setup.skill_layout
 	init()
 }
@@ -279,6 +306,17 @@ function changeLevel(input) {
 		character.mana += character.levelup_mana*levels
 	}
 	updateAll()
+	updateStats()
+}
+
+// corrupt - Sets a corruption outcome for an item
+//	type: name of item's type
+//	val: name of corruption
+// ---------------------------------
+function corrupt(type, val) {
+	// TODO: Implement
+	
+	if (val == "none" || val == type) { document.getElementById(("corruptions_"+type)).selectedIndex = 0 }
 }
 
 // mercEquip - Equips or unequips a mercenary item
@@ -335,7 +373,7 @@ function equipMerc(type, val) {
 			}
 		}
 	}
-	updateAll()
+	updateStats()
 }
 	
 // equip - Equips an item by adding its stats to the character, or unequips it if it's already equipped			// TODO: consider renaming... switchItem()?  Also, split into multiple smaller functions
@@ -519,7 +557,7 @@ function equip(type, val) {
 	if (type == val) { document.getElementById(("dropdown_"+type)).selectedIndex = 0 }
 	calculateSkillAmounts()
 	updateEffectList()
-	updateAll()
+	updateStats()
 	checkRequirements()
 	updateSkills()
 	if (selectedSkill[0] != " ­ ­ ­ ­ Skill 1") { checkSkill(selectedSkill[0], 1) }
@@ -555,7 +593,7 @@ function addAura(name, lvl, type) {
 		toggleAura(name) 	// settings.autocast ignored
 	}
 	calculateSkillAmounts()
-	updateAll()
+	updateStats()
 }
 
 // removeAura - Removes an aura from the character
@@ -589,7 +627,7 @@ function toggleAura(name) {
 		document.getElementById(name).src = "./images/effects/"+name+".png"
 	}
 	calculateSkillAmounts()
-	updateAll()
+	updateStats()
 	if (selectedSkill[0] != " ­ ­ ­ ­ Skill 1") { checkSkill(selectedSkill[0], 1) }
 	if (selectedSkill[1] != " ­ ­ ­ ­ Skill 2") { checkSkill(selectedSkill[1], 2) }
 }
@@ -716,12 +754,8 @@ function addCharm(val) {
 			insertion = inv[i].id;
 			inv[i].empty = 0
 			inv[0].in[i] = val
-			if (charm_y > 1) { inv[i+10].empty = 0; inv[0].in[i+10] = val; 
-			//	document.getElementById(inv[i].id).style = "position: absolute; width: 29px; height: 58px;"; 
-			}
-			if (charm_y > 2) { inv[i+20].empty = 0; inv[0].in[i+20] = val; 
-			//	document.getElementById(inv[i].id).style = "position: absolute; width: 29px; height: 87px;"; 
-			}
+			if (charm_y > 1) { inv[i+10].empty = 0; inv[0].in[i+10] = val; }
+			if (charm_y > 2) { inv[i+20].empty = 0; inv[0].in[i+20] = val; }
 			document.getElementById(insertion).innerHTML += charmHTML;
 			var ch = "charms";
 			equipped[ch][val] = {}
@@ -733,14 +767,15 @@ function addCharm(val) {
 					}
 				}
 			}
-			calculateSkillAmounts()
 			if (selectedSkill[0] != " ­ ­ ­ ­ Skill 1") { checkSkill(selectedSkill[0], 1) }
 			if (selectedSkill[1] != " ­ ­ ­ ­ Skill 2") { checkSkill(selectedSkill[1], 2) }
-			updateAll()
 		}
 	}
 	document.getElementById("dropdown_charms").selectedIndex = 0
 	updateEffectList()
+	calculateSkillAmounts()
+	for (let s = 0; s < skills.length; s++) { modifyEffect(skills[s]) }
+	updateStats()
 	updateSkills()
 }
 
@@ -754,7 +789,7 @@ function addMisc(val) {
 			if (typeof(effects[non_items[m].effect]) == 'undefined') { effects[non_items[m].effect] = {} }
 			initiateMiscEffect(non_items[m].effect, m)
 			calculateSkillAmounts()
-			updateAll()
+			updateStats()
 		}
 	}
 }
@@ -765,16 +800,6 @@ function addMisc(val) {
 // ---------------------------------
 function initiateMiscEffect(name, i) {
 	if (document.getElementById(name) == null) {
-
-	//	// TODO: Change getBuffData to work with other classes
-	//	var auraLevel = 0;
-	//	var auraEffects = {};
-	//	var selfbuff = 0;
-	//	if (non_items[i].name == "Mercenary: "+name.split('_').join(' ')) { auraLevel = getMercenaryAuraLevel(character.level-1) }
-	//	auraEffects = character_paladin.getBuffData(effects[name], selfbuff)
-	//	//skills_all["paladin"]
-	//	character.heal = 100
-
 		var newEffect = document.createElement("img")
 		var effectIcon = "./images/misc/dark/"+name+".png";
 		
@@ -809,7 +834,7 @@ function removeMiscEffect(name, i) {
 			effects[name][affix] = 0
 		}
 		calculateSkillAmounts()
-		updateAll()
+		updateStats()
 	}
 }
 
@@ -837,7 +862,7 @@ function toggleMiscEffect(name, i) {
 		document.getElementById(name).src = "./images/misc/"+name+".gif"
 	}
 	calculateSkillAmounts()
-	updateAll()
+	updateStats()
 }
 
 // resetMisc - Removes all miscellaneous effects
@@ -863,7 +888,7 @@ function toggleQuests(quests) {
 		character.cRes += (30*toggle)
 		character.lRes += (30*toggle)
 		character.pRes += (30*toggle)
-		updateStats()
+		updatePrimaryStats()
 		updateMisc()
 	}
 }
@@ -873,7 +898,7 @@ function toggleQuests(quests) {
 // ---------------------------------
 function toggleRunning(running) {
 	if (running.checked) { character.running = 1 } else { character.running = 0 }
-	updateAll()
+	updateStats()
 }
 
 // changeDifficulty - Changes the game difficulty
@@ -887,7 +912,7 @@ function changeDifficulty(diff) {
 		else if (diff == 2) { character[penalties[p]] = 40 }
 		else if (diff == 3) { character[penalties[p]] = 100 }
 	}
-	updateStats()
+	updatePrimaryStats()
 	updateMisc()
 }
 
@@ -907,11 +932,11 @@ function toggleAutocast(autocast) {
 
 // updateAll - Updates all stats
 // ---------------------------------
-function updateAll() { updateStats(); updateMisc(); updateSecondaryStats(); }
+function updateStats() { updatePrimaryStats(); updateMisc(); updateSecondaryStats(); updateTertiaryStats(); }
 
 // updateStats - Updates stats shown by the default (original D2) stat page
 // ---------------------------------
-function updateStats() {
+function updatePrimaryStats() {
 	var c = character;
 	var strTotal = (c.strength + c.all_attributes + (c.level-1)*c.strength_per_level);
 	var dexTotal = (c.dexterity + c.all_attributes + (c.level-1)*c.dexterity_per_level);
@@ -995,7 +1020,7 @@ function updateStats() {
 	document.getElementById("fres").innerHTML = (c.fRes + c.all_res - c.fRes_penalty + c.resistance_skillup) + " / " + Math.min(RES_CAP,(c.fRes_max_base + c.fRes_max + c.fRes_skillup))
 	document.getElementById("cres").innerHTML = (c.cRes + c.all_res - c.cRes_penalty + c.resistance_skillup) + " / " + Math.min(RES_CAP,(c.cRes_max_base + c.cRes_max + c.cRes_skillup))
 	document.getElementById("lres").innerHTML = (c.lRes + c.all_res - c.lRes_penalty + c.resistance_skillup) + " / " + Math.min(RES_CAP,(c.lRes_max_base + c.lRes_max + c.lRes_skillup))
-	document.getElementById("pres").innerHTML = (c.pRes + c.all_res - c.pRes_penalty + c.resistance_skillup) + " / " + Math.min(RES_CAP,(c.pRes_max_base + c.pRes_max))
+	document.getElementById("pres").innerHTML = (c.pRes + c.all_res - c.pRes_penalty + c.resistance_skillup) + " / " + Math.min(RES_CAP,(c.pRes_max_base + c.pRes_max + c.pRes_skillup))
 	document.getElementById("mres").innerHTML = (c.mRes - c.mRes_penalty) + "%  +" + c.mDamage_reduced
 }
 
@@ -1063,6 +1088,40 @@ function updateSecondaryStats() {
 	document.getElementById("enemy_cres").innerHTML = c.enemy_cRes
 	document.getElementById("enemy_lres").innerHTML = c.enemy_lRes
 	document.getElementById("enemy_pres").innerHTML = c.enemy_pRes
+}
+
+// updateTertiaryStats - Updates other stats
+// ---------------------------------
+function updateTertiaryStats() {
+	var c = character;
+	document.getElementById("velocity").innerHTML = (100 + c.velocity) + "%"
+	document.getElementById("poison_reduction").innerHTML = Math.min(75,c.poison_length_reduced) + "%"
+	document.getElementById("curse_reduction").innerHTML = Math.min(75,c.curse_length_reduced) + "%"
+	document.getElementById("thorns").innerHTML = c.thorns_reflect + "% +" + ~~(c.thorns_lightning + c.thorns + c.level*c.thorns_per_level)
+	document.getElementById("light_radius").innerHTML = c.light_radius
+	document.getElementById("slower_stam_drain").innerHTML = c.slower_stam_drain
+	document.getElementById("heal_stam").innerHTML = ~~(c.heal_stam + c.level*c.heal_stam_per_level)
+	document.getElementById("life_per_demon_kill").innerHTML = c.life_per_demon_kill
+	document.getElementById("slow_target").innerHTML = ~~(c.slow_target + c.slow_enemies)
+	document.getElementById("enemy_defense").innerHTML = ~~(c.enemy_defense + c.target_defense)
+	document.getElementById("monster_defense_per_hit").innerHTML = c.monster_defense_per_hit
+	document.getElementById("flee_on_hit").innerHTML = Math.min(100,c.flee_on_hit) + "%"
+	document.getElementById("blind_on_hit").innerHTML = Math.min(100,c.blind_on_hit) + "%"
+	document.getElementById("freezes_target").innerHTML = c.freezes_target
+	document.getElementById("discount").innerHTML = "-" + c.discount + "%"
+	
+	if (c.itd > 0) { document.getElementById("itd").innerHTML = "Ignore Target Defense" } else { document.getElementById("itd").innerHTML = "" }
+	if (c.pmh > 0) { document.getElementById("pmh").innerHTML = "Prevent Monster Heal" } else { document.getElementById("pmh").innerHTML = "" }
+	if (c.cbf > 0) { document.getElementById("cbf").innerHTML = "Cannot Be Frozen" }
+	else if (c.half_freeze_duration > 0) { document.getElementById("cbf").innerHTML = "Half Freeze Duration" }
+	else { document.getElementById("cbf").innerHTML = "" }
+	if (c.knockback > 0) { document.getElementById("knockback").innerHTML = "Knockback" } else { document.getElementById("knockback").innerHTML = "" }
+	if (c.melee_splash > 0) { document.getElementById("melee_splash").innerHTML = "Melee Attacks deal Splash Damage" } else { document.getElementById("melee_splash").innerHTML = "" }
+	if (c.freezes_target > 1) { document.getElementById("freezes_target").innerHTML = "Freezes Target +" + c.freezes_target }
+	else if (c.freezes_target > 0) { document.getElementById("freezes_target").innerHTML = "Freezes Target" }
+	else { document.getElementById("freezes_target").innerHTML = "" }
+	if (c.peace > 0) { document.getElementById("peace").innerHTML = "Slain Monsters Rest in Peace" } else { document.getElementById("peace").innerHTML = "" }
+	if (c.glow > 0) { document.getElementById("glow").innerHTML = "Character is Glowing" } else { document.getElementById("glow").innerHTML = "" }
 }
 
 // updateMisc - Updates other interface elements
@@ -1305,7 +1364,7 @@ function disableEffect(s) {
 		updateSkills()
 		if (selectedSkill[0] != " ­ ­ ­ ­ Skill 1") { checkSkill(selectedSkill[0], 1) }
 		if (selectedSkill[1] != " ­ ­ ­ ­ Skill 2") { checkSkill(selectedSkill[1], 2) }
-		updateAll()
+		updateStats()
 	}
 	}
 }
@@ -1324,7 +1383,7 @@ function enableEffect(s) {
 		updateSkills()
 		if (selectedSkill[0] != " ­ ­ ­ ­ Skill 1") { checkSkill(selectedSkill[0], 1) }
 		if (selectedSkill[1] != " ­ ­ ­ ­ Skill 2") { checkSkill(selectedSkill[1], 2) }
-		updateAll()
+		updateStats()
 	}
 	}
 }
@@ -1424,7 +1483,7 @@ function addStat(event, stat) {
 		else if (stat == "btn_vitality") {	character.vitality += points;	character.vitality_added += points; }
 		else if (stat == "btn_energy") {	character.energy += points;	character.energy_added += points; }
 		character.statpoints -= points
-		updateStats()
+		updatePrimaryStats()
 		updateMisc()
 		if (selectedSkill[0] != " ­ ­ ­ ­ Skill 1") { checkSkill(selectedSkill[0], 1) }
 		if (selectedSkill[1] != " ­ ­ ­ ­ Skill 2") { checkSkill(selectedSkill[1], 2) }
@@ -1456,7 +1515,7 @@ function removeStat(event, stat) {
 		character.energy_added -= points
 	} else { points = 0 }
 	character.statpoints += points
-	updateStats()
+	updatePrimaryStats()
 	updateMisc()
 	if (selectedSkill[0] != " ­ ­ ­ ­ Skill 1") { checkSkill(selectedSkill[0], 1) }
 	if (selectedSkill[1] != " ­ ­ ­ ­ Skill 2") { checkSkill(selectedSkill[1], 2) }
@@ -1508,6 +1567,7 @@ function skillUp(event, skill) {
 	if (selectedSkill[0] != " ­ ­ ­ ­ Skill 1") { checkSkill(selectedSkill[0], 1) }
 	if (selectedSkill[1] != " ­ ­ ­ ­ Skill 2") { checkSkill(selectedSkill[1], 2) }
     }
+	updateAll()
 }
 
 // skillDown - Lowers the skill level
@@ -1561,6 +1621,7 @@ function skillDown(event, skill) {
 	if (selectedSkill[0] != " ­ ­ ­ ­ Skill 1") { checkSkill(selectedSkill[0], 1) }
 	if (selectedSkill[1] != " ­ ­ ­ ­ Skill 2") { checkSkill(selectedSkill[1], 2) }
     }
+	updateAll()
 }
 
 // skillHover - Shows skill description tooltip on mouse-over
@@ -1623,7 +1684,7 @@ function skillHover(skill) {
 		document.getElementById("description").innerHTML = skill.description + "<br>"
 	}
 	calculateSkillAmounts()
-	updateAll()
+	updateStats()
 	showBaseLevels(skill)
 }
 
@@ -1897,12 +1958,13 @@ function trash(ev) {
 		}
 	}
 	ev.target.remove();
-	calculateSkillAmounts()
 	updateEffectList()
+	calculateSkillAmounts()
+	for (let s = 0; s < skills.length; s++) { modifyEffect(skills[s]) }
+	updateStats()
 	updateSkills()
 	if (selectedSkill[0] != " ­ ­ ­ ­ Skill 1") { checkSkill(selectedSkill[0], 1) }
 	if (selectedSkill[1] != " ­ ­ ­ ­ Skill 2") { checkSkill(selectedSkill[1], 2) }
-	updateAll()
 	document.getElementById("item_tooltip").innerHTML = ""
 	
 /* TODO: Make ctrl+click remove more copies of the removed charm
@@ -1936,6 +1998,32 @@ function trash(ev) {
 	trash(ev_new)
 *///	return;
 //}
+
+// getItemImage - gets the image filename for the specified item
+//	name: name of the item
+//	special: number (0 or 1) corresponding to whether the item is special (unique, set)
+//	base: item base
+// return: filename of item's image
+// ---------------------------------
+function getItemImage(name, special, base_name) {
+	var filename = "";
+	var base = base_name.split(' ').join('_'); base = base.split('-').join('_'); base = base.split("'s").join("s"); base = base.split("s'").join("s");
+	if (special == 1) {
+		filename = name
+	} else {
+		if (typeof(bases[base].downgrade) != 'undefined') {
+			filename = bases[base].downgrade
+			base = bases[base].downgrade.split(' ').join('_'); base = base.split('-').join('_'); base = base.split("'s").join("s"); base = base.split("s'").join("s");
+			if (typeof(bases[base].downgrade) != 'undefined') {
+				filename = bases[base].downgrade
+			}
+		} else {
+			filename = base_name
+		}
+	}
+	filename = filename.split(' ').join('_') + ".png"
+	return filename
+}
 
 // equipmentHover - 
 //	slot: equipment slot name

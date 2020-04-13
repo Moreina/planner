@@ -171,21 +171,19 @@
 <br><br>
 <select class="dropdown" id="dropdown_misc" onChange="addMisc(this.value)"></select>
 </div>
-<!--	Corruption Options?	-->
-<!--
-<div class="dropdown" id="equipment_corruptions" style="float: right; width:20px; height:200px; z-index: 7;">
-<select class="dropdown" id="corruptions_helm" onChange="setCorruption('helm', this.value)" onContextMenu="setCorruption('helm', 'none')"></select>
-<select class="dropdown" id="corruptions_armor" onChange="setCorruption('armor', this.value)" onContextMenu="setCorruption('armor', 'none')"></select>
-<select class="dropdown" id="corruptions_gloves" onChange="setCorruption('gloves', this.value)" onContextMenu="setCorruption('gloves', 'none')"></select>
-<select class="dropdown" id="corruptions_boots" onChange="setCorruption('boots', this.value)" onContextMenu="setCorruption('boots', 'none')"></select>
-<select class="dropdown" id="corruptions_belt" onChange="setCorruption('belt', this.value)" onContextMenu="setCorruption('belt', 'none')"></select>
-<select class="dropdown" id="corruptions_amulet" onChange="setCorruption('amulet', this.value)" onContextMenu="setCorruption('amulet', 'none')"></select>
-<select class="dropdown" id="corruptions_ring1" onChange="setCorruption('ring1', this.value)" onContextMenu="setCorruption('ring1', 'none')"></select>
-<select class="dropdown" id="corruptions_ring2" onChange="setCorruption('ring2', this.value)" onContextMenu="setCorruption('ring2', 'none')"></select>
-<select class="dropdown" id="corruptions_weapon" onChange="setCorruption('weapon', this.value)" onContextMenu="setCorruption('weapon', 'none')"></select>
-<select class="dropdown" id="corruptions_offhand" onChange="setCorruption('offhand', this.value)" onContextMenu="setCorruption('offhand', 'none')"></select>
+<!--	Corruption Options	-->
+<div class="dropdown-corruption" id="equipment_corruptions" style="float: right; width:20px; margin-right:1px; position: relative; z-index: 6;">
+<select class="dropdown" id="corruptions_helm" onChange="corrupt('helm', this.value)" onContextMenu="corrupt('helm', 'none')"></select>
+<select class="dropdown" id="corruptions_armor" onChange="corrupt('armor', this.value)" onContextMenu="corrupt('armor', 'none')"></select>
+<select class="dropdown" id="corruptions_gloves" onChange="corrupt('gloves', this.value)" onContextMenu="corrupt('gloves', 'none')"></select>
+<select class="dropdown" id="corruptions_boots" onChange="corrupt('boots', this.value)" onContextMenu="corrupt('boots', 'none')"></select>
+<select class="dropdown" id="corruptions_belt" onChange="corrupt('belt', this.value)" onContextMenu="corrupt('belt', 'none')"></select>
+<select class="dropdown" id="corruptions_amulet" onChange="corrupt('amulet', this.value)" onContextMenu="corrupt('amulet', 'none')"></select>
+<select class="dropdown" id="corruptions_ring1" onChange="corrupt('ring1', this.value)" onContextMenu="corrupt('ring1', 'none')"></select>
+<select class="dropdown" id="corruptions_ring2" onChange="corrupt('ring2', this.value)" onContextMenu="corrupt('ring2', 'none')"></select>
+<select class="dropdown" id="corruptions_weapon" onChange="corrupt('weapon', this.value)" onContextMenu="corrupt('weapon', 'none')"></select>
+<select class="dropdown" id="corruptions_offhand" onChange="corrupt('offhand', this.value)" onContextMenu="corrupt('offhand', 'none')"></select>
 </div>
--->
 
 <!--	selection options	-->
 <div style="width: 869px; margin-bottom: 40px;">
@@ -314,19 +312,42 @@
 	<font size="2">Defense vs Missiles: </font><font size="2" id="missile_defense"></font><br><br>
 	<font size="2">Life Replenish: </font><font size="2" id="life_replenish"></font><br>
 	<font size="2">Mana Regen: </font><font size="2" id="mana_regen"></font><br><br>
-	<!--<font size="2">Target Defense: </font><font size="2" id="target_defense"></font><br>
-	<font size="2">Slow Target: </font><font size="2" id="slow_target"></font><br>
-	<font size="2">Attacker takes Damage: </font><font size="2" id="thorns"></font><br>
-	<font size="2">Light Radius: </font><font size="2" id="light_radius"></font><br>
-	<font size="2">Increased Block Chance: </font><font size="2" id="ibc"></font><br>
-	<font size="2">Slower Stamina Drain: </font><font size="2" id="slower_stam_drain"></font><br>
-	<font size="2">Heal Stamina: </font><font size="2" id="heal_stam"></font><br><br>-->
 	<font size="2" id="f4"></font><br>
 	<font size="2" id="c4"></font><br>
 	<font size="2" id="l4"></font><br>
 	<font size="2" id="p4"></font><br>
 	<font size="2" id="extra"></font><br>
 	<font size="2" id="find4"></font>
+</div>
+</div>
+
+<!--	stats tertiary		-->
+<div style="position: absolute; float: left; width: 500px; margin-top: 450px; margin-bottom: 20px; z-index:4;"><br>
+<div class="gray" style="position: relative; display: block; float: left; width: 190px;" id="stats4a">
+	<font size="2">Velocity: </font><font size="2" id="velocity"></font><br>
+	<font size="2">Poison Length Reduced: </font><font size="2" id="poison_reduction"></font><br>
+	<font size="2">Curse Length Reduced: </font><font size="2" id="curse_reduction"></font><br>
+	<font size="2">Thorns: </font><font size="2" id="thorns"></font><br>
+	<font size="2">Light Radius: </font><font size="2" id="light_radius"></font><br>
+	<font size="2">Heal Stamina: </font><font size="2" id="heal_stam"></font><br>
+	<font size="2">Slower Stamina Drain: </font><font size="2" id="slower_stam_drain"></font><br>
+	<font size="2">Life per Demon Kill: </font><font size="2" id="life_per_demon_kill"></font><br>
+	<font size="2">Slow Target: </font><font size="2" id="slow_target"></font><br>
+	<font size="2">Enemy Defense: </font><font size="2" id="enemy_defense"></font><br>
+	<font size="2">Monster Defense per Hit: </font><font size="2" id="monster_defense_per_hit"></font><br>
+	<font size="2">Flee on Hit:  </font><font size="2" id="flee_on_hit"></font><br>
+	<font size="2">Blind on Hit: </font><font size="2" id="blind_on_hit"></font><br>
+	<font size="2">Merchant Discount: </font><font size="2" id="discount"></font><br>
+</div>
+<<div class="gray" style="position: relative; display: block; float: left; width: 200px;" id="stats4b">
+	<font size="2" id="itd"></font><br>
+	<font size="2" id="pmh"></font><br>
+	<font size="2" id="cbf"></font><br>
+	<font size="2" id="knockback"></font><br>
+	<font size="2" id="melee_splash"></font><br>
+	<font size="2" id="freezes_target"></font><br>
+	<font size="2" id="peace"></font><br>
+	<font size="2" id="glow"></font><br>
 </div>
 </div>
 
@@ -388,11 +409,10 @@
 </div>
 
 <!--	equipment inventory	-->
-<!--
 <div id="gui_equipment" style="position:relative; width: 869px; float: left;" class="no-selection" oncontextmenu="return false">
-<img usemap="#equipmentmap" id="equipment_grid" style="float: right; margin-right: 3px; margin-bottom: 30px; margin-top: -50px;" src="./images/equipment_inventory.png">
+<img usemap="#equipmentmap" id="equipment_grid" style="float: right; margin-right: 3px; margin-bottom: 30px; margin-top: 0px;" src="./images/equipment_inventory.png">
 <map id="equipmentmap" name="equipmentmap">
-<div style="position: relative; float: right; margin-bottom: 30px; margin-top: -50px;">
+<div style="position: relative; float: right; margin-bottom: 30px; margin-top: 0px;">
 <div id="helm" style="position: absolute; width: 57px; height: 58px; left: 63px; top: 1px; z-index: 4;" onmouseover="equipmentHover(event,'helm')" onmouseout="equipmentOut()"></div>
 <div id="armor" style="position: absolute; width: 58px; height: 88px; left: 122px; top: 1px; z-index: 4;" onmouseover="equipmentHover(event,'armor')" onmouseout="equipmentOut()"></div>
 <div id="gloves" style="position: absolute; width: 58px; height: 59px; left: 182px; top: 1px; z-index: 4;" onmouseover="equipmentHover(event,'gloves')" onmouseout="equipmentOut()"></div>
@@ -410,8 +430,8 @@
 
 
 </div>
--->
-<div style="position:relative; width: 869px; float: left;">
+
+<div style="position:relative; margin-top: 105px; margin-bottom: 33px; width: 869px; float: left;">
 <a style="display: block; color: #bbbbbb; z-index:9; width:869px; height: 25px; position:absolute; text-align:center;" href="https://github.com/Moreina/planner#planner">development plans & feedback</a>
 </div>
 
