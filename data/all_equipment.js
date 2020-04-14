@@ -1,7 +1,8 @@
 
 
-var equipped = { helm:{name:"none"}, armor:{name:"none"}, gloves:{name:"none"}, boots:{name:"none"}, belt:{name:"none"}, amulet:{name:"none"}, ring1:{name:"none"}, ring2:{name:"none"}, weapon:{name:"none", twoHanded:0, type:""}, offhand:{name:"none", type:""}, charms:{name:"none"}};
+var equipped = { helm:{name:"none"}, armor:{name:"none"}, gloves:{name:"none"}, boots:{name:"none"}, belt:{name:"none"}, amulet:{name:"none"}, ring1:{name:"none"}, ring2:{name:"none"}, weapon:{name:"none", twoHanded:0, type:""}, offhand:{name:"none", type:""}, charms:{name:"none"} };
 var mercEquipped = { helm:{name:"none"}, armor:{name:"none"}, weapon:{name:"none"}, offhand:{name:"none"} };
+var corruptsEquipped = { helm:{name:"none"}, armor:{name:"none"}, gloves:{name:"none"}, boots:{name:"none"}, belt:{name:"none"}, amulet:{name:"none"}, ring1:{name:"none"}, ring2:{name:"none"}, weapon:{name:"none"}, offhand:{name:"none"} };
 
 var unequipped = {name:"none", strength:0, dexterity:0, vitality:0, energy:0, life:0, mana:0, defense:0, ar:0, stamina:0, block:0, base_defense:0, 
 /* main stats		*/	fRes_max:0, cRes_max:0, lRes_max:0, pRes_max:0, mRes_max:0, fRes:0, cRes:0, lRes:0, pRes:0, mRes:0,
@@ -420,35 +421,34 @@ var equipment = {
 {not:["amazon"], rarity:"crafted", name:"Caster Mitts", req_level:42, mana_regen:10, mana:20, mana_per_kill:3, mana_leech:5, ias:20, mf:25, fRes:30, cRes:30, lRes:30, base:"Bramble Mitts"},
 	],
     boots: [
-    // remove kick_min and use data from base items?
 {name:"Boots"},
-{name:"Hotspur", req_level:5, defense:6, e_def:20, kick_min:3, fRes:45, fRes_max:15, fDamage_min:3, fDamage_max:6, life:15, base:"Boots"},
-{name:"Gorefoot", req_level:9, defense:12, e_def:30, kick_min:4, frw:20, mana_leech:2, thorns:2, skill_Leap:2, base:"Heavy Boots"},
-{name:"Treads of Cthon", req_level:15, defense:12, e_def:40, kick_min:6, slower_stam_drain:50, frw:30, missile_defense:50, life:10, base:"Chain Boots"},
-{name:"Goblin Toe", req_level:22, defense:15, e_def:60, kick_min:8, cblow:25, light_radius:-1, damage_reduced:1, mDamage_reduced:1, base:"Light Plated Boots"},
-{name:"Tearhaunch", req_level:29, defense:35, e_def:80, kick_min:10, frw:20, all_res:10, dexterity:5, strength:5, skill_Vigor:2, base:"Greaves"},
-{name:"Infernostride", req_level:29, defense:15, e_def:150, kick_min:26, frw:20, fRes:30, fRes_max:10, fire_min:12, fire_max:33, gf:70, light_radius:2, base:"Demonhide Boots"},
-{name:"Waterwalk", req_level:32, e_def:210, kick_min:28, frw:20, dexterity:15, fRes_max:5, stamina:40, life:65, missile_defense:100, heal_stam:50, base:"Sharkskin Boots"},
-{name:"Silkweave", req_level:36, e_def:190, kick_min:32, frw:30, mana_per_kill:5, max_mana:10, missile_defense:200, base:"Mesh Boots"},
-{name:"War Traveler", req_level:42, e_def:190, kick_min:37, frw:25, vitality:10, strength:10, mf:50, damage_min:15, damage_max:25, thorns:10, slower_stam_drain:40, base:"Battle Boots"},
-{name:"Gore Rider", req_level:47, e_def:200, kick_min:39, frw:30, owounds:10, cblow:15, dstrike:15, stamina:20, base:"War Boots"},
-{name:"Sandstorm Trek", req_level:64, e_def:170, kick_min:60, frw:20, fhr:20, stamina_per_level:1, strength:15, vitality:15, slower_stam_drain:50, pRes:70, base:"Scarabshell Boots"},
-{name:"Marrowwalk (Flesh)", req_level:66, e_def:200, kick_min:69, frw:20, e_def:200, strength:20, dexterity:17, mana_regen:10, heal_stam:10, half_freeze:1, skill_Summon_Mastery:2, skill_Flesh_Offering:1, skill_Bone_Offering:0, base:"Boneweave Boots", pod_changes:1},	// level 12 Life Tap (10 charges)
-{only:"necromancer", name:"Marrowwalk (Bone)", req_level:66, e_def:200, kick_min:69, frw:20, e_def:200, strength:20, dexterity:17, mana_regen:10, heal_stam:10, half_freeze:1, skill_Summon_Mastery:2, skill_Flesh_Offering:0, skill_Bone_Offering:1, base:"Boneweave Boots", pod_changes:1},	// level 12 Life Tap (10 charges)
-{name:"Shadow Dancer", req_level:71, e_def:100, kick_min:83, skills_shadow:2, frw:30, fhr:30, dexterity:25, req:-20, base:"Myrmidon Greaves"},
-{set_IK:1, name:"Immortal King's Pillar", req_level:31, defense:75, kick_min:39, frw:40, ar:110, life:44, base:"War Boots", set_bonuses:["set_IK",{},{mf:25},{skills_combat_barbarian:2},{defense:140},{half_freeze:1},{}]},
-{set_Nat:1, name:"Natalya's Soul", req_level:25, defense:125, kick_min:23, frw:40, heal_stam_per_level:0.25, cRes:25, lRes:25, base:"Mesh Boots", set_bonuses:["set_Nat",{},{},{},{}]},
-{set_Ald:1, name:"Aldur's Advance", req_level:45, kick_min:37, frw:40, stamina:180, damage_to_mana:10, heal_stam:32, life:50, fRes:50, indestructible:1, base:"Battle Boots", set_bonuses:["set_Ald",{},{dexterity:15},{dexterity:15},{dexterity:15}]},
-{set_Disciple:1, name:"Rite of Passage", req_level:29, kick_min:26, defense:25, frw:30, stamina:25, half_freeze:1, base:"Demonhide Boots", set_bonuses:["set_Disciple",{},{},{},{},{}], pod_changes:1},
-{set_Sander:1, name:"Sander's Riprap", req_level:20, kick_min:4, frw:40, ar:100, dexterity:10, strength:5, base:"Heavy Boots", set_bonuses:["set_Sander",{},{},{},{},{}]},
-{set_Tancred:1, name:"Tancred's Hobnails", req_level:20, kick_min:3, heal_stam:25, dexterity:10, base:"Boots", set_bonuses:["set_Tancred",{},{frw:30},{strength:10},{},{}]},
-{set_Vidala:1, name:"Vidala's Fetlock", req_level:14, kick_min:8, frw:30, stamina:150, pierce:15, base:"Light Plated Boots", set_bonuses:["set_Vidala",{},{all_res:8},{},{}], pod_changes:1},
-{set_Cow:1, name:"Cow King's Hooves", req_level:13, defense:35, kick_min:4, frw:30, fDamage_min:25, fDamage_max:35, dexterity:20, mf:25, base:"Heavy Boots", set_bonuses:["set_Cow",{},{},{}]},
-{set_Sigon:1, name:"Sigon's Sabot", req_level:6, kick_min:10, frw:20, cRes:40, base:"Greaves", set_bonuses:["set_Sigon",{},{ar:50},{mf:50},{},{},{}]},
-{set_Hsarus:1, name:"Hsarus' Iron Heel", req_level:3, kick_min:6, frw:20, fRes:25, base:"Chain Boots", set_bonuses:["set_Hsarus",{},{ar_per_level:10},{}]},
-{rarity:"rare", name:"Chromatic Boots", req_level:37, kick_min:3, frw:30, fRes:40, cRes:40, lRes:40, mf:25, gf:80, base:"Boots"},
-{rarity:"crafted", name:"Blood Boots", req_level:25, kick_min:37, life_leech:3, life:20, life_replenish:10, frw:30, fRes:40, cRes:40, lRes:40, mf:25, gf:80, base:"Battle Boots"},
-{rarity:"crafted", name:"Caster Boots", req_level:45, kick_min:65, mana_regen:10, mana:20, max_mana:5, frw:30, fRes:40, cRes:40, lRes:40, mf:25, gf:80, base:"Wyrmhide Boots"},
+{name:"Hotspur", req_level:5, defense:6, e_def:20, fRes:45, fRes_max:15, fDamage_min:3, fDamage_max:6, life:15, base:"Boots"},
+{name:"Gorefoot", req_level:9, defense:12, e_def:30, frw:20, mana_leech:2, thorns:2, skill_Leap:2, base:"Heavy Boots"},
+{name:"Treads of Cthon", req_level:15, defense:12, e_def:40, slower_stam_drain:50, frw:30, missile_defense:50, life:10, base:"Chain Boots"},
+{name:"Goblin Toe", req_level:22, defense:15, e_def:60, cblow:25, light_radius:-1, damage_reduced:1, mDamage_reduced:1, base:"Light Plated Boots"},
+{name:"Tearhaunch", req_level:29, defense:35, e_def:80, frw:20, all_res:10, dexterity:5, strength:5, skill_Vigor:2, base:"Greaves"},
+{name:"Infernostride", req_level:29, defense:15, e_def:150, frw:20, fRes:30, fRes_max:10, fire_min:12, fire_max:33, gf:70, light_radius:2, base:"Demonhide Boots"},
+{name:"Waterwalk", req_level:32, e_def:210, frw:20, dexterity:15, fRes_max:5, stamina:40, life:65, missile_defense:100, heal_stam:50, base:"Sharkskin Boots"},
+{name:"Silkweave", req_level:36, e_def:190, frw:30, mana_per_kill:5, max_mana:10, missile_defense:200, base:"Mesh Boots"},
+{name:"War Traveler", req_level:42, e_def:190, frw:25, vitality:10, strength:10, mf:50, damage_min:15, damage_max:25, thorns:10, slower_stam_drain:40, base:"Battle Boots"},
+{name:"Gore Rider", req_level:47, e_def:200, frw:30, owounds:10, cblow:15, dstrike:15, stamina:20, base:"War Boots"},
+{name:"Sandstorm Trek", req_level:64, e_def:170, frw:20, fhr:20, stamina_per_level:1, strength:15, vitality:15, slower_stam_drain:50, pRes:70, base:"Scarabshell Boots"},
+{name:"Marrowwalk (Flesh)", req_level:66, e_def:200, frw:20, e_def:200, strength:20, dexterity:17, mana_regen:10, heal_stam:10, half_freeze:1, skill_Summon_Mastery:2, skill_Flesh_Offering:1, skill_Bone_Offering:0, base:"Boneweave Boots", pod_changes:1},	// level 12 Life Tap (10 charges)
+{only:"necromancer", name:"Marrowwalk (Bone)", req_level:66, e_def:200, frw:20, e_def:200, strength:20, dexterity:17, mana_regen:10, heal_stam:10, half_freeze:1, skill_Summon_Mastery:2, skill_Flesh_Offering:0, skill_Bone_Offering:1, base:"Boneweave Boots", pod_changes:1},	// level 12 Life Tap (10 charges)
+{name:"Shadow Dancer", req_level:71, e_def:100, skills_shadow:2, frw:30, fhr:30, dexterity:25, req:-20, base:"Myrmidon Greaves"},
+{set_IK:1, name:"Immortal King's Pillar", req_level:31, defense:75, frw:40, ar:110, life:44, base:"War Boots", set_bonuses:["set_IK",{},{mf:25},{skills_combat_barbarian:2},{defense:140},{half_freeze:1},{}]},
+{set_Nat:1, name:"Natalya's Soul", req_level:25, defense:125, frw:40, heal_stam_per_level:0.25, cRes:25, lRes:25, base:"Mesh Boots", set_bonuses:["set_Nat",{},{},{},{}]},
+{set_Ald:1, name:"Aldur's Advance", req_level:45, frw:40, stamina:180, damage_to_mana:10, heal_stam:32, life:50, fRes:50, indestructible:1, base:"Battle Boots", set_bonuses:["set_Ald",{},{dexterity:15},{dexterity:15},{dexterity:15}]},
+{set_Disciple:1, name:"Rite of Passage", req_level:29, defense:25, frw:30, stamina:25, half_freeze:1, base:"Demonhide Boots", set_bonuses:["set_Disciple",{},{},{},{},{}], pod_changes:1},
+{set_Sander:1, name:"Sander's Riprap", req_level:20, frw:40, ar:100, dexterity:10, strength:5, base:"Heavy Boots", set_bonuses:["set_Sander",{},{},{},{},{}]},
+{set_Tancred:1, name:"Tancred's Hobnails", req_level:20, heal_stam:25, dexterity:10, base:"Boots", set_bonuses:["set_Tancred",{},{frw:30},{strength:10},{},{}]},
+{set_Vidala:1, name:"Vidala's Fetlock", req_level:14, frw:30, stamina:150, pierce:15, base:"Light Plated Boots", set_bonuses:["set_Vidala",{},{all_res:8},{},{}], pod_changes:1},
+{set_Cow:1, name:"Cow King's Hooves", req_level:13, defense:35, frw:30, fDamage_min:25, fDamage_max:35, dexterity:20, mf:25, base:"Heavy Boots", set_bonuses:["set_Cow",{},{},{}]},
+{set_Sigon:1, name:"Sigon's Sabot", req_level:6, frw:20, cRes:40, base:"Greaves", set_bonuses:["set_Sigon",{},{ar:50},{mf:50},{},{},{}]},
+{set_Hsarus:1, name:"Hsarus' Iron Heel", req_level:3, frw:20, fRes:25, base:"Chain Boots", set_bonuses:["set_Hsarus",{},{ar_per_level:10},{}]},
+{rarity:"rare", name:"Chromatic Boots", req_level:37, frw:30, fRes:40, cRes:40, lRes:40, mf:25, gf:80, base:"Boots"},
+{rarity:"crafted", name:"Blood Boots", req_level:25, life_leech:3, life:20, life_replenish:10, frw:30, fRes:40, cRes:40, lRes:40, mf:25, gf:80, base:"Battle Boots"},
+{rarity:"crafted", name:"Caster Boots", req_level:45, mana_regen:10, mana:20, max_mana:5, frw:30, fRes:40, cRes:40, lRes:40, mf:25, gf:80, base:"Wyrmhide Boots"},
 	],
     belt: [
 {name:"Belt"},
@@ -505,25 +505,25 @@ var equipment = {
 {set_Civerb:1, name:"Civerb's Icon", req_level:9, life_replenish:4, mana_regen:40, set_bonuses:["set_Civerb",{},{cRes:25},{defense:25}]},
 {set_Cathan:1, name:"Cathan's Sigil", req_level:11, fhr:10, thorns_lightning:5, set_bonuses:["set_Cathan",{},{ar:50},{mf:25},{},{}]},
 {set_Angelic:1, name:"Angelic Wings", req_level:12, damage_to_mana:20, light_radius:3, set_bonuses:["set_Angelic",{},{life:75},{all_skills:1},{}]},
-{rarity:"magic", name:"+3 Amulet of the Whale", req_level:75, all_skills:3, life:100},
-{only:"amazon", rarity:"magic", name:"+4 Athlete's Amulet", req_level:42, skills_passives:3, all_skills:1},
-{only:"assassin", rarity:"magic", name:"+4 Kenshi's Amulet", req_level:42, skills_martial:3, all_skills:1},
-{only:"assassin", rarity:"magic", name:"+4 Shadow Amulet", req_level:42, skills_shadow:3, all_skills:1},
-{only:"assassin", rarity:"magic", name:"+4 Cunning Amulet", req_level:42, skills_traps:3, all_skills:1},
-{only:"barbarian", rarity:"magic", name:"+4 Echoing Amulet", req_level:42, skills_warcries:3, all_skills:1},
-{only:"barbarian", rarity:"magic", name:"+4 Furious Amulet", req_level:42, skills_masteries:3, all_skills:1},
-{only:"druid", rarity:"magic", name:"+4 Gaea's Amulet", req_level:42, skills_elemental:3, all_skills:1},
-{only:"druid", rarity:"magic", name:"+4 Communal Amulet", req_level:42, skills_shapeshifting:3, all_skills:1},
-{only:"druid", rarity:"magic", name:"+4 Keeper's Amulet", req_level:42, skills_summoning_druid:3, all_skills:1},
-{only:"necromancer", rarity:"magic", name:"+4 Golemlord's Amulet", req_level:42, skills_summoning_necromancer:3, all_skills:1},
-{only:"necromancer", rarity:"magic", name:"+4 Venomous Amulet", req_level:42, skills_poisonBone:3, all_skills:1},
-{only:"necromancer", rarity:"magic", name:"+4 Cursing Amulet", req_level:42, skills_curses:3, all_skills:1},
-{only:"paladin", rarity:"magic", name:"+4 Guardian's Amulet", req_level:42, skills_defensive:3, all_skills:1},
-{only:"paladin", rarity:"magic", name:"+4 Marshal's Amulet", req_level:42, skills_offensive:3, all_skills:1},
-{only:"paladin", rarity:"magic", name:"+4 Rose Branded Amulet", req_level:42, skills_combat_paladin:3, all_skills:1},
-{only:"sorceress", rarity:"magic", name:"+4 Glacial Amulet", req_level:42, skills_cold:3, all_skills:1},
-{only:"sorceress", rarity:"magic", name:"+4 Powered Amulet", req_level:42, skills_lightning:3, all_skills:1},
-{only:"sorceress", rarity:"magic", name:"+4 Volcanic Amulet", req_level:42, skills_fire:3, all_skills:1},
+{rarity:"magic", name:"Amulet of the Whale", req_level:75, life:100, skills_amazon:2, skills_assassin:2, skills_barbarian:2, skills_druid:2, skills_necromancer:2, skills_paladin:2, skills_sorceress:2},
+{only:"amazon", rarity:"magic", name:"Athlete's Amulet", req_level:42, skills_passives:3},
+{only:"assassin", rarity:"magic", name:"Kenshi's Amulet", req_level:42, skills_martial:3},
+{only:"assassin", rarity:"magic", name:"Shadow Amulet", req_level:42, skills_shadow:3},
+{only:"assassin", rarity:"magic", name:"Cunning Amulet", req_level:42, skills_traps:3},
+{only:"barbarian", rarity:"magic", name:"Echoing Amulet", req_level:42, skills_warcries:3},
+{only:"barbarian", rarity:"magic", name:"Furious Amulet", req_level:42, skills_masteries:3},
+{only:"druid", rarity:"magic", name:"Gaea's Amulet", req_level:42, skills_elemental:3},
+{only:"druid", rarity:"magic", name:"Communal Amulet", req_level:42, skills_shapeshifting:3},
+{only:"druid", rarity:"magic", name:"Keeper's Amulet", req_level:42, skills_summoning_druid:3},
+{only:"necromancer", rarity:"magic", name:"Golemlord's Amulet", req_level:42, skills_summoning_necromancer:3},
+{only:"necromancer", rarity:"magic", name:"Venomous Amulet", req_level:42, skills_poisonBone:3},
+{only:"necromancer", rarity:"magic", name:"Cursing Amulet", req_level:42, skills_curses:3},
+{only:"paladin", rarity:"magic", name:"Guardian's Amulet", req_level:42, skills_defensive:3},
+{only:"paladin", rarity:"magic", name:"Marshal's Amulet", req_level:42, skills_offensive:3},
+{only:"paladin", rarity:"magic", name:"Rose Branded Amulet", req_level:42, skills_combat_paladin:3},
+{only:"sorceress", rarity:"magic", name:"Glacial Amulet", req_level:42, skills_cold:3},
+{only:"sorceress", rarity:"magic", name:"Powered Amulet", req_level:42, skills_lightning:3},
+{only:"sorceress", rarity:"magic", name:"Volcanic Amulet", req_level:42, skills_fire:3},
 {rarity:"crafted", name:"Blood Amulet", req_level:89, life_leech:12, life:20, frw:10, strength:30, mana_leech:5, all_res:20, skills_amazon:2, skills_assassin:2, skills_barbarian:2, skills_druid:2, skills_necromancer:2, skills_paladin:2, skills_sorceress:2},
 {rarity:"crafted", name:"Caster Amulet", req_level:89, mana_regen:10, mana:100, fcr:20, all_res:20, strength:30, dexterity:20, skills_amazon:2, skills_assassin:2, skills_barbarian:2, skills_druid:2, skills_necromancer:2, skills_paladin:2, skills_sorceress:2},
 	],
@@ -540,7 +540,7 @@ var equipment = {
 {name:"Wisp Projector", req_level:76, lAbsorb:12, mf:20, frw:8, pod_changes:1, wisp:10},	// level 9 Heart of Wolverine (17 charges)(EFFECT), TODO: use...	, aura:"Lifted Spirit", aura_lvl:1	(addAura / removeAura need to prevent 'duplicate' auras from affecting eachother - don't try to add them in the first place, and prevent whatever stat is saved that is used to see whether it's added)
 {set_Cathan:0.5, name:"Cathan's Seal", req_level:11, life_leech:6, damage_reduced:2, set_bonuses:["set_Cathan",{},{strength:10},{},{},{}]},
 {set_Angelic:0.5, name:"Angelic Halo", req_level:12, life_replenish:6, life:20, set_bonuses:["set_Angelic",{},{ar_per_level:12},{mf:50},{}]},
-{rarity:"rare", name:"Ring of the Magus", req_level:95, all_res:11, lRes:30, mana:90, life_leech:8, mana_leech:6, fcr:20},
+{rarity:"rare", name:"Emperor's Ring", req_level:95, all_res:11, lRes:30, mana:90, life_leech:8, mana_leech:6, fcr:10},
 {rarity:"crafted", name:"Blood Ring", req_level:78, life_leech:11, life:20, strength:25, ar:120, all_res:11, fcr:10, mana_leech:5},	// check ilvl
 {rarity:"crafted", name:"Caster Ring", req_level:78, mana_regen:10, mana:100, energy:20, all_res:11, fcr:10, strength:20, life:40},	// check ilvl
 	],
@@ -557,7 +557,7 @@ var equipment = {
 {name:"Wisp Projector", req_level:76, lAbsorb:12, mf:20, frw:8, pod_changes:1, wisp:10},	// level 9 Heart of Wolverine (17 charges)(EFFECT), TODO: use...	, aura:"Lifted Spirit", aura_lvl:1	(addAura / removeAura need to prevent 'duplicate' auras from affecting eachother - don't try to add them in the first place, and prevent whatever stat is saved that is used to see whether it's added)
 {set_Cathan:0.5, name:"Cathan's Seal", req_level:11, life_leech:6, damage_reduced:2, set_bonuses:["set_Cathan",{},{strength:10},{},{},{}]},
 {set_Angelic:0.5, name:"Angelic Halo", req_level:12, life_replenish:6, life:20, set_bonuses:["set_Angelic",{},{ar_per_level:12},{mf:50},{}]},
-{rarity:"rare", name:"Ring of the Magus", req_level:95, all_res:11, lRes:30, mana:90, life_leech:8, mana_leech:6, fcr:20},
+{rarity:"rare", name:"Emperor's Ring", req_level:95, all_res:11, lRes:30, mana:90, life_leech:8, mana_leech:6, fcr:10},
 {rarity:"crafted", name:"Blood Ring", req_level:78, life_leech:11, life:20, strength:25, ar:120, all_res:11, fcr:10, mana_leech:5},	// check ilvl
 {rarity:"crafted", name:"Caster Ring", req_level:78, mana_regen:10, mana:100, energy:20, all_res:11, fcr:10, strength:20, life:40},	// check ilvl
 	],
@@ -950,7 +950,6 @@ var equipment = {
 {name:"Gut Siphon", req_level:71, e_damage:220, pierce:33, life_leech:18, owounds:33, slows_target:25, twoHanded:1, type:"crossbow", base:"Demon Crossbow"},
 	],
     offhand: [
-    // remove smite_min/smite_max, block, and use data from base items?
 {name:"Offhand"},
 {only:"assassin", rw:1, name:"Chaos ­ ­ - ­ ­ Scissors Suwayyah", req_level:57, e_damage:290, ias:35, mDamage_min:216, mDamage_max:471, owounds:25, oskill_Zeal:1, strength:10, life_per_demon_kill:15, skill_Wake_of_Fire:3, skill_Blade_Shield:3, skill_Fade:3, type:"claw", base:"Scissors Suwayyah", pod_changes:1},	// 9% ctc level 11 Frozen Orb on striking, 11% ctc level 9 Charged Bolt on striking
 {only:"assassin", rw:1, name:"Pattern ­ ­ - ­ ­ Greater Claws", req_level:21, e_damage:80, fbr:30, ar_bonus:10, fDamage_min:12, fDamage_max:32, lDamage_min:1, lDamage_max:50, pDamage_all:75, pDamage_duration:5, strength:6, dexterity:6, all_res:15, mana_per_kill:2, skill_Wake_of_Fire:3, skill_Blade_Fury:3, skill_Fade:3, type:"claw", base:"Greater Claws", pod_changes:1},
@@ -961,64 +960,64 @@ var equipment = {
 {only:"assassin", set_Nat:1, name:"Natalya's Mark", type:"claw", req_level:79, e_damage:200, damage_vs_undead:200, damage_vs_demons:200, fDamage_min:12, fDamage_max:17, itd:1, ias:40, cDamage_min:50, cDamage_max:50, base:"Scissors Suwayyah", set_bonuses:["set_Nat",{},{},{},{}]},
 {only:"assassin", rw:1, name:"Plague ­ ­ - ­ ­ Suwayyah", req_level:67, damage_vs_demons:380, enemy_pRes:-23, dstrike_per_level:0.375, owounds:25, freezes_target:3, strength:10, all_skills:2, skill_Blade_Shield:3, skill_Venom:3, skill_Fade:3, type:"claw", base:"Suwayyah", pod_changes:1, aura:"Cleansing", aura_lvl:17},	// 25% ctc level 15 Poison Nova on striking, 20% ctc level 12 Lower Resist when struck
 {only:"assassin", rarity:"magic", name:"Cunning Suwayyah of Evisceration", type:"claw", req_level:65, damage_max:63, skills_traps:3, skill_Wake_of_Fire:3, skill_Blade_Shield:3, skill_Lightning_Sentry:3, base:"Suwayyah"},
-{only:"necromancer", name:"Homunculus", req_level:42, block:72, e_def:200, mana_per_kill:5, ibc:40, fbr:30, skills_necromancer:2, energy:20, mana_regen:33, all_res:40, skills_curses:2, type:"shield", base:"Heirophant Trophy"},
-{only:"necromancer", name:"Darkforce Spawn", req_level:65, block:32, e_def:180, skills_summoning_necromancer:3, skills_poisonBone:3, skills_curses:3, fcr:30, max_mana:10, type:"shield", base:"Bloodlord Skull"},
-{only:"necromancer", name:"Boneflame", req_level:72, block:30, e_def:150, frw:20, skills_necromancer:3, all_res:30, type:"shield", base:"Succubae Skull"},
-{only:"necromancer", set_TO:1, name:"Trang-Oul's Wing", req_level:54, defense:125, block:60, ibc:30, pRes:40, fRes:45, dexterity:15, strength:25, skills_poisonBone:2, type:"shield", base:"Cantor Trophy", set_bonuses:["set_TO",{},{},{enemy_pRes:-25},{life_replenish:15},{}]},
-{only:"necromancer", rarity:"magic", name:"Golemlord's Bloodlord Skull of Deflecting", ibc:20, fbr:30, pDamage_min:13, pDamage_max:28, pDamage_duration:4, type:"shield", req_level:65, skills_summoning_necromancer:3, skill_Summon_Mastery:3, skill_Raise_Skeleton_Warrior:3, skill_Raise_Skeletal_Mage:3, block:37, base:"Bloodlord Skull"},
-{only:"paladin", name:"Herald of Zakarum", req_level:42, block:82, e_def:200, ibc:30, fbr:30, ar_bonus:20, strength:20, vitality:20, all_res:50, skills_paladin:2, skills_combat_paladin:2, smite_min:20, smite_max:28, type:"shield", base:"Gilded Shield"},
-{only:"paladin", name:"Alma Negra", req_level:77, block:78, e_def:210, cdr:30, skills_paladin:2, ibc:20, fbr:30, e_damage:75, ar_bonus:75, mDamage_reduced:9, smite_min:35, smite_max:58, type:"shield", base:"Sacred Rondache", pod_changes:1},
-{only:"paladin", name:"Dragonscale", req_level:80, block:52, e_def:200, fDamage_min:211, fDamage_max:371, fDamage:15, oskill_Hydra:10, fRes_max:5, strength:25, fAbsorb:20, smite_min:46, smite_max:46, type:"shield", base:"Zakarum Shield"},
-{only:"paladin", set_Gris:1, name:"Griswold's Honor", req_level:68, defense:108, block:69, fbr:65, ibc:20, all_res:45, sockets:3, smite_min:5, smite_max:87, type:"shield", base:"Vortex Shield", set_bonuses:["set_Gris",{},{},{},{}]},
-{only:"paladin", rw:1, name:"Spirit ­ ­ - ­ ­ Sacred Targe", req_level:47, defense:158, block:60, all_skills:2, fcr:35, fhr:55, vitality:22, mana:112, cRes:35, lRes:35, pRes:35, missile_defense:250, thorns:14, mAbsorb_flat:8, smite_min:22, smite_max:70, all_res:45, type:"shield", base:"Sacred Targe"},
-{only:"paladin", rw:1, name:"Phoenix ­ ­ - ­ ­ Sacred Targe", req_level:65, defense:158, block:60, e_damage:400, enemy_fRes:-28, missile_defense:400, fAbsorb_flat:21, life:50, lRes_max:5, fRes_max:10, aura:"Redemption", aura_lvl:10, smite_min:22, smite_max:70, all_res:45, type:"shield", base:"Sacred Targe", pod_changes:1},	// 100% ctc level 40 Blaze on level-up, 40% ctc level 22 Fire Ball on striking
-{not:["paladin"], rw:1, name:"Spirit ­ ­ - ­ ­ Monarch", req_level:54, defense:148, block:52, all_skills:2, fcr:35, fhr:55, vitality:22, mana:112, cRes:35, lRes:35, pRes:35, missile_defense:250, thorns:14, mAbsorb_flat:8, type:"shield", base:"Monarch"},
-{not:["paladin"], rw:1, name:"Phoenix ­ ­ - ­ ­ Monarch", req_level:65, defense:148, block:52, e_damage:400, enemy_fRes:-28, missile_defense:400, fAbsorb_flat:21, life:50, lRes_max:5, fRes_max:10, aura:"Redemption", aura_lvl:10, type:"shield", base:"Monarch", pod_changes:1},	// 100% ctc level 40 Blaze on level-up, 40% ctc level 22 Fire Ball on striking
-{only:"paladin", rw:1, name:"Dream ­ ­ - ­ ­ Sacred Targe", req_level:65, e_def:30, defense:220, fhr:30, vitality:10, mana_per_level:0.625, all_res:20, mf:25, max_life:5, block:30, smite_min:22, smite_max:70, type:"shield", base:"Sacred Targe", pod_changes:1, aura:"Holy Shock", aura_lvl:15},	// 10% ctc level 15 Confuse when struck
-{only:"paladin", rw:1, name:"Dragon ­ ­ - ­ ­ Sacred Targe", req_level:61, defense:360, missile_defense:230, all_attributes:5, strength_per_level:0.375, lRes_max:5, damage_reduced:7, mana:50, block:30, smite_min:22, smite_max:70, type:"shield", base:"Sacred Targe", aura:"Holy Fire", aura_lvl:14},	// 20% ctc level 18 Venom when struck, 12% ctc level 15 Hydra on striking
-{only:"paladin", rw:1, name:"Exile ­ ­ - ­ ­ Sacred Targe", req_level:57, fbr:30, freezes_target:1, e_def:260, life_replenish:7, cRes_max:5, fRes_max:5, mf:25, autorepair:1, ethereal:1, block:30, smite_min:22, smite_max:70, type:"shield", base:"Sacred Targe", aura:"Defiance", aura_lvl:16},	// 15% ctc level 5 Life Tap on striking
-{only:"paladin", rw:1, name:"Sanctuary ­ ­ - ­ ­ Sacred Targe", req_level:49, fhr:20, fbr:20, ibc:20, e_def:160, missile_defense:250, dexterity:20, all_res:115, mDamage_reduced:7, smite_min:22, smite_max:70, block:50, type:"shield", base:"Sacred Targe"},	// level 12 Slow Missiles (60 charges)	...TODO: check if this still has Slow Missile charges?
-{not:["paladin"], rw:1, name:"Sanctuary ­ ­ - ­ ­ Troll Nest", req_level:49, fhr:20, fbr:20, ibc:20, e_def:160, missile_defense:250, dexterity:20, all_res:70, mDamage_reduced:7, block:40, type:"shield", base:"Troll Nest"},	// level 12 Slow Missiles (60 charges)
-{only:"paladin", rw:1, name:"Splendor ­ ­ - ­ ­ Gilded Shield", req_level:38, all_skills:1, fcr:10, fbr:20, e_def:100, energy:10, mana_regen:15, gf:50, mf:20, light_radius:3, smite_min:20, smite_max:28, block:22, type:"shield", all_res:45, base:"Gilded Shield"},
-{only:"necromancer", rw:1, name:"Splendor ­ ­ - ­ ­ Hierophant Trophy", req_level:40, all_skills:1, fcr:10, fbr:20, e_def:100, energy:10, mana_regen:15, gf:50, mf:20, light_radius:3, skill_Summon_Mastery:3, skill_Bone_Armor:3, skill_Bone_Spear:3, block:17, type:"shield", base:"Hierophant Trophy"},
-{not:["paladin","necromancer"], rw:1, name:"Splendor ­ ­ - ­ ­ Troll Nest", req_level:37, all_skills:1, fcr:10, fbr:20, e_def:100, energy:10, mana_regen:15, gf:50, mf:20, light_radius:3, block:20, type:"shield", base:"Troll Nest"},
-{only:"paladin", rw:1, name:"Rhyme ­ ­ - ­ ­ Protector Shield", req_level:34, fbr:40, ibc:20, mana_regen:15, all_res:70, cbf:1, gf:50, mf:25, smite_min:18, smite_max:24, block:40, type:"shield", base:"Protector Shield"},
-{only:"necromancer", rw:1, name:"Rhyme ­ ­ - ­ ­ Demon Head", req_level:29, fbr:40, ibc:20, mana_regen:15, all_res:25, cbf:1, gf:50, mf:25, skill_Summon_Mastery:3, skill_Bone_Armor:3, skill_Blood_Golem:3, block:37, type:"shield", base:"Demon Head"},
-{not:["paladin","necromancer"], rw:1, name:"Rhyme ­ ­ - ­ ­ Grim Shield", req_level:29, fbr:40, ibc:20, mana_regen:15, all_res:25, cbf:1, gf:50, mf:25, block:40, type:"shield", base:"Grim Shield"},
-{only:"paladin", rw:1, name:"Ancient's Pledge ­ ­ - ­ ­ Crown Shield", req_level:21, e_def:50, cRes:43, lRes:48, fRes:48, pRes:48, damage_to_mana:10, all_res:45, smite_min:4, smite_max:12, block:25, type:"shield", base:"Crown Shield"},
-{not:["paladin"], rw:1, name:"Ancient's Pledge ­ ­ - ­ ­ Grim Shield", req_level:25, e_def:50, cRes:43, lRes:48, fRes:48, pRes:48, damage_to_mana:10, block:20, type:"shield", base:"Grim Shield"},
-{name:"Pelta Lunata", req_level:2, block:50, e_def:40, defense:30, ibc:20, fbr:40, energy:10, vitality:10, strength:2, smite_min:1, smite_max:3, type:"shield", base:"Buckler"},
-{name:"Umbral Disk", req_level:9, block:65, e_def:50, defense:30, ibc:30, blind_on_hit:1, life:20, dexterity:10, light_radius:-2, durability:15, smite_min:2, smite_max:3, type:"shield", base:"Small Shield"},
-{name:"Stormguild", req_level:13, block:72, e_def:60, defense:30, ibc:30, lRes:25, lDamage_min:1, lDamage_max:6, thorns:3, mDamage_reduced:1, smite_min:2, smite_max:4, type:"shield", base:"Large Shield"},
-{name:"Steelclash", req_level:17, block:63, e_def:100, defense:20, ibc:20, all_res:15, skills_paladin:1, light_radius:3, damage_reduced:3, smite_min:2, smite_max:5, type:"shield", base:"Kite Shield"},
-{name:"Swordback Hold", req_level:15, block:60, e_def:60, defense:10, ibc:20, owounds:50, thorns:10, smite_min:5, smite_max:9, type:"shield", base:"Spike Shield"},
-{name:"Bverrit Keep", req_level:19, block:64, e_def:120, defense:30, ibc:10, fRes:75, strength:5, mDamage_reduced:5, smite_min:1, smite_max:5, type:"shield", base:"Tower Shield"},
-{name:"Wall of the Eyeless", req_level:20, block:50, e_def:40, defense:10, mana_per_kill:5, fcr:20, mana_leech:3, pRes:20, smite_min:3, smite_max:6, type:"shield", base:"Bone Shield"},
-{name:"The Ward", req_level:26, block:56, e_def:100, defense:40, ibc:10, all_res:50, mDamage_reduced:2, strength:10, smite_min:2, smite_max:6, type:"shield", base:"Gothic Shield"},
-{name:"Visceratuant", req_level:28, block:70, e_def:150, ibc:30, fbr:30, skills_sorceress:1, thorns_lightning:10, smite_min:8, smite_max:12, type:"shield", base:"Defender"},
-{name:"Moser's Blessed Circle", req_level:31, defense:179, block:67, e_def:220, ibc:25, fbr:30, all_res:25, sockets:2, smite_min:7, smite_max:14, type:"shield", base:"Round Shield"},
-{name:"Stormchaser", req_level:35, block:64, e_def:220, ibc:20, fbr:10, ar:150, lRes:50, half_freeze:1, lDamage_min:1, lDamage_max:60, smite_min:11, smite_max:15, type:"shield", base:"Scutum"},	// 4% ctc level 5 Tornado when struck, 4% ctc level 6 Blizzard when struck
-{name:"Lance Guard", req_level:35, block:47, e_def:120, damage_to_mana:15, fhr:30, dstrike:20, life:50, thorns:47, smite_min:18, smite_max:35, type:"shield", base:"Barbed Shield"},
-{name:"Tiamat's Rebuke", req_level:38, block:48, e_def:200, cDamage_min:27, cDamage_max:53, fDamage_min:35, fDamage_max:95, lDamage_min:1, lDamage_max:120, all_res:35, smite_min:15, smite_max:24, type:"shield", base:"Dragon Shield"},	// 3% ctc level 6 Hydra when struck, 5% ctc level 7 Nova when struck, 5% ctc level 9 Frost Nova when struck
-{name:"Gerke's Sanctuary", req_level:44, block:84, e_def:240, ibc:30, all_res:30, life_replenish:15, damage_reduced:16, mDamage_reduced:18, smite_min:10, smite_max:17, type:"shield", base:"Pavise"},
-{name:"Lidless Wall", req_level:41, e_def:130, block:50, all_skills:1, max_mana:10, fcr:20, mana_per_kill:5, energy:10, light_radius:1, smite_min:14, smite_max:20, type:"shield", base:"Grim Shield"},
-{name:"Radament's Sphere", req_level:50, e_def:200, block:66, e_def:200, ibc:20, pRes:75, fcr:20, skills_poisonBone:2, oskill_Desecrate:1, smite_min:12, smite_max:16, smite_min:12, smite_max:16, type:"shield", base:"Ancient Shield", pod_changes:1},
-{name:"Blackoak Shield", req_level:61, e_def:200, block:50, oskill_Inner_Sight:1, fbr:50, e_def:200, dexterity_per_level:0.5, life_per_level:1.25, cAbsorb_flat_per_level:0.625, half_freeze:1, smite_min:17, smite_max:29, type:"shield", base:"Luna", pod_changes:1},
-{name:"Spike Thorn", req_level:70, block:50, e_def:150, fhr:30, pdr:20, thorns_per_level:1.375, sockets:1, smite_min:26, smite_max:40, type:"shield", base:"Blade Barrier"},
-{name:"Stormshield", req_level:73, block:77, pdr:30, fbr:35, cRes:60, lRes:25, strength:30, defense_per_level:3.75, ibc:25, thorns:10, smite_min:12, smite_max:34, ethereal:0, type:"shield", base:"Monarch", pod_changes:1},
-{name:"Head Hunter's Glory", req_level:75, block:50, defense:420, missile_defense:350, fRes:30, pRes:40, life_per_kill:7, ar_per_socketed:150, sockets:3, smite_min:24, smite_max:38, type:"shield", base:"Troll Nest", pod_changes:1},	// 150 ar per socketed gem/rune		TODO: implement
-{name:"Medusa's Gaze", req_level:76, e_def:200, block:54, enemy_cRes:-20, cRes_max:5, cRes:80, skills_cold_all:2, oskill_Shiver_Armor:3, req:-50, smite_min:18, smite_max:28, type:"shield", base:"Aegis", pod_changes:1},
-{name:"Spirit Ward", req_level:68, block:84, e_def:180, fbr:25, ibc:30, all_res:40, cAbsorb_flat:11, smite_min:11, smite_max:35, type:"shield", base:"Ward"},	// 5% ctc level 8 Fade when struck
-{set_Brethren:1, name:"Taebaek's Glory", req_level:81, defense:50, block:79, indestructible:1, ibc:25, lRes:30, fbr:30, mana:100, thorns:30, smite_min:11, smite_max:35, type:"shield", base:"Ward", set_bonuses:["set_Brethren",{},{},{},{}]},
-{set_Orphan:1, name:"Whitstan's Guard", req_level:29, block:97, e_def:175, half_freeze:1, fbr:40, ibc:55, light_radius:5, smite_min:7, smite_max:14, type:"shield", base:"Round Shield", set_bonuses:["set_Orphan",{},{},{},{}]},
-{set_Milabrega:1, name:"Milabrega's Orb", req_level:17, block:38, defense:25, mf:20, smite_min:2, smite_max:5, type:"shield", base:"Kite Shield", set_bonuses:["set_Milabrega",{},{life:50},{e_def:50},{}]},
-{set_Civerb:1, name:"Civerb's Ward", req_level:9, block:57, defense:15, ibc:15, smite_min:2, smite_max:4, type:"shield", base:"Large Shield", set_bonuses:["set_Civerb",{},{mana:22},{pRes:26}]},	// bonuses depend on which other items are equipped?
-{set_Isenhart:1, name:"Isenhart's Parry", req_level:8, block:46, defense:40, thorns:4, smite_min:2, smite_max:6, type:"shield", base:"Gothic Shield", set_bonuses:["set_Isenhart",{},{all_res:8},{},{}]},
-{set_Sigon:1, name:"Sigon's Guard", req_level:6, block:74, all_skills:1, ibc:20, smite_min:1, smite_max:5, type:"shield", base:"Tower Shield", set_bonuses:["set_Sigon",{},{},{},{},{},{}]},
-{set_Cleglaw:1, name:"Cleglaw's Claw", req_level:4, block:35, defense:17, poison_length_reduced:75, smite_min:2, smite_max:3, type:"shield", base:"Small Shield", set_bonuses:["set_Cleglaw",{},{all_res:15},{}]},
-{set_Hsarus:1, name:"Hsarus' Iron Fist", req_level:3, block:30, damage_reduced:2, strength:10, smite_min:1, smite_max:3, type:"shield", base:"Buckler", set_bonuses:["set_Hsarus",{},{defense_per_level:2.5},{}]},
-{only:"paladin", rarity:"crafted", name:"Priest's Safety Monarch", req_level:54, damage_reduced:4, mDamage_reduced:2, mRes:10, e_def:230, all_res:20, skills_paladin:2, block:72, ibc:20, fbr:30, req:-30, fhr:17, smite_min:12, smite_max:34, type:"shield", base:"Monarch"},	// check required level of affixes
-{not:["paladin"], rarity:"crafted", name:"Safety Monarch", req_level:54, damage_reduced:4, mDamage_reduced:2, mRes:10, e_def:230, all_res:20, defense_per_level:3, block:72, ibc:20, fbr:30, req:-30, fhr:17, type:"shield", base:"Monarch"},		// check required level of affixes
+{only:"necromancer", name:"Homunculus", req_level:42, e_def:200, mana_per_kill:5, ibc:40, fbr:30, skills_necromancer:2, energy:20, mana_regen:33, all_res:40, skills_curses:2, type:"shield", base:"Heirophant Trophy"},
+{only:"necromancer", name:"Darkforce Spawn", req_level:65, e_def:180, skills_summoning_necromancer:3, skills_poisonBone:3, skills_curses:3, fcr:30, max_mana:10, type:"shield", base:"Bloodlord Skull"},
+{only:"necromancer", name:"Boneflame", req_level:72, e_def:150, frw:20, skills_necromancer:3, all_res:30, type:"shield", base:"Succubae Skull"},
+{only:"necromancer", set_TO:1, name:"Trang-Oul's Wing", req_level:54, defense:125, ibc:30, pRes:40, fRes:45, dexterity:15, strength:25, skills_poisonBone:2, type:"shield", base:"Cantor Trophy", set_bonuses:["set_TO",{},{},{enemy_pRes:-25},{life_replenish:15},{}]},
+{only:"necromancer", rarity:"magic", name:"Golemlord's Bloodlord Skull of Deflecting", ibc:20, fbr:30, pDamage_min:13, pDamage_max:28, pDamage_duration:4, type:"shield", req_level:65, skills_summoning_necromancer:3, skill_Summon_Mastery:3, skill_Raise_Skeleton_Warrior:3, skill_Raise_Skeletal_Mage:3, base:"Bloodlord Skull"},
+{only:"paladin", name:"Herald of Zakarum", req_level:42, e_def:200, ibc:30, fbr:30, ar_bonus:20, strength:20, vitality:20, all_res:50, skills_paladin:2, skills_combat_paladin:2, type:"shield", base:"Gilded Shield"},
+{only:"paladin", name:"Alma Negra", req_level:77, e_def:210, cdr:30, skills_paladin:2, ibc:20, fbr:30, e_damage:75, ar_bonus:75, mDamage_reduced:9, type:"shield", base:"Sacred Rondache", pod_changes:1},
+{only:"paladin", name:"Dragonscale", req_level:80, e_def:200, fDamage_min:211, fDamage_max:371, fDamage:15, oskill_Hydra:10, fRes_max:5, strength:25, fAbsorb:20, type:"shield", base:"Zakarum Shield"},
+{only:"paladin", set_Gris:1, name:"Griswold's Honor", req_level:68, defense:108, fbr:65, ibc:20, all_res:45, sockets:3, type:"shield", base:"Vortex Shield", set_bonuses:["set_Gris",{},{},{},{}]},
+{only:"paladin", rw:1, name:"Spirit ­ ­ - ­ ­ Sacred Targe", req_level:47, defense:158, all_skills:2, fcr:35, fhr:55, vitality:22, mana:112, cRes:35, lRes:35, pRes:35, missile_defense:250, thorns:14, mAbsorb_flat:8, all_res:45, type:"shield", base:"Sacred Targe"},
+{only:"paladin", rw:1, name:"Phoenix ­ ­ - ­ ­ Sacred Targe", req_level:65, defense:158, e_damage:400, enemy_fRes:-28, missile_defense:400, fAbsorb_flat:21, life:50, lRes_max:5, fRes_max:10, aura:"Redemption", aura_lvl:10, all_res:45, type:"shield", base:"Sacred Targe", pod_changes:1},	// 100% ctc level 40 Blaze on level-up, 40% ctc level 22 Fire Ball on striking
+{not:["paladin"], rw:1, name:"Spirit ­ ­ - ­ ­ Monarch", req_level:54, defense:148, all_skills:2, fcr:35, fhr:55, vitality:22, mana:112, cRes:35, lRes:35, pRes:35, missile_defense:250, thorns:14, mAbsorb_flat:8, type:"shield", base:"Monarch"},
+{not:["paladin"], rw:1, name:"Phoenix ­ ­ - ­ ­ Monarch", req_level:65, defense:148, e_damage:400, enemy_fRes:-28, missile_defense:400, fAbsorb_flat:21, life:50, lRes_max:5, fRes_max:10, aura:"Redemption", aura_lvl:10, type:"shield", base:"Monarch", pod_changes:1},	// 100% ctc level 40 Blaze on level-up, 40% ctc level 22 Fire Ball on striking
+{only:"paladin", rw:1, name:"Dream ­ ­ - ­ ­ Sacred Targe", req_level:65, e_def:30, defense:220, fhr:30, vitality:10, mana_per_level:0.625, all_res:20, mf:25, max_life:5, type:"shield", base:"Sacred Targe", pod_changes:1, aura:"Holy Shock", aura_lvl:15},	// 10% ctc level 15 Confuse when struck
+{only:"paladin", rw:1, name:"Dragon ­ ­ - ­ ­ Sacred Targe", req_level:61, defense:360, missile_defense:230, all_attributes:5, strength_per_level:0.375, lRes_max:5, damage_reduced:7, mana:50, type:"shield", base:"Sacred Targe", aura:"Holy Fire", aura_lvl:14},	// 20% ctc level 18 Venom when struck, 12% ctc level 15 Hydra on striking
+{only:"paladin", rw:1, name:"Exile ­ ­ - ­ ­ Sacred Targe", req_level:57, fbr:30, freezes_target:1, e_def:260, life_replenish:7, cRes_max:5, fRes_max:5, mf:25, autorepair:1, ethereal:1, type:"shield", base:"Sacred Targe", aura:"Defiance", aura_lvl:16},	// 15% ctc level 5 Life Tap on striking
+{only:"paladin", rw:1, name:"Sanctuary ­ ­ - ­ ­ Sacred Targe", req_level:49, fhr:20, fbr:20, ibc:20, e_def:160, missile_defense:250, dexterity:20, all_res:115, mDamage_reduced:7, type:"shield", base:"Sacred Targe"},	// level 12 Slow Missiles (60 charges)	...TODO: check if this still has Slow Missile charges?
+{not:["paladin"], rw:1, name:"Sanctuary ­ ­ - ­ ­ Troll Nest", req_level:49, fhr:20, fbr:20, ibc:20, e_def:160, missile_defense:250, dexterity:20, all_res:70, mDamage_reduced:7, type:"shield", base:"Troll Nest"},	// level 12 Slow Missiles (60 charges)
+{only:"paladin", rw:1, name:"Splendor ­ ­ - ­ ­ Gilded Shield", req_level:38, all_skills:1, fcr:10, fbr:20, e_def:100, energy:10, mana_regen:15, gf:50, mf:20, light_radius:3, type:"shield", all_res:45, base:"Gilded Shield"},
+{only:"necromancer", rw:1, name:"Splendor ­ ­ - ­ ­ Hierophant Trophy", req_level:40, all_skills:1, fcr:10, fbr:20, e_def:100, energy:10, mana_regen:15, gf:50, mf:20, light_radius:3, skill_Summon_Mastery:3, skill_Bone_Armor:3, skill_Bone_Spear:3, type:"shield", base:"Hierophant Trophy"},
+{not:["paladin","necromancer"], rw:1, name:"Splendor ­ ­ - ­ ­ Troll Nest", req_level:37, all_skills:1, fcr:10, fbr:20, e_def:100, energy:10, mana_regen:15, gf:50, mf:20, light_radius:3, type:"shield", base:"Troll Nest"},
+{only:"paladin", rw:1, name:"Rhyme ­ ­ - ­ ­ Protector Shield", req_level:34, fbr:40, ibc:20, mana_regen:15, all_res:70, cbf:1, gf:50, mf:25, type:"shield", base:"Protector Shield"},
+{only:"necromancer", rw:1, name:"Rhyme ­ ­ - ­ ­ Demon Head", req_level:29, fbr:40, ibc:20, mana_regen:15, all_res:25, cbf:1, gf:50, mf:25, skill_Summon_Mastery:3, skill_Bone_Armor:3, skill_Blood_Golem:3, type:"shield", base:"Demon Head"},
+{not:["paladin","necromancer"], rw:1, name:"Rhyme ­ ­ - ­ ­ Grim Shield", req_level:29, fbr:40, ibc:20, mana_regen:15, all_res:25, cbf:1, gf:50, mf:25, type:"shield", base:"Grim Shield"},
+{only:"paladin", rw:1, name:"Ancient's Pledge ­ ­ - ­ ­ Crown Shield", req_level:21, e_def:50, cRes:43, lRes:48, fRes:48, pRes:48, damage_to_mana:10, all_res:45, type:"shield", base:"Crown Shield"},
+{not:["paladin"], rw:1, name:"Ancient's Pledge ­ ­ - ­ ­ Grim Shield", req_level:25, e_def:50, cRes:43, lRes:48, fRes:48, pRes:48, damage_to_mana:10, type:"shield", base:"Grim Shield"},
+{name:"Pelta Lunata", req_level:2, e_def:40, defense:30, ibc:20, fbr:40, energy:10, vitality:10, strength:2, type:"shield", base:"Buckler"},
+{name:"Umbral Disk", req_level:9, e_def:50, defense:30, ibc:30, blind_on_hit:1, life:20, dexterity:10, light_radius:-2, durability:15, type:"shield", base:"Small Shield"},
+{name:"Stormguild", req_level:13, e_def:60, defense:30, ibc:30, lRes:25, lDamage_min:1, lDamage_max:6, thorns:3, mDamage_reduced:1, type:"shield", base:"Large Shield"},
+{name:"Steelclash", req_level:17, e_def:100, defense:20, ibc:20, all_res:15, skills_paladin:1, light_radius:3, damage_reduced:3, type:"shield", base:"Kite Shield"},
+{name:"Swordback Hold", req_level:15, e_def:60, defense:10, ibc:20, owounds:50, thorns:10, type:"shield", base:"Spike Shield"},
+{name:"Bverrit Keep", req_level:19, e_def:120, defense:30, ibc:10, fRes:75, strength:5, mDamage_reduced:5, type:"shield", base:"Tower Shield"},
+{name:"Wall of the Eyeless", req_level:20, e_def:40, defense:10, mana_per_kill:5, fcr:20, mana_leech:3, pRes:20, type:"shield", base:"Bone Shield"},
+{name:"The Ward", req_level:26, e_def:100, defense:40, ibc:10, all_res:50, mDamage_reduced:2, strength:10, type:"shield", base:"Gothic Shield"},
+{name:"Visceratuant", req_level:28, e_def:150, ibc:30, fbr:30, skills_sorceress:1, thorns_lightning:10, type:"shield", base:"Defender"},
+{name:"Moser's Blessed Circle", req_level:31, defense:179, e_def:220, ibc:25, fbr:30, all_res:25, sockets:2, type:"shield", base:"Round Shield"},
+{name:"Stormchaser", req_level:35, e_def:220, ibc:20, fbr:10, ar:150, lRes:50, half_freeze:1, lDamage_min:1, lDamage_max:60, type:"shield", base:"Scutum"},	// 4% ctc level 5 Tornado when struck, 4% ctc level 6 Blizzard when struck
+{name:"Lance Guard", req_level:35, e_def:120, damage_to_mana:15, fhr:30, dstrike:20, life:50, thorns:47, type:"shield", base:"Barbed Shield"},
+{name:"Tiamat's Rebuke", req_level:38, e_def:200, cDamage_min:27, cDamage_max:53, fDamage_min:35, fDamage_max:95, lDamage_min:1, lDamage_max:120, all_res:35, type:"shield", base:"Dragon Shield"},	// 3% ctc level 6 Hydra when struck, 5% ctc level 7 Nova when struck, 5% ctc level 9 Frost Nova when struck
+{name:"Gerke's Sanctuary", req_level:44, e_def:240, ibc:30, all_res:30, life_replenish:15, damage_reduced:16, mDamage_reduced:18, type:"shield", base:"Pavise"},
+{name:"Lidless Wall", req_level:41, e_def:130, all_skills:1, max_mana:10, fcr:20, mana_per_kill:5, energy:10, light_radius:1, type:"shield", base:"Grim Shield"},
+{name:"Radament's Sphere", req_level:50, e_def:200, e_def:200, ibc:20, pRes:75, fcr:20, skills_poisonBone:2, oskill_Desecrate:1, type:"shield", base:"Ancient Shield", pod_changes:1},
+{name:"Blackoak Shield", req_level:61, e_def:200, oskill_Inner_Sight:1, fbr:50, e_def:200, dexterity_per_level:0.5, life_per_level:1.25, cAbsorb_flat_per_level:0.625, half_freeze:1, type:"shield", base:"Luna", pod_changes:1},
+{name:"Spike Thorn", req_level:70, e_def:150, fhr:30, pdr:20, thorns_per_level:1.375, sockets:1, type:"shield", base:"Blade Barrier"},
+{name:"Stormshield", req_level:73, pdr:30, fbr:35, cRes:60, lRes:25, strength:30, defense_per_level:3.75, ibc:25, thorns:10, ethereal:0, type:"shield", base:"Monarch", pod_changes:1},
+{name:"Head Hunter's Glory", req_level:75, defense:420, missile_defense:350, fRes:30, pRes:40, life_per_kill:7, ar_per_socketed:150, sockets:3, type:"shield", base:"Troll Nest", pod_changes:1},	// 150 ar per socketed gem/rune		TODO: implement
+{name:"Medusa's Gaze", req_level:76, e_def:200, enemy_cRes:-20, cRes_max:5, cRes:80, skills_cold_all:2, oskill_Shiver_Armor:3, req:-50, type:"shield", base:"Aegis", pod_changes:1},
+{name:"Spirit Ward", req_level:68, e_def:180, fbr:25, ibc:30, all_res:40, cAbsorb_flat:11, type:"shield", base:"Ward"},	// 5% ctc level 8 Fade when struck
+{set_Brethren:1, name:"Taebaek's Glory", req_level:81, defense:50, indestructible:1, ibc:25, lRes:30, fbr:30, mana:100, thorns:30, type:"shield", base:"Ward", set_bonuses:["set_Brethren",{},{},{},{}]},
+{set_Orphan:1, name:"Whitstan's Guard", req_level:29, e_def:175, half_freeze:1, fbr:40, ibc:55, light_radius:5, type:"shield", base:"Round Shield", set_bonuses:["set_Orphan",{},{},{},{}]},
+{set_Milabrega:1, name:"Milabrega's Orb", req_level:17, defense:25, mf:20, type:"shield", base:"Kite Shield", set_bonuses:["set_Milabrega",{},{life:50},{e_def:50},{}]},
+{set_Civerb:1, name:"Civerb's Ward", req_level:9, defense:15, ibc:15, type:"shield", base:"Large Shield", set_bonuses:["set_Civerb",{},{mana:22},{pRes:26}]},	// bonuses depend on which other items are equipped?
+{set_Isenhart:1, name:"Isenhart's Parry", req_level:8, defense:40, thorns:4, type:"shield", base:"Gothic Shield", set_bonuses:["set_Isenhart",{},{all_res:8},{},{}]},
+{set_Sigon:1, name:"Sigon's Guard", req_level:6, all_skills:1, ibc:20, type:"shield", base:"Tower Shield", set_bonuses:["set_Sigon",{},{},{},{},{},{}]},
+{set_Cleglaw:1, name:"Cleglaw's Claw", req_level:4, defense:17, poison_length_reduced:75, type:"shield", base:"Small Shield", set_bonuses:["set_Cleglaw",{},{all_res:15},{}]},
+{set_Hsarus:1, name:"Hsarus' Iron Fist", req_level:3, damage_reduced:2, strength:10, type:"shield", base:"Buckler", set_bonuses:["set_Hsarus",{},{defense_per_level:2.5},{}]},
+{only:"paladin", rarity:"crafted", name:"Priest's Safety Monarch", req_level:54, damage_reduced:4, mDamage_reduced:2, mRes:10, e_def:230, all_res:20, skills_paladin:2, ibc:20, fbr:30, req:-30, fhr:17, type:"shield", base:"Monarch"},	// check required level of affixes
+{not:["paladin"], rarity:"crafted", name:"Safety Monarch", req_level:54, damage_reduced:4, mDamage_reduced:2, mRes:10, e_def:230, all_res:20, defense_per_level:3, ibc:20, fbr:30, req:-30, fhr:17, type:"shield", base:"Monarch"},		// check required level of affixes
 // Quivers
 {not:["amazon"], rarity:"rare", name:"Bolts of Doom", type:"quiver", req_level:65, pierce:25, all_skills:1, mf_per_level:0.5, mf:35, life_per_ranged_hit:16, mana_per_ranged_hit:9},
 {not:["amazon"], rarity:"rare", name:"Queen's Arrows", type:"quiver", req_level:65, max_damage_per_level:0.625, pierce:25, all_skills:1, damage_min:26, damage_max:31, ias:16, dstrike:20},
@@ -1213,13 +1212,13 @@ var corruptions = {
 		{name:"+ Energy", energy:10},
 		{name:"+ Life/Mana per Hit", life_per_hit:14, life_per_ranged_hit:10},
 		{name:"+ Life", life:15},
-		{name:"+ Enhanced Defense", e_def:25},
+		{name:"+ Enhanced Defense", e_def:25},	// TODO: Implement (needs to be applied to helm defense)
 	],
 	armor: [
 		{name:"Armor"},
 		{name:"+ Sockets", sockets:4},
 		{name:"+ Increased Attack Speed", ias:10},
-		{name:"+ Enhanced Defense", e_def:20},
+		{name:"+ Enhanced Defense", e_def:20},	// TODO: Implement (needs to be applied to armor defense)
 		{name:"+ Attack Rating", ar_bonus:20},
 		{name:"+ Faster Cast Rate", fcr:10},
 		{name:"+ Max Life", max_life:2},
@@ -1284,7 +1283,7 @@ var corruptions = {
 	offhand: [
 		{name:"Offhand"},
 		// shield
-		{name:"+ Sockets", base:"shield", sockets:4},
+		{name:"+ Sockets", base:"shield", sockets:6},
 		{name:"+ Block Chance", base:"shield", ibc:10},
 		{name:"+ Fire Damage", base:"shield", fDamage:10},
 		{name:"+ Cold Damage", base:"shield", cDamage:10},
