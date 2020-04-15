@@ -19,10 +19,10 @@ var LIMIT = 60; // Highest Skill Data
 var RES_CAP = 95;
 
 var socketed = {
-	helm:{sockets:0, socketsFilled:0, items:[{name:""},{name:""},{name:""}]},
-	armor:{sockets:0, socketsFilled:0, items:[{name:""},{name:""},{name:""},{name:""}]},
-	weapon:{sockets:0, socketsFilled:0, items:[{name:""},{name:""},{name:""},{name:""},{name:""},{name:""}]},
-	offhand:{sockets:0, socketsFilled:0, items:[{name:""},{name:""},{name:""},{name:""},{name:""},{name:""}]},
+	helm:{sockets:0, socketsFilled:0, items:[{id:"",name:""},{id:"",name:""},{id:"",name:""}]},
+	armor:{sockets:0, socketsFilled:0, items:[{id:"",name:""},{id:"",name:""},{id:"",name:""},{id:"",name:""}]},
+	weapon:{sockets:0, socketsFilled:0, items:[{id:"",name:""},{id:"",name:""},{id:"",name:""},{id:"",name:""},{id:"",name:""},{id:"",name:""}]},
+	offhand:{sockets:0, socketsFilled:0, items:[{id:"",name:""},{id:"",name:""},{id:"",name:""},{id:"",name:""},{id:"",name:""},{id:"",name:""}]},
 };
 
 // Charm Inventory
@@ -2054,10 +2054,14 @@ function allowDrop(ev, cell, y) {
 		if (inv[0].pickup_y > 1 && inv[cell+10].empty == 0 && inv[0].in[cell+10] != inv[0].onpickup) { allow = 0 }
 		if (inv[0].pickup_y > 2 && inv[cell+20].empty == 0 && inv[0].in[cell+20] != inv[0].onpickup) { allow = 0 }
 		if (allow == 1) {
-		if (inv[0].in[cell] == inv[0].onpickup) {
-		//	document.getElementById(inv[cell].id).style = "position: absolute; width: 29px; height: 29px; pointer-events: none;";
-		}
-		ev.preventDefault();
+			if (inv[0].in[cell] == inv[0].onpickup) {
+			//	document.getElementById(inv[cell].id).style = "position: absolute; width: 29px; height: 29px; pointer-events: none;";
+			}
+			var inEquipment = 0;
+			var val = inv[0].onpickup;
+			var groups = ["helm", "armor", "weapon", "offhand"];
+			for (let g = 0; g < groups.length; g++) { for (let i = 0; i < socketed[groups[g]].items.length; i++) { if (val == socketed[groups[g]].items[i].id) { inEquipment = 1; } } }
+			if (inEquipment == 0) { ev.preventDefault(); }
 		}
 	}
 }
@@ -2215,24 +2219,45 @@ function socket(event, group) {
 	event.preventDefault();
 	var data = event.dataTransfer.getData("text");
 	event.target.appendChild(document.getElementById(data));
-	for (let i = 0; i < socketed[group].items.length; i++) {
-		if (socketed[group].items[i].name == "") {
-			socketed[group].items[i].name = inv[0].onpickup
-			// TODO: add affixes
-//			socketed[group].socketsFilled += 1
-		}
-	}
 	
+	// equipment destination
+	var spaceFound = 0;
+	var index = 0;
+	for (let i = 0; i < socketed[group].items.length; i++) { if (socketed[group].items[i].name == "") { spaceFound = 1; index = i; } }
+	if (spaceFound == 1) {
+		var name = inv[0].onpickup.split('_')[0];
+		for (let k = 0; k < socketables.length; k++) { if (socketables[k].name == name) {
+			socketed[group].items[index].id = inv[0].onpickup
+			for (affix in socketables[k]) {
+				if (affix != "type" && affix != "rarity" && affix != "img") {
+					socketed[group].items[index][affix] = socketables[k][affix]
+					character[affix] += socketables[k][affix]
+				}
+				if (affix == group || (affix == "armor" && group == "helm") || (affix == "armor" && group == "offhand" && typeof(socketables[k]["shield"]) == 'undefined') || (affix == "shield" && group == "offhand")) {
+					for (groupAffix in socketables[k][affix]) {
+						socketed[group].items[index][groupAffix] = socketables[k][affix][groupAffix]
+						character[groupAffix] += socketables[k][affix][groupAffix]
+					}
+				}
+			}
+		} }
+		// update
+		updateEffectList()
+		calculateSkillAmounts()
+		for (let s = 0; s < skills.length; s++) { modifyEffect(skills[s]) }
+		updateStats()
+		updateSkills()
+		if (selectedSkill[0] != " ­ ­ ­ ­ Skill 1") { checkSkill(selectedSkill[0], 1) }
+		if (selectedSkill[1] != " ­ ­ ­ ­ Skill 2") { checkSkill(selectedSkill[1], 2) }
+	}
+	// inventory destination
 	for (s = 1; s <= inv[0].in.length; s++) {
 		if (inv[0].in[s] == inv[0].onpickup) { inv[s].empty = 1; inv[0].in[s] = ""; 
 			inv[s].y = 1;
 			document.getElementById(inv[s].id).style = "position: absolute; width: 29px; height: 29px; z-index: 3;";
 		}
 	}
-	//inv[cell].empty = 0
-	//inv[0].in[cell] = inv[0].onpickup
 	inv[0].onpickup = "none"
-
 }
 
 // allowSocket - 
@@ -2267,20 +2292,30 @@ function dragSocketable(ev) {
 // ---------------------------------
 function trashSocketable(event) {
 	var val = event.target.id;
-//	var type = "charms"
-//	for (old_affix in equipped[type][val]) {
-//		character[old_affix] -= equipped[type][val][old_affix]
-//		equipped[type][val][old_affix] = unequipped[old_affix]
-//	}
+	// removed from equipment
+	var groups = ["helm", "armor", "weapon", "offhand"];
+	for (let g = 0; g < groups.length; g++) {
+		for (let i = 0; i < socketed[groups[g]].items.length; i++) {
+			if (val == socketed[groups[g]].items[i].id) {
+				for (affix in socketed[groups[g]].items[i]) {
+					if (affix != "id") { character[affix] -= socketed[groups[g]].items[i][affix] }
+					//character[affix] -= socketed[groups[g]].items[i][affix]
+				}
+				socketed[groups[g]].items[i] = {id:"",name:""}
+			}
+		}
+	}
+	// removed from inventory
 	for (s = 1; s <= inv[0].in.length; s++) {
 		if (inv[0].in[s] == event.target.id) {
 			inv[s].empty = 1;
 			inv[0].in[s] = "";
 		}
 	}
-	// TODO: Determine & remove affixes
 	
 	event.target.remove();
+	
+	// update
 	updateEffectList()
 	calculateSkillAmounts()
 	for (let s = 0; s < skills.length; s++) { modifyEffect(skills[s]) }
