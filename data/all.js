@@ -1076,7 +1076,7 @@ function toggleAutocast(autocast) {
 	if (autocast.checked) { settings.autocast = 1 } else { settings.autocast = 0 }
 }
 
-// updateAll - Updates all stats
+// updateStats - Updates all stats
 // ---------------------------------
 function updateStats() { updatePrimaryStats(); updateMisc(); updateSecondaryStats(); updateTertiaryStats(); }
 
@@ -1294,7 +1294,7 @@ function updateMisc() {
 	checkRequirements()
 	
 	// temporary location for now, update sockets on equipped gear:
-	// ???
+	for (group in socketed) { socketed[group].sockets = (equipped[group].sockets + corruptsEquipped[group].sockets) }
 }
 
 // calculateSkillAmounts - Updates skill levels
@@ -2225,6 +2225,7 @@ function socket(event, group) {
 	var index = 0;
 	for (let i = 0; i < socketed[group].items.length; i++) { if (socketed[group].items[i].name == "") { spaceFound = 1; index = i; } }
 	if (spaceFound == 1) {
+		// TODO: remove previous affixes, if being moved from another equipment item
 		var name = inv[0].onpickup.split('_')[0];
 		for (let k = 0; k < socketables.length; k++) { if (socketables[k].name == name) {
 			socketed[group].items[index].id = inv[0].onpickup
@@ -2265,13 +2266,21 @@ function socket(event, group) {
 // ---------------------------------
 function allowSocket(event, group) {
 	socketed[group].sockets = ~~equipped[group].sockets + ~~corruptsEquipped[group].sockets
+	var allow = 0;
 	if (socketed[group].sockets > 0 && socketed[group].socketsFilled < socketed[group].sockets) {
 		var name = inv[0].onpickup.split('_')[0];
 		for (let k = 0; k < socketables.length; k++) {
-			if (socketables[k].name == name) { event.preventDefault(); }
+			if (socketables[k].name == name) { allow = 1 }
 		}
 	}
-	// TODO: limit when sockets are filled
+	if (allow == 1) {
+		var spaceAvailable = 0;
+		for (let i = 0; i < socketed[group].sockets; i++) {
+			if (socketed[group].items[i].name == "") { spaceAvailable = 1; }
+		}
+		// TODO: limit based on how many sockets are available
+		if (spaceAvailable == 1) { event.preventDefault(); }
+	}
 }
 
 // dragSocketable - Handles item dragging for socketables (gems, runes, jewels)
