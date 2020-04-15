@@ -34,11 +34,12 @@ Character Skill Planner for Diablo 2: Path of Diablo
   * stats gained from effects (buffs, minions, auras, shrines, etc)
 * mercenary selection
 * equipment selection (all unique/set/runeword items)
+* equipment corrupting
 * charm inventory
 * character validation
 
 ### Upcoming Plans:
-* item socketing/corrupting
+* item socketing
 * breakpoints
 * mercenary stats & validation
 * interface niceties
@@ -46,6 +47,7 @@ Character Skill Planner for Diablo 2: Path of Diablo
 ### Longterm Goals:
 * full GUI inventory/stash
 * custom item creation & editing
+* item-base upgrading (for uniques/rares)
 * item description tooltips
 * options for individual quests
 * option for strict character validation (prevent invalid character states instead of just making text red)
@@ -54,6 +56,7 @@ Character Skill Planner for Diablo 2: Path of Diablo
 * custom item-pool saving
 * monster stat calculations
 * debuff tracking
+* party tracking/planning
 * pvp info
 * character comparison tool
 * comparison to original D2 skills/stats
