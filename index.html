@@ -413,16 +413,16 @@
 <img usemap="#equipmentmap" id="equipment_grid" style="float: right; margin-right: 3px; margin-bottom: 30px; margin-top: 0px;" src="./images/equipment_inventory.png">
 <map id="equipmentmap" name="equipmentmap">
 <div style="position: relative; float: right; margin-bottom: 30px; margin-top: 0px;">
-<div id="helm" style="position: absolute; width: 57px; height: 58px; left: 63px; top: 1px; z-index: 4;" onmouseover="equipmentHover(event,'helm')" onmouseout="equipmentOut()"></div>
-<div id="armor" style="position: absolute; width: 58px; height: 88px; left: 122px; top: 1px; z-index: 4;" onmouseover="equipmentHover(event,'armor')" onmouseout="equipmentOut()"></div>
+<div id="helm" style="position: absolute; width: 57px; height: 58px; left: 63px; top: 1px; z-index: 4;" ondrop="socket(event,'helm')" ondragover="allowSocket(event,'helm')" onmouseover="equipmentHover(event,'helm')" onmouseout="equipmentOut()"></div>
+<div id="armor" style="position: absolute; width: 58px; height: 88px; left: 122px; top: 1px; z-index: 4;" ondrop="socket(event,'armor')" ondragover="allowSocket(event,'armor')" onmouseover="equipmentHover(event,'armor')" onmouseout="equipmentOut()"></div>
 <div id="gloves" style="position: absolute; width: 58px; height: 59px; left: 182px; top: 1px; z-index: 4;" onmouseover="equipmentHover(event,'gloves')" onmouseout="equipmentOut()"></div>
 <div id="boots" style="position: absolute; width: 58px; height: 58px; left: 182px; top: 61px; z-index: 4;" onmouseover="equipmentHover(event,'boots')" onmouseout="equipmentOut()"></div>
 <div id="belt" style="position: absolute; width: 58px; height: 29px; left: 122px; top: 90px; z-index: 4;" onmouseover="equipmentHover(event,'belt')" onmouseout="equipmentOut()"></div>
 <div id="amulet" style="position: absolute; width: 29px; height: 29px; left: 77px; top: 60px; z-index: 4;" onmouseover="equipmentHover(event,'amulet')" onmouseout="equipmentOut()"></div>
 <div id="ring1" style="position: absolute; width: 28px; height: 29px; left: 63px; top: 90px; z-index: 4;" onmouseover="equipmentHover(event,'ring1')" onmouseout="equipmentOut()"></div>
 <div id="ring2" style="position: absolute; width: 28px; height: 29px; left: 93px; top: 90px; z-index: 4;" onmouseover="equipmentHover(event,'ring2')" onmouseout="equipmentOut()"></div>
-<div id="weapon" style="position: absolute; width: 60px; height: 118px; left: 1px; top: 1px; z-index: 4;" onmouseover="equipmentHover(event,'weapon')" onmouseout="equipmentOut()"></div>
-<div id="offhand" style="position: absolute; width: 60px; height: 118px; left: 242px; top: 1px; z-index: 4;" onmouseover="equipmentHover(event,'offhand')" onmouseout="equipmentOut()"></div>
+<div id="weapon" style="position: absolute; width: 60px; height: 118px; left: 1px; top: 1px; z-index: 4;" ondrop="socket(event,'weapon')" ondragover="allowSocket(event,'weapon')" onmouseover="equipmentHover(event,'weapon')" onmouseout="equipmentOut()"></div>
+<div id="offhand" style="position: absolute; width: 60px; height: 118px; left: 242px; top: 1px; z-index: 4;" ondrop="socket(event,'offhand')" ondragover="allowSocket(event,'offhand')" onmouseover="equipmentHover(event,'offhand')" onmouseout="equipmentOut()"></div>
 
 <div class="hover-item" style="display: none; top:-30px;" id="equipment_tooltip"></div>
 </div>

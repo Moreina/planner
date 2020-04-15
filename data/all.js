@@ -9,12 +9,21 @@ var skillList = []; var skillOptions = [];
 var selectedSkill = [" ­ ­ ­ ­ Skill 1", " ­ ­ ­ ­ Skill 2"];
 
 var mercenary = {name:"",level:1,base_aura:"",base_aura_level:1};
+var offhandType = "none";
 var lastCharm = "";
+var lastSocketable = "";
 var lastSelected = "";
 var settings = {coupling:1, autocast:1}
 var MAX = 20;	// Highest Skill Hardpoints
 var LIMIT = 60; // Highest Skill Data
 var RES_CAP = 95;
+
+var socketed = {
+	helm:{sockets:0, socketsFilled:0, items:[{name:""},{name:""},{name:""}]},
+	armor:{sockets:0, socketsFilled:0, items:[{name:""},{name:""},{name:""},{name:""}]},
+	weapon:{sockets:0, socketsFilled:0, items:[{name:""},{name:""},{name:""},{name:""},{name:""},{name:""}]},
+	offhand:{sockets:0, socketsFilled:0, items:[{name:""},{name:""},{name:""},{name:""},{name:""},{name:""}]},
+};
 
 // Charm Inventory
 var inv = [
@@ -324,6 +333,22 @@ function changeLevel(input) {
 	updateStats()
 }
 
+// reloadOffhandCorruptions - reloads corruption options for offhands (when the selected type changes)
+// ---------------------------------
+function reloadOffhandCorruptions() {
+	corrupt("offhand", "offhand")
+	var choices = "<option>­ ­ ­ ­ Corruption</option>";
+	if (offhandType == "shield" || offhandType == "quiver") {
+		for (let m = 1; m < corruptions["offhand"].length; m++) { if (corruptions["offhand"][m].base == offhandType) { choices += "<option>" + corruptions["offhand"][m].name + "</option>" } }
+	} else if (offhandType == "weapon") {
+		for (let m = 1; m < corruptions["weapon"].length; m++) { choices += "<option>" + corruptions["weapon"][m].name + "</option>" }
+		choices = ""
+	} else {
+		for (let m = 1; m < corruptions["offhand"].length; m++) { choices += "<option>" + corruptions["offhand"][m].name + "</option>" }
+	}
+	document.getElementById("corruptions_offhand").innerHTML = choices
+}
+
 // adjustCorruptionSockets - Adjusts the sockets granted by corruptions
 //	group: item group (helm, armor, weapon, offhand)
 // ---------------------------------
@@ -354,6 +379,7 @@ function corrupt(group, val) {
 	}
 	if (val == "­ ­ ­ ­ Corruption" || val == "none" || val == group || equipped[group].ethereal > 0 || equipped[group].sockets > 0 || equipped[group].rw > 0 || equipped[group].rarity == "common") { document.getElementById("corruptions_"+group).selectedIndex = 0 }
 	else {
+		//if (group == "offhand" && offhandType == "weapon") { group = "weapon" }
 		for (outcome in corruptions[group]) {
 			if (corruptions[group][outcome].name == val) {
 				for (affix in corruptions[group][outcome]) {
@@ -526,19 +552,22 @@ function equip(group, val) {
 					var multEth = 1;
 					var multED = 1;
 					var multReq = 1;
-					if (typeof(equipped[group][affix]) == 'undefined') { equipped[group][affix] = 0 }	// undefined (new) affixes get initialized to zero
-					if (typeof(equipment[group][item]["ethereal"]) != 'undefined') { if (equipment[group][item]["ethereal"] == 1) { multEth = 1.5; } }
+					var reqEth = 0;
+					
+					if (typeof(equipment[group][item]["ethereal"]) != 'undefined') { if (equipment[group][item]["ethereal"] == 1) { multEth = 1.5; reqEth = 10; } }
 					if (affix == "base_defense") { if (typeof(equipment[group][item]["e_def"]) != 'undefined') { multED += (equipment[group][item]["e_def"]/100) } }
 					else if (affix == "base_damage_min" || affix == "base_damage_max" || affix == "throw_min" || affix == "throw_max") { if (typeof(equipment[group][item]["e_damage"]) != 'undefined') { multED += (equipment[group][item]["e_damage"]/100) } }
 					else if (affix == "req_strength" || affix == "req_dexterity") { if (typeof(equipment[group][item]["req"]) != 'undefined') { multReq += (equipment[group][item]["req"]/100) } }
-					//TODO: ethereal reduces strength/dexterity requirements by 10
-					else if (affix == "base_damage_min" || affix == "base_damage_max" || affix == "throw_min" || affix == "throw_max" || affix == "base_defense") {
+					
+					if (typeof(equipped[group][affix]) == 'undefined') { equipped[group][affix] = 0 }	// undefined (new) affixes get initialized to zero
+					
+					if (affix == "base_damage_min" || affix == "base_damage_max" || affix == "throw_min" || affix == "throw_max" || affix == "base_defense") {
 						equipped[group][affix] = Math.ceil(multEth*multED*bases[base][affix])
 						character[affix] += Math.ceil(multEth*multED*bases[base][affix])
 					}
 					else if (affix == "req_strength" || affix == "req_dexterity") {
-						equipped[group][affix] += Math.ceil(multReq*bases[base][affix])
-						character[affix] += Math.ceil(multReq*bases[base][affix])
+						equipped[group][affix] += Math.ceil(multReq*bases[base][affix] - reqEth)
+						character[affix] += Math.ceil(multReq*bases[base][affix] - reqEth)
 					}
 					else {
 						equipped[group][affix] += bases[base][affix]
@@ -616,6 +645,14 @@ function equip(group, val) {
 	// remove incompatible corruptions
 	if (equipped[group].ethereal > 0 || equipped[group].sockets > 0 || equipped[group].rw > 0 || equipped[group].rarity == "common" || (group == "offhand" && (equipped[group].type == "shield" || equipped[group].type == "quiver") && equipped[group].type != corruptsEquipped[group].base)) { corrupt(group, group) }
 	if (corruptsEquipped[group].name == "+ Sockets") { adjustCorruptionSockets(group) }
+	if (group == "offhand") {
+		// reload corruption options when the selected type changes
+		if (equipped[group].type == "shield") { if (offhandType != "shield") { offhandType = "shield"; reloadOffhandCorruptions(); } }
+		else if (equipped[group].type == "quiver") { if (offhandType != "quiver") { offhandType = "quiver"; reloadOffhandCorruptions(); } }
+		else if (equipped[group].name != "none") { if (offhandType != "weapon") { offhandType = "weapon"; reloadOffhandCorruptions(); } }
+		else { if (offhandType != "none") { offhandType = "none"; reloadOffhandCorruptions(); } }
+		
+	}
 	// update
 	if (group == val) { document.getElementById(("dropdown_"+group)).selectedIndex = 0 }
 	calculateSkillAmounts()
@@ -863,7 +900,7 @@ function addSocketable(val) {
 	val = val + append
 	
 	var socketable = 'socketable';
-	var itemHTML = '<img style="width: 29; height: 29; pointer-events: auto;" id="' + val + '" src="' + itemImage + '" draggable="true" ondragstart="drag(event)" width="29" height="29" oncontextmenu="trash(event)" onmouseover="itemHover(event, this.value)" onmouseout="itemOut()" onclick="itemSelect(event)">';
+	var itemHTML = '<img style="width: 29; height: 29; pointer-events: auto;" id="' + val + '" src="' + itemImage + '" draggable="true" ondragstart="dragSocketable(event)" width="29" height="29" oncontextmenu="trashSocketable(event)" onmouseover="itemHover(event, this.value)" onmouseout="itemOut()" onclick="socketableSelect(event)">';
 	var insertion = "";
 	var space_found = 0;
 	var empty = 1;
@@ -1093,7 +1130,7 @@ function updatePrimaryStats() {
 /*
 	TODO: DPS calculations
 /**/
-	var block = c.block;
+	var block = c.block + c.ibc;	// TODO: ibc isn't affected by corruption?
 	if (c.class_name != "Paladin") { block -= 5; if (c.class_name == "Druid" || c.class_name == "Necromancer" || c.class_name == "Sorceress") { block -= 5 } }
 	block = (Math.max(0,block) + c.block_skillup)*(dexTotal-15)/(c.level*2)
 	if (c.running > 0) { block = block / 3 }
@@ -1255,6 +1292,9 @@ function updateMisc() {
 	}
 	updateSkillIcons()
 	checkRequirements()
+	
+	// temporary location for now, update sockets on equipped gear:
+	// ???
 }
 
 // calculateSkillAmounts - Updates skill levels
@@ -1962,14 +2002,15 @@ function itemHover(ev, id) {
 		style = "display: block; color: #634db0;"
 		if (name == "Annihilus" || name == "Hellfire Torch" || name == "Gheed's Fortune" || name == "Horadric Sigil") { style = "display: block; color: #928068;" }
 		if (equipped["charms"][val].type != "small" && equipped["charms"][val].type != "large" && equipped["charms"][val].type != "grand") { style = "display: block; color: #ff8080;" }
+		lastCharm = name
 	} else {
 		if (type == "rune") { style = "display: block; color: orange;" }
 		else if (socketables[index].rarity == "unique") { style = "display: block; color: #928068;" }
 		else if (socketables[index].rarity == "magic") { style = "display: block; color: #8080ff;" }
 		else if (socketables[index].rarity == "rare") { style = "display: block; color: yellow;" }
 		else { style = "display: block; color: white;" }
+		lastSocketable = name
 	}
-	lastCharm = name
 	var display = name //+ "<br>" + stats
 	document.getElementById("item_tooltip").innerHTML = display
 	document.getElementById("item_tooltip").style = style
@@ -2141,6 +2182,15 @@ function getItemImage(name, special, base_name) {
 	return filename
 }
 
+// socketableSelect - Duplicates the selected socketable item (gem, rune, jewel)
+// ---------------------------------
+function socketableSelect(ev) {
+	var dup = 0;
+	if (ev.shiftKey) { dup = 1 }
+	if (ev.ctrlKey) { dup = 10 }
+	if (dup > 0) { for (let d = 0; d < dup; d++) { addSocketable(lastSocketable) } }
+}
+
 // equipmentHover - 
 //	slot: equipment slot name
 // ---------------------------------
@@ -2156,4 +2206,87 @@ function equipmentOut() {
 	document.getElementById("equipment_tooltip").innerHTML = ""
 	document.getElementById("equipment_tooltip").visibility = "hidden"
 	document.getElementById("equipment_tooltip").style.display = "none"
+}
+
+// socket - 
+//	group: item group
+// ---------------------------------
+function socket(event, group) {
+	event.preventDefault();
+	var data = event.dataTransfer.getData("text");
+	event.target.appendChild(document.getElementById(data));
+	for (let i = 0; i < socketed[group].items.length; i++) {
+		if (socketed[group].items[i].name == "") {
+			socketed[group].items[i].name = inv[0].onpickup
+			// TODO: add affixes
+//			socketed[group].socketsFilled += 1
+		}
+	}
+	
+	for (s = 1; s <= inv[0].in.length; s++) {
+		if (inv[0].in[s] == inv[0].onpickup) { inv[s].empty = 1; inv[0].in[s] = ""; 
+			inv[s].y = 1;
+			document.getElementById(inv[s].id).style = "position: absolute; width: 29px; height: 29px; z-index: 3;";
+		}
+	}
+	//inv[cell].empty = 0
+	//inv[0].in[cell] = inv[0].onpickup
+	inv[0].onpickup = "none"
+
+}
+
+// allowSocket - 
+//	group: item group
+// ---------------------------------
+function allowSocket(event, group) {
+	socketed[group].sockets = ~~equipped[group].sockets + ~~corruptsEquipped[group].sockets
+	if (socketed[group].sockets > 0 && socketed[group].socketsFilled < socketed[group].sockets) {
+		var name = inv[0].onpickup.split('_')[0];
+		for (let k = 0; k < socketables.length; k++) {
+			if (socketables[k].name == name) { event.preventDefault(); }
+		}
+	}
+	// TODO: limit when sockets are filled
+}
+
+// dragSocketable - Handles item dragging for socketables (gems, runes, jewels)
+// ---------------------------------
+function dragSocketable(ev) {
+	ev.dataTransfer.setData("text", ev.target.id);
+	inv[0].onpickup = ev.target.id
+	inv[0].pickup_y = 1
+//	for (s = 1; s < inv[0]["in"].length; s++) {
+//		if (inv[0].in[s] == inv[0].onpickup) {
+//			document.getElementById(inv[s].id).style = "position: absolute; width: 28px; height: 28px; z-index: 5;";
+//		}
+//	}
+}
+
+
+// trash - Handles item removal for socketables (gems, runes, jewels)
+// ---------------------------------
+function trashSocketable(event) {
+	var val = event.target.id;
+//	var type = "charms"
+//	for (old_affix in equipped[type][val]) {
+//		character[old_affix] -= equipped[type][val][old_affix]
+//		equipped[type][val][old_affix] = unequipped[old_affix]
+//	}
+	for (s = 1; s <= inv[0].in.length; s++) {
+		if (inv[0].in[s] == event.target.id) {
+			inv[s].empty = 1;
+			inv[0].in[s] = "";
+		}
+	}
+	// TODO: Determine & remove affixes
+	
+	event.target.remove();
+	updateEffectList()
+	calculateSkillAmounts()
+	for (let s = 0; s < skills.length; s++) { modifyEffect(skills[s]) }
+	updateStats()
+	updateSkills()
+	if (selectedSkill[0] != " ­ ­ ­ ­ Skill 1") { checkSkill(selectedSkill[0], 1) }
+	if (selectedSkill[1] != " ­ ­ ­ ­ Skill 2") { checkSkill(selectedSkill[1], 2) }
+	document.getElementById("item_tooltip").innerHTML = ""
 }
