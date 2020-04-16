@@ -655,6 +655,21 @@ function equip(group, val) {
 	}
 	// update
 	if (group == val) { document.getElementById(("dropdown_"+group)).selectedIndex = 0 }
+	
+	// display image for equipped item
+	if (group != "helm" && group != "armor" && group != "weapon" && group != "offhand") {
+		// TODO: Needs to use a separate UI space than socketables
+		var prefix = "./images/items/"+group;
+		if (group == "weapon") { prefix += ("/" + equipped[group].type) }
+		if (typeof(equipped[group].img) != 'undefined') { if (equipped[group].img != "") {
+			prefix += "/special/"
+			document.getElementById(group+"_image").src = (prefix + equipped[group].img + ".png")
+		}
+		// TODO: Use getItemImage()
+		else { document.getElementById(group+"_image").src = ("./images/skills/none.png") } }
+		else { document.getElementById(group+"_image").src = ("./images/skills/none.png") }
+	}
+
 	calculateSkillAmounts()
 	updateEffectList()
 	updateStats()
@@ -1293,8 +1308,11 @@ function updateMisc() {
 	updateSkillIcons()
 	checkRequirements()
 	
-	// temporary location for now, update sockets on equipped gear:
-	for (group in socketed) { socketed[group].sockets = (equipped[group].sockets + corruptsEquipped[group].sockets) }
+	// update available sockets - TODO: move this to a more suitable 'update' function
+	for (group in socketed) {
+		removeInvalidSockets(group)
+		socketed[group].sockets = (~~equipped[group].sockets + ~~corruptsEquipped[group].sockets)
+	}
 }
 
 // calculateSkillAmounts - Updates skill levels
@@ -2225,8 +2243,19 @@ function socket(event, group) {
 	var index = 0;
 	for (let i = 0; i < socketed[group].items.length; i++) { if (socketed[group].items[i].name == "") { spaceFound = 1; index = i; } }
 	if (spaceFound == 1) {
-		// TODO: remove previous affixes, if being moved from another equipment item
 		var name = inv[0].onpickup.split('_')[0];
+		// Remove previous affixes, if being moved from another equipment item
+		var groups = ["helm", "armor", "weapon", "offhand"];
+		for (let g = 0; g < groups.length; g++) {
+			for (let i = 0; i < socketed[groups[g]].items.length; i++) {
+				if (inv[0].onpickup == socketed[groups[g]].items[i].id) {
+					for (affix in socketed[groups[g]].items[i]) { if (affix != "id") { character[affix] -= socketed[groups[g]].items[i][affix] } }
+					socketed[groups[g]].items[i] = {id:"",name:""}
+					socketed[groups[g]].socketsFilled -= 1
+				}
+			}
+		}
+		// Add affixes
 		for (let k = 0; k < socketables.length; k++) { if (socketables[k].name == name) {
 			socketed[group].items[index].id = inv[0].onpickup
 			for (affix in socketables[k]) {
@@ -2242,6 +2271,7 @@ function socket(event, group) {
 				}
 			}
 		} }
+		socketed[group].socketsFilled += 1
 		// update
 		updateEffectList()
 		calculateSkillAmounts()
@@ -2270,15 +2300,14 @@ function allowSocket(event, group) {
 	if (socketed[group].sockets > 0 && socketed[group].socketsFilled < socketed[group].sockets) {
 		var name = inv[0].onpickup.split('_')[0];
 		for (let k = 0; k < socketables.length; k++) {
-			if (socketables[k].name == name) { allow = 1 }
+			if (socketables[k].name == name) { if (socketed[group].socketsFilled < socketed[group].sockets) { allow = 1 } }
 		}
 	}
 	if (allow == 1) {
 		var spaceAvailable = 0;
-		for (let i = 0; i < socketed[group].sockets; i++) {
+		for (let i = 0; i < socketed[group].items.length; i++) {
 			if (socketed[group].items[i].name == "") { spaceAvailable = 1; }
 		}
-		// TODO: limit based on how many sockets are available
 		if (spaceAvailable == 1) { event.preventDefault(); }
 	}
 }
@@ -2296,7 +2325,6 @@ function dragSocketable(ev) {
 //	}
 }
 
-
 // trash - Handles item removal for socketables (gems, runes, jewels)
 // ---------------------------------
 function trashSocketable(event) {
@@ -2311,6 +2339,7 @@ function trashSocketable(event) {
 					//character[affix] -= socketed[groups[g]].items[i][affix]
 				}
 				socketed[groups[g]].items[i] = {id:"",name:""}
+				socketed[groups[g]].socketsFilled -= 1
 			}
 		}
 	}
@@ -2333,4 +2362,22 @@ function trashSocketable(event) {
 	if (selectedSkill[0] != " ­ ­ ­ ­ Skill 1") { checkSkill(selectedSkill[0], 1) }
 	if (selectedSkill[1] != " ­ ­ ­ ­ Skill 2") { checkSkill(selectedSkill[1], 2) }
 	document.getElementById("item_tooltip").innerHTML = ""
+}
+
+// removeInvalidSockets - Handles indirect removal/validation of socketables
+//	group: the item group which is socketed
+// ---------------------------------
+function removeInvalidSockets(group) {
+	// TODO: Not being called?
+	if (socketed[group].socketsFilled > socketed[group].sockets) {
+		var invalidSockets = socketed[group].socketsFilled - socketed[group].sockets
+		for (let i = socketed[group].items.length-1; i >= 0; i--) {
+			if (socketed[group].items[i].name != "" && invalidSockets > 0) {
+				for (affix in socketed[group].items[i]) { if (affix != "id") { character[affix] -= socketed[group].items[i][affix] } }
+				socketed[group].socketsFilled -= 1
+				socketed[group].items[i] = {id:"",name:""}
+				invalidSockets -= 1
+			}
+		}
+	}
 }

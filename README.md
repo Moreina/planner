@@ -35,23 +35,24 @@ Character Skill Planner for Diablo 2: Path of Diablo
 * mercenary selection
 * equipment selection (all unique/set/runeword items)
 * equipment corrupting
+* socketing
 * charm inventory
 * character validation
 
 ### Upcoming Plans:
-* item socketing
+* more validation for socketed items
+* item-base upgrading (for uniques/rares)
 * breakpoints
 * mercenary stats & validation
 * interface niceties
 
 ### Longterm Goals:
+* character saving/sharing
 * full GUI inventory/stash
 * custom item creation & editing
-* item-base upgrading (for uniques/rares)
 * item description tooltips
 * options for individual quests
 * option for strict character validation (prevent invalid character states instead of just making text red)
-* character saving/sharing
 * character importing
 * custom item-pool saving
 * monster stat calculations
