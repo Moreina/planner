@@ -1137,8 +1137,8 @@ function updatePrimaryStats() {
 	var phys_min = ((1+statBonus+(c.e_damage+c.damage_bonus+weapon_skillup)/100)*((c.level-1)*c.min_damage_per_level+c.base_damage_min))+c.damage_min;
 	var phys_max = ((1+statBonus+(c.e_damage+c.damage_bonus+weapon_skillup)/100)*((c.level-1)*c.max_damage_per_level+c.base_damage_max))+c.damage_max;
 	
-	var basic_min = Math.floor(wisp*(phys_min + c.fDamage_min + c.cDamage_min + c.lDamage_min) + c.mDamage_min);
-	var basic_max = Math.floor(wisp*(phys_max + c.fDamage_max + c.cDamage_max + c.lDamage_max) + c.mDamage_max + wisp*(c.pDamage_all+c.pDamage_max));
+	var basic_min = Math.floor(wisp*(phys_min + c.fDamage_min*(1+c.fDamage_skillup/100) + c.cDamage_min*(1+c.cDamage_skillup/100) + c.lDamage_min*(1+c.lDamage_skillup/100)) + c.mDamage_min);
+	var basic_max = Math.floor(wisp*(phys_max + c.fDamage_max*(1+c.fDamage_skillup/100) + c.cDamage_max*(1+c.cDamage_skillup/100) + c.lDamage_max*(1+c.lDamage_skillup/100)) + c.mDamage_max + wisp*(c.pDamage_all+c.pDamage_max));
 	if (basic_min > 0 || basic_max > 0) { document.getElementById("basic_attack").innerHTML = basic_min + "-" + basic_max }
 	else { document.getElementById("basic_attack").innerHTML = "" }
 
