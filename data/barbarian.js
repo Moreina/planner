@@ -11,7 +11,7 @@ var weapon_frames = {dagger:13, oneHand_sword:13, oneHand_axe:13, twoHand_sword:
 //	base frames: 7
 //	var fcr_bp = [0, 9, 20, 42, 86, 280]
 
-var character_barbarian = {class_name:"Barbarian", strength:30, dexterity:20, vitality:25, energy:10, life:55, mana:10, defense:5, ar:85, stamina:192, levelup_life:2, levelup_stamina:1, levelup_mana:1, ar_per_dexterity:5, defense_per_dexterity:0.25, life_per_vitality:4, stamina_per_vitality:1, mana_per_energy:1, starting_strength:30, starting_dexterity:20, starting_vitality:25, starting_energy:10, ar_const:20, skill_layout:"./images/barbarian.png",
+var character_barbarian = {class_name:"Barbarian", strength:30, dexterity:20, vitality:25, energy:10, life:55, mana:10, defense:5, ar:85, stamina:192, levelup_life:2, levelup_stamina:1, levelup_mana:1, ar_per_dexterity:5, defense_per_dexterity:0.25, life_per_vitality:4, stamina_per_vitality:1, mana_per_energy:1, starting_strength:30, starting_dexterity:20, starting_vitality:25, starting_energy:10, ar_const:20, skill_layout:"./images/barbarian.png", mana_regen:1.66,
 	
 	// getSkillData - gets skill info from the skills data table
 	//	skill: skill object for the skill in question

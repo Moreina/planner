@@ -11,7 +11,7 @@ var weapon_frames = {dagger:18, oneHand_sword:18, oneHand_axe:18, twoHand_sword:
 //	base frames: 11
 //	var fcr_bp = [0, 6, 13, 20, 32, 52, 86, 174, 600]
 
-var character_necromancer = {class_name:"Necromancer", strength:15, dexterity:25, vitality:15, energy:25, life:45, mana:25, defense:6, ar:80, stamina:179, levelup_life:2, levelup_stamina:1, levelup_mana:2, ar_per_dexterity:5, defense_per_dexterity:0.25, life_per_vitality:2, stamina_per_vitality:1, mana_per_energy:2, starting_strength:15, starting_dexterity:25, starting_vitality:15, starting_energy:25, ar_const:-10, skill_layout:"./images/necromancer.png",
+var character_necromancer = {class_name:"Necromancer", strength:15, dexterity:25, vitality:15, energy:25, life:45, mana:25, defense:6, ar:80, stamina:179, levelup_life:2, levelup_stamina:1, levelup_mana:2, ar_per_dexterity:5, defense_per_dexterity:0.25, life_per_vitality:2, stamina_per_vitality:1, mana_per_energy:2, starting_strength:15, starting_dexterity:25, starting_vitality:15, starting_energy:25, ar_const:-10, skill_layout:"./images/necromancer.png", mana_regen:1.66,
 	
 	// getSkillData - gets skill info from the skills data table
 	//	skill: skill object for the skill in question

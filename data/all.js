@@ -1168,6 +1168,10 @@ function updatePrimaryStats() {
 	document.getElementById("dexterity").innerHTML = Math.floor(dexTotal)
 	document.getElementById("vitality").innerHTML = Math.floor(vitTotal)
 	document.getElementById("energy").innerHTML = Math.floor(energyTotal)
+	document.getElementById("strength2").innerHTML = Math.floor(strTotal)
+	document.getElementById("dexterity2").innerHTML = Math.floor(dexTotal)
+	document.getElementById("vitality2").innerHTML = Math.floor(vitTotal)
+	document.getElementById("energy2").innerHTML = Math.floor(energyTotal)
 	if (c.running > 0) { document.getElementById("defense").innerHTML = "" }
 	else { document.getElementById("defense").innerHTML = def }
 	document.getElementById("ar").innerHTML = ar
@@ -1239,7 +1243,7 @@ function updateSecondaryStats() {
 	if (c.life_per_demon_kill > 0) { document.getElementById("life_per_kill").innerHTML = c.life_per_kill + " , " + c.life_per_demon_kill + " (demons)" } else { document.getElementById("life_per_kill").innerHTML = c.life_per_kill }
 	document.getElementById("mana_per_kill").innerHTML = c.mana_per_kill
 	document.getElementById("life_replenish").innerHTML = c.life_replenish
-	document.getElementById("mana_regen").innerHTML = c.mana_regen + c.mana_regen_skillup
+	document.getElementById("mana_regen").innerHTML = round(c.mana_regen + c.mana_regen_skillup)
 	
 	document.getElementById("damage_to_mana").innerHTML = c.damage_to_mana
 	if (c.running > 0) { document.getElementById("missile_defense").innerHTML = "" }
@@ -2217,17 +2221,18 @@ function socketableSelect(ev) {
 //	slot: equipment slot name
 // ---------------------------------
 function equipmentHover(event, slot) {
-	document.getElementById("equipment_tooltip").innerHTML = "selecting: " + slot
-	document.getElementById("equipment_tooltip").visibility = "visible"
-	document.getElementById("equipment_tooltip").style.display = "block"
+//	document.getElementById("item_tooltip").innerHTML = "selecting: " + slot
+//	document.getElementById("item_tooltip").style.color = "white"
+//	document.getElementById("item_tooltip").visibility = "visible"
+//	document.getElementById("item_tooltip").style.display = "block"
 }
 
 // equipmentOut - 
 // ---------------------------------
 function equipmentOut() {
-	document.getElementById("equipment_tooltip").innerHTML = ""
-	document.getElementById("equipment_tooltip").visibility = "hidden"
-	document.getElementById("equipment_tooltip").style.display = "none"
+//	document.getElementById("item_tooltip").innerHTML = ""
+//	document.getElementById("item_tooltip").visibility = "hidden"
+//	document.getElementById("item_tooltip").style.display = "none"
 }
 
 // socket - 
