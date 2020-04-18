@@ -373,6 +373,7 @@ function adjustCorruptionSockets(group) {
 //	val: name of corruption
 // ---------------------------------
 function corrupt(group, val) {
+	// TODO: Allow ethereal items to get one socket? (from Larzuk, not corruption)
 	for (old_affix in corruptsEquipped[group]) {
 		character[old_affix] -= corruptsEquipped[group][old_affix]
 		corruptsEquipped[group][old_affix] = unequipped[old_affix]
@@ -462,6 +463,8 @@ function equipMerc(type, val) {
 //	val: name of item
 // ---------------------------------
 function equip(group, val) {
+	var auraName = "";
+	var auraLevel = "";
 	//var selected = document.getElementById("dropdown_"+type).selectedIndex;	// consider using if unequipping weapon/offhand due to equipping a new incompatible item
 	var old_set_bonuses = "";
 	var old_set = "";
@@ -490,7 +493,7 @@ function equip(group, val) {
 		if (old_affix == "aura") {
 			removeAura(equipped[group][old_affix])
 		}
-		if (old_affix != "set_bonuses") { equipped[group][old_affix] = unequipped[old_affix] }
+		if (old_affix != "set_bonuses" && old_affix != "aura" && old_affix != "aura_lvl") { equipped[group][old_affix] = unequipped[old_affix] }
 	}
 	// remove set bonuses from previous item
 	if (old_set_bonuses != "") {
@@ -581,7 +584,9 @@ function equip(group, val) {
 				if (affix == "aura" || affix == "name" || affix == "type" || affix == "base" || affix == "only" || affix == "not" || affix == "rw") {
 					if (affix == "aura") {
 			//			equipped[group].aura_lvl = equipment[group][item].aura_lvl	// redundant?
-						addAura(equipment[group][item][affix], equipment[group][item].aura_lvl, group)
+						auraName = equipment[group][item][affix]
+						auraLevel = equipment[group][item].aura_lvl
+						//addAura(equipment[group][item][affix], equipment[group][item].aura_lvl, group)
 					}
 				} else {
 					var oskill_info = "";
@@ -654,21 +659,19 @@ function equip(group, val) {
 		
 	}
 	// update
-	if (group == val) { document.getElementById(("dropdown_"+group)).selectedIndex = 0 }
+	if (group == val) { document.getElementById(("dropdown_"+group)).selectedIndex = 0; }
 	
-	// display image for equipped item
-	if (group != "helm" && group != "armor" && group != "weapon" && group != "offhand") {
-		// TODO: Needs to use a separate UI space than socketables
-		var prefix = "./images/items/"+group;
-		if (group == "weapon") { prefix += ("/" + equipped[group].type) }
-		if (typeof(equipped[group].img) != 'undefined') { if (equipped[group].img != "") {
-			prefix += "/special/"
-			document.getElementById(group+"_image").src = (prefix + equipped[group].img + ".png")
-		}
-		// TODO: Use getItemImage()
-		else { document.getElementById(group+"_image").src = ("./images/skills/none.png") } }
-		else { document.getElementById(group+"_image").src = ("./images/skills/none.png") }
+	if (equipped[group].name != "none") {
+		var src = "";
+		var base = "";
+		if (typeof(equipped[group].img) != 'undefined') { src = equipped[group].img }
+		if (typeof(equipped[group].base) != 'undefined') { base = equipped[group].base }
+		document.getElementById(group+"_image").src = getItemImage(group,base,src)
+	} else {
+		document.getElementById(group+"_image").src = "./images/items/none.png"
 	}
+	
+	if (auraName != "" && auraLevel != "") { addAura(auraName, auraLevel, group); }		// TODO: Why does this break things if called earlier? (item image wasn't appearing)
 
 	calculateSkillAmounts()
 	updateEffectList()
@@ -1314,8 +1317,8 @@ function updateMisc() {
 	
 	// update available sockets - TODO: move this to a more suitable 'update' function
 	for (group in socketed) {
-		removeInvalidSockets(group)
 		socketed[group].sockets = (~~equipped[group].sockets + ~~corruptsEquipped[group].sockets)
+		removeInvalidSockets(group)
 	}
 }
 
@@ -2129,18 +2132,41 @@ function drop(ev,cell) {
 // ---------------------------------
 function trash(ev) {
 	var val = ev.target.id;
+	var name = val.split('_')[0];
 	var type = "charms"
 	for (old_affix in equipped[type][val]) {
 		character[old_affix] -= equipped[type][val][old_affix]
 		equipped[type][val][old_affix] = unequipped[old_affix]
 	}
-	for (s = 1; s <= inv[0].in.length; s++) {
+	for (let s = 1; s <= inv[0].in.length; s++) {
 		if (inv[0].in[s] == ev.target.id) {
 			inv[s].empty = 1;
 			inv[0].in[s] = "";
 		}
 	}
 	ev.target.remove();
+	
+	// find/remove duplicates
+	var dup = 0;
+	if (ev.ctrlKey) { dup = 10 }
+	if (dup > 0) {
+		for (let d = 0; d < inv[0].in.length; d++) {
+			if (name == inv[0].in[d].split('_')[0]) {
+				val = inv[0].in[d];
+				var size = equipped[type][val].type
+				for (old_affix in equipped[type][val]) {
+					character[old_affix] -= equipped[type][val][old_affix]
+					equipped[type][val][old_affix] = unequipped[old_affix]
+				}
+				inv[0].in[d] = "";
+				inv[d].empty = 1;
+				if (size == "large" || size == "grand") { inv[d+10].empty = 1; inv[0].in[d+10] = ""; }
+				if (size == "grand") { inv[d+20].empty = 1; inv[0].in[d+20] = ""; }
+				document.getElementById(val).remove()
+			}
+		}
+	}
+	
 	updateEffectList()
 	calculateSkillAmounts()
 	for (let s = 0; s < skills.length; s++) { modifyEffect(skills[s]) }
@@ -2149,62 +2175,64 @@ function trash(ev) {
 	if (selectedSkill[0] != " ­ ­ ­ ­ Skill 1") { checkSkill(selectedSkill[0], 1) }
 	if (selectedSkill[1] != " ­ ­ ­ ­ Skill 2") { checkSkill(selectedSkill[1], 2) }
 	document.getElementById("item_tooltip").innerHTML = ""
-	
-/* TODO: Make ctrl+click remove more copies of the removed charm
-	var dup = 0;
-	if (ev.ctrlKey) { dup = 10 }
-	if (dup > 0) {
-		for (let d = 0; d < dup; d++) {
-			addCharm(lastCharm)
-		}
-	}
-*/
 }
 
-// 
-// ---------------------------------
-//function itemDrag(ev, x, y) {
-/*	var cell = (y-1)*10+x
-	var id = inv[0].in[cell]
-	ev_new = document.getElementById(id)
-	drag(ev_new)
-*///	return;	
-//}
-
-// 
-// ---------------------------------
-//function itemRemove(ev, x, y) {
-/*	var cell = (y-1)*10+x
-	var id = inv[0].in[cell]
-	ev_new = document.getElementById(id)
-	trash(ev)
-	trash(ev_new)
-*///	return;
-//}
-
 // getItemImage - gets the image filename for the specified item
-//	name: name of the item
-//	special: number (0 or 1) corresponding to whether the item is special (unique, set)
-//	base: item base
+//	group: item's group
+//	base_name: item base
+//	source: specified file name, if it has one
 // return: filename of item's image
 // ---------------------------------
-function getItemImage(name, special, base_name) {
-	var filename = "";
-	var base = base_name.split(' ').join('_'); base = base.split('-').join('_'); base = base.split("'s").join("s"); base = base.split("s'").join("s");
-	if (special == 1) {
-		filename = name
-	} else {
-		if (typeof(bases[base].downgrade) != 'undefined') {
-			filename = bases[base].downgrade
-			base = bases[base].downgrade.split(' ').join('_'); base = base.split('-').join('_'); base = base.split("'s").join("s"); base = base.split("s'").join("s");
-			if (typeof(bases[base].downgrade) != 'undefined') {
-				filename = bases[base].downgrade
-			}
+function getItemImage(group, base_name, source) {
+	var prefix = "./images/items/"
+	var filename = source
+	var base = base_name.split(' ').join('_'); base = base.split('-').join('_'); base = base.split("s'").join("s"); base = base.split("'s").join("s");
+	if (base_name != "") {
+		prefix += (bases[base].group + "/")
+		if (bases[base].group == "weapon") {
+			var type = equipped[group].type;
+			if (type == "hammer" || type == "club") { type = "mace" }
+			prefix += (type + "/")
+		}
+		if (source != "") {
+			prefix += "special/"
 		} else {
-			filename = base_name
+			if (base_name == "Tiara" || base_name == "Diadem" || base_name == "Bolts") {
+				filename = base_name
+			} else {
+				if (typeof(bases[base].downgrade) != 'undefined') {
+					filename = bases[base].downgrade
+					base = bases[base].downgrade.split(' ').join('_'); base = base.split('-').join('_'); base = base.split("'s").join("s"); base = base.split("s'").join("s");
+					if (typeof(bases[base].downgrade) != 'undefined') {
+						filename = bases[base].downgrade
+					}
+				} else {
+					filename = base_name
+				}
+			}
+		}
+	} else {
+		// quest items, unique quiver/jewelry
+		if (source != "") {
+			prefix += (group + "/")
+			if (group == "weapon") {
+				var type = equipped[group].type;
+				if (type == "hammer" || type == "club") { type = "mace" }
+				prefix += (type + "/special/")
+			} else {
+				prefix += "special/"
+			}
+		// jewelry, quivers (arrows)
+		} else {
+			if (group == "amulet" || group == "ring1" || group == "ring2") {
+				if (group == "amulet") { prefix += "amulet/"; filename = "Amulet_" + Math.ceil(Math.random() * 3); }
+				else { prefix += "ring/"; filename = "Ring_" + Math.ceil(Math.random() * 5); }
+			} else if (group == "offhand") {
+				prefix += "offhand/"; filename = "Arrows";
+			}
 		}
 	}
-	filename = filename.split(' ').join('_') + ".png"
+	filename = prefix + filename.split(' ').join('_') + ".png"
 	return filename
 }
 
@@ -2218,21 +2246,39 @@ function socketableSelect(ev) {
 }
 
 // equipmentHover - 
-//	slot: equipment slot name
+//	group: equipment group name
 // ---------------------------------
-function equipmentHover(event, slot) {
-//	document.getElementById("item_tooltip").innerHTML = "selecting: " + slot
-//	document.getElementById("item_tooltip").style.color = "white"
-//	document.getElementById("item_tooltip").visibility = "visible"
-//	document.getElementById("item_tooltip").style.display = "block"
+function equipmentHover(event, group) {
+	var selected = equipped[group].name;
+	
+	// show sockets & corruptions
+	if (group == "helm" || group == "armor" || (group == "weapon" && typeof(equipped[group].base) != 'undefined') || (group == "offhand" && equipped[group].type != "quiver")) {
+		var sockets = ~~socketed[group].sockets + ~~equipped[group].sockets;
+		var base = equipped[group].base.split(' ').join('_'); base = base.split('-').join('_'); base = base.split("s'").join("s"); base = base.split("'s").join("s");
+		sockets = Math.min(sockets,bases[base].max_sockets)
+		if (socketed[group].sockets > 0 || equipped[group].sockets > 0) { selected += " ["+sockets+"]" }
+	}
+	if (corruptsEquipped[group].name != "none" && corruptsEquipped[group].name !="+ Sockets") { selected += (" "+corruptsEquipped[group].name) }
+	if (selected != "none") { document.getElementById("item_tooltip").innerHTML = selected }
+	
+	var textColor = "white";
+	if (equipped[group].rarity == "set") { textColor = "#00f000" }
+	else if (equipped[group].rarity == "magic") { textColor = "#8080ff" }
+	else if (equipped[group].rarity == "rare") { textColor = "yellow" }
+	else if (equipped[group].rarity == "crafted") { textColor = "orange" }
+	else if (equipped[group].rw == "1") { textColor = "#b2a992" }
+	else if (equipped[group].rarity != "common") { textColor = "#928068" }
+	document.getElementById("item_tooltip").style.color = textColor
+	document.getElementById("item_tooltip").visibility = "visible"
+	document.getElementById("item_tooltip").style.display = "block"
 }
 
 // equipmentOut - 
 // ---------------------------------
 function equipmentOut() {
-//	document.getElementById("item_tooltip").innerHTML = ""
-//	document.getElementById("item_tooltip").visibility = "hidden"
-//	document.getElementById("item_tooltip").style.display = "none"
+	document.getElementById("item_tooltip").innerHTML = ""
+	document.getElementById("item_tooltip").visibility = "hidden"
+	document.getElementById("item_tooltip").style.display = "none"
 }
 
 // socket - 
@@ -2241,7 +2287,9 @@ function equipmentOut() {
 function socket(event, group) {
 	event.preventDefault();
 	var data = event.dataTransfer.getData("text");
-	event.target.appendChild(document.getElementById(data));
+	// switches to the correct target if the item image is in the way
+	if (event.target.id != group) { document.getElementById(group).appendChild(document.getElementById(data)); }
+	else { event.target.appendChild(document.getElementById(data)); }
 	
 	// equipment destination
 	var spaceFound = 0;
@@ -2334,6 +2382,7 @@ function dragSocketable(ev) {
 // ---------------------------------
 function trashSocketable(event) {
 	var val = event.target.id;
+	var nameVal = val.split('_')[0];
 	// removed from equipment
 	var groups = ["helm", "armor", "weapon", "offhand"];
 	for (let g = 0; g < groups.length; g++) {
@@ -2358,6 +2407,20 @@ function trashSocketable(event) {
 	
 	event.target.remove();
 	
+	// find/remove duplicates
+	var dup = 0;
+	if (event.ctrlKey) { dup = 10 }
+	if (dup > 0) {
+		for (let d = 0; d < inv[0].in.length; d++) {
+			if (nameVal == inv[0].in[d].split('_')[0]) {
+				val = inv[0].in[d];
+				inv[0].in[d] = "";
+				inv[d].empty = 1;
+				document.getElementById(val).remove()
+			}
+		}
+	}
+	
 	// update
 	updateEffectList()
 	calculateSkillAmounts()
@@ -2373,16 +2436,17 @@ function trashSocketable(event) {
 //	group: the item group which is socketed
 // ---------------------------------
 function removeInvalidSockets(group) {
-	// TODO: Not being called?
-	if (socketed[group].socketsFilled > socketed[group].sockets) {
-		var invalidSockets = socketed[group].socketsFilled - socketed[group].sockets
+//	if (socketed[group].socketsFilled > socketed[group].sockets) {
+		var invalidSockets = Math.max(0, socketed[group].socketsFilled - socketed[group].sockets)
+		if (socketed[group].sockets == 0) { invalidSockets = 6 }
 		for (let i = socketed[group].items.length-1; i >= 0; i--) {
 			if (socketed[group].items[i].name != "" && invalidSockets > 0) {
 				for (affix in socketed[group].items[i]) { if (affix != "id") { character[affix] -= socketed[group].items[i][affix] } }
+				document.getElementById(socketed[group].items[i].id).remove();
 				socketed[group].socketsFilled -= 1
 				socketed[group].items[i] = {id:"",name:""}
 				invalidSockets -= 1
 			}
 		}
-	}
+//	}
 }

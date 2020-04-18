@@ -9,7 +9,6 @@ Current Known Bugs:
 * Charms can't be moved into a new space below the original space if they overlap eachother
 * Shift + Right Click in Firefox doesn't work (and still opens the default menu)
 * Auras may override eachother if multiples of the same one are added
-* Buffs from oskills aren't added (eg Battle Command from CtA, Enflame from Lava Gout)
 
 To report a bug - edit the planner wiki, post in the reddit thread, or send a direct message.
 
@@ -20,7 +19,7 @@ https://github.com/Moreina/planner#planner
 
 Character Skill Planner for Diablo 2: Path of Diablo
 
-### [Download](https://github.com/Moreina/planner/archive/v1.18.zip)
+### [Download](https://github.com/Moreina/planner/archive/v1.19.zip)
 
 ### Features So Far:
 * all skill info up to level 60
@@ -40,8 +39,8 @@ Character Skill Planner for Diablo 2: Path of Diablo
 * character validation
 
 ### Upcoming Plans:
-* more validation for socketed items
 * item-base upgrading (for uniques/rares)
+* o-skill buffs
 * breakpoints
 * mercenary stats & validation
 * interface niceties
