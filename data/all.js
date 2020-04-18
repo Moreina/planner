@@ -2184,7 +2184,6 @@ function trash(ev) {
 // return: filename of item's image
 // ---------------------------------
 function getItemImage(group, base_name, source) {
-	document.getElementById("extra").innerHTML = group+" "+base_name+" "+source
 	var prefix = "./images/items/"
 	var filename = source
 	var base = base_name.split(' ').join('_'); base = base.split('-').join('_'); base = base.split("s'").join("s"); base = base.split("'s").join("s");
