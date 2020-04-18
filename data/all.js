@@ -918,7 +918,7 @@ function addSocketable(val) {
 	val = val + append
 	
 	var socketable = 'socketable';
-	var itemHTML = '<img style="width: 29; height: 29; pointer-events: auto;" id="' + val + '" src="' + itemImage + '" draggable="true" ondragstart="dragSocketable(event)" width="29" height="29" oncontextmenu="trashSocketable(event)" onmouseover="itemHover(event, this.value)" onmouseout="itemOut()" onclick="socketableSelect(event)">';
+	var itemHTML = '<img style="width: 28; height: 28; pointer-events: auto; z-index:5;" id="' + val + '" src="' + itemImage + '" draggable="true" ondragstart="dragSocketable(event)" width="28" height="28" oncontextmenu="trashSocketable(event)" onmouseover="itemHover(event, this.value)" onmouseout="itemOut()" onclick="socketableSelect(event)">';
 	var insertion = "";
 	var space_found = 0;
 	var empty = 1;
@@ -2134,6 +2134,7 @@ function trash(ev) {
 	var val = ev.target.id;
 	var name = val.split('_')[0];
 	var type = "charms"
+	if (name == "+1 (each) skill") { for (let i = 0; i < skills.length; i++) { if (skills[i].level == 0 && skills[i].force_levels <= 1) { disableEffect(i) } } }
 	for (old_affix in equipped[type][val]) {
 		character[old_affix] -= equipped[type][val][old_affix]
 		equipped[type][val][old_affix] = unequipped[old_affix]
@@ -2262,7 +2263,7 @@ function equipmentHover(event, group) {
 		if (socketed[group].sockets > 0 || equipped[group].sockets > 0) { selected += " ["+sockets+"]" }
 	}
 	if (corruptsEquipped[group].name != "none" && corruptsEquipped[group].name !="+ Sockets") { selected += (" "+corruptsEquipped[group].name) }
-	if (selected != "none") { document.getElementById("item_tooltip").innerHTML = selected }
+	if (selected != "none") { document.getElementById("item_tooltip").innerHTML = selected } else { document.getElementById("item_tooltip").innerHTML = "" }
 	
 	var textColor = "white";
 	if (equipped[group].rarity == "set") { textColor = "#00f000" }
