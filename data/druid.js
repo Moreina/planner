@@ -139,7 +139,7 @@ var character_druid = {class_name:"Druid", strength:15, dexterity:20, vitality:2
 		else if (skill.name == "Tornado") { 		attack = 0; spell = 1; damage_min = character.getSkillData(skill, lvl, 0); damage_max = character.getSkillData(skill, lvl, 1); }
 		else if (skill.name == "Armageddon") {		attack = 0; spell = 1; damage_min = character.getSkillData(skill, lvl, 1); damage_max = character.getSkillData(skill, lvl, 2); fDamage_min = character.getSkillData(skill, lvl, 3); fDamage_max = character.getSkillData(skill, lvl, 4); }
 		else if (skill.name == "Hurricane") {		attack = 0; spell = 1; cDamage_min = character.getSkillData(skill, lvl, 1); cDamage_max = character.getSkillData(skill, lvl, 2); }
-		else if (skill.name == "Feral Rage") {		attack = 1; spell = 0; ar_bonus = character.getSkillData(skill, lvl, 5); damage_bonus = character.getSkillData(skill, lvl, 4); }
+		else if (skill.name == "Feral Rage") {		attack = 1; spell = 0; ar_bonus = character.getSkillData(skill, lvl, 5); damage_bonus = character.getSkillData(skill, lvl, 4); }	// TODO: check damage_bonus? extra levels seem to hardly matter
 		else if (skill.name == "Maul") { 		attack = 1; spell = 0; ar_bonus = character.getSkillData(skill, lvl, 3); damage_bonus = character.getSkillData(skill, lvl, 2); }
 		else if (skill.name == "Rabies") { 		attack = 1; spell = 0; ar_bonus = character.getSkillData(skill, lvl, 0); pDamage_min = character.getSkillData(skill, lvl, 1); pDamage_max = character.getSkillData(skill, lvl, 2); pDamage_duration = 4; }
 		else if (skill.name == "Fire Claws") {		attack = 1; spell = 0; ar_bonus = character.getSkillData(skill, lvl, 2); fDamage_min = character.getSkillData(skill, lvl, 0); fDamage_max = character.getSkillData(skill, lvl, 1); }

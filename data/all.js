@@ -2184,15 +2184,19 @@ function trash(ev) {
 // return: filename of item's image
 // ---------------------------------
 function getItemImage(group, base_name, source) {
+	document.getElementById("extra").innerHTML = group+" "+base_name+" "+source
 	var prefix = "./images/items/"
 	var filename = source
 	var base = base_name.split(' ').join('_'); base = base.split('-').join('_'); base = base.split("s'").join("s"); base = base.split("'s").join("s");
 	if (base_name != "") {
-		prefix += (bases[base].group + "/")
-		if (bases[base].group == "weapon") {
-			var type = equipped[group].type;
-			if (type == "hammer" || type == "club") { type = "mace" }
-			prefix += (type + "/")
+		if (base_name == "Bolts") { prefix += group + "/" }
+		else {
+			prefix += (bases[base].group + "/")
+			if (bases[base].group == "weapon") {
+				var type = equipped[group].type;
+				if (type == "hammer" || type == "club") { type = "mace" }
+				prefix += (type + "/")
+			}
 		}
 		if (source != "") {
 			prefix += "special/"
@@ -2253,7 +2257,7 @@ function equipmentHover(event, group) {
 	
 	// show sockets & corruptions
 	if (group == "helm" || group == "armor" || (group == "weapon" && typeof(equipped[group].base) != 'undefined') || (group == "offhand" && equipped[group].type != "quiver")) {
-		var sockets = ~~socketed[group].sockets + ~~equipped[group].sockets;
+		var sockets = ~~corruptsEquipped[group].sockets + ~~equipped[group].sockets;
 		var base = equipped[group].base.split(' ').join('_'); base = base.split('-').join('_'); base = base.split("s'").join("s"); base = base.split("'s").join("s");
 		sockets = Math.min(sockets,bases[base].max_sockets)
 		if (socketed[group].sockets > 0 || equipped[group].sockets > 0) { selected += " ["+sockets+"]" }
