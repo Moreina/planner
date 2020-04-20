@@ -141,8 +141,8 @@ var character_sorceress = {class_name:"Sorceress", strength:10, dexterity:25, vi
 		if (attack == 0) { phys_min = 0; phys_max = 0; ele_min = 0; ele_max = 0; mag_min = 0; mag_max = 0; }
 		ele_min += Math.floor(fDamage_min + cDamage_min + lDamage_min);
 		ele_max += Math.floor(fDamage_max + cDamage_max + lDamage_max + pDamage_max);
-		phys_min = Math.floor((phys_min*weapon_damage/100 + damage_min) * 1+damage_bonus/100);
-		phys_max = Math.floor((phys_max*weapon_damage/100 + damage_max) * 1+damage_bonus/100);
+		phys_min = Math.floor((phys_min*weapon_damage/100 + damage_min) * (1+damage_bonus/100));
+		phys_max = Math.floor((phys_max*weapon_damage/100 + damage_max) * (1+damage_bonus/100));
 		if (spell == 0) { skillMin = Math.floor(mag_min+mDamage_min+ele_min+phys_min); skillMax = Math.floor(mag_max+mDamage_max+ele_max+phys_max); skillAr = Math.floor(ar*(1+ar_bonus/100));
 		} else if (spell == 1) { skillMin = Math.floor(mag_min+mDamage_min+ele_min+phys_min); skillMax = Math.floor(mag_max+mDamage_max+ele_max+phys_max); skillAr = "";
 		} else if (spell == 2) { skillMin = ""; skillMax = ""; skillAr = ""; }

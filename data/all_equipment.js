@@ -290,7 +290,7 @@ var equipment = {
 {set_Sigon:1, name:"Sigon's Visor", req_level:6, defense:25, mana:30, base:"Great Helm", rarity:"set", set_bonuses:["set_Sigon",{},{ar_per_level:8},{},{},{},{}], img:"Sigon's_Visor"},
 {set_Infernal:1, name:"Infernal Cranium", req_level:5, damage_to_mana:20, all_res:10, base:"Cap", rarity:"set", set_bonuses:["set_Infernal",{},{defense_per_level:2},{}], img:"Infernal_Cranium"},
 {set_Berserker:1, name:"Berserker's Headgear", req_level:3, defense:15, fRes:25, base:"Helm", rarity:"set", set_bonuses:["set_Berserker",{},{ar_per_level:8},{}], img:"Berserker's_Headgear"},
-{not:["Rogue Scout","Desert Guard","Iron Wolf","Barb (merc)"], rarity:"rare", name:"Vanguard's Diadem", req_level:64, frw:30, fcr:20, strength:30, all_res:20, damage_bonus:30, skills_amazon:2, skills_assassin:2, skills_barbarian:2, skills_druid:2, skills_necromancer:2, skills_paladin:2, skills_sorceress:2, base:"Diadem"},	// check level requirement of affixes?
+{not:["Rogue Scout","Desert Guard","Iron Wolf","Barb (merc)"], rarity:"rare", name:"Vanguard's Diadem", req_level:64, frw:30, fcr:20, strength:30, all_res:20, pRes:40, skills_amazon:2, skills_assassin:2, skills_barbarian:2, skills_druid:2, skills_necromancer:2, skills_paladin:2, skills_sorceress:2, base:"Diadem"},	// check level requirement of affixes?
 {only:"assassin", rarity:"crafted", name:"Psychic Caster Demonhead", req_level:55, mana_regen:10, mana:20, mana_leech:4, skills_shadow:2, mana_per_level:0.75, life:60, e_def:200, fhr:10, ar_bonus:5, light_radius:5, base:"Demonhead"},
 {only:"assassin", rarity:"crafted", name:"Sensei's Blood Armet", req_level:51, dstrike:10, life:80, life_leech:4, skills_martial:2, ar_bonus_per_level:1, e_def:200, fhr:10, ar_bonus:5, light_radius:5, base:"Armet"},
 {only:"barbarian", rarity:"crafted", name:"Veteran's Blood Armet", req_level:51, dstrike:10, life:80, life_leech:4, skills_combat_barbarian:2, ar_bonus_per_level:1, e_def:200, fhr:10, ar_bonus:5, light_radius:5, base:"Armet"},
@@ -949,6 +949,8 @@ var equipment = {
 {name:"Demon Machine", req_level:49, e_damage:123, damage_max:66, ar:632, pierce:66, defense:321, mana:36, twoHanded:1, type:"crossbow", base:"Chu-Ko-Nu", img:"Demon_Machine"},	// level 6 Explosive Bolt
 {name:"Hellrack", req_level:76, e_damage:230, ar_bonus:150, fDamage_min:63, fDamage_max:324, cDamage_min:63, cDamage_max:324, lDamage_min:63, lDamage_max:324, ias:20, sockets:2, twoHanded:1, type:"crossbow", base:"Colossus Crossbow", img:"Hellcast"},	// level 18 Immolation Arrow (150 charges)
 {name:"Gut Siphon", req_level:71, e_damage:220, pierce:33, life_leech:18, owounds:33, slows_target:25, twoHanded:1, type:"crossbow", base:"Demon Crossbow", img:"Gut_Siphon"},
+
+{rarity:"rare", name:"Heavenly Blade", req_level:56, e_damage:450, ar:250, ar_per_level:16.5, max_damage_per_level:0.5, ias:40, req:-30, type:"sword", base:"Phase Blade"},	// 10% ctc level 1 Amplify Damage on Striking
 	],
     offhand: [
 {name:"Offhand"},

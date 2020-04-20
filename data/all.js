@@ -330,7 +330,13 @@ function changeLevel(input) {
 		character.mana += character.levelup_mana*levels
 	}
 	updateAll()
+	updateEffectList()
+	calculateSkillAmounts()
+	//for (let s = 0; s < skills.length; s++) { modifyEffect(skills[s]) }
 	updateStats()
+	updateSkills()
+	if (selectedSkill[0] != " ­ ­ ­ ­ Skill 1") { checkSkill(selectedSkill[0], 1) }
+	if (selectedSkill[1] != " ­ ­ ­ ­ Skill 2") { checkSkill(selectedSkill[1], 2) }
 }
 
 // reloadOffhandCorruptions - reloads corruption options for offhands (when the selected type changes)
@@ -680,6 +686,7 @@ function equip(group, val) {
 	updateSkills()
 	if (selectedSkill[0] != " ­ ­ ­ ­ Skill 1") { checkSkill(selectedSkill[0], 1) }
 	if (selectedSkill[1] != " ­ ­ ­ ­ Skill 2") { checkSkill(selectedSkill[1], 2) }
+	//for (let s = 0; s < skills.length; s++) { modifyEffect(skills[s]) }
 }
 
 // addAura - Adds an aura of the specified level to the character
@@ -844,7 +851,7 @@ function addCharm(val) {
 	}
 	if (allow == 1) {
 		if (val != "Annihilus" && val != "Hellfire Torch" && val != "Gheed's Fortune") {
-			var append = "" + Math.floor((Math.random() * 999) + 1);	// generate "unique" ID for charm
+			var append = "" + Math.floor((Math.random() * 999999) + 1);	// generate "unique" ID for charm
 			val = val + "_" + append
 		}
 		if (nameVal == "Annihilus") { charmImage = charm_img.prefix+"charm1u.png"; }
@@ -915,7 +922,7 @@ function addSocketable(val) {
 	else if (item.name == "Standard of Heroes") { itemImage = prefix + "Standard of Heroes.png" }
 	else { itemImage = prefix + "debug_plus.png" }
 	
-	var append = "_" + Math.floor((Math.random() * 999) + 1);	// generate "unique" ID for item
+	var append = "_" + Math.floor((Math.random() * 999999) + 1);	// generate "unique" ID for item
 	val = val + append
 	
 	var socketable = 'socketable';
@@ -953,8 +960,14 @@ function addMisc(val) {
 		if (val == non_items[m].name) {
 			if (typeof(effects[non_items[m].effect]) == 'undefined') { effects[non_items[m].effect] = {} }
 			initiateMiscEffect(non_items[m].effect, m)
+			// update
+			updateEffectList()
 			calculateSkillAmounts()
+			//for (let s = 0; s < skills.length; s++) { modifyEffect(skills[s]) }
 			updateStats()
+			updateSkills()
+			if (selectedSkill[0] != " ­ ­ ­ ­ Skill 1") { checkSkill(selectedSkill[0], 1) }
+			if (selectedSkill[1] != " ­ ­ ­ ­ Skill 2") { checkSkill(selectedSkill[1], 2) }
 		}
 	}
 }
@@ -998,8 +1011,14 @@ function removeMiscEffect(name, i) {
 			character[affix] -= effects[name][affix]
 			effects[name][affix] = 0
 		}
+		// update
+		updateEffectList()
 		calculateSkillAmounts()
+		//for (let s = 0; s < skills.length; s++) { modifyEffect(skills[s]) }
 		updateStats()
+		updateSkills()
+		if (selectedSkill[0] != " ­ ­ ­ ­ Skill 1") { checkSkill(selectedSkill[0], 1) }
+		if (selectedSkill[1] != " ­ ­ ­ ­ Skill 2") { checkSkill(selectedSkill[1], 2) }
 	}
 }
 
@@ -1026,8 +1045,14 @@ function toggleMiscEffect(name, i) {
 		effects[name]["enabled"] = 1
 		document.getElementById(name).src = "./images/misc/"+name+".gif"
 	}
+	// update
+	updateEffectList()
 	calculateSkillAmounts()
+	//for (let s = 0; s < skills.length; s++) { modifyEffect(skills[s]) }
 	updateStats()
+	updateSkills()
+	if (selectedSkill[0] != " ­ ­ ­ ­ Skill 1") { checkSkill(selectedSkill[0], 1) }
+	if (selectedSkill[1] != " ­ ­ ­ ­ Skill 2") { checkSkill(selectedSkill[1], 2) }
 }
 
 // resetMisc - Removes all miscellaneous effects
@@ -1553,12 +1578,13 @@ function disableEffect(s) {
 		effects[eff]["enabled"] = 0
 		document.getElementById(eff).src = "./images/skills/"+character.class_name.toLowerCase()+"/dark/"+skills[s].name+" dark.png";
 		removeEffect(effects[eff])
-	//	if (document.getElementById(eff) != null) { document.getElementById(eff).remove(); }
+		// update
+		updateEffectList()
 		calculateSkillAmounts()
+		updateStats()
 		updateSkills()
 		if (selectedSkill[0] != " ­ ­ ­ ­ Skill 1") { checkSkill(selectedSkill[0], 1) }
 		if (selectedSkill[1] != " ­ ­ ­ ­ Skill 2") { checkSkill(selectedSkill[1], 2) }
-		updateStats()
 	}
 	}
 }
@@ -1573,11 +1599,13 @@ function enableEffect(s) {
 		effects[eff]["enabled"] = 1
 		document.getElementById(eff).src = "./images/skills/"+character.class_name.toLowerCase()+"/"+skills[s].name+".png";	
 		addEffect(effects[eff])
+		// update
+		updateEffectList()
 		calculateSkillAmounts()
+		updateStats()
 		updateSkills()
 		if (selectedSkill[0] != " ­ ­ ­ ­ Skill 1") { checkSkill(selectedSkill[0], 1) }
 		if (selectedSkill[1] != " ­ ­ ­ ­ Skill 2") { checkSkill(selectedSkill[1], 2) }
-		updateStats()
 	}
 	}
 }
@@ -1677,8 +1705,12 @@ function addStat(event, stat) {
 		else if (stat == "btn_vitality") {	character.vitality += points;	character.vitality_added += points; }
 		else if (stat == "btn_energy") {	character.energy += points;	character.energy_added += points; }
 		character.statpoints -= points
-		updatePrimaryStats()
-		updateMisc()
+		// update
+		updateEffectList()
+		calculateSkillAmounts()
+		//for (let s = 0; s < skills.length; s++) { modifyEffect(skills[s]) }
+		updateStats()
+		updateSkills()
 		if (selectedSkill[0] != " ­ ­ ­ ­ Skill 1") { checkSkill(selectedSkill[0], 1) }
 		if (selectedSkill[1] != " ­ ­ ­ ­ Skill 2") { checkSkill(selectedSkill[1], 2) }
 	}
@@ -1709,8 +1741,12 @@ function removeStat(event, stat) {
 		character.energy_added -= points
 	} else { points = 0 }
 	character.statpoints += points
-	updatePrimaryStats()
-	updateMisc()
+	// update
+	updateEffectList()
+	calculateSkillAmounts()
+	//for (let s = 0; s < skills.length; s++) { modifyEffect(skills[s]) }
+	updateStats()
+	updateSkills()
 	if (selectedSkill[0] != " ­ ­ ­ ­ Skill 1") { checkSkill(selectedSkill[0], 1) }
 	if (selectedSkill[1] != " ­ ­ ­ ­ Skill 2") { checkSkill(selectedSkill[1], 2) }
 }
@@ -1980,7 +2016,7 @@ function checkSkill(skillName, num) {
 		else if (weaponType == "claw") { weapon_skillup = c.claw_skillup[0]; c.ar_skillup = c.claw_skillup[1]; c.cstrike_skillup = c.claw_skillup[2]; }
 		else { weapon_skillup = 0; c.ar_skillup = 0; c.cstrike_skillup = 0; c.pierce_skillup = 0; }
 	}
-	var ar = Math.floor((((dexTotal - 7) * 5 + c.ar + (c.level-1)*c.ar_per_level + c.ar_const)/2) * (1+(c.ar_skillup + c.ar_bonus + c.level*c.ar_bonus_per_level)/100) * (1+c.ar_shrine_bonus/100));
+	var ar = ((dexTotal - 7) * 5 + c.ar + c.level*c.ar_per_level + c.ar_const) * (1+(c.ar_skillup + c.ar_bonus + c.level*c.ar_bonus_per_level)/100) * (1+c.ar_shrine_bonus/100);
 	var wisp = 1+~~Math.round(c.wisp/20,0)/10
 	var phys_min = Math.floor(wisp*(((1+statBonus+(c.e_damage+c.damage_bonus+weapon_skillup)/100)*((c.level-1)*c.min_damage_per_level+c.base_damage_min))+c.damage_min));
 	var phys_max = Math.floor(wisp*(((1+statBonus+(c.e_damage+c.damage_bonus+weapon_skillup)/100)*((c.level-1)*c.max_damage_per_level+c.base_damage_max))+c.damage_max));
@@ -2107,6 +2143,7 @@ function allowDrop(ev, cell, y) {
 			var val = inv[0].onpickup;
 			var groups = ["helm", "armor", "weapon", "offhand"];
 			for (let g = 0; g < groups.length; g++) { for (let i = 0; i < socketed[groups[g]].items.length; i++) { if (val == socketed[groups[g]].items[i].id) { inEquipment = 1; } } }
+			for (group in equipped) { for (item in equipped[group]) { if (val == equipped[group][item].name) { inEquipment == 1 } } }
 			if (inEquipment == 0) { ev.preventDefault(); }
 		}
 	}
@@ -2155,7 +2192,7 @@ function trash(ev) {
 	var val = ev.target.id;
 	var name = val.split('_')[0];
 	var type = "charms"
-	if (name == "+1 (each) skill") { for (let i = 0; i < skills.length; i++) { if (skills[i].level == 0 && skills[i].force_levels <= 1) { disableEffect(i) } } }
+	if (name == "+1 (each) skill") { for (let i = 0; i < skills.length; i++) { if (skills[i].level == 0 /*&& skills[i].force_levels <= 1*/) { disableEffect(i) } } }
 	for (old_affix in equipped[type][val]) {
 		character[old_affix] -= equipped[type][val][old_affix]
 		equipped[type][val][old_affix] = unequipped[old_affix]
@@ -2170,10 +2207,11 @@ function trash(ev) {
 	
 	// find/remove duplicates
 	var dup = 0;
-	if (ev.ctrlKey) { dup = 10 }
+	if (ev.shiftKey) { dup = 9 }
+	if (ev.ctrlKey) { dup = 39 }
 	if (dup > 0) {
 		for (let d = 0; d < inv[0].in.length; d++) {
-			if (name == inv[0].in[d].split('_')[0]) {
+			if (dup > 0 && name == inv[0].in[d].split('_')[0]) {
 				val = inv[0].in[d];
 				var size = equipped[type][val].type
 				for (old_affix in equipped[type][val]) {
@@ -2185,6 +2223,7 @@ function trash(ev) {
 				if (size == "large" || size == "grand") { inv[d+10].empty = 1; inv[0].in[d+10] = ""; }
 				if (size == "grand") { inv[d+20].empty = 1; inv[0].in[d+20] = ""; }
 				document.getElementById(val).remove()
+				dup--
 			}
 		}
 	}
@@ -2434,14 +2473,16 @@ function trashSocketable(event) {
 	
 	// find/remove duplicates
 	var dup = 0;
-	if (event.ctrlKey) { dup = 10 }
+	if (event.shiftKey) { dup = 9 }
+	if (event.ctrlKey) { dup = 39 }
 	if (dup > 0) {
 		for (let d = 0; d < inv[0].in.length; d++) {
-			if (nameVal == inv[0].in[d].split('_')[0]) {
+			if (dup > 0 && nameVal == inv[0].in[d].split('_')[0]) {
 				val = inv[0].in[d];
 				inv[0].in[d] = "";
 				inv[d].empty = 1;
 				document.getElementById(val).remove()
+				dup--
 			}
 		}
 	}
