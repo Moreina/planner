@@ -15,7 +15,7 @@ var unequipped = {name:"none", strength:0, dexterity:0, vitality:0, energy:0, li
 /* other, boolean	*/	itd:0, pmh:0, cbf:0, peace:0, knockback:0, half_freeze_duration:0, melee_splash:0, glow:0, 
 /* item qualities	*/	indestructible:0, req:0, autorepair:0, autoreplenish:0, stack_size:0, sockets:0, e_def:0, group:"", tier:0, type:"", def_low:0, def_high:0, durability:0, max_sockets:0, upgrade:"", downgrade:"", 
 /* sets			*/	set_IK:0, set_Mav:0, set_Gris:0, set_TO:0, set_TR:0, set_Nat:0, set_Ald:0, set_Disciple:0, set_Angelic:0, set_Cathan:0, set_Cow:0, set_Brethren:0, set_Hwanin:0, set_Naj:0, set_Orphan:0, set_Sander:0, set_Sazabi:0, set_Arcanna:0, set_Arctic:0, set_Berserker:0, set_Civerb:0, set_Cleglaw:0, set_Death:0, set_Hsarus:0, set_Infernal:0, set_Iratha:0, set_Isenhart:0, set_Milabrega:0, set_Sigon:0, set_Tancred:0, set_Vidala:0,
-/* misc			*/	ar_shrine_bonus:0, bonus_corpse_explosion:0, skill_random_sorc:0, thorns_reflect:0, curse_length_reduced:0, enemy_defense:0, slow_enemies:0, hammer_bonus:0, skeleton_bonus:0, stun_length:0, charge_ember:0, charge_thunder:0, charge_ice:0, wisp:0, blessed_hammer_on_hit:0, discount:0, 
+/* misc			*/	ar_shrine_bonus:0, bonus_corpse_explosion:0, skill_random_sorc:0, thorns_reflect:0, curse_length_reduced:0, enemy_defense:0, enemy_defense_flat:0, slow_enemies:0, hammer_bonus:0, skeleton_bonus:0, stun_length:0, charge_ember:0, charge_thunder:0, charge_ice:0, wisp:0, blessed_hammer_on_hit:0, discount:0, 
 
 /* skill tabs		*/	skills_javelins:0, skills_passives:0, skills_bows:0, skills_martial:0, skills_shadow:0, skills_traps:0, skills_warcries:0, skills_masteries:0, skills_combat_barbarian:0, skills_elemental:0, skills_shapeshifting:0, skills_summoning_druid:0, skills_summoning_necromancer:0, skills_poisonBone:0, skills_curses:0, skills_offensive:0, skills_defensive:0, skills_combat_paladin:0, skills_cold:0, skills_lightning:0, skills_fire:0, skills_amazon:0, skills_assassin:0, skills_barbarian:0, skills_druid:0, skills_necromancer:0, skills_paladin:0, skills_sorceress:0, skills_fire_all:0, skills_cold_all:0, skills_poison_all:0,
 /* skills   amazon	*/	skill_Jab:0, skill_Power_Strike:0, skill_Poison_Javelin:0, skill_Fend:0, skill_Lightning_Bolt:0, skill_Charged_Strike:0, skill_Plague_Javelin:0, skill_Ground_Slam:0, skill_Lightning_Strike:0, skill_Lightning_Fury:0, skill_Inner_Sight:0, skill_Lethal_Strike:0, skill_Phase_Run:0, skill_Dodge:0, skill_Avoid:0, skill_Penetrate:0, skill_Evade:0, skill_Decoy:0, skill_Valkyrie:0, skill_Pierce:0, skill_Cold_Arrow:0, skill_Magic_Arrow:0, skill_Multiple_Shot:0, skill_Fire_Arrow:0, skill_Ice_Arrow:0, skill_Guided_Arrow:0, skill_Exploding_Arrow:0, skill_Strafe:0, skill_Immolation_Arrow:0, skill_Freezing_Arrow:0, 
@@ -192,7 +192,7 @@ function getAuraData(aura, lvl) {
 	else if (aura == "Thorns") {
 		result.thorns_reflect = auras[a].values[0][lvl]; }
 	else if (aura == "Inner Sight") {
-		result.enemy_defense = auras[a].values[0][lvl]; }
+		result.enemy_defense_flat = auras[a].values[0][lvl]; }
 	else if (aura == "Righteous Fire") {
 		/* No buffs. Deals 45% of max life as fire damage per second in a small area. */	}
 	else if (aura == "Lifted Spirit") {
@@ -204,16 +204,11 @@ function getAuraData(aura, lvl) {
 var equipment = {
     helm: [
 {name:"Helm"},
-{only:"Barb (merc)", name:"Arreat's Face", req_level:42, e_def:200, skills_barbarian:2, fhr:30, ar_bonus:20, life_leech:6, all_res:30, strength:20, dexterity:20, skills_combat_barbarian:2, base:"Slayer Guard", img:""},
-{only:"Barb (merc)", name:"Wolfhowl", req_level:79, e_def:150, skills_warcries:3, oskill_Lycanthropy:6, oskill_Werewolf:6, oskill_Feral_Rage:6, strength:15, dexterity:15, vitality:15, charges_summon_dire_wolf:15, base:"Fury Visor", img:""},
-{only:"Barb (merc)", name:"Demonhorn's Edge", req_level:61, e_def:160, ias:10, life_leech:6, thorns:77, skills_warcries:3, skills_masteries:3, skills_combat_barbarian:3, base:"Destroyer Helm", img:""},
-{only:"Barb (merc)", name:"Halaberd's Reign", req_level:77, e_def:170, life_replenish:23, fhr:20, skills_barbarian:2, skills_masteries:1, skill_Battle_Command:2, skill_Battle_Orders:2, base:"Conqueror Crown", img:""},
-{only:"Barb (merc)", set_IK:1, name:"Immortal King's Will", req_level:47, defense:125, light_radius:4, gf:37, mf:40, skills_warcries:2, sockets:2, base:"Avenger Guard", rarity:"set", set_bonuses:["set_IK",{},{},{},{},{},{}], img:""},
-{only:"barbarian", name:"Arreat's Face", req_level:42, e_def:200, skills_barbarian:2, fhr:30, ar_bonus:20, life_leech:6, all_res:30, strength:20, dexterity:20, skills_combat_barbarian:2, base:"Slayer Guard", img:""},
-{only:"barbarian", name:"Wolfhowl", req_level:79, e_def:150, skills_warcries:3, oskill_Lycanthropy:6, oskill_Werewolf:6, oskill_Feral_Rage:6, strength:15, dexterity:15, vitality:15, charges_summon_dire_wolf:15, base:"Fury Visor", img:""},
-{only:"barbarian", name:"Demonhorn's Edge", req_level:61, e_def:160, ias:10, life_leech:6, thorns:77, skills_warcries:3, skills_masteries:3, skills_combat_barbarian:3, base:"Destroyer Helm", img:""},
-{only:"barbarian", name:"Halaberd's Reign", req_level:77, e_def:170, life_replenish:23, fhr:20, skills_barbarian:2, skills_masteries:1, skill_Battle_Command:2, skill_Battle_Orders:2, base:"Conqueror Crown", img:""},
-{only:"barbarian", set_IK:1, name:"Immortal King's Will", req_level:47, defense:125, light_radius:4, gf:37, mf:40, skills_warcries:2, sockets:2, base:"Avenger Guard", rarity:"set", set_bonuses:["set_IK",{},{},{},{},{},{}], img:""},
+{not:["amazon","assassin","druid","necromancer","paladin","sorceress","Rogue Scout","Desert Guard","Iron Wolf"], name:"Arreat's Face", req_level:42, e_def:200, skills_barbarian:2, fhr:30, ar_bonus:20, life_leech:6, all_res:30, strength:20, dexterity:20, skills_combat_barbarian:2, base:"Slayer Guard", img:""},
+{not:["amazon","assassin","druid","necromancer","paladin","sorceress","Rogue Scout","Desert Guard","Iron Wolf"], name:"Wolfhowl", req_level:79, e_def:150, skills_warcries:3, oskill_Lycanthropy:6, oskill_Werewolf:6, oskill_Feral_Rage:6, strength:15, dexterity:15, vitality:15, charges_summon_dire_wolf:15, base:"Fury Visor", img:""},
+{not:["amazon","assassin","druid","necromancer","paladin","sorceress","Rogue Scout","Desert Guard","Iron Wolf"], name:"Demonhorn's Edge", req_level:61, e_def:160, ias:10, life_leech:6, thorns:77, skills_warcries:3, skills_masteries:3, skills_combat_barbarian:3, base:"Destroyer Helm", img:""},
+{not:["amazon","assassin","druid","necromancer","paladin","sorceress","Rogue Scout","Desert Guard","Iron Wolf"], name:"Halaberd's Reign", req_level:77, e_def:170, life_replenish:23, fhr:20, skills_barbarian:2, skills_masteries:1, skill_Battle_Command:2, skill_Battle_Orders:2, base:"Conqueror Crown", img:""},
+{not:["amazon","assassin","druid","necromancer","paladin","sorceress","Rogue Scout","Desert Guard","Iron Wolf"], set_IK:1, name:"Immortal King's Will", req_level:47, defense:125, light_radius:4, gf:37, mf:40, skills_warcries:2, sockets:2, base:"Avenger Guard", rarity:"set", set_bonuses:["set_IK",{},{},{},{},{},{}], img:""},
 {only:"druid", name:"Jalal's Mane", req_level:42, e_def:200, fhr:30, ar_bonus:20, skills_druid:2, all_res:30, mana_per_kill:5, strength:20, energy:20, skills_shapeshifting:2, base:"Totemic Mask", img:""},
 {only:"druid", name:"Cerebus' Bite", req_level:63, e_def:140, ar_bonus:120, life_leech:10, owounds:33, skills_shapeshifting:4, skill_Feral_Rage:2, base:"Blood Spirit", img:"Cerebus'_Bite"},
 {only:"druid", name:"Spirit Keeper", req_level:67, e_def:190, skills_druid:2, fhr:20, pRes_max:10, fRes:40, lAbsorb_flat:14, cAbsorb:25, base:"Earth Spirit", img:""},
@@ -351,7 +346,7 @@ var equipment = {
 {name:"Atma's Wail", req_level:51, e_def:160, defense_per_level:2, fhr:30, life_replenish:10, max_mana:15, dexterity:15, mf:20, base:"Embossed Plate", img:""},
 {name:"Que-Hegan's Wisdom", req_level:51, e_def:160, all_skills:1, mana_per_kill:3, fcr:20, fhr:20, mDamage_reduced:10, energy:15, base:"Mage Plate", img:""},
 {name:"Black Hades", req_level:53, e_def:200, damage_vs_demons:60, ar_vs_demons:250, half_freeze:1, light_radius:-2, sockets:3, base:"Chaos Armor", img:""},
-{name:"Corpsemourn", req_level:55, e_def:180, fDamage_min:12, fDamage_max:36, strength:8, vitality:10, cRes:35, base:"Ornate Plate", pod_changes:1, img:"Corpsemourn"},	// level 5 Desecrate (50 charges), implement corpse explosion bonus: bonus_corpse_explosion:5, 
+{name:"Corpsemourn", req_level:55, e_def:180, fDamage_min:12, fDamage_max:36, strength:8, vitality:10, cRes:35, bonus_corpse_explosion:5, base:"Ornate Plate", pod_changes:1, img:"Corpsemourn"},	// level 5 Desecrate (50 charges)
 {name:"Ormus' Robes", req_level:75, defense:20, fcr:20, cDamage:15, fDamage:15, lDamage:15, mana_regen:15, skill_frozen_orb:3, base:"Dusk Shroud", img:"Ormus'_Robes"},	// TODO: many possible skills
 {name:"The Gladiator's Bane", req_level:85, defense:50, e_def:200, cbf:1, fhr:30, poison_length_reduced:50, thorns:20, damage_reduced:20, mDamage_reduced:20, base:"Wire Fleece", img:"The_Gladiator's_Bane"},
 {name:"Arkaine's Valor", req_level:85, e_def:180, all_skills:2, fhr:30, damage_reduced:15, vitality_per_level:0.5, base:"Balrog Skin", img:"Arkaine's_Valor"},
@@ -1114,7 +1109,7 @@ var equipment = {
 	//		+X% to Fire Blast radius
 	//		Can Summon One Additional Hydra				(now available on Hexfire)
 	//
-{debug:1, name:"+1 (each) skill", req_level:100,
+{debug:1, name:"+1 (each) skill", req_level:100, 
 	/* amazon	*/	skill_Jab:1, skill_Power_Strike:1, skill_Poison_Javelin:1, skill_Fend:1, skill_Lightning_Bolt:1, skill_Charged_Strike:1, skill_Plague_Javelin:1, skill_Ground_Slam:1, skill_Lightning_Strike:1, skill_Lightning_Fury:1, skill_Inner_Sight:1, skill_Lethal_Strike:1, skill_Phase_Run:1, skill_Dodge:1, skill_Avoid:1, skill_Penetrate:1, skill_Evade:1, skill_Decoy:1, skill_Valkyrie:1, skill_Pierce:1, skill_Cold_Arrow:1, skill_Magic_Arrow:1, skill_Multiple_Shot:1, skill_Fire_Arrow:1, skill_Ice_Arrow:1, skill_Guided_Arrow:1, skill_Exploding_Arrow:1, skill_Strafe:1, skill_Immolation_Arrow:1, skill_Freezing_Arrow:1,
 	/* assassin	*/	skill_Dual_Strike:1, skill_Fists_of_Ember:1, skill_Fists_of_Thunder:1, skill_Fists_of_Ice:1, skill_Static_Strike:1, skill_Dragon_Talon:1, skill_Emberstorm:1, skill_Dragon_Flight:1, skill_Blades_of_Ice:1, skill_Claw_Mastery:1, skill_Psychic_Hammer:1, skill_Burst_of_Speed:1, skill_Mind_Barrier:1, skill_Weapon_Block:1, skill_Cloak_of_Shadows:1, skill_Fade:1, skill_Shadow_Warrior:1, skill_Mind_Blast:1, skill_Venom:1, skill_Shadow_Master:1, skill_Fire_Blast:1, skill_Shock_Web:1, skill_Blade_Throw:1, skill_Charged_Bolt_Sentry:1, skill_Wake_of_Fire:1, skill_Blade_Fury:1, skill_Lightning_Sentry:1, skill_Wake_of_Inferno:1, skill_Death_Sentry:1, skill_Blade_Shield:1, skill_Dragon_Tail:1,
 	/* barbarian	*/	skill_Howl:1, skill_Find_Potion:1, skill_Taunt:1, skill_Shout:1, skill_Find_Item:1, skill_Battle_Cry:1, skill_Battle_Orders:1, skill_Grim_Ward:1, skill_War_Cry:1, skill_Battle_Command:1, skill_Edged_Weapon_Mastery:1, skill_Pole_Weapon_Mastery:1, skill_Blunt_Weapon_Mastery:1, skill_Thrown_Weapon_Mastery:1, skill_Increased_Stamina:1, skill_Iron_Skin:1, skill_Increased_Speed:1, skill_Natural_Resistance:1, skill_Frenzy:1, skill_Concentrate:1, skill_Cleave:1, skill_Stun:1, skill_Leap:1, skill_Power_Throw:1, skill_Bash:1, skill_Leap_Attack:1, skill_Ethereal_Throw:1, skill_Whirlwind:1, skill_One_Handed_Weapon_Mastery:1, skill_Two_Handed_Weapon_Mastery:1,
@@ -1122,16 +1117,32 @@ var equipment = {
 	/* necromancer	*/	skill_Summon_Mastery:1, skill_Raise_Skeleton_Warrior:1, skill_Bone_Offering:1, skill_Clay_Golem:1, skill_Flesh_Offering:1, skill_Raise_Skeletal_Mage:1, skill_Blood_Golem:1, skill_Convocation:1, skill_Iron_Golem:1, skill_Fire_Golem:1, skill_Revive:1, skill_Deadly_Poison:1, skill_Teeth:1, skill_Bone_Armor:1, skill_Corpse_Explosion:1, skill_Desecrate:1, skill_Bone_Spear:1, skill_Bone_Wall:1, skill_Bone_Spirit:1, skill_Poison_Nova:1, skill_Amplify_Damage:1, skill_Dim_Vision:1, skill_Hemorrhage:1, skill_Weaken:1, skill_Iron_Maiden:1, skill_Terror:1, skill_Confuse:1, skill_Life_Tap:1, skill_Attract:1, skill_Decrepify:1, skill_Lower_Resist:1,
 	/* paladin	*/	skill_Prayer:1, skill_Resist_Fire:1, skill_Defiance:1, skill_Resist_Cold:1, skill_Cleansing:1, skill_Resist_Lightning:1, skill_Vigor:1, skill_Meditation:1, skill_Redemption:1, skill_Salvation:1, skill_Might:1, skill_Holy_Fire:1, skill_Precision:1, skill_Blessed_Aim:1, skill_Concentration:1, skill_Holy_Freeze:1, skill_Holy_Shock:1, skill_Sanctuary:1, skill_Fanaticism:1, skill_Conviction:1, skill_Sacrifice:1, skill_Smite:1, skill_Holy_Bolt:1, skill_Zeal:1, skill_Charge:1, skill_Vengeance:1, skill_Blessed_Hammer:1, skill_Conversion:1, skill_Holy_Shield:1, skill_Fist_of_the_Heavens:1, skill_Dashing_Strike:1,
 	/* sorceress	*/	skill_Ice_Bolt:1, skill_Frigerate:1, skill_Frost_Nova:1, skill_Ice_Blast:1, skill_Shiver_Armor:1, skill_Glacial_Spike:1, skill_Blizzard:1, skill_Freezing_Pulse:1, skill_Chilling_Armor:1, skill_Frozen_Orb:1, skill_Cold_Mastery:1, skill_Charged_Bolt:1, skill_Static_Field:1, skill_Telekinesis:1, skill_Nova:1, skill_Lightning_Surge:1, skill_Chain_Lightning:1, skill_Teleport:1, skill_Discharge:1, skill_Energy_Shield:1, skill_Lightning_Mastery:1, skill_Thunder_Storm:1, skill_Fire_Bolt:1, skill_Warmth:1, skill_Blaze:1, skill_Immolate:1, skill_Fire_Ball:1, skill_Fire_Wall:1, skill_Enflame:1, skill_Meteor:1, skill_Fire_Mastery:1, skill_Hydra:1	},
-//{debug:0, name:"+1 (each) o-skill", req_level:100,
-			//	oskill_Warp:1, oskill_Ball_Lightning:1,
-	/* amazon	*///	oskill_Inner_Sight:1, oskill_Lethal_Strike:1, oskill_Valkyrie:1, oskill_Magic_Arrow:1, oskill_Guided_Arrow:1, oskill_Multiple_Shot:1,
-	/* barbarian	*///	oskill_Battle_Command:1, oskill_Battle_Orders:1, oskill_Battle_Cry:1, oskill_Bash:1, oskill_Edged_Weapon_Mastery:1,
-	/* druid	*///	oskill_Arctic_Blast:1, oskill_Lycanthropy:1, oskill_Werebear:1, oskill_Werewolf:1, oskill_Feral_Rage:1, oskill_Flame_Dash:1, oskill_Summon_Dire_Wolf:1,
-	/* necromancer	*///	oskill_Desecrate:1,
-	/* paladin	*///	oskill_Zeal:1, oskill_Vengeance:1,
-	/* sorceress	*///	oskill_Shiver_Armor:1, oskill_Cold_Mastery:1, oskill_Hydra:1, oskill_Fire_Ball:1, oskill_Fire_Wall:1, oskill_Meteor:1, oskill_Fire_Mastery:1, oskill_Enflame:1	},
 {debug:1, name:"+1 skill", req_level:100, all_skills:1},
 {debug:1, name:"+20 skills", req_level:100, all_skills:20},
+/*
+{debug:1, name:"+1 each oskill", req_level:100,
+				oskill_Warp:1, oskill_Ball_Lightning:1,
+				oskill_Inner_Sight:1, oskill_Lethal_Strike:1, oskill_Valkyrie:1, oskill_Magic_Arrow:1, oskill_Guided_Arrow:1, oskill_Multiple_Shot:1,
+				oskill_Battle_Command:1, oskill_Battle_Orders:1, oskill_Battle_Cry:1, oskill_Bash:1, oskill_Edged_Weapon_Mastery:1,
+				oskill_Arctic_Blast:1, oskill_Lycanthropy:1, oskill_Werebear:1, oskill_Werewolf:1, oskill_Feral_Rage:1, oskill_Flame_Dash:1, oskill_Summon_Dire_Wolf:1,
+				oskill_Desecrate:1,
+				oskill_Zeal:1, oskill_Vengeance:1,
+				oskill_Shiver_Armor:1, oskill_Cold_Mastery:1, oskill_Hydra:1, oskill_Fire_Ball:1, oskill_Fire_Wall:1, oskill_Meteor:1, oskill_Fire_Mastery:1, oskill_Enflame:1	},
+
+{debug:1, name:"everything", req_level:100, 
+				strength:1, dexterity:1, vitality:1, energy:1, life:1, mana:1, defense:1, ar:1, stamina:1, block:1, base_defense:1, 
+				fRes_max:1, cRes_max:1, lRes_max:1, pRes_max:1, mRes_max:1, fRes:1, cRes:1, lRes:1, pRes:1, mRes:1, 
+				cdr:1, fcr:1, fbr:1, fhr:1, frw:1, ias:1, pierce:1, cblow:1, dstrike:1, cstrike:1, owounds:1, fDamage:1, cDamage:1, lDamage:1, pDamage:1, fPierce:1, cPierce:1, lPierce:1, pPierce:1, pdr:1, damage_reduced:1, mDamage_reduced:1, mf:1, gf:1, life_leech:1, mana_leech:1, life_per_hit:1, mana_per_hit:1, life_per_ranged_hit:1, mana_per_ranged_hit:1, fAbsorb:1, cAbsorb:1, lAbsorb:1, mAbsorb:0, fAbsorb_flat:1, cAbsorb_flat:1, lAbsorb_flat:1, mAbsorb_flat:1, 
+				all_skills:0, all_attributes:1, all_res:1, velocity:1, max_life:1, max_mana:1, max_stamina:1, damage_bonus:1, defense_bonus:1, ar_bonus:1, ar_bonus_per_level:0.1, ias_per_8_dexterity:1, max_energy:1, ar_per_socketed:1, 
+				life_per_level:0.1, mana_per_level:0.1, defense_per_level:0.1, ar_per_level:0.1, stamina_per_level:0.1, strength_per_level:0.1, dexterity_per_level:0.1, vitality_per_level:0.1, energy_per_level:0.1, fRes_per_level:0.1, cRes_per_level:0.1, lRes_per_level:0.1, pRes_per_level:0.1, fAbsorb_flat_per_level:0.1, cAbsorb_flat_per_level:0.1, lAbsorb_flat_per_level:0, mAbsorb_flat_per_level:0.1, mf_per_level:0.1, gf_per_level:0.1, fcr_per_level:0.1, dstrike_per_level:0.1, e_def_per_level:0.1, 
+				base_damage_min:1, base_damage_max:1, damage_min:1, damage_max:1, fDamage_min:1, fDamage_max:1, cDamage_min:1, cDamage_max:1, lDamage_min:1, lDamage_max:1, pDamage_min:1, pDamage_max:1, pDamage_all:1, pDamage_duration:1, mDamage_min:1, mDamage_max:1, min_damage_per_level:0.1, max_damage_per_level:0.1, kick_min:1, fDamage_max_per_level:0.1, cDamage_max_per_level:0.1, lDamage_max_per_level:0.1, pDamage_max_per_level:0.1, kick_damage_per_level:0.1, smite_min:1, smite_max:1, e_damage:1, e_damage_per_level:0.1, e_max_damage_per_level:0.1, lDamage_max_per_2_energy:1, 
+				ibc:1, life_per_kill:1, mana_per_kill:1, damage_vs_demons:1, damage_vs_undead:1, ar_vs_demons:1, ar_vs_undead:1, damage_to_mana:1, life_replenish:1, life_regen:1, mana_regen:1, missile_defense:1, melee_defense:1, ar_vs_undead_per_level:0.1, damage_vs_undead_per_level:0.1, ar_vs_demons_per_level:0.1, damage_vs_demons_per_level:0.1, poison_length_reduced:1, thorns_lightning:1, life_per_demon_kill:1, light_radius:1, thorns:1, thorns_per_level:0.1, slower_stam_drain:1, heal_stam:1, heal_stam_per_level:0.1, 
+				enemy_fRes:-1, enemy_cRes:-1, enemy_lRes:-1, enemy_pRes:-1, slow_target:1, target_defense:-1, flee_on_hit:1, blind_on_hit:1, monster_defense_per_hit:-1, freezes_target:1,
+				itd:1, pmh:1, cbf:1, peace:1, knockback:1, half_freeze_duration:1, melee_splash:1, glow:1, 
+				indestructible:1, req:1, autorepair:1, autoreplenish:1, stack_size:1, sockets:1, e_def:1, group:"", tier:1, type:"", def_low:1, def_high:1, durability:1, max_sockets:1, upgrade:"", downgrade:"", 
+				set_IK:1, set_Mav:1, set_Gris:1, set_TO:1, set_TR:1, set_Nat:1, set_Ald:1, set_Disciple:1, set_Angelic:1, set_Cathan:1, set_Cow:1, set_Brethren:1, set_Hwanin:1, set_Naj:1, set_Orphan:1, set_Sander:1, set_Sazabi:1, set_Arcanna:1, set_Arctic:1, set_Berserker:1, set_Civerb:1, set_Cleglaw:1, set_Death:1, set_Hsarus:1, set_Infernal:1, set_Iratha:1, set_Isenhart:1, set_Milabrega:1, set_Sigon:1, set_Tancred:1, set_Vidala:1, 
+				ar_shrine_bonus:1, bonus_corpse_explosion:1, skill_random_sorc:1, thorns_reflect:1, curse_length_reduced:1, enemy_defense:-1, enemy_defense_flat:-1, slow_enemies:1, hammer_bonus:1, skeleton_bonus:1, stun_length:1, charge_ember:1, charge_thunder:1, charge_ice:1, wisp:1, blessed_hammer_on_hit:1, discount:1, 
+},*/
 	],
 };
 

@@ -12,7 +12,7 @@ var weapon_frames = {dagger:16, oneHand_sword:17, oneHand_axe:17, twoHand_sword:
 //	base frames: 9
 //	var fcr_bp = [0, 7, 15, 27, 48, 86, 200]
 
-var character_sorceress = {class_name:"Sorceress", strength:10, dexterity:25, vitality:10, energy:35, life:40, mana:35, defense:6, ar:75, stamina:174, levelup_life:1.5, levelup_stamina:1, levelup_mana:2, ar_per_dexterity:5, defense_per_dexterity:0.25, life_per_vitality:2, stamina_per_vitality:1, mana_per_energy:2, starting_strength:10, starting_dexterity:25, starting_vitality:10, starting_energy:35, ar_const:-15, skill_layout:"./images/sorceress.png", mana_regen:1.66,
+var character_sorceress = {class_name:"Sorceress", strength:10, dexterity:25, vitality:10, energy:35, life:40, mana:35, stamina:174, levelup_life:1.5, levelup_stamina:1, levelup_mana:2, ar_per_dexterity:5, life_per_vitality:2, stamina_per_vitality:1, mana_per_energy:2, starting_strength:10, starting_dexterity:25, starting_vitality:10, starting_energy:35, ar_const:-15, skill_layout:"./images/sorceress.png", mana_regen:1.66,
 	
 	// getSkillData - gets skill info from the skills data table
 	//	skill: skill object for the skill in question

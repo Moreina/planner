@@ -11,7 +11,7 @@ var weapon_frames = {dagger:18, oneHand_sword:18, oneHand_axe:18, twoHand_sword:
 //	base frames: 11
 //	var fcr_bp = [0, 6, 13, 20, 32, 52, 86, 174, 600]
 
-var character_necromancer = {class_name:"Necromancer", strength:15, dexterity:25, vitality:15, energy:25, life:45, mana:25, defense:6, ar:80, stamina:179, levelup_life:2, levelup_stamina:1, levelup_mana:2, ar_per_dexterity:5, defense_per_dexterity:0.25, life_per_vitality:2, stamina_per_vitality:1, mana_per_energy:2, starting_strength:15, starting_dexterity:25, starting_vitality:15, starting_energy:25, ar_const:-10, skill_layout:"./images/necromancer.png", mana_regen:1.66,
+var character_necromancer = {class_name:"Necromancer", strength:15, dexterity:25, vitality:15, energy:25, life:45, mana:25, stamina:179, levelup_life:2, levelup_stamina:1, levelup_mana:2, ar_per_dexterity:5, life_per_vitality:2, stamina_per_vitality:1, mana_per_energy:2, starting_strength:15, starting_dexterity:25, starting_vitality:15, starting_energy:25, ar_const:-10, skill_layout:"./images/necromancer.png", mana_regen:1.66,
 	
 	// getSkillData - gets skill info from the skills data table
 	//	skill: skill object for the skill in question
@@ -42,8 +42,8 @@ var character_necromancer = {class_name:"Necromancer", strength:15, dexterity:25
 		if (skill.name == "Revive" && elem == 0) {			result = (skill.data.values[elem][1] + ~~skills[0].data.values[0][skills[0].level+skills[0].extra_levels]) }
 		if (skill.name == "Revive" && elem == 1) {			result = (skill.data.values[elem][1] + ~~skills[0].data.values[1][skills[0].level+skills[0].extra_levels]) }	// wisp excluded from tooltip
 
-		if (skill.name == "Corpse Explosion" && elem == 0) { if (skill.level == 0) { result = (21 )}} //+ ~~bonus_corpse_explosion) } else { result += ~~bonus_corpse_explosion } }
-		if (skill.name == "Corpse Explosion" && elem == 1) { if (skill.level == 0) { result = (27 )}} //+ ~~bonus_corpse_explosion) } else { result += ~~bonus_corpse_explosion } }
+		if (skill.name == "Corpse Explosion" && elem == 0) { if (skill.level == 0) { result = (21 )}} //+ ~~bonus_corpse_explosion) } else { result += ~~bonus_corpse_explosion } }	// Corpsemourn bonus shown?
+		if (skill.name == "Corpse Explosion" && elem == 1) { if (skill.level == 0) { result = (27 )}} //+ ~~bonus_corpse_explosion) } else { result += ~~bonus_corpse_explosion } }	// Corpsemourn bonus shown?
 		if (skill.name == "Bone Armor" && elem == 0) { 			result += 20*skills[17].level + 20*skills[18].level }
 		if (skill.name == "Bone Wall" && elem < 1) { 			result *= (1 + (0.10*skills[13].level)) }
 		if (skill.name == "Teeth" && elem > 0 && elem < 3) { 		result *= (1 + (0.17*skills[16].level + 0.17*skills[18].level)) }

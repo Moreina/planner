@@ -11,7 +11,7 @@ var weapon_frames = {dagger:14, oneHand_sword:14, oneHand_axe:14, twoHand_sword:
 //	base frames: 5
 //	var fcr_bp = [0, 13, 32, 86, 600]
 
-var character_assassin = {class_name:"Assassin", strength:20, dexterity:20, vitality:20, energy:25, life:50, mana:25, defense:5, ar:80, stamina:195, levelup_life:2, levelup_stamina:1.25, levelup_mana:1.5, ar_per_dexterity:5, defense_per_dexterity:0.25, life_per_vitality:3, stamina_per_vitality:1.25, mana_per_energy:1.75, starting_strength:20, starting_dexterity:20, starting_vitality:20, starting_energy:25, ar_const:15, skill_layout:"./images/assassin.png", mana_regen:1.66,
+var character_assassin = {class_name:"Assassin", strength:20, dexterity:20, vitality:20, energy:25, life:50, mana:25, stamina:195, levelup_life:2, levelup_stamina:1.25, levelup_mana:1.5, ar_per_dexterity:5, life_per_vitality:3, stamina_per_vitality:1.25, mana_per_energy:1.75, starting_strength:20, starting_dexterity:20, starting_vitality:20, starting_energy:25, ar_const:15, skill_layout:"./images/assassin.png", mana_regen:1.66,
 	
 	// getSkillData - gets skill info from the skills data table
 	//	skill: skill object for the skill in question

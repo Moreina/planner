@@ -30,6 +30,7 @@
 
 <div id="gui" class="no-selection" oncontextmenu="return false">
 
+<!--		/GUI Stats		-->
 <div id="gui_stats" style="position: relative; width: 175px; height: 434px; float: left;">
 <img usemap="#statmap" src="./images/statbar.png">
 <map id="statmap" name="statmap">
@@ -62,8 +63,9 @@
 <option>Necromancer</option>
 <option>Paladin</option>
 <option>Sorceress</option></select>
-</div>		<!--	/gui stats	-->
+</div> <!-- /GUI Stats -->
 
+<!--		GUI Skills		-->
 <div id="gui_skills" style="position: relative; width: 694px; height: 434px; float: left;">
 <img usemap="#skillmap" id="skill_tree" src="">
 <map id="skillmap" name="skillmap">
@@ -144,9 +146,8 @@
 	<a id="next"></a><br>
 	<a id="syn_title" class="green"></a>
 	<a id="syn_text"></a>
-</div>
-
-</div>		<!--	/gui skills	-->
+</div> <!-- /skill hover text -->
+</div> <!-- /GUI Skills -->
 
 <!--	Equipment Menus 	-->
 <div class="dropdown" id="equipment" style="float: right; width:200px; height:20px; margin-right:2px; position: relative; z-index: 6;">
@@ -171,7 +172,8 @@
 <select class="dropdown" id="dropdown_merc_offhand" onChange="equipMerc('offhand', this.value)" onContextMenu="equipMerc('offhand', 'offhand')"></select>
 <br><br>
 <select class="dropdown" id="dropdown_misc" onChange="addMisc(this.value)"></select>
-</div>
+</div> <!-- /Equipment Menus -->
+
 <!--	Corruption Options	-->
 <div class="dropdown-corruption" id="equipment_corruptions" style="float: right; width:20px; margin-right:1px; position: relative; z-index: 6;">
 <select class="dropdown" id="corruptions_helm" onChange="corrupt('helm', this.value)" onContextMenu="corrupt('helm', 'none')"></select>
@@ -184,7 +186,7 @@
 <select class="dropdown" id="corruptions_ring2" onChange="corrupt('ring2', this.value)" onContextMenu="corrupt('ring2', 'none')"></select>
 <select class="dropdown" id="corruptions_weapon" onChange="corrupt('weapon', this.value)" onContextMenu="corrupt('weapon', 'none')"></select>
 <select class="dropdown" id="corruptions_offhand" onChange="corrupt('offhand', this.value)" onContextMenu="corrupt('offhand', 'none')"></select>
-</div>
+</div> <!-- /Corruption Options -->
 
 <!--	selection options	-->
 <div style="width: 869px; margin-bottom: 0px;">
@@ -217,7 +219,7 @@
 <label style="color: #aaa;" for="difficulty">Hell</label>
 </div>
 </div>
-</div>
+</div> <!-- /selection options -->
 
 <!--	inventory	-->
 <div class="inventory-new">
@@ -238,7 +240,7 @@
 <div id="offhand_" class="flex-box" style="position: absolute; width: 60px; height: 118px; left: 242px; top: 1px; z-index: 2;" ondrop="socket(event,'offhand')" ondragover="allowSocket(event,'offhand')" onmouseover="equipmentHover(event,'offhand')" onmouseout="equipmentOut()"><img id="offhand_image" style="position:absolute; z-index:3;" src="" onContextMenu="equip('offhand', 'offhand')"><div style="position:absolute; z-index:4;" align="center" id="offhand"></div></div>
 </div>
 </map>
-</div>
+</div> <!-- /equipment inventory -->
 
 <!--	charm inventory 	-->
 <div id="gui_charms" class="inventory" oncontextmenu="return false">
@@ -291,16 +293,15 @@
 
 </map>
 <div class="hover-item" id="item_tooltip"></div>
-</div>
-</div>
+</div> <!-- /charm inventory -->
+</div> <!-- /inventory -->
 
-
-</div>		<!--	/gui	-->
+</div> <!-- /gui -->
 
 <!--		skill details		-->
-<div class="no-selection" style="display: block; height:200px; width: 300px; margin-top: 30px; position: relative;">
-
-<div class="gray" style="width: 200px; margin-bottom: 15px; margin-top: 40px;">
+<div class="no-selection" style="display: block; height:220px; width: 300px; margin-top: 30px; position: relative;">
+<div class="gray">
+<div style="width: 200px; margin-bottom: 15px; margin-top: 40px;">
 <!--<a style="visibility:visible;">Damage per Second: </a><a id="dps"></a><br>-->
 <!--<a style="visibility:visible;">Chance to Hit: </a><a id="hit"></a><br>-->
 	<a>Basic Attack: </a><a id="basic_attack"></a><br>
@@ -320,138 +321,143 @@
 	</div>
 	<a style="visibility: hidden; color: gray;">AR: </a><a id="ar_skill2"></a>
 </div>
+<div> <!-- TODO: Incorporate into calculated damage & attack rating -->
+<div style="position:absolute; left:30px;">
+	<br>
+	<font size="2">Damage vs Demons: </font><font size="2" id="damage_vs_demons"></font><br>
+	<font size="2">Damage vs Undead: </font><font size="2" id="damage_vs_undead"></font><br>
 </div>
+<div style="position:absolute; left:200px;">
+	<br>
+	<font size="2">AR vs Demons: </font><font size="2" id="ar_vs_demons"></font><br>
+	<font size="2">AR vs Undead: </font><font size="2" id="ar_vs_undead"></font><br>
+</div>
+</div>
+</div>
+</div> <!-- /skill details -->
 
-
-
-<div>
-<!--	stats primary	-->
-<div style="float: left; position: relative; width: 321px; height: 434px; margin-bottom: 36px;">
-<div style="position: absolute; float: left;" class="no-selection">
-<br>
-<div class="gray" style="position: relative; display: block; float: left; width: 170px;" id="stats2a">
+<!--		stats		-->
+<div class="gray" id="stats">
+<div id="stats_main_columns">
+<div style="position:absolute; left:10px;" id="stats_column_1">
 	<font size="2">Fire Resistance: </font><font size="2" id="fres"></font><br>
 	<font size="2">Cold Resistance: </font><font size="2" id="cres"></font><br>
 	<font size="2">Lightning Resistance: </font><font size="2" id="lres"></font><br>
 	<font size="2">Poison Resistance: </font><font size="2" id="pres"></font><br>
 	<font size="2">Magic Resistance: </font><font size="2" id="mres"></font><br>
 	<font size="2">Damage Reduction: </font><font size="2" id="pdr"></font><br><br>
-	<font size="2">Cooldown Reduction: </font><font size="2" id="cdr"></font><br>
+	
+	<font size="2">Increased Attack Speed: </font><font size="2" id="ias"></font><br>
 	<font size="2">Faster Cast Rate: </font><font size="2" id="fcr"></font><br>
 	<font size="2">Faster Block Rate: </font><font size="2" id="fbr"></font><br>
 	<font size="2">Faster Hit Recovery: </font><font size="2" id="fhr"></font><br>
-	<font size="2">Faster Run/Walk: </font><font size="2" id="frw"></font><br>
-	<font size="2">Increased Attack Speed: </font><font size="2" id="ias"></font><br><br>
+	<br>
+	<font size="2">Cooldown Reduction: </font><font size="2" id="cdr"></font><br><br>
+	
 	<font size="2">Life Leech: </font><font size="2" id="life_leech"></font><br>
 	<font size="2">Mana Leech: </font><font size="2" id="mana_leech"></font><br><br>
+	
 	<font size="2">+ Fire Damage </font><font size="2" id="fdamage"></font><br>
 	<font size="2">+ Cold Damage: </font><font size="2" id="cdamage"></font><br>
 	<font size="2">+ Lightning Damage: </font><font size="2" id="ldamage"></font><br>
-	<font size="2">+ Poison Damage: </font><font size="2" id="pdamage"></font><br><br>
-	<font size="2">Magic Find: </font><font size="2" id="mf"></font>
+	<font size="2">+ Poison Damage: </font><font size="2" id="pdamage"></font><br>
 </div>
-<div class="gray" style="position: relative; display: block; float: left;" id="stats2b">
+<div style="position:absolute; left:180px;" id="stats_column_2">
 	<font size="2">Fire Absorb: </font><font size="2" id="fabsorb"></font><br>
 	<font size="2">Cold Absorb: </font><font size="2" id="cabsorb"></font><br>
 	<font size="2">Lightning Absorb: </font><font size="2" id="labsorb"></font><br><br>
 	<font size="2">Magic Absorb: </font><font size="2" id="mabsorb"></font><br><br><br>
+	
 	<font size="2">Pierce: </font><font size="2" id="pierce"></font><br>
 	<font size="2">Crushing Blow: </font><font size="2" id="cblow"></font><br>
 	<font size="2">Deadly Strike: </font><font size="2" id="dstrike"></font><br>
 	<font size="2">Critical Strike: </font><font size="2" id="cstrike"></font><br>
-	<font size="2">Open Wounds: </font><font size="2" id="owounds"></font><br><br><br>
+	<font size="2">Open Wounds: </font><font size="2" id="owounds"></font><br>
+	<font size="2">Enemy Defense: </font><font size="2" id="enemy_defense"></font><br>
+	<font size="2" id="enemy_defense_per_hit"></font><br>
 	<font size="2">Life per Hit: </font><font size="2" id="life_per_hit"></font><br>
 	<font size="2">Mana per Hit: </font><font size="2" id="mana_per_hit"></font><br><br>
+	
 	<font size="2">Fire Pierce: </font><font size="2" id="fpierce"></font><br>
 	<font size="2">Cold Pierce: </font><font size="2" id="cpierce"></font><br>
 	<font size="2">Lightning Pierce: </font><font size="2" id="lpierce"></font><br>
-	<font size="2">Poison Pierce: </font><font size="2" id="ppierce"></font><br><br>
-	<font size="2">Gold Find: </font><font size="2" id="gf"></font>
+	<font size="2">Poison Pierce: </font><font size="2" id="ppierce"></font><br>
 </div>
-</div>
-</div>
-
-<!--	stats secondary		-->
-<div style="position: absolute; float: left; width: 500px; margin-left: 320px; margin-top: 25px; padding: 14px; z-index:4;"><br>
-<div style="margin-bottom:37px;">
-<div class="gray" style="display: block; width: 180px; float: left;" id="stats">
+<div style="position:absolute; left:350px;" id="stats_column_3">
+	<br>
 	<a>Life: </a><a id="life"></a><br>
 	<a>Mana: </a><a id="mana"></a><br>
 	<a>Stamina: </a><a id="stamina"></a><br>
 	<a>Defense: </a><a id="defense"></a><br>
-	<a id="block_label" style="visibility:hidden;">Block Chance: </a><a id="block"></a>
-</div>
-<div class="gray" style="display: block;">
-	<a>Strength: </a><a id="strength2"></a><br>
-	<a>Dexterity: </a><a id="dexterity2"></a><br>
-	<a>Vitality: </a><a id="vitality2"></a><br>
-	<a>Energy: </a><a id="energy2"></a><br><br>
-</div>
-</div>
-<div class="gray" style="position: relative; display: block; float: left; width: 190px;" id="stats3a">
-	<font size="2">Damage vs Demons: </font><font size="2" id="damage_vs_demons"></font><br>
-	<font size="2">Damage vs Undead: </font><font size="2" id="damage_vs_undead"></font><br><br>
-	<font size="2">Damage Taken goes to Mana: </font><font size="2" id="damage_to_mana"></font><br><br>
+	<a id="block_label" style="visibility:hidden;">Block Chance: </a><a id="block"></a><br><br>
+	
+	<font size="2">Magic Find: </font><font size="2" id="mf"></font><br>
+	<font size="2">Gold Find: </font><font size="2" id="gf"></font><br><br>
+	
+	<font size="2">Poison Length Reduced: </font><font size="2" id="poison_reduction"></font><br>
+	<font size="2">Curse Length Reduced: </font><font size="2" id="curse_reduction"></font><br>
+	<br><br>
 	<font size="2">Life per Kill: </font><font size="2" id="life_per_kill"></font><br>
 	<font size="2">Mana per Kill: </font><font size="2" id="mana_per_kill"></font><br><br>
+	
 	<font size="2">Enemy Fire Resistance: </font><font size="2" id="enemy_fres"></font><br>
 	<font size="2">Enemy Cold Resistance: </font><font size="2" id="enemy_cres"></font><br>
 	<font size="2">Enemy Lightning Resistance: </font><font size="2" id="enemy_lres"></font><br>
-	<font size="2">Enemy Poison Resistance: </font><font size="2" id="enemy_pres"></font><br><br>
-	<font size="2" id="find3"></font><br>
+	<font size="2">Enemy Poison Resistance: </font><font size="2" id="enemy_pres"></font><br>
 </div>
-<div class="gray" style="position: relative; display: block; float: left; width: 200px;" id="stats3b">
-	<font size="2">AR vs Demons: </font><font size="2" id="ar_vs_demons"></font><br>
-	<font size="2">AR vs Undead: </font><font size="2" id="ar_vs_undead"></font><br><br>
-	<font size="2">Defense vs Missiles: </font><font size="2" id="missile_defense"></font><br><br>
-	<font size="2">Life Replenish: </font><font size="2" id="life_replenish"></font><br>
+<div style="position:absolute; left:540px;" id="stats_column_4">
+	<br>
+	<a>Strength: </a><a id="strength2"></a><br>
+	<a>Dexterity: </a><a id="dexterity2"></a><br>
+	<a>Vitality: </a><a id="vitality2"></a><br>
+	<a>Energy: </a><a id="energy2"></a><br><br><br>
+	
+	<font size="2">Faster Run/Walk: </font><font size="2" id="frw"></font><br>
+	<font size="2">Velocity: </font><font size="2" id="velocity"></font><br><br>
+	
+	<font size="2">Damage to Mana: </font><font size="2" id="damage_to_mana"></font><br>
+	<font size="2">Thorns: </font><font size="2" id="thorns"></font><br><br>
+	<br>
+	<font size="2">Life Regen: </font><font size="2" id="life_regen"></font><br>
 	<font size="2">Mana Regen: </font><font size="2" id="mana_regen"></font><br><br>
+	
 	<font size="2" id="f4"></font><br>
 	<font size="2" id="c4"></font><br>
 	<font size="2" id="l4"></font><br>
 	<font size="2" id="p4"></font><br>
-	<font size="2" id="extra"></font><br>
-	<font size="2" id="find4"></font>
 </div>
 </div>
 
-<!--	stats tertiary		-->
-<div style="position: absolute; float: left; width: 800px; margin-top: 450px; margin-bottom: 20px; z-index:4;"><br>
-<div class="gray" style="position: relative; display: block; float: left; width: 190px;" id="stats4a">
-	<font size="2">Velocity: </font><font size="2" id="velocity"></font><br>
-	<font size="2">Poison Length Reduced: </font><font size="2" id="poison_reduction"></font><br>
-	<font size="2">Curse Length Reduced: </font><font size="2" id="curse_reduction"></font><br>
-	<font size="2">Thorns: </font><font size="2" id="thorns"></font><br>
-	<font size="2">Light Radius: </font><font size="2" id="light_radius"></font><br>
-	<font size="2">Heal Stamina: </font><font size="2" id="heal_stam"></font><br>
-	<font size="2">Slower Stamina Drain: </font><font size="2" id="slower_stam_drain"></font><br>
-	<font size="2">Slow Target: </font><font size="2" id="slow_target"></font><br>
-	<font size="2">Enemy Defense: </font><font size="2" id="enemy_defense"></font><br>
-	<font size="2">Monster Defense per Hit: </font><font size="2" id="monster_defense_per_hit"></font><br>
-	<font size="2">Flee on Hit:  </font><font size="2" id="flee_on_hit"></font><br>
-	<font size="2">Blind on Hit: </font><font size="2" id="blind_on_hit"></font><br>
-	<font size="2" id="discount"></font><br>
+<div style="width:869px;" id="stats_positioning_alignment">
+<div><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br></div>
+<div style="float:right; width:195px;" id="stats_column_5">
+	<font size="2" id="itd"></font>
+	<font size="2" id="pmh"></font>
+	<font size="2" id="cbf"></font>
+	<font size="2" id="knockback"></font>
+	<font size="2" id="melee_splash"></font>
+	<font size="2" id="slow_target"></font>
+	<font size="2" id="freezes_target"></font>
+	<font size="2" id="blind_on_hit"></font>
+	<font size="2" id="flee_on_hit"></font>
+	<font size="2" id="peace"></font>
+	<font size="2" id="light_radius"></font>
+	<font size="2" id="heal_stam"></font>
+	<font size="2" id="slower_stam_drain"></font>
+	<font size="2" id="discount"></font>
+	<font size="2" id="glow"></font>
 </div>
-<<div class="gray" style="position: relative; display: block; float: left; width: 200px;" id="stats4b">
-	<font size="2" id="itd"></font><br>
-	<font size="2" id="pmh"></font><br>
-	<font size="2" id="cbf"></font><br>
-	<font size="2" id="knockback"></font><br>
-	<font size="2" id="melee_splash"></font><br>
-	<font size="2" id="freezes_target"></font><br>
-	<font size="2" id="peace"></font><br>
-	<font size="2" id="glow"></font><br>
+<div><br><br><br><br><br></div>
 </div>
-</div>
-</div>
+</div>	<!-- /stats -->
 
-<div style="position:relative; margin-top: 225px; margin-bottom: 33px; width: 869px; float: left;">
+<div style="position:relative; margin-top: 15px; margin-bottom: 33px; width: 869px; float: left;">
 <a style="display: block; color: #bbbbbb; z-index:9; width:869px; height: 25px; position:absolute; text-align:center;" href="https://github.com/Moreina/planner#planner">development plans & feedback</a>
 </div>
 
-</div>		<!--	/interface	-->
-</div>		<!--	/full_interface		-->
-</div>		<!--	/main	-->
+</div>	<!-- /interface -->
+</div>	<!-- /full_interface -->
+</div>	<!-- /main -->
 
 </div>
 

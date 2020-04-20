@@ -833,6 +833,7 @@ function addCharm(val) {
 		if (val == "+20 skills") { charmHeight = "29"; charmImage = charm_img.prefix+"debug_II.png"; charm_y = 1; }
 		else if (val == "+1 skill") { charmHeight = "29"; charmImage = charm_img.prefix+"debug_D.png"; charm_y = 1; }
 		else if (val == "+1 (each) skill") { charmHeight = "29"; charmImage = charm_img.prefix+"debug_P.png"; charm_y = 1; }
+		else if (val == "everything") { charmHeight = "29"; charmImage = charm_img.prefix+"debug_face.png"; charm_y = 1; }
 		else { charmHeight = "29"; charmImage = charm_img.prefix+"debug_skull.png"; charm_y = 1; }
 	}
 	
@@ -1124,18 +1125,12 @@ function updatePrimaryStats() {
 		else if (weaponType == "claw") { weapon_skillup = c.claw_skillup[0]; c.ar_skillup = c.claw_skillup[1]; c.cstrike_skillup = c.claw_skillup[2]; }
 		else { weapon_skillup = 0; c.ar_skillup = 0; c.cstrike_skillup = 0; c.pierce_skillup = 0; }
 	}
-	var ar_addon = (dexTotal-c.starting_dexterity)*c.ar_per_dexterity;
-	var defense_addon = (dexTotal-c.starting_dexterity)*c.defense_per_dexterity;	// it may be easier to use: dexTotal/4
 	var life_addon = (vitTotal-c.starting_vitality)*c.life_per_vitality;
 	var stamina_addon = (vitTotal-c.starting_vitality)*c.stamina_per_vitality;
 	var mana_addon = (energyTotal-c.starting_energy)*c.mana_per_energy;
-	
-	var def_items = 0;
-	for (type in equipped) { def_items += Math.floor(~~equipped[type]["base_defense"] + ~~equipped[type]["defense"]) }	// e_def left out here, calculated elsewhere
-	var def = Math.floor((def_items + dexTotal/4) * (1 + (c.defense_bonus + c.defense_skillup)/100) + (c.level-1)*c.defense_per_level);
-	
-	//var _ar = Math.floor((c.ar + (c.level-1)*c.ar_per_level + ar_addon) * (1 + (c.ar_skillup + c.ar_bonus + c.level*c.ar_bonus_per_level)/100));			// OLD
-	var ar = Math.floor((((dexTotal - 7) * 5 + c.ar + (c.level-1)*c.ar_per_level + c.ar_const)/2) * (1+(c.ar_skillup + c.ar_bonus + c.level*c.ar_bonus_per_level)/100) * (1+c.ar_shrine_bonus/100));
+
+	var def = (c.base_defense + c.defense + c.level*c.defense_per_level + Math.floor(dexTotal/4)) * (1 + (c.defense_bonus + c.defense_skillup)/100);
+	var ar = ((dexTotal - 7) * 5 + c.ar + c.level*c.ar_per_level + c.ar_const) * (1+(c.ar_skillup + c.ar_bonus + c.level*c.ar_bonus_per_level)/100) * (1+c.ar_shrine_bonus/100);
 	var wisp = 1+~~Math.round(c.wisp/20,0)/10
 	var phys_min = ((1+statBonus+(c.e_damage+c.damage_bonus+weapon_skillup)/100)*((c.level-1)*c.min_damage_per_level+c.base_damage_min))+c.damage_min;
 	var phys_max = ((1+statBonus+(c.e_damage+c.damage_bonus+weapon_skillup)/100)*((c.level-1)*c.max_damage_per_level+c.base_damage_max))+c.damage_max;
@@ -1176,8 +1171,11 @@ function updatePrimaryStats() {
 	document.getElementById("vitality2").innerHTML = Math.floor(vitTotal)
 	document.getElementById("energy2").innerHTML = Math.floor(energyTotal)
 	if (c.running > 0) { document.getElementById("defense").innerHTML = "" }
-	else { document.getElementById("defense").innerHTML = def }
-	document.getElementById("ar").innerHTML = ar
+	else {
+		document.getElementById("defense").innerHTML = Math.floor(def + c.melee_defense)
+		if (c.missile_defense > 0) { document.getElementById("defense").innerHTML += " (+" + c.missile_defense + ")" }
+	}
+	document.getElementById("ar").innerHTML = Math.floor(ar)
 	document.getElementById("stamina").innerHTML = Math.floor((c.stamina + (c.level-1)*c.stamina_per_level + stamina_addon) * (1+c.stamina_skillup/100) * (1+c.max_stamina/100))
 	document.getElementById("life").innerHTML = Math.floor((c.life + (c.level-1)*c.life_per_level + life_addon) * (1 + c.max_life/100))
 	document.getElementById("mana").innerHTML = Math.floor((c.mana + (c.level-1)*c.mana_per_level + mana_addon) * (1 + c.max_mana/100))
@@ -1189,18 +1187,28 @@ function updatePrimaryStats() {
 	document.getElementById("cres").innerHTML = (c.cRes + c.all_res - c.cRes_penalty + c.resistance_skillup) + " / " + Math.min(RES_CAP,(c.cRes_max_base + c.cRes_max + c.cRes_skillup))
 	document.getElementById("lres").innerHTML = (c.lRes + c.all_res - c.lRes_penalty + c.resistance_skillup) + " / " + Math.min(RES_CAP,(c.lRes_max_base + c.lRes_max + c.lRes_skillup))
 	document.getElementById("pres").innerHTML = (c.pRes + c.all_res - c.pRes_penalty + c.resistance_skillup) + " / " + Math.min(RES_CAP,(c.pRes_max_base + c.pRes_max + c.pRes_skillup))
-	document.getElementById("mres").innerHTML = (c.mRes - c.mRes_penalty) + "%  +" + c.mDamage_reduced
+	var magicRes = (c.mRes - c.mRes_penalty)+"%";
+	if (c.mDamage_reduced > 0) { magicRes += (" +"+c.mDamage_reduced) }
+	document.getElementById("mres").innerHTML = magicRes
 }
 
 // updateSecondaryStats - Updates stats shown on the secondary (Path of Diablo) stat page
 // ---------------------------------
 function updateSecondaryStats() {
 	var c = character;
-	document.getElementById("pdr").innerHTML = c.pdr + "%  +" + c.damage_reduced
-	document.getElementById("fabsorb").innerHTML = c.fAbsorb + "%  +" + Math.floor(c.fAbsorb_flat + (c.level*c.fAbsorb_flat_per_level))
-	document.getElementById("cabsorb").innerHTML = c.cAbsorb + "%  +" + Math.floor(c.cAbsorb_flat + (c.level*c.cAbsorb_flat_per_level))
-	document.getElementById("labsorb").innerHTML = c.lAbsorb + "%  +" + Math.floor(c.lAbsorb_flat + (c.level*c.lAbsorb_flat_per_level))
-	document.getElementById("mabsorb").innerHTML = c.mAbsorb + "%  +" + Math.floor(c.mAbsorb_flat + (c.level*c.mAbsorb_flat_per_level))	
+	var physRes = c.pdr+"%";
+	if (c.damage_reduced > 0) { physRes += (" +"+c.damage_reduced) }
+	document.getElementById("pdr").innerHTML = physRes
+	var fAbs = c.fAbsorb+"%";
+	if (c.fAbsorb_flat > 0 || c.fAbsorb_flat_per_level > 0) { fAbs += (" +"+Math.floor(c.fAbsorb_flat + (c.level*c.fAbsorb_flat_per_level))) }
+	document.getElementById("fabsorb").innerHTML = fAbs
+	var cAbs = c.cAbsorb+"%";
+	if (c.cAbsorb_flat > 0 || c.cAbsorb_flat_per_level > 0) { cAbs += (" +"+Math.floor(c.cAbsorb_flat + (c.level*c.cAbsorb_flat_per_level))) }
+	document.getElementById("cabsorb").innerHTML = cAbs
+	var lAbs = c.lAbsorb+"%";
+	if (c.lAbsorb_flat > 0 || c.lAbsorb_flat_per_level > 0) { lAbs += (" +"+Math.floor(c.lAbsorb_flat + (c.level*c.lAbsorb_flat_per_level))) }
+	document.getElementById("labsorb").innerHTML = lAbs
+	document.getElementById("mabsorb").innerHTML = c.mAbsorb_flat
 	
 	document.getElementById("cdr").innerHTML = c.cdr
 	document.getElementById("fcr").innerHTML = c.fcr + Math.floor(c.level*c.fcr_per_level)
@@ -1217,8 +1225,12 @@ function updateSecondaryStats() {
 	
 	document.getElementById("life_leech").innerHTML = c.life_leech
 	document.getElementById("mana_leech").innerHTML = c.mana_leech
-	document.getElementById("life_per_hit").innerHTML = c.life_per_hit + "m , " + c.life_per_ranged_hit + "r"
-	document.getElementById("mana_per_hit").innerHTML = c.mana_per_hit + "m , " + c.mana_per_ranged_hit + "r"
+	var LPH = c.life_per_hit + "m , " + c.life_per_ranged_hit + "r";
+	if (LPH == "0m , 0r") { LPH = 0 }
+	document.getElementById("life_per_hit").innerHTML = LPH
+	var MPH = c.mana_per_hit + "m , " + c.mana_per_ranged_hit + "r";
+	if (MPH == "0m , 0r") { MPH = 0 }
+	document.getElementById("mana_per_hit").innerHTML = MPH
 	
 	document.getElementById("fdamage").innerHTML = c.fDamage + c.fDamage_skillup
 	document.getElementById("cdamage").innerHTML = c.cDamage + c.cDamage_skillup
@@ -1245,12 +1257,13 @@ function updateSecondaryStats() {
 	
 	if (c.life_per_demon_kill > 0) { document.getElementById("life_per_kill").innerHTML = c.life_per_kill + " , " + c.life_per_demon_kill + " (demons)" } else { document.getElementById("life_per_kill").innerHTML = c.life_per_kill }
 	document.getElementById("mana_per_kill").innerHTML = c.mana_per_kill
-	document.getElementById("life_replenish").innerHTML = c.life_replenish
-	document.getElementById("mana_regen").innerHTML = round(c.mana_regen + c.mana_regen_skillup)
+	var lifeRegen = "";
+	if (c.life_regen > 0) { lifeRegen = c.life_regen+"% " }
+	lifeRegen += ("+"+c.life_replenish)
+	document.getElementById("life_regen").innerHTML = lifeRegen
+	document.getElementById("mana_regen").innerHTML = round(c.mana_regen + c.mana_regen_skillup)+"%"
 	
 	document.getElementById("damage_to_mana").innerHTML = c.damage_to_mana
-	if (c.running > 0) { document.getElementById("missile_defense").innerHTML = "" }
-	else { document.getElementById("missile_defense").innerHTML = c.missile_defense }
 	
 	document.getElementById("enemy_fres").innerHTML = c.enemy_fRes
 	document.getElementById("enemy_cres").innerHTML = c.enemy_cRes
@@ -1265,30 +1278,38 @@ function updateTertiaryStats() {
 	document.getElementById("velocity").innerHTML = (100 + c.velocity) + "%"
 	document.getElementById("poison_reduction").innerHTML = Math.min(75,c.poison_length_reduced) + "%"
 	document.getElementById("curse_reduction").innerHTML = Math.min(75,c.curse_length_reduced) + "%"
-	document.getElementById("thorns").innerHTML = c.thorns_reflect + "% +" + ~~(c.thorns_lightning + c.thorns + c.level*c.thorns_per_level)
-	document.getElementById("light_radius").innerHTML = c.light_radius
-	document.getElementById("slower_stam_drain").innerHTML = c.slower_stam_drain
-	document.getElementById("heal_stam").innerHTML = ~~(c.heal_stam + c.level*c.heal_stam_per_level)
-	document.getElementById("slow_target").innerHTML = ~~(c.slow_target + c.slow_enemies)
-	document.getElementById("enemy_defense").innerHTML = ~~(c.enemy_defense + c.target_defense)
-	document.getElementById("monster_defense_per_hit").innerHTML = c.monster_defense_per_hit
-	document.getElementById("flee_on_hit").innerHTML = Math.min(100,c.flee_on_hit) + "%"
-	document.getElementById("blind_on_hit").innerHTML = Math.min(100,c.blind_on_hit) + "%"
-	document.getElementById("freezes_target").innerHTML = c.freezes_target
-	if (discount > 0) { document.getElementById("discount").innerHTML = "-" + c.discount + "%" } else { document.getElementById("discount").innerHTML = "" }
+	document.getElementById("thorns").innerHTML = c.thorns_reflect + "% +" + Math.floor(c.thorns_lightning + c.thorns + c.level*c.thorns_per_level)
+	var lightRadius = "";
+	if (c.light_radius > 0) { lightRadius = "+"+c.light_radius + " to Light Radius<br>" } else if (c.light_radius < 0) { lightRadius = c.light_radius + " to Light Radius<br>" } else { lightRadius = "" }
+	document.getElementById("light_radius").innerHTML = lightRadius
+	if (c.slower_stam_drain > 0) { document.getElementById("slower_stam_drain").innerHTML = "+"+c.slower_stam_drain+"% Slower Stamina Drain<br>" } else { document.getElementById("slower_stam_drain").innerHTML = "" }
+	if (c.heal_stam > 0) { document.getElementById("heal_stam").innerHTML = "Heal Stamina +" + Math.floor(c.heal_stam + c.level*c.heal_stam_per_level)+"%<br>" } else { document.getElementById("heal_stam").innerHTML = "" }
+	var enemyDef = "";
+	if (c.enemy_defense != 0 || c.target_defense != 0) { enemyDef += (Math.min(99,(c.enemy_defense + c.target_defense))+"%"); if (c.enemy_defense_flat != 0 || c.monster_defense_per_hit != 0) { enemyDef += ", " } }
+	if (c.enemy_defense_flat != 0) { enemyDef += c.enemy_defense_flat; if (c.monster_defense_per_hit != 0) { enemyDef += ", " } }
+	if (c.monster_defense_per_hit != 0) { enemyDef += (c.monster_defense_per_hit+" per hit") }
+	if (enemyDef == "") { enemyDef = "0"}
+	document.getElementById("enemy_defense").innerHTML = enemyDef
+//	if (c.monster_defense_per_hit != 0) { document.getElementById("enemy_defense_per_hit").innerHTML = ("Enemy Def: "+c.monster_defense_per_hit+" (per hit)") } else { document.getElementById("enemy_defense_per_hit").innerHTML = "" }	// temporary second line for enemy defense stats (to fit allocated area)
+	var enemyBlind = "";
+	if (c.blind_on_hit > 0) { enemyBlind = "Hit Blinds Target"; if (c.blind_on_hit > 1) { enemyBlind += (" +"+c.blind_on_hit+"<br>"); } else { enemyBlind += "<br>" } }
+	document.getElementById("blind_on_hit").innerHTML = enemyBlind
+	if (c.flee_on_hit > 0) { document.getElementById("flee_on_hit").innerHTML = "Hit Causes Monster to Flee " + Math.min(100,c.flee_on_hit) + "%<br>" } else { document.getElementById("flee_on_hit").innerHTML = "" }
+	if (c.discount > 0) { document.getElementById("discount").innerHTML = "Vendor Prices Reduced by " + c.discount + "%<br>" } else { document.getElementById("discount").innerHTML = "" }
 	
-	if (c.itd > 0) { document.getElementById("itd").innerHTML = "Ignore Target Defense" } else { document.getElementById("itd").innerHTML = "" }
-	if (c.pmh > 0) { document.getElementById("pmh").innerHTML = "Prevent Monster Heal" } else { document.getElementById("pmh").innerHTML = "" }
-	if (c.cbf > 0) { document.getElementById("cbf").innerHTML = "Cannot Be Frozen" }
-	else if (c.half_freeze_duration > 0) { document.getElementById("cbf").innerHTML = "Half Freeze Duration" }
+	if (c.itd > 0) { document.getElementById("itd").innerHTML = "Ignore Target Defense<br>" } else { document.getElementById("itd").innerHTML = "" }
+	if (c.pmh > 0) { document.getElementById("pmh").innerHTML = "Prevent Monster Heal<br>" } else { document.getElementById("pmh").innerHTML = "" }
+	if (c.cbf > 0) { document.getElementById("cbf").innerHTML = "Cannot Be Frozen<br>" }
+	else if (c.half_freeze_duration > 0) { document.getElementById("cbf").innerHTML = "Half Freeze Duration<br>" }
 	else { document.getElementById("cbf").innerHTML = "" }
-	if (c.knockback > 0) { document.getElementById("knockback").innerHTML = "Knockback" } else { document.getElementById("knockback").innerHTML = "" }
-	if (c.melee_splash > 0) { document.getElementById("melee_splash").innerHTML = "Melee Attacks deal Splash Damage" } else { document.getElementById("melee_splash").innerHTML = "" }
-	if (c.freezes_target > 1) { document.getElementById("freezes_target").innerHTML = "Freezes Target +" + c.freezes_target }
-	else if (c.freezes_target > 0) { document.getElementById("freezes_target").innerHTML = "Freezes Target" }
+	if (c.knockback > 0) { document.getElementById("knockback").innerHTML = "Knockback<br>" } else { document.getElementById("knockback").innerHTML = "" }
+	if (c.melee_splash > 0) { document.getElementById("melee_splash").innerHTML = "Melee Attacks deal Splash Damage<br>" } else { document.getElementById("melee_splash").innerHTML = "" }
+	if (c.slow_target > 0 || c.slow_enemies > 0) { document.getElementById("slow_target").innerHTML = "Targets Slowed " + (c.slow_target + c.slow_enemies)+"%<br>" } else { document.getElementById("slow_target").innerHTML = "" }
+	if (c.freezes_target > 1) { document.getElementById("freezes_target").innerHTML = "Freezes Target +" + c.freezes_target + "<br>" }
+	else if (c.freezes_target > 0) { document.getElementById("freezes_target").innerHTML = "Freezes Target<br>" }
 	else { document.getElementById("freezes_target").innerHTML = "" }
-	if (c.peace > 0) { document.getElementById("peace").innerHTML = "Slain Monsters Rest in Peace" } else { document.getElementById("peace").innerHTML = "" }
-	if (c.glow > 0) { document.getElementById("glow").innerHTML = "Character is Glowing" } else { document.getElementById("glow").innerHTML = "" }
+	if (c.peace > 0) { document.getElementById("peace").innerHTML = "Slain Monsters Rest in Peace<br>" } else { document.getElementById("peace").innerHTML = "" }
+	if (c.glow > 0) { document.getElementById("glow").innerHTML = "Character is Glowing<br>" } else { document.getElementById("glow").innerHTML = "" }
 }
 
 // updateMisc - Updates other interface elements
