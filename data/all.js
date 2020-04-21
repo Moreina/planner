@@ -696,7 +696,7 @@ function equip(group, val) {
 			else if (src_group == "weapon") {
 				// TODO: Offhand attacks are separate
 				for (affix in equipped.offhand) {
-					if (affix == "damage_min" || affix == "damage_max" || /*...many affixes*/) {
+					if (affix == "damage_min" || affix == "damage_max" /*|| ...many affixes*/) {
 						// TODO: prevent offhand attack stats from affecting mainhand attacks
 					}
 				}
