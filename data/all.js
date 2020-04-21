@@ -73,57 +73,90 @@ function loadItems(type, dropdown, className) {
 		var choices = "";
 		for (item in equipment[type]) {
 			if (typeof(equipment[type][item].only) == 'undefined' || equipment[type][item].only == className) {
-			var halt = 0;
-			if (className == "clear") { halt = 1 }
-			if (typeof(equipment[type][item].not) != 'undefined') {
-				for (let l = 0; l < equipment[type][item].not.length; l++) {
-					if (equipment[type][item].not[l] == className) { halt = 1 }
+				var halt = 0;
+				if (className == "clear") { halt = 1 }
+				if (typeof(equipment[type][item].not) != 'undefined') {
+					for (let l = 0; l < equipment[type][item].not.length; l++) {
+						if (equipment[type][item].not[l] == className) { halt = 1 }
+					}
 				}
-			}
-			if (className == "Rogue Scout") {
-				if (type == "offhand") { halt = 1 }
-				if (type == "weapon" && equipment[type][item].type != "bow" && equipment[type][item].type != "crossbow" && equipment[type][item].name != "Weapon") { halt = 1 }
-			}
-			if (className == "Desert Guard") {
-				if (type == "offhand") { halt = 1 }
-				if (type == "weapon" && equipment[type][item].type != "polearm" && equipment[type][item].type != "spear" && equipment[type][item].name != "Weapon") { halt = 1 }
-			}
-			if (className == "Iron Wolf") {
-				if (type == "offhand" && equipment[type][item].type != "shield" && equipment[type][item].name != "Offhand") { halt = 1 }
-				if (type == "weapon" && (equipment[type][item].type != "sword" || typeof(equipment[type][item].twoHanded) != 'undefined') && equipment[type][item].name != "Weapon") { halt = 1 }
-			}
-			if (className == "Barb (merc)") {
-				if (type == "offhand") { halt = 1 }
-				if (type == "weapon" && equipment[type][item].type != "sword" && equipment[type][item].name != "Weapon") { halt = 1 }
-			}
+				if (className == "Rogue Scout") {
+					if (type == "offhand") { halt = 1 }
+					if (type == "weapon" && equipment[type][item].type != "bow" && equipment[type][item].type != "crossbow" && equipment[type][item].name != "Weapon") { halt = 1 }
+				}
+				if (className == "Desert Guard") {
+					if (type == "offhand") { halt = 1 }
+					if (type == "weapon" && equipment[type][item].type != "polearm" && equipment[type][item].type != "spear" && equipment[type][item].name != "Weapon") { halt = 1 }
+				}
+				if (className == "Iron Wolf") {
+					if (type == "offhand" && equipment[type][item].type != "shield" && equipment[type][item].name != "Offhand") { halt = 1 }
+					if (type == "weapon" && (equipment[type][item].type != "sword" || typeof(equipment[type][item].twoHanded) != 'undefined') && equipment[type][item].name != "Weapon") { halt = 1 }
+				}
+				if (className == "Barb (merc)") {
+					if (type == "offhand") { halt = 1 }
+					if (type == "weapon" && equipment[type][item].type != "sword" && equipment[type][item].name != "Weapon") { halt = 1 }
+				}
 
-			if (halt == 0) {
-				if (item > 0) {
-					if (typeof(equipment[type][item].set_bonuses) != 'undefined') {
-						choices += "<option class='dropdown-set'>" + equipment[type][item].name + "</option>"
-					} else if (typeof(equipment[type][item].debug) != 'undefined'){
-						choices += "<option class='dropdown-debug'>" + equipment[type][item].name + "</option>"
-					} else if (typeof(equipment[type][item].rarity) != 'undefined' && equipment[type][item].rarity == "magic"){
-						choices += "<option class='dropdown-magic'>" + equipment[type][item].name + "</option>"
-					} else if (typeof(equipment[type][item].rarity) != 'undefined' && equipment[type][item].rarity == "rare"){
-						choices += "<option class='dropdown-rare'>" + equipment[type][item].name + "</option>"
-					} else if (typeof(equipment[type][item].rarity) != 'undefined' && equipment[type][item].rarity == "crafted"){
-						choices += "<option class='dropdown-crafted'>" + equipment[type][item].name + "</option>"
-					} else if (typeof(equipment[type][item].rarity) != 'undefined' && equipment[type][item].rarity == "common"){
-						choices += "<option class='dropdown-common'>" + equipment[type][item].name + "</option>"
-					} else if (typeof(equipment[type][item].rw) != 'undefined'){
-						choices += "<option class='dropdown-runeword'>" + equipment[type][item].name + "</option>"
+				if (halt == 0) {
+					if (item > 0) {
+						if (typeof(equipment[type][item].set_bonuses) != 'undefined') {
+							choices += "<option class='dropdown-set'>" + equipment[type][item].name + "</option>"
+						} else if (typeof(equipment[type][item].debug) != 'undefined'){
+							choices += "<option class='dropdown-debug'>" + equipment[type][item].name + "</option>"
+						} else if (typeof(equipment[type][item].rarity) != 'undefined' && equipment[type][item].rarity == "magic"){
+							choices += "<option class='dropdown-magic'>" + equipment[type][item].name + "</option>"
+						} else if (typeof(equipment[type][item].rarity) != 'undefined' && equipment[type][item].rarity == "rare"){
+							choices += "<option class='dropdown-rare'>" + equipment[type][item].name + "</option>"
+						} else if (typeof(equipment[type][item].rarity) != 'undefined' && equipment[type][item].rarity == "crafted"){
+							choices += "<option class='dropdown-crafted'>" + equipment[type][item].name + "</option>"
+						} else if (typeof(equipment[type][item].rarity) != 'undefined' && equipment[type][item].rarity == "common"){
+							choices += "<option class='dropdown-common'>" + equipment[type][item].name + "</option>"
+						} else if (typeof(equipment[type][item].rw) != 'undefined'){
+							choices += "<option class='dropdown-runeword'>" + equipment[type][item].name + "</option>"
+						} else {
+							choices += "<option class='dropdown-unique'>" + equipment[type][item].name + "</option>"
+						}
 					} else {
-						choices += "<option class='dropdown-unique'>" + equipment[type][item].name + "</option>"
-					}
-				} else {
-					if (type != "charms") {
-						choices += "<option selected>" + "­ ­ ­ ­ " + equipment[type][item].name + "</option>"
-					} else {
-						choices += "<option disabled selected>" + "­ ­ ­ ­ " + equipment[type][item].name + "</option>"
+						if (type != "charms") {
+							choices += "<option selected>" + "­ ­ ­ ­ " + equipment[type][item].name + "</option>"
+						} else {
+							choices += "<option disabled selected>" + "­ ­ ­ ­ " + equipment[type][item].name + "</option>"
+						}
 					}
 				}
 			}
+		}
+		if (type == "offhand" && className == "barbarian") {		// TODO: reduce code duplication
+			type = "weapon"
+			for (item in equipment[type]) {
+				if (typeof(equipment[type][item].only) == 'undefined' || equipment[type][item].only == className) {
+					var halt = 0
+					if (typeof(equipment[type][item].not) != 'undefined') {
+						for (let m = 0; m < equipment[type][item].not.length; m++) {
+							if (equipment[type][item].not[m] == className) { halt = 1 }
+						}
+					}
+					if (equipment[type][item].type != "sword") { if (typeof(equipment[type][item].twoHanded) != 'undefined') { if (equipment[type][item].twoHanded == 1) { halt = 1 } } }
+					if (halt == 0) {
+						if (item > 0) {
+							if (typeof(equipment[type][item].set_bonuses) != 'undefined') {
+								choices += "<option class='dropdown-set'>" + equipment[type][item].name + "</option>"
+							} else if (typeof(equipment[type][item].rarity) != 'undefined' && equipment[type][item].rarity == "magic"){
+								choices += "<option class='dropdown-magic'>" + equipment[type][item].name + "</option>"
+							} else if (typeof(equipment[type][item].rarity) != 'undefined' && equipment[type][item].rarity == "rare"){
+								choices += "<option class='dropdown-rare'>" + equipment[type][item].name + "</option>"
+							} else if (typeof(equipment[type][item].rarity) != 'undefined' && equipment[type][item].rarity == "crafted"){
+								choices += "<option class='dropdown-crafted'>" + equipment[type][item].name + "</option>"
+							} else if (typeof(equipment[type][item].rarity) != 'undefined' && equipment[type][item].rarity == "common"){
+								choices += "<option class='dropdown-common'>" + equipment[type][item].name + "</option>"
+							} else if (typeof(equipment[type][item].rw) != 'undefined'){
+								choices += "<option class='dropdown-runeword'>" + equipment[type][item].name + "</option>"
+							} else {
+								choices += "<option class='dropdown-unique'>" + equipment[type][item].name + "</option>"
+							}
+						}
+					}
+				}
 			}
 		}
 		document.getElementById(dropdown).innerHTML = choices
@@ -465,13 +498,13 @@ function equipMerc(type, val) {
 }
 	
 // equip - Equips an item by adding its stats to the character, or unequips it if it's already equipped			// TODO: consider renaming... switchItem()?  Also, split into multiple smaller functions
-//	type: name of equipment type
+//	group: equipment group
 //	val: name of item
 // ---------------------------------
 function equip(group, val) {
 	var auraName = "";
 	var auraLevel = "";
-	//var selected = document.getElementById("dropdown_"+type).selectedIndex;	// consider using if unequipping weapon/offhand due to equipping a new incompatible item
+	//var selected = document.getElementById("dropdown_"+group).selectedIndex;	// consider using if unequipping weapon/offhand due to equipping a new incompatible item
 	var old_set_bonuses = "";
 	var old_set = "";
 	var old_set_before = 0;
@@ -480,10 +513,21 @@ function equip(group, val) {
 	var set = "";
 	var set_before = 0;
 	var set_after = 0;
+	
+	// check if item was imported from a different category
+	var src_group = group;
+	var found = 0;
+	for (item in equipment[group]) { if (equipment[group][item].name == val) { found = 1 } }
+	if (found == 0 && group == "offhand") {
+		src_group = "weapon"
+		for (item in equipment[src_group]) { if (equipment[src_group][item].name == val) { twoHanded = equipment[src_group][item].twoHanded; if (typeof(equipment[src_group][item].type) != 'undefined') itemType = equipment[src_group][item].type } }
+	}
+	
 	for (old_affix in equipped[group]) { if (old_affix == "set_bonuses") { old_set_bonuses = equipped[group].set_bonuses } }
-	for (item in equipment[group]) { if (equipment[group][item].name == val) { if (typeof(equipment[group][item].set_bonuses) != 'undefined') { set_bonuses = equipment[group][item].set_bonuses } } }
+	for (item in equipment[src_group]) { if (equipment[src_group][item].name == val) { if (typeof(equipment[src_group][item].set_bonuses) != 'undefined') { set_bonuses = equipment[src_group][item].set_bonuses } } }
 	if (set_bonuses != "") { set = set_bonuses[0]; set_before = character[set]; }
 	if (old_set_bonuses != "") { old_set = old_set_bonuses[0]; old_set_before = character[old_set]; }
+	
 	// remove effects
 	for (old_affix in equipped[group]) {			// old_affix isn't used...?
 		for (let s = 0; s < skills.length; s++) {
@@ -537,40 +581,30 @@ function equip(group, val) {
 		}
 	}
 	
-	// two-handed weapon verification
-	var allow = 1;
 	var twoHanded = 0;
 	var itemType = "";
-	for (item in equipment[group]) { if (equipment[group][item].name == val) { twoHanded = equipment[group][item].twoHanded; if (typeof(equipment[group][item].type) != 'undefined') itemType = equipment[group][item].type } }
-	if (group == "weapon" && equipped["offhand"].name != "none" && equipped["offhand"].name != "Offhand") {
-		if ((twoHanded == 1 || equipped["offhand"].type == "quiver") && !(equipped["offhand"].type == "quiver" && (itemType == "bow" || itemType == "crossbow"))) {
-			allow = 0; document.getElementById("dropdown_weapon").selectedIndex = 0; }
-	}
-	if (group == "offhand" && equipped["weapon"].name != "none") {
-		if ((equipped["weapon"].twoHanded == 1 || (equipped["weapon"].type != "bow" && itemType == "quiver")) && !((equipped["weapon"].type == "bow" || equipped["weapon"].type == "crossbow") && itemType == "quiver")) {
-			allow = 0; document.getElementById("dropdown_offhand").selectedIndex = 0; }
-	}
-	
+	for (item in equipment[src_group]) { if (equipment[src_group][item].name == val) { twoHanded = equipment[src_group][item].twoHanded; if (typeof(equipment[src_group][item].type) != 'undefined') itemType = equipment[src_group][item].type } }
+
 	// add affixes to character
-	if (allow == 1) { for (item in equipment[group]) {
-		if (equipment[group][item].name == val) {
+	for (item in equipment[src_group]) {
+		if (equipment[src_group][item].name == val) {
 			// add affixes from base item
-			if (typeof(equipment[group][item]["base"]) != 'undefined') { if (equipment[group][item]["base"] != "") {
-				var base = equipment[group][item].base; base = base.split(' ').join('_'); base = base.split('-').join('_'); base = base.split("'s").join("s");	// spaces, hypens, and apostrophes converted to match named entry in bases{}
+			if (typeof(equipment[src_group][item]["base"]) != 'undefined') { if (equipment[src_group][item]["base"] != "") {
+				var base = equipment[src_group][item].base; base = base.split(' ').join('_'); base = base.split('-').join('_'); base = base.split("'s").join("s");	// spaces, hypens, and apostrophes converted to match named entry in bases{}
 				if (typeof(bases[base]) != 'undefined') { for (affix in bases[base]) { if (affix != "group" || affix != "type" || affix != "upgrade" || affix != "downgrade" || affix != "subtype" || affix != "only") {
 					var multEth = 1;
 					var multED = 1;
 					var multReq = 1;
 					var reqEth = 0;
 					
-					if (typeof(equipment[group][item]["ethereal"]) != 'undefined') { if (equipment[group][item]["ethereal"] == 1) { multEth = 1.5; reqEth = 10; } }
-					if (affix == "base_defense") { if (typeof(equipment[group][item]["e_def"]) != 'undefined') { multED += (equipment[group][item]["e_def"]/100) } }
-					else if (affix == "base_damage_min" || affix == "base_damage_max" || affix == "throw_min" || affix == "throw_max") { if (typeof(equipment[group][item]["e_damage"]) != 'undefined') { multED += (equipment[group][item]["e_damage"]/100) } }
-					else if (affix == "req_strength" || affix == "req_dexterity") { if (typeof(equipment[group][item]["req"]) != 'undefined') { multReq += (equipment[group][item]["req"]/100) } }
+					if (typeof(equipment[src_group][item]["ethereal"]) != 'undefined') { if (equipment[src_group][item]["ethereal"] == 1) { multEth = 1.5; reqEth = 10; } }
+					if (affix == "base_defense") { if (typeof(equipment[src_group][item]["e_def"]) != 'undefined') { multED += (equipment[src_group][item]["e_def"]/100) } }
+					else if (affix == "base_damage_min" || affix == "base_damage_max" || affix == "throw_min" || affix == "throw_max" || affix == "base_min_alternate" || affix == "base_max_alternate") { if (typeof(equipment[src_group][item]["e_damage"]) != 'undefined') { multED += (equipment[src_group][item]["e_damage"]/100) } }
+					else if (affix == "req_strength" || affix == "req_dexterity") { if (typeof(equipment[src_group][item]["req"]) != 'undefined') { multReq += (equipment[src_group][item]["req"]/100) } }
 					
 					if (typeof(equipped[group][affix]) == 'undefined') { equipped[group][affix] = 0 }	// undefined (new) affixes get initialized to zero
 					
-					if (affix == "base_damage_min" || affix == "base_damage_max" || affix == "throw_min" || affix == "throw_max" || affix == "base_defense") {
+					if (affix == "base_damage_min" || affix == "base_damage_max" || affix == "throw_min" || affix == "throw_max" || affix == "base_min_alternate" || affix == "base_max_alternate" || affix == "base_defense") {
 						equipped[group][affix] = Math.ceil(multEth*multED*bases[base][affix])
 						character[affix] += Math.ceil(multEth*multED*bases[base][affix])
 					}
@@ -585,14 +619,14 @@ function equip(group, val) {
 				} } }
 			} }
 			// add regular affixes
-			for (affix in equipment[group][item]) {
-				equipped[group][affix] = equipment[group][item][affix]
+			for (affix in equipment[src_group][item]) {
+				equipped[group][affix] = equipment[src_group][item][affix]
 				if (affix == "aura" || affix == "name" || affix == "type" || affix == "base" || affix == "only" || affix == "not" || affix == "rw") {
 					if (affix == "aura") {
-			//			equipped[group].aura_lvl = equipment[group][item].aura_lvl	// redundant?
-						auraName = equipment[group][item][affix]
-						auraLevel = equipment[group][item].aura_lvl
-						//addAura(equipment[group][item][affix], equipment[group][item].aura_lvl, group)
+			//			equipped[group].aura_lvl = equipment[src_group][item].aura_lvl	// redundant?
+						auraName = equipment[src_group][item][affix]
+						auraLevel = equipment[src_group][item].aura_lvl
+						//addAura(equipment[src_group][item][affix], equipment[src_group][item].aura_lvl, group)
 					}
 				} else {
 					var oskill_info = "";
@@ -603,7 +637,7 @@ function equip(group, val) {
 					}
 					if (oskill_info != "") {
 						if (oskill_info.native_class == character.class_name.toLowerCase()) {
-							if (equipment[group][item][affix] > 3) { equipped[group][affix] -= (equipment[group][item][affix]-3) }	// oskills are capped at 3 for 'native' classes
+							if (equipment[src_group][item][affix] > 3) { equipped[group][affix] -= (equipment[src_group][item][affix]-3) }	// oskills are capped at 3 for 'native' classes
 						} else { if (oskill_info.native_class != "none") {
 							var skill = skills_all[oskill_info.native_class][oskill_info.i];
 							if (typeof(skill.effect) != 'undefined') { if (skill.effect > 3) {
@@ -617,7 +651,7 @@ function equip(group, val) {
 				}
 			}
 		}
-	} }
+	}
 	// add set bonuses
 	if (set_bonuses != "") {
 		set_after = character[set];
@@ -653,6 +687,36 @@ function equip(group, val) {
 			}
 		}
 	}
+	// prevent incompatible weapon/offhand combinations
+	if (equipped.weapon.name != "none" && equipped.offhand.name != "none") {
+		if (group == "offhand") {
+			if (itemType == "quiver" && equipped.weapon.type != "bow" && equipped.weapon.type != "crossbow") { equip('weapon', 'none') }
+			else if (itemType != "quiver" && equipped.weapon.twoHanded == 1 && (equipped.weapon.type != "sword" || character.class_name != "Barbarian")) { equip('weapon', 'none') }
+			else if (itemType == "claw" && equipped.weapon.type != "claw") { equip('weapon', 'none') }
+			else if (src_group == "weapon") {
+				// TODO: Offhand attacks are separate
+				for (affix in equipped.offhand) {
+					if (affix == "damage_min" || affix == "damage_max" || /*...many affixes*/) {
+						// TODO: prevent offhand attack stats from affecting mainhand attacks
+					}
+				}
+			}
+		} else if (group == "weapon") {
+			if (equipped.offhand.type == "quiver" && itemType != "bow" && itemType != "crossbow") { equip('offhand', 'none') }
+			else if (equipped.offhand.type != "quiver" && twoHanded == 1 && (itemType != "sword" || character.class_name != "Barbarian")) { equip('offhand', 'none') }
+			else if (itemType != "claw" && equipped.offhand.type == "claw") { equip('offhand', 'none') }
+		}
+	}
+	// adjust damage for 2-handed swords if wielded differently
+	if (character.class_name == "Barbarian") {
+		if (equipped.weapon.name != "none" && equipped.offhand.name != "none") {
+			if (equipped.weapon.type == "sword" && equipped.weapon.twoHanded == 1) { checkWield("weapon", 1) }
+			if (equipped.offhand.type == "sword" && equipped.offhand.twoHanded == 1) { checkWield("offhand", 1) }
+		} else {
+			if (equipped.weapon.type == "sword" && equipped.weapon.twoHanded == 1) { checkWield("weapon", 2) }
+			if (equipped.offhand.type == "sword" && equipped.offhand.twoHanded == 1) { checkWield("offhand", 2) }
+		}
+	}
 	// remove incompatible corruptions
 	if (equipped[group].ethereal > 0 || equipped[group].sockets > 0 || equipped[group].rw > 0 || equipped[group].rarity == "common" || (group == "offhand" && (equipped[group].type == "shield" || equipped[group].type == "quiver") && equipped[group].type != corruptsEquipped[group].base)) { corrupt(group, group) }
 	if (corruptsEquipped[group].name == "+ Sockets") { adjustCorruptionSockets(group) }
@@ -660,13 +724,11 @@ function equip(group, val) {
 		// reload corruption options when the selected type changes
 		if (equipped[group].type == "shield") { if (offhandType != "shield") { offhandType = "shield"; reloadOffhandCorruptions(); } }
 		else if (equipped[group].type == "quiver") { if (offhandType != "quiver") { offhandType = "quiver"; reloadOffhandCorruptions(); } }
-		else if (equipped[group].name != "none") { if (offhandType != "weapon") { offhandType = "weapon"; reloadOffhandCorruptions(); } }
+		else if (equipped[group].name != "none") { if (offhandType != "weapon") { offhandType = "weapon"; reloadOffhandCorruptions(); } }	// TODO: Add weapon corruptions for dual-wielding
 		else { if (offhandType != "none") { offhandType = "none"; reloadOffhandCorruptions(); } }
-		
 	}
-	// update
-	if (group == val) { document.getElementById(("dropdown_"+group)).selectedIndex = 0; }
-	
+	if (val == group || val == "none") { document.getElementById(("dropdown_"+group)).selectedIndex = 0; }
+	// set inventory image
 	if (equipped[group].name != "none") {
 		var src = "";
 		var base = "";
@@ -678,7 +740,7 @@ function equip(group, val) {
 	}
 	
 	if (auraName != "" && auraLevel != "") { addAura(auraName, auraLevel, group); }		// TODO: Why does this break things if called earlier? (item image wasn't appearing)
-
+	// update
 	calculateSkillAmounts()
 	updateEffectList()
 	updateStats()
@@ -686,7 +748,30 @@ function equip(group, val) {
 	updateSkills()
 	if (selectedSkill[0] != " ­ ­ ­ ­ Skill 1") { checkSkill(selectedSkill[0], 1) }
 	if (selectedSkill[1] != " ­ ­ ­ ­ Skill 2") { checkSkill(selectedSkill[1], 2) }
-	//for (let s = 0; s < skills.length; s++) { modifyEffect(skills[s]) }
+}
+
+// checkWield - Adjust base damage for two-handed swords (dependent on whether wielded with 1 or 2 hands)
+//	group: item's group (weapon or offhand)
+//	hands_used: number of hands used to wield the weapon
+// ---------------------------------
+function checkWield(group, hands_used) {
+		var base_min = equipped[group].base_damage_min;
+		var base_max = equipped[group].base_damage_max;
+		var min_alt = equipped[group].base_min_alternate;
+		var max_alt = equipped[group].base_max_alternate;
+		var swap = 0;
+		if (hands_used == 2) { if (base_min < min_alt) { swap = 1 } }
+		else { if (base_min > min_alt) { swap = 1 } }
+		if (swap == 1) {
+			character.base_damage_min -= base_min
+			character.base_damage_max -= base_max
+			equipped[group].base_damage_min = min_alt
+			equipped[group].base_damage_max = max_alt
+			equipped[group].base_min_alternate = base_min
+			equipped[group].base_max_alternate = base_max
+			character.base_damage_min += min_alt
+			character.base_damage_max += max_alt
+		}
 }
 
 // addAura - Adds an aura of the specified level to the character
@@ -1150,6 +1235,8 @@ function updatePrimaryStats() {
 		else if (weaponType == "claw") { weapon_skillup = c.claw_skillup[0]; c.ar_skillup = c.claw_skillup[1]; c.cstrike_skillup = c.claw_skillup[2]; }
 		else { weapon_skillup = 0; c.ar_skillup = 0; c.cstrike_skillup = 0; c.pierce_skillup = 0; }
 	}
+	// TODO: Add statBonus & weapon_skillup for offhand weapons
+	// TODO: Subtract damage, ED, AR gained from offhand weapon - apply only to offhand attacks (need new display for them)
 	var life_addon = (vitTotal-c.starting_vitality)*c.life_per_vitality;
 	var stamina_addon = (vitTotal-c.starting_vitality)*c.stamina_per_vitality;
 	var mana_addon = (energyTotal-c.starting_energy)*c.mana_per_energy;
@@ -1246,7 +1333,9 @@ function updateSecondaryStats() {
 	document.getElementById("frw").innerHTML = Math.floor(c.frw + c.frw_skillup) //+ " ­ (" + Math.floor(movespeed) + "%)"
 
 //	var weapon_speed = Math.ceil(256 * (charWpnSpeed + 1) / Math.floor(256 * (100 + wpnIAS + Math.floor(charIAS /(1 + charIAS/120)))/100)) - 1
-	document.getElementById("ias").innerHTML = c.ias
+	var ias = c.ias;
+	if (offhandType == "weapon") { if (typeof(equipped.offhand.ias) != 'undefined') { ias -= equipped.offhand.ias } }
+	document.getElementById("ias").innerHTML = ias
 	
 	document.getElementById("life_leech").innerHTML = c.life_leech
 	document.getElementById("mana_leech").innerHTML = c.mana_leech
