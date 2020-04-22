@@ -40,7 +40,8 @@ Character Skill Planner for Diablo 2: Path of Diablo
 
 ### Upcoming Plans:
 * item-base upgrading (for uniques/rares)
-* o-skill buffs
+* off-class skill buffs
+* option to 'snapshot' buffs
 * breakpoints
 * mercenary stats & validation
 * interface niceties
