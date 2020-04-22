@@ -113,7 +113,7 @@ var character_any = {
 	//	min/max parameters: base damage of different types
 	//	wisp: multiplier for Wisp Projector (Lifted Spirit aura)
 	// ---------------------------------
-	updateSelectedSkill : function(skillName, num, ar, phys_min, phys_max, ele_min, ele_max, mag_min, mag_max, wisp) {
+	updateSelectedSkill : function(skill, num, ar, phys_min, phys_max, phys_mult, ele_min, ele_max, mag_min, mag_max, wisp) {
 		var nameMod = "oskill_"+skillName.split(" ").join("_");
 		var lvl = ~~character[nameMod] + character.all_skills;
 		var ar_bonus = 0; var damage_bonus = 0; var weapon_damage = 100;
@@ -148,11 +148,11 @@ var character_any = {
 
 	//	TODO: check weapon requirements & werewolf/werebear requirements
 
-		if (attack == 0) { phys_min = 0; phys_max = 0; ele_min = 0; ele_max = 0; mag_min = 0; mag_max = 0; }
-		ele_min += Math.floor(fDamage_min + cDamage_min + lDamage_min);
+		if (attack == 0) { phys_min = 0; phys_max = 0; phys_mult = 1; ele_min = 0; ele_max = 0; mag_min = 0; mag_max = 0; }
+		ele_min += Math.floor(fDamage_min + cDamage_min + lDamage_min + pDamage_min);
 		ele_max += Math.floor(fDamage_max + cDamage_max + lDamage_max + pDamage_max);
-		phys_min = Math.floor((phys_min*weapon_damage/100 + damage_min) * 1+damage_bonus/100);
-		phys_max = Math.floor((phys_max*weapon_damage/100 + damage_max) * 1+damage_bonus/100);
+		phys_min = Math.floor((phys_min + damage_min) * (phys_mult + (weapon_damage-100+damage_bonus)/100));
+		phys_max = Math.floor((phys_max + damage_max) * (phys_mult + (weapon_damage-100+damage_bonus)/100));
 		if (spell == 0) { skillMin = Math.floor(mag_min+mDamage_min+ele_min+phys_min); skillMax = Math.floor(mag_max+mDamage_max+ele_max+phys_max); skillAr = Math.floor(ar*(1+ar_bonus/100));
 		} else if (spell == 1) { skillMin = Math.floor(mag_min+mDamage_min+ele_min+phys_min); skillMax = Math.floor(mag_max+mDamage_max+ele_max+phys_max); skillAr = "";
 		} else if (spell == 2) { skillMin = ""; skillMax = ""; skillAr = ""; }
