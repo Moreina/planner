@@ -979,16 +979,17 @@ function addCharm(val) {
 					}
 				}
 			}
-			if (selectedSkill[0] != " ­ ­ ­ ­ Skill 1") { checkSkill(selectedSkill[0], 1) }
-			if (selectedSkill[1] != " ­ ­ ­ ­ Skill 2") { checkSkill(selectedSkill[1], 2) }
 		}
 	}
 	document.getElementById("dropdown_charms").selectedIndex = 0
+	// update
 	updateEffectList()
 	calculateSkillAmounts()
 	for (let s = 0; s < skills.length; s++) { modifyEffect(skills[s]) }
 	updateStats()
 	updateSkills()
+	if (selectedSkill[0] != " ­ ­ ­ ­ Skill 1") { checkSkill(selectedSkill[0], 1) }
+	if (selectedSkill[1] != " ­ ­ ­ ­ Skill 2") { checkSkill(selectedSkill[1], 2) }
 }
 
 // addSocketable - Adds a jewel, rune, or gem to the inventory
