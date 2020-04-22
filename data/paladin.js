@@ -45,13 +45,17 @@ var character_paladin = {class_name:"Paladin", strength:25, dexterity:20, vitali
 		if (skill.name == "Zeal" && elem == 1) { 	result += (10*skills[20].level) }
 		if (skill.name == "Charge" && elem == 0) { 	result += (26*skills[6].level + 26*skills[10].level) }	// TODO: are these synergies supposed to be multiplicative instead of additive?
 		
+		// calculates weapon's physical damage - similar to getWeaponDamage()
 		var sock = {damage_min:0, damage_max:0, e_damage:0};
 		var phys_min = 0;
 		var phys_max = 0;
 		if (skill.name == "Vengeance") {
-			for (let i = 0; i < socketed["weapon"].items.length; i++) {
-				for (affix in socketed["weapon"].items[i]) {
-					if (affix == "e_damage" || affix == "damage_min" || affix == "damage_max") { sock[affix] += socketed["weapon"].items[i][affix] }
+			for (group in socketed) {
+				for (let i = 0; i < socketed[group].items.length; i++) {
+					for (affix in socketed[group].items[i]) {
+						if (group == "weapon" && affix == "e_damage") { sock[affix] += socketed[group].items[i][affix] }
+						if (affix == "damage_min" || affix == "damage_max") { sock[affix] += socketed[group].items[i][affix] }
+					}
 				}
 			}
 			// TODO: Doesn't account for superior ED (unless it has since been combined with weapon ED)

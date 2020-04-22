@@ -429,7 +429,7 @@ function corrupt(group, val) {
 			}
 		}
 		if (val == "+ Sockets") { adjustCorruptionSockets(group) }
-		if (group == "offhand") { if (equipped[group].type == "shield" || equipped[group.type == "quiver"]) { if (equipped[group].type != corruptsEquipped[group].base) { corrupt(group, group) } } }
+		if (group == "offhand") { if (equipped[group].type == "shield" || equipped[group].type == "quiver") { if (equipped[group].type != corruptsEquipped[group].base) { corrupt(group, group) } } }
 	}
 	calculateSkillAmounts()
 	updateEffectList()
@@ -1207,63 +1207,54 @@ function toggleAutocast(autocast) {
 	if (autocast.checked) { settings.autocast = 1 } else { settings.autocast = 0 }
 }
 
-// updateStats - Updates all stats
+// getWeaponDamage - Calculates physical min/max damage and multiplier for an equipped weapon
+//	str: total strength
+//	dex: total dexterity
+//	type: type of the weapon
+//	thrown: 1 if the weapon is being thrown
+// return: array with [min damage, max damage, multiplier]
 // ---------------------------------
-function updateStats() { updatePrimaryStats(); updateMisc(); updateSecondaryStats(); updateTertiaryStats(); }
-
-// updateStats - Updates stats shown by the default (original D2) stat page
-// ---------------------------------
-function updatePrimaryStats() {
+function getWeaponDamage(str, dex, type, thrown) {
+// TODO: change offhand code, just use 'type' instead
 	var c = character;
-	var strTotal = (c.strength + c.all_attributes + (c.level-1)*c.strength_per_level);
-	var dexTotal = (c.dexterity + c.all_attributes + (c.level-1)*c.dexterity_per_level);
-	var vitTotal = (c.vitality + c.all_attributes + (c.level-1)*c.vitality_per_level);
-	var energyTotal = (c.energy + c.all_attributes)*(1+c.max_energy);
+	// multiplier from stats
 	var statBonus = 1;
-	var statBonus_offhand = 1;
-	var weaponType = equipped.weapon.type;
-	var weaponType_offhand = "";
-	if (offhandType == "weapon") { weaponType_offhand = equipped.offhand.type }
-	if (typeof(weaponType) != 'undefined') { 
-		if (weaponType == "hammer") { statBonus = (strTotal*1.1/100) }
-		else if (weaponType == "bow" || weaponType == "crossbow") { statBonus = (dexTotal/100) }
-		else if (typeof(equipped.weapon.only) != 'undefined') { if (weaponType == "spear" || weaponType == "javelin" || equipped.weapon.only == "amazon") { statBonus = ((strTotal*0.8/100)+(dexTotal*0.5/100)) } }
-		else if (weaponType == "dagger" || weaponType == "thrown" || weaponType == "claw" || weaponType == "javelin") { statBonus = ((strTotal*0.75/100)+(dexTotal*0.75/100)) }
-		else  { statBonus = (strTotal/100) }
-		if (offhandType == "weapon") {
-			if (weaponType_offhand == "hammer") { statBonus_offhand = (strTotal*1.1/100) }
-			else if (weaponType_offhand == "dagger" || weaponType_offhand == "thrown" || weaponType_offhand == "claw" || weaponType_offhand == "javelin") { statBonus_offhand = ((strTotal*0.75/100)+(dexTotal*0.75/100)) }
-			else  { statBonus_offhand = (strTotal/100) }
-		}
+//	var statBonus_offhand = 1;
+//	var type_offhand = "";
+//	if (offhandType == "weapon") { type_offhand = equipped.offhand.type }
+	if (typeof(type) != 'undefined') { 
+		if (type == "hammer") { statBonus = (str*1.1/100) }
+		else if (type == "bow" || type == "crossbow") { statBonus = (dex/100) }
+		else if (typeof(equipped.weapon.only) != 'undefined') { if (type == "spear" || type == "javelin" || equipped.weapon.only == "amazon") { statBonus = ((str*0.8/100)+(dex*0.5/100)) } }
+		else if (type == "dagger" || type == "thrown" || type == "claw" || type == "javelin") { statBonus = ((str*0.75/100)+(dex*0.75/100)) }
+		else  { statBonus = (str/100) }
+//		if (offhandType == "weapon") {
+//			if (type_offhand == "hammer") { statBonus_offhand = (str*1.1/100) }
+//			else if (type_offhand == "dagger" || type_offhand == "thrown" || type_offhand == "claw" || type_offhand == "javelin") { statBonus_offhand = ((str*0.75/100)+(dex*0.75/100)) }
+//			else  { statBonus_offhand = (str/100) }
+//		}
 	}
+	// multipliers from skills
 	var weapon_skillup = 0;
-	var weapon_skillup_offhand = 0;
+//	var weapon_skillup_offhand = 0;
 	var ar_skillup_offhand = 0;
 	var cstrike_skillup_offhand = 0;
 	var pierce_skillup_offhand = 0;
 	if (c.class_name == "Barbarian" || c.class_name == "Assassin") {
-		if (weaponType == "sword" || weaponType == "axe" || weaponType == "dagger") { weapon_skillup = c.edged_skillup[0]; c.ar_skillup = c.edged_skillup[1]; c.cstrike_skillup = c.edged_skillup[2]; }
-		else if (weaponType == "polearm" || weaponType == "spear") { weapon_skillup = c.pole_skillup[0]; c.ar_skillup = c.pole_skillup[1]; c.cstrike_skillup = c.pole_skillup[2]; }
-		else if (weaponType == "mace" || weaponType == "scepter" || weaponType == "staff" || weaponType == "hammer" || weaponType == "club") { weapon_skillup = c.blunt_skillup[0]; c.ar_skillup = c.blunt_skillup[1]; c.cstrike_skillup = c.blunt_skillup[2]; }
-		else if (weaponType == "thrown") { weapon_skillup = c.thrown_skillup[0]; c.ar_skillup = c.thrown_skillup[1]; c.pierce_skillup = c.thrown_skillup[2]; }
-		else if (weaponType == "claw") { weapon_skillup = c.claw_skillup[0]; c.ar_skillup = c.claw_skillup[1]; c.cstrike_skillup = c.claw_skillup[2]; }
+		if (type == "sword" || type == "axe" || type == "dagger") { weapon_skillup = c.edged_skillup[0]; c.ar_skillup = c.edged_skillup[1]; c.cstrike_skillup = c.edged_skillup[2]; }
+		else if (type == "polearm" || type == "spear") { weapon_skillup = c.pole_skillup[0]; c.ar_skillup = c.pole_skillup[1]; c.cstrike_skillup = c.pole_skillup[2]; }
+		else if (type == "mace" || type == "scepter" || type == "staff" || type == "hammer" || type == "club") { weapon_skillup = c.blunt_skillup[0]; c.ar_skillup = c.blunt_skillup[1]; c.cstrike_skillup = c.blunt_skillup[2]; }
+		else if (type == "thrown") { weapon_skillup = c.thrown_skillup[0]; c.ar_skillup = c.thrown_skillup[1]; c.pierce_skillup = c.thrown_skillup[2]; }
+		else if (type == "claw") { weapon_skillup = c.claw_skillup[0]; c.ar_skillup = c.claw_skillup[1]; c.cstrike_skillup = c.claw_skillup[2]; }
 		else { weapon_skillup = 0; c.ar_skillup = 0; c.cstrike_skillup = 0; c.pierce_skillup = 0; }
-		if (offhandType == "weapon") {
-			if (weaponType_offhand == "sword" || weaponType_offhand == "axe" || weaponType_offhand == "dagger") { weapon_skillup_offhand = c.edged_skillup[0]; ar_skillup_offhand = c.edged_skillup[1]; cstrike_skillup_offhand = c.edged_skillup[2]; }
-			else if (weaponType_offhand == "mace" || weaponType_offhand == "scepter" || weaponType_offhand == "hammer" || weaponType_offhand == "club") { weapon_skillup_offhand = c.blunt_skillup[0]; ar_skillup_offhand = c.blunt_skillup[1]; cstrike_skillup_offhand = c.blunt_skillup[2]; }
-			else if (weaponType_offhand == "thrown") { weapon_skillup_offhand = c.thrown_skillup[0]; ar_skillup_offhand = c.thrown_skillup[1]; pierce_skillup_offhand = c.thrown_skillup[2]; }
-			else if (weaponType_offhand == "claw") { weapon_skillup_offhand = c.claw_skillup[0]; ar_skillup_offhand = c.claw_skillup[1]; cstrike_skillup_offhand = c.claw_skillup[2]; }
-			else { weapon_skillup_offhand = 0; ar_skillup_offhand = 0; cstrike_skillup_offhand = 0; pierce_skillup_offhand = 0; }
-		}
+//		if (offhandType == "weapon") {
+//			if (type_offhand == "sword" || type_offhand == "axe" || type_offhand == "dagger") { weapon_skillup_offhand = c.edged_skillup[0]; ar_skillup_offhand = c.edged_skillup[1]; cstrike_skillup_offhand = c.edged_skillup[2]; }
+//			else if (type_offhand == "mace" || type_offhand == "scepter" || type_offhand == "hammer" || type_offhand == "club") { weapon_skillup_offhand = c.blunt_skillup[0]; ar_skillup_offhand = c.blunt_skillup[1]; cstrike_skillup_offhand = c.blunt_skillup[2]; }
+//			else if (type_offhand == "thrown") { weapon_skillup_offhand = c.thrown_skillup[0]; ar_skillup_offhand = c.thrown_skillup[1]; pierce_skillup_offhand = c.thrown_skillup[2]; }
+//			else if (type_offhand == "claw") { weapon_skillup_offhand = c.claw_skillup[0]; ar_skillup_offhand = c.claw_skillup[1]; cstrike_skillup_offhand = c.claw_skillup[2]; }
+//			else { weapon_skillup_offhand = 0; ar_skillup_offhand = 0; cstrike_skillup_offhand = 0; pierce_skillup_offhand = 0; }
+//		}
 	}
-	var life_addon = (vitTotal-c.starting_vitality)*c.life_per_vitality;
-	var stamina_addon = (vitTotal-c.starting_vitality)*c.stamina_per_vitality;
-	var mana_addon = (energyTotal-c.starting_energy)*c.mana_per_energy;
-
-	var def = (c.base_defense + c.defense + c.level*c.defense_per_level + Math.floor(dexTotal/4)) * (1 + (c.defense_bonus + c.defense_skillup)/100);
-	var ar = ((dexTotal - 7) * 5 + c.ar + c.level*c.ar_per_level + c.ar_const) * (1+(c.ar_skillup + c.ar_bonus + c.level*c.ar_bonus_per_level)/100) * (1+c.ar_shrine_bonus/100);	// TODO: Add c.ar_per_socketed
-	var wisp = 1+~~Math.round(c.wisp/20,0)/10
-	
 	// combine socket affixes
 	var socket_affixes = {};
 	var socket_eDamage = 0;
@@ -1281,54 +1272,77 @@ function updatePrimaryStats() {
 	var socket_eDamage_offWeapon = ~~socket_affixes.e_damage + ~~socket_affixes.damage_bonus;
 	if (offhandType == "weapon") { socket_eDamage_offWeapon -= socket_eDamage_offhand }
 	// TODO: Weapon corruptions granting ED or ED per level are not yet included
-	//var phys_min = ((1+statBonus+(c.e_damage+c.damage_bonus+weapon_skillup)/100)*((c.level-1)*c.min_damage_per_level+c.base_damage_min))+c.damage_min;	// deprecated
-	//var phys_max = ((1+statBonus+(c.e_damage+c.damage_bonus+weapon_skillup)/100)*((c.level-1)*c.max_damage_per_level+c.base_damage_max))+c.damage_max;	// deprecated
 	var sup = 0;	// TODO: Remove this and add superior ED stat to character stat list (so far, no weapons are superior)
 	var e_damage_offWeapon = c.e_damage - ~~equipped.weapon.e_damage;
 	if (offhandType == "weapon") { e_damage_offWeapon -= ~~equipped.offhand.e_damage }
-	var phys_min = ((~~equipped.weapon.base_damage_min * (1+(~~equipped.weapon.e_damage+sup+socket_eDamage)/100) + c.damage_min + (c.level-1)*c.min_damage_per_level) * (1+statBonus+(c.damage_bonus+e_damage_offWeapon+weapon_skillup+socket_eDamage_offWeapon)/100));
-	var phys_max = ((~~equipped.weapon.base_damage_max * (1+(~~equipped.weapon.e_damage+sup+socket_eDamage+(c.level*c.e_max_damage_per_level))/100) + c.damage_max + (c.level-1)*c.max_damage_per_level) * (1+statBonus+(c.damage_bonus+e_damage_offWeapon+weapon_skillup+socket_eDamage_offWeapon)/100));
-	var phys_min_offhand = ((~~equipped.offhand.base_damage_min * (1+(~~equipped.offhand.e_damage+sup+socket_eDamage_offhand)/100) + c.damage_min + (c.level-1)*c.min_damage_per_level) * (1+statBonus_offhand+(c.damage_bonus+e_damage_offWeapon+weapon_skillup_offhand+socket_eDamage_offWeapon)/100));
-	var phys_max_offhand = ((~~equipped.offhand.base_damage_max * (1+(~~equipped.offhand.e_damage+sup+socket_eDamage_offhand)/100) + c.damage_max + (c.level-1)*c.max_damage_per_level) * (1+statBonus_offhand+(c.damage_bonus+e_damage_offWeapon+weapon_skillup_offhand+socket_eDamage_offWeapon)/100));
+	
+	var base_min = ~~equipped.weapon.base_damage_min;
+	var base_max = ~~equipped.weapon.base_damage_max;
+	if (thrown == 1) { base_min = ~~equipped.weapon.throw_min; base_max = ~~equipped.weapon.throw_max; }
+	var phys_min = (base_min * (1+(~~equipped.weapon.e_damage+sup+socket_eDamage)/100) + c.damage_min + (c.level-1)*c.min_damage_per_level + ~~socket_affixes.damage_min);
+	var phys_max = (base_max * (1+(~~equipped.weapon.e_damage+sup+socket_eDamage+(c.level*c.e_max_damage_per_level))/100) + c.damage_max + (c.level-1)*c.max_damage_per_level + ~~socket_affixes.damage_max);
+	var phys_mult = (1+statBonus+(c.damage_bonus+e_damage_offWeapon+weapon_skillup+socket_eDamage_offWeapon)/100);
+//	var phys_min_offhand = (~~equipped.offhand.base_damage_min * (1+(~~equipped.offhand.e_damage+sup+socket_eDamage_offhand)/100) + c.damage_min + (c.level-1)*c.min_damage_per_level);
+//	var phys_max_offhand = (~~equipped.offhand.base_damage_max * (1+(~~equipped.offhand.e_damage+sup+socket_eDamage_offhand)/100) + c.damage_max + (c.level-1)*c.max_damage_per_level);
+//	var phys_offhand_mult = (1+statBonus_offhand+(c.damage_bonus+e_damage_offWeapon+weapon_skillup_offhand+socket_eDamage_offWeapon)/100);
+	var values = [phys_min, phys_max, phys_mult];
+	
+	return values
+}
 
-// TODO: Most code above this is duplicated in checkSkill(). Duplicated code should be added to its own function or otherwise merged
+// updateStats - Updates all stats
+// ---------------------------------
+function updateStats() { updatePrimaryStats(); updateMisc(); updateSecondaryStats(); updateTertiaryStats(); }
 
+// updateStats - Updates stats shown by the default (original D2) stat page
+// ---------------------------------
+function updatePrimaryStats() {
+	var c = character;
+	var strTotal = (c.strength + c.all_attributes + (c.level-1)*c.strength_per_level);
+	var dexTotal = (c.dexterity + c.all_attributes + (c.level-1)*c.dexterity_per_level);
+	var vitTotal = (c.vitality + c.all_attributes + (c.level-1)*c.vitality_per_level);
+	var energyTotal = (c.energy + c.all_attributes)*(1+c.max_energy);
+	
+	var weaponType = equipped.weapon.type;
+	//var weaponType_offhand = "";
+	//if (offhandType == "weapon") { weaponType_offhand = equipped.offhand.type }
+	var physDamage = getWeaponDamage(strTotal,dexTotal,weaponType);
+	
+	var life_addon = (vitTotal-c.starting_vitality)*c.life_per_vitality;
+	var stamina_addon = (vitTotal-c.starting_vitality)*c.stamina_per_vitality;
+	var mana_addon = (energyTotal-c.starting_energy)*c.mana_per_energy;
+	
+	var def = (c.base_defense + c.defense + c.level*c.defense_per_level + Math.floor(dexTotal/4)) * (1 + (c.defense_bonus + c.defense_skillup)/100);
+	var ar = ((dexTotal - 7) * 5 + c.ar + c.level*c.ar_per_level + c.ar_const) * (1+(c.ar_skillup + c.ar_bonus + c.level*c.ar_bonus_per_level)/100) * (1+c.ar_shrine_bonus/100);	// TODO: Add c.ar_per_socketed
+	var wisp = 1+~~Math.round(c.wisp/20,0)/10
+	
 	var fMin = c.fDamage_min*(1+(c.fDamage+c.fDamage_skillup)/100)*wisp;
 	var fMax = (c.fDamage_max+(c.level*c.fDamage_max_per_level))*(1+(c.fDamage+c.fDamage_skillup)/100)*wisp;
-	var cMin = c.cDamage_min*(1+(c.cDamage+c.cDamage_skillup)/100)*wisp;						// TODO: Add c.cDamage_per_charge_ice & c.cDamage_per_socketed
-	var cMax = (c.cDamage_max+(c.level*c.cDamage_max_per_level))*(1+(c.cDamage+c.cDamage_skillup)/100)*wisp;	// TODO: Add c.cDamage_per_charge_ice & c.cDamage_per_socketed
+	var cMin = (c.cDamage_min+(c.cDamage_per_ice*c.charge_ice))*(1+(c.cDamage+c.cDamage_skillup)/100)*wisp;						// TODO: Add (c.cDamage_per_socketed*socketed... filled sockets)
+	var cMax = (c.cDamage_max+(c.cDamage_per_ice*c.charge_ice)+(c.level*c.cDamage_max_per_level))*(1+(c.cDamage+c.cDamage_skillup)/100)*wisp;	// TODO: Add (c.cDamage_per_socketed*socketed... filled sockets)
 	var lMin = c.lDamage_min*(1+(c.lDamage+c.lDamage_skillup)/100)*wisp;
 	var lMax = (c.lDamage_max+(Math.floor(energyTotal/2)*c.lDamage_max_per_2_energy))*(1+(c.lDamage+c.lDamage_skillup)/100)*wisp;
 	var pMin = (c.pDamage_all+c.pDamage_min)*(1+c.pDamage/100)*wisp;	// TODO: Damage over time should be separate from regular damage. Calculate poison bitrate.
 	var pMax = (c.pDamage_all+c.pDamage_max)*(1+c.pDamage/100)*wisp;	//	 Also, poison doesn't overlap from different sources?
 	
-	var basic_min = Math.floor(phys_min*wisp + fMin + cMin + lMin + pMin + c.mDamage_min);
-	var basic_max = Math.floor(phys_max*wisp + fMax + cMax + lMax + pMax + c.mDamage_max);
-	//var basic_min = Math.floor(wisp*(phys_min + c.fDamage_min*(1+c.fDamage_skillup/100) + c.cDamage_min*(1+c.cDamage_skillup/100) + c.lDamage_min*(1+c.lDamage_skillup/100)) + c.mDamage_min);	// deprecated
-	//var basic_max = Math.floor(wisp*(phys_max + c.fDamage_max*(1+c.fDamage_skillup/100) + c.cDamage_max*(1+c.cDamage_skillup/100) + c.lDamage_max*(1+c.lDamage_skillup/100)) + c.mDamage_max + wisp*(c.pDamage_all+c.pDamage_max));	// deprecated
+	var basic_min = Math.floor(physDamage[0]*physDamage[2]*wisp + fMin + cMin + lMin + pMin + c.mDamage_min);
+	var basic_max = Math.floor(physDamage[1]*physDamage[2]*wisp + fMax + cMax + lMax + pMax + c.mDamage_max);
 	if (basic_min > 0 || basic_max > 0) { document.getElementById("basic_attack").innerHTML = basic_min + "-" + basic_max }
 	else { document.getElementById("basic_attack").innerHTML = "" }
 	// TODO: Create display for offhand attacks (separate damage & AR)
 	
-	var block = c.block + c.ibc;	// TODO: ibc isn't affected by corruption?
+	var block = c.block + c.ibc;
 	if (c.class_name != "Paladin") { block -= 5; if (c.class_name == "Druid" || c.class_name == "Necromancer" || c.class_name == "Sorceress") { block -= 5 } }
-	block = (Math.max(0,block) + c.block_skillup)*(dexTotal-15)/(c.level*2)
+	block = (Math.max(0,block) + c.block_skillup + c.ibc)*(dexTotal-15)/(c.level*2)
 	if (c.running > 0) { block = block / 3 }
 	if (c.block > 0) {
 		document.getElementById("block_label").style.visibility = "visible"
-		document.getElementById("block").innerHTML = Math.floor(Math.min(75,c.block,block))+"%"
+		document.getElementById("block").innerHTML = Math.floor(Math.min(75,block))+"%"
 	} else {
 		document.getElementById("block_label").style.visibility = "hidden"
 		document.getElementById("block").innerHTML = ""
 	}
-/*
-	TODO: Hit chance calculations
-	var monsterDefense = def;
-	var monsterLevel = c.level;
-	var hit = Math.max(5,Math.min(95,Math.round(200 * (ar/(ar+monsterDefense)) * (c.level/(c.level+monsterLevel)),0)));
-	if (hit > 0) { document.getElementById("hit").innerHTML = hit+"%" }
-	else { document.getElementById("hit").innerHTML = "" }
-/**/
+	
 	document.getElementById("strength").innerHTML = Math.floor(strTotal)
 	document.getElementById("dexterity").innerHTML = Math.floor(dexTotal)
 	document.getElementById("vitality").innerHTML = Math.floor(vitTotal)
@@ -2138,88 +2152,24 @@ function checkSkill(skillName, num) {
 	for (let s = 0; s < skills.length; s++) {
 		if (skillName == skills[s].name) { native_skill = 1 }
 	}
-// copied from updatePrimaryStats()
+	
 	var c = character;
 	var strTotal = (c.strength + c.all_attributes + (c.level-1)*c.strength_per_level);
 	var dexTotal = (c.dexterity + c.all_attributes + (c.level-1)*c.dexterity_per_level);
-	var vitTotal = (c.vitality + c.all_attributes + (c.level-1)*c.vitality_per_level);
 	var energyTotal = Math.floor((c.energy + c.all_attributes)*(1+c.max_energy));
-	var statBonus = 1;
-	var statBonus_offhand = 1;
 	var weaponType = equipped.weapon.type;
 	var weaponType_offhand = "";
 	if (offhandType == "weapon") { weaponType_offhand = equipped.offhand.type }
-	if (typeof(weaponType) != 'undefined') { 
-		if (weaponType == "hammer") { statBonus = (strTotal*1.1/100) }
-		else if (weaponType == "bow" || weaponType == "crossbow") { statBonus = (dexTotal/100) }
-		else if (typeof(equipped.weapon.only) != 'undefined') { if (weaponType == "spear" || weaponType == "javelin" || equipped.weapon.only == "amazon") { statBonus = ((strTotal*0.8/100)+(dexTotal*0.5/100)) } }
-		else if (weaponType == "dagger" || weaponType == "thrown" || weaponType == "claw" || weaponType == "javelin") { statBonus = ((strTotal*0.75/100)+(dexTotal*0.75/100)) }
-		else  { statBonus = (strTotal/100) }
-		if (offhandType == "weapon") {
-			if (weaponType_offhand == "hammer") { statBonus_offhand = (strTotal*1.1/100) }
-			else if (weaponType_offhand == "dagger" || weaponType_offhand == "thrown" || weaponType_offhand == "claw" || weaponType_offhand == "javelin") { statBonus_offhand = ((strTotal*0.75/100)+(dexTotal*0.75/100)) }
-			else  { statBonus_offhand = (strTotal/100) }
-		}
-	}
-	var weapon_skillup = 0;
-	var weapon_skillup_offhand = 0;
-	var ar_skillup_offhand = 0;
-	var cstrike_skillup_offhand = 0;
-	var pierce_skillup_offhand = 0;
-	if (c.class_name == "Barbarian" || c.class_name == "Assassin") {
-		if (weaponType == "sword" || weaponType == "axe" || weaponType == "dagger") { weapon_skillup = c.edged_skillup[0]; c.ar_skillup = c.edged_skillup[1]; c.cstrike_skillup = c.edged_skillup[2]; }
-		else if (weaponType == "polearm" || weaponType == "spear") { weapon_skillup = c.pole_skillup[0]; c.ar_skillup = c.pole_skillup[1]; c.cstrike_skillup = c.pole_skillup[2]; }
-		else if (weaponType == "mace" || weaponType == "scepter" || weaponType == "staff" || weaponType == "hammer" || weaponType == "club") { weapon_skillup = c.blunt_skillup[0]; c.ar_skillup = c.blunt_skillup[1]; c.cstrike_skillup = c.blunt_skillup[2]; }
-		else if (weaponType == "thrown") { weapon_skillup = c.thrown_skillup[0]; c.ar_skillup = c.thrown_skillup[1]; c.pierce_skillup = c.thrown_skillup[2]; }
-		else if (weaponType == "claw") { weapon_skillup = c.claw_skillup[0]; c.ar_skillup = c.claw_skillup[1]; c.cstrike_skillup = c.claw_skillup[2]; }
-		else { weapon_skillup = 0; c.ar_skillup = 0; c.cstrike_skillup = 0; c.pierce_skillup = 0; }
-		if (offhandType == "weapon") {
-			if (weaponType_offhand == "sword" || weaponType_offhand == "axe" || weaponType_offhand == "dagger") { weapon_skillup_offhand = c.edged_skillup[0]; ar_skillup_offhand = c.edged_skillup[1]; cstrike_skillup_offhand = c.edged_skillup[2]; }
-			else if (weaponType_offhand == "mace" || weaponType_offhand == "scepter" || weaponType_offhand == "hammer" || weaponType_offhand == "club") { weapon_skillup_offhand = c.blunt_skillup[0]; ar_skillup_offhand = c.blunt_skillup[1]; cstrike_skillup_offhand = c.blunt_skillup[2]; }
-			else if (weaponType_offhand == "thrown") { weapon_skillup_offhand = c.thrown_skillup[0]; ar_skillup_offhand = c.thrown_skillup[1]; pierce_skillup_offhand = c.thrown_skillup[2]; }
-			else if (weaponType_offhand == "claw") { weapon_skillup_offhand = c.claw_skillup[0]; ar_skillup_offhand = c.claw_skillup[1]; cstrike_skillup_offhand = c.claw_skillup[2]; }
-			else { weapon_skillup_offhand = 0; ar_skillup_offhand = 0; cstrike_skillup_offhand = 0; pierce_skillup_offhand = 0; }
-		}
-	}
-// (some not copied)
+	
 	var ar = ((dexTotal - 7) * 5 + c.ar + c.level*c.ar_per_level + c.ar_const) * (1+(c.ar_skillup + c.ar_bonus + c.level*c.ar_bonus_per_level)/100) * (1+c.ar_shrine_bonus/100);
 	var wisp = 1+~~Math.round(c.wisp/20,0)/10
-	
-	// combine socket affixes
-	var socket_affixes = {};
-	var socket_eDamage = 0;
-	var socket_eDamage_offhand = 0;
-	for (group in socketed) {
-		for (let i = 0; i < socketed[group].items.length; i++) {
-			for (affix in socketed[group].items[i]) {
-				if (typeof(socket_affixes[affix]) == 'undefined') { socket_affixes[affix] = 0 }
-				if (group == "weapon" && (affix == "e_damage" || affix == "damage_bonus")) { socket_eDamage += socketed[group].items[i][affix] }
-				else if (group == "offhand" && (affix == "e_damage" || affix == "damage_bonus")) { socket_eDamage_offhand += socketed[group].items[i][affix] }
-				socket_affixes[affix] += socketed[group].items[i][affix]
-			}
-		}
-	}
-	var socket_eDamage_offWeapon = ~~socket_affixes.e_damage + ~~socket_affixes.damage_bonus;
-	if (offhandType == "weapon") { socket_eDamage_offWeapon -= socket_eDamage_offhand }
-	var sup = 0;	// TODO: Remove this and add superior ED stat to character stat list (so far, no weapons are superior)
-	var e_damage_offWeapon = c.e_damage - ~~equipped.weapon.e_damage;
-	if (offhandType == "weapon") { e_damage_offWeapon -= ~~equipped.offhand.e_damage }
-// end copied section
-
-	var phys_min = (~~equipped.weapon.base_damage_min * (1+(~~equipped.weapon.e_damage+sup+socket_eDamage)/100) + c.damage_min + (c.level-1)*c.min_damage_per_level);
-	var phys_max = (~~equipped.weapon.base_damage_max * (1+(~~equipped.weapon.e_damage+sup+socket_eDamage+(c.level*c.e_max_damage_per_level))/100) + c.damage_max + (c.level-1)*c.max_damage_per_level);
-	var phys_mult = (1+statBonus+(c.damage_bonus+e_damage_offWeapon+weapon_skillup+socket_eDamage_offWeapon)/100);
-	var phys_min_offhand = (~~equipped.offhand.base_damage_min * (1+(~~equipped.offhand.e_damage+sup+socket_eDamage_offhand)/100) + c.damage_min + (c.level-1)*c.min_damage_per_level);
-	var phys_max_offhand = (~~equipped.offhand.base_damage_max * (1+(~~equipped.offhand.e_damage+sup+socket_eDamage_offhand)/100) + c.damage_max + (c.level-1)*c.max_damage_per_level);
-	var phys_offhand_mult = (1+statBonus_offhand+(c.damage_bonus+e_damage_offWeapon+weapon_skillup_offhand+socket_eDamage_offWeapon)/100);
-
 	var ele_min = Math.floor(wisp*(c.fDamage_min*(1+(c.fDamage+c.fDamage_skillup)/100) + c.cDamage_min*(1+(c.cDamage+c.cDamage_skillup)/100) + c.lDamage_min*(1+(c.lDamage+c.lDamage_skillup)/100) + (c.pDamage_all+c.pDamage_min)*(1+c.pDamage/100)));
 	var ele_max = Math.floor(wisp*((c.fDamage_max+(c.level*c.fDamage_max_per_level))*(1+(c.fDamage+c.fDamage_skillup)/100) + (c.cDamage_max+(c.level*c.cDamage_max_per_level))*(1+(c.cDamage+c.cDamage_skillup)/100) + (c.lDamage_max+(Math.floor(energyTotal/2)*c.lDamage_max_per_2_energy))*(1+(c.lDamage+c.lDamage_skillup)/100) + (c.pDamage_all+c.pDamage_max)*(1+c.pDamage/100)));
 	
-	if (skillName == "Poison Javelin" || skillName == "Lightning Bolt" || skillName == "Plague Javelin" || skillName == "Lightning Fury" || skillName == "Power Throw" || skillName == "Ethereal Throw") {	// consider swapping throw damage & base damage by default
-		phys_min = ((~~equipped.weapon.throw_min * (1+(~~equipped.weapon.e_damage+sup+socket_eDamage)/100) + c.damage_min + (c.level-1)*c.min_damage_per_level));
-		phys_max = ((~~equipped.weapon.throw_max * (1+(~~equipped.weapon.e_damage+sup+socket_eDamage)/100) + c.damage_max + (c.level-1)*c.max_damage_per_level));
-	}
+	var physDamage = [0,0,1];
+	if (skillName == "Poison Javelin" || skillName == "Lightning Bolt" || skillName == "Plague Javelin" || skillName == "Lightning Fury" || skillName == "Power Throw" || skillName == "Ethereal Throw") {
+		physDamage = getWeaponDamage(strTotal,dexTotal,weaponType,1);
+	} else { physDamage = getWeaponDamage(strTotal,dexTotal,weaponType); }
 	
 	var skill = "";
 	for (let s = 0; s < skills.length; s++) {
@@ -2228,8 +2178,8 @@ function checkSkill(skillName, num) {
 		}
 	}
 	if (skillName != " ­ ­ ­ ­ Skill 1" && skillName != " ­ ­ ­ ­ Skill 2") {
-		if (native_skill == 0) { character_any.updateSelectedSkill(skillName, num, ar, phys_min, phys_max, phys_mult, ele_min, ele_max, c.mDamage_min, c.mDamage_max, wisp); }
-		else { c.updateSelectedSkill(skill, num, ar, phys_min, phys_max, phys_mult, ele_min, ele_max, c.mDamage_min, c.mDamage_max, wisp); }
+		if (native_skill == 0) { character_any.updateSelectedSkill(skillName, num, ar, physDamage[0], physDamage[1], physDamage[2], ele_min, ele_max, c.mDamage_min, c.mDamage_max, wisp); }
+		else { c.updateSelectedSkill(skill, num, ar, physDamage[0], physDamage[1], physDamage[2], ele_min, ele_max, c.mDamage_min, c.mDamage_max, wisp); }
 	}
 	updateSkills()
 }	

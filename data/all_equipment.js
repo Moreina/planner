@@ -291,7 +291,7 @@ var equipment = {
 {set_Sigon:1, name:"Sigon's Visor", req_level:6, defense:25, mana:30, base:"Great Helm", rarity:"set", set_bonuses:["set_Sigon",{},{ar_per_level:8},{},{},{},{}], img:"Sigon's_Visor"},
 {set_Infernal:1, name:"Infernal Cranium", req_level:5, damage_to_mana:20, all_res:10, base:"Cap", rarity:"set", set_bonuses:["set_Infernal",{},{defense_per_level:2},{}], img:"Infernal_Cranium"},
 {set_Berserker:1, name:"Berserker's Headgear", req_level:3, defense:15, fRes:25, base:"Helm", rarity:"set", set_bonuses:["set_Berserker",{},{ar_per_level:8},{}], img:"Berserker's_Headgear"},
-{not:["Rogue Scout","Desert Guard","Iron Wolf","Barb (merc)"], rarity:"rare", name:"Vanguard's Diadem", req_level:64, frw:30, fcr:20, strength:30, all_res:20, pRes:40, skills_amazon:2, skills_assassin:2, skills_barbarian:2, skills_druid:2, skills_necromancer:2, skills_paladin:2, skills_sorceress:2, base:"Diadem"},	// check level requirement of affixes?
+{not:["Rogue Scout","Desert Guard","Iron Wolf","Barb (merc)"], rarity:"rare", name:"Vanguard's Diadem", req_level:67, frw:30, fcr:20, strength:30, all_res:20, pRes:40, skills_amazon:2, skills_assassin:2, skills_barbarian:2, skills_druid:2, skills_necromancer:2, skills_paladin:2, skills_sorceress:2, base:"Diadem"},
 {only:"assassin", rarity:"crafted", name:"Psychic Caster Demonhead", req_level:55, mana_regen:10, mana:20, mana_leech:4, skills_shadow:2, mana_per_level:0.75, life:60, e_def:200, fhr:10, ar_bonus:5, light_radius:5, base:"Demonhead"},
 {only:"assassin", rarity:"crafted", name:"Sensei's Blood Armet", req_level:51, dstrike:10, life:80, life_leech:4, skills_martial:2, ar_bonus_per_level:1, e_def:200, fhr:10, ar_bonus:5, light_radius:5, base:"Armet"},
 {only:"barbarian", rarity:"crafted", name:"Veteran's Blood Armet", req_level:51, dstrike:10, life:80, life_leech:4, skills_combat_barbarian:2, ar_bonus_per_level:1, e_def:200, fhr:10, ar_bonus:5, light_radius:5, base:"Armet"},
@@ -537,8 +537,8 @@ var equipment = {
 {set_Cathan:0.5, name:"Cathan's Seal", req_level:11, life_leech:6, damage_reduced:2, rarity:"set", set_bonuses:["set_Cathan",{},{strength:10},{},{},{}]},
 {set_Angelic:0.5, name:"Angelic Halo", req_level:12, life_replenish:6, life:20, rarity:"set", set_bonuses:["set_Angelic",{},{ar_per_level:12},{mf:50},{}]},
 {rarity:"rare", name:"Emperor's Ring", req_level:95, all_res:11, lRes:30, mana:90, life_leech:8, mana_leech:6, fcr:10},
-{rarity:"crafted", name:"Blood Ring", req_level:78, life_leech:11, life:20, strength:25, ar:120, all_res:11, fcr:10, mana_leech:5},	// check ilvl
-{rarity:"crafted", name:"Caster Ring", req_level:78, mana_regen:10, mana:100, energy:20, all_res:11, fcr:10, strength:20, life:40},	// check ilvl
+{rarity:"crafted", name:"Blood Ring", req_level:78, life_leech:11, life:20, strength:25, ar:120, all_res:11, fcr:10, mana_leech:5},	// check ilvl/affixes
+{rarity:"crafted", name:"Caster Ring", req_level:78, mana_regen:10, mana:100, energy:20, all_res:11, fcr:10, strength:20, life:40},	// check ilvl/affixes
 	],
     ring2: [
 {name:"Ring"},
@@ -554,8 +554,8 @@ var equipment = {
 {set_Cathan:0.5, name:"Cathan's Seal", req_level:11, life_leech:6, damage_reduced:2, rarity:"set", set_bonuses:["set_Cathan",{},{strength:10},{},{},{}]},
 {set_Angelic:0.5, name:"Angelic Halo", req_level:12, life_replenish:6, life:20, rarity:"set", set_bonuses:["set_Angelic",{},{ar_per_level:12},{mf:50},{}]},
 {rarity:"rare", name:"Emperor's Ring", req_level:95, all_res:11, lRes:30, mana:90, life_leech:8, mana_leech:6, fcr:10},
-{rarity:"crafted", name:"Blood Ring", req_level:78, life_leech:11, life:20, strength:25, ar:120, all_res:11, fcr:10, mana_leech:5},	// check ilvl
-{rarity:"crafted", name:"Caster Ring", req_level:78, mana_regen:10, mana:100, energy:20, all_res:11, fcr:10, strength:20, life:40},	// check ilvl
+{rarity:"crafted", name:"Blood Ring", req_level:78, life_leech:11, life:20, strength:25, ar:120, all_res:11, fcr:10, mana_leech:5},	// check ilvl/affixes
+{rarity:"crafted", name:"Caster Ring", req_level:78, mana_regen:10, mana:100, energy:20, all_res:11, fcr:10, strength:20, life:40},	// check ilvl/affixes
 	],
     weapon: [
 {name:"Weapon"},
@@ -951,7 +951,7 @@ var equipment = {
 {name:"Hellrack", req_level:76, e_damage:230, ar_bonus:150, fDamage_min:63, fDamage_max:324, cDamage_min:63, cDamage_max:324, lDamage_min:63, lDamage_max:324, ias:20, sockets:2, twoHanded:1, type:"crossbow", base:"Colossus Crossbow", img:"Hellcast"},	// level 18 Immolation Arrow (150 charges)
 {name:"Gut Siphon", req_level:71, e_damage:220, pierce:33, life_leech:18, owounds:33, slows_target:25, twoHanded:1, type:"crossbow", base:"Demon Crossbow", img:"Gut_Siphon"},
 
-{rarity:"rare", name:"Heavenly Blade", req_level:56, e_damage:450, ar:250, ar_per_level:16.5, max_damage_per_level:0.5, ias:40, req:-30, type:"sword", base:"Phase Blade"},	// 10% ctc level 1 Amplify Damage on Striking	// check required level?
+{rarity:"rare", name:"Heavenly Blade", req_level:56, e_damage:450, ar:250, ar_per_level:16.5, max_damage_per_level:0.5, ias:40, req:-30, type:"sword", base:"Phase Blade"},	// 10% ctc level 1 Amplify Damage on Striking	// check ilvl/affixes/required level?
 	],
     offhand: [
 {name:"Offhand"},
@@ -1020,8 +1020,8 @@ var equipment = {
 {set_Sigon:1, name:"Sigon's Guard", req_level:6, all_skills:1, ibc:20, type:"shield", base:"Tower Shield", rarity:"set", set_bonuses:["set_Sigon",{},{},{},{},{},{}], img:"Bverrit_Keep"},
 {set_Cleglaw:1, name:"Cleglaw's Claw", req_level:4, defense:17, poison_length_reduced:75, type:"shield", base:"Small Shield", rarity:"set", set_bonuses:["set_Cleglaw",{},{all_res:15},{}], img:"Cleglaw's_Claw"},
 {set_Hsarus:1, name:"Hsarus' Iron Fist", req_level:3, damage_reduced:2, strength:10, type:"shield", base:"Buckler", rarity:"set", set_bonuses:["set_Hsarus",{},{defense_per_level:2.5},{}], img:"Hsarus'_Iron_Fist"},
-{only:"paladin", rarity:"crafted", name:"Priest's Safety Monarch", req_level:54, damage_reduced:4, mDamage_reduced:2, mRes:10, e_def:230, all_res:20, skills_paladin:2, ibc:20, fbr:30, req:-30, fhr:17, type:"shield", base:"Monarch"},	// check required level of affixes
-{not:["paladin"], rarity:"crafted", name:"Safety Monarch", req_level:54, damage_reduced:4, mDamage_reduced:2, mRes:10, e_def:230, all_res:20, defense_per_level:3, ibc:20, fbr:30, req:-30, fhr:17, type:"shield", base:"Monarch"},	// check required level of affixes
+{only:"paladin", rarity:"crafted", name:"Priest's Safety Monarch", req_level:58, damage_reduced:4, mDamage_reduced:2, mRes:10, e_def:230, all_res:20, skills_paladin:2, ibc:20, fbr:30, req:-30, fhr:17, type:"shield", base:"Monarch"},
+{not:["paladin"], rarity:"crafted", name:"Safety Monarch", req_level:43, damage_reduced:4, mDamage_reduced:2, mRes:10, e_def:230, all_res:20, defense_per_level:3, ibc:20, fbr:30, req:-30, fhr:17, type:"shield", base:"Monarch"},
 // Quivers
 {not:["amazon"], rarity:"rare", name:"Bolts of Doom", type:"quiver", req_level:65, pierce:25, all_skills:1, mf_per_level:0.5, mf:35, life_per_ranged_hit:16, mana_per_ranged_hit:9, base:"Bolts"},
 {not:["amazon"], rarity:"rare", name:"Queen's Arrows", type:"quiver", req_level:65, max_damage_per_level:0.625, pierce:25, all_skills:1, damage_min:26, damage_max:31, ias:16, dstrike:20},
@@ -1172,8 +1172,8 @@ var socketables = [
 {name:"Turquoise Jewel", type:"jewel", rarity:"magic", req_level:22, mana:20},
 {name:"Jewel of Hope", type:"jewel", rarity:"magic", req_level:34, life:20},
 	magic/rare affixes & values
-{name:"Diamond Jewel", type:"jewel", rarity:"rare", req_level:20, damage_vs_demons:40, ar_vs_demons:50},
-{name:"Pearl Jewel", type:"jewel", rarity:"rare", req_level:2, damage_vs_undead:50, ar_vs_undead:50},	// check required level
+{name:"Diamond Jewel", type:"jewel", rarity:"rare", req_level:19, damage_vs_demons:40, ar_vs_demons:50},
+{name:"Pearl Jewel", type:"jewel", rarity:"rare", req_level:13, damage_vs_undead:50, ar_vs_undead:50},
 {name:"Jewel of Freedom", type:"jewel", rarity:"magic", req_level:1, req:-15},
 {name:"Aureolin Jewel", type:"jewel", rarity:"magic", req_level:17, mana_per_kill:3},
 {name:"Dun Jewel", type:"jewel", rarity:"magic", req_level:5, damage_to_mana:12},
