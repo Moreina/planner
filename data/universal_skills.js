@@ -113,7 +113,7 @@ var character_any = {
 	//	min/max parameters: base damage of different types
 	//	wisp: multiplier for Wisp Projector (Lifted Spirit aura)
 	// ---------------------------------
-	updateSelectedSkill : function(skill, num, ar, phys_min, phys_max, phys_mult, ele_min, ele_max, mag_min, mag_max, wisp) {
+	updateSelectedSkill : function(skillName, num, ar, phys_min, phys_max, phys_mult, ele_min, ele_max, mag_min, mag_max, wisp) {
 		var nameMod = "oskill_"+skillName.split(" ").join("_");
 		var lvl = ~~character[nameMod] + character.all_skills;
 		var ar_bonus = 0; var damage_bonus = 0; var weapon_damage = 100;

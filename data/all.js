@@ -19,10 +19,10 @@ var LIMIT = 60; // Highest Skill Data
 var RES_CAP = 95;
 
 var socketed = {
-	helm:{sockets:0, socketsFilled:0, items:[{id:"",name:""},{id:"",name:""},{id:"",name:""}]},
-	armor:{sockets:0, socketsFilled:0, items:[{id:"",name:""},{id:"",name:""},{id:"",name:""},{id:"",name:""}]},
-	weapon:{sockets:0, socketsFilled:0, items:[{id:"",name:""},{id:"",name:""},{id:"",name:""},{id:"",name:""},{id:"",name:""},{id:"",name:""}]},
-	offhand:{sockets:0, socketsFilled:0, items:[{id:"",name:""},{id:"",name:""},{id:"",name:""},{id:"",name:""},{id:"",name:""},{id:"",name:""}]},
+	helm:{sockets:0, socketsFilled:0, totals:{}, items:[{id:"",name:""},{id:"",name:""},{id:"",name:""}]},
+	armor:{sockets:0, socketsFilled:0, totals:{}, items:[{id:"",name:""},{id:"",name:""},{id:"",name:""},{id:"",name:""}]},
+	weapon:{sockets:0, socketsFilled:0, totals:{}, items:[{id:"",name:""},{id:"",name:""},{id:"",name:""},{id:"",name:""},{id:"",name:""},{id:"",name:""}]},
+	offhand:{sockets:0, socketsFilled:0, totals:{}, items:[{id:"",name:""},{id:"",name:""},{id:"",name:""},{id:"",name:""},{id:"",name:""},{id:"",name:""}]},
 };
 
 // Charm Inventory
@@ -238,6 +238,7 @@ function getMercenaryAuraLevel(hlvl) {
 //	if (hlvl > 9 && hlvl < 31) { result = (3+((hlvl-9)*10/32)) }
 //	else if (hlvl > 30 && hlvl < 55) { result = (10+((hlvl-31)*10/32)) }
 //	else if (hlvl > 54) { result = 18 }
+	// TODO: Is the Might aura still uncapped? (benefit from + all skills)
 	return result;
 }
 
@@ -368,7 +369,6 @@ function changeLevel(input) {
 	updateAll()
 	updateEffectList()
 	calculateSkillAmounts()
-	//for (let s = 0; s < skills.length; s++) { modifyEffect(skills[s]) }
 	updateStats()
 	updateSkills()
 	if (selectedSkill[0] != " ­ ­ ­ ­ Skill 1") { checkSkill(selectedSkill[0], 1) }
@@ -401,7 +401,6 @@ function adjustCorruptionSockets(group) {
 			character.sockets -= corruptsEquipped[group].sockets
 			corruptsEquipped[group].sockets = max
 			character.sockets += max
-			// TODO: update equipment display (number of sockets available for jewels/runes/gems)
 		}
 	}
 	if (max == 0 && equipped[group].name != "none" && corruptsEquipped[group].name == "+ Sockets") { corrupt(group, group) }
@@ -413,19 +412,18 @@ function adjustCorruptionSockets(group) {
 //	val: name of corruption
 // ---------------------------------
 function corrupt(group, val) {
-	// TODO: Allow ethereal items to get one socket? (from Larzuk, not corruption)
 	for (old_affix in corruptsEquipped[group]) {
 		character[old_affix] -= corruptsEquipped[group][old_affix]
 		corruptsEquipped[group][old_affix] = unequipped[old_affix]
 	}
 	if (val == "­ ­ ­ ­ Corruption" || val == "none" || val == group || equipped[group].ethereal > 0 || equipped[group].sockets > 0 || equipped[group].rw > 0 || equipped[group].rarity == "common") { document.getElementById("corruptions_"+group).selectedIndex = 0 }
 	else {
-		//if (group == "offhand" && offhandType == "weapon") { group = "weapon" }
 		for (outcome in corruptions[group]) {
 			if (corruptions[group][outcome].name == val) {
 				for (affix in corruptions[group][outcome]) {
 					corruptsEquipped[group][affix] = corruptions[group][outcome][affix]
 					character[affix] += corruptsEquipped[group][affix]
+					//if (affix == e_def) { corruptsEquipped[group].defense = equipped[group].defense * (1+corruptsEquipped[group][affix]) - equipped[group].defense; character.defense += corruptsEquipped.defense; }
 				}
 			}
 		}
@@ -464,19 +462,20 @@ function equipMerc(type, val) {
 						var multEth = 1;
 						var multED = 1;
 						var multReq = 1;
-						if (typeof(equipment[type][item]["ethereal"]) != 'undefined') { if (equipment[type][item]["ethereal"] == 1) { multEth = 1.5; } }
+						var reqEth = 0;
+						if (typeof(equipment[type][item]["ethereal"]) != 'undefined') { if (equipment[type][item]["ethereal"] == 1) { multEth = 1.5; reqEth = 10; } }
 						if (affix == "base_defense") { if (typeof(equipment[type][item]["e_def"]) != 'undefined') { multED += (equipment[type][item]["e_def"]/100) } }
 						if (affix == "base_damage_min" || affix == "base_damage_max") { if (typeof(equipment[type][item]["e_damage"]) != 'undefined') { multED += (equipment[type][item]["e_damage"]/100) } }
 						if (affix == "req_strength" || affix == "req_dexterity") { if (typeof(equipment[type][item]["req"]) != 'undefined') { multReq += (equipment[type][item]["req"]/100) } }
-						//TODO: ethereal reduces strength/dexterity requirements by 10
+						
 						if (typeof(mercEquipped[type][affix]) == 'undefined') { mercEquipped[type][affix] = 0 }	// undefined (new) affixes get initialized to zero
 						if (affix == "base_damage_min" || affix == "base_damage_max" || affix == "base_defense") {
 							mercEquipped[type][affix] = Math.ceil(multEth*multED*bases[base][affix])
 							mercenary[affix] += Math.ceil(multEth*multED*bases[base][affix])
 						}
 						if (affix == "req_strength" || affix == "req_dexterity") {
-							mercEquipped[type][affix] += Math.ceil(multReq*bases[base][affix])
-							mercenary[affix] += Math.ceil(multReq*bases[base][affix])
+							mercEquipped[type][affix] += Math.ceil(multReq*bases[base][affix] - reqEth)
+							mercenary[affix] += Math.ceil(multReq*bases[base][affix] - reqEth)
 						}
 					} } }
 				} }
@@ -485,7 +484,7 @@ function equipMerc(type, val) {
 					if (affix == "aura" || affix == "name" || affix == "type" || affix == "base" || affix == "only" || affix == "not" || affix == "rw") {
 						if (affix == "aura" && equipment[type][item][affix] != mercenary.base_aura) {
 							mercEquipped[type][affix] = equipment[type][item][affix]
-							addAura(equipment[type][item][affix], equipment[type][item].aura_lvl, type)
+							addAura(equipment[type][item][affix], equipment[type][item].aura_lvl, "mercenary")
 						}
 					} else {
 						mercEquipped[type][affix] = equipment[type][item][affix]
@@ -505,7 +504,6 @@ function equipMerc(type, val) {
 function equip(group, val) {
 	var auraName = "";
 	var auraLevel = "";
-	//var selected = document.getElementById("dropdown_"+group).selectedIndex;	// consider using if unequipping weapon/offhand due to equipping a new incompatible item
 	var old_set_bonuses = "";
 	var old_set = "";
 	var old_set_before = 0;
@@ -591,7 +589,7 @@ function equip(group, val) {
 		if (equipment[src_group][item].name == val) {
 			// add affixes from base item
 			if (typeof(equipment[src_group][item]["base"]) != 'undefined') { if (equipment[src_group][item]["base"] != "") {
-				var base = equipment[src_group][item].base; base = base.split(' ').join('_'); base = base.split('-').join('_'); base = base.split("'s").join("s");	// spaces, hypens, and apostrophes converted to match named entry in bases{}
+				var base = equipment[src_group][item].base; base = base.split(' ').join('_'); base = base.split('-').join('_'); base = base.split("'s").join("s");	// spaces, hyphens, and apostrophes converted to match named entry in bases{}
 				if (typeof(bases[base]) != 'undefined') { for (affix in bases[base]) { if (affix != "group" || affix != "type" || affix != "upgrade" || affix != "downgrade" || affix != "subtype" || affix != "only") {
 					var multEth = 1;
 					var multED = 1;
@@ -600,7 +598,6 @@ function equip(group, val) {
 					
 					if (typeof(equipment[src_group][item]["ethereal"]) != 'undefined') { if (equipment[src_group][item]["ethereal"] == 1) { multEth = 1.5; reqEth = 10; } }
 					if (affix == "base_defense") { if (typeof(equipment[src_group][item]["e_def"]) != 'undefined') { multED += (equipment[src_group][item]["e_def"]/100) } }
-				//	else if (affix == "base_damage_min" || affix == "base_damage_max" || affix == "throw_min" || affix == "throw_max" || affix == "base_min_alternate" || affix == "base_max_alternate") { if (typeof(equipment[src_group][item]["e_damage"]) != 'undefined') { multED += (equipment[src_group][item]["e_damage"]/100) } }	// enhanced damage should be calculated elsewhere
 					else if (affix == "req_strength" || affix == "req_dexterity") { if (typeof(equipment[src_group][item]["req"]) != 'undefined') { multReq += (equipment[src_group][item]["req"]/100) } }
 					
 					if (typeof(equipped[group][affix]) == 'undefined') { equipped[group][affix] = 0 }	// undefined (new) affixes get initialized to zero
@@ -628,7 +625,7 @@ function equip(group, val) {
 			//			equipped[group].aura_lvl = equipment[src_group][item].aura_lvl	// redundant?
 						auraName = equipment[src_group][item][affix]
 						auraLevel = equipment[src_group][item].aura_lvl
-						//addAura(equipment[src_group][item][affix], equipment[src_group][item].aura_lvl, group)
+						//addAura(equipment[src_group][item][affix], equipment[src_group][item].aura_lvl, group)	// moved to end of function
 					}
 				} else {
 					var oskill_info = "";
@@ -779,9 +776,9 @@ function checkWield(group, hands_used) {
 // addAura - Adds an aura of the specified level to the character
 //	name: aura name
 //	lvl: aura level
-//	type: item type which the aura is granted by
+//	source: item type which the aura is granted by, or other source
 // ---------------------------------
-function addAura(name, lvl, type) {
+function addAura(name, lvl, source) {
 	if (document.getElementById(name) == null && lvl > 0) {
 		var newEffect = document.createElement("img")
 		var effectIcon = "./images/effects/dark/"+name+" dark.png"
@@ -799,7 +796,7 @@ function addAura(name, lvl, type) {
 		effectGUI.appendChild(newEffect);
 		
 		if (typeof(effects[name]) == 'undefined') { effects[name] = {} }
-		var data = getAuraData(name, lvl);
+		var data = getAuraData(name, lvl, source);
 		for (affix in data) { effects[name][affix] = data[affix] }
 		effects[name]["enabled"] = 0
 		toggleAura(name) 	// settings.autocast ignored
@@ -919,6 +916,7 @@ function addCharm(val) {
 			type = charmItem.type
 		}
 	}
+	var autoCast = settings.autocast;
 	var r = Math.floor((Math.random() * 3));
 	if (type == "grand") { charmHeight = "88"; charmImage = charm_img.prefix+charm_img.grand[r]; charm_y = 3; }
 	else if (type == "large") { charmHeight = "59"; charmImage = charm_img.prefix+charm_img.large[r]; charm_y = 2; }
@@ -926,7 +924,9 @@ function addCharm(val) {
 	if (typeof(charmItem.debug) != 'undefined') {
 		if (val == "+20 skills") { charmHeight = "29"; charmImage = charm_img.prefix+"debug_II.png"; charm_y = 1; }
 		else if (val == "+1 skill") { charmHeight = "29"; charmImage = charm_img.prefix+"debug_D.png"; charm_y = 1; }
-		else if (val == "+1 (each) skill") { charmHeight = "29"; charmImage = charm_img.prefix+"debug_P.png"; charm_y = 1; }
+		else if (val == "+1 (each) skill") { charmHeight = "29"; charmImage = charm_img.prefix+"debug_P.png"; charm_y = 1;
+			if (autoCast == 1) { toggleAutocast("autocast") }	// disable autocast to prevent Paladin auras from all being enabled
+		}
 		else if (val == "everything") { charmHeight = "29"; charmImage = charm_img.prefix+"debug_face.png"; charm_y = 1; }
 		else { charmHeight = "29"; charmImage = charm_img.prefix+"debug_skull.png"; charm_y = 1; }
 	}
@@ -984,6 +984,7 @@ function addCharm(val) {
 	}
 	document.getElementById("dropdown_charms").selectedIndex = 0
 	// update
+	if (settings.autocast != autoCast) { toggleAutocast("autocast") }
 	updateEffectList()
 	calculateSkillAmounts()
 	for (let s = 0; s < skills.length; s++) { modifyEffect(skills[s]) }
@@ -1254,9 +1255,9 @@ function getWeaponDamage(str, dex, type, thrown) {
 			}
 		}
 	}
+	// TODO: Use socketed[group][totals] instead of iterating through here
 	var socket_eDamage_offWeapon = ~~socket_affixes.e_damage + ~~socket_affixes.damage_bonus;
 	if (offhandType == "weapon") { socket_eDamage_offWeapon -= socket_eDamage_offhand }
-	// TODO: Weapon corruptions granting ED or ED per level are not yet included
 	var sup = 0;	// TODO: Remove this and add superior ED stat to character stat list (so far, no weapons are superior)
 	var e_damage_offWeapon = c.e_damage - ~~equipped.weapon.e_damage;
 	if (offhandType == "weapon") { e_damage_offWeapon -= ~~equipped.offhand.e_damage }
@@ -1295,13 +1296,13 @@ function updatePrimaryStats() {
 	var mana_addon = (energyTotal-c.starting_energy)*c.mana_per_energy;
 	
 	var def = (c.base_defense + c.defense + c.level*c.defense_per_level + Math.floor(dexTotal/4)) * (1 + (c.defense_bonus + c.defense_skillup)/100);
-	var ar = ((dexTotal - 7) * 5 + c.ar + c.level*c.ar_per_level + c.ar_const) * (1+(c.ar_skillup + c.ar_bonus + c.level*c.ar_bonus_per_level)/100) * (1+c.ar_shrine_bonus/100);	// TODO: Add c.ar_per_socketed
+	var ar = ((dexTotal - 7) * 5 + c.ar + c.level*c.ar_per_level + c.ar_const + (c.ar_per_socketed*socketed.offhand.socketsFilled)) * (1+(c.ar_skillup + c.ar_bonus + c.level*c.ar_bonus_per_level)/100) * (1+c.ar_shrine_bonus/100);
 	var wisp = 1+~~Math.round(c.wisp/20,0)/10
 	
 	var fMin = c.fDamage_min*(1+(c.fDamage+c.fDamage_skillup)/100)*wisp;
 	var fMax = (c.fDamage_max+(c.level*c.fDamage_max_per_level))*(1+(c.fDamage+c.fDamage_skillup)/100)*wisp;
-	var cMin = (c.cDamage_min+(c.cDamage_per_ice*c.charge_ice))*(1+(c.cDamage+c.cDamage_skillup)/100)*wisp;						// TODO: Add (c.cDamage_per_socketed*socketed... filled sockets)
-	var cMax = (c.cDamage_max+(c.cDamage_per_ice*c.charge_ice)+(c.level*c.cDamage_max_per_level))*(1+(c.cDamage+c.cDamage_skillup)/100)*wisp;	// TODO: Add (c.cDamage_per_socketed*socketed... filled sockets)
+	var cMin = (c.cDamage_min+(c.cDamage_per_ice*c.charge_ice)+(c.cDamage_per_socketed*socketed.weapon.socketsFilled))*(1+(c.cDamage+c.cDamage_skillup)/100)*wisp;
+	var cMax = (c.cDamage_max+(c.cDamage_per_ice*c.charge_ice)+(c.level*c.cDamage_max_per_level)+(c.cDamage_per_socketed*socketed.weapon.socketsFilled))*(1+(c.cDamage+c.cDamage_skillup)/100)*wisp;
 	var lMin = c.lDamage_min*(1+(c.lDamage+c.lDamage_skillup)/100)*wisp;
 	var lMax = (c.lDamage_max+(Math.floor(energyTotal/2)*c.lDamage_max_per_2_energy))*(1+(c.lDamage+c.lDamage_skillup)/100)*wisp;
 	var pMin = (c.pDamage_all+c.pDamage_min)*(1+c.pDamage/100)*wisp;	// TODO: Damage over time should be separate from regular damage. Calculate poison bitrate.
@@ -1309,7 +1310,7 @@ function updatePrimaryStats() {
 	
 	var basic_min = Math.floor(physDamage[0]*physDamage[2]*wisp + fMin + cMin + lMin + pMin + c.mDamage_min);
 	var basic_max = Math.floor(physDamage[1]*physDamage[2]*wisp + fMax + cMax + lMax + pMax + c.mDamage_max);
-	if (basic_min > 0 || basic_max > 0) { document.getElementById("basic_attack").innerHTML = basic_min + "-" + basic_max }
+	if (basic_min > 0 || basic_max > 0) { document.getElementById("basic_attack").innerHTML = basic_min + " - " + basic_max }
 	else { document.getElementById("basic_attack").innerHTML = "" }
 	// TODO: Create display for offhand attacks (separate damage & AR)
 	
@@ -1336,7 +1337,7 @@ function updatePrimaryStats() {
 	if (c.running > 0) { document.getElementById("defense").innerHTML = "" }
 	else {
 		document.getElementById("defense").innerHTML = Math.floor(def + c.melee_defense)
-		if (c.missile_defense > 0) { document.getElementById("defense").innerHTML += " (+" + c.missile_defense + ")" }
+		if ((c.missile_defense-c.melee_defense) > 0) { document.getElementById("defense").innerHTML += " (+" + (c.missile_defense) + ")" }	// add difference when missile & melee defense are both present?
 	}
 	document.getElementById("ar").innerHTML = Math.floor(ar)
 	document.getElementById("stamina").innerHTML = Math.floor((c.stamina + (c.level-1)*c.stamina_per_level + stamina_addon) * (1+c.stamina_skillup/100) * (1+c.max_stamina/100))
@@ -1765,8 +1766,6 @@ function removeEffect(effect) {
 //	effect: the effects[] element being added
 // ---------------------------------
 function addEffect(effect) {
-//	var selfbuff = 1;
-//	buffData = character.getBuffData(effect, selfbuff)
 	buffData = character.getBuffData(effect)
 	for (affix in buffData) {
 		character[affix] += buffData[affix]
@@ -1849,7 +1848,6 @@ function addStat(event, stat) {
 		// update
 		updateEffectList()
 		calculateSkillAmounts()
-		//for (let s = 0; s < skills.length; s++) { modifyEffect(skills[s]) }
 		updateStats()
 		updateSkills()
 		if (selectedSkill[0] != " ­ ­ ­ ­ Skill 1") { checkSkill(selectedSkill[0], 1) }
@@ -1885,7 +1883,6 @@ function removeStat(event, stat) {
 	// update
 	updateEffectList()
 	calculateSkillAmounts()
-	//for (let s = 0; s < skills.length; s++) { modifyEffect(skills[s]) }
 	updateStats()
 	updateSkills()
 	if (selectedSkill[0] != " ­ ­ ­ ­ Skill 1") { checkSkill(selectedSkill[0], 1) }
@@ -1932,13 +1929,11 @@ function skillUp(event, skill) {
 	skillHover(skill)
     if (skill.bindable > 0 && (old_level == 0 || (old_level > 0 && skill.level == 0 && skill.force_levels == 0))) {
 	updateSkills()
-	if (selectedSkill[0] != " ­ ­ ­ ­ Skill 1") { checkSkill(selectedSkill[0], 1) }
-	if (selectedSkill[1] != " ­ ­ ­ ­ Skill 2") { checkSkill(selectedSkill[1], 2) }
-    } else {
-	if (selectedSkill[0] != " ­ ­ ­ ­ Skill 1") { checkSkill(selectedSkill[0], 1) }
-	if (selectedSkill[1] != " ­ ­ ­ ­ Skill 2") { checkSkill(selectedSkill[1], 2) }
     }
 	updateAll()
+	for (let s = 0; s < skills.length; s++) { modifyEffect(skills[s]) }
+	if (selectedSkill[0] != " ­ ­ ­ ­ Skill 1") { checkSkill(selectedSkill[0], 1) }
+	if (selectedSkill[1] != " ­ ­ ­ ­ Skill 2") { checkSkill(selectedSkill[1], 2) }
 }
 
 // skillDown - Lowers the skill level
@@ -1986,13 +1981,11 @@ function skillDown(event, skill) {
 	skillHover(skill)
     if (skill.bindable > 0 && (old_level == 0 || (old_level > 0 && skill.level == 0 && skill.force_levels == 0))) {
 	updateSkills()
-	if (selectedSkill[0] != " ­ ­ ­ ­ Skill 1") { checkSkill(selectedSkill[0], 1) }
-	if (selectedSkill[1] != " ­ ­ ­ ­ Skill 2") { checkSkill(selectedSkill[1], 2) }
-    } else {
-	if (selectedSkill[0] != " ­ ­ ­ ­ Skill 1") { checkSkill(selectedSkill[0], 1) }
-	if (selectedSkill[1] != " ­ ­ ­ ­ Skill 2") { checkSkill(selectedSkill[1], 2) }
     }
 	updateAll()
+	for (let s = 0; s < skills.length; s++) { modifyEffect(skills[s]) }
+	if (selectedSkill[0] != " ­ ­ ­ ­ Skill 1") { checkSkill(selectedSkill[0], 1) }
+	if (selectedSkill[1] != " ­ ­ ­ ­ Skill 2") { checkSkill(selectedSkill[1], 2) }
 }
 
 // skillHover - Shows skill description tooltip on mouse-over
@@ -2322,7 +2315,10 @@ function drop(ev,cell) {
 		for (let g = 0; g < groups.length; g++) {
 			for (let i = 0; i < socketed[groups[g]].items.length; i++) {
 				if (val == socketed[groups[g]].items[i].id) {
-					for (affix in socketed[groups[g]].items[i]) { if (affix != "id") { character[affix] -= socketed[groups[g]].items[i][affix] } }
+					for (affix in socketed[groups[g]].items[i]) { if (affix != "id") {
+						character[affix] -= socketed[groups[g]].items[i][affix]
+						socketed[groups[g]].totals[affix] -= socketed[groups[g]].items[i][affix]
+					} }
 					socketed[groups[g]].items[i] = {id:"",name:""}
 					socketed[groups[g]].socketsFilled -= 1
 				}
@@ -2522,7 +2518,10 @@ function socket(event, group) {
 		for (let g = 0; g < groups.length; g++) {
 			for (let i = 0; i < socketed[groups[g]].items.length; i++) {
 				if (inv[0].onpickup == socketed[groups[g]].items[i].id) {
-					for (affix in socketed[groups[g]].items[i]) { if (affix != "id") { character[affix] -= socketed[groups[g]].items[i][affix] } }
+					for (affix in socketed[groups[g]].items[i]) { if (affix != "id") {
+						character[affix] -= socketed[groups[g]].items[i][affix]
+						socketed[groups[g]].totals[affix] -= socketed[groups[g]].items[i][affix]
+					} }
 					socketed[groups[g]].items[i] = {id:"",name:""}
 					socketed[groups[g]].socketsFilled -= 1
 				}
@@ -2535,11 +2534,13 @@ function socket(event, group) {
 				if (affix != "type" && affix != "rarity" && affix != "img") {
 					socketed[group].items[index][affix] = socketables[k][affix]
 					character[affix] += socketables[k][affix]
+					socketed[group].totals[affix] += socketables[k][affix]
 				}
 				if (affix == group || (affix == "armor" && group == "helm") || (affix == "armor" && group == "offhand" && typeof(socketables[k]["shield"]) == 'undefined') || (affix == "shield" && group == "offhand")) {
 					for (groupAffix in socketables[k][affix]) {
 						socketed[group].items[index][groupAffix] = socketables[k][affix][groupAffix]
 						character[groupAffix] += socketables[k][affix][groupAffix]
+						socketed[group].totals[groupAffix] += socketables[k][affix][groupAffix]
 					}
 				}
 			}
@@ -2609,8 +2610,10 @@ function trashSocketable(event) {
 		for (let i = 0; i < socketed[groups[g]].items.length; i++) {
 			if (val == socketed[groups[g]].items[i].id) {
 				for (affix in socketed[groups[g]].items[i]) {
-					if (affix != "id") { character[affix] -= socketed[groups[g]].items[i][affix] }
-					//character[affix] -= socketed[groups[g]].items[i][affix]
+					if (affix != "id") {
+						character[affix] -= socketed[groups[g]].items[i][affix]
+						socketed[groups[g]].totals[affix] -= socketed[groups[g]].items[i][affix]
+					}
 				}
 				socketed[groups[g]].items[i] = {id:"",name:""}
 				socketed[groups[g]].socketsFilled -= 1

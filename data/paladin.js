@@ -90,7 +90,7 @@ var character_paladin = {class_name:"Paladin", strength:25, dexterity:20, vitali
 		var skill = skills[effect.skill]
 		var lvl = skill.level + skill.extra_levels;
 		var result = {};
-		disableAuras(skill)
+		if (skill.name != "Holy Shield") { disableAuras(skill) }
 		
 	    // Defensive Auras	
 		if (skill.name == "Prayer") {
@@ -144,7 +144,6 @@ var character_paladin = {class_name:"Paladin", strength:25, dexterity:20, vitali
 			result.fDamage_max = skill.data.values[1][lvl] * (1 + 0.04*skills[1].level + 0.06*skills[9].level);
 		}
 		if (skill.name == "Precision") {
-			disableAuras(skill);
 			result.pierce = skill.data.values[0][lvl];
 			result.cstrike = skill.data.values[2][lvl];
 			result.ar_bonus = skill.data.values[3][lvl];

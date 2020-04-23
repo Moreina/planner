@@ -108,9 +108,10 @@ var auras = [
 // getAuraData - gets a list of stats corresponding to the aura
 //	aura: name of the aura
 //	lvl: level of the aura
+//	source: "mercenary" or the item type which is granted the aura
 // result: indexed array of stats granted and their values
 // ---------------------------------
-function getAuraData(aura, lvl) {
+function getAuraData(aura, lvl, source) {
 	if (lvl < 1) { lvl = 1 }	// may not be necessary
 	var result = {};
 	var a = -1;
@@ -160,7 +161,8 @@ function getAuraData(aura, lvl) {
 		result.fDamage_min = auras[a].values[0][lvl];
 		result.fDamage_max = auras[a].values[1][lvl]; }
 	else if (aura == "Precision") {
-		result.pierce = auras[a].values[0][lvl];
+		if (source == "mercenary") { result.pierce = auras[a].values[1][lvl]; }
+		else { result.pierce = auras[a].values[0][lvl]; }
 		result.cstrike = auras[a].values[2][lvl];
 		result.ar_bonus = auras[a].values[3][lvl]; }
 	else if (aura == "Blessed Aim") {
@@ -180,7 +182,8 @@ function getAuraData(aura, lvl) {
 	else if (aura == "Sanctuary") {
 		result.damage_vs_undead = auras[a].values[0][lvl]; }
 	else if (aura == "Fanaticism") {
-		result.damage_bonus = auras[a].values[1][lvl];
+		if (source == "mercenary") { result.damage_bonus = auras[a].values[0][lvl]; }
+		else { result.damage_bonus = auras[a].values[1][lvl]; }
 		result.ias = auras[a].values[2][lvl];
 		result.ar_bonus = auras[a].values[3][lvl]; }
 	else if (aura == "Conviction") {
@@ -501,7 +504,13 @@ var equipment = {
 {set_Civerb:1, name:"Civerb's Icon", req_level:9, life_replenish:4, mana_regen:40, rarity:"set", set_bonuses:["set_Civerb",{},{cRes:25},{defense:25}]},
 {set_Cathan:1, name:"Cathan's Sigil", req_level:11, fhr:10, thorns_lightning:5, rarity:"set", set_bonuses:["set_Cathan",{},{ar:50},{mf:25},{},{}]},
 {set_Angelic:1, name:"Angelic Wings", req_level:12, damage_to_mana:20, light_radius:3, rarity:"set", set_bonuses:["set_Angelic",{},{life:75},{all_skills:1},{}]},
-{rarity:"magic", name:"Amulet of the Whale", req_level:75, life:100, skills_amazon:2, skills_assassin:2, skills_barbarian:2, skills_druid:2, skills_necromancer:2, skills_paladin:2, skills_sorceress:2},
+{only:"amazon", rarity:"magic", name:"Valkyrie's Amulet of the Whale", req_level:75, life:100, skills_amazon:2},
+{only:"assassin", rarity:"magic", name:"Witch-Hunter's Amulet of the Whale", req_level:75, life:100, skills_assassin:2},
+{only:"barbarian", rarity:"magic", name:"Berserker's Amulet of the Whale", req_level:75, life:100, skills_barbarian:2},
+{only:"druid", rarity:"magic", name:"Hierophant's Amulet of the Whale", req_level:75, life:100, skills_druid:2},
+{only:"necromancer", rarity:"magic", name:"Necromancer's Amulet of the Whale", req_level:75, life:100, skills_necromancer:2},
+{only:"paladin", rarity:"magic", name:"Priest's Amulet of the Whale", req_level:75, life:100, skills_paladin:2},
+{only:"sorceress", rarity:"magic", name:"Arch-Angel's Amulet of the Whale", req_level:75, life:100, skills_sorceress:2},
 {only:"amazon", rarity:"magic", name:"Athlete's Amulet", req_level:42, skills_passives:3},
 {only:"assassin", rarity:"magic", name:"Kenshi's Amulet", req_level:42, skills_martial:3},
 {only:"assassin", rarity:"magic", name:"Shadow Amulet", req_level:42, skills_shadow:3},
@@ -648,22 +657,22 @@ var equipment = {
 {only:"sorceress", rarity:"magic", name:"Glacial Vortex Orb of the Magus", type:"orb", req_level:67, life:60, fcr:20, skills_cold:3, skill_Freezing_Pulse:3, skill_Cold_Mastery:3, skill_Frozen_Orb:3, base:"Vortex Orb"},
 {only:"necromancer", rarity:"magic", name:"Golemlord's Lich Wand", type:"wand", req_level:65, skills_summoning_necromancer:3, skill_Summon_Mastery:3, skill_Raise_Skeleton_Warrior:3, skill_Raise_Skeletal_Mage:3, base:"Lich Wand"},
 // Bows
-{only:"amazon", rw:1, name:"Brand ­ ­ - ­ ­ Grand Matron Bow", req_level:65, e_damage:340, itd:1, ar_bonus:20, damage_vs_demons:330, dstrike:20, pmh:1, knockback:1, skills_bows:3, twoHanded:1, type:"bow", base:"Grand Matron Bow"},	// 35% ctc level 14 Amplify Damage when struck, 100% ctc level 18 Bone Spear on striking, Fires explosive arrows/bolts (15)
-{not:["amazon"], rw:1, name:"Brand ­ ­ - ­ ­ Hydra Bow", req_level:65, e_damage:340, itd:1, ar_bonus:20, damage_vs_demons:330, dstrike:20, pmh:1, knockback:1, twoHanded:1, type:"bow", base:"Hydra Bow"},				// 35% ctc level 14 Amplify Damage when struck, 100% ctc level 18 Bone Spear on striking, Fires explosive arrows/bolts (15)
-{only:"amazon", rw:1, name:"Faith ­ ­ - ­ ­ Grand Matron Bow", req_level:65, twoHanded:1, all_skills:2, e_damage:330, itd:1, ar_bonus:300, damage_vs_undead:75, ar_vs_undead:50, fDamage_min:120, fDamage_max:120, all_res:15, gf:75, skills_bows:3, type:"bow", base:"Grand Matron Bow", aura:"Fanaticism", aura_lvl:15},	// also has 10% reanimate as: Returned
-{not:["amazon"], rw:1, name:"Faith ­ ­ - ­ ­ Hydra Bow", req_level:65, twoHanded:1, all_skills:2, e_damage:330, itd:1, ar_bonus:300, damage_vs_undead:75, ar_vs_undead:50, fDamage_min:120, fDamage_max:120, all_res:15, gf:75, type:"bow", base:"Hydra Bow", aura:"Fanaticism", aura_lvl:15},					// also has 10% reanimate as: Returned
-{only:"amazon", rw:1, name:"Ice ­ ­ - ­ ­ Grand Matron Bow", req_level:65, e_damage:210, ias:20, itd:1, cDamage:30, life_leech:7, enemy_cRes:-20, dstrike:20, gf_per_level:3.125, skills_bows:3, twoHanded:1, type:"bow", base:"Grand Matron Bow", aura:"Holy Freeze", aura_lvl:18},	// 100% ctc level 40 Blizzard when you level-up, 25% ctc level 22 Frost Nova on striking
-{not:["amazon"], rw:1, name:"Ice ­ ­ - ­ ­ Hydra Bow", req_level:65, e_damage:210, ias:20, itd:1, cDamage:30, life_leech:7, enemy_cRes:-20, dstrike:20, gf_per_level:3.125, twoHanded:1, type:"bow", base:"Hydra Bow", aura:"Holy Freeze", aura_lvl:18},				// 100% ctc level 40 Blizzard when you level-up, 25% ctc level 22 Frost Nova on striking
-{only:"amazon", rw:1, name:"Wrath ­ ­ - ­ ­ Grand Matron Bow", req_level:63, damage_vs_demons:375, damage_vs_undead:300, ar_vs_demons:100, mDamage_min:85, mDamage_max:120, lDamage_min:41, lDamage_max:240, cblow:20, pmh:1, energy:10, cbf:1, skills_bows:3, twoHanded:1, type:"bow", base:"Grand Matron Bow"},	// 30% ctc level 1 Decrepify on striking, 5% ctc level 10 Life Tap on striking
-{not:["amazon"], rw:1, name:"Wrath ­ ­ - ­ ­ Hydra Bow", req_level:63, damage_vs_demons:375, damage_vs_undead:300, ar_vs_demons:100, mDamage_min:85, mDamage_max:120, lDamage_min:41, lDamage_max:240, cblow:20, pmh:1, energy:10, cbf:1, twoHanded:1, type:"bow", base:"Hydra Bow"},					// 30% ctc level 1 Decrepify on striking, 5% ctc level 10 Life Tap on striking
-{only:"amazon", rw:1, name:"Melody ­ ­ - ­ ­ Matriarchal Bow", req_level:39, e_damage:50, ias:20, damage_vs_undead:300, skills_bows:6, skill_Dodge:3, skill_Phase_Run:3, skill_Lethal_Strike:3, knockback:1, dexterity:10, twoHanded:1, type:"bow", base:"Matriarchal Bow", pod_changes:1},
-{not:["amazon"], rw:1, name:"Melody ­ ­ - ­ ­ Spider Bow", req_level:41, e_damage:50, ias:20, damage_vs_undead:300, skills_bows:3, skill_Dodge:3, skill_Phase_Run:3, skill_Lethal_Strike:3, knockback:1, dexterity:10, twoHanded:1, type:"bow", base:"Spider Bow", pod_changes:1},
-{only:"amazon", rw:1, name:"Harmony ­ ­ - ­ ­ Matriarchal Bow", req_level:39, e_damage:275, damage_min:9, damage_max:9, fDamage_min:55, fDamage_max:160, cDamage_min:55, cDamage_max:160, lDamage_min:55, lDamage_max:160, oskill_Valkyrie:6, dexterity:10, mana_regen:20, mana_per_kill:2, light_radius:2, skills_bows:3, twoHanded:1, type:"bow", base:"Matriarchal Bow", aura:"Vigor", aura_lvl:10},	// level 20 Revive (25 charges)
-{not:["amazon"], rw:1, name:"Harmony ­ ­ - ­ ­ Crusader Bow", req_level:57, e_damage:275, damage_min:9, damage_max:9, fDamage_min:55, fDamage_max:160, cDamage_min:55, cDamage_max:160, lDamage_min:55, lDamage_max:160, oskill_Valkyrie:6, dexterity:10, mana_regen:20, mana_per_kill:2, light_radius:2, twoHanded:1, type:"bow", base:"Crusader Bow", aura:"Vigor", aura_lvl:10},			// level 20 Revive (25 charges)
-{only:"amazon", rw:1, name:"Edge ­ ­ - ­ ­ Ashwood Bow", req_level:29, ias:35, damage_vs_demons:380, damage_vs_undead:280, pDamage_all:75, pDamage_duration:5, life_leech:7, pmh:1, all_attributes:10, mana_per_kill:2, discount:15, skills_bows:3, twoHanded:1, type:"bow", base:"Ashwood Bow", aura:"Thorns", aura_lvl:15},
-{not:["amazon"], rw:1, name:"Edge ­ ­ - ­ ­ Gothic Bow", req_level:25, ias:35, damage_vs_demons:380, damage_vs_undead:280, pDamage_all:75, pDamage_duration:5, life_leech:7, pmh:1, all_attributes:10, mana_per_kill:2, discount:15, twoHanded:1, type:"bow", base:"Gothic Bow", aura:"Thorns", aura_lvl:15},
-{only:"amazon", rw:1, name:"Zephyr ­ ­ - ­ ­ Ashwood Bow", req_level:29, e_damage:33, frw:25, ias:25, target_defense:-25, ar:66, lDamage_min:1, lDamage_max:50, defense:25, skill_Phase_Run:3, skills_bows:3, twoHanded:1, type:"bow", base:"Ashwood Bow", pod_changes:1},
-{not:["amazon"], rw:1, name:"Zephyr ­ ­ - ­ ­ Gothic Bow", req_level:25, e_damage:33, frw:25, ias:25, target_defense:-25, ar:66, lDamage_min:1, lDamage_max:50, defense:25, skill_Phase_Run:3, twoHanded:1, type:"bow", base:"Gothic Bow", pod_changes:1},
+{only:"amazon", rw:1, 	name:"Brand ­ ­ - ­ ­ Grand Matron Bow", req_level:65, e_damage:340, itd:1, ar_bonus:20, damage_vs_demons:330, dstrike:20, pmh:1, knockback:1, skills_bows:3, twoHanded:1, type:"bow", base:"Grand Matron Bow"},	// 35% ctc level 14 Amplify Damage when struck, 100% ctc level 18 Bone Spear on striking, Fires explosive arrows/bolts (15)
+{not:["amazon"], rw:1, 	name:"Brand ­ ­ - ­ ­ Hydra Bow", req_level:65, e_damage:340, itd:1, ar_bonus:20, damage_vs_demons:330, dstrike:20, pmh:1, knockback:1, twoHanded:1, type:"bow", base:"Hydra Bow"},				// 35% ctc level 14 Amplify Damage when struck, 100% ctc level 18 Bone Spear on striking, Fires explosive arrows/bolts (15)
+{only:"amazon", rw:1, 	name:"Faith ­ ­ - ­ ­ Grand Matron Bow", req_level:65, twoHanded:1, all_skills:2, e_damage:330, itd:1, ar_bonus:300, damage_vs_undead:75, ar_vs_undead:50, fDamage_min:120, fDamage_max:120, all_res:15, gf:75, skills_bows:3, type:"bow", base:"Grand Matron Bow", aura:"Fanaticism", aura_lvl:15},	// also has 10% reanimate as: Returned
+{not:["amazon"], rw:1, 	name:"Faith ­ ­ - ­ ­ Hydra Bow", req_level:65, twoHanded:1, all_skills:2, e_damage:330, itd:1, ar_bonus:300, damage_vs_undead:75, ar_vs_undead:50, fDamage_min:120, fDamage_max:120, all_res:15, gf:75, type:"bow", base:"Hydra Bow", aura:"Fanaticism", aura_lvl:15},					// also has 10% reanimate as: Returned
+{only:"amazon", rw:1, 	name:"Ice ­ ­ - ­ ­ Grand Matron Bow", req_level:65, e_damage:210, ias:20, itd:1, cDamage:30, life_leech:7, enemy_cRes:-20, dstrike:20, gf_per_level:3.125, skills_bows:3, twoHanded:1, type:"bow", base:"Grand Matron Bow", aura:"Holy Freeze", aura_lvl:18},	// 100% ctc level 40 Blizzard when you level-up, 25% ctc level 22 Frost Nova on striking
+{not:["amazon"], rw:1, 	name:"Ice ­ ­ - ­ ­ Hydra Bow", req_level:65, e_damage:210, ias:20, itd:1, cDamage:30, life_leech:7, enemy_cRes:-20, dstrike:20, gf_per_level:3.125, twoHanded:1, type:"bow", base:"Hydra Bow", aura:"Holy Freeze", aura_lvl:18},				// 100% ctc level 40 Blizzard when you level-up, 25% ctc level 22 Frost Nova on striking
+{only:"amazon", rw:1, 	name:"Wrath ­ ­ - ­ ­ Grand Matron Bow", req_level:63, damage_vs_demons:375, damage_vs_undead:300, ar_vs_demons:100, mDamage_min:85, mDamage_max:120, lDamage_min:41, lDamage_max:240, cblow:20, pmh:1, energy:10, cbf:1, skills_bows:3, twoHanded:1, type:"bow", base:"Grand Matron Bow"},	// 30% ctc level 1 Decrepify on striking, 5% ctc level 10 Life Tap on striking
+{not:["amazon"], rw:1, 	name:"Wrath ­ ­ - ­ ­ Hydra Bow", req_level:63, damage_vs_demons:375, damage_vs_undead:300, ar_vs_demons:100, mDamage_min:85, mDamage_max:120, lDamage_min:41, lDamage_max:240, cblow:20, pmh:1, energy:10, cbf:1, twoHanded:1, type:"bow", base:"Hydra Bow"},					// 30% ctc level 1 Decrepify on striking, 5% ctc level 10 Life Tap on striking
+{only:"amazon", rw:1, 	name:"Melody ­ ­ - ­ ­ Matriarchal Bow", req_level:39, e_damage:50, ias:20, damage_vs_undead:300, skills_bows:6, skill_Dodge:3, skill_Phase_Run:3, skill_Lethal_Strike:3, knockback:1, dexterity:10, twoHanded:1, type:"bow", base:"Matriarchal Bow", pod_changes:1},
+{not:["amazon"], rw:1, 	name:"Melody ­ ­ - ­ ­ Spider Bow", req_level:41, e_damage:50, ias:20, damage_vs_undead:300, skills_bows:3, skill_Dodge:3, skill_Phase_Run:3, skill_Lethal_Strike:3, knockback:1, dexterity:10, twoHanded:1, type:"bow", base:"Spider Bow", pod_changes:1},
+{only:"amazon", rw:1, 	name:"Harmony ­ ­ - ­ ­ Matriarchal Bow", req_level:39, e_damage:275, damage_min:9, damage_max:9, fDamage_min:55, fDamage_max:160, cDamage_min:55, cDamage_max:160, lDamage_min:55, lDamage_max:160, oskill_Valkyrie:6, dexterity:10, mana_regen:20, mana_per_kill:2, light_radius:2, skills_bows:3, twoHanded:1, type:"bow", base:"Matriarchal Bow", aura:"Vigor", aura_lvl:10},	// level 20 Revive (25 charges)
+{not:["amazon"], rw:1, 	name:"Harmony ­ ­ - ­ ­ Crusader Bow", req_level:57, e_damage:275, damage_min:9, damage_max:9, fDamage_min:55, fDamage_max:160, cDamage_min:55, cDamage_max:160, lDamage_min:55, lDamage_max:160, oskill_Valkyrie:6, dexterity:10, mana_regen:20, mana_per_kill:2, light_radius:2, twoHanded:1, type:"bow", base:"Crusader Bow", aura:"Vigor", aura_lvl:10},			// level 20 Revive (25 charges)
+{only:"amazon", rw:1, 	name:"Edge ­ ­ - ­ ­ Ashwood Bow", req_level:29, ias:35, damage_vs_demons:380, damage_vs_undead:280, pDamage_all:75, pDamage_duration:5, life_leech:7, pmh:1, all_attributes:10, mana_per_kill:2, discount:15, skills_bows:3, twoHanded:1, type:"bow", base:"Ashwood Bow", aura:"Thorns", aura_lvl:15},
+{not:["amazon"], rw:1, 	name:"Edge ­ ­ - ­ ­ Gothic Bow", req_level:25, ias:35, damage_vs_demons:380, damage_vs_undead:280, pDamage_all:75, pDamage_duration:5, life_leech:7, pmh:1, all_attributes:10, mana_per_kill:2, discount:15, twoHanded:1, type:"bow", base:"Gothic Bow", aura:"Thorns", aura_lvl:15},
+{only:"amazon", rw:1, 	name:"Zephyr ­ ­ - ­ ­ Ashwood Bow", req_level:29, e_damage:33, frw:25, ias:25, target_defense:-25, ar:66, lDamage_min:1, lDamage_max:50, defense:25, skill_Phase_Run:3, skills_bows:3, twoHanded:1, type:"bow", base:"Ashwood Bow", pod_changes:1},
+{not:["amazon"], rw:1, 	name:"Zephyr ­ ­ - ­ ­ Gothic Bow", req_level:25, e_damage:33, frw:25, ias:25, target_defense:-25, ar:66, lDamage_min:1, lDamage_max:50, defense:25, skill_Phase_Run:3, twoHanded:1, type:"bow", base:"Gothic Bow", pod_changes:1},
 //{only:"amazon", rw:1, name:"Silence ­ ­ - ­ ­ Grand Matron Bow", req_level:58, e_damage:200, all_skills:2, ias:20, fhr:20, damage_vs_undead:75, ar_vs_undead:50, mana_leech:11, blind_on_hit:33, flee_on_hit:25, all_res:75, mana_per_kill:2, mf:30, req:-20, skills_bows:3, twoHanded:1, type:"bow", base:"Grand Matron Bow", pod_changes:1, aura:"Cleansing", aura_lvl:7},
 // Runewords
 {only:"amazon", rw:1, name:"Breath of the Dying ­ ­ - ­ ­ Matriarchal Pike", req_level:69, twoHanded:1, indestructible:1, ethereal:1, ias:60, e_damage:400, target_defense:-25, ar:50, damage_vs_undead:200, ar_vs_undead:50, mana_leech:7, life_leech:15, pmh:1, all_attributes:30, light_radius:1, req:-20, skills_javelins:3, type:"spear", base:"Matriarchal Pike"},
@@ -1240,8 +1249,8 @@ var corruptions = {
 		{name:"+ Faster Cast Rate", fcr:10},
 		{name:"+ Increased Attack Speed", ias:10},
 		{name:"+ Attack Rating", ar_bonus:20},
-		{name:"+ Enhanced Defense", e_def:20},	// TODO: Implement (needs to be applied to armor defense)
 		{name:"+ Max Life", max_life:2},
+		{name:"+ Enhanced Defense", e_def:20},	// TODO: Implement (needs to be applied to armor defense)
 	],
 	gloves: [
 		{name:"Gloves"},
@@ -1304,18 +1313,18 @@ var corruptions = {
 		{name:"Offhand"},
 		// weapon
 		{name:"+ Sockets", base:"weapon", sockets:6},
-		{name:"+ Damage per Level", base:"weapon", max_damage_per_level:1},
-		{name:"+ Enhanced Damage", base:"weapon", e_damage:50},
-		{name:"+ Deadly Strike", base:"weapon", dstrike:10},
-		{name:"+ Crushing Blow", base:"weapon", cblow:10},
-		{name:"+ Increased Attack Speed", base:"weapon", ias:15},
+		{name:"+ Damage per Level", base:"weapon", max_damage_per_level:1, sockets:1},
+		{name:"+ Enhanced Damage", base:"weapon", e_damage:50, sockets:1},
+		{name:"+ Deadly Strike", base:"weapon", dstrike:10, sockets:1},
+		{name:"+ Crushing Blow", base:"weapon", cblow:10, sockets:1},
+		{name:"+ Increased Attack Speed", base:"weapon", ias:15, sockets:1},
 		// shield
 		{name:"+ Sockets", base:"shield", sockets:4},
-		{name:"+ Block Chance", base:"shield", ibc:10},
-		{name:"+ Fire Damage", base:"shield", fDamage:10},
-		{name:"+ Cold Damage", base:"shield", cDamage:10},
-		{name:"+ Lightning Damage", base:"shield", lDamage:10},
-		{name:"+ Poison Damage", base:"shield", pDamage:10},
+		{name:"+ Block Chance", base:"shield", ibc:10, sockets:1},
+		{name:"+ Fire Damage", base:"shield", fDamage:10, sockets:1},
+		{name:"+ Cold Damage", base:"shield", cDamage:10, sockets:1},
+		{name:"+ Lightning Damage", base:"shield", lDamage:10, sockets:1},
+		{name:"+ Poison Damage", base:"shield", pDamage:10, sockets:1},
 		// quiver
 		{name:"+ Increased Attack Speed", base:"quiver", ias:10},
 		{name:"+ All Resistances", base:"quiver", all_res:5},
