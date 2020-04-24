@@ -1305,7 +1305,7 @@ function updatePrimaryStats() {
 	var block = c.block + c.ibc;
 	if (c.class_name != "Paladin") { block -= 5; if (c.class_name == "Druid" || c.class_name == "Necromancer" || c.class_name == "Sorceress") { block -= 5 } }
 	block = (Math.max(0,block) + c.block_skillup + c.ibc)*(dexTotal-15)/(c.level*2)
-	if (c.running > 0) { block = block / 3 }
+	if (c.running > 0) { block = Math.min(25,block/3) }
 	if (c.block > 0) {
 		document.getElementById("block_label").style.visibility = "visible"
 		document.getElementById("block").innerHTML = Math.floor(Math.min(75,block))+"%"
@@ -1389,8 +1389,12 @@ function updateSecondaryStats() {
 	document.getElementById("fhr").innerHTML = c.fhr
 	
 	// actual movespeed
-	//var speed = Math.floor((150*c.frw)/(150+c.frw)) + Math.floor((9*100)/6) + (1+(c.frw_skillup/100)) - (100+c.velocity);	// calculation for actual speed (units travelled per second), seems flawed?
+	var movespeed = 9;
+	var movement = (1 + (Math.floor(150*c.frw/(150+c.frw)) + c.frw_skillup + c.velocity)/100);
+	if (c.running > 0) { movespeed = round(9 * movement) } else { movespeed = round(6 * movement) }
+	//document.getElementById("f4").innerHTML = "Movespeed: " + movespeed + " yards/s"
 	document.getElementById("frw").innerHTML = Math.floor(c.frw + c.frw_skillup)+"%"
+	document.getElementById("velocity").innerHTML = (100 + c.velocity) + "%"
 	
 	document.getElementById("life_leech").innerHTML = c.life_leech
 	document.getElementById("mana_leech").innerHTML = c.mana_leech
@@ -1444,7 +1448,6 @@ function updateSecondaryStats() {
 // ---------------------------------
 function updateTertiaryStats() {
 	var c = character;
-	document.getElementById("velocity").innerHTML = (100 + c.velocity) + "%"
 	document.getElementById("poison_reduction").innerHTML = "-" + Math.min(75,c.poison_length_reduced) + "%"
 	document.getElementById("curse_reduction").innerHTML = "-" + Math.min(75,c.curse_length_reduced) + "%"
 	var thorns = c.thorns_reflect;

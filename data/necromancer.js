@@ -67,7 +67,7 @@ var character_necromancer = {class_name:"Necromancer", strength:15, dexterity:25
 		var result = {};
 		
 		if (skill.name == "Bone Offering") { result.defense_bonus = skill.data.values[2][lvl]; result.skeleton_bonus = skill.data.values[3][lvl]; result.curse_length_reduced = skill.data.values[4][lvl]; result.duration = skill.data.values[0][lvl]; }
-		if (skill.name == "Flesh Offering") { result.fcr = skill.data.values[2][lvl]; result.ias_skill = skill.data.values[3][lvl]; result.frw = skill.data.values[4][lvl]; result.duration = skill.data.values[0][lvl]; }
+		if (skill.name == "Flesh Offering") { result.fcr = skill.data.values[2][lvl]; result.ias_skill = skill.data.values[3][lvl]; result.velocity = skill.data.values[4][lvl]; result.duration = skill.data.values[0][lvl]; }
 		if (skill.name == "Blood Golem") {
 			disableGolems(skill)
 			result.life_per_ranged_hit = skill.data.values[3][lvl]; result.life_per_hit = skill.data.values[4][lvl];

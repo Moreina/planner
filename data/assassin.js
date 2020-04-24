@@ -71,7 +71,7 @@ var character_assassin = {class_name:"Assassin", strength:20, dexterity:20, vita
 		if (skill.name == "Fists of Ice") { if (equipped.weapon.type == "claw" || equipped.weapon.type == "dagger") { result.charge_ice = charges; result.cDamage_min = charges * skill.data.values[0][lvl]; result.cDamage_max = charges * skill.data.values[1][lvl]; result.duration = skill.data.values[2][lvl]; } }		// consider auto-disabling
 		if (skill.name == "Burst of Speed") {
 			if (document.getElementById("e"+skills[15].key) != null) { if (effects["e"+skills[15].key].enabled == 1) { disableEffect(15) } }	// disables Fade
-			result.ias_skill = skill.data.values[0][lvl]; result.frw = skill.data.values[1][lvl]; result.duration = skill.data.values[2][lvl];
+			result.ias_skill = skill.data.values[0][lvl]; result.velocity = skill.data.values[1][lvl]; result.duration = skill.data.values[2][lvl];
 		}
 		if (skill.name == "Fade") {
 			if (document.getElementById("e"+skills[11].key) != null) { if (effects["e"+skills[11].key].enabled == 1) { disableEffect(11) } }	// disables Burst of Speed

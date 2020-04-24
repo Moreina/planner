@@ -94,21 +94,23 @@ var character_druid = {class_name:"Druid", strength:15, dexterity:20, vitality:2
 			result.max_life = (25 + lycan_life); result.damage_bonus = skill.data.values[1][lvl] + lycan_damage; result.defense_bonus = skill.data.values[2][lvl]; result.duration = 1040;
 		}
 		if (skill.name == "Feral Rage") {
-			if (document.getElementById("e"+skills[11].key) == null || effects["e"+skills[11].key].enabled != 1) { disableEffect(14); }	// only useable with Werewolf
-			result.frw = skill.data.values[1][lvl]; result.life_leech = skill.data.values[3][lvl]; result.duration = 20;
+		//	if (document.getElementById("e"+skills[11].key) != null) { if (effects["e"+skills[11].key].enabled == 1) {
+				result.velocity = skill.data.values[1][lvl]; result.life_leech = skill.data.values[3][lvl]; result.duration = 20;
+		//	} }
+		//	if (document.getElementById("e"+skills[11].key) == null || effects["e"+skills[11].key].enabled != 1) { disableEffect(14); }	// only useable with Werewolf
 			}
 		if (skill.name == "Maul") {
-			if (document.getElementById("e"+skills[13].key) == null || effects["e"+skills[13].key].enabled != 1) { disableEffect(15); }	// only useable with Werebear
 			/*result.damage_bonus = skill.data.values[2][lvl];*/ result.duration = 20;
+		//	if (document.getElementById("e"+skills[13].key) == null || effects["e"+skills[13].key].enabled != 1) { disableEffect(15); }	// only useable with Werebear
 		}
 		if (skill.name == "Heart of Wolverine") { result.damage_bonus = skill.data.values[1][lvl]; result.ar_bonus = skill.data.values[2][lvl]; }
 		if (skill.name == "Oak Sage") { result.max_life = skill.data.values[1][lvl]; }
 		if (skill.name == "Spirit of Barbs") { result.thorns_reflect = skill.data.values[1][lvl]; }
 		if (skill.name == "Carrion Vine") { result.life_regen = skill.data.values[1][lvl]; }	// Check if "Heals: X percent" is equivalent to life_regen
-		if (skill.name == "Solar Creeper") { result.duration = skill.data.values[1][lvl]; }	// Check if "Mana Recovery Rate: X" is equivalent to mana_regen
+		if (skill.name == "Solar Creeper") { result.mana_regen = skill.data.values[1][lvl]; }	// Check if "Mana Recovery Rate: X" is equivalent to mana_regen
 		if (skill.name == "Cyclone Armor") { result.absorb_elemental = skill.data.values[0][lvl]; }
-		// Armageddon - only buffs DPS
-		// Hurricane - only buffs DPS
+		// Armageddon - DPS
+		// Hurricane - DPS
 		// minions - DPS (see above, Spirit Wolf, Dire Wolf, Grizzly, Raven)
 		
 	return result
@@ -242,10 +244,10 @@ var skills_druid = [
 {data:d313, key:"313", code:242, name:"Poison Creeper", i:22, req:[], reqlvl:1, level:0, extra_levels:0, force_levels:0, bindable:1, style:"display: block; top: 82px; left: 496px;", description:"Summon a vine that spreads<br>disease to all it contacts", syn_title:"", syn_text:"", graytext:"", text:["Life: ","<br>Poison Damage: ","-","<br>over 5 seconds<br>Mana Cost: 8"]},
 {data:d321, key:"321", code:243, name:"Heart of Wolverine", i:23, req:[], reqlvl:6, level:0, extra_levels:0, force_levels:0, effect:5, bindable:1, style:"display: block; top: 150px; left: 336px;", description:"Summon a spirit pet that adds<br>to the damage and attack rating<br>of you and your party", syn_title:"", syn_text:"", graytext:"", text:["Life: ","<br>Damage: +"," percent<br>Attack Rating: +"," percent<br>Radius: "," yards<br>Mana Cost: ",""]},
 {data:d322, key:"322", code:244, name:"Summon Spirit Wolf", i:24, req:[21], reqlvl:6, level:0, extra_levels:0, force_levels:0, bindable:1, style:"display: block; top: 150px; left: 366px;", description:"Summon a wolf to fight by your side", syn_title:"<br>Summon Spirit Wolf Receives Bonuses From:<br>", syn_text:"Summon Dire Wolf<br>Summon Grizzly", graytext:"<br>One Wolf per Base Level. Max: 7<br>", text:["Wolves: ","<br>Mana Cost: 15<br>Life: ","Damage: ","-","<br>Attack Rating: +"," percent<br>Defense: +"," percent"]},
-{data:d333, key:"333", code:245, name:"Carrion Vine", i:25, req:[22], reqlvl:12, level:0, extra_levels:0, force_levels:0, bindable:1, style:"display: block; top: 218px; left: 466px;", description:"Summon a vine that eats corpses<br>and replenishes your life", syn_title:"", syn_text:"", graytext:"", text:["Life: ","<br>Heals: "," percent<br>Mana Cost: 10",""]},
+{data:d333, key:"333", code:245, name:"Carrion Vine", i:25, req:[22], reqlvl:12, level:0, extra_levels:0, force_levels:0, effect:3, bindable:1, style:"display: block; top: 218px; left: 466px;", description:"Summon a vine that eats corpses<br>and replenishes your life", syn_title:"", syn_text:"", graytext:"", text:["Life: ","<br>Heals: "," percent<br>Mana Cost: 10",""]},
 {data:d341, key:"341", code:246, name:"Oak Sage", i:26, req:[23], reqlvl:18, level:0, extra_levels:0, force_levels:0, effect:5, bindable:1, style:"display: block; top: 286px; left: 326px;", description:"Summon a spirit pet that increases<br>life for you and your party", syn_title:"", syn_text:"", graytext:"", text:["Life: ","<br>Life: +"," percent<br>Radius: "," yards<br>Mana Cost: ",""]},
 {data:d342, key:"342", code:247, name:"Summon Dire Wolf", i:27, req:[23,24,21], reqlvl:18, level:0, extra_levels:0, force_levels:0, bindable:1, style:"display: block; top: 286px; left: 386px;", description:"Summon a wolf that becomes enraged,<br>eating corpses to increase its damage", syn_title:"<br>Summon Dire Wolf Receives Bonuses From:<br>", syn_text:"Summon Spirit Wolf<br>Summon Grizzly", graytext:"<br>One Wolf per Base Level. Max: 3<br>", text:["Wolves: ","<br>Mana Cost: 20<br>Attack Rating: +"," percent<br>Defense: +","Life: ","<br>Damage: ","-","<br>Life: +"," percent",""]},
-{data:d353, key:"353", code:248, name:"Solar Creeper", i:28, req:[25,22], reqlvl:24, level:0, extra_levels:0, force_levels:0, bindable:1, style:"display: block; top: 354px; left: 466px;", description:"Summon a vine that eats corpses<br>and replenishes your mana", syn_title:"", syn_text:"", graytext:"", text:["Life: ","<br>Mana Recovery Rate: "," percent<br>Mana Cost: ",""]},
+{data:d353, key:"353", code:248, name:"Solar Creeper", i:28, req:[25,22], reqlvl:24, level:0, extra_levels:0, force_levels:0, effect:3, bindable:1, style:"display: block; top: 354px; left: 466px;", description:"Summon a vine that eats corpses<br>and replenishes your mana", syn_title:"", syn_text:"", graytext:"", text:["Life: ","<br>Mana Recovery Rate: "," percent<br>Mana Cost: ",""]},
 {data:d361, key:"361", code:249, name:"Spirit of Barbs", i:29, req:[26,23], reqlvl:30, level:0, extra_levels:0, force_levels:0, effect:3, bindable:1, style:"display: block; top: 422px; left: 296px;", description:"Summon spirit pet that reflects damage<br>taken by you and your party<br>back at your enemies", syn_title:"", syn_text:"", graytext:"", text:["Life: ","<br>"," percent damage returned<br>Radius: "," yards<br>Mana Cost: ",""]},
 {data:d362, key:"362", code:250, name:"Summon Grizzly", i:30, req:[27,23,24,21], reqlvl:30, level:0, extra_levels:0, force_levels:0, bindable:1, style:"display: block; top: 422px; left: 346px;", description:"Summon a ferocious grizzly bear", syn_title:"<br>Summon Grizzly Receives Bonuses From:<br>", syn_text:"Summon Spirit Wolf<br>Summon Dire Wolf", graytext:"", text:["Mana Cost: 40<br>Life: ","<br>Attack Rating: +"," percent<br>Defense: +","Damage: ","-","<br>Damage: +"," percent",""]}
 ];
