@@ -23,7 +23,7 @@ var character_barbarian = {class_name:"Barbarian", strength:30, dexterity:20, vi
 		var wisp = (1+Math.round(character.wisp/20,0)/10);
 		
 		if (skill.name == "War Cry" && elem < 2) { 		result *= ((1 + (0.16*skills[2].level + 0.16*skills[8].level))) }
-		if (skill.name == "Battle Command" && elem == 0) { 	result = Math.floor(1+(lvl / 10)) }
+		if (skill.name == "Battle Command" && elem == 0) { 	result = 1+Math.floor(skill.level/10) }
 		
 		if (skill.name == "Frenzy" && elem == 0) { 		result = skills[24].level }
 		if (skill.name == "Frenzy" && elem == 1) { 		result += (10*skills[20].level) }
@@ -50,7 +50,7 @@ var character_barbarian = {class_name:"Barbarian", strength:30, dexterity:20, vi
 		var lvl = skill.level + skill.extra_levels;
 		var result = {};
 		
-		if (skill.name == "Battle Command") { result.all_skills = Math.floor(1+(skill.level / 10)); result.duration = skill.data.values[1][lvl]; }
+		if (skill.name == "Battle Command") { result.all_skills = 1+Math.floor(skill.level/10); result.duration = skill.data.values[1][lvl]; }
 		if (skill.name == "Shout") { result.defense_bonus = skill.data.values[0][lvl]; result.duration = skill.data.values[1][lvl]; }
 		if (skill.name == "Battle Orders") { result.max_stamina = skill.data.values[1][lvl]; result.max_life = skill.data.values[2][lvl]; result.max_mana = skill.data.values[3][lvl]; result.duration = skill.data.values[0][lvl]; }
 		if (skill.name == "Frenzy") { if (offhandType == "weapon") { result.ias_skill = skill.data.values[4][lvl]; result.frw = skill.data.values[6][lvl]; result.duration = 7.5; } }	// consider auto-disabling
