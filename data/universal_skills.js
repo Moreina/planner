@@ -84,7 +84,7 @@ var character_any = {
 			result.max_life = (15 + lycan_life);
 			result.max_stamina = 40;
 			result.ar_bonus = skill.data.values[1][lvl];
-			result.ias = skill.data.values[2][lvl];
+			result.ias_skill = skill.data.values[2][lvl];
 			result.damage_bonus = lycan_damage;
 		}
 		if (skillName == "Werebear") {

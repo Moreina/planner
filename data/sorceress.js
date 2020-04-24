@@ -1,6 +1,4 @@
 
-// frames per attack with a base weapon speed of 0 and no IAS
-var weapon_frames = {dagger:16, oneHand_sword:17, oneHand_axe:17, twoHand_sword:21, twoHand_axe:15, staff:15, polearm:15, oneHand_mace:17, scepter:17, wand:17, twoHand_mace:20, javelin:20, spear:20, bow:16, crossbow:19, orb:17}
 // FCR breakpoints
 //	base frames: 13 or 19 (for Lightning Surge & Chain Lightning)
 //	var fcr_bp = [0, 9, 20, 37, 63, 105, 200]
@@ -13,7 +11,8 @@ var weapon_frames = {dagger:16, oneHand_sword:17, oneHand_axe:17, twoHand_sword:
 //	var fcr_bp = [0, 7, 15, 27, 48, 86, 200]
 
 var character_sorceress = {class_name:"Sorceress", strength:10, dexterity:25, vitality:10, energy:35, life:40, mana:35, stamina:174, levelup_life:1.5, levelup_stamina:1, levelup_mana:2, ar_per_dexterity:5, life_per_vitality:2, stamina_per_vitality:1, mana_per_energy:2, starting_strength:10, starting_dexterity:25, starting_vitality:10, starting_energy:35, ar_const:-15, skill_layout:"./images/sorceress.png", mana_regen:1.66,
-	
+	weapon_frames:{dagger:16, sword:[17,21], axe:[17,15], mace:[17,20], staff:15, polearm:15, scepter:17, wand:17, javelin:20, spear:20, bow:16, crossbow:19, orb:17},
+
 	// getSkillData - gets skill info from the skills data table
 	//	skill: skill object for the skill in question
 	//	lvl: level of the skill
@@ -44,8 +43,8 @@ var character_sorceress = {class_name:"Sorceress", strength:10, dexterity:25, vi
 		if (skill.name == "Nova" && elem < 2) { 			result *= ((1 + (0.03*sk[18].level)) * (1 + (c.lDamage+c.lDamage_skillup)/100) * wisp) }
 		if (skill.name == "Lightning Surge" && elem < 2) { 		result *= ((1 + (0.05*sk[11].level + 0.05*sk[16].level)) * (1 + (c.lDamage+c.lDamage_skillup)/100) * wisp) }
 		if (skill.name == "Chain Lightning" && elem < 3 && elem > 0) { 	result *= ((1 + (0.03*sk[11].level + 0.03*sk[15].level)) * (1 + (c.lDamage+c.lDamage_skillup)/100) * wisp) }
-		if (skill.name == "Teleport" && elem < 1) { 			result = Math.max(0, (0.05*Math.floor((character.mana + (character.level-1)*character.mana_per_level + (((character.energy + character.all_attributes + (character.level-1)*character.energy_per_level)-character.starting_energy)*character.mana_per_energy)) * (1 + character.max_mana/100)) - result)) }
-		if (skill.name == "Discharge" && elem < 3 && elem > 0) { 	result *= ((1 + 0.03*sk[12].level + 0.03*sk[14].level + 0.01*Math.floor((c.energy + c.all_attributes + c.level*c.energy_per_level)/2)) * (1 + (c.lDamage+c.lDamage_skillup)/100) * wisp) }
+		if (skill.name == "Teleport" && elem < 1) { 			result = Math.max(0, (0.05*Math.floor((character.mana + (character.level-1)*character.mana_per_level + ((((character.energy + character.all_attributes)*(1+character.max_energy))-character.starting_energy)*character.mana_per_energy)) * (1 + character.max_mana/100)) - result)) }
+		if (skill.name == "Discharge" && elem < 3 && elem > 0) { 	result *= ((1 + 0.03*sk[12].level + 0.03*sk[14].level + 0.01*Math.floor(((character.energy + character.all_attributes)*(1+character.max_energy))/2)) * (1 + (c.lDamage+c.lDamage_skillup)/100) * wisp) }
 		if (skill.name == "Energy Shield" && elem == 0) { 		result = (4*sk[13].level + 6) }
 		if (skill.name == "Thunder Storm" && elem == 0) { 		result = (2.6 - (0.12*sk[17].level)) }
 		if (skill.name == "Thunder Storm" && elem < 4 && elem > 1) { 	result *= ((1 + (0.21*sk[13].level + 0.21*sk[15].level)) * (1 + (c.lDamage+c.lDamage_skillup)/100) * wisp) }
@@ -80,16 +79,19 @@ var character_sorceress = {class_name:"Sorceress", strength:10, dexterity:25, vi
 			if (document.getElementById("e"+skills[4].key) != null) { if (effects["e"+skills[4].key].enabled == 1) { disableEffect(4) } }	// disables Chilling Armor
 			result.defense_bonus = skill.data.values[1][lvl];
 		}
-		if (skill.name == "Frigerate") {
+		if (skill.name == "Frigerate") {	// TODO: Make always-active
 			result.cDamage_min = skill.data.values[0][lvl] * (1 + (0.15*skills[4].level)) * (1 + (~~skills[10].data.values[1][skills[10].level+skills[10].extra_levels])/100);
 			result.cDamage_max = skill.data.values[1][lvl] * (1 + (0.15*skills[4].level)) * (1 + (~~skills[10].data.values[1][skills[10].level+skills[10].extra_levels])/100);
 			result.enemy_defense = skill.data.values[2][lvl];
 		}
-		if (skill.name == "Enflame") {
+		if (skill.name == "Enflame") {		// TODO: Make always-active
 			result.fDamage_min = skill.data.values[1][lvl] * (1 + (0.12*skills[23].level)) * (1 + (~~skills[30].data.values[1][skills[30].level+skills[30].extra_levels])/100);
 			result.fDamage_max = skill.data.values[2][lvl] * (1 + (0.12*skills[23].level)) * (1 + (~~skills[30].data.values[1][skills[30].level+skills[30].extra_levels])/100);
 			result.ar_bonus = 100+skill.data.values[3][lvl];
 		}
+		// Energy Shield - only buffs effective HP
+		// Thunder Storm - only buffs DPS
+		// Blaze
 		
 	return result
 	},
@@ -124,7 +126,7 @@ var character_sorceress = {class_name:"Sorceress", strength:10, dexterity:25, vi
 		else if (skill.name == "Charged Bolt") {	attack = 0; spell = 1; lDamage_min = character.getSkillData(skill, lvl, 1); lDamage_max = character.getSkillData(skill, lvl, 2); }
 		else if (skill.name == "Telekinesis") {		attack = 0; spell = 1; lDamage_min = character.getSkillData(skill, lvl, 0); lDamage_max = character.getSkillData(skill, lvl, 1); }
 		else if (skill.name == "Nova") {		attack = 0; spell = 1; lDamage_min = character.getSkillData(skill, lvl, 0); lDamage_max = character.getSkillData(skill, lvl, 1); }
-		else if (skill.name == "Lightning Surge") {	attack = 0; spell = 1; lDamage_min = character.getSkillData(skill, lvl, 0); lDamage_max = character.getSkillData(skill, lvl, 1); }
+		else if (skill.name == "Lightning Surge") {	attack = 0; spell = 1; lDamage_min = character.getSkillData(skill, lvl, 0); lDamage_max = character.getSkillData(skill, lvl, 1); damage_min = lDamage_min*character.phys_Lightning_Surge/100; damage_max = lDamage_max*character.phys_Lightning_Surge/100; }
 		else if (skill.name == "Chain Lightning") {	attack = 0; spell = 1; lDamage_min = character.getSkillData(skill, lvl, 1); lDamage_max = character.getSkillData(skill, lvl, 2); }
 		else if (skill.name == "Discharge") {		attack = 0; spell = 1; lDamage_min = character.getSkillData(skill, lvl, 1); lDamage_max = character.getSkillData(skill, lvl, 2); }
 		else if (skill.name == "Thunder Storm") {	attack = 0; spell = 1; lDamage_min = character.getSkillData(skill, lvl, 2); lDamage_max = character.getSkillData(skill, lvl, 3); }

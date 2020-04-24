@@ -1,6 +1,4 @@
 
-// frames per attack with a base weapon speed of 0 and no IAS
-var weapon_frames = {dagger:14, oneHand_sword:14, oneHand_axe:14, twoHand_sword:22, twoHand_axe:18, staff:18, polearm:18, oneHand_mace:14, scepter:14, wand:14, twoHand_mace:21, javelin:22, spear:22, bow:15, crossbow:20, claw:13.5}
 // FCR breakpoints
 //	base frames: 16
 //	var fcr_bp = [0, 8, 16, 27, 42, 65, 102, 174]
@@ -12,7 +10,8 @@ var weapon_frames = {dagger:14, oneHand_sword:14, oneHand_axe:14, twoHand_sword:
 //	var fcr_bp = [0, 13, 32, 86, 600]
 
 var character_assassin = {class_name:"Assassin", strength:20, dexterity:20, vitality:20, energy:25, life:50, mana:25, stamina:195, levelup_life:2, levelup_stamina:1.25, levelup_mana:1.5, ar_per_dexterity:5, life_per_vitality:3, stamina_per_vitality:1.25, mana_per_energy:1.75, starting_strength:20, starting_dexterity:20, starting_vitality:20, starting_energy:25, ar_const:15, skill_layout:"./images/assassin.png", mana_regen:1.66,
-	
+	weapon_frames:{dagger:14, sword:[14,22], axe:[14,18], mace:[14,21], staff:18, polearm:18, scepter:14, wand:14, javelin:22, spear:22, bow:15, crossbow:20, claw:13.5},
+
 	// getSkillData - gets skill info from the skills data table
 	//	skill: skill object for the skill in question
 	//	lvl: level of the skill
@@ -62,7 +61,7 @@ var character_assassin = {class_name:"Assassin", strength:20, dexterity:20, vita
 	// result: indexed array including stats affected and their values
 	// ---------------------------------
 	getBuffData : function(effect) {
-		var skill = skills[effect.skill]
+		var skill = skills[effect.skill];
 		var lvl = skill.level + skill.extra_levels;
 		var result = {};
 		var charges = 5;
@@ -84,7 +83,7 @@ var character_assassin = {class_name:"Assassin", strength:20, dexterity:20, vita
 		}
 		if (skill.name == "Burst of Speed") {
 			if (document.getElementById("e"+skills[15].key) != null) { if (effects["e"+skills[15].key].enabled == 1) { disableEffect(15) } }	// disables Fade
-			result.ias = skill.data.values[0][lvl];
+			result.ias_skill = skill.data.values[0][lvl];
 			result.frw = skill.data.values[1][lvl];
 		}
 		if (skill.name == "Fade") {
@@ -102,6 +101,7 @@ var character_assassin = {class_name:"Assassin", strength:20, dexterity:20, vita
 			result.defense_bonus = skill.data.values[0][lvl];
 			result.enemy_defense = skill.data.values[1][lvl];
 		}
+		// Blade Shield - doesn't buff anything except DPS
 	return result	
 	},
 	

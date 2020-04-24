@@ -864,8 +864,8 @@ function resetSkills() {
 		document.getElementById("s"+skills[s].key).onclick = function() {mouseOut};
 		document.getElementById("s"+skills[s].key).oncontextmenu = function() {mouseOut};
 	}
-	document.getElementById("dropdown_skill1").innerHTML = "<option class='gray' disabled selected>" + " ­ ­ ­ ­ Skill 1" + "</option>"
-	document.getElementById("dropdown_skill2").innerHTML = "<option class='gray' disabled selected>" + " ­ ­ ­ ­ Skill 2" + "</option>"
+	document.getElementById("dropdown_skill1").innerHTML = "<option class='gray-all' style='color:gray' disabled selected>" + " ­ ­ ­ ­ Skill 1" + "</option>"
+	document.getElementById("dropdown_skill2").innerHTML = "<option class='gray-all' style='color:gray' disabled selected>" + " ­ ­ ­ ­ Skill 2" + "</option>"
 }
 
 // resetEquipment - Resets all items
@@ -1355,10 +1355,25 @@ function updatePrimaryStats() {
 	if (c.mDamage_reduced > 0) { magicRes += (" +"+c.mDamage_reduced) }
 	document.getElementById("mres").innerHTML = magicRes
 	
-//	var weapon_speed = Math.ceil(256 * (charWpnSpeed + 1) / Math.floor(256 * (100 + wpnIAS + Math.floor(charIAS /(1 + charIAS/120)))/100)) - 1
-	var ias = c.ias;
-	if (offhandType == "weapon") { if (typeof(equipped.offhand.ias) != 'undefined') { ias -= equipped.offhand.ias } } else { ias += (Math.floor(dexTotal/8)*c.ias_per_8_dexterity) }
-	document.getElementById("ias").innerHTML = ias
+	var ias = c.ias + c.ias_skill + Math.floor(dexTotal/8)*c.ias_per_8_dexterity;
+	if (offhandType == "weapon" && typeof(equipped.offhand.ias) != 'undefined') { ias -= equipped.offhand.ias }
+	document.getElementById("ias").innerHTML = ias+"%"
+	if (equipped.weapon.type != "") {
+		var eIAS = Math.floor(120*ias/(120+ias));
+		var weaponFrames = 0;
+		if (weaponType != "") {
+			weaponFrames = c.weapon_frames[weaponType];
+			if (c.class_name == "Druid") {
+				var werewolf = "e"+skills[11].key;
+				var werebear = "e"+skills[13].key;
+				if (typeof(effects[werewolf]) != 'undefined') { if (effects[werewolf]["enabled"] == 1) { weaponFrames = c.wereform_frames[weaponType] } }
+				if (typeof(effects[werebear]) != 'undefined') { if (effects[werebear]["enabled"] == 1) { weaponFrames = c.wereform_frames[weaponType] } }
+			}
+			if (weaponType == "sword" || weaponType == "axe" || weaponType == "mace") { if (equipped.weapon.twoHanded == 1) { weaponFrames = weaponFrames[1]; } else { weaponFrames = weaponFrames[0]; } }
+		}
+		var frames_per_attack = Math.ceil((weaponFrames*256)/Math.floor(256 * (100 + c.ias_skill + eIAS - c.baseSpeed) / 100));
+		document.getElementById("ias").innerHTML += " ("+frames_per_attack+" fpa)"
+	}
 }
 
 // updateSecondaryStats - Updates stats shown on the secondary (Path of Diablo) stat page
@@ -1441,8 +1456,8 @@ function updateSecondaryStats() {
 function updateTertiaryStats() {
 	var c = character;
 	document.getElementById("velocity").innerHTML = (100 + c.velocity) + "%"
-	document.getElementById("poison_reduction").innerHTML = Math.min(75,c.poison_length_reduced) + "%"
-	document.getElementById("curse_reduction").innerHTML = Math.min(75,c.curse_length_reduced) + "%"
+	document.getElementById("poison_reduction").innerHTML = "-" + Math.min(75,c.poison_length_reduced) + "%"
+	document.getElementById("curse_reduction").innerHTML = "-" + Math.min(75,c.curse_length_reduced) + "%"
 	var thorns = c.thorns_reflect;
 	if (c.thorns_reflect == 0) { thorns = Math.floor(c.thorns_lightning + c.thorns + c.level*c.thorns_per_level) } else { thorns += "%"; if (c.thorns > 0 || c.thorns_per_level > 0) { thorns += (" +"+Math.floor(c.thorns_lightning + c.thorns + c.level*c.thorns_per_level)) } }
 	document.getElementById("thorns").innerHTML = thorns
@@ -1477,6 +1492,9 @@ function updateTertiaryStats() {
 	else { document.getElementById("freezes_target").innerHTML = "" }
 	if (c.peace > 0) { document.getElementById("peace").innerHTML = "Slain Monsters Rest in Peace<br>" } else { document.getElementById("peace").innerHTML = "" }
 	if (c.glow > 0) { document.getElementById("glow").innerHTML = "Character is Glowing<br>" } else { document.getElementById("glow").innerHTML = "" }
+
+	// TODO: Add chance-to-cast stats and others. Implement array?
+	// c.hammer_on_hit	Cast Blessed Hammer on hit
 }
 
 // updateMisc - Updates other interface elements
@@ -2078,7 +2096,7 @@ function updateSkills() {
 				if (natClass != "none") { if (skills_all[natClass][natIndex].bindable > 0) { addSkill = 1 } } else { addSkill = 1 }
 				if (addSkill == 1) {
 					oskillList[k] = oskills_info[oskills[o]].name
-					oskillOptions[k] = "<option>" + oskills_info[oskills[o]].name + "</option>"
+					oskillOptions[k] = "<option class='gray-all'>" + oskills_info[oskills[o]].name + "</option>"
 					choices += oskillOptions[k]
 					k++
 				}
@@ -2090,7 +2108,7 @@ function updateSkills() {
 	for (let s = 0; s < skills.length; s++) {
 		if (skills[s].bindable > 0 && (skills[s].level > 0 || skills[s].force_levels > 0)) {
 			skillList[k] = skills[s].name
-			skillOptions[k] = "<option>" + skills[s].name + "</option>"
+			skillOptions[k] = "<option class='gray-all'>" + skills[s].name + "</option>"
 			choices += skillOptions[k]
 			k++
 		}
@@ -2104,8 +2122,8 @@ function updateSkills() {
 		}
 	}
 
-	document.getElementById("dropdown_skill1").innerHTML = "<option class='gray' disabled>" + " ­ ­ ­ ­ Skill 1" + "</option>" + choices
-	document.getElementById("dropdown_skill2").innerHTML = "<option class='gray' disabled>" + " ­ ­ ­ ­ Skill 2" + "</option>" + choices
+	document.getElementById("dropdown_skill1").innerHTML = "<option class='gray-all' style='color:gray' disabled>" + " ­ ­ ­ ­ Skill 1" + "</option>" + choices
+	document.getElementById("dropdown_skill2").innerHTML = "<option class='gray-all' style='color:gray' disabled>" + " ­ ­ ­ ­ Skill 2" + "</option>" + choices
 	var selectedIndex = [0,0];
 	for (let l = 0; l < skillList.length; l++) {
 		if (skillList[l] == selectedSkill[0]) { selectedIndex[0] = l }

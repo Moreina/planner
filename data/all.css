@@ -3,20 +3,11 @@
   color: gray;
   border-color: #333;
 }
-.none-test {
-  background-color: black;
-  color: white;
-  border-color: #333;
-}
 .no-selection {
 -webkit-user-select: none; /* for safari & chrome browsers */
 -moz-user-select: none; /* for mozilla browsers */
 -ms-user-select: none; /* for IE10+ */
   background-color: black;
-}
-.container {
-  position: absolute;
-  text-align: center;
 }
 .hover {
   position: absolute;
@@ -43,7 +34,7 @@
   color: white;
   width: 30px;
 }
-.inventory-new {
+.inventory {
   position: relative;
   width: 303px;
   height: 300px;
@@ -51,7 +42,7 @@
   float: right;
   z-index: 3;
 }
-.inventory {
+.inv-charms {
   position: relative;
   margin-left:2px;
   width: 300px;
@@ -59,7 +50,7 @@
   float: left;
   z-index: 3;
 }
-.inventory2 {
+.inv-equipment {
   position: relative;
   z-index: 3;
 }
@@ -73,7 +64,7 @@
   text-align: center;
   color: #00f000;
 }
-.green_name {
+.green-name {
   text-align: center;
   color: #00f000;
 /*  font-weight: bold;	*/
@@ -83,14 +74,14 @@
   z-index: 3;
 }
 .gray-all {
-  color: gray;
+  color: #bbb;
   z-index: 3;
-/*  background-color: #333;	*/
+  background-color: #161616;
 }
 .background {
   background-color: black;
 }
-.dropdown_character {
+.dropdown-character {
   color: #ddd;
   position: absolute;
   left: 68px;
@@ -130,10 +121,6 @@
 .dropdown-option {
   background-color: #222;
   z-index: 6;
-/*
-  margin-top: 5px;
-  margin-bottom: 5px;
-*/
 }
 .dropdown-set {
   background-color: #222;
@@ -250,28 +237,6 @@ li a:hover {
 position:absolute;
 }
 
-/*	FULL INVENTORY PAGE
-.H {
-  position: absolute;
-  width: 29px;
-  height: 29px;
-}
-.Hx1 {left: 18px;}
-.Hx2 {left: 47px;}
-.Hx3 {left: 76px;}
-.Hx4 {left: 105px;}
-.Hx5 {left: 134px;}
-.Hx6 {left: 163px;}
-.Hx7 {left: 192px;}
-.Hx8 {left: 221px;}
-.Hx9 {left: 250px;}
-.Hx10 {left: 279px;}
-.Hy1 {top: 255px;}
-.Hy2 {top: 284px;}
-.Hy3 {top: 313px;}
-.Hy4 {top: 342px;}
-*/
-
 .H {
   position: absolute;
   width: 29px;
@@ -292,11 +257,6 @@ position:absolute;
 .Hy2 {top: 32px;}
 .Hy3 {top: 61px;}
 .Hy4 {top: 90px;}
-
-.inventory {
-  width: 29px;
-  z-index: 3;
-}
 
 .effect {
   width: 36px;

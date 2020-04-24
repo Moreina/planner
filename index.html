@@ -54,7 +54,7 @@
 <img id="hide_stats" src="./images/statbar_hidden_buttons.png" style="position: absolute; display: block; left: 120px; top: 98px;">
 
 <!--	class selection 	-->
-<select class="dropdown_character" id="dropdown_class" onChange="reset(this.value)">
+<select class="dropdown-character" id="dropdown_class" onChange="reset(this.value)">
 <option class="gray" disabled selected>Choose Class</option>
 <option>Amazon</option>
 <option>Assassin</option>
@@ -137,7 +137,7 @@
 
 <!--	skill hover text	-->
 <div class="hover" style="display: none;" id="tooltip">
-	<a id="title" class="green_name"></a><br>
+	<a id="title" class="green-name"></a><br>
 	<a id="description"></a>
 	<a id="graytext" class="gray"></a>
 	<a id="pretext"></a>
@@ -222,9 +222,9 @@
 </div> <!-- /selection options -->
 
 <!--	inventory	-->
-<div class="inventory-new">
+<div class="inventory">
 <!--	equipment inventory	-->
-<div id="gui_equipment" class="inventory2" oncontextmenu="return false">
+<div id="gui_equipment" class="inv-equipment" oncontextmenu="return false">
 <img usemap="#equipmentmap" id="equipment_grid" style="float: right;" src="./images/equipment_inventory.png">
 <map id="equipmentmap" name="equipmentmap">
 <div style="position: relative;">
@@ -243,7 +243,7 @@
 </div> <!-- /equipment inventory -->
 
 <!--	charm inventory 	-->
-<div id="gui_charms" class="inventory" oncontextmenu="return false">
+<div id="gui_charms" class="inv-charms" oncontextmenu="return false">
 <img usemap="#charmmap" id="charm_grid" src="./images/charm_inventory.png">
 <map id="charmmap" name="charmmap">
 
@@ -321,13 +321,13 @@
 	</div>
 	<a style="visibility: hidden; color: gray;">AR: </a><a id="ar_skill2"></a>
 </div>
-<div> <!-- TODO: Incorporate into calculated damage & attack rating -->
+<div> <!-- TODO: Incorporate into calculated damage & attack rating (instead of displaying as ED) -->
 <div style="position:absolute; left:30px;">
 	<br>
 	<font size="2">Damage vs Demons: </font><font size="2" id="damage_vs_demons"></font><br>
 	<font size="2">Damage vs Undead: </font><font size="2" id="damage_vs_undead"></font><br>
 </div>
-<div style="position:absolute; left:200px;">
+<div style="position:absolute; left:192px;">
 	<br>
 	<font size="2">AR vs Demons: </font><font size="2" id="ar_vs_demons"></font><br>
 	<font size="2">AR vs Undead: </font><font size="2" id="ar_vs_undead"></font><br>
@@ -340,14 +340,14 @@
 <div class="gray" id="stats">
 <div id="stats_main_columns">
 <div style="position:absolute; left:10px;" id="stats_column_1">
-	<font size="2">Fire Resistance: </font><font size="2" id="fres"></font><br>
-	<font size="2">Cold Resistance: </font><font size="2" id="cres"></font><br>
-	<font size="2">Lightning Resistance: </font><font size="2" id="lres"></font><br>
-	<font size="2">Poison Resistance: </font><font size="2" id="pres"></font><br>
-	<font size="2">Magic Resistance: </font><font size="2" id="mres"></font><br>
+	<font size="2">Fire Resist: </font><font size="2" id="fres"></font><br>
+	<font size="2">Cold Resist: </font><font size="2" id="cres"></font><br>
+	<font size="2">Lightning Resist: </font><font size="2" id="lres"></font><br>
+	<font size="2">Poison Resist: </font><font size="2" id="pres"></font><br>
+	<font size="2">Magic Resist: </font><font size="2" id="mres"></font><br>
 	<font size="2">Damage Reduction: </font><font size="2" id="pdr"></font><br><br>
 	
-	<font size="2">Increased Attack Speed: </font><font size="2" id="ias"></font><br>
+	<font size="2">+ Attack Speed: </font><font size="2" id="ias"></font><br>
 	<font size="2">Faster Cast Rate: </font><font size="2" id="fcr"></font><br>
 	<font size="2">Faster Block Rate: </font><font size="2" id="fbr"></font><br>
 	<font size="2">Faster Hit Recovery: </font><font size="2" id="fhr"></font><br>
@@ -394,16 +394,16 @@
 	<font size="2">Faster Run/Walk: </font><font size="2" id="frw"></font><br>
 	<font size="2">Velocity: </font><font size="2" id="velocity"></font><br><br>
 	
-	<font size="2">Poison Length Reduced: </font><font size="2" id="poison_reduction"></font><br>
-	<font size="2">Curse Length Reduced: </font><font size="2" id="curse_reduction"></font><br>
+	<font size="2">Poison Length: </font><font size="2" id="poison_reduction"></font><br>
+	<font size="2">Curse Length: </font><font size="2" id="curse_reduction"></font><br>
 	<br><br>
 	<font size="2">Life per Kill: </font><font size="2" id="life_per_kill"></font><br>
 	<font size="2">Mana per Kill: </font><font size="2" id="mana_per_kill"></font><br><br>
 	
-	<font size="2">Enemy Fire Resistance: </font><font size="2" id="enemy_fres"></font><br>
-	<font size="2">Enemy Cold Resistance: </font><font size="2" id="enemy_cres"></font><br>
-	<font size="2">Enemy Lightning Resistance: </font><font size="2" id="enemy_lres"></font><br>
-	<font size="2">Enemy Poison Resistance: </font><font size="2" id="enemy_pres"></font><br>
+	<font size="2">Enemy Fire Resist: </font><font size="2" id="enemy_fres"></font><br>
+	<font size="2">Enemy Cold Resist: </font><font size="2" id="enemy_cres"></font><br>
+	<font size="2">Enemy Lightning Resist: </font><font size="2" id="enemy_lres"></font><br>
+	<font size="2">Enemy Poison Resist: </font><font size="2" id="enemy_pres"></font><br>
 </div>
 <div style="position:absolute; left:540px;" id="stats_column_4">
 	<br>

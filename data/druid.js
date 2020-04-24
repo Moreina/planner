@@ -1,7 +1,4 @@
 
-// frames per attack with a base weapon speed of 0 and no IAS
-var weapon_frames = {dagger:20, oneHand_sword:20, oneHand_axe:20, twoHand_sword:21, twoHand_axe:17, staff:17, polearm:17, oneHand_mace:20, scepter:20, wand:20, twoHand_mace:20, javelin:23, spear:23, bow:15, crossbow:19}
-var wereform_frames = {dagger:22, oneHand_sword:22, oneHand_axe:22, twoHand_sword:25, twoHand_axe:20, staff:20, polearm:20, oneHand_mace:22, scepter:22, wand:22, twoHand_mace:23, javelin:27, spear:27, bow:19, crossbow:24}
 // FCR breakpoints
 //	base frames: 18, 16 (Werebear or Werewolf)
 //	var fcr_bp = [0, 4, 10, 19, 30, 46, 68, 99, 163]
@@ -20,7 +17,9 @@ var wereform_frames = {dagger:22, oneHand_sword:22, oneHand_axe:22, twoHand_swor
 //	var fcr_bp = [0, 7, 15, 27, 48, 86, 200]	(Werewolf)
 
 var character_druid = {class_name:"Druid", strength:15, dexterity:20, vitality:25, energy:20, life:55, mana:20, stamina:184, levelup_life:1.5, levelup_stamina:1, levelup_mana:2, ar_per_dexterity:5, life_per_vitality:2, stamina_per_vitality:1, mana_per_energy:2, starting_strength:15, starting_dexterity:20, starting_vitality:25, starting_energy:20, ar_const:5, skill_layout:"./images/druid.png", mana_regen:1.66,
-	
+	weapon_frames:{dagger:20, sword:[20,21], axe:[20,17], mace:[20,20], staff:17, polearm:17, scepter:20, wand:20, javelin:23, spear:23, bow:15, crossbow:19},
+	wereform_frames:{dagger:22, sword:[22,25], axe:[22,20], mace:[22,23], staff:20, polearm:20, scepter:22, wand:22, javelin:27, spear:27, bow:19, crossbow:24},
+
 	// getSkillData - gets skill info from the skills data table
 	//	skill: skill object for the skill in question
 	//	lvl: level of the skill
@@ -33,7 +32,7 @@ var character_druid = {class_name:"Druid", strength:15, dexterity:20, vitality:2
 		
 		if (skill.name == "Firestorm" && elem > 0 && elem < 3) { 	result *= ((1 + (0.30*skills[1].level + 0.30*skills[4].level)) * (1+character.fDamage/100) * wisp) }
 		if (skill.name == "Flame Dash" && elem == 0) { 			result = Math.max(0.5, (8.4 - 0.4*skill.level)) }
-		if (skill.name == "Flame Dash" && elem < 3 && elem > 0) { 	result *= ((1 + 0.10*skills[1].level + 0.01*(character.energy + character.all_attributes + character.level*character.energy_per_level)) * (1+character.fDamage/100) * wisp) }
+		if (skill.name == "Flame Dash" && elem < 3 && elem > 0) { 	result *= ((1 + 0.10*skills[1].level + 0.01*((character.energy + character.all_attributes)*(1+character.max_energy))) * (1+character.fDamage/100) * wisp) }
 		if (skill.name == "Molten Boulder" && elem < 2) { 		result *= (1 + (0.20*skills[7].level)) }
 		if (skill.name == "Molten Boulder" && elem > 1 && elem < 4) { 	result *= ((1 + (0.23*skills[0].level)) * (1+character.fDamage/100) * wisp) }
 		if (skill.name == "Molten Boulder" && elem > 3 && elem < 6) { 	result *= ((1 + (0.17*skills[0].level)) * (1+character.fDamage/100) * wisp) }
@@ -58,7 +57,7 @@ var character_druid = {class_name:"Druid", strength:15, dexterity:20, vitality:2
 		if (skill.name == "Rabies" && elem > 0 && elem < 3) { result *= ((1 + (0.20*skills[22].level + 0.20*skills[27].level)) * (1+character.pDamage/100) * wisp) }
 
 		if (skill.name == "Raven" && elem < 3 && elem > 0) { result *= (1 + (0.20*skills[5].level + 0.20*skills[6].level)) }
-		if (skill.name == "Raven" && elem < 5 && elem > 2) { result *= (1 + 0.21*skills[3].level + 0.01*(character.energy + character.all_attributes + character.level*character.energy_per_level)) }
+		if (skill.name == "Raven" && elem < 5 && elem > 2) { result *= (1 + 0.21*skills[3].level + 0.01*((character.energy + character.all_attributes)*(1+character.max_energy))) }
 		if (skill.name == "Summon Spirit Wolf" && elem == 0) { result = Math.min(7, skill.level) }
 		if (skill.name == "Summon Spirit Wolf" && elem == 1) { if (skills[27].level > 0) { result = ((1 + (skills[27].data.values[6][skills[27].level+skills[27].extra_levels] / 100)) * skill.data.values[elem][character.difficulty]) } else { result = skill.data.values[elem][character.difficulty] } }
 		if (skill.name == "Summon Spirit Wolf" && elem < 4 && elem > 1) { if (skills[30].level > 0) { result *= (1 + (skills[30].data.values[5][skills[30].level+skills[30].extra_levels] / 100)) } }
@@ -91,7 +90,7 @@ var character_druid = {class_name:"Druid", strength:15, dexterity:20, vitality:2
 			result.max_life = (15 + lycan_life);
 			result.max_stamina = 40;
 			result.ar_bonus = skill.data.values[1][lvl];
-			result.ias = skill.data.values[2][lvl];
+			result.ias_skill = skill.data.values[2][lvl];
 			result.damage_bonus = lycan_damage;
 		}
 		if (skill.name == "Werebear") {
@@ -105,6 +104,14 @@ var character_druid = {class_name:"Druid", strength:15, dexterity:20, vitality:2
 			result.ar_bonus = skill.data.values[2][lvl];
 		}
 		if (skill.name == "Oak Sage") { result.max_life = skill.data.values[1][lvl]; }
+		// Cyclone Armor - only buffs effective HP
+		// Armageddon - only buffs DPS
+		// Hurricane - only buffs DPS
+		// Feral Rage
+		// Maul
+		// Spirit of Barbs
+		// Carrion Vine
+		// Solar Creeper
 		
 	return result
 	},
@@ -211,7 +218,7 @@ var character_druid = {class_name:"Druid", strength:15, dexterity:20, vitality:2
 
 var skills_druid = [
 {data:d111, key:"111", code:220, name:"Firestorm", i:0, req:[], reqlvl:1, level:0, extra_levels:0, force_levels:0, bindable:2, style:"display: block; top: 82px; left: 2px;", description:"Unleash fiery chaos to burn your enemies", syn_title:"<br>Firestorm Receives Bonuses From:<br>", syn_text:"Molten Boulder: +30% Fire Damage per Level<br>Fissure: +30% Fire Damage per Level", graytext:"", text:["+","% increased fire spread speed<br>Average Fire Damage: ","-"," per second<br>Mana Cost: ",""]},
-{data:d121, key:"121", code:221, name:"Molten Boulder", i:1, req:[0], reqlvl:6, level:0, extra_levels:0, force_levels:0, bindable:2, style:"display: block; top: 150px; left: 2px;", description:"Launch a boulder of flaming hot magma<br>that knocks back your enemies", syn_title:"<br>Molten Boulder Receives Bonuses From:<br>", syn_text:"Volcano: +20% damage per Level<br>Firestorm: +23% Fire Damage per Level<br>Firestorm: +17% Average Fire Damage per Second per Level", graytext:"", text:["Damage: ","-","<br>Fire Damage: ","-","<br>Average Fire Damage: ","-"," per second<br>Mana Cost: ",""]},
+{data:d121, key:"121", code:221, name:"Molten Boulder", i:1, req:[0], reqlvl:6, level:0, extra_levels:0, force_levels:0, bindable:2, style:"display: block; top: 150px; left: 2px;", description:"Launch a boulder of flaming hot magma<br>that knocks back your enemies", syn_title:"<br>Molten Boulder Receives Bonuses From:<br>", syn_text:"Volcano: +20% Damage per Level<br>Firestorm: +23% Fire Damage per Level<br>Firestorm: +17% Average Fire Damage per Second per Level", graytext:"", text:["Damage: ","-","<br>Fire Damage: ","-","<br>Average Fire Damage: ","-"," per second<br>Mana Cost: ",""]},
 {data:d122, key:"122", code:222, name:"Flame Dash", i:2, req:[1,0], reqlvl:6, level:0, extra_levels:0, force_levels:0, bindable:1, style:"display: block; top: 150px; left: 72px;", description:"Instantly teleport to a location and unleash a fiery<br>explosion that incinerates all enemies in your path", syn_title:"<br>Flame Dash Receives Bonuses From:<br>", syn_text:"Molten Boulder: +10% Fire Damage per Level<br>1% Increased Fire Damage per Energy", graytext:"<br>Cooldown Reduced by 0.4 Seconds per Base Level", text:["Cooldown: ","Fire Damage: ","-","<br>Mana Cost: ",""]},
 {data:d123, key:"123", code:223, name:"Arctic Blast", i:3, req:[], reqlvl:6, level:0, extra_levels:0, force_levels:0, bindable:2, style:"display: block; top: 150px; left: 142px;", description:"Blast a continous jet of ice<br>to burn your enemies with frost<br><br>Minimum Mana Required to Cast: 4", syn_title:"<br>Arctic Blast Receives Bonuses From:<br>", syn_text:"Hurricane: +10% Cold Damage per Level<br>Cyclone Armor: +10% Cold Damage per Level", graytext:"", text:["Average Cold Damage: ","-"," per second<br>Cold Length: "," seconds<br>Range: "," yards<br>Mana Cost: "," per second",""]},
 {data:d131, key:"131", code:224, name:"Fissure", i:4, req:[1,0], reqlvl:12, level:0, extra_levels:0, force_levels:0, bindable:1, style:"display: block; top: 218px; left: 2px;", description:"Open volcanic vents below your enemies,<br>burning them to a crisp<br><br>Mana Cost: 15", syn_title:"<br>Fissure Receives Bonuses From:<br>", syn_text:"Firestorm: +15% Fire Damage per Level<br>Volcano: +15% Fire Damage per Level", graytext:"", text:["Fire Damage: ","-","<br>Duration: 3.2 seconds",""]},

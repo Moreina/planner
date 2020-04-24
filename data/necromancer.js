@@ -1,6 +1,4 @@
 
-// frames per attack with a base weapon speed of 0 and no IAS
-var weapon_frames = {dagger:18, oneHand_sword:18, oneHand_axe:18, twoHand_sword:22, twoHand_axe:19, staff:19, polearm:19, oneHand_mace:18, scepter:18, wand:18, twoHand_mace:22, javelin:23, spear:23, bow:17, crossbow:19}
 // FCR breakpoints
 //	base frames: 15
 //	var fcr_bp = [0, 9, 18, 30, 48, 75, 125]
@@ -12,7 +10,8 @@ var weapon_frames = {dagger:18, oneHand_sword:18, oneHand_axe:18, twoHand_sword:
 //	var fcr_bp = [0, 6, 13, 20, 32, 52, 86, 174, 600]
 
 var character_necromancer = {class_name:"Necromancer", strength:15, dexterity:25, vitality:15, energy:25, life:45, mana:25, stamina:179, levelup_life:2, levelup_stamina:1, levelup_mana:2, ar_per_dexterity:5, life_per_vitality:2, stamina_per_vitality:1, mana_per_energy:2, starting_strength:15, starting_dexterity:25, starting_vitality:15, starting_energy:25, ar_const:-10, skill_layout:"./images/necromancer.png", mana_regen:1.66,
-	
+	weapon_frames:{dagger:18, sword:[18,22], axe:[18,19], mace:[18,22], staff:19, polearm:19, scepter:18, wand:18, javelin:23, spear:23, bow:17, crossbow:19},
+
 	// getSkillData - gets skill info from the skills data table
 	//	skill: skill object for the skill in question
 	//	lvl: level of the skill
@@ -74,7 +73,7 @@ var character_necromancer = {class_name:"Necromancer", strength:15, dexterity:25
 		}
 		if (skill.name == "Flesh Offering") {
 			result.fcr = skill.data.values[2][lvl];
-			result.ias = skill.data.values[3][lvl];
+			result.ias_skill = skill.data.values[3][lvl];
 			result.frw = skill.data.values[4][lvl];
 		}
 		if (skill.name == "Blood Golem") {
@@ -87,6 +86,7 @@ var character_necromancer = {class_name:"Necromancer", strength:15, dexterity:25
 			result.pDamage_duration = 2;
 			result.enemy_pRes = skill.data.values[3][lvl];
 		}
+		// Bone Armor - only buffs effective HP
 		
 	return result
 	},

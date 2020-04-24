@@ -1,6 +1,5 @@
 
-// frames per attack with a base weapon speed of 0 and no IAS
-var weapon_frames = {dagger:12, oneHand_sword:13, oneHand_axe:13, twoHand_sword:17, twoHand_axe:17, staff:17, polearm:17, oneHand_mace:13, scepter:13, wand:13, twoHand_mace:20, javelin:15, spear:15, bow:13, crossbow:19}
+
 // FCR breakpoints
 //	base frames: 19
 //	var fcr_bp = [0, 7, 14, 22, 32, 48, 68, 99, 152]
@@ -13,7 +12,8 @@ var weapon_frames = {dagger:12, oneHand_sword:13, oneHand_axe:13, twoHand_sword:
 //	var fcr_bp = [0, 4, 6, 11, 15, 23, 29, 40, 56, 80, 120, 200, 480]	// (with 1-hand swinging weapons: axes, maces, swords, throwing axes, wands)
 
 var character_amazon = {class_name:"Amazon", strength:20, dexterity:25, vitality:20, energy:15, life:50, mana:15, stamina:184, levelup_life:2.5, levelup_stamina:1, levelup_mana:1.5, ar_per_dexterity:5, life_per_vitality:3, stamina_per_vitality:1, mana_per_energy:1.5, starting_strength:20, starting_dexterity:25, starting_vitality:20, starting_energy:15, ar_const:10, skill_layout:"./images/amazon.png", mana_regen:1.66,
-	
+	weapon_frames:{dagger:12, sword:[13,17], axe:[13,17], mace:[13,20], staff:17, polearm:17, scepter:13, wand:13, javelin:15, spear:15, bow:13, crossbow:19},
+
 	// getSkillData - gets skill info from the skills data table
 	//	skill: skill object for the skill in question
 	//	lvl: level of the skill
@@ -32,8 +32,19 @@ var character_amazon = {class_name:"Amazon", strength:20, dexterity:25, vitality
 		if (skill.name == "Lightning Strike" && elem > 0 && elem < 3) { result *= ((1 + (0.15*skills[1].level + 0.15*skills[5].level)) * (1+character.lDamage/100) * wisp) }
 		if (skill.name == "Lightning Fury" && elem > 0 && elem < 3) { 	result *= ((1 + (0.06*skills[4].level)) * (1+character.lDamage/100) * wisp) }
 		
-		if (skill.name == "Decoy" && elem == 0) { 			result = Math.max(1, skills[22].level) }
-		if (skill.name == "Decoy" && elem < 3 && elem > 0) { 		result = 1 }
+		// calculates bow's physical damage - similar to getWeaponDamage()
+		var bow_min = 1;
+		var bow_max = 1;
+		var bow_mult = 1;
+		if (skill.name == "Decoy" && (equipped.weapon.type == "bow" || equipped.weapon.type == "crossbow") && (elem == 1 || elem == 2)) {
+			var dexTotal = (character.dexterity + character.all_attributes + (character.level-1)*character.dexterity_per_level);
+			bow_min = (character.base_damage_min * (1+character.e_damage/100) + character.damage_min + (character.level-1)*character.min_damage_per_level);
+			bow_max = (character.base_damage_max * (1+(character.e_damage+(character.level*character.e_max_damage_per_level))/100) + character.damage_max + (character.level-1)*character.max_damage_per_level);
+			bow_mult = (1+dexTotal/100+character.damage_bonus/100);
+		}
+		if (skill.name == "Decoy" && elem == 0) {			result = Math.max(1, skills[22].level) }
+		if (skill.name == "Decoy" && elem == 1) {			result = Math.floor(bow_min*bow_mult) }
+		if (skill.name == "Decoy" && elem == 2) {			result = Math.floor(bow_max*bow_mult) }
 		if (skill.name == "Valkyrie" && elem < 2) { 			result *= (1 + (0.20*skills[1].level + 0.20*skills[8].level)) }
 		if (skill.name == "Valkyrie" && elem > 1 && elem < 4) { 	result *= (1 + (0.18*skills[0].level)) }
 		
@@ -57,8 +68,8 @@ var character_amazon = {class_name:"Amazon", strength:20, dexterity:25, vitality
 		var skill = skills[effect.skill]
 		var lvl = skill.level + skill.extra_levels;
 		var result = {};
-		
-		if (skill.name == "Phase Run") { result.fhr = 30; result.frw = 30; }
+		if (skill.name == "Phase Run") { result.fhr = 30; result.frw = 30; result.duration = skill.data.values[2][lvl]; }
+		// Inner Sight? Can't disable it, but it should still show as an aura.
 	return result
 	},
 	

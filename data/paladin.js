@@ -1,6 +1,4 @@
 
-// frames per attack with a base weapon speed of 0 and no IAS
-var weapon_frames = {dagger:16, oneHand_sword:14, oneHand_axe:14, twoHand_sword:17.5, twoHand_axe:17, staff:17, polearm:17, oneHand_mace:14, scepter:14, wand:14, twoHand_mace:20, javelin:19, spear:19, bow:15, crossbow:19}
 // FCR breakpoints
 //	base frames: 15
 //	var fcr_bp = [0, 9, 30, 48, 75, 125]
@@ -14,7 +12,8 @@ var weapon_frames = {dagger:16, oneHand_sword:14, oneHand_axe:14, twoHand_sword:
 //	var fcr_bp = [0, 86]	(with Holy Shield active)
 
 var character_paladin = {class_name:"Paladin", strength:25, dexterity:20, vitality:25, energy:15, life:55, mana:15, stamina:189, levelup_life:2.5, levelup_stamina:1, levelup_mana:1.5, ar_per_dexterity:5, life_per_vitality:3, stamina_per_vitality:1, mana_per_energy:1.5, starting_strength:25, starting_dexterity:20, starting_vitality:25, starting_energy:15, ar_const:20, skill_layout:"./images/paladin.png", mana_regen:1.66,
-	
+	weapon_frames:{dagger:16, sword:[14,17.5], axe:[14,17], mace:[14,20], staff:17, polearm:17, scepter:14, wand:14, javelin:19, spear:19, bow:15, crossbow:19},
+
 	// getSkillData - gets skill info from the skills data table
 	//	skill: skill object for the skill in question
 	//	lvl: level of the skill
@@ -49,7 +48,7 @@ var character_paladin = {class_name:"Paladin", strength:25, dexterity:20, vitali
 		var sock = {damage_min:0, damage_max:0, e_damage:0};
 		var phys_min = 0;
 		var phys_max = 0;
-		if (skill.name == "Vengeance") {
+		if (skill.name == "Vengeance" && equipped.weapon.name != "none" && elem < 8) {
 			for (group in socketed) {
 				for (let i = 0; i < socketed[group].items.length; i++) {
 					for (affix in socketed[group].items[i]) {
@@ -168,7 +167,7 @@ var character_paladin = {class_name:"Paladin", strength:25, dexterity:20, vitali
 			result.damage_vs_undead = skill.data.values[0][lvl]; }
 		if (skill.name == "Fanaticism") {
 			result.damage_bonus = skill.data.values[1][lvl];
-			result.ias = skill.data.values[2][lvl];
+			result.ias_skill = skill.data.values[2][lvl];
 			result.ar_bonus = skill.data.values[3][lvl];
 		}
 		if (skill.name == "Conviction") {
