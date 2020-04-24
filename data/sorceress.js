@@ -11,7 +11,7 @@
 //	var fcr_bp = [0, 7, 15, 27, 48, 86, 200]
 
 var character_sorceress = {class_name:"Sorceress", strength:10, dexterity:25, vitality:10, energy:35, life:40, mana:35, stamina:174, levelup_life:1.5, levelup_stamina:1, levelup_mana:2, ar_per_dexterity:5, life_per_vitality:2, stamina_per_vitality:1, mana_per_energy:2, starting_strength:10, starting_dexterity:25, starting_vitality:10, starting_energy:35, ar_const:-15, skill_layout:"./images/sorceress.png", mana_regen:1.66,
-	weapon_frames:{dagger:16, sword:[17,21], axe:[17,15], mace:[17,20], staff:15, polearm:15, scepter:17, wand:17, javelin:20, spear:20, bow:16, crossbow:19, orb:17},
+	weapon_frames:{dagger:16, sword:[17,21], axe:[17,15], mace:[17,20], thrown:17, staff:15, polearm:15, scepter:17, wand:17, javelin:20, spear:20, bow:16, crossbow:19, orb:17},
 
 	// getSkillData - gets skill info from the skills data table
 	//	skill: skill object for the skill in question
@@ -73,11 +73,11 @@ var character_sorceress = {class_name:"Sorceress", strength:10, dexterity:25, vi
 		
 		if (skill.name == "Shiver Armor") {		
 			if (document.getElementById("e"+skills[8].key) != null) { if (effects["e"+skills[8].key].enabled == 1) { disableEffect(8) } }	// disables Shiver Armor
-			result.defense_bonus = skill.data.values[1][lvl];
+			result.defense_bonus = skill.data.values[1][lvl]; result.duration = skill.data.values[0][lvl];
 		}
 		if (skill.name == "Chilling Armor") {
 			if (document.getElementById("e"+skills[4].key) != null) { if (effects["e"+skills[4].key].enabled == 1) { disableEffect(4) } }	// disables Chilling Armor
-			result.defense_bonus = skill.data.values[1][lvl];
+			result.defense_bonus = skill.data.values[1][lvl]; result.duration = skill.data.values[0][lvl];
 		}
 		if (skill.name == "Frigerate") {	// TODO: Make always-active
 			result.cDamage_min = skill.data.values[0][lvl] * (1 + (0.15*skills[4].level)) * (1 + (~~skills[10].data.values[1][skills[10].level+skills[10].extra_levels])/100);
@@ -89,9 +89,12 @@ var character_sorceress = {class_name:"Sorceress", strength:10, dexterity:25, vi
 			result.fDamage_max = skill.data.values[2][lvl] * (1 + (0.12*skills[23].level)) * (1 + (~~skills[30].data.values[1][skills[30].level+skills[30].extra_levels])/100);
 			result.ar_bonus = 100+skill.data.values[3][lvl];
 		}
-		// Energy Shield - only buffs effective HP
-		// Thunder Storm - only buffs DPS
-		// Blaze
+		if (skill.name == "Blaze") { result.life_regen = 2; result.duration = skill.data.values[0][lvl]; }
+		if (skill.name == "Energy Shield") {
+			result.absorb_es_deplete = 100*(100 / (skill.data.values[0][lvl] + (0.04*skills[13].level)));
+			result.absorb_es_redirect = skill.data.values[2][lvl]; result.duration = skill.data.values[1][lvl];
+		}
+		// Thunder Storm - DPS
 		
 	return result
 	},
@@ -222,7 +225,7 @@ var skills_sorceress = [
 
 {data:d312, key:"312", code:58, name:"Fire Bolt", i:22, req:[], reqlvl:1, level:0, extra_levels:0, force_levels:0, bindable:2, style:"display: block; top: 82px; left: 376px;", description:"Creates a magical flaming missile<br><br>Mana Cost: 2.5", syn_title:"<br>Fire Bolt Receives Bonuses From:<br>", syn_text:"Fire Ball: +35% Fire Damage per Level<br>Meteor: +35% Fire Damage per Level<br>Fire Wall: +35% Fire Damage per Level<br>Fire Mastery", graytext:"", text:["Fire Damage: ","-",""]},
 {data:d313, key:"313", code:59, name:"Warmth", i:23, req:[], reqlvl:1, level:0, extra_levels:0, force_levels:0, effect:1, bindable:0, style:"display: block; top: 82px; left: 426px;", description:"Passive - Increases your accuracy and<br>the rate at which you recover mana", syn_title:"", syn_text:"", graytext:"", text:["To Attack Rating: +"," percent<br>Mana Recovery Rate: +"," percent"]},
-{data:d321, key:"321", code:60, name:"Blaze", i:24, req:[], reqlvl:6, level:0, extra_levels:0, force_levels:0, effect:2, bindable:1, style:"display: block; top: 150px; left: 295px;", description:"Your footsteps create areas of burning ground<br>that damages enemies and heals you<br><br>+2% Life Regenerated per Second<br>Fire Trail Duration: 1 second", syn_title:"<br>Blaze Receives Bonuses From:<br>", syn_text:"Immolate: +8% Average Fire Damage per Second per Level<br>Warmth: +3% Average Fire Damage per Second per Level<br>Fire Mastery", graytext:"", text:["Duration: "," seconds<br>Average Fire Damage: ","-"," per second<br>Mana Cost: ",""]},
+{data:d321, key:"321", code:60, name:"Blaze", i:24, req:[], reqlvl:6, level:0, extra_levels:0, force_levels:0, effect:3, bindable:1, style:"display: block; top: 150px; left: 295px;", description:"Your footsteps create areas of burning ground<br>that damages enemies and heals you<br><br>+2% Life Regenerated per Second<br>Fire Trail Duration: 1 second", syn_title:"<br>Blaze Receives Bonuses From:<br>", syn_text:"Immolate: +8% Average Fire Damage per Second per Level<br>Warmth: +3% Average Fire Damage per Second per Level<br>Fire Mastery", graytext:"", text:["Duration: "," seconds<br>Average Fire Damage: ","-"," per second<br>Mana Cost: ",""]},
 {data:d331, key:"331", code:61, name:"Immolate", i:25, req:[24], reqlvl:12, level:0, extra_levels:0, force_levels:0, bindable:2, style:"display: block; top: 218px; left: 286px;", description:"Creates a fiery blast in front of you<br>engulfing enemies with intense heat<br><br>Radius: 7 yards", syn_title:"<br>Immolate Receives Bonuses From:<br>", syn_text:"Warmth: +4% Fire Damage per Level<br>Fire Mastery", graytext:"", text:["Fire Damage: ","-","<br>Mana Cost: ",""]},
 {data:d332, key:"332", code:62, name:"Fire Ball", i:26, req:[22], reqlvl:12, level:0, extra_levels:0, force_levels:0, bindable:2, style:"display: block; top: 218px; left: 336px;", description:"Creates an explosive sphere of fiery death<br>to engulf your enemies<br><br>Radius: 3 yards", syn_title:"<br>Fire Ball Receives Bonuses From:<br>", syn_text:"Fire Bolt: +6% Fire Damage per Level<br>Meteor: +6% Fire Damage per Level<br>Fire Mastery", graytext:"", text:["Fire Damage: ","-","<br>Mana Cost: ",""]},
 {data:d341, key:"341", code:63, name:"Fire Wall", i:27, req:[25,24], reqlvl:18, level:0, extra_levels:0, force_levels:0, bindable:1, style:"display: block; top: 286px; left: 266px;", description:"Creates a wall of flame that<br>blocks or burns your enemies", syn_title:"<br>Fire Wall Receives Bonuses From:<br>", syn_text:"Warmth: +4% Fire Damage per Level<br>Blaze: +4% Fire Damage per Level<br>Fire Mastery", graytext:"", text:["Fire Duration: 3.6 seconds<br>Average Fire Damage: ","-"," per second<br>"," yards<br>Mana Cost: ",""]},

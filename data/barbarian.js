@@ -10,7 +10,7 @@
 //	var fcr_bp = [0, 9, 20, 42, 86, 280]
 
 var character_barbarian = {class_name:"Barbarian", strength:30, dexterity:20, vitality:25, energy:10, life:55, mana:10, stamina:192, levelup_life:2, levelup_stamina:1, levelup_mana:1, ar_per_dexterity:5, life_per_vitality:4, stamina_per_vitality:1, mana_per_energy:1, starting_strength:30, starting_dexterity:20, starting_vitality:25, starting_energy:10, ar_const:20, skill_layout:"./images/barbarian.png", mana_regen:1.66,
-	weapon_frames:{dagger:13, sword:[13,17], axe:[13,18], mace:[13,21], staff:18, polearm:18, scepter:13, wand:13, javelin:18, spear:18, bow:14, crossbow:19},
+	weapon_frames:{dagger:13, sword:[13,17], axe:[13,18], mace:[13,21], thrown:13, staff:18, polearm:18, scepter:13, wand:13, javelin:18, spear:18, bow:14, crossbow:19},
 
 	// getSkillData - gets skill info from the skills data table
 	//	skill: skill object for the skill in question
@@ -49,10 +49,13 @@ var character_barbarian = {class_name:"Barbarian", strength:30, dexterity:20, vi
 		var skill = skills[effect.skill];
 		var lvl = skill.level + skill.extra_levels;
 		var result = {};
+		
 		if (skill.name == "Battle Command") { result.all_skills = Math.floor(1+(skill.level / 10)); result.duration = skill.data.values[1][lvl]; }
 		if (skill.name == "Shout") { result.defense_bonus = skill.data.values[0][lvl]; result.duration = skill.data.values[1][lvl]; }
 		if (skill.name == "Battle Orders") { result.max_stamina = skill.data.values[1][lvl]; result.max_life = skill.data.values[2][lvl]; result.max_mana = skill.data.values[3][lvl]; result.duration = skill.data.values[0][lvl]; }
-		//if (skill.name == "Frenzy") { result.ias_skill = skill.data.values[4][lvl]; result.frw = skill.data.values[6][lvl]; result.duration = 7.5; }
+		if (skill.name == "Frenzy") { if (offhandType == "weapon") { result.ias_skill = skill.data.values[4][lvl]; result.frw = skill.data.values[6][lvl]; result.duration = 7.5; } }	// consider auto-disabling
+		// debuffs: Grim Ward, Howl, Taunt, Battle Cry
+		
 	return result
 	},
 	

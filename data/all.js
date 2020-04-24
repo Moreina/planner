@@ -379,6 +379,11 @@ function changeLevel(input) {
 //	kind: the group/type of the selected item
 // ---------------------------------
 function reloadOffhandCorruptions(kind) {
+	// trash socketed items first
+	for (affix in socketed.offhand.totals) { character[affix] -= socketed.offhand.totals[affix] }
+	socketed.offhand.totals = {}
+	for (let i = 0; i < socketed.offhand.items.length; i++) { socketed.offhand.items[i] = {id:socketed.offhand.items[i].id,name:socketed.offhand.items[i].name} }
+	
 	corrupt("offhand", "offhand")
 	var choices = "<option>­ ­ ­ ­ Corruption</option>";
 	for (let m = 1; m < corruptions["offhand"].length; m++) {
@@ -387,6 +392,7 @@ function reloadOffhandCorruptions(kind) {
 		}
 	}
 	document.getElementById("corruptions_offhand").innerHTML = choices
+	document.getElementById("corruptions_offhand").selectedIndex = 0
 }
 
 // adjustCorruptionSockets - Adjusts the sockets granted by corruptions
@@ -416,13 +422,13 @@ function corrupt(group, val) {
 		character[old_affix] -= corruptsEquipped[group][old_affix]
 		corruptsEquipped[group][old_affix] = unequipped[old_affix]
 	}
-	if (val == "­ ­ ­ ­ Corruption" || val == "none" || val == group || equipped[group].ethereal > 0 || equipped[group].sockets > 0 || equipped[group].rw > 0 || equipped[group].rarity == "common") { document.getElementById("corruptions_"+group).selectedIndex = 0 }
+	if (val == "­ ­ ­ ­ Corruption" || val == "none" || val == group || equipped[group].ethereal > 0 || equipped[group].sockets > 0 || equipped[group].rw > 0 || equipped[group].rarity == "common" || (group == "offhand" && equipped[group].type != "quiver" && equipped.weapon.twoHanded == 1)) { document.getElementById("corruptions_"+group).selectedIndex = 0 }
 	else {
 		for (outcome in corruptions[group]) {
-			if (corruptions[group][outcome].name == val) {
+			if (corruptions[group][outcome].name == val && (group != "offhand" || (offhandType == corruptions[group][outcome].base || offhandType == "none"))) {
 				for (affix in corruptions[group][outcome]) {
 					corruptsEquipped[group][affix] = corruptions[group][outcome][affix]
-					character[affix] += corruptsEquipped[group][affix]
+					character[affix] += corruptions[group][outcome][affix]
 					//if (affix == e_def) { corruptsEquipped[group].defense = equipped[group].defense * (1+corruptsEquipped[group][affix]) - equipped[group].defense; character.defense += corruptsEquipped.defense; }
 				}
 			}
@@ -639,7 +645,7 @@ function equip(group, val) {
 							if (equipment[src_group][item][affix] > 3) { equipped[group][affix] -= (equipment[src_group][item][affix]-3) }	// oskills are capped at 3 for 'native' classes
 						} else { if (oskill_info.native_class != "none") {
 							var skill = skills_all[oskill_info.native_class][oskill_info.i];
-							if (typeof(skill.effect) != 'undefined') { if (skill.effect > 3) {
+							if (typeof(skill.effect) != 'undefined') { if (skill.effect > 2) {
 								if (character[affix] == 0 && typeof(effects["e"+skill.key]) == 'undefined') {
 									// TODO: create new buff effect for oskill
 								}
@@ -702,7 +708,7 @@ function equip(group, val) {
 			}
 		} else if (group == "weapon") {
 			if (equipped.offhand.type == "quiver" && itemType != "bow" && itemType != "crossbow") { equip('offhand', 'none') }
-			else if (equipped.offhand.type != "quiver" && twoHanded == 1 && (itemType != "sword" || character.class_name != "Barbarian")) { equip('offhand', 'none') }
+			else if (equipped.offhand.type != "quiver" && twoHanded == 1 && (itemType != "sword" || character.class_name != "Barbarian")) { equip('offhand', 'none'); }
 			else if (itemType != "claw" && equipped.offhand.type == "claw") { equip('offhand', 'none') }
 		}
 	}
@@ -723,8 +729,12 @@ function equip(group, val) {
 		// reload corruption options when the selected type changes
 		if (equipped[group].type == "shield") { if (offhandType == "quiver" || offhandType == "weapon") { offhandType = "shield"; reloadOffhandCorruptions("shield"); } }
 		else if (equipped[group].type == "quiver") { if (offhandType != "quiver") { offhandType = "quiver"; reloadOffhandCorruptions("quiver"); } }
-		else if (equipped[group].name != "none") { if (offhandType != "weapon") { offhandType = "weapon"; reloadOffhandCorruptions("weapon"); } }	// TODO: Add weapon corruptions for dual-wielding
+		else if (equipped[group].name != "none") { if (offhandType != "weapon") { offhandType = "weapon"; reloadOffhandCorruptions("weapon"); } }
 		else { if (offhandType == "quiver" || offhandType == "weapon") { offhandType = "none"; reloadOffhandCorruptions("shield"); } }
+		if (equipped[group].type == "shield") { offhandType = "shield" } else if (equipped[group].name == "none") { offhandType = "none" }
+	}
+	else if (group == "weapon") {
+		if (equipped.offhand.type != "quiver" && twoHanded == 1 && (itemType != "sword" || character.class_name != "Barbarian") && corruptsEquipped.offhand.name != "none") { reloadOffhandCorruptions("shield"); document.getElementById("p4").innerHTML = "reloading: "+offhandType; }
 	}
 	if (val == group || val == "none") { document.getElementById(("dropdown_"+group)).selectedIndex = 0; }
 	// set inventory image
@@ -925,7 +935,7 @@ function addCharm(val) {
 		if (val == "+20 skills") { charmHeight = "29"; charmImage = charm_img.prefix+"debug_II.png"; charm_y = 1; }
 		else if (val == "+1 skill") { charmHeight = "29"; charmImage = charm_img.prefix+"debug_D.png"; charm_y = 1; }
 		else if (val == "+1 (each) skill") { charmHeight = "29"; charmImage = charm_img.prefix+"debug_P.png"; charm_y = 1;
-			if (autoCast == 1) { toggleAutocast("autocast") }	// disable autocast to prevent Paladin auras from all being enabled
+			if (autoCast == 1) { toggleAutocast("autocast"); document.getElementById("autocast").checked = 0; }	// disable autocast to prevent Paladin auras from all being enabled
 		}
 		else if (val == "everything") { charmHeight = "29"; charmImage = charm_img.prefix+"debug_face.png"; charm_y = 1; }
 		else { charmHeight = "29"; charmImage = charm_img.prefix+"debug_skull.png"; charm_y = 1; }
@@ -984,7 +994,6 @@ function addCharm(val) {
 	}
 	document.getElementById("dropdown_charms").selectedIndex = 0
 	// update
-	if (settings.autocast != autoCast) { toggleAutocast("autocast") }
 	updateEffectList()
 	calculateSkillAmounts()
 	for (let s = 0; s < skills.length; s++) { modifyEffect(skills[s]) }
@@ -992,7 +1001,8 @@ function addCharm(val) {
 	updateSkills()
 	if (selectedSkill[0] != " ­ ­ ­ ­ Skill 1") { checkSkill(selectedSkill[0], 1) }
 	if (selectedSkill[1] != " ­ ­ ­ ­ Skill 2") { checkSkill(selectedSkill[1], 2) }
-}
+	if (settings.autocast != autoCast) { toggleAutocast("autocast"); settings.autocast = 1; document.getElementById("autocast").checked = 1; }
+	}
 
 // addSocketable - Adds a jewel, rune, or gem to the inventory
 //	val: the name of the socketable item
@@ -1167,6 +1177,7 @@ function toggleQuests(quests) {
 		character.cRes += (30*toggle)
 		character.lRes += (30*toggle)
 		character.pRes += (30*toggle)
+		// TODO: Include merchant price discount?
 		updatePrimaryStats()
 		updateMisc()
 	}
@@ -1228,11 +1239,8 @@ function getWeaponDamage(str, dex, type, thrown) {
 		else if (type == "dagger" || type == "thrown" || type == "claw" || type == "javelin") { statBonus = ((str*0.75/100)+(dex*0.75/100)) }
 		else  { statBonus = (str/100) }
 	}
-	// multipliers from skills
+	// multiplier from skills
 	var weapon_skillup = 0;
-	var ar_skillup_offhand = 0;
-	var cstrike_skillup_offhand = 0;
-	var pierce_skillup_offhand = 0;
 	if (c.class_name == "Barbarian" || c.class_name == "Assassin") {
 		if (type == "sword" || type == "axe" || type == "dagger") { weapon_skillup = c.edged_skillup[0]; c.ar_skillup = c.edged_skillup[1]; c.cstrike_skillup = c.edged_skillup[2]; }
 		else if (type == "polearm" || type == "spear") { weapon_skillup = c.pole_skillup[0]; c.ar_skillup = c.pole_skillup[1]; c.cstrike_skillup = c.pole_skillup[2]; }
@@ -1241,33 +1249,15 @@ function getWeaponDamage(str, dex, type, thrown) {
 		else if (type == "claw") { weapon_skillup = c.claw_skillup[0]; c.ar_skillup = c.claw_skillup[1]; c.cstrike_skillup = c.claw_skillup[2]; }
 		else { weapon_skillup = 0; c.ar_skillup = 0; c.cstrike_skillup = 0; c.pierce_skillup = 0; }
 	}
-	// combine socket affixes
-	var socket_affixes = {};
-	var socket_eDamage = 0;
-	var socket_eDamage_offhand = 0;
-	for (group in socketed) {
-		for (let i = 0; i < socketed[group].items.length; i++) {
-			for (affix in socketed[group].items[i]) {
-				if (typeof(socket_affixes[affix]) == 'undefined') { socket_affixes[affix] = 0 }
-				if (group == "weapon" && (affix == "e_damage" || affix == "damage_bonus")) { socket_eDamage += socketed[group].items[i][affix] }
-				else if (group == "offhand" && (affix == "e_damage" || affix == "damage_bonus")) { socket_eDamage_offhand += socketed[group].items[i][affix] }
-				socket_affixes[affix] += socketed[group].items[i][affix]
-			}
-		}
-	}
-	// TODO: Use socketed[group][totals] instead of iterating through here
-	var socket_eDamage_offWeapon = ~~socket_affixes.e_damage + ~~socket_affixes.damage_bonus;
-	if (offhandType == "weapon") { socket_eDamage_offWeapon -= socket_eDamage_offhand }
-	var sup = 0;	// TODO: Remove this and add superior ED stat to character stat list (so far, no weapons are superior)
-	var e_damage_offWeapon = c.e_damage - ~~equipped.weapon.e_damage;
-	if (offhandType == "weapon") { e_damage_offWeapon -= ~~equipped.offhand.e_damage }
-	
+	var e_damage_offhand = 0;
+	if (offhandType == "weapon") { e_damage_offhand = (~~equipped.offhand.e_damage + ~~socketed.offhand.totals.e_damage + ~~corruptsEquipped.offhand.e_damage); }
+	var e_damage = c.e_damage + (c.level*c.e_max_damage_per_level) - e_damage_offhand;
 	var base_min = ~~equipped.weapon.base_damage_min;
 	var base_max = ~~equipped.weapon.base_damage_max;
 	if (thrown == 1) { base_min = ~~equipped.weapon.throw_min; base_max = ~~equipped.weapon.throw_max; }
-	var phys_min = (base_min * (1+(~~equipped.weapon.e_damage+sup+socket_eDamage)/100) + c.damage_min + (c.level-1)*c.min_damage_per_level + ~~socket_affixes.damage_min);
-	var phys_max = (base_max * (1+(~~equipped.weapon.e_damage+sup+socket_eDamage+(c.level*c.e_max_damage_per_level))/100) + c.damage_max + (c.level-1)*c.max_damage_per_level + ~~socket_affixes.damage_max);
-	var phys_mult = (1+statBonus+(c.damage_bonus+e_damage_offWeapon+weapon_skillup+socket_eDamage_offWeapon)/100);
+	var phys_min = (base_min * (1+e_damage/100) + c.damage_min + (c.level-1)*c.min_damage_per_level);
+	var phys_max = (base_max * (1+e_damage/100) + c.damage_max + (c.level-1)*c.max_damage_per_level);
+	var phys_mult = (1+statBonus+(c.damage_bonus+weapon_skillup)/100);
 	var values = [phys_min, phys_max, phys_mult];
 	
 	return values
@@ -1287,8 +1277,6 @@ function updatePrimaryStats() {
 	var energyTotal = (c.energy + c.all_attributes)*(1+c.max_energy);
 	
 	var weaponType = equipped.weapon.type;
-	//var weaponType_offhand = "";
-	//if (offhandType == "weapon") { weaponType_offhand = equipped.offhand.type }
 	var physDamage = getWeaponDamage(strTotal,dexTotal,weaponType,0);
 	
 	var life_addon = (vitTotal-c.starting_vitality)*c.life_per_vitality;
@@ -1362,6 +1350,7 @@ function updatePrimaryStats() {
 		var eIAS = Math.floor(120*ias/(120+ias));
 		var weaponFrames = 0;
 		if (weaponType != "") {
+			if (weaponType == "club" || weaponType == "hammer") { weaponType = "mace" }
 			weaponFrames = c.weapon_frames[weaponType];
 			if (c.class_name == "Druid") {
 				var werewolf = "e"+skills[11].key;
@@ -1401,7 +1390,7 @@ function updateSecondaryStats() {
 	
 	// actual movespeed
 	//var speed = Math.floor((150*c.frw)/(150+c.frw)) + Math.floor((9*100)/6) + (1+(c.frw_skillup/100)) - (100+c.velocity);	// calculation for actual speed (units travelled per second), seems flawed?
-	document.getElementById("frw").innerHTML = Math.floor(c.frw + c.frw_skillup)
+	document.getElementById("frw").innerHTML = Math.floor(c.frw + c.frw_skillup)+"%"
 	
 	document.getElementById("life_leech").innerHTML = c.life_leech
 	document.getElementById("mana_leech").innerHTML = c.mana_leech
@@ -1679,7 +1668,7 @@ function updateEffectList() { for (let s = 0; s < skills.length; s++) { updateEf
 //	skill: skill object in question
 // ---------------------------------
 function updateEffect(skill) {
-	if (typeof(skill.effect) != 'undefined') { if (skill.effect > 3) {
+	if (typeof(skill.effect) != 'undefined') { if (skill.effect > 2) {
 		var eff = "e"+skill.key;
 		var effectElem = document.getElementById(eff);
 		if (skill.level > 0 || skill.force_levels > 0) {
@@ -1795,7 +1784,7 @@ function addEffect(effect) {
 //	skill: skill object
 // ---------------------------------
 function modifyEffect(skill) {
-	if (typeof(skill.effect) != 'undefined') { if (skill.effect > 3) {
+	if (typeof(skill.effect) != 'undefined') { if (skill.effect > 2) {
 		updateEffect(skill);
 		if (typeof(effects["e"+skill.key]) != 'undefined') { if (effects["e"+skill.key].enabled == 1) {
 			disableEffect(skill.i);
@@ -1911,7 +1900,7 @@ function removeStat(event, stat) {
 //	skill: the skill to modify
 // ---------------------------------
 function skillUp(event, skill) {
-	if (typeof(skill.effect) != 'undefined') { if (skill.effect > 3) {
+	if (typeof(skill.effect) != 'undefined') { if (skill.effect > 2) {
 		if (skill.level == 0 && skill.force_levels == 0 && typeof(effects["e"+skill.key]) == 'undefined') { enableEffect(skill.i) }
 	} }
 	var old_level = skill.level;
@@ -1940,7 +1929,7 @@ function skillUp(event, skill) {
 			}
 		}
 	}
-	if (typeof(skill.effect) != 'undefined') { if (skill.effect > 3) {
+	if (typeof(skill.effect) != 'undefined') { if (skill.effect > 2) {
 		skillHover(skill)
 		modifyEffect(skill)
 	} }
@@ -1991,7 +1980,7 @@ function skillDown(event, skill) {
 		skill.level -= levels
 		character.skillpoints += levels
 	}
-	if (typeof(skill.effect) != 'undefined') { if (skill.effect > 3) {
+	if (typeof(skill.effect) != 'undefined') { if (skill.effect > 2) {
 		skillHover(skill)
 		if (skill.level == 0 && skill.force_levels == 0 && typeof(effects["e"+skill.key]) != 'undefined') { if (effects["e"+skill.key].enabled == 1) { disableEffect(skill.i) } }
 		modifyEffect(skill)
@@ -2475,25 +2464,25 @@ function socketableSelect(ev) {
 	if (dup > 0) { for (let d = 0; d < dup; d++) { addSocketable(lastSocketable) } }
 }
 
-// equipmentHover - 
+// equipmentHover - shows equipment info on mouse-over
 //	group: equipment group name
 // ---------------------------------
 function equipmentHover(event, group) {
 	var selected = equipped[group].name;
-	
-	// show sockets & corruptions
-	if (group == "helm" || group == "armor" || (group == "weapon" && typeof(equipped[group].base) != 'undefined') || (group == "offhand" && equipped[group].type != "quiver")) {
+	if (selected != "none" && (group == "helm" || group == "armor" || group == "weapon" || (group == "offhand" && equipped[group].type != "quiver"))) {
 		var sockets = ~~corruptsEquipped[group].sockets + ~~equipped[group].sockets;
-		var base = equipped[group].base.split(' ').join('_'); base = base.split('-').join('_'); base = base.split("s'").join("s"); base = base.split("'s").join("s");
-		sockets = Math.min(sockets,bases[base].max_sockets)
-		if (socketed[group].sockets > 0 || equipped[group].sockets > 0) { selected += " ["+sockets+"]" }
-	} else if (group == "weapon" && equipped[group].special == 1) {
-		var sockets = ~~corruptsEquipped[group].sockets + ~~equipped[group].sockets;
-		sockets = Math.min(sockets,equipped[group].max_sockets)
+		var base = "";
+		if (typeof(equipped[group].base) != 'undefined') { equipped[group].base.split(' ').join('_'); base = base.split('-').join('_'); base = base.split("s'").join("s"); base = base.split("'s").join("s"); }
+		if (base == "") { sockets = Math.min(sockets,equipped[group].max_sockets) }
+		else { sockets = Math.min(sockets,bases[base].max_sockets) }
 		if (socketed[group].sockets > 0 || equipped[group].sockets > 0) { selected += " ["+sockets+"]" }
 	}
-	if (corruptsEquipped[group].name != "none" && corruptsEquipped[group].name !="+ Sockets") { selected += (" "+corruptsEquipped[group].name) }
-	if (selected != "none") { document.getElementById("item_tooltip").innerHTML = selected } else { document.getElementById("item_tooltip").innerHTML = "" }
+	if (selected != "none") {
+		if (corruptsEquipped[group].name != "none" && corruptsEquipped[group].name != "+ Sockets") { selected += (" "+corruptsEquipped[group].name) }
+		document.getElementById("item_tooltip").innerHTML = selected
+	} else {
+		document.getElementById("item_tooltip").innerHTML = ""
+	}
 	
 	var textColor = "white";
 	if (equipped[group].rarity == "set") { textColor = "#00f000" }
@@ -2507,7 +2496,7 @@ function equipmentHover(event, group) {
 	document.getElementById("item_tooltip").style.display = "block"
 }
 
-// equipmentOut - 
+// equipmentOut - stops showing equipment info (mouse-over ends)
 // ---------------------------------
 function equipmentOut() {
 	document.getElementById("item_tooltip").innerHTML = ""
@@ -2515,7 +2504,7 @@ function equipmentOut() {
 	document.getElementById("item_tooltip").style.display = "none"
 }
 
-// socket - 
+// socket - Adds a socketable item (jewel, rune, gem) to equipment
 //	group: item group
 // ---------------------------------
 function socket(event, group) {
@@ -2550,14 +2539,18 @@ function socket(event, group) {
 			socketed[group].items[index].id = inv[0].onpickup
 			for (affix in socketables[k]) {
 				if (affix != "type" && affix != "rarity" && affix != "img") {
-					socketed[group].items[index][affix] = socketables[k][affix]
-					character[affix] += socketables[k][affix]
-					socketed[group].totals[affix] += socketables[k][affix]
+					var affix_dest = affix;
+					if (affix == "e_damage") { if (group == "weapon" || (group == "offhand" && offhandType == "weapon")) { /*don't change*/ } else { affix_dest = "damage_bonus" } }
+					if (typeof(socketed[group].totals[affix_dest]) == 'undefined') { socketed[group].totals[affix_dest] = 0 }
+					socketed[group].items[index][affix_dest] = socketables[k][affix]
+					character[affix_dest] += socketables[k][affix]
+					socketed[group].totals[affix_dest] += socketables[k][affix]
 				}
-				if (affix == group || (affix == "armor" && group == "helm") || (affix == "armor" && group == "offhand" && typeof(socketables[k]["shield"]) == 'undefined') || (affix == "shield" && group == "offhand")) {
+				if (affix == group || (affix == "armor" && group == "helm") || (affix == "armor" && group == "offhand" && typeof(socketables[k]["shield"]) == 'undefined' && offhandType != "weapon") || (affix == "shield" && group == "offhand" && offhandType != "weapon") || (affix == "weapon" && group == "offhand" && offhandType == "weapon")) {
 					for (groupAffix in socketables[k][affix]) {
 						socketed[group].items[index][groupAffix] = socketables[k][affix][groupAffix]
 						character[groupAffix] += socketables[k][affix][groupAffix]
+						if (typeof(socketed[group].totals[groupAffix]) == 'undefined') { socketed[group].totals[groupAffix] = 0 }
 						socketed[group].totals[groupAffix] += socketables[k][affix][groupAffix]
 					}
 				}
@@ -2583,7 +2576,7 @@ function socket(event, group) {
 	inv[0].onpickup = "none"
 }
 
-// allowSocket - 
+// allowSocket - Checks on mouse-over whether a socketable item may be added
 //	group: item group
 // ---------------------------------
 function allowSocket(event, group) {
@@ -2617,7 +2610,7 @@ function dragSocketable(ev) {
 //	}
 }
 
-// trash - Handles item removal for socketables (gems, runes, jewels)
+// trashSocketable - Handles item removal for socketables (gems, runes, jewels)
 // ---------------------------------
 function trashSocketable(event) {
 	var val = event.target.id;
@@ -2628,7 +2621,7 @@ function trashSocketable(event) {
 		for (let i = 0; i < socketed[groups[g]].items.length; i++) {
 			if (val == socketed[groups[g]].items[i].id) {
 				for (affix in socketed[groups[g]].items[i]) {
-					if (affix != "id") {
+					if (affix != "id" && affix != "name") {
 						character[affix] -= socketed[groups[g]].items[i][affix]
 						socketed[groups[g]].totals[affix] -= socketed[groups[g]].items[i][affix]
 					}

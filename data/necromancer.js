@@ -10,7 +10,7 @@
 //	var fcr_bp = [0, 6, 13, 20, 32, 52, 86, 174, 600]
 
 var character_necromancer = {class_name:"Necromancer", strength:15, dexterity:25, vitality:15, energy:25, life:45, mana:25, stamina:179, levelup_life:2, levelup_stamina:1, levelup_mana:2, ar_per_dexterity:5, life_per_vitality:2, stamina_per_vitality:1, mana_per_energy:2, starting_strength:15, starting_dexterity:25, starting_vitality:15, starting_energy:25, ar_const:-10, skill_layout:"./images/necromancer.png", mana_regen:1.66,
-	weapon_frames:{dagger:18, sword:[18,22], axe:[18,19], mace:[18,22], staff:19, polearm:19, scepter:18, wand:18, javelin:23, spear:23, bow:17, crossbow:19},
+	weapon_frames:{dagger:18, sword:[18,22], axe:[18,19], mace:[18,22], thrown:18, staff:19, polearm:19, scepter:18, wand:18, javelin:23, spear:23, bow:17, crossbow:19},
 
 	// getSkillData - gets skill info from the skills data table
 	//	skill: skill object for the skill in question
@@ -66,27 +66,26 @@ var character_necromancer = {class_name:"Necromancer", strength:15, dexterity:25
 		var lvl = skill.level + skill.extra_levels;
 		var result = {};
 		
-		if (skill.name == "Bone Offering") {
-			result.defense_bonus = skill.data.values[2][lvl];
-			result.skeleton_bonus = skill.data.values[3][lvl];
-			result.curse_length_reduced = skill.data.values[4][lvl];
-		}
-		if (skill.name == "Flesh Offering") {
-			result.fcr = skill.data.values[2][lvl];
-			result.ias_skill = skill.data.values[3][lvl];
-			result.frw = skill.data.values[4][lvl];
-		}
+		if (skill.name == "Bone Offering") { result.defense_bonus = skill.data.values[2][lvl]; result.skeleton_bonus = skill.data.values[3][lvl]; result.curse_length_reduced = skill.data.values[4][lvl]; result.duration = skill.data.values[0][lvl]; }
+		if (skill.name == "Flesh Offering") { result.fcr = skill.data.values[2][lvl]; result.ias_skill = skill.data.values[3][lvl]; result.frw = skill.data.values[4][lvl]; result.duration = skill.data.values[0][lvl]; }
 		if (skill.name == "Blood Golem") {
-			result.life_per_ranged_hit = skill.data.values[3][lvl];
-			result.life_per_hit = skill.data.values[4][lvl];
+			disableGolems(skill)
+			result.life_per_ranged_hit = skill.data.values[3][lvl]; result.life_per_hit = skill.data.values[4][lvl];
+		}
+		if (skill.name == "Iron Golem") {	// TODO: Add Iron Golem equipment selection	...dropdown appears when Iron Golem effect is available?
+			disableGolems(skill)
+			var aura = "Meditation"; var aura_lvl = 17;	// temporary - golem is made from Insight
+			var auraInfo = getAuraData(aura, aura_lvl, "mercenary");
+			for (affix in auraInfo) { result[affix] = auraInfo[affix] }
 		}
 		if (skill.name == "Deadly Poison") {
 			result.pDamage_min = skill.data.values[1][lvl] * (1 + (0.10*skills[15].level + 0.10*skills[19].level));
 			result.pDamage_max = skill.data.values[2][lvl] * (1 + (0.10*skills[15].level + 0.10*skills[19].level));
-			result.pDamage_duration = 2;
-			result.enemy_pRes = skill.data.values[3][lvl];
+			result.pDamage_duration = 2; result.pDamage_duration_override = 2; result.enemy_pRes = skill.data.values[3][lvl]; result.duration = skill.data.values[0][lvl];
 		}
-		// Bone Armor - only buffs effective HP
+		if (skill.name == "Bone Armor") { result.absorb_melee = skill.data.values[0][lvl]; }
+		// minions - DPS (Clay/Blood/Iron/Fire Golem, Skeleton Warriors, Skeletal Mages, Revived minions)
+		// debuffs: all curses, Clay Golem?
 		
 	return result
 	},
@@ -147,6 +146,18 @@ var character_necromancer = {class_name:"Necromancer", strength:15, dexterity:25
 	}
 };
 
+// disableGolems - disable all but the selected golem
+//	skill: skill object for the specified golem
+// ---------------------------------
+function disableGolems(skill) {
+	var golems = [3,6,8,9];
+	for (let g = 0; g < golems.length; g++) {
+		if (skill.i != golems[g] && document.getElementById("e"+skills[golems[g]].key) != null) {
+			disableEffect(golems[g])
+		}
+	}
+};
+
 /*[ 0] Summon Mastery	*/ var d111 = {index:[0,""], values:[["revive life",5,10,15,20,25,30,35,40,45,50,55,60,65,70,75,80,85,90,95,100,105,110,115,120,125,130,135,140,145,150,155,160,165,170,175,180,185,190,195,200,205,210,215,220,225,230,235,240,245,250,255,260,265,270,275,280,285,290,295,300], ["revive damage",9,14,19,24,29,34,39,44,49,54,59,64,69,74,79,84,89,94,99,104,109,114,119,124,129,134,139,144,149,154,159,164,169,174,179,184,189,194,199,204,209,214,219,224,229,234,239,244,249,254,259,264,269,274,279,284,289,294,299,304], ["defense",30,40,50,60,70,80,90,100,110,120,130,140,150,160,170,180,190,200,210,220,230,240,250,260,270,280,290,300,310,320,330,340,350,360,370,380,390,400,410,420,430,440,450,460,470,480,490,500,510,520,530,540,550,560,570,580,590,600,610,620], ["life",30,40,50,60,70,80,90,100,110,120,130,140,150,160,170,180,190,200,210,220,230,240,250,260,270,280,290,300,310,320,330,340,350,360,370,380,390,400,410,420,430,440,450,460,470,480,490,500,510,520,530,540,550,560,570,580,590,600,610,620], ["damage",15,25,35,45,55,65,75,85,95,105,115,125,135,145,155,165,175,185,195,205,215,225,235,245,255,265,275,285,295,305,315,325,335,345,355,365,375,385,395,405,415,425,435,445,455,465,475,485,495,505,515,525,535,545,555,565,575,585,595,605], ["attack rating",30,40,50,60,70,80,90,100,110,120,130,140,150,160,170,180,190,200,210,220,230,240,250,260,270,280,290,300,310,320,330,340,350,360,370,380,390,400,410,420,430,440,450,460,470,480,490,500,510,520,530,540,550,560,570,580,590,600,610,620], ["resistances",15,17,19,21,23,25,27,29,31,33,35,37,39,41,43,45,47,49,51,53,55,57,59,61,63,65,67,69,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70]]};
 /*[ 1] Skeleton Warrior	*/ var d113 = {index:[3,""], values:[["damage min",2,4,6,8,10,12,14,16,19,22,25,28,31,34,37,40,46,52,58,64,70,76,85,94,103,112,121,130,147,164,181,198,215,232,249,266,283,300,317,334,351,368,385,402,419,436,453,470,487,504,521,538,555,572,589,606,623,640,657,674], ["damage max",3,5,7,9,11,13,15,17,20,23,26,29,32,35,38,41,47,53,59,65,71,77,86,95,104,113,122,131,148,165,182,199,216,233,250,267,284,301,318,335,352,369,386,403,420,437,454,471,488,505,522,539,556,573,590,607,624,641,658,675], ["base life",25,100,200], ["skeletons",1,2,3,3,3,4,4,4,5,5,5,6,6,6,7,7,7,8,8,8,9,9,9,10,10,10,11,11,11,12,12,12,13,13,13,14,14,14,15,15,15,16,16,16,17,17,17,18,18,18,19,19,19,20,20,20,21,21,21,22], ["mana cost",6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65]]};
 /*[ 2] Bone Offering	*/ var d121 = {index:[0,""], values:[["duration",5,5.2,5.4,5.6,5.8,6,6.2,6.4,6.6,6.8,7,7.2,7.4,7.6,7.8,8,8.2,8.4,8.6,8.8,9,9.2,9.4,9.6,9.8,10,10.2,10.4,10.6,10.8,11,11.2,11.4,11.6,11.8,12,12.2,12.4,12.6,12.8,13,13.2,13.4,13.6,13.8,14,14.2,14.4,14.6,14.8,15,15.2,15.4,15.6,15.8,16,16.2,16.4,16.6,16.8], ["radius",7.3,8,8.6,9.3,10,10.6,11.3,12,12.6,13.3,14,14.6,15.3,16,16.6,17.3,18,18.6,19.3,20,20.6,21.3,22,22.6,23.3,24,24.6,25.3,26,26.6,27.3,28,28.6,29.3,30,30.6,31.3,32,32.6,33.3,34,34.6,35.3,36,36.6,37.3,38,38.6,39.3,40,40.6,41.3,42,42.6,43.3,44,44.6,45.3,46,46.6], ["defense",17,24,30,35,39,42,44,46,48,50,52,53,54,55,56,57,58,58,59,60,60,61,61,62,62,63,63,63,64,64,65,65,65,65,65,66,66,66,66,66,66,67,67,67,68,68,68,68,68,68,68,68,68,69,69,69,69,69,69,70], ["skeleton damage",10,16,22,28,34,40,46,52,58,64,70,76,82,88,94,100,106,112,118,124,130,136,142,148,154,160,166,172,178,184,190,196,202,208,214,220,226,232,238,244,250,256,262,268,274,280,286,292,298,304,310,316,322,328,334,340,346,352,358,364], ["curse duration",7,12,15,18,21,22,24,25,27,27,28,29,30,31,31,32,32,33,33,33,34,34,35,35,35,35,36,36,36,36,36,36,37,37,37,37,37,38,38,38,38,38,38,38,38,38,38,38,39,39,39,39,39,39,39,39,39,39,39,40], ["mana cost",6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65]]};
@@ -190,7 +201,7 @@ var skills_necromancer = [
 {data:d133, key:"133", code:71, name:"Raise Skeletal Mage", i:5, req:[1], reqlvl:12, level:0, extra_levels:0, force_levels:0, bindable:1, style:"display: block; top: 218px; left: 142px;", description:"Cast on the corpse of a slain monster.<br>This raises a skeleton mage that fights for you", syn_title:"<br>Raise Skeletal Mage Receives Bonuses From:<br>", syn_text:"Summon Mastery", graytext:"", text:["Lightning Damage: ","-","<br>Cold Damage: ","-","<br>Fire Damage: ","-","<br>Poison Damage: ","Life: ","<br>"," skeleton magi<br>Mana Cost: ",""]},
 {data:d142, key:"142", code:72, name:"Blood Golem", i:6, req:[3], reqlvl:18, level:0, extra_levels:0, force_levels:0, effect:5, bindable:1, style:"display: block; top: 286px; left: 72px;", description:"A golem that steals the life of enemies<br>and shares it with you<br><br>1/4 of life stolen by golem is shared with you<br>Aura: Nearby Allies Gain Life on Hit", syn_title:"<br>Blood Golem Receives Bonuses From:<br>", syn_text:"Summon Mastery", graytext:"", text:["Damage: ","-","<br>Life: ","+"," Life Gained on Ranged Hit<br>+"," Life Gained on Melee hit<br>Radius: "," yards<br>","% Life Stolen per Hit<br>Mana Cost: ",""]},
 {data:d151, key:"151", code:73, name:"Convocation", i:7, req:[], reqlvl:24, level:0, extra_levels:0, force_levels:0, bindable:1, style:"display: block; top: 354px; left: 2px;", description:"Muster dark energies to warp<br>you and your minions to a location", syn_title:"", syn_text:"", graytext:"", text:["Cooldown: "," seconds<br>Mana Cost: 30",""]},
-{data:d152, key:"152", code:74, name:"Iron Golem", i:8, req:[6,3], reqlvl:24, level:0, extra_levels:0, force_levels:0, bindable:1, style:"display: block; top: 354px; left: 72px;", description:"Transforms a metallic item into a golem that gains<br>the properties of the item", syn_title:"<br>Iron Golem Receives Bonuses From:<br>", syn_text:"Summon Mastery", graytext:"", text:["Damage: ","-","<br>Life: ","Thorns Damage<br>"," percent damage returned<br>Mana Cost: 35",""]},
+{data:d152, key:"152", code:74, name:"Iron Golem", i:8, req:[6,3], reqlvl:24, level:0, extra_levels:0, force_levels:0, effect:3, bindable:1, style:"display: block; top: 354px; left: 72px;", description:"Transforms a metallic item into a golem that gains<br>the properties of the item", syn_title:"<br>Iron Golem Receives Bonuses From:<br>", syn_text:"Summon Mastery", graytext:"", text:["Damage: ","-","<br>Life: ","Thorns Damage<br>"," percent damage returned<br>Mana Cost: 35",""]},
 {data:d162, key:"162", code:75, name:"Fire Golem", i:9, req:[8,6,3], reqlvl:30, level:0, extra_levels:0, force_levels:0, bindable:1, style:"display: block; top: 422px; left: 72px;", description:"Creates a golem that converts the damage<br>it receives from fire into life", syn_title:"<br>Fire Golem Receives Bonuses From:<br>", syn_text:"Summon Mastery", graytext:"", text:["Damage: ","-","<br>Life: ","Absorbs ","% of fire damage<br>Holy Fire: ","-","<br>Mana Cost: ",""]},
 {data:d163, key:"163", code:76, name:"Revive", i:10, req:[5,1], reqlvl:30, level:0, extra_levels:0, force_levels:0, bindable:1, style:"display: block; top: 422px; left: 142px;", description:"Returns a monster to life to fight by your side", syn_title:"<br>Revive Receives Bonuses From:<br>", syn_text:"Summon Mastery", graytext:"", text:["Duration: 600 seconds<br>Life: +"," percent<br>Damage: +","Monsters: ","<br>Mana Cost: 45",""]},
 

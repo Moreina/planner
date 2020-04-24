@@ -17,8 +17,8 @@
 //	var fcr_bp = [0, 7, 15, 27, 48, 86, 200]	(Werewolf)
 
 var character_druid = {class_name:"Druid", strength:15, dexterity:20, vitality:25, energy:20, life:55, mana:20, stamina:184, levelup_life:1.5, levelup_stamina:1, levelup_mana:2, ar_per_dexterity:5, life_per_vitality:2, stamina_per_vitality:1, mana_per_energy:2, starting_strength:15, starting_dexterity:20, starting_vitality:25, starting_energy:20, ar_const:5, skill_layout:"./images/druid.png", mana_regen:1.66,
-	weapon_frames:{dagger:20, sword:[20,21], axe:[20,17], mace:[20,20], staff:17, polearm:17, scepter:20, wand:20, javelin:23, spear:23, bow:15, crossbow:19},
-	wereform_frames:{dagger:22, sword:[22,25], axe:[22,20], mace:[22,23], staff:20, polearm:20, scepter:22, wand:22, javelin:27, spear:27, bow:19, crossbow:24},
+	weapon_frames:{dagger:20, sword:[20,21], axe:[20,17], mace:[20,20], thrown:20, staff:17, polearm:17, scepter:20, wand:20, javelin:23, spear:23, bow:15, crossbow:19},
+	wereform_frames:{dagger:22, sword:[22,25], axe:[22,20], mace:[22,23], thrown:22, staff:20, polearm:20, scepter:22, wand:22, javelin:27, spear:27, bow:19, crossbow:24},
 
 	// getSkillData - gets skill info from the skills data table
 	//	skill: skill object for the skill in question
@@ -87,31 +87,29 @@ var character_druid = {class_name:"Druid", strength:15, dexterity:20, vitality:2
 		
 		if (skill.name == "Werewolf") {
 			if (document.getElementById("e"+skills[13].key) != null) { if (effects["e"+skills[13].key].enabled == 1) { disableEffect(13); } }	// disables Werebear
-			result.max_life = (15 + lycan_life);
-			result.max_stamina = 40;
-			result.ar_bonus = skill.data.values[1][lvl];
-			result.ias_skill = skill.data.values[2][lvl];
-			result.damage_bonus = lycan_damage;
+			result.max_life = (15 + lycan_life); result.max_stamina = 40; result.ar_bonus = skill.data.values[1][lvl]; result.ias_skill = skill.data.values[2][lvl]; result.damage_bonus = lycan_damage; result.duration = 1040;
 		}
 		if (skill.name == "Werebear") {
 			if (document.getElementById("e"+skills[11].key) != null) { if (effects["e"+skills[11].key].enabled == 1) { disableEffect(11); } }	// disables Werewolf
-			result.max_life = (25 + lycan_life);
-			result.damage_bonus = skill.data.values[1][lvl] + lycan_damage;
-			result.defense_bonus = skill.data.values[2][lvl];
+			result.max_life = (25 + lycan_life); result.damage_bonus = skill.data.values[1][lvl] + lycan_damage; result.defense_bonus = skill.data.values[2][lvl]; result.duration = 1040;
 		}
-		if (skill.name == "Heart of Wolverine") {
-			result.damage_bonus = skill.data.values[1][lvl];
-			result.ar_bonus = skill.data.values[2][lvl];
+		if (skill.name == "Feral Rage") {
+			if (document.getElementById("e"+skills[11].key) == null || effects["e"+skills[11].key].enabled != 1) { disableEffect(14); }	// only useable with Werewolf
+			result.frw = skill.data.values[1][lvl]; result.life_leech = skill.data.values[3][lvl]; result.duration = 20;
+			}
+		if (skill.name == "Maul") {
+			if (document.getElementById("e"+skills[13].key) == null || effects["e"+skills[13].key].enabled != 1) { disableEffect(15); }	// only useable with Werebear
+			/*result.damage_bonus = skill.data.values[2][lvl];*/ result.duration = 20;
 		}
+		if (skill.name == "Heart of Wolverine") { result.damage_bonus = skill.data.values[1][lvl]; result.ar_bonus = skill.data.values[2][lvl]; }
 		if (skill.name == "Oak Sage") { result.max_life = skill.data.values[1][lvl]; }
-		// Cyclone Armor - only buffs effective HP
+		if (skill.name == "Spirit of Barbs") { result.thorns_reflect = skill.data.values[1][lvl]; }
+		if (skill.name == "Carrion Vine") { result.life_regen = skill.data.values[1][lvl]; }	// Check if "Heals: X percent" is equivalent to life_regen
+		if (skill.name == "Solar Creeper") { result.duration = skill.data.values[1][lvl]; }	// Check if "Mana Recovery Rate: X" is equivalent to mana_regen
+		if (skill.name == "Cyclone Armor") { result.absorb_elemental = skill.data.values[0][lvl]; }
 		// Armageddon - only buffs DPS
 		// Hurricane - only buffs DPS
-		// Feral Rage
-		// Maul
-		// Spirit of Barbs
-		// Carrion Vine
-		// Solar Creeper
+		// minions - DPS (see above, Spirit Wolf, Dire Wolf, Grizzly, Raven)
 		
 	return result
 	},

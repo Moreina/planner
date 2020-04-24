@@ -10,7 +10,7 @@
 //	var fcr_bp = [0, 13, 32, 86, 600]
 
 var character_assassin = {class_name:"Assassin", strength:20, dexterity:20, vitality:20, energy:25, life:50, mana:25, stamina:195, levelup_life:2, levelup_stamina:1.25, levelup_mana:1.5, ar_per_dexterity:5, life_per_vitality:3, stamina_per_vitality:1.25, mana_per_energy:1.75, starting_strength:20, starting_dexterity:20, starting_vitality:20, starting_energy:25, ar_const:15, skill_layout:"./images/assassin.png", mana_regen:1.66,
-	weapon_frames:{dagger:14, sword:[14,22], axe:[14,18], mace:[14,21], staff:18, polearm:18, scepter:14, wand:14, javelin:22, spear:22, bow:15, crossbow:20, claw:13.5},
+	weapon_frames:{dagger:14, sword:[14,22], axe:[14,18], mace:[14,21], thrown:14, staff:18, polearm:18, scepter:14, wand:14, javelin:22, spear:22, bow:15, crossbow:20, claw:13.5},
 
 	// getSkillData - gets skill info from the skills data table
 	//	skill: skill object for the skill in question
@@ -66,42 +66,23 @@ var character_assassin = {class_name:"Assassin", strength:20, dexterity:20, vita
 		var result = {};
 		var charges = 5;
 		
-		if (skill.name == "Fists of Ember") {
-			result.charge_ember = charges;
-			result.fDamage_min = charges * skill.data.values[0][lvl];
-			result.fDamage_max = charges * skill.data.values[0][lvl];
-		}
-		if (skill.name == "Fists of Thunder") {
-			result.charge_thunder = charges;
-			result.lDamage_min = charges * skill.data.values[0][lvl];
-			result.lDamage_max = charges * skill.data.values[1][lvl];
-		}
-		if (skill.name == "Fists of Ice") {
-			result.charge_ice = charges;
-			result.cDamage_min = charges * skill.data.values[0][lvl];
-			result.cDamage_max = charges * skill.data.values[1][lvl];
-		}
+		if (skill.name == "Fists of Ember") { if (equipped.weapon.type == "claw" || equipped.weapon.type == "dagger") { result.charge_ember = charges; result.fDamage_min = charges * skill.data.values[0][lvl]; result.fDamage_max = charges * skill.data.values[0][lvl]; result.duration = skill.data.values[1][lvl]; } }	// Consider automatically disabling whenever conditions aren't met? Would need to update effects after equip() ...	} else { disableEffect(1) }
+		if (skill.name == "Fists of Thunder") { if (equipped.weapon.type == "claw" || equipped.weapon.type == "dagger") { result.charge_thunder = charges; result.lDamage_min = charges * skill.data.values[0][lvl]; result.lDamage_max = charges * skill.data.values[1][lvl]; result.duration = skill.data.values[2][lvl]; } }	// consider auto-disabling
+		if (skill.name == "Fists of Ice") { if (equipped.weapon.type == "claw" || equipped.weapon.type == "dagger") { result.charge_ice = charges; result.cDamage_min = charges * skill.data.values[0][lvl]; result.cDamage_max = charges * skill.data.values[1][lvl]; result.duration = skill.data.values[2][lvl]; } }		// consider auto-disabling
 		if (skill.name == "Burst of Speed") {
 			if (document.getElementById("e"+skills[15].key) != null) { if (effects["e"+skills[15].key].enabled == 1) { disableEffect(15) } }	// disables Fade
-			result.ias_skill = skill.data.values[0][lvl];
-			result.frw = skill.data.values[1][lvl];
+			result.ias_skill = skill.data.values[0][lvl]; result.frw = skill.data.values[1][lvl]; result.duration = skill.data.values[2][lvl];
 		}
 		if (skill.name == "Fade") {
 			if (document.getElementById("e"+skills[11].key) != null) { if (effects["e"+skills[11].key].enabled == 1) { disableEffect(11) } }	// disables Burst of Speed
-			result.curse_reduction = skill.data.values[0][lvl];
-			result.all_res = skill.data.values[1][lvl];
-			result.pdr = skill.data.values[2][lvl];
+			result.curse_reduction = skill.data.values[0][lvl]; result.all_res = skill.data.values[1][lvl]; result.pdr = skill.data.values[2][lvl]; result.duration = skill.data.values[3][lvl];
 		}
-		if (skill.name == "Venom") {
-			result.pDamage_min = skill.data.values[1][lvl];
-			result.pDamage_max = skill.data.values[2][lvl];
-			result.pDamage_duration = 0.4;
-		}
-		if (skill.name == "Cloak of Shadows") {
-			result.defense_bonus = skill.data.values[0][lvl];
-			result.enemy_defense = skill.data.values[1][lvl];
-		}
-		// Blade Shield - doesn't buff anything except DPS
+		if (skill.name == "Venom") { result.pDamage_min = skill.data.values[1][lvl]; result.pDamage_max = skill.data.values[2][lvl]; result.pDamage_duration = 0.4; result.pDamage_duration_override = 0.4; result.duration = skill.data.values[0][lvl]; }
+		if (skill.name == "Cloak of Shadows") { result.defense_bonus = skill.data.values[0][lvl]; result.enemy_defense = skill.data.values[1][lvl]; result.duration = 8; }
+		// Blade Shield - DPS		if (skill.name == "Blade Shield") { result.duration = skill.data.values[1][lvl]; }
+		// minions - DPS (Shadow Warrior or Shadow Master)
+		// debuffs: Cloak of Shadows?
+		
 	return result	
 	},
 	
@@ -230,7 +211,7 @@ var skills_assassin = [
 {data:d221, key:"221", code:262, name:"Burst of Speed", i:11, req:[9], reqlvl:6, level:0, extra_levels:0, force_levels:0, effect:5, bindable:1, style:"display: block; top: 150px; left: 194px;", description:"Increases attack and movement speed<br>for a period of time", syn_title:"", syn_text:"", graytext:"", text:["Attack Speed: +"," percent<br>Walk/Run Speed: +"," percent<br>Duration: "," seconds<br>Mana Cost: 10",""]},
 {data:d223, key:"223", code:263, name:"Mind Barrier", i:12, req:[10], reqlvl:6, level:0, extra_levels:0, force_levels:0, bindable:0, style:"display: block; top: 150px; left: 234px;", description:"Create a mental barrier around yourself<br>that disarms enemies", syn_title:"", syn_text:"", graytext:"", text:["Chance to stun in retaliation: ","%<br>Chance to retaliate with Psychic Hammer: ","%<br>Chance to stun on hit with attacks: ","%<br>Stun Length: "," seconds",""]},
 {data:d232, key:"232", code:264, name:"Weapon Block", i:13, req:[9], reqlvl:12, level:0, extra_levels:0, force_levels:0, effect:1, bindable:0, style:"display: block; top: 218px; left: 204px;", description:"Passive - Chance to block when<br>you are using dual claw-class weapons", syn_title:"", syn_text:"", graytext:"", text:[""," percent chance",""]},
-{data:d233, key:"233", code:265, name:"Cloak of Shadows", i:14, req:[12], reqlvl:12, level:0, extra_levels:0, force_levels:0, effect:4, bindable:1, style:"display: block; top: 218px; left: 284px;", description:"Cast a shadow to blind nearby enemies,<br>lowering their defenses for a period of time<br><br>Range: 20 yards<br>Mana Cost: 13", syn_title:"", syn_text:"", graytext:"", text:["Duration: 8 seconds<br>Defense Bonus: +"," percent<br>Enemy Defense: "," percent",""]},
+{data:d233, key:"233", code:265, name:"Cloak of Shadows", i:14, req:[12], reqlvl:12, level:0, extra_levels:0, force_levels:0, effect:3, bindable:1, style:"display: block; top: 218px; left: 284px;", description:"Cast a shadow to blind nearby enemies,<br>lowering their defenses for a period of time<br><br>Range: 20 yards<br>Mana Cost: 13", syn_title:"", syn_text:"", graytext:"", text:["Duration: 8 seconds<br>Defense Bonus: +"," percent<br>Enemy Defense: "," percent",""]},
 {data:d241, key:"241", code:266, name:"Fade", i:15, req:[11,9], reqlvl:18, level:0, extra_levels:0, force_levels:0, effect:5, bindable:1, style:"display: block; top: 286px; left: 204px;", description:"Raise all resistances and resist curses<br>for a period of time", syn_title:"", syn_text:"", graytext:"", text:["Reduces curse duration by "," percent<br>Resist All: "," percent<br>Physical Resistance: "," percent<br>Duration: "," seconds<br>Mana Cost: 10",""]},
 {data:d242, key:"242", code:267, name:"Shadow Warrior", i:16, req:[13,14,9,12,10], reqlvl:18, level:0, extra_levels:0, force_levels:0, bindable:1, style:"display: block; top: 286px; left: 194px;", description:"Summon a shadow of yourself that mimics<br>your skills and fights by your side", syn_title:"", syn_text:"", graytext:"", text:["Life: ","<br>Attack Rating: +","<br>Defense Bonus: +"," percent<br>Mana Cost: ",""]},
 {data:d253, key:"253", code:268, name:"Mind Blast", i:17, req:[14,12,10], reqlvl:24, level:0, extra_levels:0, force_levels:0, bindable:1, style:"display: block; top: 354px; left: 254px;", description:"Damage a group of enemies using<br>the power of your mind", syn_title:"<br>Mind Blast Receives Bonuses From:<br>", syn_text:"Psychic Hammer: +21% Damage per Level<br>Mind Barrier: +21% Damage per Level<br>Cloak of Shadows: +0.7 Radius per 5 Levels", graytext:"", text:["Radius: ","Damage: ","-",""]},
@@ -246,5 +227,5 @@ var skills_assassin = [
 {data:d351, key:"351", code:277, name:"Lightning Sentry", i:26, req:[23,21,20], reqlvl:24, level:0, extra_levels:0, force_levels:0, bindable:1, style:"display: block; top: 354px; left: 266px;", description:"A trap that shoots lightning<br>to scorch passing enemies<br><br>Shoots 10 Times", syn_title:"<br>Lightning Sentry Receives Bonuses From:<br>", syn_text:"Shock Web: +21% Lightning Damage per Level<br>Charged Bolt Sentry: +21% Lightning Damage per Level<br>Death Sentry: +21% Lightning Damage per Level", graytext:"", text:["Lightning Damage: ","-","<br>Mana Cost: 20",""]},
 {data:d352, key:"352", code:278, name:"Wake of Inferno", i:27, req:[24,20], reqlvl:24, level:0, extra_levels:0, force_levels:0, bindable:1, style:"display: block; top: 354px; left: 336px;", description:"Trap that sprays fire at passing enemies", syn_title:"<br>Wake of Inferno Receives Bonuses From:<br>", syn_text:"Wake of Fire: +0.04 seconds Channel Time per Level<br>Fire Blast: +13% Fire Damage per Level<br>Wake of Fire: +20% Fire Damage per Level<br>Death Sentry: +13% Fire Damage per Level", graytext:"", text:["Shoots 10 Times<br>Channel time: ","Fire Damage: ","-","<br>Mana Cost: 20",""]},
 {data:d361, key:"361", code:279, name:"Death Sentry", i:28, req:[26,23,21,20], reqlvl:30, level:0, extra_levels:0, force_levels:0, bindable:1, style:"display: block; top: 422px; left: 266px;", description:"Trap that shoots lightning at your enemies<br>or explodes nearby corpses laying waste to more enemies", syn_title:"<br>Death Sentry Receives Bonuses From:<br>", syn_text:"Fire Blast: +1 Shot per 3 Levels<br>Lightning Sentry: +15% Lightning Damage per Level", graytext:"", text:["Corpse Explosion Damage: 21-29 percent of corpse life<br>Shoots ","Radius: "," yards<br>Lightning Damage: ","-","<br>Mana Cost: 20",""]},
-{data:d363, key:"363", code:280, name:"Blade Shield", i:29, req:[25,22,24,20], reqlvl:30, level:0, extra_levels:0, force_levels:0, effect:3, bindable:1, style:"display: block; top: 422px; left: 436px;", description:"Spinning blades slice enemies<br>who stray too close<br><br>Deals 50% of Weapon Damage", syn_title:"<br>Blade Shield Receives Bonuses From:<br>", syn_text:"Blade Throw: +5% Damage per Level<br>Blade Fury: +5% Damage per Level", graytext:"", text:["Shoots "," blade(s)<br>Duration: "," seconds<br>Damage: ","-","<br>Attack Rating: +"," percent<br>Mana Cost: ",""]}
+{data:d363, key:"363", code:280, name:"Blade Shield", i:29, req:[25,22,24,20], reqlvl:30, level:0, extra_levels:0, force_levels:0, effect:2, bindable:1, style:"display: block; top: 422px; left: 436px;", description:"Spinning blades slice enemies<br>who stray too close<br><br>Deals 50% of Weapon Damage", syn_title:"<br>Blade Shield Receives Bonuses From:<br>", syn_text:"Blade Throw: +5% Damage per Level<br>Blade Fury: +5% Damage per Level", graytext:"", text:["Shoots "," blade(s)<br>Duration: "," seconds<br>Damage: ","-","<br>Attack Rating: +"," percent<br>Mana Cost: ",""]}
 ];

@@ -9,14 +9,14 @@ var unequipped = {name:"none", strength:0, dexterity:0, vitality:0, energy:0, li
 /* stats		*/	cdr:0, fcr:0, fbr:0, fhr:0, frw:0, ias:0, pierce:0, cblow:0, dstrike:0, cstrike:0, owounds:0, fDamage:0, cDamage:0, lDamage:0, pDamage:0, fPierce:0, cPierce:0, lPierce:0, pPierce:0, pdr:0, damage_reduced:0, mDamage_reduced:0, mf:0, gf:0, life_leech:0, mana_leech:0, life_per_hit:0, mana_per_hit:0, life_per_ranged_hit:0, mana_per_ranged_hit:0, fAbsorb:0, cAbsorb:0, lAbsorb:0, fAbsorb_flat:0, cAbsorb_flat:0, lAbsorb_flat:0, mAbsorb_flat:0, 
 /* stats (indirect)	*/	all_skills:0, all_attributes:0, all_res:0, velocity:0, max_life:0, max_mana:0, max_stamina:0, damage_bonus:0, defense_bonus:0, ar_bonus:0, ar_bonus_per_level:0, max_energy:0, ias_per_8_dexterity:0, ar_per_socketed:0, all_skills_ember:0, baseSpeed:0, 
 /* stats (per level)	*/	life_per_level:0, mana_per_level:0, defense_per_level:0, ar_per_level:0, stamina_per_level:0, strength_per_level:0, dexterity_per_level:0, vitality_per_level:0, fRes_per_level:0, cRes_per_level:0, lRes_per_level:0, pRes_per_level:0, fAbsorb_flat_per_level:0, cAbsorb_flat_per_level:0, mf_per_level:0, gf_per_level:0, fcr_per_level:0, dstrike_per_level:0, e_def_per_level:0, 
-/* attack damage	*/	base_damage_min:0, base_damage_max:0, damage_min:0, damage_max:0, fDamage_min:0, fDamage_max:0, cDamage_min:0, cDamage_max:0, lDamage_min:0, lDamage_max:0, pDamage_min:0, pDamage_max:0, pDamage_all:0, pDamage_duration:0, mDamage_min:0, mDamage_max:0, min_damage_per_level:0, max_damage_per_level:0, fDamage_max_per_level:0, cDamage_max_per_level:0, kick_min:0, kick_damage_per_level:0, smite_min:0, smite_max:0, e_damage:0, e_max_damage_per_level:0, lDamage_max_per_2_energy:0, cDamage_per_ice:0, cDamage_per_socketed:0, 
-/* other (not in-game)	*/	ibc:0, life_per_kill:0, mana_per_kill:0, life_replenish:0, life_regen:0, mana_regen:0, damage_to_mana:0, missile_defense:0, melee_defense:0, damage_vs_demons:0, damage_vs_undead:0, ar_vs_demons:0, ar_vs_undead:0, ar_vs_undead_per_level:0, damage_vs_undead_per_level:0, damage_vs_demons_per_level:0, life_per_demon_kill:0, thorns_lightning:0, thorns:0, thorns_per_level:0, thorns_reflect:0, poison_length_reduced:0, curse_length_reduced:0, light_radius:0, 
-/* other, affects enemy	*/	enemy_fRes:0, enemy_cRes:0, enemy_lRes:0, enemy_pRes:0, slow_target:0, target_defense:0, flee_on_hit:0, blind_on_hit:0, monster_defense_per_hit:0, freezes_target:0, enemy_defense:0, enemy_defense_flat:0, slow_enemies:0, 
-/* other, boolean	*/	special:0, itd:0, pmh:0, cbf:0, peace:0, knockback:0, half_freeze_duration:0, melee_splash:0, glow:0, 
-/* item properties	*/	sockets:0, e_def:0, req:0, indestructible:0, autorepair:0, autoreplenish:0, stack_size:0, group:"", type:"", def_low:0, def_high:0, durability:0, max_sockets:0, upgrade:"", downgrade:"", 
+/* attack damage	*/	base_damage_min:0, base_damage_max:0, damage_min:0, damage_max:0, fDamage_min:0, fDamage_max:0, cDamage_min:0, cDamage_max:0, lDamage_min:0, lDamage_max:0, pDamage_min:0, pDamage_max:0, pDamage_all:0, pDamage_duration:0, pDamage_duration_override:0, mDamage_min:0, mDamage_max:0, min_damage_per_level:0, max_damage_per_level:0, fDamage_max_per_level:0, cDamage_max_per_level:0, kick_min:0, kick_damage_per_level:0, smite_min:0, smite_max:0, e_damage:0, e_max_damage_per_level:0, lDamage_max_per_2_energy:0, cDamage_per_ice:0, cDamage_per_socketed:0, 
+/* other (not in-game)	*/	ibc:0, life_per_kill:0, mana_per_kill:0, life_replenish:0, life_regen:0, mana_regen:0, damage_to_mana:0, missile_defense:0, melee_defense:0, damage_vs_demons:0, damage_vs_undead:0, ar_vs_demons:0, ar_vs_undead:0, ar_vs_undead_per_level:0, damage_vs_undead_per_level:0, damage_vs_demons_per_level:0, life_per_demon_kill:0, thorns_lightning:0, thorns:0, thorns_per_level:0, thorns_reflect:0, poison_length_reduced:0, curse_length_reduced:0, light_radius:0, slower_stam_drain:0, heal_stam:0, heal_stam_per_level:0, discount:0, 
+/* other, affects enemy	*/	enemy_fRes:0, enemy_cRes:0, enemy_lRes:0, enemy_pRes:0, enemy_defense:0, enemy_defense_flat:0, target_defense:0, monster_defense_per_hit:0, slow_target:0, slow_enemies:0, freezes_target:0, flee_on_hit:0, blind_on_hit:0, 
+/* other, boolean	*/	itd:0, pmh:0, cbf:0, peace:0, knockback:0, half_freeze_duration:0, melee_splash:0, glow:0, 
+/* item properties	*/	sockets:0, e_def:0, req:0, indestructible:0, autorepair:0, autoreplenish:0, stack_size:0, group:"", type:"", def_low:0, def_high:0, durability:0, max_sockets:0, upgrade:"", downgrade:"", special:0, 
 /* sets			*/	set_IK:0, set_Mav:0, set_Gris:0, set_TO:0, set_TR:0, set_Nat:0, set_Ald:0, set_BK:0, set_Disciple:0, set_Angelic:0, set_Cathan:0, set_Cow:0, set_Brethren:0, set_Hwanin:0, set_Naj:0, set_Orphan:0, set_Sander:0, set_Sazabi:0, set_Arcanna:0, set_Arctic:0, set_Berserker:0, set_Civerb:0, set_Cleglaw:0, set_Death:0, set_Hsarus:0, set_Infernal:0, set_Iratha:0, set_Isenhart:0, set_Milabrega:0, set_Sigon:0, set_Tancred:0, set_Vidala:0,
-/* misc			*/	slower_stam_drain:0, heal_stam:0, heal_stam_per_level:0, discount:0, wisp:0, bonus_corpse_explosion:0, skill_random_sorc:0, phys_Lightning_Surge:0, 
-/* misc (non-item)	*/	ias_skill:0, ar_shrine_bonus:0, charge_ember:0, charge_thunder:0, charge_ice:0, hammer_bonus:0, skeleton_bonus:0, hammer_on_hit:0, 
+/* misc			*/	wisp:0, bonus_corpse_explosion:0, skill_random_sorc:0, phys_Lightning_Surge:0, 
+/* misc (non-item)	*/	ias_skill:0, ar_shrine_bonus:0, charge_ember:0, charge_thunder:0, charge_ice:0, skeleton_bonus:0, hammer_bonus:0, hammer_on_hit:0, recovery_per_corpse:0, absorb_elemental:0, absorb_melee:0, absorb_es_redirect:0, absorb_es_deplete:0, 
 
 /*   not used (yet?)	*///	energy_per_level:0, lAbsorb_flat_per_level:0, mAbsorb_flat_per_level:0, mAbsorb:0, lDamage_max_per_level:0, pDamage_max_per_level:0, e_damage_per_level:0, ar_vs_demons_per_level:0, stun_length:0, 
 
@@ -110,7 +110,7 @@ var auras = [
 // getAuraData - gets a list of stats corresponding to the aura
 //	aura: name of the aura
 //	lvl: level of the aura
-//	source: "mercenary" or the item type which is granted the aura
+//	source: "mercenary" or the item type which is granting the aura
 // result: indexed array of stats granted and their values
 // ---------------------------------
 function getAuraData(aura, lvl, source) {
@@ -150,6 +150,7 @@ function getAuraData(aura, lvl, source) {
 	else if (aura == "Redemption") {
 		//result. = auras[a].values[0][lvl];		// redeem soul
 		//result. = auras[a].values[1][lvl];		// life & mana recovered
+		result.recovery_per_corpse = auras[a].values[0][lvl]/100 * auras[a].values[1][lvl];
 	}
 	else if (aura == "Salvation") {
 		result.fDamage = auras[a].values[0][lvl];
@@ -1040,7 +1041,7 @@ var equipment = {
 {not:["amazon"], rarity:"rare", name:"Bolts of Doom", type:"quiver", req_level:65, pierce:25, all_skills:1, mf_per_level:0.5, mf:35, life_per_ranged_hit:16, mana_per_ranged_hit:9, base:"Bolts"},
 {not:["amazon"], rarity:"rare", name:"Queen's Arrows", type:"quiver", req_level:65, max_damage_per_level:0.625, pierce:25, all_skills:1, damage_min:26, damage_max:31, ias:16, dstrike:20},
 {only:"amazon", rarity:"rare", name:"Archer's Arrows", type:"quiver", req_level:68, max_damage_per_level:0.625, pierce:25, skills_bows:2, damage_min:26, damage_max:31, ias:16, dstrike:20},
-{only:"amazon", rarity:"rare", name:"Vampiric Arrows", type:"quiver", req_level:68, pierce:25, skills_bows:2, all_res:15, ias:16, mana_per_hit:9, mana_leech:3},
+{only:"amazon", rarity:"rare", name:"Vampiric Arrows", type:"quiver", req_level:68, pierce:25, skills_bows:2, all_res:15, ias:16, mana_per_ranged_hit:9, mana_leech:3},
 {name:"Dragonbreath", type:"quiver", req_level:12, fDamage_max_per_level:2, fRes:15, pod_changes:1, img:"Dragonbreath"},
 {name:"Hailstorm", type:"quiver", req_level:12, cDamage_max_per_level:2, cRes:15, pod_changes:1},
 {name:"Ice Shards", type:"quiver", req_level:18, skills_cold_all:2, ias:20, energy:20, pod_changes:1},
