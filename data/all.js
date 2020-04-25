@@ -1420,9 +1420,25 @@ function updateTertiaryStats() {
 	else { document.getElementById("freezes_target").innerHTML = "" }
 	if (c.peace > 0) { document.getElementById("peace").innerHTML = "Slain Monsters Rest in Peace<br>" } else { document.getElementById("peace").innerHTML = "" }
 	if (c.glow > 0) { document.getElementById("glow").innerHTML = "Character is Glowing<br>" } else { document.getElementById("glow").innerHTML = "" }
+	updateCTC()
+}
 
-	// TODO: Add chance-to-cast stats and others. Implement array?
-	// c.hammer_on_hit	Cast Blessed Hammer on hit
+// updateCTC - 
+// ---------------------------------
+function updateCTC() {
+	// TODO: Add other miscellaneous skill/item stats here?
+	var stats = "";
+	for (group in equipped) {
+		if (typeof(equipped[group].ctc) != 'undefined') {
+			if (equipped[group].ctc != "") {
+				for (let i = 0; i < equipped[group].ctc.length; i++) {
+					var stat = equipped[group].ctc[i][0]+"% chance to cast level "+equipped[group].ctc[i][1]+" "+equipped[group].ctc[i][2]+" "+equipped[group].ctc[i][3];
+					stats += (stat + "<br>")
+				}
+			}
+		}
+	}
+	document.getElementById("ctc").innerHTML = stats
 }
 
 // updateMisc - Updates other interface elements
@@ -2610,4 +2626,10 @@ function removeInvalidSockets(group) {
 			}
 		}
 //	}
+}
+
+// hoverFCR - 
+// ---------------------------------
+function hoverFCR() {
+	//document.getElementById("fcr").innerHTML = "testing"//character.fcr + Math.floor(character.level*character.fcr_per_level)
 }

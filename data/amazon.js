@@ -73,7 +73,7 @@ var character_amazon = {class_name:"Amazon", strength:20, dexterity:25, vitality
 		if (skill.name == "Inner Sight") { result.enemy_defense_flat = skill.data.values[0][lvl]; }	// TODO: Make always-active
 		// No stat buffs:
 		if (skill.name == "Decoy") { result.duration = skill.data.values[8][lvl]; }
-		if (skill.name == "Valkyrie") { result.amountSummoned = 1 }
+		if (skill.name == "Valkyrie") { result.amountSummoned = 1+character.extraValkyrie; }
 		
 	return result
 	},

@@ -83,7 +83,7 @@ var character_necromancer = {class_name:"Necromancer", strength:15, dexterity:25
 		if (skill.name == "Bone Armor") { result.absorb_melee = skill.data.values[0][lvl]; }
 		// No stat buffs:
 		if (skill.name == "Clay Golem") { disableGolems(skill); result.slow_target = skill.data.values[3][lvl]; }
-		if (skill.name == "Fire Golem") { disableGolems(skill); result.amountSummoned = 1; }
+		if (skill.name == "Fire Golem") { disableGolems(skill); result.amountSummoned = 1+character.extraFireGolem; }
 		if (skill.name == "Raise Skeleton Warrior") { result.amountSummoned = skill.data.values[3][lvl]; }
 		if (skill.name == "Raise Skeletal Mage") { result.amountSummoned = skill.data.values[8][lvl]; }
 		if (skill.name == "Revive") { result.amountSummoned = skill.data.values[2][lvl]; result.duration = 600; }

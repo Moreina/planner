@@ -116,7 +116,7 @@ var character_druid = {class_name:"Druid", strength:15, dexterity:20, vitality:2
 		if (skill.name == "Raven") { result.amountSummoned = skill.data.values[0][lvl]; }
 		if (skill.name == "Summon Spirit Wolf") { result.amountSummoned = skill.data.values[0][lvl]; }
 		if (skill.name == "Summon Dire Wolf") { result.amountSummoned = skill.data.values[0][lvl]; }
-		if (skill.name == "Summon Grizzly") { result.amountSummoned = 1; }
+		if (skill.name == "Summon Grizzly") { result.amountSummoned = 1+character.extraGrizzly; }
 		
 	return result
 	},
