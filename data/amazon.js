@@ -71,7 +71,9 @@ var character_amazon = {class_name:"Amazon", strength:20, dexterity:25, vitality
 		
 		if (skill.name == "Phase Run") { result.fhr = 30; result.velocity = 30; result.duration = skill.data.values[0][lvl]; }
 		if (skill.name == "Inner Sight") { result.enemy_defense_flat = skill.data.values[0][lvl]; }	// TODO: Make always-active
-		// minions - DPS (Valkyrie, Decoy)
+		// No stat buffs:
+		if (skill.name == "Decoy") { result.duration = skill.data.values[8][lvl]; }
+		if (skill.name == "Valkyrie") { result.amountSummoned = 1 }
 		
 	return result
 	},
