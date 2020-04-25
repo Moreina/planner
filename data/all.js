@@ -8,6 +8,7 @@ var effects = {};
 var skillList = []; var skillOptions = [];
 var selectedSkill = [" ­ ­ ­ ­ Skill 1", " ­ ­ ­ ­ Skill 2"];
 
+var offhandSetup = "";
 var mercenary = {name:"",level:1,base_aura:"",base_aura_level:1};
 var offhandType = "none";
 var lastCharm = "";
@@ -63,102 +64,44 @@ function loadEquipment(className) {
 }
 
 // loadItems - Creates a dropdown menu option
-//	type: equipment type
+//	group: equipment's group
 //	dropdown: name of the dropdown to edit
 //	className: name of the character class
 // ---------------------------------
-function loadItems(type, dropdown, className) {
-	if (type.length == 0) { document.getElementById(dropdown).innerHTML = "<option></option>" }
+function loadItems(group, dropdown, className) {
+	if (group.length == 0) { document.getElementById(dropdown).innerHTML = "<option></option>" }
 	else {
 		var choices = "";
-		for (item in equipment[type]) {
-			if (typeof(equipment[type][item].only) == 'undefined' || equipment[type][item].only == className) {
+		var choices_offhand = "";
+		for (itemNew in equipment[group]) {
+			var item = equipment[group][itemNew];
+			if (typeof(item.only) == 'undefined' || item.only == className) {
 				var halt = 0;
 				if (className == "clear") { halt = 1 }
-				if (typeof(equipment[type][item].not) != 'undefined') {
-					for (let l = 0; l < equipment[type][item].not.length; l++) {
-						if (equipment[type][item].not[l] == className) { halt = 1 }
-					}
-				}
-				if (className == "Rogue Scout") {
-					if (type == "offhand") { halt = 1 }
-					if (type == "weapon" && equipment[type][item].type != "bow" && equipment[type][item].type != "crossbow" && equipment[type][item].name != "Weapon") { halt = 1 }
-				}
-				if (className == "Desert Guard") {
-					if (type == "offhand") { halt = 1 }
-					if (type == "weapon" && equipment[type][item].type != "polearm" && equipment[type][item].type != "spear" && equipment[type][item].name != "Weapon") { halt = 1 }
-				}
-				if (className == "Iron Wolf") {
-					if (type == "offhand" && equipment[type][item].type != "shield" && equipment[type][item].name != "Offhand") { halt = 1 }
-					if (type == "weapon" && (equipment[type][item].type != "sword" || typeof(equipment[type][item].twoHanded) != 'undefined') && equipment[type][item].name != "Weapon") { halt = 1 }
-				}
-				if (className == "Barb (merc)") {
-					if (type == "offhand") { halt = 1 }
-					if (type == "weapon" && equipment[type][item].type != "sword" && equipment[type][item].name != "Weapon") { halt = 1 }
-				}
-
+				if (typeof(item.not) != 'undefined') { for (let l = 0; l < item.not.length; l++) { if (item.not[l] == className) { halt = 1 } } }
+				if (className == "Rogue Scout") { if (group == "offhand" || (group == "weapon" && item.type != "bow" && item.type != "crossbow" && item.name != "Weapon")) { halt = 1 } }
+				if (className == "Desert Guard") { if (group == "offhand" || (group == "weapon" && item.type != "polearm" && item.type != "spear" && item.name != "Weapon")) { halt = 1 } }
+				if (className == "Iron Wolf") { if ((group == "offhand" && item.type != "shield" && item.name != "Offhand") || (group == "weapon" && (item.type != "sword" || typeof(item.twoHanded) != 'undefined') && item.name != "Weapon")) { halt = 1 } }
+				if (className == "Barb (merc)") { if (group == "offhand" || (group == "weapon" && item.type != "sword" && item.name != "Weapon")) { halt = 1 } }
 				if (halt == 0) {
-					if (item > 0) {
-						if (typeof(equipment[type][item].set_bonuses) != 'undefined') {
-							choices += "<option class='dropdown-set'>" + equipment[type][item].name + "</option>"
-						} else if (typeof(equipment[type][item].debug) != 'undefined'){
-							choices += "<option class='dropdown-debug'>" + equipment[type][item].name + "</option>"
-						} else if (typeof(equipment[type][item].rarity) != 'undefined' && equipment[type][item].rarity == "magic"){
-							choices += "<option class='dropdown-magic'>" + equipment[type][item].name + "</option>"
-						} else if (typeof(equipment[type][item].rarity) != 'undefined' && equipment[type][item].rarity == "rare"){
-							choices += "<option class='dropdown-rare'>" + equipment[type][item].name + "</option>"
-						} else if (typeof(equipment[type][item].rarity) != 'undefined' && equipment[type][item].rarity == "crafted"){
-							choices += "<option class='dropdown-crafted'>" + equipment[type][item].name + "</option>"
-						} else if (typeof(equipment[type][item].rarity) != 'undefined' && equipment[type][item].rarity == "common"){
-							choices += "<option class='dropdown-common'>" + equipment[type][item].name + "</option>"
-						} else if (typeof(equipment[type][item].rw) != 'undefined'){
-							choices += "<option class='dropdown-runeword'>" + equipment[type][item].name + "</option>"
-						} else {
-							choices += "<option class='dropdown-unique'>" + equipment[type][item].name + "</option>"
-						}
+					var addon = "";
+					if (choices == "") {
+						if (group != "charms") { addon = "<option selected>" + "­ ­ ­ ­ " + item.name + "</option>" }
+						else { addon = "<option disabled selected>" + "­ ­ ­ ­ " + item.name + "</option>" }
 					} else {
-						if (type != "charms") {
-							choices += "<option selected>" + "­ ­ ­ ­ " + equipment[type][item].name + "</option>"
-						} else {
-							choices += "<option disabled selected>" + "­ ­ ­ ­ " + equipment[type][item].name + "</option>"
-						}
+						if (typeof(item.debug) != 'undefined') { addon = "<option class='dropdown-debug'>" + item.name + "</option>" }
+						else if (typeof(item.rarity) != 'undefined') { addon = "<option class='dropdown-"+item.rarity+"'>" + item.name + "</option>" }
+						else { addon = "<option class='dropdown-unique'>" + item.name + "</option>" }
 					}
+					choices += addon
+					if (className == "assassin" && item.name == "Offhand") { choices += offhandSetup }	// weapons inserted into offhand list
+					if (className == "assassin" && item.type == "claw") { choices_offhand += addon }
+					if (className == "barbarian" && item.name != "Weapon" && (typeof(item.twoHanded) == 'undefined' || item.twoHanded != 1 || item.type == "sword")) { choices_offhand += addon }
 				}
 			}
 		}
-		if (type == "offhand" && className == "barbarian") {		// TODO: reduce code duplication
-			type = "weapon"
-			for (item in equipment[type]) {
-				if (typeof(equipment[type][item].only) == 'undefined' || equipment[type][item].only == className) {
-					var halt = 0
-					if (typeof(equipment[type][item].not) != 'undefined') {
-						for (let m = 0; m < equipment[type][item].not.length; m++) {
-							if (equipment[type][item].not[m] == className) { halt = 1 }
-						}
-					}
-					if (equipment[type][item].type != "sword") { if (typeof(equipment[type][item].twoHanded) != 'undefined') { if (equipment[type][item].twoHanded == 1) { halt = 1 } } }
-					if (halt == 0) {
-						if (item > 0) {
-							if (typeof(equipment[type][item].set_bonuses) != 'undefined') {
-								choices += "<option class='dropdown-set'>" + equipment[type][item].name + "</option>"
-							} else if (typeof(equipment[type][item].rarity) != 'undefined' && equipment[type][item].rarity == "magic"){
-								choices += "<option class='dropdown-magic'>" + equipment[type][item].name + "</option>"
-							} else if (typeof(equipment[type][item].rarity) != 'undefined' && equipment[type][item].rarity == "rare"){
-								choices += "<option class='dropdown-rare'>" + equipment[type][item].name + "</option>"
-							} else if (typeof(equipment[type][item].rarity) != 'undefined' && equipment[type][item].rarity == "crafted"){
-								choices += "<option class='dropdown-crafted'>" + equipment[type][item].name + "</option>"
-							} else if (typeof(equipment[type][item].rarity) != 'undefined' && equipment[type][item].rarity == "common"){
-								choices += "<option class='dropdown-common'>" + equipment[type][item].name + "</option>"
-							} else if (typeof(equipment[type][item].rw) != 'undefined'){
-								choices += "<option class='dropdown-runeword'>" + equipment[type][item].name + "</option>"
-							} else {
-								choices += "<option class='dropdown-unique'>" + equipment[type][item].name + "</option>"
-							}
-						}
-					}
-				}
-			}
-		}
+		if (group == "weapon") { offhandSetup = choices_offhand }
+		if (className == "barbarian" && group == "offhand") { choices += offhandSetup }	// weapons inserted into offhand list
 		document.getElementById(dropdown).innerHTML = choices
 	}
 }
@@ -176,10 +119,8 @@ function loadMisc() {
 function loadSocketables() {
 	var choices = "<option class='gray' disabled selected>­ ­ ­ ­ Socketables</option>";
 	for (let m = 1; m < socketables.length; m++) {
-		if (socketables[m].type == "rune") { choices += "<option class='dropdown-crafted'>" + socketables[m].name + "</option>" }
-		else if (socketables[m].rarity == "unique") { choices += "<option class='dropdown-unique'>" + socketables[m].name + "</option>" }
-		else if (socketables[m].rarity == "magic") { choices += "<option class='dropdown-magic'>" + socketables[m].name + "</option>" }
-		else if (socketables[m].rarity == "rare") { choices += "<option class='dropdown-rare'>" + socketables[m].name + "</option>" }
+		if (socketables[m].type == "rune") { choices += "<option class='dropdown-craft'>" + socketables[m].name + "</option>" }
+		else if (typeof(socketables[m].rarity) != 'undefined') { choices += "<option class='dropdown-"+socketables[m].rarity+"'>" + socketables[m].name + "</option>" }
 		else { choices += "<option>" + socketables[m].name + "</option>" }
 	}
 	document.getElementById("dropdown_socketables").innerHTML = choices
@@ -238,7 +179,7 @@ function getMercenaryAuraLevel(hlvl) {
 //	if (hlvl > 9 && hlvl < 31) { result = (3+((hlvl-9)*10/32)) }
 //	else if (hlvl > 30 && hlvl < 55) { result = (10+((hlvl-31)*10/32)) }
 //	else if (hlvl > 54) { result = 18 }
-	// TODO: Is the Might aura still uncapped? (benefit from + all skills)
+	// TODO: Is the Might aura still uncapped? (up to level 31) Also, can these benefit from + all skills?
 	return result;
 }
 
@@ -292,19 +233,12 @@ function reset(name) { startup(name.toLowerCase()); }
 // init - Initiates mouse functions
 // ---------------------------------
 function init() {
-	var stats = ["btn_strength", "btn_dexterity", "btn_vitality", "btn_energy"];
 	document.getElementById("skillmap").onmouseout = function() {skillOut()};
 	for (let s = 0, len = skills.length; s < len; s++) {
 		document.getElementById("s"+skills[s].key).onmouseover = function() {skillHover(skills[s])};
 		document.getElementById("s"+skills[s].key).onclick = function() {skillUp(event, skills[s])};
 		document.getElementById("s"+skills[s].key).oncontextmenu = function() {skillDown(event, skills[s])};
 	}
-	for (let t = 0; t < stats.length; t++) {
-		document.getElementById(stats[t]).onclick = function() {addStat(event, stats[t])};
-		document.getElementById(stats[t]).oncontextmenu = function() {removeStat(event, stats[t])};
-	}
-	document.getElementById("dropdown_item").onchange = function() {var selected = document.getElementById("dropdown_item").selectedIndex};
-	document.getElementById("quests").onchange = function() {toggleQuests()};
 }
 
 // clearIconSources - Removes all active skill icons
@@ -402,7 +336,7 @@ function adjustCorruptionSockets(group) {
 	var max = 0;
 	if (equipped[group].max_sockets > 0 && corruptsEquipped[group].name != group) {
 		max = ~~equipped[group].max_sockets;
-		if (equipped[group].ethereal > 0 || equipped[group].sockets > 0 || equipped[group].rw > 0 || equipped[group].rarity == "common" || equipped[group].type == "quiver") { max = 0 }
+		if (equipped[group].ethereal > 0 || equipped[group].sockets > 0 || equipped[group].rarity == "rw" || equipped[group].rarity == "common" || equipped[group].type == "quiver") { max = 0 }
 		if (max != corruptsEquipped[group].sockets) {
 			character.sockets -= corruptsEquipped[group].sockets
 			corruptsEquipped[group].sockets = max
@@ -422,7 +356,7 @@ function corrupt(group, val) {
 		character[old_affix] -= corruptsEquipped[group][old_affix]
 		corruptsEquipped[group][old_affix] = unequipped[old_affix]
 	}
-	if (val == "­ ­ ­ ­ Corruption" || val == "none" || val == group || equipped[group].ethereal > 0 || equipped[group].sockets > 0 || equipped[group].rw > 0 || equipped[group].rarity == "common" || (group == "offhand" && equipped[group].type != "quiver" && equipped.weapon.twoHanded == 1)) { document.getElementById("corruptions_"+group).selectedIndex = 0 }
+	if (val == "­ ­ ­ ­ Corruption" || val == "none" || val == group || equipped[group].ethereal > 0 || equipped[group].sockets > 0 || equipped[group].rarity == "rw" || equipped[group].rarity == "common" || (group == "offhand" && equipped[group].type != "quiver" && equipped.weapon.twoHanded == 1)) { document.getElementById("corruptions_"+group).selectedIndex = 0 }
 	else {
 		for (outcome in corruptions[group]) {
 			if (corruptions[group][outcome].name == val && (group != "offhand" || (offhandType == corruptions[group][outcome].base || offhandType == "none"))) {
@@ -446,55 +380,55 @@ function corrupt(group, val) {
 }
 
 // mercEquip - Equips or unequips a mercenary item
-//	type: name of item's type
+//	group: name of item's group
 //	val: name of item
 // ---------------------------------
-function equipMerc(type, val) {
-	for (old_affix in mercEquipped[type]) {
-		mercenary[old_affix] -= mercEquipped[type][old_affix]
+function equipMerc(group, val) {
+	for (old_affix in mercEquipped[group]) {
+		mercenary[old_affix] -= mercEquipped[group][old_affix]
 		if (old_affix == "aura") {
-			removeAura(mercEquipped[type][old_affix])
+			removeAura(mercEquipped[group][old_affix])
 		}
-		if (old_affix != "set_bonuses") { mercEquipped[type][old_affix] = unequipped[old_affix] }
+		if (old_affix != "set_bonuses") { mercEquipped[group][old_affix] = unequipped[old_affix] }
 	}
-	if (type == val) { document.getElementById(("dropdown_merc_"+type)).selectedIndex = 0 }
+	if (group == val) { document.getElementById(("dropdown_merc_"+group)).selectedIndex = 0 }
 	else {
-		for (item in equipment[type]) {
-			if (equipment[type][item].name == val) {
+		for (item in equipment[group]) {
+			if (equipment[group][item].name == val) {
 				// add affixes from base item
-				if (typeof(equipment[type][item]["base"]) != 'undefined') { if (equipment[type][item]["base"] != "") {
-					var base = equipment[type][item].base; base = base.split(' ').join('_'); base = base.split('-').join('_'); base = base.split("'s").join("s");	// spaces, hypens, and apostrophes converted to match named entry in bases{}
+				if (typeof(equipment[group][item]["base"]) != 'undefined') { if (equipment[group][item]["base"] != "") {
+					var base = equipment[group][item].base; base = base.split(' ').join('_'); base = base.split('-').join('_'); base = base.split("'s").join("s");	// spaces, hypens, and apostrophes converted to match named entry in bases{}
 					if (typeof(bases[base]) != 'undefined') { for (affix in bases[base]) { if (affix == "base_damage_min" || affix == "base_damage_max" || affix == "base_defense" || affix == "req_strength" || affix == "req_dexterity") {
 						var multEth = 1;
 						var multED = 1;
 						var multReq = 1;
 						var reqEth = 0;
-						if (typeof(equipment[type][item]["ethereal"]) != 'undefined') { if (equipment[type][item]["ethereal"] == 1) { multEth = 1.5; reqEth = 10; } }
-						if (affix == "base_defense") { if (typeof(equipment[type][item]["e_def"]) != 'undefined') { multED += (equipment[type][item]["e_def"]/100) } }
-						if (affix == "base_damage_min" || affix == "base_damage_max") { if (typeof(equipment[type][item]["e_damage"]) != 'undefined') { multED += (equipment[type][item]["e_damage"]/100) } }
-						if (affix == "req_strength" || affix == "req_dexterity") { if (typeof(equipment[type][item]["req"]) != 'undefined') { multReq += (equipment[type][item]["req"]/100) } }
+						if (typeof(equipment[group][item]["ethereal"]) != 'undefined') { if (equipment[group][item]["ethereal"] == 1) { multEth = 1.5; reqEth = 10; } }
+						if (affix == "base_defense") { if (typeof(equipment[group][item]["e_def"]) != 'undefined') { multED += (equipment[group][item]["e_def"]/100) } }
+						if (affix == "base_damage_min" || affix == "base_damage_max") { if (typeof(equipment[group][item]["e_damage"]) != 'undefined') { multED += (equipment[group][item]["e_damage"]/100) } }
+						if (affix == "req_strength" || affix == "req_dexterity") { if (typeof(equipment[group][item]["req"]) != 'undefined') { multReq += (equipment[group][item]["req"]/100) } }
 						
-						if (typeof(mercEquipped[type][affix]) == 'undefined') { mercEquipped[type][affix] = 0 }	// undefined (new) affixes get initialized to zero
+						if (typeof(mercEquipped[group][affix]) == 'undefined') { mercEquipped[group][affix] = 0 }	// undefined (new) affixes get initialized to zero
 						if (affix == "base_damage_min" || affix == "base_damage_max" || affix == "base_defense") {
-							mercEquipped[type][affix] = Math.ceil(multEth*multED*bases[base][affix])
+							mercEquipped[group][affix] = Math.ceil(multEth*multED*bases[base][affix])
 							mercenary[affix] += Math.ceil(multEth*multED*bases[base][affix])
 						}
 						if (affix == "req_strength" || affix == "req_dexterity") {
-							mercEquipped[type][affix] += Math.ceil(multReq*bases[base][affix] - reqEth)
+							mercEquipped[group][affix] += Math.ceil(multReq*bases[base][affix] - reqEth)
 							mercenary[affix] += Math.ceil(multReq*bases[base][affix] - reqEth)
 						}
 					} } }
 				} }
 				// add regular affixes
-				for (affix in equipment[type][item]) {
+				for (affix in equipment[group][item]) {
 					if (affix == "aura" || affix == "name" || affix == "type" || affix == "base" || affix == "only" || affix == "not" || affix == "rw") {
-						if (affix == "aura" && equipment[type][item][affix] != mercenary.base_aura) {
-							mercEquipped[type][affix] = equipment[type][item][affix]
-							addAura(equipment[type][item][affix], equipment[type][item].aura_lvl, "mercenary")
+						if (affix == "aura" && equipment[group][item][affix] != mercenary.base_aura) {
+							mercEquipped[group][affix] = equipment[group][item][affix]
+							addAura(equipment[group][item][affix], equipment[group][item].aura_lvl, "mercenary")
 						}
 					} else {
-						mercEquipped[type][affix] = equipment[type][item][affix]
-						mercenary[affix] += mercEquipped[type][affix]
+						mercEquipped[group][affix] = equipment[group][item][affix]
+						mercenary[affix] += mercEquipped[group][affix]
 					}
 				}
 			}
@@ -723,7 +657,7 @@ function equip(group, val) {
 		}
 	}
 	// remove incompatible corruptions
-	if (equipped[group].ethereal > 0 || equipped[group].sockets > 0 || equipped[group].rw > 0 || equipped[group].rarity == "common" || (group == "offhand" && (equipped[group].type == "shield" || equipped[group].type == "quiver") && equipped[group].type != corruptsEquipped[group].base)) { corrupt(group, group) }
+	if (equipped[group].ethereal > 0 || equipped[group].sockets > 0 || equipped[group].rarity == "rw" || equipped[group].rarity == "common" || (group == "offhand" && (equipped[group].type == "shield" || equipped[group].type == "quiver") && equipped[group].type != corruptsEquipped[group].base)) { corrupt(group, group) }
 	if (corruptsEquipped[group].name == "+ Sockets") { adjustCorruptionSockets(group) }
 	if (group == "offhand") {
 		// reload corruption options when the selected type changes
@@ -789,6 +723,7 @@ function checkWield(group, hands_used) {
 //	source: item type which the aura is granted by, or other source
 // ---------------------------------
 function addAura(name, lvl, source) {
+	// TODO: Auras need unique IDs so they don't override eachother
 	if (document.getElementById(name) == null && lvl > 0) {
 		var newEffect = document.createElement("img")
 		var effectIcon = "./images/effects/dark/"+name+" dark.png"
@@ -819,6 +754,7 @@ function addAura(name, lvl, source) {
 //	name: aura name
 // ---------------------------------
 function removeAura(name) {
+	// TODO: 'Removing' an aura shouldn't eliminate the 'aura effect' if there's another source for the same aura (i.e. when Last Wish is wielded AND a barbarian mercenary is hired)
 	if (typeof(effects[name]) != 'undefined') {
 		if (document.getElementById(name) != null) {
 //			for (affix in effects[name]) { effects[name][affix] = 0 }
@@ -856,7 +792,7 @@ function toggleAura(name) {
 // ---------------------------------
 function hoverAura(name) {}	// TODO: implement
 
-// auraOut - remove mouseover info
+// auraOut - hide aura mouseover info
 //	name: aura name
 // ---------------------------------
 function auraOut(name) {}	// TODO: implement
@@ -916,21 +852,21 @@ function addCharm(val) {
 	var charmImage = charm_img.prefix+"debug_plus.png";
 	var charmHeight = "";
 	var charmWidth = "29";
-	var type = "";
+	var size = "";
 	var charm_y = 1;
 	var nameVal = val;
 	var charmItem = "";
 	for (item in equipment["charms"]) {
 		if (equipment["charms"][item].name == val) {
 			charmItem = equipment["charms"][item]
-			type = charmItem.type
+			size = charmItem.size
 		}
 	}
 	var autoCast = settings.autocast;
 	var r = Math.floor((Math.random() * 3));
-	if (type == "grand") { charmHeight = "88"; charmImage = charm_img.prefix+charm_img.grand[r]; charm_y = 3; }
-	else if (type == "large") { charmHeight = "59"; charmImage = charm_img.prefix+charm_img.large[r]; charm_y = 2; }
-	else if (type == "small") { charmHeight = "29"; charmImage = charm_img.prefix+charm_img.small[r]; charm_y = 1; }
+	if (size == "grand") { charmHeight = "88"; charmImage = charm_img.prefix+charm_img.grand[r]; charm_y = 3; }
+	else if (size == "large") { charmHeight = "59"; charmImage = charm_img.prefix+charm_img.large[r]; charm_y = 2; }
+	else if (size == "small") { charmHeight = "29"; charmImage = charm_img.prefix+charm_img.small[r]; charm_y = 1; }
 	if (typeof(charmItem.debug) != 'undefined') {
 		if (val == "+20 skills") { charmHeight = "29"; charmImage = charm_img.prefix+"debug_II.png"; charm_y = 1; }
 		else if (val == "+1 skill") { charmHeight = "29"; charmImage = charm_img.prefix+"debug_D.png"; charm_y = 1; }
@@ -1392,9 +1328,9 @@ function updateSecondaryStats() {
 	var movespeed = 9;
 	var movement = (1 + (Math.floor(150*c.frw/(150+c.frw)) + c.frw_skillup + c.velocity)/100);
 	if (c.running > 0) { movespeed = round(9 * movement) } else { movespeed = round(6 * movement) }
-	//document.getElementById("f4").innerHTML = "Movespeed: " + movespeed + " yards/s"
+	document.getElementById("velocity").innerHTML = movespeed + " yds/s"
 	document.getElementById("frw").innerHTML = Math.floor(c.frw + c.frw_skillup)+"%"
-	document.getElementById("velocity").innerHTML = (100 + c.velocity) + "%"
+	//document.getElementById("velocity").innerHTML = (100 + c.velocity) + "%"
 	
 	document.getElementById("life_leech").innerHTML = c.life_leech
 	document.getElementById("mana_leech").innerHTML = c.mana_leech
@@ -2214,7 +2150,7 @@ function itemHover(ev, id) {
 	if (type == "charm") {
 		style = "display: block; color: #634db0;"
 		if (name == "Annihilus" || name == "Hellfire Torch" || name == "Gheed's Fortune" || name == "Horadric Sigil") { style = "display: block; color: #928068;" }
-		if (equipped["charms"][val].type != "small" && equipped["charms"][val].type != "large" && equipped["charms"][val].type != "grand") { style = "display: block; color: #ff8080;" }
+		if (equipped["charms"][val].size != "small" && equipped["charms"][val].size != "large" && equipped["charms"][val].size != "grand") { style = "display: block; color: #ff8080;" }
 		lastCharm = name
 	} else {
 		if (type == "rune") { style = "display: block; color: orange;" }
@@ -2267,13 +2203,9 @@ function allowDrop(ev, cell, y) {
 		if (inv[0].pickup_y > 1 && inv[cell+10].empty == 0 && inv[0].in[cell+10] != inv[0].onpickup) { allow = 0 }
 		if (inv[0].pickup_y > 2 && inv[cell+20].empty == 0 && inv[0].in[cell+20] != inv[0].onpickup) { allow = 0 }
 		if (allow == 1) {
-			if (inv[0].in[cell] == inv[0].onpickup) {
-			//	document.getElementById(inv[cell].id).style = "position: absolute; width: 29px; height: 29px; pointer-events: none;";
-			}
 			var inEquipment = 0;
 			var val = inv[0].onpickup;
 			var groups = ["helm", "armor", "weapon", "offhand"];
-		//	for (let g = 0; g < groups.length; g++) { for (let i = 0; i < socketed[groups[g]].items.length; i++) { if (val == socketed[groups[g]].items[i].id) { inEquipment = 1; } } }
 			for (group in equipped) { if (val == equipped[group].name) { inEquipment = 1 } }
 			if (inEquipment == 0) { ev.preventDefault(); }
 		}
@@ -2289,11 +2221,6 @@ function drag(ev) {
 	if (height > 80) { inv[0].pickup_y = 3 }
 	else if (height > 50) { inv[0].pickup_y = 2 }
 	else { inv[0].pickup_y = 1 }
-	for (s = 1; s < inv[0]["in"].length; s++) {
-		if (inv[0].in[s] == inv[0].onpickup) {
-			document.getElementById(inv[s].id).style = "position: absolute; width: 29px; height: 29px; z-index: 5;";
-		}
-	}
 }
 
 // drop - Handles item dropping for Charm Inventory
@@ -2349,11 +2276,11 @@ function drop(ev,cell) {
 function trash(ev) {
 	var val = ev.target.id;
 	var name = val.split('_')[0];
-	var type = "charms"
+	var group = "charms"
 	if (name == "+1 (each) skill") { for (let i = 0; i < skills.length; i++) { if (skills[i].level == 0 /*&& skills[i].force_levels <= 1*/) { disableEffect(i) } } }
-	for (old_affix in equipped[type][val]) {
-		character[old_affix] -= equipped[type][val][old_affix]
-		equipped[type][val][old_affix] = unequipped[old_affix]
+	for (old_affix in equipped[group][val]) {
+		character[old_affix] -= equipped[group][val][old_affix]
+		equipped[group][val][old_affix] = unequipped[old_affix]
 	}
 	for (let s = 1; s <= inv[0].in.length; s++) {
 		if (inv[0].in[s] == ev.target.id) {
@@ -2371,10 +2298,10 @@ function trash(ev) {
 		for (let d = 0; d < inv[0].in.length; d++) {
 			if (dup > 0 && name == inv[0].in[d].split('_')[0]) {
 				val = inv[0].in[d];
-				var size = equipped[type][val].type
-				for (old_affix in equipped[type][val]) {
-					character[old_affix] -= equipped[type][val][old_affix]
-					equipped[type][val][old_affix] = unequipped[old_affix]
+				var size = equipped[group][val].size
+				for (old_affix in equipped[group][val]) {
+					character[old_affix] -= equipped[group][val][old_affix]
+					equipped[group][val][old_affix] = unequipped[old_affix]
 				}
 				inv[0].in[d] = "";
 				inv[d].empty = 1;
@@ -2491,8 +2418,8 @@ function equipmentHover(event, group) {
 	if (equipped[group].rarity == "set") { textColor = "#00f000" }
 	else if (equipped[group].rarity == "magic") { textColor = "#8080ff" }
 	else if (equipped[group].rarity == "rare") { textColor = "yellow" }
-	else if (equipped[group].rarity == "crafted") { textColor = "orange" }
-	else if (equipped[group].rw == "1") { textColor = "#b2a992" }
+	else if (equipped[group].rarity == "craft") { textColor = "orange" }
+	else if (equipped[group].rarity == "rw") { textColor = "#b2a992" }
 	else if (equipped[group].rarity != "common") { textColor = "#928068" }
 	document.getElementById("item_tooltip").style.color = textColor
 	document.getElementById("item_tooltip").visibility = "visible"
@@ -2606,11 +2533,6 @@ function dragSocketable(ev) {
 	ev.dataTransfer.setData("text", ev.target.id);
 	inv[0].onpickup = ev.target.id
 	inv[0].pickup_y = 1
-//	for (s = 1; s < inv[0]["in"].length; s++) {
-//		if (inv[0].in[s] == inv[0].onpickup) {
-//			document.getElementById(inv[s].id).style = "position: absolute; width: 28px; height: 28px; z-index: 5;";
-//		}
-//	}
 }
 
 // trashSocketable - Handles item removal for socketables (gems, runes, jewels)

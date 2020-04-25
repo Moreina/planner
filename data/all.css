@@ -118,10 +118,6 @@
   -moz-appearance: none;
   appearance: none;
 }
-.dropdown-option {
-  background-color: #222;
-  z-index: 6;
-}
 .dropdown-set {
   background-color: #222;
   color: #00f000;
@@ -142,7 +138,7 @@
   color: yellow;
   z-index: 6;
 }
-.dropdown-crafted {
+.dropdown-craft {
   background-color: #222;
   color: orange;
   z-index: 6;
@@ -152,7 +148,7 @@
   color: white;
   z-index: 6;
 }
-.dropdown-runeword {
+.dropdown-rw {
   background-color: #222;
   color: #b2a992;
   z-index: 6;
@@ -166,27 +162,6 @@
   background-color: #222;
   z-index: 6;
 }
-ul {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-  overflow: hidden;
-  background-color: black;
-}
-li {
-  float: left;
-}
-li a {
-  display: inline-block;
-  color: white;
-  text-align: center;
-  padding: 14px 16px;
-  text-decoration: none;
-}
-li a:hover {
-  background-color: #222;
-}
-.show {display: block;}
 
 .P {  position: absolute;
   text-align: center;
@@ -274,5 +249,4 @@ position:absolute;
   
   justify-content: center;
   align-items: center;
-  
 }

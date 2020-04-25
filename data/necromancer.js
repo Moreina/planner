@@ -68,12 +68,9 @@ var character_necromancer = {class_name:"Necromancer", strength:15, dexterity:25
 		
 		if (skill.name == "Bone Offering") { result.defense_bonus = skill.data.values[2][lvl]; result.skeleton_bonus = skill.data.values[3][lvl]; result.curse_length_reduced = skill.data.values[4][lvl]; result.duration = skill.data.values[0][lvl]; }
 		if (skill.name == "Flesh Offering") { result.fcr = skill.data.values[2][lvl]; result.ias_skill = skill.data.values[3][lvl]; result.velocity = skill.data.values[4][lvl]; result.duration = skill.data.values[0][lvl]; }
-		if (skill.name == "Blood Golem") {
-			disableGolems(skill)
-			result.life_per_ranged_hit = skill.data.values[3][lvl]; result.life_per_hit = skill.data.values[4][lvl];
-		}
+		if (skill.name == "Blood Golem") { disableGolems(skill); result.life_per_ranged_hit = skill.data.values[3][lvl]; result.life_per_hit = skill.data.values[4][lvl]; }
 		if (skill.name == "Iron Golem") {	// TODO: Add Iron Golem equipment selection	...dropdown appears when Iron Golem effect is available?
-			disableGolems(skill)
+			disableGolems(skill);
 			var aura = "Meditation"; var aura_lvl = 17;	// temporary - golem is made from Insight
 			var auraInfo = getAuraData(aura, aura_lvl, "mercenary");
 			for (affix in auraInfo) { result[affix] = auraInfo[affix] }
@@ -84,8 +81,23 @@ var character_necromancer = {class_name:"Necromancer", strength:15, dexterity:25
 			result.pDamage_duration = 2; result.pDamage_duration_override = 2; result.enemy_pRes = skill.data.values[3][lvl]; result.duration = skill.data.values[0][lvl];
 		}
 		if (skill.name == "Bone Armor") { result.absorb_melee = skill.data.values[0][lvl]; }
-		// minions - DPS (Clay/Blood/Iron/Fire Golem, Skeleton Warriors, Skeletal Mages, Revived minions)
-		// debuffs: all curses, Clay Golem?
+		// No stat buffs:
+		if (skill.name == "Clay Golem") { disableGolems(skill); result.slow_target = skill.data.values[3][lvl]; }
+		if (skill.name == "Fire Golem") { disableGolems(skill); result.amountSummoned = 1; }
+		if (skill.name == "Raise Skeleton Warrior") { result.amountSummoned = skill.data.values[3][lvl]; }
+		if (skill.name == "Raise Skeletal Mage") { result.amountSummoned = skill.data.values[8][lvl]; }
+		if (skill.name == "Revive") { result.amountSummoned = skill.data.values[2][lvl]; result.duration = 600; }
+		// Debuffs:
+		if (skill.name == "Amplify Damage") { enemy_physRes = -100; result.radius = skill.data.values[0][lvl]; result.duration = skill.data.values[1][lvl]; }
+		if (skill.name == "Dim Vision") { result.dimmedVision = 1; result.radius = skill.data.values[0][lvl]; result.duration = skill.data.values[1][lvl]; }
+		if (skill.name == "Weaken") { result.enemy_damage = -33; result.radius = skill.data.values[0][lvl]; result.duration = skill.data.values[1][lvl]; }
+		if (skill.name == "Iron Maiden") { result.thorns_reflect = skill.data.values[0][lvl]; result.radius = skill.data.values[2][lvl]; result.duration = skill.data.values[1][lvl]; }
+		if (skill.name == "Terror") { result.fleeing = 1; result.radius = skill.data.values[0][lvl]; result.duration = skill.data.values[1][lvl]; }
+		if (skill.name == "Confuse") { result.confused = 1; result.radius = skill.data.values[0][lvl]; result.duration = skill.data.values[1][lvl]; }
+		if (skill.name == "Life Tap") { result.life_leech = skill.data.values[0][lvl]; result.radius = skill.data.values[1][lvl]; result.duration = skill.data.values[2][lvl]; }
+		if (skill.name == "Attract") { result.attraction = 1; result.radius = 5.3; result.duration = skill.data.values[0][lvl]; }
+		if (skill.name == "Decrepify") { enemy_physRes = -50; enemy_damage = -50; enemy_ias = -50; enemy_frw = -50; result.radius = skill.data.values[0][lvl]; result.duration = 10; }
+		if (skill.name == "Lower Resist") { result.enemy_allRes = skill.data.values[2][lvl]; result.radius = skill.data.values[0][lvl]; result.duration = skill.data.values[1][lvl]; }
 		
 	return result
 	},

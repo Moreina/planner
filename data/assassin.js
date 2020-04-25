@@ -78,10 +78,11 @@ var character_assassin = {class_name:"Assassin", strength:20, dexterity:20, vita
 			result.curse_reduction = skill.data.values[0][lvl]; result.all_res = skill.data.values[1][lvl]; result.pdr = skill.data.values[2][lvl]; result.duration = skill.data.values[3][lvl];
 		}
 		if (skill.name == "Venom") { result.pDamage_min = skill.data.values[1][lvl]; result.pDamage_max = skill.data.values[2][lvl]; result.pDamage_duration = 0.4; result.pDamage_duration_override = 0.4; result.duration = skill.data.values[0][lvl]; }
-		if (skill.name == "Cloak of Shadows") { result.defense_bonus = skill.data.values[0][lvl]; result.enemy_defense = skill.data.values[1][lvl]; result.duration = 8; }
-		// Blade Shield - DPS		if (skill.name == "Blade Shield") { result.duration = skill.data.values[1][lvl]; }
-		// minions - DPS (Shadow Warrior or Shadow Master)
-		// debuffs: Cloak of Shadows?
+		if (skill.name == "Cloak of Shadows") { result.defense_bonus = skill.data.values[0][lvl]; result.enemy_defense = skill.data.values[1][lvl]; result.duration = 8; }	// debuffs: Cloak of Shadows?
+		// No stat buffs:
+		if (skill.name == "Shadow Warrior") { if (document.getElementById("e"+skills[19].key) != null) { if (effects["e"+skills[19].key].enabled == 1) { disableEffect(19) } } }
+		if (skill.name == "Shadow Master") { if (document.getElementById("e"+skills[16].key) != null) { if (effects["e"+skills[16].key].enabled == 1) { disableEffect(16) } } }
+		if (skill.name == "Blade Shield") { result.duration = skill.data.values[1][lvl]; }
 		
 	return result	
 	},

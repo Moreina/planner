@@ -94,7 +94,8 @@ var character_sorceress = {class_name:"Sorceress", strength:10, dexterity:25, vi
 			result.absorb_es_deplete = 100*(100 / (skill.data.values[0][lvl] + (0.04*skills[13].level)));
 			result.absorb_es_redirect = skill.data.values[2][lvl]; result.duration = skill.data.values[1][lvl];
 		}
-		// Thunder Storm - DPS
+		// No stat buffs:
+		if (skill.name == "Thunder Storm") { result.duration = skill.data.values[1][lvl]; }
 		
 	return result
 	},

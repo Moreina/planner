@@ -109,9 +109,14 @@ var character_druid = {class_name:"Druid", strength:15, dexterity:20, vitality:2
 		if (skill.name == "Carrion Vine") { result.life_regen = skill.data.values[1][lvl]; }	// Check if "Heals: X percent" is equivalent to life_regen
 		if (skill.name == "Solar Creeper") { result.mana_regen = skill.data.values[1][lvl]; }	// Check if "Mana Recovery Rate: X" is equivalent to mana_regen
 		if (skill.name == "Cyclone Armor") { result.absorb_elemental = skill.data.values[0][lvl]; }
-		// Armageddon - DPS
-		// Hurricane - DPS
-		// minions - DPS (see above, Spirit Wolf, Dire Wolf, Grizzly, Raven)
+		// No stat buffs:
+		if (skill.name == "Armageddon") { result.duration = skill.data.values[0][lvl]; }
+		if (skill.name == "Hurricane") { result.duration = skill.data.values[0][lvl]; }
+		if (skill.name == "Poison Creeper") {  }
+		if (skill.name == "Raven") { result.amountSummoned = skill.data.values[0][lvl]; }
+		if (skill.name == "Summon Spirit Wolf") { result.amountSummoned = skill.data.values[0][lvl]; }
+		if (skill.name == "Summon Dire Wolf") { result.amountSummoned = skill.data.values[0][lvl]; }
+		if (skill.name == "Summon Grizzly") { result.amountSummoned = 1; }
 		
 	return result
 	},

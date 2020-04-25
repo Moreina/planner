@@ -134,7 +134,8 @@ var character_paladin = {class_name:"Paladin", strength:25, dexterity:20, vitali
 			result.defense_bonus = skill.data.values[3][lvl] * (1 + 0.15*skills[2].level);
 			result.smite_min = skill.data.values[0][lvl]; result.smite_max = skill.data.values[1][lvl]; result.block = skill.data.values[4][lvl]; result.duration = skill.data.values[2][lvl];
 		}
-		// minions - DPS (converted minions)
+		// No stat buffs:
+		if (skill.name == "Conversion") { result.duration = skill.data.values[1][lvl]; }
 		
 	return result
 	},

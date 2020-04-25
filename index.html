@@ -34,10 +34,10 @@
 <div id="gui_stats" style="position: relative; width: 175px; height: 434px; float: left;">
 <img usemap="#statmap" src="./images/statbar.png">
 <map id="statmap" name="statmap">
-<area coords="127,107,163,143" id="btn_strength">
-<area coords="127,169,163,203" id="btn_dexterity">
-<area coords="127,231,163,267" id="btn_vitality">
-<area coords="127,293,163,329" id="btn_energy">
+<area coords="127,107,163,143" id="btn_strength" onclick="addStat(event,this.id)" oncontextmenu="removeStat(event,this.id)">
+<area coords="127,169,163,203" id="btn_dexterity" onclick="addStat(event,this.id)" oncontextmenu="removeStat(event,this.id)">
+<area coords="127,231,163,267" id="btn_vitality" onclick="addStat(event,this.id)" oncontextmenu="removeStat(event,this.id)">
+<area coords="127,293,163,329" id="btn_energy" onclick="addStat(event,this.id)" oncontextmenu="removeStat(event,this.id)">
 <area coords="14,15,61,52" id="btn_level" onclick="changeLevel(1)" oncontextmenu="changeLevel(-1)">
 </map>
 <p class="point" style="left: 23px; top: 12px;" id="level" onclick="changeLevel(1)" oncontextmenu="changeLevel(-1)"></p>
@@ -392,7 +392,7 @@
 	<a id="block_label" style="visibility:hidden;">Block Chance: </a><a id="block"></a><br><br>
 	
 	<font size="2">Faster Run/Walk: </font><font size="2" id="frw"></font><br>
-	<font size="2">Velocity: </font><font size="2" id="velocity"></font><br><br>
+	<font size="2">Speed: </font><font size="2" id="velocity"></font><br><br>
 	
 	<font size="2">Poison Length: </font><font size="2" id="poison_reduction"></font><br>
 	<font size="2">Curse Length: </font><font size="2" id="curse_reduction"></font><br>
@@ -487,7 +487,7 @@ function initial_load() {
 	var classes = ["amazon","assassin","barbarian","druid","necromancer","paladin","sorceress"]
 	var initial_class = classes[random];
 	skills = skills_all[initial_class]
-	
+	equipment.ring2 = equipment.ring1
 	startup(initial_class)
 }
 

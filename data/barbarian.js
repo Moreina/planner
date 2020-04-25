@@ -54,7 +54,11 @@ var character_barbarian = {class_name:"Barbarian", strength:30, dexterity:20, vi
 		if (skill.name == "Shout") { result.defense_bonus = skill.data.values[0][lvl]; result.duration = skill.data.values[1][lvl]; }
 		if (skill.name == "Battle Orders") { result.max_stamina = skill.data.values[1][lvl]; result.max_life = skill.data.values[2][lvl]; result.max_mana = skill.data.values[3][lvl]; result.duration = skill.data.values[0][lvl]; }
 		if (skill.name == "Frenzy") { if (offhandType == "weapon") { result.ias_skill = skill.data.values[4][lvl]; result.frw = skill.data.values[6][lvl]; result.duration = 7.5; } }	// consider auto-disabling
-		// debuffs: Grim Ward, Howl, Taunt, Battle Cry
+		// Debuffs:
+		if (skill.name == "Howl") { result.flee_distance = skill.data.values[0][lvl]; result.duration = skill.data.values[1][lvl]; }
+		if (skill.name == "Taunt") { result.enemy_damage = skill.data.values[0][lvl]; result.enemy_attack = skill.data.values[1][lvl]; }	// duration unlisted
+		if (skill.name == "Battle Cry") { result.duration = skill.data.values[0][lvl]; result.enemy_defense = skill.data.values[1][lvl]; result.enemy_damage = skill.data.values[2][lvl]; }
+		if (skill.name == "Grim Ward") { result.duration = skill.data.values[0][lvl]; result.radius = skill.data.values[1][lvl]; result.enemy_physRes = skill.data.values[2][lvl]; }
 		
 	return result
 	},
@@ -152,7 +156,7 @@ var character_barbarian = {class_name:"Barbarian", strength:30, dexterity:20, vi
 /*[27] Whirlwind	*/ var d362 = {index:[0,""], values:[["damage",-75,-69,-63,-57,-51,-45,-39,-33,-27,-21,-15,-9,-3,3,9,15,21,27,33,39,45,51,57,63,69,75,81,87,93,99,105,111,117,123,129,135,141,147,153,159,165,171,177,183,189,195,201,207,213,219,225,231,237,243,249,255,261,267,273,279], ["attack rating",10,15,20,25,30,35,40,45,50,55,60,65,70,75,80,85,90,95,100,105,110,115,120,125,130,135,140,145,150,155,160,165,170,175,180,185,190,195,200,205,210,215,220,225,230,235,240,245,250,255,260,265,270,275,280,285,290,295,300,305], ["mana cost",5,5.5,6,6.5,7,7.5,8,8.5,9,9.5,10,10.5,11,11.5,12,12.5,13,13.5,14,14.5,15,15.5,16,16.5,17,17.5,18,18.5,19,19.5,20,20.5,21,21.5,22,22.5,23,23.5,24,24.5,25,25.5,26,26.5,27,27.5,28,28.5,29,29.5,30,30.5,31,31.5,32,32.5,33,33.5,34,34.5]]};
 
 var skills_barbarian = [
-{data:d111, key:"111", code:128, name:"Howl", i:0, req:[], reqlvl:1, level:0, extra_levels:0, force_levels:0, bindable:1, style:"display: block; top: 82px; left: 2px;", description:"Sends nearby monsters<br>scrambling away in fear", syn_title:"", syn_text:"", graytext:"", text:["Enemy run up to "," yards<br>Enemy runs for "," seconds<br>Mana Cost: 4",""]},
+{data:d111, key:"111", code:128, name:"Howl", i:0, req:[], reqlvl:1, level:0, extra_levels:0, force_levels:0, bindable:1, style:"display: block; top: 82px; left: 2px;", description:"Sends nearby monsters<br>scrambling away in fear", syn_title:"", syn_text:"", graytext:"", text:["Enemy runs up to "," yards<br>Enemy runs for "," seconds<br>Mana Cost: 4",""]},
 {data:d113, key:"113", code:129, name:"Find Potion", i:1, req:[], reqlvl:1, level:0, extra_levels:0, force_levels:0, bindable:1, style:"display: block; top: 82px; left: 142px;", description:"Use on the corpse of a slain monster<br>for a chance to find a potion", syn_title:"", syn_text:"", graytext:"", text:[""," percent chance<br>Mana Cost: 1",""]},
 {data:d121, key:"121", code:130, name:"Taunt", i:2, req:[0], reqlvl:6, level:0, extra_levels:0, force_levels:0, bindable:1, style:"display: block; top: 150px; left: 2px;", description:"Enrages a monster into relentlessly attacking", syn_title:"", syn_text:"", graytext:"", text:["Target's Damage: "," percent<br>Target's Attack: "," percent<br>Mana Cost: 4",""]},
 {data:d122, key:"122", code:131, name:"Shout", i:3, req:[0], reqlvl:6, level:0, extra_levels:0, force_levels:0, effect:5, bindable:1, style:"display: block; top: 150px; left: 72px;", description:"Warns of impending danger and improves the defense<br>rating of you and your party", syn_title:"", syn_text:"", graytext:"", text:["Defense: +"," percent<br>Duration: "," seconds<br>Mana Cost: 4",""]},
