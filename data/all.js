@@ -560,13 +560,16 @@ function equip(group, val) {
 			// add regular affixes
 			for (affix in equipment[src_group][item]) {
 				equipped[group][affix] = equipment[src_group][item][affix]
-				if (affix == "aura" || affix == "name" || affix == "type" || affix == "base" || affix == "only" || affix == "not" || affix == "rw") {
+				if (affix == "aura" || affix == "name" || affix == "type" || affix == "base" || affix == "only" || affix == "not" || affix == "rw" || affix == "img") {
 					if (affix == "aura") {
 			//			equipped[group].aura_lvl = equipment[src_group][item].aura_lvl	// redundant?
 						auraName = equipment[src_group][item][affix]
 						auraLevel = equipment[src_group][item].aura_lvl
 						//addAura(equipment[src_group][item][affix], equipment[src_group][item].aura_lvl, group)	// moved to end of function
 					}
+				} else if (affix == "sup") {
+						equipped[group]["e_damage"] += equipment[src_group][item][affix]
+						character["e_damage"] += equipment[src_group][item][affix]
 				} else {
 					var oskill_info = "";
 					for (let o = 0; o < oskills.length; o++) {
@@ -586,7 +589,7 @@ function equip(group, val) {
 							} }
 						} }
 					}
-					character[affix] += equipped[group][affix]
+					character[affix] += equipment[src_group][item][affix]
 				}
 			}
 		}
@@ -824,6 +827,7 @@ function resetEquipment() {
 		document.getElementById(equipmentDropdowns[e]).selectedIndex = 0
 	}
 	resetCharms()
+	resetCorruptions()
 }
 
 // resetCharms - Resets all charms
@@ -842,6 +846,12 @@ function resetCharms() {
 		inv[t].id
 		document.getElementById(inv[t].id).innerHTML = ""
 	}
+}
+
+// resetCorruptions - Resets all corruptions
+// ---------------------------------
+function resetCorruptions() {
+	for (group in corruptsEquipped) { corrupt(group, "none") }
 }
 
 // addCharm - Adds a charm to the inventory
