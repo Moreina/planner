@@ -530,7 +530,7 @@ function equip(group, val) {
 			// add affixes from base item
 			if (typeof(equipment[src_group][item]["base"]) != 'undefined') { if (equipment[src_group][item]["base"] != "") {
 				var base = equipment[src_group][item].base; base = base.split(' ').join('_'); base = base.split('-').join('_'); base = base.split("'s").join("s");	// spaces, hyphens, and apostrophes converted to match named entry in bases{}
-				if (typeof(bases[base]) != 'undefined') { for (affix in bases[base]) { if (affix != "group" || affix != "type" || affix != "upgrade" || affix != "downgrade" || affix != "subtype" || affix != "only") {
+				if (typeof(bases[base]) != 'undefined') { for (affix in bases[base]) { if (affix != "group" && affix != "type" && affix != "upgrade" && affix != "downgrade" && affix != "subtype" && affix != "only") {
 					var multEth = 1;
 					var multED = 1;
 					var multReq = 1;
@@ -545,14 +545,13 @@ function equip(group, val) {
 					if (affix == "base_damage_min" || affix == "base_damage_max" || affix == "throw_min" || affix == "throw_max" || affix == "base_min_alternate" || affix == "base_max_alternate" || affix == "base_defense") {
 						equipped[group][affix] = Math.ceil(multEth*multED*bases[base][affix])
 						character[affix] += Math.ceil(multEth*multED*bases[base][affix])
-						// TODO: Implement superior ED
 					}
 					else if (affix == "req_strength" || affix == "req_dexterity") {
 						equipped[group][affix] += Math.ceil(multReq*bases[base][affix] - reqEth)
-						character[affix] += Math.ceil(multReq*bases[base][affix] - reqEth)
+						//character[affix] += Math.ceil(multReq*bases[base][affix] - reqEth)
 					}
 					else {
-						equipped[group][affix] += bases[base][affix]
+						equipped[group][affix] = bases[base][affix]
 						character[affix] += bases[base][affix]
 					}
 				} } }
@@ -820,12 +819,7 @@ function resetSkills() {
 // resetEquipment - Resets all items
 // ---------------------------------
 function resetEquipment() {
-	var equipmentTypes = ["helm", "armor", "gloves", "boots", "belt", "amulet", "ring1", "ring2", "weapon", "offhand"];
-	var equipmentDropdowns = ["dropdown_helm", "dropdown_armor", "dropdown_gloves", "dropdown_boots", "dropdown_belt", "dropdown_amulet", "dropdown_ring1", "dropdown_ring2", "dropdown_weapon", "dropdown_offhand"]
-	for (let e = 0; e < equipmentTypes.length; e++) {
-		equip(equipmentTypes[e], "none")
-		document.getElementById(equipmentDropdowns[e]).selectedIndex = 0
-	}
+	for (group in corruptsEquipped) { equip(group, "none") }
 	resetCharms()
 	resetCorruptions()
 }
@@ -1340,7 +1334,6 @@ function updateSecondaryStats() {
 	if (c.running > 0) { movespeed = round(9 * movement) } else { movespeed = round(6 * movement) }
 	document.getElementById("velocity").innerHTML = movespeed + " yds/s"
 	document.getElementById("frw").innerHTML = Math.floor(c.frw + c.frw_skillup)+"%"
-	//document.getElementById("velocity").innerHTML = (100 + c.velocity) + "%"
 	
 	document.getElementById("life_leech").innerHTML = c.life_leech
 	document.getElementById("mana_leech").innerHTML = c.mana_leech
@@ -1410,7 +1403,6 @@ function updateTertiaryStats() {
 	if (c.monster_defense_per_hit != 0) { enemyDef += (c.monster_defense_per_hit+" per hit") }
 	if (enemyDef == "") { enemyDef = "0"}
 	document.getElementById("enemy_defense").innerHTML = enemyDef
-//	if (c.monster_defense_per_hit != 0) { document.getElementById("enemy_defense_per_hit").innerHTML = ("Enemy Def: "+c.monster_defense_per_hit+" (per hit)") } else { document.getElementById("enemy_defense_per_hit").innerHTML = "" }	// temporary second line for enemy defense stats (to fit allocated area)
 	var enemyBlind = "";
 	if (c.blind_on_hit > 0) { enemyBlind = "Hit Blinds Target"; if (c.blind_on_hit > 1) { enemyBlind += (" +"+c.blind_on_hit+"<br>"); } else { enemyBlind += "<br>" } }
 	document.getElementById("blind_on_hit").innerHTML = enemyBlind
@@ -1431,12 +1423,12 @@ function updateTertiaryStats() {
 	if (c.peace > 0) { document.getElementById("peace").innerHTML = "Slain Monsters Rest in Peace<br>" } else { document.getElementById("peace").innerHTML = "" }
 	if (c.glow > 0) { document.getElementById("glow").innerHTML = "Character is Glowing<br>" } else { document.getElementById("glow").innerHTML = "" }
 	updateCTC()
+	updateChargeSkills()
 }
 
 // updateCTC - 
 // ---------------------------------
 function updateCTC() {
-	// TODO: Add other miscellaneous skill/item stats here?
 	var stats = "";
 	for (group in equipped) {
 		if (typeof(equipped[group].ctc) != 'undefined') {
@@ -1449,6 +1441,23 @@ function updateCTC() {
 		}
 	}
 	document.getElementById("ctc").innerHTML = stats
+}
+
+// updateChargeSkills - 
+// ---------------------------------
+function updateChargeSkills() {
+	var stats = "";
+	for (group in equipped) {
+		if (typeof(equipped[group].cskill) != 'undefined') {
+			if (equipped[group].cskill != "") {
+				for (let i = 0; i < equipped[group].cskill.length; i++) {
+					var stat = "Level "+equipped[group].cskill[i][0]+" "+equipped[group].cskill[i][1]+" ("+equipped[group].cskill[i][2]+" charges)";
+					stats += (stat + "<br>")
+				}
+			}
+		}
+	}
+	document.getElementById("cskill").innerHTML = stats
 }
 
 // updateMisc - Updates other interface elements
@@ -1764,15 +1773,15 @@ function modifyEffect(skill) {
 // ---------------------------------
 function checkRequirements() {
 	var highest_level = 1; var highest_str = 1; var highest_dex = 1;
-	for (type in equipped) {
-		if (type == "charms") { for (item in equipped[type]) {
-			if (equipped[type][item].req_level > highest_level) { highest_level = equipped[type][item].req_level }
-			if (equipped[type][item].req_strength > highest_str) { highest_str = equipped[type][item].req_strength }
-			if (equipped[type][item].req_dexterity > highest_dex) { highest_dex = equipped[type][item].req_dexterity }
+	for (group in equipped) {
+		if (group == "charms") { for (item in equipped[group]) {
+			if (equipped[group][item].req_level > highest_level) { highest_level = equipped[group][item].req_level }
+			if (equipped[group][item].req_strength > highest_str) { highest_str = equipped[group][item].req_strength }
+			if (equipped[group][item].req_dexterity > highest_dex) { highest_dex = equipped[group][item].req_dexterity }
 		} }
-		if (equipped[type].req_level > highest_level) { highest_level = equipped[type].req_level }
-		if (equipped[type].req_strength > highest_str) { highest_str = equipped[type].req_strength }
-		if (equipped[type].req_dexterity > highest_dex) { highest_dex = equipped[type].req_dexterity }
+		if (equipped[group].req_level > highest_level) { highest_level = equipped[group].req_level }
+		if (equipped[group].req_strength > highest_str) { highest_str = equipped[group].req_strength }
+		if (equipped[group].req_dexterity > highest_dex) { highest_dex = equipped[group].req_dexterity }
 	}
 	character.req_level = highest_level
 	character.req_strength = highest_str
@@ -2423,8 +2432,11 @@ function socketableSelect(ev) {
 // equipmentHover - shows equipment info on mouse-over
 //	group: equipment group name
 // ---------------------------------
-function equipmentHover(event, group) {
+function equipmentHover(group) {
 	var selected = equipped[group].name;
+	if (selected != "none" && equipped[group].rarity == "rw") {
+		selected = selected.split(" ­ ­ - ­ ­ ")[0]+ " ­ ­ - ­ ­ " + equipped[group].base
+	}
 	if (selected != "none" && (group == "helm" || group == "armor" || group == "weapon" || (group == "offhand" && equipped[group].type != "quiver"))) {
 		var sockets = ~~corruptsEquipped[group].sockets + ~~equipped[group].sockets;
 		var base = "";
@@ -2461,7 +2473,7 @@ function equipmentOut() {
 }
 
 // socket - Adds a socketable item (jewel, rune, gem) to equipment
-//	group: item group
+//	group: equipment group name
 // ---------------------------------
 function socket(event, group) {
 	event.preventDefault();
@@ -2533,7 +2545,7 @@ function socket(event, group) {
 }
 
 // allowSocket - Checks on mouse-over whether a socketable item may be added
-//	group: item group
+//	group: equipment group being mouse-over'd
 // ---------------------------------
 function allowSocket(event, group) {
 	socketed[group].sockets = ~~equipped[group].sockets + ~~corruptsEquipped[group].sockets
@@ -2556,9 +2568,10 @@ function allowSocket(event, group) {
 // dragSocketable - Handles item dragging for socketables (gems, runes, jewels)
 // ---------------------------------
 function dragSocketable(ev) {
-	ev.dataTransfer.setData("text", ev.target.id);
-	inv[0].onpickup = ev.target.id
-	inv[0].pickup_y = 1
+//	ev.dataTransfer.setData("text", ev.target.id);
+//	inv[0].onpickup = ev.target.id
+//	inv[0].pickup_y = 1
+	drag(ev)
 }
 
 // trashSocketable - Handles item removal for socketables (gems, runes, jewels)
@@ -2636,6 +2649,82 @@ function removeInvalidSockets(group) {
 			}
 		}
 //	}
+}
+
+// inventoryLeftClick - 
+//	group: equipment group name
+// ---------------------------------
+function inventoryLeftClick(event, group) {
+	var mod = 0;
+	if (event.shiftKey) { mod = 1 }
+	if (event.ctrlKey) { mod = 2 }
+	if (mod > 0) {
+		// TODO: Limit to unique/rare/craft/rw (i.e. not sets)
+		if (typeof(equipped[group].base) != 'undefined') { changeBase(group, "upgrade") }
+	}
+}
+
+// inventoryRightClick - 
+//	group: equipment group name
+// ---------------------------------
+function inventoryRightClick(event, group) {
+	var mod = 0;
+	if (event.shiftKey) { mod = 1 }
+	if (event.ctrlKey) { mod = 2 }
+	if (mod > 0) {
+		// TODO: Limit to unique/rare/craft/rw (i.e. not sets)
+		if (typeof(equipped[group].base) != 'undefined') { changeBase(group, "downgrade") }
+	} else {
+		equip(group, group)	// right click = unequip
+	}
+}
+
+// changeBase - Modifies the base for an equipped item (upgrading)
+//	group: equipment group to modify
+//	change: what kind of change to make ("upgrade" or "downgrade")
+// ---------------------------------
+function changeBase(group, change) {
+	var base_name = equipped[group].base;
+	var base = base_name.split(' ').join('_'); base = base.split('-').join('_'); base = base.split("s'").join("s"); base = base.split("'s").join("s");
+	if (typeof(bases[base][change]) != 'undefined') {
+		base = bases[base][change];
+		equipped[group].base = base;
+		base = base.split(' ').join('_'); base = base.split('-').join('_'); base = base.split("s'").join("s"); base = base.split("'s").join("s");
+		// TODO: Reduce duplicated code - very similar to equip()
+		for (affix in bases[base]) { if (affix != "group" && affix != "type" && affix != "upgrade" && affix != "downgrade" && affix != "subtype" && affix != "only") {
+			var multEth = 1;
+			var multED = 1;
+			var multReq = 1;
+			var reqEth = 0;
+			if (typeof(equipped[group]["ethereal"]) != 'undefined') { if (equipped[group]["ethereal"] == 1) { multEth = 1.5; reqEth = 10; } }
+			if (affix == "base_defense") { if (typeof(equipped[group]["e_def"]) != 'undefined') { multED += (equipped[group]["e_def"]/100) } }
+			else if (affix == "req_strength" || affix == "req_dexterity") { if (typeof(equipped[group]["req"]) != 'undefined') { multReq += (equipped[group]["req"]/100) } }
+
+			if (affix == "base_damage_min" || affix == "base_damage_max" || affix == "throw_min" || affix == "throw_max" || affix == "base_min_alternate" || affix == "base_max_alternate" || affix == "base_defense") {
+				character[affix] -= equipped[group][affix]
+				equipped[group][affix] = Math.ceil(multEth*multED*bases[base][affix])
+				character[affix] += equipped[group][affix]
+			}
+			else if (affix == "req_strength" || affix == "req_dexterity") {
+				equipped[group][affix] = Math.ceil(multReq*bases[base][affix] - reqEth)
+			}
+			else {
+				character[affix] -= equipped[group][affix]
+				equipped[group][affix] = bases[base][affix]
+				character[affix] += bases[base][affix]
+			}
+		} }
+	}
+	adjustCorruptionSockets(group)
+	equipmentOut()
+	equipmentHover(group)
+	// update
+	updateEffectList()
+	calculateSkillAmounts()
+	updateStats()
+	updateSkills()
+	if (selectedSkill[0] != " ­ ­ ­ ­ Skill 1") { checkSkill(selectedSkill[0], 1) }
+	if (selectedSkill[1] != " ­ ­ ­ ­ Skill 2") { checkSkill(selectedSkill[1], 2) }
 }
 
 // hoverFCR - 
