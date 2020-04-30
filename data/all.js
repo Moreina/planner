@@ -2685,6 +2685,10 @@ function inventoryRightClick(event, group) {
 //	change: what kind of change to make ("upgrade" or "downgrade")
 // ---------------------------------
 function changeBase(group, change) {
+	// TODO: Upgraded items get +5 to req_level
+	// TODO: required level depends on affixes, not just base level
+	// TODO: Prevent items from being downgraded below their baseline
+	// TODO: Add special cases for quest items?
 	var base_name = equipped[group].base;
 	var base = base_name.split(' ').join('_'); base = base.split('-').join('_'); base = base.split("s'").join("s"); base = base.split("'s").join("s");
 	if (typeof(bases[base][change]) != 'undefined') {
