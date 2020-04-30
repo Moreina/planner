@@ -107,104 +107,45 @@ var auras = [
 /*23*/	{name:"Lifted Spirit", values:[["damage multiplier",10]]},
 ];
 
-// getAuraData - gets a list of stats corresponding to the aura
+// getAuraData - gets a list of stats corresponding to the aura (excludes synergy bonuses)
 //	aura: name of the aura
-//	lvl: level of the aura
+//	lvl: level of the aura (1+)
 //	source: "mercenary" or the item type which is granting the aura
 // result: indexed array of stats granted and their values
 // ---------------------------------
 function getAuraData(aura, lvl, source) {
-	if (lvl < 1) { lvl = 1 }	// may not be necessary
 	var result = {};
 	var a = -1;
 	for (let u = 0; u < auras.length; u++) {
 		if (auras[u].name == aura) { a = u }
 	}
-	
-    // Defensive Auras
-	if (aura == "Prayer") {
-		result.life_regen = 1;
-		result.life_replenish = auras[a].values[0][lvl]; }
-	else if (aura == "Resist Fire") {
-		result.fRes = auras[a].values[1][lvl];
-		result.fRes_max = auras[a].values[2][lvl]; }
-	else if (aura == "Defiance") {
-		result.defense_bonus = auras[a].values[0][lvl]; }
-	else if (aura == "Resist Cold") {
-		result.cRes = auras[a].values[1][lvl];
-		result.cRes_max = auras[a].values[2][lvl]; }
-	else if (aura == "Cleansing") {
-	//	result.life_replenish = ~~auras[0].data.values[0][auras[0].level];	// check: is 'life replenish' the same as 'life regenerated per 2 seconds'?
-		result.poison_length_reduced = auras[a].values[2][lvl];
-		result.curse_length_reduced = auras[a].values[2][lvl]; }
-	else if (aura == "Resist Lightning") {
-		result.lRes = auras[a].values[1][lvl];
-		result.lRes_max = auras[a].values[2][lvl]; }
-	else if (aura == "Vigor") {
-		result.velocity = auras[a].values[0][lvl];
-		result.max_stamina = auras[a].values[1][lvl];
-		result.heal_stam = auras[a].values[2][lvl]; }
-	else if (aura == "Meditation") {
-	//	result.life_replenish = ~~auras[0].data.values[0][auras[0].level];	// check: is 'life replenish' the same as 'life regenerated per 2 seconds'?
-		result.mana_regen = auras[a].values[1][lvl]; }
-	else if (aura == "Redemption") {
-		//result. = auras[a].values[0][lvl];		// redeem soul
-		//result. = auras[a].values[1][lvl];		// life & mana recovered
-		result.recovery_per_corpse = auras[a].values[0][lvl]/100 * auras[a].values[1][lvl];
-	}
-	else if (aura == "Salvation") {
-		result.fDamage = auras[a].values[0][lvl];
-		result.cDamage = auras[a].values[0][lvl];
-		result.lDamage = auras[a].values[0][lvl];
-		result.all_res = auras[a].values[1][lvl]; }
-    // Offensive Auras
-	else if (aura == "Might") {
-		result.damage_bonus = auras[a].values[0][lvl]; }
-	else if (aura == "Holy Fire") {
-		result.fDamage_min = auras[a].values[0][lvl];
-		result.fDamage_max = auras[a].values[1][lvl]; }
-	else if (aura == "Precision") {
-		if (source == "mercenary") { result.pierce = auras[a].values[1][lvl]; }
-		else { result.pierce = auras[a].values[0][lvl]; }
-		result.cstrike = auras[a].values[2][lvl];
-		result.ar_bonus = auras[a].values[3][lvl]; }
-	else if (aura == "Blessed Aim") {
-		result.ar_bonus = auras[a].values[2][lvl];
-		result.hammer_on_hit = auras[a].values[1][lvl]; }
-	else if (aura == "Concentration") {
-		result.ar_bonus = auras[a].values[0][lvl];
-		result.damage_bonus = auras[a].values[1][lvl];
-		result.hammer_bonus = auras[a].values[2][lvl]; }
-	else if (aura == "Holy Freeze") {
-		result.cDamage_min = auras[a].values[0][lvl];
-		result.cDamage_max = auras[a].values[1][lvl];
-		result.slow_enemies = auras[a].values[2][lvl]; }
-	else if (aura == "Holy Shock") {
-		result.lDamage_min = auras[a].values[0][lvl];
-		result.lDamage_max = auras[a].values[1][lvl];
-	}
-	else if (aura == "Sanctuary") {
-		result.damage_vs_undead = auras[a].values[0][lvl]; }
-	else if (aura == "Fanaticism") {
-		if (source == "mercenary") { result.damage_bonus = auras[a].values[0][lvl]; }
-		else { result.damage_bonus = auras[a].values[1][lvl]; }
-		result.ias_skill = auras[a].values[2][lvl];
-		result.ar_bonus = auras[a].values[3][lvl]; }
-	else if (aura == "Conviction") {
-		result.enemy_defense = auras[a].values[0][lvl];
-		result.enemy_fRes = auras[a].values[1][lvl];
-		result.enemy_cRes = auras[a].values[1][lvl];
-		result.enemy_lRes = auras[a].values[1][lvl];
-		result.enemy_pRes = auras[a].values[1][lvl]; }
-    // Others
-	else if (aura == "Thorns") {
-		result.thorns_reflect = auras[a].values[0][lvl]; }
-	else if (aura == "Inner Sight") {
-		result.enemy_defense_flat = auras[a].values[0][lvl]; }
-	else if (aura == "Righteous Fire") {
-		/* No buffs. Deals 45% of max life as fire damage per second in a small area. */	}
-	else if (aura == "Lifted Spirit") {
-		result.wisp = auras[a].values[0][lvl]; }
+	// Defensive Auras	
+	if (aura == "Prayer") { result.life_regen = 1; result.life_replenish = auras[a].values[0][lvl]; }
+	else if (aura == "Resist Fire") { result.fRes = auras[a].values[1][lvl]; result.fRes_max = auras[a].values[2][lvl]; }
+	else if (aura == "Defiance") { result.defense_bonus = auras[a].values[0][lvl]; }
+	else if (aura == "Resist Cold") { result.cRes = auras[a].values[1][lvl]; result.cRes_max = auras[a].values[2][lvl]; }
+	else if (aura == "Cleansing") { result.poison_length_reduced = auras[a].values[2][lvl]; result.curse_length_reduced = auras[a].values[2][lvl]; }
+	else if (aura == "Resist Lightning") { result.lRes = auras[a].values[1][lvl]; result.lRes_max = auras[a].values[2][lvl]; }
+	else if (aura == "Vigor") { result.velocity = auras[a].values[0][lvl]; result.max_stamina = auras[a].values[1][lvl]; result.heal_stam = auras[a].values[2][lvl]; }
+	else if (aura == "Meditation") { result.mana_regen = auras[a].values[1][lvl]; }
+	else if (aura == "Redemption") { result.recovery_per_corpse = auras[a].values[0][lvl]/100 * auras[a].values[1][lvl]; }
+	else if (aura == "Salvation") { result.fDamage = auras[a].values[0][lvl]; result.cDamage = auras[a].values[0][lvl]; result.lDamage = auras[a].values[0][lvl]; result.all_res = auras[a].values[1][lvl]; }
+	// Offensive Auras
+	else if (aura == "Might") { result.damage_bonus = auras[a].values[0][lvl]; }
+	else if (aura == "Holy Fire") { result.fDamage_min = auras[a].values[0][lvl]; result.fDamage_max = auras[a].values[1][lvl]; }
+	else if (aura == "Precision") { result.cstrike = auras[a].values[2][lvl]; result.ar_bonus = auras[a].values[3][lvl]; if (source == "mercenary") { result.pierce = auras[a].values[1][lvl] } else { result.pierce = auras[a].values[0][lvl] }}
+	else if (aura == "Blessed Aim") { result.ar_bonus = auras[a].values[2][lvl]; result.hammer_on_hit = auras[a].values[1][lvl]; }
+	else if (aura == "Concentration") { result.ar_bonus = auras[a].values[0][lvl]; result.damage_bonus = auras[a].values[1][lvl]; result.hammer_bonus = auras[a].values[2][lvl]; }
+	else if (aura == "Holy Freeze") { result.cDamage_min = auras[a].values[0][lvl]; result.cDamage_max = auras[a].values[1][lvl]; result.slow_enemies = auras[a].values[2][lvl]; }
+	else if (aura == "Holy Shock") { result.lDamage_min = auras[a].values[0][lvl]; result.lDamage_max = auras[a].values[1][lvl]; }
+	else if (aura == "Sanctuary") { result.damage_vs_undead = auras[a].values[0][lvl]; }
+	else if (aura == "Fanaticism") { result.ias_skill = auras[a].values[2][lvl]; result.ar_bonus = auras[a].values[3][lvl]; if (source == "mercenary") { result.damage_bonus = auras[a].values[0][lvl] } else { result.damage_bonus = auras[a].values[1][lvl] }}
+	else if (aura == "Conviction") { result.enemy_defense = auras[a].values[0][lvl]; result.enemy_fRes = auras[a].values[1][lvl]; result.enemy_cRes = auras[a].values[1][lvl]; result.enemy_lRes = auras[a].values[1][lvl]; result.enemy_pRes = auras[a].values[1][lvl]; }
+	// Others
+	else if (aura == "Thorns") { result.thorns_reflect = auras[a].values[0][lvl]; }
+	else if (aura == "Inner Sight") { result.enemy_defense_flat = auras[a].values[0][lvl]; }
+	else if (aura == "Righteous Fire") {  }		// No buffs. Deals 45% of max life as fire damage per second in a small area.
+	else if (aura == "Lifted Spirit") { result.wisp = auras[a].values[0][lvl]; }
 	
 	return result;
 };

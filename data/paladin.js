@@ -130,10 +130,10 @@ var character_paladin = {class_name:"Paladin", strength:25, dexterity:20, vitali
 		if (skill.name == "Fanaticism") { result.damage_bonus = skill.data.values[1][lvl]; result.ias_skill = skill.data.values[2][lvl]; result.ar_bonus = skill.data.values[3][lvl]; }
 		if (skill.name == "Conviction") { result.enemy_defense = skill.data.values[0][lvl]; result.enemy_fRes = skill.data.values[1][lvl]; result.enemy_cRes = skill.data.values[1][lvl]; result.enemy_lRes = skill.data.values[1][lvl]; result.enemy_pRes = skill.data.values[1][lvl]; }
 	    // Combat
-		if (skill.name == "Holy Shield") {
+		if (skill.name == "Holy Shield") { if (equipped.offhand.type == "shield") {
 			result.defense_bonus = skill.data.values[3][lvl] * (1 + 0.15*skills[2].level);
 			result.smite_min = skill.data.values[0][lvl]; result.smite_max = skill.data.values[1][lvl]; result.block = skill.data.values[4][lvl]; result.duration = skill.data.values[2][lvl];
-		}
+		} }
 		// No stat buffs:
 		if (skill.name == "Conversion") { result.duration = skill.data.values[1][lvl]; }
 		
@@ -157,7 +157,7 @@ var character_paladin = {class_name:"Paladin", strength:25, dexterity:20, vitali
 		var pDamage_min = 0; var pDamage_max = 0; var pDamage_duration = 0;
 		var mDamage_min = 0; var mDamage_max = 0;
 		var skillMin = ""; var skillMax = ""; var skillAr = "";
-		var attack = 1;	// 0 = no basic damage, 1 = includes basic attack damage, 2 = includes basic throw damage
+		var attack = 1;	// 0 = no basic damage, 1 = includes basic attack damage
 		var spell = 1;	// 0 = uses attack rating, 1 = no attack rating, 2 = non-damaging
 		var smite_min = 0; var smite_max = 0;
 		

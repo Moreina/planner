@@ -88,10 +88,10 @@ var character_barbarian = {class_name:"Barbarian", strength:30, dexterity:20, vi
 		else if (skill.name == "Concentrate") {		attack = 1; spell = 0; weapon_damage = 160; ar_bonus = character.getSkillData(skill, lvl, 1); damage_bonus = character.getSkillData(skill, lvl, 2); }
 		else if (skill.name == "Cleave") { 		attack = 1; spell = 1; weapon_damage = 60; damage_min = character.getSkillData(skill, lvl, 0); damage_max = character.getSkillData(skill, lvl, 1); }
 		else if (skill.name == "Stun") { 		attack = 1; spell = 0; weapon_damage = 100+character.getSkillData(skill, lvl, 0); ar_bonus = character.getSkillData(skill, lvl, 1); }
-		else if (skill.name == "Power Throw") {		attack = 1; spell = 0; weapon_damage = 120; ar_bonus = character.getSkillData(skill, lvl, 1); damage_bonus = character.getSkillData(skill, lvl, 0); }	
+		else if (skill.name == "Power Throw") {		attack = 2; spell = 0; weapon_damage = 120; ar_bonus = character.getSkillData(skill, lvl, 1); damage_bonus = character.getSkillData(skill, lvl, 0); }	
 		else if (skill.name == "Bash") { 		attack = 1; spell = 0; weapon_damage = 110; ar_bonus = character.getSkillData(skill, lvl, 2); damage_bonus = character.getSkillData(skill, lvl, 3); }	// TODO: X% Physical Damage converted to Magic
 		else if (skill.name == "Leap Attack") {		attack = 1; spell = 0; weapon_damage = 175; ar_bonus = character.getSkillData(skill, lvl, 1); damage_bonus = character.getSkillData(skill, lvl, 0); }
-		else if (skill.name == "Ethereal Throw") { 	attack = 1; spell = 0; weapon_damage = 60; mDamage_min = character.getSkillData(skill, lvl, 0); mDamage_max = character.getSkillData(skill, lvl, 1); }
+		else if (skill.name == "Ethereal Throw") { 	attack = 2; spell = 0; weapon_damage = 60; mDamage_min = character.getSkillData(skill, lvl, 0); mDamage_max = character.getSkillData(skill, lvl, 1); }
 		else if (skill.name == "Whirlwind") {		attack = 1; spell = 0; weapon_damage = 90; ar_bonus = character.getSkillData(skill, lvl, 1); damage_bonus = character.getSkillData(skill, lvl, 0); }
 		else { attack = 0; spell = 2; }
 		

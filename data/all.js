@@ -688,6 +688,8 @@ function equip(group, val) {
 	// update
 	calculateSkillAmounts()
 	updateEffectList()
+	
+	for (let s = 0; s < skills.length; s++) { modifyEffect(skills[s]) }
 	updateStats()
 	checkRequirements()
 	updateSkills()
@@ -1262,11 +1264,10 @@ function updatePrimaryStats() {
 	document.getElementById("dexterity2").innerHTML = Math.floor(dexTotal)
 	document.getElementById("vitality2").innerHTML = Math.floor(vitTotal)
 	document.getElementById("energy2").innerHTML = Math.floor(energyTotal)
-	if (c.running > 0) { document.getElementById("defense").innerHTML = "" }
-	else {
-		document.getElementById("defense").innerHTML = Math.floor(def + c.melee_defense)
-		if ((c.missile_defense-c.melee_defense) > 0) { document.getElementById("defense").innerHTML += " (+" + (c.missile_defense) + ")" }	// add difference when missile & melee defense are both present?
-	}
+	document.getElementById("defense").innerHTML = Math.floor(def + c.melee_defense)
+	if ((c.missile_defense-c.melee_defense) > 0) { document.getElementById("defense").innerHTML += " (+" + (c.missile_defense) + ")" }	// add difference when missile & melee defense are both present?
+	if (c.running > 0) { document.getElementById("defense").style.color = "brown" }
+	else { document.getElementById("defense").style.color = "gray" }
 	document.getElementById("ar").innerHTML = Math.floor(ar)
 	document.getElementById("stamina").innerHTML = Math.floor((c.stamina + (c.level-1)*c.stamina_per_level + stamina_addon) * (1+c.stamina_skillup/100) * (1+c.max_stamina/100))
 	document.getElementById("life").innerHTML = Math.floor((c.life + (c.level-1)*c.life_per_level + life_addon) * (1 + c.max_life/100))
@@ -2715,7 +2716,7 @@ function changeBase(group, change) {
 			}
 		} }
 	}
-	adjustCorruptionSockets(group)
+	if (corruptsEquipped[group].name == "+ Sockets") { adjustCorruptionSockets(group) }
 	equipmentOut()
 	equipmentHover(group)
 	// update
