@@ -588,7 +588,7 @@ function equip(group, val) {
 							} }
 						} }
 					}
-					character[affix] += equipment[src_group][item][affix]
+					character[affix] += equipped[group][affix]
 				}
 			}
 		}
