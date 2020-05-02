@@ -94,32 +94,32 @@ var character_amazon = {class_name:"Amazon", strength:20, dexterity:25, vitality
 		var lDamage_min = 0; var lDamage_max = 0;
 		var pDamage_min = 0; var pDamage_max = 0; var pDamage_duration = 0;
 		var mDamage_min = 0; var mDamage_max = 0;
-		var skillMin = ""; var skillMax = ""; var skillAr = "";
+		var skillMin = 0; var skillMax = 0; var skillAr = 0;
 		var attack = 1;	// 0 = no basic damage, 1 = includes basic attack damage, 2 = includes basic throw damage
 		var spell = 1;	// 0 = uses attack rating, 1 = no attack rating, 2 = non-damaging
 
-		if (skill.name == "Jab") { 			attack = 1; spell = 0; ar_bonus = character.getSkillData(skill, lvl, 0); damage_bonus = character.getSkillData(skill, lvl, 1); }
-		else if (skill.name == "Power Strike") { 	attack = 1; spell = 0; ar_bonus = character.getSkillData(skill, lvl, 0); lDamage_min = character.getSkillData(skill, lvl, 1); lDamage_max = character.getSkillData(skill, lvl, 2); }
-		else if (skill.name == "Poison Javelin") {	attack = 2; spell = 0; pDamage_min = character.getSkillData(skill, lvl, 0); pDamage_max = character.getSkillData(skill, lvl, 1); pDamage_duration = 5; }
-		else if (skill.name == "Fend") { 		attack = 1; spell = 0; weapon_damage = 125; ar_bonus = character.getSkillData(skill, lvl, 0); damage_bonus = character.getSkillData(skill, lvl, 1); }
-		else if (skill.name == "Lightning Bolt") {	attack = 2; spell = 1; lDamage_min = phys_min+character.getSkillData(skill, lvl, 0); lDamage_max = phys_max+character.getSkillData(skill, lvl, 1); }
-		else if (skill.name == "Charged Strike") {	attack = 1; spell = 1; lDamage_min = character.getSkillData(skill, lvl, 1); lDamage_max = character.getSkillData(skill, lvl, 2); }
-		else if (skill.name == "Plague Javelin") {	attack = 2; spell = 0; ar_bonus = character.getSkillData(skill, lvl, 0); pDamage_min = character.getSkillData(skill, lvl, 1); pDamage_max = character.getSkillData(skill, lvl, 2); pDamage_duration = 5; }
+		if (skill.name == "Jab") { 			attack = 1; spell = 0; ar_bonus = character.getSkillData(skill,lvl,0); damage_bonus = character.getSkillData(skill,lvl,1); }
+		else if (skill.name == "Power Strike") { 	attack = 1; spell = 0; ar_bonus = character.getSkillData(skill,lvl,0); lDamage_min = character.getSkillData(skill,lvl,1); lDamage_max = character.getSkillData(skill,lvl,2); }
+		else if (skill.name == "Poison Javelin") {	attack = 2; spell = 0; pDamage_min = character.getSkillData(skill,lvl,0); pDamage_max = character.getSkillData(skill,lvl,1); pDamage_duration = 5; }
+		else if (skill.name == "Fend") { 		attack = 1; spell = 0; weapon_damage = 125; ar_bonus = character.getSkillData(skill,lvl,0); damage_bonus = character.getSkillData(skill,lvl,1); }
+		else if (skill.name == "Lightning Bolt") {	attack = 2; spell = 1; lDamage_min = phys_min+character.getSkillData(skill,lvl,0); lDamage_max = phys_max+character.getSkillData(skill,lvl,1); }
+		else if (skill.name == "Charged Strike") {	attack = 1; spell = 1; lDamage_min = character.getSkillData(skill,lvl,1); lDamage_max = character.getSkillData(skill,lvl,2); }
+		else if (skill.name == "Plague Javelin") {	attack = 2; spell = 0; ar_bonus = character.getSkillData(skill,lvl,0); pDamage_min = character.getSkillData(skill,lvl,1); pDamage_max = character.getSkillData(skill,lvl,2); pDamage_duration = 5; }
 		else if (skill.name == "Ground Slam") { 	attack = 1; spell = 1; weapon_damage = 85; }
-		else if (skill.name == "Lightning Strike") {	attack = 1; spell = 1; lDamage_min = character.getSkillData(skill, lvl, 1); lDamage_max = character.getSkillData(skill, lvl, 2); }
-		else if (skill.name == "Lightning Fury") {	attack = 2; spell = 1; lDamage_min = character.getSkillData(skill, lvl, 1); lDamage_max = character.getSkillData(skill, lvl, 2); }
+		else if (skill.name == "Lightning Strike") {	attack = 1; spell = 1; lDamage_min = character.getSkillData(skill,lvl,1); lDamage_max = character.getSkillData(skill,lvl,2); }
+		else if (skill.name == "Lightning Fury") {	attack = 2; spell = 1; lDamage_min = character.getSkillData(skill,lvl,1); lDamage_max = character.getSkillData(skill,lvl,2); }
 	//	else if (skill.name == "Decoy") {		attack = 0; spell = 1; }
 	//	else if (skill.name == "Valkyrie") {		attack = 0; spell = 1; }
-		else if (skill.name == "Cold Arrow") {		attack = 1; spell = 0; cDamage_min = character.getSkillData(skill, lvl, 1); cDamage_max = character.getSkillData(skill, lvl, 2); }
-		else if (skill.name == "Magic Arrow") {		attack = 1; spell = 0; mDamage_min = character.getSkillData(skill, lvl, 1); mDamage_max = character.getSkillData(skill, lvl, 2); }
-		else if (skill.name == "Multiple Shot") {	attack = 1; spell = 0; damage_min = character.getSkillData(skill, lvl, 0); damage_max = character.getSkillData(skill, lvl, 1); }
-		else if (skill.name == "Fire Arrow") {		attack = 1; spell = 0; fDamage_min = character.getSkillData(skill, lvl, 4); fDamage_max = character.getSkillData(skill, lvl, 5); ar_bonus = character.getSkillData(skill, lvl, 3); }
-		else if (skill.name == "Ice Arrow") {		attack = 1; spell = 0; cDamage_min = character.getSkillData(skill, lvl, 0); cDamage_max = character.getSkillData(skill, lvl, 1); }
-		else if (skill.name == "Guided Arrow") {	attack = 1; spell = 1; weapon_damage = 150; damage_bonus = character.getSkillData(skill, lvl, 0); }
-		else if (skill.name == "Exploding Arrow") {	attack = 1; spell = 0; fDamage_min = character.getSkillData(skill, lvl, 0); fDamage_max = character.getSkillData(skill, lvl, 1); }
-		else if (skill.name == "Strafe") {		attack = 1; spell = 0; damage_min = character.getSkillData(skill, lvl, 0); damage_max = character.getSkillData(skill, lvl, 1); damage_bonus = character.getSkillData(skill, lvl, 3); }
-		else if (skill.name == "Immolation Arrow") {	attack = 1; spell = 0; fDamage_min = character.getSkillData(skill, lvl, 0); fDamage_max = character.getSkillData(skill, lvl, 1); }
-		else if (skill.name == "Freezing Arrow") {	attack = 1; spell = 0; cDamage_min = character.getSkillData(skill, lvl, 0); cDamage_max = character.getSkillData(skill, lvl, 1); }
+		else if (skill.name == "Cold Arrow") {		attack = 1; spell = 0; cDamage_min = character.getSkillData(skill,lvl,1); cDamage_max = character.getSkillData(skill,lvl,2); }
+		else if (skill.name == "Magic Arrow") {		attack = 1; spell = 0; mDamage_min = character.getSkillData(skill,lvl,1); mDamage_max = character.getSkillData(skill,lvl,2); }
+		else if (skill.name == "Multiple Shot") {	attack = 1; spell = 0; damage_min = character.getSkillData(skill,lvl,0); damage_max = character.getSkillData(skill,lvl,1); }
+		else if (skill.name == "Fire Arrow") {		attack = 1; spell = 0; fDamage_min = character.getSkillData(skill,lvl,4); fDamage_max = character.getSkillData(skill,lvl,5); ar_bonus = character.getSkillData(skill,lvl,3); }
+		else if (skill.name == "Ice Arrow") {		attack = 1; spell = 0; cDamage_min = character.getSkillData(skill,lvl,0); cDamage_max = character.getSkillData(skill,lvl,1); }
+		else if (skill.name == "Guided Arrow") {	attack = 1; spell = 1; weapon_damage = 150; damage_bonus = character.getSkillData(skill,lvl,0); }
+		else if (skill.name == "Exploding Arrow") {	attack = 1; spell = 0; fDamage_min = character.getSkillData(skill,lvl,0); fDamage_max = character.getSkillData(skill,lvl,1); }
+		else if (skill.name == "Strafe") {		attack = 1; spell = 0; damage_min = character.getSkillData(skill,lvl,0); damage_max = character.getSkillData(skill,lvl,1); damage_bonus = character.getSkillData(skill,lvl,3); }
+		else if (skill.name == "Immolation Arrow") {	attack = 1; spell = 0; fDamage_min = character.getSkillData(skill,lvl,0); fDamage_max = character.getSkillData(skill,lvl,1); }
+		else if (skill.name == "Freezing Arrow") {	attack = 1; spell = 0; cDamage_min = character.getSkillData(skill,lvl,0); cDamage_max = character.getSkillData(skill,lvl,1); }
 		else { attack = 0; spell = 2; }
 		
 		if (typeof(skill.reqWeapon) != 'undefined') { var match = 0; for (let w = 0; w < skill.reqWeapon.length; w++) {
@@ -131,18 +131,12 @@ var character_amazon = {class_name:"Amazon", strength:20, dexterity:25, vitality
 		ele_max += Math.floor(fDamage_max + cDamage_max + lDamage_max + pDamage_max);
 		phys_min = Math.floor((phys_min + damage_min) * (phys_mult + (weapon_damage-100+damage_bonus)/100));
 		phys_max = Math.floor((phys_max + damage_max) * (phys_mult + (weapon_damage-100+damage_bonus)/100));
-		if (spell == 0) { skillMin = Math.floor(mag_min+mDamage_min+ele_min+phys_min); skillMax = Math.floor(mag_max+mDamage_max+ele_max+phys_max); skillAr = Math.floor(ar*(1+ar_bonus/100));
-		} else if (spell == 1) { skillMin = Math.floor(mag_min+mDamage_min+ele_min+phys_min); skillMax = Math.floor(mag_max+mDamage_max+ele_max+phys_max); skillAr = "";
-		} else if (spell == 2) { skillMin = ""; skillMax = ""; skillAr = ""; }
+		if (spell != 2) { skillMin = Math.floor(mag_min+mDamage_min+ele_min+phys_min); skillMax = Math.floor(mag_max+mDamage_max+ele_max+phys_max); }
+		if (spell == 0) { skillAr = Math.floor(ar*(1+ar_bonus/100)); }
 		
-		var output = ": " + skillMin + " - " + skillMax;
-		if (num == 1) {
-			if (output != ": 0 - 0" && output != ":  - ") { document.getElementById("skill1_info").innerHTML = output } else { document.getElementById("skill1_info").innerHTML = ":" }
-			if (skillAr != "") { document.getElementById("ar_skill1").innerHTML = "AR: " + skillAr } else { document.getElementById("ar_skill1").innerHTML = "" }
-		} else if (num == 2) {
-			if (output != ": 0 - 0" && output != ":  - ") { document.getElementById("skill2_info").innerHTML = output } else { document.getElementById("skill2_info").innerHTML = ":" }
-			if (skillAr != "") { document.getElementById("ar_skill2").innerHTML = "AR: " + skillAr } else { document.getElementById("ar_skill2").innerHTML = "" }
-		}
+		var output = ": " + skillMin + "-" + skillMax + " {"+Math.ceil((skillMin+skillMax)/2)+"}";
+		if (skillMin != 0 && skillMax != 0) { document.getElementById("skill"+num+"_info").innerHTML = output } else { document.getElementById("skill"+num+"_info").innerHTML = ":" }
+		if (skillAr != 0) { document.getElementById("ar_skill"+num).innerHTML = "AR: " + skillAr } else { document.getElementById("ar_skill"+num).innerHTML = "" }
 	}
 };
 

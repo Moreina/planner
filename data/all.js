@@ -179,7 +179,8 @@ function getMercenaryAuraLevel(hlvl) {
 //	if (hlvl > 9 && hlvl < 31) { result = (3+((hlvl-9)*10/32)) }
 //	else if (hlvl > 30 && hlvl < 55) { result = (10+((hlvl-31)*10/32)) }
 //	else if (hlvl > 54) { result = 18 }
-	// TODO: Is the Might aura still uncapped? (up to level 31) Also, can these benefit from + all skills?
+	// TODO: Is the Might aura still uncapped? (up to level 31)
+	result += ~~mercenary.all_skills
 	return result;
 }
 
@@ -421,7 +422,7 @@ function equipMerc(group, val) {
 				} }
 				// add regular affixes
 				for (affix in equipment[group][item]) {
-					if (affix == "aura" || affix == "name" || affix == "type" || affix == "base" || affix == "only" || affix == "not" || affix == "rw") {
+					if (affix == "aura" || affix == "name" || affix == "type" || affix == "base" || affix == "only" || affix == "not" || affix == "img") {
 						if (affix == "aura" && equipment[group][item][affix] != mercenary.base_aura) {
 							mercEquipped[group][affix] = equipment[group][item][affix]
 							addAura(equipment[group][item][affix], equipment[group][item].aura_lvl, "mercenary")
@@ -540,7 +541,7 @@ function equip(group, val) {
 					if (affix == "base_defense") { if (typeof(equipment[src_group][item]["e_def"]) != 'undefined') { multED += (equipment[src_group][item]["e_def"]/100) } }
 					else if (affix == "req_strength" || affix == "req_dexterity") { if (typeof(equipment[src_group][item]["req"]) != 'undefined') { multReq += (equipment[src_group][item]["req"]/100) } }
 					
-					if (typeof(equipped[group][affix]) == 'undefined') { equipped[group][affix] = 0 }	// undefined (new) affixes get initialized to zero
+					if (typeof(equipped[group][affix]) == 'undefined') { equipped[group][affix] = unequipped[affix] }	// undefined (new) affixes get initialized to zero
 					
 					if (affix == "base_damage_min" || affix == "base_damage_max" || affix == "throw_min" || affix == "throw_max" || affix == "base_min_alternate" || affix == "base_max_alternate" || affix == "base_defense") {
 						equipped[group][affix] = Math.ceil(multEth*multED*bases[base][affix])
@@ -548,7 +549,7 @@ function equip(group, val) {
 					}
 					else if (affix == "req_strength" || affix == "req_dexterity") {
 						equipped[group][affix] += Math.ceil(multReq*bases[base][affix] - reqEth)
-						//character[affix] += Math.ceil(multReq*bases[base][affix] - reqEth)
+						//character[affix] += Math.ceil(multReq*bases[base][affix] - reqEth)	// not used
 					}
 					else {
 						equipped[group][affix] = bases[base][affix]
@@ -558,8 +559,9 @@ function equip(group, val) {
 			} }
 			// add regular affixes
 			for (affix in equipment[src_group][item]) {
-				equipped[group][affix] = equipment[src_group][item][affix]
-				if (affix == "aura" || affix == "name" || affix == "type" || affix == "base" || affix == "only" || affix == "not" || affix == "rw" || affix == "img") {
+				if (typeof(equipped[group][affix]) == 'undefined') { equipped[group][affix] = unequipped[affix] }
+				if (affix != "damage_vs_undead") { equipped[group][affix] = equipment[src_group][item][affix] } else { equipped[group][affix] += equipment[src_group][item][affix] }
+				if (affix == "aura" || affix == "name" || affix == "type" || affix == "base" || affix == "only" || affix == "not" || affix == "img") {
 					if (affix == "aura") {
 			//			equipped[group].aura_lvl = equipment[src_group][item].aura_lvl	// redundant?
 						auraName = equipment[src_group][item][affix]
@@ -587,8 +589,10 @@ function equip(group, val) {
 								}
 							} }
 						} }
+						character[affix] += equipped[group][affix]
+					} else {
+						character[affix] += equipment[src_group][item][affix]
 					}
-					character[affix] += equipped[group][affix]
 				}
 			}
 		}
@@ -1170,15 +1174,15 @@ function toggleAutocast(autocast) {
 // return: array with [min damage, max damage, multiplier]
 // ---------------------------------
 function getWeaponDamage(str, dex, type, thrown) {
-// TODO: change offhand code, just use 'type' instead
+// TODO: make useable for offhand weapons too
 	var c = character;
 	// multiplier from stats
-	var statBonus = 1;
+	var statBonus = 0;
 	if (typeof(type) != 'undefined') { 
 		if (type == "hammer") { statBonus = (str*1.1/100) }
-		else if (type == "bow" || type == "crossbow") { statBonus = (dex/100) }
-		else if (typeof(equipped.weapon.only) != 'undefined') { if (type == "spear" || type == "javelin" || equipped.weapon.only == "amazon") { statBonus = ((str*0.8/100)+(dex*0.5/100)) } }
-		else if (type == "dagger" || type == "thrown" || type == "claw" || type == "javelin") { statBonus = ((str*0.75/100)+(dex*0.75/100)) }
+		else if (typeof(equipped.weapon.only) != 'undefined') { if ((type == "spear" || type == "javelin") && equipped.weapon.only == "amazon") { statBonus = ((str*0.8/100)+(dex*0.5/100)) } }
+		else if (type == "bow" || type == "crossbow" || type == "javelin") { statBonus = (dex/100) }						// check if javelins are counted as missile weapons or throwing weapons
+		else if (type == "dagger" || type == "thrown" || type == "claw" || type == "javelin") { statBonus = ((str*0.75/100)+(dex*0.75/100)) }	// check if javelins are counted as missile weapons or throwing weapons
 		else  { statBonus = (str/100) }
 	}
 	// multiplier from skills
@@ -1186,8 +1190,8 @@ function getWeaponDamage(str, dex, type, thrown) {
 	if (c.class_name == "Barbarian" || c.class_name == "Assassin") {
 		if (type == "sword" || type == "axe" || type == "dagger") { weapon_skillup = c.edged_skillup[0]; c.ar_skillup = c.edged_skillup[1]; c.cstrike_skillup = c.edged_skillup[2]; }
 		else if (type == "polearm" || type == "spear") { weapon_skillup = c.pole_skillup[0]; c.ar_skillup = c.pole_skillup[1]; c.cstrike_skillup = c.pole_skillup[2]; }
-		else if (type == "mace" || type == "scepter" || type == "staff" || type == "hammer" || type == "club") { weapon_skillup = c.blunt_skillup[0]; c.ar_skillup = c.blunt_skillup[1]; c.cstrike_skillup = c.blunt_skillup[2]; }
-		else if (type == "thrown") { weapon_skillup = c.thrown_skillup[0]; c.ar_skillup = c.thrown_skillup[1]; c.pierce_skillup = c.thrown_skillup[2]; }
+		else if (type == "mace" || type == "scepter" || type == "staff" || type == "hammer" || type == "club" || type == "wand") { weapon_skillup = c.blunt_skillup[0]; c.ar_skillup = c.blunt_skillup[1]; c.cstrike_skillup = c.blunt_skillup[2]; }
+		else if (type == "thrown" || type == "javelin") { weapon_skillup = c.thrown_skillup[0]; c.ar_skillup = c.thrown_skillup[1]; c.pierce_skillup = c.thrown_skillup[2]; }	// check if javelins can benefit from Pole Weapon Mastery
 		else if (type == "claw") { weapon_skillup = c.claw_skillup[0]; c.ar_skillup = c.claw_skillup[1]; c.cstrike_skillup = c.claw_skillup[2]; }
 		else { weapon_skillup = 0; c.ar_skillup = 0; c.cstrike_skillup = 0; c.pierce_skillup = 0; }
 	}
@@ -1240,7 +1244,7 @@ function updatePrimaryStats() {
 	
 	var basic_min = Math.floor(physDamage[0]*physDamage[2]*wisp + fMin + cMin + lMin + pMin + c.mDamage_min);
 	var basic_max = Math.floor(physDamage[1]*physDamage[2]*wisp + fMax + cMax + lMax + pMax + c.mDamage_max);
-	if (basic_min > 0 || basic_max > 0) { document.getElementById("basic_attack").innerHTML = basic_min + " - " + basic_max }
+	if (basic_min > 0 || basic_max > 0) { document.getElementById("basic_attack").innerHTML = basic_min + "-" + basic_max + " {"+Math.ceil((basic_min+basic_max)/2)+"}"}
 	else { document.getElementById("basic_attack").innerHTML = "" }
 	// TODO: Create display for offhand attacks (separate damage & AR)
 	
@@ -1540,7 +1544,7 @@ function calculateSkillAmounts() {
 		} else if (character.class_name == "Necromancer") {
 			skills[s].extra_levels += character.skills_necromancer
 			if (s < 11) { skills[s].extra_levels += character.skills_summoning_necromancer
-				if (s == 9) { skills[s].extra_levels += character.skills_fire_all }
+				if (s == 9 || s == 14) { skills[s].extra_levels += character.skills_fire_all }
 			} else if (s > 19) { skills[s].extra_levels += character.skills_curses
 			} else { skills[s].extra_levels += character.skills_poisonBone
 			}
@@ -1578,6 +1582,7 @@ function calculateSkillAmounts() {
 //	className: name of the character class
 // ---------------------------------
 function calculateSkillPassives(className) {
+	// TODO: Transfer to getBuffData()?
 	if (className == "Amazon") {
 		if (skills[11].level > 0 || skills[11].force_levels > 0) { character.cstrike_skillup = ~~skills[11].data.values[0][skills[11].level+skills[11].extra_levels]; } else { character.cstrike_skillup = 0 }
 		if (skills[15].level > 0 || skills[15].force_levels > 0) { character.ar_skillup = ~~skills[15].data.values[0][skills[15].level+skills[15].extra_levels]; } else { character.ar_skillup = 0 }
@@ -1618,7 +1623,8 @@ function calculateSkillPassives(className) {
 		if (skills[16].level > 0 || skills[16].force_levels > 0) { character.frw_skillup = ~~skills[16].data.values[0][skills[16].level+skills[16].extra_levels]; } else { character.frw_skillup = 0 }
 		if (skills[17].level > 0 || skills[17].force_levels > 0) { character.resistance_skillup = ~~skills[17].data.values[0][skills[17].level+skills[17].extra_levels]; } else { character.resistance_skillup = 0 }
 	} else if (className == "Sorceress") {
-		if (skills[23].level > 0 || skills[28].level > 0 || skills[23].force_levels > 0 || skills[28].force_levels > 0) { character.ar_skillup = ~~skills[23].data.values[0][skills[23].level+skills[23].extra_levels] + ~~skills[28].data.values[3][skills[28].level+skills[28].extra_levels]; } else { character.ar_skillup = 0; }
+		//if (skills[23].level > 0 || skills[28].level > 0 || skills[23].force_levels > 0 || skills[28].force_levels > 0) { character.ar_skillup = ~~skills[23].data.values[0][skills[23].level+skills[23].extra_levels] + ~~skills[28].data.values[3][skills[28].level+skills[28].extra_levels]; } else { character.ar_skillup = 0; }
+		if (skills[23].level > 0 || skills[23].force_levels > 0) { character.ar_skillup = ~~skills[23].data.values[0][skills[23].level+skills[23].extra_levels]; } else { character.ar_skillup = 0; }
 		if (skills[23].level > 0 || skills[23].force_levels > 0) { character.mana_regen_skillup = ~~skills[23].data.values[1][skills[23].level+skills[23].extra_levels]; } else { character.mana_regen_skillup = 0; }
 		if (skills[10].level > 0 || skills[10].force_levels > 0) {
 			character.cPierce_skillup = ~~skills[10].data.values[0][skills[10].level+skills[10].extra_levels];
@@ -1643,6 +1649,7 @@ function updateEffectList() { for (let s = 0; s < skills.length; s++) { updateEf
 //	skill: skill object in question
 // ---------------------------------
 function updateEffect(skill) {
+	// TODO: Decouple from skills & classes - effects can be gained that are not skill related, or are based on others' skills
 	if (typeof(skill.effect) != 'undefined') { if (skill.effect > 2) {
 		var eff = "e"+skill.key;
 		var effectElem = document.getElementById(eff);

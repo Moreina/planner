@@ -42,12 +42,20 @@ var character_any = {
 	// Necromancer
 		if (skillName == "Desecrate" && elem > 0 && elem < 3) { 	result *= ((1+character.pDamage/100) * wisp) }
 	// Paladin
-		if (skillName == "Vengeance" && elem == 2) {			result = Math.floor(phys_min * (1+(skill.data.values[8][lvl])/100)) }
-		if (skillName == "Vengeance" && elem == 3) {			result = Math.floor(phys_max * (1+(skill.data.values[8][lvl])/100)) }
-		if (skillName == "Vengeance" && elem == 4) {			result = Math.floor(phys_min * (1+(skill.data.values[9][lvl])/100)) }
-		if (skillName == "Vengeance" && elem == 5) {			result = Math.floor(phys_max * (1+(skill.data.values[9][lvl])/100)) }
-		if (skillName == "Vengeance" && elem == 6) {			result = Math.floor(phys_min * (1+(skill.data.values[10][lvl])/100)) }
-		if (skillName == "Vengeance" && elem == 7) {			result = Math.floor(phys_max * (1+(skill.data.values[10][lvl])/100)) }
+		var phys_min = 0;
+		var phys_max = 0;
+		if (skillName == "Vengeance" && equipped.weapon.name != "none" && elem < 8) {
+			phys_min = (character.base_damage_min * (1+character.e_damage/100) + character.damage_min + (character.level-1)*character.min_damage_per_level);
+			phys_max = (character.base_damage_max * (1+character.e_damage/100) + character.damage_max + (character.level-1)*character.max_damage_per_level);
+		}
+		if (skillName == "Vengeance" && elem == 0) {			result = phys_min * wisp }
+		if (skillName == "Vengeance" && elem == 1) {			result = phys_max * wisp }
+		if (skillName == "Vengeance" && elem == 2) {			result = Math.floor(phys_min * (skill.data.values[8][lvl]/100) * (1+character.fDamage/100) * wisp) }
+		if (skillName == "Vengeance" && elem == 3) {			result = Math.floor(phys_max * (skill.data.values[8][lvl]/100) * (1+character.fDamage/100) * wisp) }
+		if (skillName == "Vengeance" && elem == 4) {			result = Math.floor(phys_min * (skill.data.values[9][lvl]/100) * (1+character.cDamage/100) * wisp) }
+		if (skillName == "Vengeance" && elem == 5) {			result = Math.floor(phys_max * (skill.data.values[9][lvl]/100) * (1+character.cDamage/100) * wisp) }
+		if (skillName == "Vengeance" && elem == 6) {			result = Math.floor(phys_min * (skill.data.values[10][lvl]/100) * (1+character.lDamage/100) * wisp) }
+		if (skillName == "Vengeance" && elem == 7) {			result = Math.floor(phys_max * (skill.data.values[10][lvl]/100) * (1+character.lDamage/100) * wisp) }
 	// Sorceress
 		//if (skillName == "Shiver Armor" && elem < 4 && elem > 1) { 	result *= ((1 + (character.cDamage+character.cDamage_skillup)/100) * wisp) }
 		if (skillName == "Fire Ball" && elem < 2) { 			result *= ((1 + (character.fDamage+character.fDamage_skillup)/100) * wisp) }
@@ -67,39 +75,29 @@ var character_any = {
 	// ---------------------------------
 	getBuffData : function(effect) {
 		var skill = skills[effect.skill]
-		var lvl = skill.level + skill.extra_levels;
+		var lvl = character["oskill_"+skill.name.split(" ").join("_")] + character.all_skills;
 		var result = {};
-		var lycan_damage = ~~(skills[12].data.values[0][skills[12].level+skills[12].extra_levels]);
-		var lycan_life = ~~(skills[12].data.values[1][skills[12].level+skills[12].extra_levels]);
+		var lycan_damage = ~~(skills[12].data.values[0][character.oskill_Lycanthropy+character.all_skills]);
+		var lycan_life = ~~(skills[12].data.values[1][character.oskill_Lycanthropy+character.all_skills]);
 		
-		if (skillName == "Battle Command") { result.all_skills = Math.floor(1+(skill.level / 10)); }
-		if (skillName == "Shout") { result.defense_bonus = skill.data.values[0][lvl]; }
-		if (skillName == "Battle Orders") {
-			result.max_stamina = skill.data.values[1][lvl];
-			result.max_life = skill.data.values[2][lvl];
-			result.max_mana = skill.data.values[3][lvl];
-		}
-		if (skillName == "Werewolf") {
+		if (skill.name == "Inner Sight") { result.enemy_defense_flat = skill.data.values[0][lvl]; }	// TODO: Make always-active?
+		if (skill.name == "Lethal Strike") { result.cstrike = skill.data.values[0][lvl]; }	// TODO: Make always-active
+		if (skillName == "Battle Command") { result.all_skills = 1; result.duration = skill.data.values[1][lvl]; }
+		if (skillName == "Shout") { result.defense_bonus = skill.data.values[0][lvl]; result.duration = skill.data.values[1][lvl]; }
+		if (skill.name == "Battle Orders") { result.max_stamina = skill.data.values[1][lvl]; result.max_life = skill.data.values[2][lvl]; result.max_mana = skill.data.values[3][lvl]; result.duration = skill.data.values[0][lvl]; }
+		if (skill.name == "Werewolf") {
 			if (document.getElementById("e"+skills[13].key) != null) { if (effects["e"+skills[13].key].enabled == 1) { disableEffect(13); } }	// disables Werebear
-			result.max_life = (15 + lycan_life);
-			result.max_stamina = 40;
-			result.ar_bonus = skill.data.values[1][lvl];
-			result.ias_skill = skill.data.values[2][lvl];
-			result.damage_bonus = lycan_damage;
+			result.max_life = (15 + lycan_life); result.max_stamina = 40; result.ar_bonus = skill.data.values[1][lvl]; result.ias_skill = skill.data.values[2][lvl]; result.damage_bonus = lycan_damage; result.duration = 1040;
 		}
-		if (skillName == "Werebear") {
+		if (skill.name == "Werebear") {
 			if (document.getElementById("e"+skills[11].key) != null) { if (effects["e"+skills[11].key].enabled == 1) { disableEffect(11); } }	// disables Werewolf
-			result.max_life = (25 + lycan_life);
-			result.damage_bonus = skill.data.values[1][lvl] + lycan_damage;
-			result.defense_bonus = skill.data.values[2][lvl];
+			result.max_life = (25 + lycan_life); result.damage_bonus = skill.data.values[1][lvl] + lycan_damage; result.defense_bonus = skill.data.values[2][lvl]; result.duration = 1040;
 		}
-		if (skillName == "Shiver Armor") {
-			if (document.getElementById("e"+skills[8].key) != null) { if (effects["e"+skills[8].key].enabled == 1) { disableEffect(8) } }	// disables Shiver Armor
-			result.defense_bonus = skill.data.values[1][lvl];
-		}
-		if (skillName == "Enflame") {
-			result.fDamage_min = skill.data.values[1][lvl] * (1 + (0.12*skills[23].level)) * (1 + (~~skills[30].data.values[1][skills[30].level+skills[30].extra_levels])/100);
-			result.fDamage_max = skill.data.values[2][lvl] * (1 + (0.12*skills[23].level)) * (1 + (~~skills[30].data.values[1][skills[30].level+skills[30].extra_levels])/100);
+		if (skill.name == "Feral Rage") { result.velocity = skill.data.values[1][lvl]; result.life_leech = skill.data.values[3][lvl]; result.duration = 20; }
+		if (skill.name == "Shiver Armor") { result.defense_bonus = skill.data.values[1][lvl]; result.duration = skill.data.values[0][lvl]; }
+		if (skillName == "Enflame") {	// TODO: Make always-active?
+			result.fDamage_min = skill.data.values[1][lvl] * (1 + (~~skills[30].data.values[1][skills[30].level+skills[30].extra_levels])/100);
+			result.fDamage_max = skill.data.values[2][lvl] * (1 + (~~skills[30].data.values[1][skills[30].level+skills[30].extra_levels])/100);
 			result.ar_bonus = skill.data.values[3][lvl];
 		}
 		
@@ -123,47 +121,41 @@ var character_any = {
 		var lDamage_min = 0; var lDamage_max = 0;
 		var pDamage_min = 0; var pDamage_max = 0; var pDamage_duration = 0;
 		var mDamage_min = 0; var mDamage_max = 0;
-		var skillMin = ""; var skillMax = ""; var skillAr = "";
-		var attack = 1;	// 0 = no basic damage, 1 = includes basic attack damage, 2 = includes basic throw damage
+		var skillMin = 0; var skillMax = 0; var skillAr = 0;
+		var attack = 1;	// 0 = no basic damage, 1 = includes basic attack damage
 		var spell = 1;	// 0 = uses attack rating, 1 = no attack rating, 2 = non-damaging
 		
-		if (skillName == "Ball Lightning") {		attack = 0; spell = 1; lDamage_min = character_any.getSkillData(skillName, lvl, 0); lDamage_max = character_any.getSkillData(skillName, lvl, 1); }
+		if (skillName == "Ball Lightning") {		attack = 0; spell = 1; lDamage_min = character_any.getSkillData(skillName,lvl,0); lDamage_max = character_any.getSkillData(skillName,lvl,1); }
 		// else if (skillName == "Valkyrie") {		attack = 0; spell = 1; }
-		else if (skillName == "Magic Arrow") {		attack = 1; spell = 0; mDamage_min = character_any.getSkillData(skillName, lvl, 1); mDamage_max = character_any.getSkillData(skillName, lvl, 2); }
-		else if (skillName == "Multiple Shot") {	attack = 1; spell = 0; damage_min = character_any.getSkillData(skillName, lvl, 0); damage_max = character_any.getSkillData(skillName, lvl, 1); }
-		else if (skillName == "Guided Arrow") {		attack = 1; spell = 1; weapon_damage = 150; damage_bonus = character_any.getSkillData(skillName, lvl, 0); }
-		else if (skillName == "Bash") { 		attack = 1; spell = 0; weapon_damage = 110; ar_bonus = character_any.getSkillData(skillName, lvl, 2); damage_bonus = character_any.getSkillData(skillName, lvl, 3); }
-		else if (skillName == "Flame Dash") { 		attack = 0; spell = 1; lvl += character.skills_fire_all; fDamage_min = character_any.getSkillData(skillName, lvl, 1); fDamage_max = character_any.getSkillData(skillName, lvl, 2); }
-		else if (skillName == "Arctic Blast") { 	attack = 0; spell = 1; lvl += character.skills_cold_all; cDamage_min = character_any.getSkillData(skillName, lvl, 0); cDamage_max = character_any.getSkillData(skillName, lvl, 1); }
-		else if (skillName == "Feral Rage") {		attack = 1; spell = 0; ar_bonus = character_any.getSkillData(skillName, lvl, 5); damage_bonus = character_any.getSkillData(skillName, lvl, 4); }
-		else if (skillName == "Summon Dire Wolf") {	attack = 0; spell = 1; damage_min = character_any.getSkillData(skillName, lvl, 4); damage_max = character_any.getSkillData(skillName, lvl, 5); ar_bonus = character_any.getSkillData(skillName, lvl, 1); }
-		else if (skillName == "Desecrate") {		attack = 0; spell = 1; lvl += character.skills_poison_all; pDamage_min = character_any.getSkillData(skillName, lvl, 1); pDamage_max = character_any.getSkillData(skillName, lvl, 2); pDamage_duration = 2; }
-		else if (skillName == "Zeal") {			attack = 1; spell = 0; ar_bonus = character_any.getSkillData(skillName, lvl, 0); damage_bonus = character_any.getSkillData(skillName, lvl, 1); }
-		else if (skillName == "Vengeance") {		attack = 1; spell = 0; fDamage_min = character_any.getSkillData(skillName, lvl, 2); fDamage_max = character_any.getSkillData(skillName, lvl, 3); cDamage_min = character_any.getSkillData(skillName, lvl, 4); cDamage_max = character_any.getSkillData(skillName, lvl, 5); lDamage_min = character_any.getSkillData(skillName, lvl, 6); lDamage_max = character_any.getSkillData(skillName, lvl, 7); ar_bonus = character_any.getSkillData(skillName, lvl, 11); }
-		else if (skillName == "Fire Ball") {		attack = 0; spell = 1; lvl += character.skills_fire_all; fDamage_min = character_any.getSkillData(skillName, lvl, 0); fDamage_max = character_any.getSkillData(skillName, lvl, 1); }
-		else if (skillName == "Fire Wall") {		attack = 0; spell = 1; lvl += character.skills_fire_all; fDamage_min = character_any.getSkillData(skillName, lvl, 0); fDamage_max = character_any.getSkillData(skillName, lvl, 1); }
-		else if (skillName == "Meteor") {		attack = 0; spell = 1; lvl += character.skills_fire_all; fDamage_min = character_any.getSkillData(skillName, lvl, 0); fDamage_max = character_any.getSkillData(skillName, lvl, 1); }
-		else if (skillName == "Hydra") {		attack = 0; spell = 1; lvl += character.skills_fire_all; fDamage_min = character_any.getSkillData(skillName, lvl, 1); fDamage_max = character_any.getSkillData(skillName, lvl, 2); }
+		else if (skillName == "Magic Arrow") {		attack = 1; spell = 0; mDamage_min = character_any.getSkillData(skillName,lvl,1); mDamage_max = character_any.getSkillData(skillName,lvl,2); }
+		else if (skillName == "Multiple Shot") {	attack = 1; spell = 0; damage_min = character_any.getSkillData(skillName,lvl,0); damage_max = character_any.getSkillData(skillName,lvl,1); }
+		else if (skillName == "Guided Arrow") {		attack = 1; spell = 1; weapon_damage = 150; damage_bonus = character_any.getSkillData(skillName,lvl,0); }
+		else if (skillName == "Bash") { 		attack = 1; spell = 0; weapon_damage = 110; ar_bonus = character_any.getSkillData(skillName,lvl,2); damage_bonus = character_any.getSkillData(skillName,lvl,3); }
+		else if (skillName == "Flame Dash") { 		attack = 0; spell = 1; lvl += character.skills_fire_all; fDamage_min = character_any.getSkillData(skillName,lvl,1); fDamage_max = character_any.getSkillData(skillName,lvl,2); }
+		else if (skillName == "Arctic Blast") { 	attack = 0; spell = 1; lvl += character.skills_cold_all; cDamage_min = character_any.getSkillData(skillName,lvl,0); cDamage_max = character_any.getSkillData(skillName,lvl,1); }
+		else if (skillName == "Feral Rage") {		attack = 1; spell = 0; ar_bonus = character_any.getSkillData(skillName,lvl,5); damage_bonus = character_any.getSkillData(skillName,lvl,4); }
+		else if (skillName == "Summon Dire Wolf") {	attack = 0; spell = 1; damage_min = character_any.getSkillData(skillName,lvl,4); damage_max = character_any.getSkillData(skillName,lvl,5); ar_bonus = character_any.getSkillData(skillName,lvl,1); }
+		else if (skillName == "Desecrate") {		attack = 0; spell = 1; lvl += character.skills_poison_all; pDamage_min = character_any.getSkillData(skillName,lvl,1); pDamage_max = character_any.getSkillData(skillName,lvl,2); pDamage_duration = 2; }
+		else if (skillName == "Zeal") {			attack = 1; spell = 0; ar_bonus = character_any.getSkillData(skillName,lvl,0); damage_bonus = character_any.getSkillData(skillName,lvl,1); }
+		else if (skillName == "Vengeance") {		attack = 1; spell = 0; fDamage_min = character_any.getSkillData(skillName,lvl,2); fDamage_max = character_any.getSkillData(skillName,lvl,3); cDamage_min = character_any.getSkillData(skillName,lvl,4); cDamage_max = character_any.getSkillData(skillName,lvl,5); lDamage_min = character_any.getSkillData(skillName,lvl,6); lDamage_max = character_any.getSkillData(skillName,lvl,7); ar_bonus = character_any.getSkillData(skillName,lvl,11); }
+		else if (skillName == "Fire Ball") {		attack = 0; spell = 1; lvl += character.skills_fire_all; fDamage_min = character_any.getSkillData(skillName,lvl,0); fDamage_max = character_any.getSkillData(skillName,lvl,1); }
+		else if (skillName == "Fire Wall") {		attack = 0; spell = 1; lvl += character.skills_fire_all; fDamage_min = character_any.getSkillData(skillName,lvl,0); fDamage_max = character_any.getSkillData(skillName,lvl,1); }
+		else if (skillName == "Meteor") {		attack = 0; spell = 1; lvl += character.skills_fire_all; fDamage_min = character_any.getSkillData(skillName,lvl,0); fDamage_max = character_any.getSkillData(skillName,lvl,1); }
+		else if (skillName == "Hydra") {		attack = 0; spell = 1; lvl += character.skills_fire_all; fDamage_min = character_any.getSkillData(skillName,lvl,1); fDamage_max = character_any.getSkillData(skillName,lvl,2); }
 		else { attack = 0; spell = 2; }
 
-	//	TODO: check weapon requirements & werewolf/werebear requirements
+	//	TODO: check weapon requirements (only conflict would be a Passion bow, which grants Bash & Zeal...) & werewolf/werebear requirements
 
 		if (attack == 0) { phys_min = 0; phys_max = 0; phys_mult = 1; ele_min = 0; ele_max = 0; mag_min = 0; mag_max = 0; }
 		ele_min += Math.floor(fDamage_min + cDamage_min + lDamage_min + pDamage_min);
 		ele_max += Math.floor(fDamage_max + cDamage_max + lDamage_max + pDamage_max);
 		phys_min = Math.floor((phys_min + damage_min) * (phys_mult + (weapon_damage-100+damage_bonus)/100));
 		phys_max = Math.floor((phys_max + damage_max) * (phys_mult + (weapon_damage-100+damage_bonus)/100));
-		if (spell == 0) { skillMin = Math.floor(mag_min+mDamage_min+ele_min+phys_min); skillMax = Math.floor(mag_max+mDamage_max+ele_max+phys_max); skillAr = Math.floor(ar*(1+ar_bonus/100));
-		} else if (spell == 1) { skillMin = Math.floor(mag_min+mDamage_min+ele_min+phys_min); skillMax = Math.floor(mag_max+mDamage_max+ele_max+phys_max); skillAr = "";
-		} else if (spell == 2) { skillMin = ""; skillMax = ""; skillAr = ""; }
+		if (spell != 2) { skillMin = Math.floor(mag_min+mDamage_min+ele_min+phys_min); skillMax = Math.floor(mag_max+mDamage_max+ele_max+phys_max); }
+		if (spell == 0) { skillAr = Math.floor(ar*(1+ar_bonus/100)); }
 		
-		var output = ": " + ~~skillMin + " - " + ~~skillMax;
-		if (num == 1) {
-			if (output != ": 0 - 0" && output != ":  - ") { document.getElementById("skill1_info").innerHTML = output } else { document.getElementById("skill1_info").innerHTML = ":" }
-			if (skillAr != "") { document.getElementById("ar_skill1").innerHTML = "AR: " + skillAr } else { document.getElementById("ar_skill1").innerHTML = "" }
-		} else if (num == 2) {
-			if (output != ": 0 - 0" && output != ":  - ") { document.getElementById("skill2_info").innerHTML = output } else { document.getElementById("skill2_info").innerHTML = ":" }
-			if (skillAr != "") { document.getElementById("ar_skill2").innerHTML = "AR: " + skillAr } else { document.getElementById("ar_skill2").innerHTML = "" }
-		}
+		var output = ": " + skillMin + "-" + skillMax + " {"+Math.ceil((skillMin+skillMax)/2)+"}";
+		if (skillMin != 0 && skillMax != 0) { document.getElementById("skill"+num+"_info").innerHTML = output } else { document.getElementById("skill"+num+"_info").innerHTML = ":" }
+		if (skillAr != 0) { document.getElementById("ar_skill"+num).innerHTML = "AR: " + skillAr } else { document.getElementById("ar_skill"+num).innerHTML = "" }
 	}
 };

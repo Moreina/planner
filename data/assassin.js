@@ -103,34 +103,35 @@ var character_assassin = {class_name:"Assassin", strength:20, dexterity:20, vita
 		var lDamage_min = 0; var lDamage_max = 0;
 		var pDamage_min = 0; var pDamage_max = 0; var pDamage_duration = 0;
 		var mDamage_min = 0; var mDamage_max = 0;
-		var skillMin = ""; var skillMax = ""; var skillAr = "";
+		var skillMin = 0; var skillMax = 0; var skillAr = 0;
 		var attack = 1;	// 0 = no basic damage, 1 = includes basic attack damage
 		var spell = 1;	// 0 = uses attack rating, 1 = no attack rating, 2 = non-damaging
 		var kick_damage_min = 0; var kick_damage_max = 0; var kick_bonus = 0;
+		var strTotal = (character.strength + character.all_attributes + (character.level-1)*character.strength_per_level);	// used in Kick calculations
 
-		if (skill.name == "Dual Strike") { 		attack = 1; spell = 0; weapon_damage = 110; damage_bonus = character.getSkillData(skill, lvl, 0); ar_bonus = character.getSkillData(skill, lvl, 1); }
-		else if (skill.name == "Fists of Ember") { 	attack = 1; spell = 0; ar_bonus = character.getSkillData(skill, lvl, 2); damage_min = 1; damage_max = 1; }
-		else if (skill.name == "Fists of Thunder") {	attack = 1; spell = 0; ar_bonus = character.getSkillData(skill, lvl, 3); damage_min = 1; damage_max = 1; }
-		else if (skill.name == "Fists of Ice") { 	attack = 1; spell = 0; ar_bonus = character.getSkillData(skill, lvl, 3); damage_min = 1; damage_max = 1; }
-		else if (skill.name == "Static Strike") {	attack = 1; spell = 0; weapon_damage = 0; lDamage_min = 0.8*phys_min+character.getSkillData(skill, lvl, 0); lDamage_max = 0.8*phys_max+character.getSkillData(skill, lvl, 1); }
-		else if (skill.name == "Dragon Talon") {	attack = 1; spell = 0; kick_damage_min = character.getSkillData(skill, lvl, 0); kick_damage_max = character.getSkillData(skill, lvl, 1); ar_bonus = character.getSkillData(skill, lvl, 2); kick_bonus = character.getSkillData(skill, lvl, 3); damage_bonus = character.getSkillData(skill, lvl, 4); }
-		else if (skill.name == "Emberstorm") {		attack = 1; spell = 1; fDamage_min = character.getSkillData(skill, lvl, 0); fDamage_max = character.getSkillData(skill, lvl, 1); }
-		else if (skill.name == "Dragon Flight") { 	attack = 1; spell = 0; kick_damage_min = character.getSkillData(skill, lvl, 0); kick_damage_max = character.getSkillData(skill, lvl, 1); kick_bonus = character.getSkillData(skill, lvl, 3); ar_bonus = character.getSkillData(skill, lvl, 4); }
-		else if (skill.name == "Blades of Ice") {	attack = 1; spell = 0; weapon_damage = 0.4*50; cDamage_min = 0.5*0.6*phys_min+character.getSkillData(skill, lvl, 1); cDamage_max = 0.5*0.6*phys_max+character.getSkillData(skill, lvl, 2); ar_bonus = character.getSkillData(skill, lvl, 0); }
-		else if (skill.name == "Psychic Hammer") {	attack = 0; spell = 1; damage_min = character.getSkillData(skill, lvl, 0); damage_max = character.getSkillData(skill, lvl, 1); mDamage_min = character.getSkillData(skill, lvl, 2); mDamage_max = character.getSkillData(skill, lvl, 3); }
-		else if (skill.name == "Mind Blast") {		attack = 0; spell = 1; damage_min = character.getSkillData(skill, lvl, 0); damage_max = character.getSkillData(skill, lvl, 1); }
+		if (skill.name == "Dual Strike") { 		attack = 1; spell = 0; weapon_damage = 110; damage_bonus = character.getSkillData(skill,lvl,0); ar_bonus = character.getSkillData(skill,lvl,1); }
+		else if (skill.name == "Fists of Ember") { 	attack = 1; spell = 0; ar_bonus = character.getSkillData(skill,lvl,2); damage_min = 1; damage_max = 1; }
+		else if (skill.name == "Fists of Thunder") {	attack = 1; spell = 0; ar_bonus = character.getSkillData(skill,lvl,3); damage_min = 1; damage_max = 1; }
+		else if (skill.name == "Fists of Ice") { 	attack = 1; spell = 0; ar_bonus = character.getSkillData(skill,lvl,3); damage_min = 1; damage_max = 1; }
+		else if (skill.name == "Static Strike") {	attack = 1; spell = 0; weapon_damage = 0; lDamage_min = 0.8*phys_min+character.getSkillData(skill,lvl,0); lDamage_max = 0.8*phys_max+character.getSkillData(skill,lvl,1); }
+		else if (skill.name == "Dragon Talon") {	attack = 1; spell = 0; kick_damage_min = character.getSkillData(skill,lvl,0); kick_damage_max = character.getSkillData(skill,lvl,1); ar_bonus = character.getSkillData(skill,lvl,2); kick_bonus = 1.2*strTotal+character.getSkillData(skill,lvl,3); damage_bonus = character.getSkillData(skill,lvl,4); }
+		else if (skill.name == "Emberstorm") {		attack = 1; spell = 1; fDamage_min = character.getSkillData(skill,lvl,0); fDamage_max = character.getSkillData(skill,lvl,1); }
+		else if (skill.name == "Dragon Flight") { 	attack = 1; spell = 0; kick_damage_min = character.getSkillData(skill,lvl,0); kick_damage_max = character.getSkillData(skill,lvl,1); kick_bonus = 1.2*strTotal+character.getSkillData(skill,lvl,3); ar_bonus = character.getSkillData(skill,lvl,4); }
+		else if (skill.name == "Blades of Ice") {	attack = 1; spell = 0; weapon_damage = 0.4*50; cDamage_min = 0.5*0.6*phys_min+character.getSkillData(skill,lvl,1); cDamage_max = 0.5*0.6*phys_max+character.getSkillData(skill,lvl,2); ar_bonus = character.getSkillData(skill,lvl,0); }
+		else if (skill.name == "Psychic Hammer") {	attack = 0; spell = 1; damage_min = character.getSkillData(skill,lvl,0); damage_max = character.getSkillData(skill,lvl,1); mDamage_min = character.getSkillData(skill,lvl,2); mDamage_max = character.getSkillData(skill,lvl,3); }
+		else if (skill.name == "Mind Blast") {		attack = 0; spell = 1; damage_min = character.getSkillData(skill,lvl,0); damage_max = character.getSkillData(skill,lvl,1); }
 	//	else if (skill.name == "Shadow Warrior") {	attack = 0; spell = 2; }
 	//	else if (skill.name == "Shadow Master") {	attack = 0; spell = 2; }
-		else if (skill.name == "Fire Blast") {		attack = 0; spell = 1; fDamage_min = character.getSkillData(skill, lvl, 0); fDamage_max = character.getSkillData(skill, lvl, 1); }
-		else if (skill.name == "Shock Web") {		attack = 0; spell = 1; lDamage_min = character.getSkillData(skill, lvl, 1); lDamage_max = character.getSkillData(skill, lvl, 2); }
-		else if (skill.name == "Blade Throw") {		attack = 1; spell = 0; weapon_damage = 50; ar_bonus = character.getSkillData(skill, lvl, 0); damage_min = character.getSkillData(skill, lvl, 1); damage_max = character.getSkillData(skill, lvl, 2); }
-		else if (skill.name == "Charged Bolt Sentry") {	attack = 0; spell = 1; lDamage_min = character.getSkillData(skill, lvl, 2); lDamage_max = character.getSkillData(skill, lvl, 3); }
-		else if (skill.name == "Wake of Fire") {	attack = 0; spell = 1; fDamage_min = character.getSkillData(skill, lvl, 0); fDamage_max = character.getSkillData(skill, lvl, 1); }
-		else if (skill.name == "Blade Fury") {		attack = 1; spell = 0; weapon_damage = 87; ar_bonus = character.getSkillData(skill, lvl, 0); damage_min = character.getSkillData(skill, lvl, 1); damage_max = character.getSkillData(skill, lvl, 2); }
-		else if (skill.name == "Lightning Sentry") {	attack = 0; spell = 1; lDamage_min = character.getSkillData(skill, lvl, 0); lDamage_max = character.getSkillData(skill, lvl, 1); }
-		else if (skill.name == "Wake of Inferno") {	attack = 0; spell = 1; fDamage_min = character.getSkillData(skill, lvl, 1); fDamage_max = character.getSkillData(skill, lvl, 2); }
-		else if (skill.name == "Death Sentry") {	attack = 0; spell = 1; lDamage_min = character.getSkillData(skill, lvl, 2); lDamage_max = character.getSkillData(skill, lvl, 3); }
-		else if (skill.name == "Blade Shield") {	attack = 1; spell = 0; weapon_damage = 50; damage_min = character.getSkillData(skill, lvl, 2); damage_max = character.getSkillData(skill, lvl, 3); ar_bonus = character.getSkillData(skill, lvl, 4); }
+		else if (skill.name == "Fire Blast") {		attack = 0; spell = 1; fDamage_min = character.getSkillData(skill,lvl,0); fDamage_max = character.getSkillData(skill,lvl,1); }
+		else if (skill.name == "Shock Web") {		attack = 0; spell = 1; lDamage_min = character.getSkillData(skill,lvl,1); lDamage_max = character.getSkillData(skill,lvl,2); }
+		else if (skill.name == "Blade Throw") {		attack = 1; spell = 0; weapon_damage = 50; ar_bonus = character.getSkillData(skill,lvl,0); damage_min = character.getSkillData(skill,lvl,1); damage_max = character.getSkillData(skill,lvl,2); }
+		else if (skill.name == "Charged Bolt Sentry") {	attack = 0; spell = 1; lDamage_min = character.getSkillData(skill,lvl,2); lDamage_max = character.getSkillData(skill,lvl,3); }
+		else if (skill.name == "Wake of Fire") {	attack = 0; spell = 1; fDamage_min = character.getSkillData(skill,lvl,0); fDamage_max = character.getSkillData(skill,lvl,1); }
+		else if (skill.name == "Blade Fury") {		attack = 1; spell = 0; weapon_damage = 87; ar_bonus = character.getSkillData(skill,lvl,0); damage_min = character.getSkillData(skill,lvl,1); damage_max = character.getSkillData(skill,lvl,2); }
+		else if (skill.name == "Lightning Sentry") {	attack = 0; spell = 1; lDamage_min = character.getSkillData(skill,lvl,0); lDamage_max = character.getSkillData(skill,lvl,1); }
+		else if (skill.name == "Wake of Inferno") {	attack = 0; spell = 1; fDamage_min = character.getSkillData(skill,lvl,1); fDamage_max = character.getSkillData(skill,lvl,2); }
+		else if (skill.name == "Death Sentry") {	attack = 0; spell = 1; lDamage_min = character.getSkillData(skill,lvl,2); lDamage_max = character.getSkillData(skill,lvl,3); }
+		else if (skill.name == "Blade Shield") {	attack = 1; spell = 0; weapon_damage = 50; damage_min = character.getSkillData(skill,lvl,2); damage_max = character.getSkillData(skill,lvl,3); ar_bonus = character.getSkillData(skill,lvl,4); }
 		else { attack = 0; spell = 2; }
 		
 		if (typeof(skill.reqWeapon) != 'undefined') { var match = 0; for (let w = 0; w < skill.reqWeapon.length; w++) {
@@ -148,18 +149,12 @@ var character_assassin = {class_name:"Assassin", strength:20, dexterity:20, vita
 		ele_max += Math.floor(fDamage_max + cDamage_max + lDamage_max + pDamage_max);
 		phys_min = Math.floor((phys_min + damage_min + kick_min) * (phys_mult + (weapon_damage-100+damage_bonus+kick_bonus)/100));
 		phys_max = Math.floor((phys_max + damage_max + kick_max) * (phys_mult + (weapon_damage-100+damage_bonus+kick_bonus)/100));
-		if (spell == 0) { skillMin = Math.floor(mag_min+mDamage_min+ele_min+phys_min); skillMax = Math.floor(mag_max+mDamage_max+ele_max+phys_max); skillAr = Math.floor(ar*(1+ar_bonus/100));
-		} else if (spell == 1) { skillMin = Math.floor(mag_min+mDamage_min+ele_min+phys_min); skillMax = Math.floor(mag_max+mDamage_max+ele_max+phys_max); skillAr = "";
-		} else if (spell == 2) { skillMin = ""; skillMax = ""; skillAr = ""; }
+		if (spell != 2) { skillMin = Math.floor(mag_min+mDamage_min+ele_min+phys_min); skillMax = Math.floor(mag_max+mDamage_max+ele_max+phys_max); }
+		if (spell == 0) { skillAr = Math.floor(ar*(1+ar_bonus/100)); }
 		
-		var output = ": " + skillMin + " - " + skillMax;
-		if (num == 1) {
-			if (output != ": 0 - 0" && output != ":  - ") { document.getElementById("skill1_info").innerHTML = output } else { document.getElementById("skill1_info").innerHTML = ":" }
-			if (skillAr != "") { document.getElementById("ar_skill1").innerHTML = "AR: " + skillAr } else { document.getElementById("ar_skill1").innerHTML = "" }
-		} else if (num == 2) {
-			if (output != ": 0 - 0" && output != ":  - ") { document.getElementById("skill2_info").innerHTML = output } else { document.getElementById("skill2_info").innerHTML = ":" }
-			if (skillAr != "") { document.getElementById("ar_skill2").innerHTML = "AR: " + skillAr } else { document.getElementById("ar_skill2").innerHTML = "" }
-		}
+		var output = ": " + skillMin + "-" + skillMax + " {"+Math.ceil((skillMin+skillMax)/2)+"}";
+		if (skillMin != 0 && skillMax != 0) { document.getElementById("skill"+num+"_info").innerHTML = output } else { document.getElementById("skill"+num+"_info").innerHTML = ":" }
+		if (skillAr != 0) { document.getElementById("ar_skill"+num).innerHTML = "AR: " + skillAr } else { document.getElementById("ar_skill"+num).innerHTML = "" }
 	}
 };
 
@@ -206,6 +201,7 @@ var skills_assassin = [
 {data:d151, key:"151", code:257, name:"Emberstorm", i:6, req:[1,0], reqlvl:24, reqWeapon:["claw","dagger"], level:0, extra_levels:0, force_levels:0, bindable:2, style:"display: block; top: 354px; left: 2px;", description:"Flaming bolts rain down and explode on impact<br>[Requires Claw or Dagger Class Weapons]", syn_title:"<br>Emberstorm Receives Bonuses From:<br>", syn_text:"Fire Blast: +18% Fire Damage per Level<br>+20% Fire Damage per Ember Charge", graytext:"", text:["Fire Damage: ","-","<br>Mana Cost: ",""]},
 {data:d152, key:"152", code:258, name:"Dragon Flight", i:7, req:[5], reqlvl:24, reqWeapon:["axe","mace","club","hammer","sword","dagger","thrown","javelin","scepter","claw","wand"], level:0, extra_levels:0, force_levels:0, bindable:2, style:"display: block; top: 354px; left: 72px;", description:"Perform a teleporting kick attack that also<br>deals damage to enemies near your target<br>[Requires One-Handed Melee Weapons]", syn_title:"", syn_text:"", graytext:"", text:["Deals 100% of Weapon Damage<br>Kick Damage from Footwear: ","-","<br>Your Cold Damage Freezes Enemies<br><br>Cooldown Reduced by 0.5 seconds<br>per Thunder,Ice,Ember Charge<br><br>Minimum Cooldown: 0.4 seconds<br>Cooldown: ","Kick Damage: +"," percent<br>Attack Rating: +"," percent<br>Mana Cost: ",""]},
 {data:d163, key:"163", code:259, name:"Blades of Ice", i:8, req:[3,0], reqlvl:30, reqWeapon:["claw","dagger"], level:0, extra_levels:0, force_levels:0, bindable:2, style:"display: block; top: 422px; left: 142px;", description:"Create a flurry of ice shards which<br>seek out nearby enemies<br>[Requires Claw or Dagger Class Weapons]<br><br>Deals 50% of Weapon Damage<br>60% of Physical Damage converted to Cold", syn_title:"<br>Blades of Ice Receives Bonuses From:<br>", syn_text:"+20% Cold Damage per Ice Charge", graytext:"", text:["Attack Rating: +"," percent<br>Cold Damage: ","-","<br>Mana Cost: ",""]},
+// TODO: Add info for Dragon Tail? (available from claws)
 
 {data:d212, key:"212", code:260, name:"Claw Mastery", i:9, req:[], reqlvl:1, level:0, extra_levels:0, force_levels:0, effect:1, bindable:0, style:"display: block; top: 82px; left: 234px;", description:"Passive - Improves your skill<br>with claw-class weapons", syn_title:"", syn_text:"", graytext:"", text:["Damage: +"," percent<br>Attack Rating: +"," percent<br>"," percent chance of Critical Strike",""]},
 {data:d213, key:"213", code:261, name:"Psychic Hammer", i:10, req:[], reqlvl:1, level:0, extra_levels:0, force_levels:0, bindable:2, style:"display: block; top: 82px; left: 234px;", description:"Use the power of your mind<br>to create a psychic blast<br>to crush and knock back your enemies", syn_title:"<br>Psychic Hammer Receives Bonuses From:<br>", syn_text:"Mind Blast: +25% Damage per Level<br>Mind Barrier: +25% Damage per Level<br>Mind Barrier: +25% Magic Damage per Level<br>Mind Blast: +25% Magic Damage per Level", graytext:"", text:["Damage: ","-","<br>Magic damage: ","-","<br>Mana Cost: ",""]},

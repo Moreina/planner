@@ -44,22 +44,11 @@ var character_paladin = {class_name:"Paladin", strength:25, dexterity:20, vitali
 		if (skill.name == "Zeal" && elem == 1) { 	result += (10*skills[20].level) }
 		if (skill.name == "Charge" && elem == 0) { 	result += (26*skills[6].level + 26*skills[10].level) }	// TODO: are these synergies supposed to be multiplicative instead of additive?
 		
-		// calculates weapon's physical damage - similar to getWeaponDamage()
-		var sock = {damage_min:0, damage_max:0, e_damage:0};
 		var phys_min = 0;
 		var phys_max = 0;
 		if (skill.name == "Vengeance" && equipped.weapon.name != "none" && elem < 8) {
-			for (group in socketed) {
-				for (let i = 0; i < socketed[group].items.length; i++) {
-					for (affix in socketed[group].items[i]) {
-						if (group == "weapon" && affix == "e_damage") { sock[affix] += socketed[group].items[i][affix] }
-						if (affix == "damage_min" || affix == "damage_max") { sock[affix] += socketed[group].items[i][affix] }
-					}
-				}
-			}
-			// TODO: Doesn't account for superior ED (unless it has since been combined with weapon ED)
-			phys_min = (character.base_damage_min * (1+(character.e_damage+sock.e_damage)/100) + character.damage_min + (character.level-1)*character.min_damage_per_level + sock.damage_min);
-			phys_max = (character.base_damage_max * (1+(character.e_damage+sock.e_damage)/100) + character.damage_max + (character.level-1)*character.max_damage_per_level + sock.damage_max);
+			phys_min = (character.base_damage_min * (1+character.e_damage/100) + character.damage_min + (character.level-1)*character.min_damage_per_level);
+			phys_max = (character.base_damage_max * (1+character.e_damage/100) + character.damage_max + (character.level-1)*character.max_damage_per_level);
 		}
 		if (skill.name == "Vengeance" && elem == 0) { 	result = phys_min * wisp }
 		if (skill.name == "Vengeance" && elem == 1) { 	result = phys_max * wisp }
@@ -156,20 +145,24 @@ var character_paladin = {class_name:"Paladin", strength:25, dexterity:20, vitali
 		var lDamage_min = 0; var lDamage_max = 0;
 		var pDamage_min = 0; var pDamage_max = 0; var pDamage_duration = 0;
 		var mDamage_min = 0; var mDamage_max = 0;
-		var skillMin = ""; var skillMax = ""; var skillAr = "";
+		var skillMin = 0; var skillMax = 0; var skillAr = 0;
 		var attack = 1;	// 0 = no basic damage, 1 = includes basic attack damage
 		var spell = 1;	// 0 = uses attack rating, 1 = no attack rating, 2 = non-damaging
 		var smite_min = 0; var smite_max = 0;
+		var strTotal = (character.strength + character.all_attributes + (character.level-1)*character.strength_per_level);	// used in Smite calculation
 		
-		if (skill.name == "Sacrifice") {		attack = 1; spell = 0; weapon_damage = 150; ar_bonus = character.getSkillData(skill, lvl, 0); damage_bonus = character.getSkillData(skill, lvl, 1); }
-		else if (skill.name == "Smite") {		attack = 1; spell = 1; phys_min = 0; phys_max = 0; phys_mult = (1+character.damage_bonus/100); damage_bonus = character.getSkillData(skill, lvl, 0); smite_min = character.smite_min + equipped.offhand.smite_min + character.damage_min + (character.level-1)*character.min_damage_per_level; smite_max = character.smite_max + equipped.offhand.smite_max + character.damage_min + (character.level-1)*character.max_damage_per_level; }	// TODO: Add ED from non-weapon sockets to phys_mult
-		else if (skill.name == "Holy Bolt") {		attack = 0; spell = 1; mDamage_min = character.getSkillData(skill, lvl, 0); mDamage_max = character.getSkillData(skill, lvl, 1); }
-		else if (skill.name == "Zeal") {		attack = 1; spell = 0; ar_bonus = character.getSkillData(skill, lvl, 0); damage_bonus = character.getSkillData(skill, lvl, 1); }
-		else if (skill.name == "Charge") {		attack = 1; spell = 0; ar_bonus = character.getSkillData(skill, lvl, 1); damage_bonus = character.getSkillData(skill, lvl, 0); }
-		else if (skill.name == "Vengeance") {		attack = 1; spell = 0; fDamage_min = character.getSkillData(skill, lvl, 2); fDamage_max = character.getSkillData(skill, lvl, 3); cDamage_min = character.getSkillData(skill, lvl, 4); cDamage_max = character.getSkillData(skill, lvl, 5); lDamage_min = character.getSkillData(skill, lvl, 6); lDamage_max = character.getSkillData(skill, lvl, 7); ar_bonus = character.getSkillData(skill, lvl, 11); }
-		else if (skill.name == "Blessed Hammer") {	attack = 0; spell = 1; mDamage_min = character.getSkillData(skill, lvl, 0); mDamage_max = character.getSkillData(skill, lvl, 1); }
-		else if (skill.name == "Fist of the Heavens") {	attack = 0; spell = 1; mDamage_min = character.getSkillData(skill, lvl, 0); mDamage_max = character.getSkillData(skill, lvl, 1); lDamage_min = character.getSkillData(skill, lvl, 2); lDamage_max = character.getSkillData(skill, lvl, 3); }
-		else if (skill.name == "Dashing Strike") {	attack = 1; spell = 1; mDamage_min = character.getSkillData(skill, lvl, 1); mDamage_max = character.getSkillData(skill, lvl, 2); }
+	//	if (skill.name == "Holy Fire") {		attack = 0; spell = 2; }
+	//	else if (skill.name == "Holy Freeze") {		attack = 0; spell = 2; }
+	//	else if (skill.name == "Holy Shock") {		attack = 0; spell = 2; }
+		if (skill.name == "Sacrifice") {		attack = 1; spell = 0; weapon_damage = 150; ar_bonus = character.getSkillData(skill,lvl,0); damage_bonus = character.getSkillData(skill,lvl,1); }
+		else if (skill.name == "Smite") {		attack = 1; spell = 1; phys_min = 0; phys_max = 0; phys_mult = (1+(strTotal+character.damage_bonus)/100); damage_bonus = character.getSkillData(skill,lvl,0); smite_min = character.smite_min + equipped.offhand.smite_min + character.damage_min + (character.level-1)*character.min_damage_per_level; smite_max = character.smite_max + equipped.offhand.smite_max + character.damage_min + (character.level-1)*character.max_damage_per_level; }	// TODO: Add ED from non-weapon sockets to phys_mult
+		else if (skill.name == "Holy Bolt") {		attack = 0; spell = 1; mDamage_min = character.getSkillData(skill,lvl,0); mDamage_max = character.getSkillData(skill,lvl,1); }
+		else if (skill.name == "Zeal") {		attack = 1; spell = 0; ar_bonus = character.getSkillData(skill,lvl,0); damage_bonus = character.getSkillData(skill,lvl,1); }
+		else if (skill.name == "Charge") {		attack = 1; spell = 0; ar_bonus = character.getSkillData(skill,lvl,1); damage_bonus = character.getSkillData(skill,lvl,0); }
+		else if (skill.name == "Vengeance") {		attack = 1; spell = 0; fDamage_min = character.getSkillData(skill,lvl,2); fDamage_max = character.getSkillData(skill,lvl,3); cDamage_min = character.getSkillData(skill,lvl,4); cDamage_max = character.getSkillData(skill,lvl,5); lDamage_min = character.getSkillData(skill,lvl,6); lDamage_max = character.getSkillData(skill,lvl,7); ar_bonus = character.getSkillData(skill,lvl,11); }
+		else if (skill.name == "Blessed Hammer") {	attack = 0; spell = 1; mDamage_min = character.getSkillData(skill,lvl,0); mDamage_max = character.getSkillData(skill,lvl,1); }
+		else if (skill.name == "Fist of the Heavens") {	attack = 0; spell = 1; mDamage_min = character.getSkillData(skill,lvl,0); mDamage_max = character.getSkillData(skill,lvl,1); lDamage_min = character.getSkillData(skill,lvl,2); lDamage_max = character.getSkillData(skill,lvl,3); }
+		else if (skill.name == "Dashing Strike") {	attack = 1; spell = 1; mDamage_min = character.getSkillData(skill,lvl,1); mDamage_max = character.getSkillData(skill,lvl,2); }
 		else if (skill.name == "Conversion") {		attack = 1; spell = 0; }
 		else { attack = 0; spell = 2; }
 
@@ -183,18 +176,12 @@ var character_paladin = {class_name:"Paladin", strength:25, dexterity:20, vitali
 		ele_max += Math.floor(fDamage_max + cDamage_max + lDamage_max + pDamage_max);
 		phys_min = Math.floor((phys_min + damage_min + smite_min) * (phys_mult + (weapon_damage-100+damage_bonus)/100));
 		phys_max = Math.floor((phys_max + damage_max + smite_max) * (phys_mult + (weapon_damage-100+damage_bonus)/100));
-		if (spell == 0) { skillMin = Math.floor(mag_min+mDamage_min+ele_min+phys_min); skillMax = Math.floor(mag_max+mDamage_max+ele_max+phys_max); skillAr = Math.floor(ar*(1+ar_bonus/100));
-		} else if (spell == 1) { skillMin = Math.floor(mag_min+mDamage_min+ele_min+phys_min); skillMax = Math.floor(mag_max+mDamage_max+ele_max+phys_max); skillAr = "";
-		} else if (spell == 2) { skillMin = ""; skillMax = ""; skillAr = ""; }
+		if (spell != 2) { skillMin = Math.floor(mag_min+mDamage_min+ele_min+phys_min); skillMax = Math.floor(mag_max+mDamage_max+ele_max+phys_max); }
+		if (spell == 0) { skillAr = Math.floor(ar*(1+ar_bonus/100)); }
 		
-		var output = ": " + skillMin + " - " + skillMax;
-		if (num == 1) {
-			if (output != ": 0 - 0" && output != ":  - ") { document.getElementById("skill1_info").innerHTML = output } else { document.getElementById("skill1_info").innerHTML = ":" }
-			if (skillAr != "") { document.getElementById("ar_skill1").innerHTML = "AR: " + skillAr } else { document.getElementById("ar_skill1").innerHTML = "" }
-		} else if (num == 2) {
-			if (output != ": 0 - 0" && output != ":  - ") { document.getElementById("skill2_info").innerHTML = output } else { document.getElementById("skill2_info").innerHTML = ":" }
-			if (skillAr != "") { document.getElementById("ar_skill2").innerHTML = "AR: " + skillAr } else { document.getElementById("ar_skill2").innerHTML = "" }
-		}
+		var output = ": " + skillMin + "-" + skillMax + " {"+Math.ceil((skillMin+skillMax)/2)+"}";
+		if (skillMin != 0 && skillMax != 0) { document.getElementById("skill"+num+"_info").innerHTML = output } else { document.getElementById("skill"+num+"_info").innerHTML = ":" }
+		if (skillAr != 0) { document.getElementById("ar_skill"+num).innerHTML = "AR: " + skillAr } else { document.getElementById("ar_skill"+num).innerHTML = "" }
 	}
 };
 

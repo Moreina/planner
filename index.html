@@ -299,25 +299,25 @@
 </div> <!-- /gui -->
 
 <!--		skill details		-->
-<div class="no-selection" style="display: block; height:220px; width: 300px; margin-top: 30px; position: relative;">
+<div class="no-selection" style="display: block; height:220px; width: 330px; margin-top: 30px; position: relative;">
 <div class="gray">
-<div style="width: 200px; margin-bottom: 15px; margin-top: 40px;">
+<div style="width: 300px; margin-bottom: 15px; margin-top: 40px;">
 <!--<a style="visibility:visible;">Damage per Second: </a><a id="dps"></a><br>-->
 <!--<a style="visibility:visible;">Chance to Hit: </a><a id="hit"></a><br>-->
 	<a>Basic Attack: </a><a id="basic_attack"></a><br>
 	<a>Attack Rating: </a><a id="ar"></a>
 </div>
 
-<div class="gray" style="width: 200px;">
-	<div class="none" id="skillDetail1" style="height: 22px; width: 300px; position: relative; z-index: 4;">
-	<select class="none" id="dropdown_skill1" onChange="checkSkill(this.value, 1)" oncontextmenu="checkSkill(' ­ ­ ­ ­ Skill 1', 1)"><option class="gray-all" disabled selected> ­ ­ ­ ­ Skill 1</option></select><a id="skill1_info">: </a>
+<div>
+	<div id="skillDetail1" style="height: 22px; position: relative; z-index: 3;">
+	<select class="dropdown-skill" id="dropdown_skill1" onChange="checkSkill(this.value, 1)" oncontextmenu="checkSkill(' ­ ­ ­ ­ Skill 1', 1)"><option class="gray-all" disabled selected> ­ ­ ­ ­ Skill 1</option></select><a id="skill1_info">: </a>
 	</div>
-	<a class="none" style="visibility: hidden; color: gray;">AR: </a><a id="ar_skill1"></a>
+	<a style="visibility: hidden; color: gray;">AR: </a><a id="ar_skill1"></a>
 </div>
 
-<div class="gray" style="width: 200px;">
-	<div class="none" id="skillDetail2" style="height: 22px; width: 275px; position: relative; z-index: 4; margin-top: 10px;">
-	<select class="none" id="dropdown_skill2" onChange="checkSkill(this.value, 2)" oncontextmenu="checkSkill(' ­ ­ ­ ­ Skill 2', 2)"><option class="gray-all" disabled selected> ­ ­ ­ ­ Skill 2</option></select><a id="skill2_info">: </a>
+<div>
+	<div id="skillDetail2" style="height: 22px; position: relative; z-index: 3; margin-top: 10px;">
+	<select class="dropdown-skill" id="dropdown_skill2" onChange="checkSkill(this.value, 2)" oncontextmenu="checkSkill(' ­ ­ ­ ­ Skill 2', 2)"><option class="gray-all" disabled selected> ­ ­ ­ ­ Skill 2</option></select><a id="skill2_info">: </a>
 	</div>
 	<a style="visibility: hidden; color: gray;">AR: </a><a id="ar_skill2"></a>
 </div>

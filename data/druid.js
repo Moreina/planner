@@ -137,53 +137,52 @@ var character_druid = {class_name:"Druid", strength:15, dexterity:20, vitality:2
 		var lDamage_min = 0; var lDamage_max = 0;
 		var pDamage_min = 0; var pDamage_max = 0; var pDamage_duration = 0;
 		var mDamage_min = 0; var mDamage_max = 0;
-		var skillMin = ""; var skillMax = ""; var skillAr = "";
+		var skillMin = 0; var skillMax = 0; var skillAr = 0;
 		var attack = 1;	// 0 = no basic damage, 1 = includes basic attack damage
 		var spell = 1;	// 0 = uses attack rating, 1 = no attack rating, 2 = non-damaging
 		
-		if (skill.name == "Firestorm") { 		attack = 0; spell = 1; fDamage_min = character.getSkillData(skill, lvl, 1); fDamage_max = character.getSkillData(skill, lvl, 2); }
-		else if (skill.name == "Molten Boulder") { 	attack = 0; spell = 1; damage_min = character.getSkillData(skill, lvl, 0); damage_max = character.getSkillData(skill, lvl, 1); fDamage_min = character.getSkillData(skill, lvl, 2); fDamage_max = character.getSkillData(skill, lvl, 3); }
-		else if (skill.name == "Flame Dash") { 		attack = 0; spell = 1; fDamage_min = character.getSkillData(skill, lvl, 1); fDamage_max = character.getSkillData(skill, lvl, 2); }
-		else if (skill.name == "Arctic Blast") { 	attack = 0; spell = 1; cDamage_min = character.getSkillData(skill, lvl, 0); cDamage_max = character.getSkillData(skill, lvl, 1); }
-		else if (skill.name == "Fissure") { 		attack = 0; spell = 1; fDamage_min = character.getSkillData(skill, lvl, 0); fDamage_max = character.getSkillData(skill, lvl, 1); }
-		else if (skill.name == "Twister") { 		attack = 0; spell = 1; damage_min = character.getSkillData(skill, lvl, 0); damage_max = character.getSkillData(skill, lvl, 1); }
-		else if (skill.name == "Volcano") { 		attack = 0; spell = 1; damage_min = character.getSkillData(skill, lvl, 0); damage_max = character.getSkillData(skill, lvl, 1); fDamage_min = character.getSkillData(skill, lvl, 2); fDamage_max = character.getSkillData(skill, lvl, 3); }
-		else if (skill.name == "Tornado") { 		attack = 0; spell = 1; damage_min = character.getSkillData(skill, lvl, 0); damage_max = character.getSkillData(skill, lvl, 1); }
-		else if (skill.name == "Armageddon") {		attack = 0; spell = 1; damage_min = character.getSkillData(skill, lvl, 1); damage_max = character.getSkillData(skill, lvl, 2); fDamage_min = character.getSkillData(skill, lvl, 3); fDamage_max = character.getSkillData(skill, lvl, 4); }
-		else if (skill.name == "Hurricane") {		attack = 0; spell = 1; cDamage_min = character.getSkillData(skill, lvl, 1); cDamage_max = character.getSkillData(skill, lvl, 2); }
-		else if (skill.name == "Feral Rage") {		attack = 1; spell = 0; ar_bonus = character.getSkillData(skill, lvl, 5); damage_bonus = character.getSkillData(skill, lvl, 4); }
-		else if (skill.name == "Maul") { 		attack = 1; spell = 0; ar_bonus = character.getSkillData(skill, lvl, 3); damage_bonus = character.getSkillData(skill, lvl, 2); }
-		else if (skill.name == "Rabies") { 		attack = 1; spell = 0; ar_bonus = character.getSkillData(skill, lvl, 0); pDamage_min = character.getSkillData(skill, lvl, 1); pDamage_max = character.getSkillData(skill, lvl, 2); pDamage_duration = 4; }
-		else if (skill.name == "Fire Claws") {		attack = 1; spell = 0; ar_bonus = character.getSkillData(skill, lvl, 2); fDamage_min = character.getSkillData(skill, lvl, 0); fDamage_max = character.getSkillData(skill, lvl, 1); }
-		else if (skill.name == "Hunger") { 		attack = 1; spell = 0; ar_bonus = character.getSkillData(skill, lvl, 2); damage_bonus = -75; }
-		else if (skill.name == "Shock Wave") {		attack = 1; spell = 0; weapon_damage = 25; damage_min = character.getSkillData(skill, lvl, 0); damage_max = character.getSkillData(skill, lvl, 1); }
-		else if (skill.name == "Fury") { 		attack = 1; spell = 0; ar_bonus = character.getSkillData(skill, lvl, 1); damage_bonus = character.getSkillData(skill, lvl, 2); }
-		else if (skill.name == "Raven") { 		attack = 0; spell = 1; damage_min = character.getSkillData(skill, lvl, 1); damage_max = character.getSkillData(skill, lvl, 2); cDamage_min = character.getSkillData(skill, lvl, 3); cDamage_max = character.getSkillData(skill, lvl, 4); }
-		else if (skill.name == "Poison Creeper") { 	attack = 0; spell = 1; pDamage_min = character.getSkillData(skill, lvl, 1); pDamage_max = character.getSkillData(skill, lvl, 2); pDamage_duration = 5; }
-		else if (skill.name == "Summon Spirit Wolf") {	attack = 0; spell = 1; damage_min = character.getSkillData(skill, lvl, 2); damage_max = character.getSkillData(skill, lvl, 3); ar_bonus = character.getSkillData(skill, lvl, 4); }
-		else if (skill.name == "Summon Dire Wolf") {	attack = 0; spell = 1; damage_min = character.getSkillData(skill, lvl, 4); damage_max = character.getSkillData(skill, lvl, 5); ar_bonus = character.getSkillData(skill, lvl, 1); }
-		else if (skill.name == "Summon Grizzly") { 	attack = 0; spell = 1; damage_min = character.getSkillData(skill, lvl, 3); damage_max = character.getSkillData(skill, lvl, 4); ar_bonus = character.getSkillData(skill, lvl, 1); }
+		if (skill.name == "Firestorm") { 		attack = 0; spell = 1; fDamage_min = character.getSkillData(skill,lvl,1); fDamage_max = character.getSkillData(skill,lvl,2); }
+		else if (skill.name == "Molten Boulder") { 	attack = 0; spell = 1; damage_min = character.getSkillData(skill,lvl,0); damage_max = character.getSkillData(skill,lvl,1); fDamage_min = character.getSkillData(skill,lvl,2); fDamage_max = character.getSkillData(skill,lvl,3); }
+		else if (skill.name == "Flame Dash") { 		attack = 0; spell = 1; fDamage_min = character.getSkillData(skill,lvl,1); fDamage_max = character.getSkillData(skill,lvl,2); }
+		else if (skill.name == "Arctic Blast") { 	attack = 0; spell = 1; cDamage_min = character.getSkillData(skill,lvl,0); cDamage_max = character.getSkillData(skill,lvl,1); }
+		else if (skill.name == "Fissure") { 		attack = 0; spell = 1; fDamage_min = character.getSkillData(skill,lvl,0); fDamage_max = character.getSkillData(skill,lvl,1); }
+		else if (skill.name == "Twister") { 		attack = 0; spell = 1; damage_min = character.getSkillData(skill,lvl,0); damage_max = character.getSkillData(skill,lvl,1); }
+		else if (skill.name == "Volcano") { 		attack = 0; spell = 1; damage_min = character.getSkillData(skill,lvl,0); damage_max = character.getSkillData(skill,lvl,1); fDamage_min = character.getSkillData(skill,lvl,2); fDamage_max = character.getSkillData(skill,lvl,3); }
+		else if (skill.name == "Tornado") { 		attack = 0; spell = 1; damage_min = character.getSkillData(skill,lvl,0); damage_max = character.getSkillData(skill,lvl,1); }
+		else if (skill.name == "Armageddon") {		attack = 0; spell = 1; damage_min = character.getSkillData(skill,lvl,1); damage_max = character.getSkillData(skill,lvl,2); fDamage_min = character.getSkillData(skill,lvl,3); fDamage_max = character.getSkillData(skill,lvl,4); }
+		else if (skill.name == "Hurricane") {		attack = 0; spell = 1; cDamage_min = character.getSkillData(skill,lvl,1); cDamage_max = character.getSkillData(skill,lvl,2); }
+		else if (skill.name == "Feral Rage") {		attack = 1; spell = 0; ar_bonus = character.getSkillData(skill,lvl,5); damage_bonus = character.getSkillData(skill,lvl,4); }
+		else if (skill.name == "Maul") { 		attack = 1; spell = 0; ar_bonus = character.getSkillData(skill,lvl,3); damage_bonus = character.getSkillData(skill,lvl,2); }
+		else if (skill.name == "Rabies") { 		attack = 1; spell = 0; ar_bonus = character.getSkillData(skill,lvl,0); pDamage_min = character.getSkillData(skill,lvl,1); pDamage_max = character.getSkillData(skill,lvl,2); pDamage_duration = 4; }
+		else if (skill.name == "Fire Claws") {		attack = 1; spell = 0; ar_bonus = character.getSkillData(skill,lvl,2); fDamage_min = character.getSkillData(skill,lvl,0); fDamage_max = character.getSkillData(skill,lvl,1); }
+		else if (skill.name == "Hunger") { 		attack = 1; spell = 0; ar_bonus = character.getSkillData(skill,lvl,2); damage_bonus = -75; }
+		else if (skill.name == "Shock Wave") {		attack = 1; spell = 0; weapon_damage = 25; damage_min = character.getSkillData(skill,lvl,0); damage_max = character.getSkillData(skill,lvl,1); }
+		else if (skill.name == "Fury") { 		attack = 1; spell = 0; ar_bonus = character.getSkillData(skill,lvl,1); damage_bonus = character.getSkillData(skill,lvl,2); }
+		else if (skill.name == "Raven") { 		attack = 0; spell = 1; damage_min = character.getSkillData(skill,lvl,1); damage_max = character.getSkillData(skill,lvl,2); cDamage_min = character.getSkillData(skill,lvl,3); cDamage_max = character.getSkillData(skill,lvl,4); }
+		else if (skill.name == "Poison Creeper") { 	attack = 0; spell = 1; pDamage_min = character.getSkillData(skill,lvl,1); pDamage_max = character.getSkillData(skill,lvl,2); pDamage_duration = 5; }
+		else if (skill.name == "Summon Spirit Wolf") {	attack = 0; spell = 1; damage_min = character.getSkillData(skill,lvl,2); damage_max = character.getSkillData(skill,lvl,3); ar_bonus = character.getSkillData(skill,lvl,4); }
+		else if (skill.name == "Summon Dire Wolf") {	attack = 0; spell = 1; damage_min = character.getSkillData(skill,lvl,4); damage_max = character.getSkillData(skill,lvl,5); ar_bonus = character.getSkillData(skill,lvl,1); }
+		else if (skill.name == "Summon Grizzly") { 	attack = 0; spell = 1; damage_min = character.getSkillData(skill,lvl,3); damage_max = character.getSkillData(skill,lvl,4); ar_bonus = character.getSkillData(skill,lvl,1); }
 		else { attack = 0; spell = 2; }
 		
-	//	TODO: check werewolf/werebear form requirements
+		if (skill.name == "Feral Rage" || skill.name == "Rabies" || skill.name == "Fury" || skill.name == "Maul" || skill.name == "Shock Wave" || skill.name == "Fire Claws" || skill.name == "Hunger") {
+			var match = 0;
+			if (document.getElementById("e"+skills[11].key) != null) { if (effects["e"+skills[11].key].enabled == 1) { if (skill.name == "Feral Rage" || skill.name == "Rabies" || skill.name == "Fury" || skill.name == "Fire Claws" || skill.name == "Hunger") { match = 1 } } }
+			if (document.getElementById("e"+skills[13].key) != null) { if (effects["e"+skills[13].key].enabled == 1) { if (skill.name == "Maul" || skill.name == "Shock Wave" || skill.name == "Fire Claws" || skill.name == "Hunger") { match = 1 } } }
+			if (match == 0) { spell = 2 }
+		}
 		
 		if (attack == 0) { phys_min = 0; phys_max = 0; phys_mult = 1; ele_min = 0; ele_max = 0; mag_min = 0; mag_max = 0; }
 		ele_min += Math.floor(fDamage_min + cDamage_min + lDamage_min + pDamage_min);
 		ele_max += Math.floor(fDamage_max + cDamage_max + lDamage_max + pDamage_max);
 		phys_min = Math.floor((phys_min + damage_min) * (phys_mult + (weapon_damage-100+damage_bonus)/100));
 		phys_max = Math.floor((phys_max + damage_max) * (phys_mult + (weapon_damage-100+damage_bonus)/100));
-		if (spell == 0) { skillMin = Math.floor(mag_min+mDamage_min+ele_min+phys_min); skillMax = Math.floor(mag_max+mDamage_max+ele_max+phys_max); skillAr = Math.floor(ar*(1+ar_bonus/100));
-		} else if (spell == 1) { skillMin = Math.floor(mag_min+mDamage_min+ele_min+phys_min); skillMax = Math.floor(mag_max+mDamage_max+ele_max+phys_max); skillAr = "";
-		} else if (spell == 2) { skillMin = ""; skillMax = ""; skillAr = ""; }
+		if (spell != 2) { skillMin = Math.floor(mag_min+mDamage_min+ele_min+phys_min); skillMax = Math.floor(mag_max+mDamage_max+ele_max+phys_max); }
+		if (spell == 0) { skillAr = Math.floor(ar*(1+ar_bonus/100)); }
 		
-		var output = ": " + skillMin + " - " + skillMax;
-		if (num == 1) {
-			if (output != ": 0 - 0" && output != ":  - ") { document.getElementById("skill1_info").innerHTML = output } else { document.getElementById("skill1_info").innerHTML = ":" }
-			if (skillAr != "") { document.getElementById("ar_skill1").innerHTML = "AR: " + skillAr } else { document.getElementById("ar_skill1").innerHTML = "" }
-		} else if (num == 2) {
-			if (output != ": 0 - 0" && output != ":  - ") { document.getElementById("skill2_info").innerHTML = output } else { document.getElementById("skill2_info").innerHTML = ":" }
-			if (skillAr != "") { document.getElementById("ar_skill2").innerHTML = "AR: " + skillAr } else { document.getElementById("ar_skill2").innerHTML = "" }
-		}
+		var output = ": " + skillMin + "-" + skillMax + " {"+Math.ceil((skillMin+skillMax)/2)+"}";
+		if (skillMin != 0 && skillMax != 0) { document.getElementById("skill"+num+"_info").innerHTML = output } else { document.getElementById("skill"+num+"_info").innerHTML = ":" }
+		if (skillAr != 0) { document.getElementById("ar_skill"+num).innerHTML = "AR: " + skillAr } else { document.getElementById("ar_skill"+num).innerHTML = "" }
 	}
 };
 

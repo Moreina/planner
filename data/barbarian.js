@@ -79,20 +79,20 @@ var character_barbarian = {class_name:"Barbarian", strength:30, dexterity:20, vi
 		var lDamage_min = 0; var lDamage_max = 0;
 		var pDamage_min = 0; var pDamage_max = 0; var pDamage_duration = 0;
 		var mDamage_min = 0; var mDamage_max = 0;
-		var skillMin = ""; var skillMax = ""; var skillAr = "";
+		var skillMin = 0; var skillMax = 0; var skillAr = 0;
 		var attack = 1;	// 0 = no basic damage, 1 = includes basic attack damage, 2 = includes basic throw damage
 		var spell = 1;	// 0 = uses attack rating, 1 = no attack rating, 2 = non-damaging
 
-		if (skill.name == "War Cry") {			attack = 0; spell = 1; damage_min = character.getSkillData(skill, lvl, 0); damage_max = character.getSkillData(skill, lvl, 1); }
-		else if (skill.name == "Frenzy") { 		attack = 1; spell = 0; weapon_damage = 115; mDamage_min = phys_min*character.getSkillData(skill, lvl, 0)/100; mDamage_max = phys_max*character.getSkillData(skill, lvl, 0)/100; damage_bonus = character.getSkillData(skill, lvl, 1); ar_bonus = character.getSkillData(skill, lvl, 2); }
-		else if (skill.name == "Concentrate") {		attack = 1; spell = 0; weapon_damage = 160; ar_bonus = character.getSkillData(skill, lvl, 1); damage_bonus = character.getSkillData(skill, lvl, 2); }
-		else if (skill.name == "Cleave") { 		attack = 1; spell = 1; weapon_damage = 60; damage_min = character.getSkillData(skill, lvl, 0); damage_max = character.getSkillData(skill, lvl, 1); }
-		else if (skill.name == "Stun") { 		attack = 1; spell = 0; weapon_damage = 100+character.getSkillData(skill, lvl, 0); ar_bonus = character.getSkillData(skill, lvl, 1); }
-		else if (skill.name == "Power Throw") {		attack = 2; spell = 0; weapon_damage = 120; ar_bonus = character.getSkillData(skill, lvl, 1); damage_bonus = character.getSkillData(skill, lvl, 0); }	
-		else if (skill.name == "Bash") { 		attack = 1; spell = 0; weapon_damage = 110; ar_bonus = character.getSkillData(skill, lvl, 2); damage_bonus = character.getSkillData(skill, lvl, 3); }	// TODO: X% Physical Damage converted to Magic
-		else if (skill.name == "Leap Attack") {		attack = 1; spell = 0; weapon_damage = 175; ar_bonus = character.getSkillData(skill, lvl, 1); damage_bonus = character.getSkillData(skill, lvl, 0); }
-		else if (skill.name == "Ethereal Throw") { 	attack = 2; spell = 0; weapon_damage = 60; mDamage_min = character.getSkillData(skill, lvl, 0); mDamage_max = character.getSkillData(skill, lvl, 1); }
-		else if (skill.name == "Whirlwind") {		attack = 1; spell = 0; weapon_damage = 90; ar_bonus = character.getSkillData(skill, lvl, 1); damage_bonus = character.getSkillData(skill, lvl, 0); }
+		if (skill.name == "War Cry") {			attack = 0; spell = 1; damage_min = character.getSkillData(skill,lvl,0); damage_max = character.getSkillData(skill,lvl,1); }
+		else if (skill.name == "Frenzy") { 		attack = 1; spell = 0; weapon_damage = 115; mDamage_min = phys_min*character.getSkillData(skill,lvl,0)/100; mDamage_max = phys_max*character.getSkillData(skill,lvl,0)/100; damage_bonus = character.getSkillData(skill,lvl,1); ar_bonus = character.getSkillData(skill,lvl,2); }
+		else if (skill.name == "Concentrate") {		attack = 1; spell = 0; weapon_damage = 160; ar_bonus = character.getSkillData(skill,lvl,1); damage_bonus = character.getSkillData(skill,lvl,2); }
+		else if (skill.name == "Cleave") { 		attack = 1; spell = 1; weapon_damage = 60; damage_min = character.getSkillData(skill,lvl,0); damage_max = character.getSkillData(skill,lvl,1); }
+		else if (skill.name == "Stun") { 		attack = 1; spell = 0; weapon_damage = 100+character.getSkillData(skill,lvl,0); ar_bonus = character.getSkillData(skill,lvl,1); }
+		else if (skill.name == "Power Throw") {		attack = 2; spell = 0; weapon_damage = 120; ar_bonus = character.getSkillData(skill,lvl,1); damage_bonus = character.getSkillData(skill,lvl,0); }	
+		else if (skill.name == "Bash") { 		attack = 1; spell = 0; weapon_damage = 110; ar_bonus = character.getSkillData(skill,lvl,2); damage_bonus = character.getSkillData(skill,lvl,3); }	// TODO: X% Physical Damage converted to Magic
+		else if (skill.name == "Leap Attack") {		attack = 1; spell = 0; weapon_damage = 175; ar_bonus = character.getSkillData(skill,lvl,1); damage_bonus = character.getSkillData(skill,lvl,0); }
+		else if (skill.name == "Ethereal Throw") { 	attack = 2; spell = 0; weapon_damage = 60; mDamage_min = character.getSkillData(skill,lvl,0); mDamage_max = character.getSkillData(skill,lvl,1); }
+		else if (skill.name == "Whirlwind") {		attack = 1; spell = 0; weapon_damage = 90; ar_bonus = character.getSkillData(skill,lvl,1); damage_bonus = character.getSkillData(skill,lvl,0); }
 		else { attack = 0; spell = 2; }
 		
 		if (typeof(skill.reqWeapon) != 'undefined') { var match = 0; for (let w = 0; w < skill.reqWeapon.length; w++) {
@@ -109,18 +109,12 @@ var character_barbarian = {class_name:"Barbarian", strength:30, dexterity:20, vi
 		ele_max += Math.floor(fDamage_max + cDamage_max + lDamage_max + pDamage_max);
 		phys_min = Math.floor((phys_min + damage_min) * (phys_mult + (weapon_damage-100+damage_bonus)/100));
 		phys_max = Math.floor((phys_max + damage_max) * (phys_mult + (weapon_damage-100+damage_bonus)/100));
-		if (spell == 0) { skillMin = Math.floor(mag_min+mDamage_min+ele_min+phys_min); skillMax = Math.floor(mag_max+mDamage_max+ele_max+phys_max); skillAr = Math.floor(ar*(1+ar_bonus/100));
-		} else if (spell == 1) { skillMin = Math.floor(mag_min+mDamage_min+ele_min+phys_min); skillMax = Math.floor(mag_max+mDamage_max+ele_max+phys_max); skillAr = "";
-		} else if (spell == 2) { skillMin = ""; skillMax = ""; skillAr = ""; }
+		if (spell != 2) { skillMin = Math.floor(mag_min+mDamage_min+ele_min+phys_min); skillMax = Math.floor(mag_max+mDamage_max+ele_max+phys_max); }
+		if (spell == 0) { skillAr = Math.floor(ar*(1+ar_bonus/100)); }
 		
-		var output = ": " + skillMin + " - " + skillMax;
-		if (num == 1) {
-			if (output != ": 0 - 0" && output != ":  - ") { document.getElementById("skill1_info").innerHTML = output } else { document.getElementById("skill1_info").innerHTML = ":" }
-			if (skillAr != "") { document.getElementById("ar_skill1").innerHTML = "AR: " + skillAr } else { document.getElementById("ar_skill1").innerHTML = "" }
-		} else if (num == 2) {
-			if (output != ": 0 - 0" && output != ":  - ") { document.getElementById("skill2_info").innerHTML = output } else { document.getElementById("skill2_info").innerHTML = ":" }
-			if (skillAr != "") { document.getElementById("ar_skill2").innerHTML = "AR: " + skillAr } else { document.getElementById("ar_skill2").innerHTML = "" }
-		}
+		var output = ": " + skillMin + "-" + skillMax + " {"+Math.ceil((skillMin+skillMax)/2)+"}";
+		if (skillMin != 0 && skillMax != 0) { document.getElementById("skill"+num+"_info").innerHTML = output } else { document.getElementById("skill"+num+"_info").innerHTML = ":" }
+		if (skillAr != 0) { document.getElementById("ar_skill"+num).innerHTML = "AR: " + skillAr } else { document.getElementById("ar_skill"+num).innerHTML = "" }
 	}
 };
 
@@ -175,8 +169,9 @@ var skills_barbarian = [
 {data:d243, key:"243", code:143, name:"Iron Skin", i:15, req:[], reqlvl:18, level:0, extra_levels:0, force_levels:0, effect:1, bindable:0, style:"display: block; top: 286px; left: 304px;", description:"Passive Improves defense rating", syn_title:"", syn_text:"", graytext:"", text:["+"," percent",""]},
 {data:d251, key:"251", code:144, name:"Increased Speed", i:16, req:[14], reqlvl:24, level:0, extra_levels:0, force_levels:0, effect:1, bindable:0, style:"display: block; top: 354px; left: 134px;", description:"Passive - Increases walk and run speed", syn_title:"", syn_text:"", graytext:"", text:["Walk/Run Speed: +"," percent",""]},
 {data:d263, key:"263", code:145, name:"Natural Resistance", i:17, req:[15], reqlvl:30, level:0, extra_levels:0, force_levels:0, effect:1, bindable:0, style:"display: block; top: 422px; left: 294px;", description:"Passive - Increases natural resistances<br>to elemental and poison damage", syn_title:"", syn_text:"", graytext:"", text:["Resistances: +"," percent",""]},
+// TODO: Add info for 1-Handed Weapon Mastery & 2-Handed Weapon Mastery? (available on primal helms)
 
-{data:d312, key:"312", code:146, name:"Frenzy", i:18, req:[], reqlvl:1, reqWeapon:["axe","mace","club","hammer","sword","dagger","thrown","javelin","scepter","wand","staff","spear","polearm"], level:0, extra_levels:0, force_levels:0, effect:3, bindable:2, style:"display: block; top: 82px; left: 326px;", description:"Allows you to swing two weapons at once<br>East successful attack increases your overall speed<br>Requires you to equip two weapons", syn_title:"<br>Frenzy Receives Bonuses From:<br>", syn_text:"Cleave: +10% Damage per Level<br>Bash: +1% Magic Damage per Level<br>Concentrate: +8% Attack Rating per Level", graytext:"", text:["Deals 115% of Weapon Damage<br>Magic Damage: +","Damage: +"," percent<br>Attack Rating: +"," percent<br>Attack Speed: +","-"," percent<br>Walk/Run Speed: +","-"," percent<br>Mana Cost: ",""]},
+{data:d312, key:"312", code:146, name:"Frenzy", i:18, req:[], reqlvl:1, reqWeapon:["axe","mace","club","hammer","sword","dagger","thrown","javelin","scepter","wand"], level:0, extra_levels:0, force_levels:0, effect:3, bindable:2, style:"display: block; top: 82px; left: 326px;", description:"Allows you to swing two weapons at once<br>East successful attack increases your overall speed<br>Requires you to equip two weapons", syn_title:"<br>Frenzy Receives Bonuses From:<br>", syn_text:"Cleave: +10% Damage per Level<br>Bash: +1% Magic Damage per Level<br>Concentrate: +8% Attack Rating per Level", graytext:"", text:["Deals 115% of Weapon Damage<br>Magic Damage: +","Damage: +"," percent<br>Attack Rating: +"," percent<br>Attack Speed: +","-"," percent<br>Walk/Run Speed: +","-"," percent<br>Mana Cost: ",""]},
 {data:d321, key:"321", code:147, name:"Concentrate", i:19, req:[], reqlvl:6, reqWeapon:["axe","mace","club","hammer","sword","dagger","thrown","javelin","scepter","wand","staff","spear","polearm"], level:0, extra_levels:0, force_levels:0, bindable:2, style:"display: block; top: 150px; left: 306px;", description:"Attack that is not interruptible and<br>improves attack and defense rating<br><br>Deals 160% of Weapon Damage", syn_title:"<br>Concentrate Receives Bonuses From:<br>", syn_text:"Bash: +5% Damage per Level<br>Battle Orders: +10% Damage per Level<br>Taunt: +10% Damage per Level", graytext:"", text:["Defense Bonus: +"," percent<br>Attack Rating: +"," percent<br>Damage: +"," percent<br>Mana Cost: 2",""]},
 {data:d323, key:"323", code:148, name:"Cleave", i:20, req:[18], reqlvl:6, reqWeapon:["axe","mace","club","hammer","sword","dagger","thrown","javelin","scepter","wand","staff","spear","polearm"], level:0, extra_levels:0, force_levels:0, bindable:2, style:"display: block; top: 150px; left: 456px;", description:"Attacks in an arc, dealing damage<br>to all enemies caught in the swing<br><br>Deals 60% of Weapon Damage", syn_title:"<br>Cleave Receives Bonuses From:<br>", syn_text:"Frenzy: +15% Damage per Level", graytext:"", text:["Damage: ","-","<br>Mana Cost: ",""]},
 {data:d332, key:"332", code:149, name:"Stun", i:21, req:[18], reqlvl:12, reqWeapon:["axe","mace","club","hammer","sword","dagger","thrown","javelin","scepter","wand","staff","spear","polearm"], level:0, extra_levels:0, force_levels:0, bindable:2, style:"display: block; top: 218px; left: 346px;", description:"Stuns your target for a short time<br>and increases your attack rating", syn_title:"<br>Stun Receives Bonuses From:<br>", syn_text:"Bash: +10% Damage per Level<br>Concentrate: +5% Attack Rating per Level<br>War Cry +5% Duration per Level", graytext:"", text:["Deals 100% of Weapon Damage<br>Damage: +","Attack Rating: "," percent<br>Duration: "," seconds<br>Mana Cost: 2",""]},
