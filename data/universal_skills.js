@@ -9,10 +9,10 @@ var character_any = {
 	// ---------------------------------
 	getSkillData : function(skillName, lvl, elem) {
 		var skills = "";
+		var skill = "";
 		var nameMod = "oskill_"+skillName.split(" ").join("_");
 		var natClass = oskills_info[nameMod].native_class;
-		if (natClass != "none") { skills = skills_all[natClass] }
-		var skill = skills[oskills_info[nameMod].i];
+		if (natClass != "none") { skills = skills_all[natClass]; skill = skills[oskills_info[nameMod].i]; }
 		
 		var sk_Ball_Lightning = {data:{values:[
 				["lightning min",6.6,6.9,7.2,7.5,7.8,8.1,8.4,8.7,9,9.3,9.6,9.9,10.2,10.5,10.8,11.1,11.4,11.7,12,12.3,12.6,12.9,13.2,13.5,13.8,14.1,14.4,14.7,15,15.3,15.6,15.9,16.2,16.5,16.8,17.1,17.4,17.7,18,18.3,18.6,18.9,19.2,19.5,19.8,20.1,20.4,20.7,21,21.3,21.6,21.9,22.2,22.5,22.8,23.1,23.4,23.7,24,24.3], 
@@ -27,13 +27,13 @@ var character_any = {
 		var phys_max = ((1+(character.e_damage+character.damage_bonus)/100)*((character.level-1)*character.max_damage_per_level+character.base_damage_max))+character.damage_max;
 	
 	// Universal
-		if (skillName == "Ball Lightning" && elem < 2) {		result *= ((1 + (character.lDamage+character.lDamage_skillup)/100 + 0.01*(character.energy + character.all_attributes + character.level*character.energy_per_level)/3) * wisp) }
+		if (skillName == "Ball Lightning" && elem < 2) {		result *= ((1 + (character.lDamage+character.lDamage_skillup)/100) * wisp) }
 	// Barbarian
 		if (skillName == "Battle Command" && elem == 0) {		result = 1 }
 	// Druid
 		if (skillName == "Flame Dash" && elem == 0) {			result = 8 }
-		if (skillName == "Flame Dash" && elem < 3 && elem > 0) {	result *= ((1 + 0.01*(character.energy + character.all_attributes + character.level*character.energy_per_level)) * (1+character.fDamage/100) * wisp) }
-		if (skillName == "Arctic Blast" && elem < 2) {			result *= ((1+character.cDamage/100) * wisp) }
+		if (skillName == "Flame Dash" && elem < 3 && elem > 0) {	result *= ((1 + 0.01*(character.energy + character.all_attributes)*(1+character.max_energy/100)) * (1+(character.fDamage+character.fDamage_skillup)/100) * wisp) }
+		if (skillName == "Arctic Blast" && elem < 2) {			result *= ((1+(character.cDamage+character.cDamage_skillup)/100) * wisp) }
 		if (skillName == "Werewolf" && elem == 0) {			result = (15 + skills[12].data.values[1][lycan_lvl]) }
 		if (skillName == "Werewolf" && elem == 3) {			result = (skills[12].data.values[0][lycan_lvl]) }
 		if (skillName == "Werebear" && elem == 0) {			result = (25 + skills[12].data.values[1][lycan_lvl]) }
@@ -50,12 +50,12 @@ var character_any = {
 		}
 		if (skillName == "Vengeance" && elem == 0) {			result = phys_min * wisp }
 		if (skillName == "Vengeance" && elem == 1) {			result = phys_max * wisp }
-		if (skillName == "Vengeance" && elem == 2) {			result = Math.floor(phys_min * (skill.data.values[8][lvl]/100) * (1+character.fDamage/100) * wisp) }
-		if (skillName == "Vengeance" && elem == 3) {			result = Math.floor(phys_max * (skill.data.values[8][lvl]/100) * (1+character.fDamage/100) * wisp) }
-		if (skillName == "Vengeance" && elem == 4) {			result = Math.floor(phys_min * (skill.data.values[9][lvl]/100) * (1+character.cDamage/100) * wisp) }
-		if (skillName == "Vengeance" && elem == 5) {			result = Math.floor(phys_max * (skill.data.values[9][lvl]/100) * (1+character.cDamage/100) * wisp) }
-		if (skillName == "Vengeance" && elem == 6) {			result = Math.floor(phys_min * (skill.data.values[10][lvl]/100) * (1+character.lDamage/100) * wisp) }
-		if (skillName == "Vengeance" && elem == 7) {			result = Math.floor(phys_max * (skill.data.values[10][lvl]/100) * (1+character.lDamage/100) * wisp) }
+		if (skillName == "Vengeance" && elem == 2) {			result = Math.floor(phys_min * (skill.data.values[8][lvl]/100) * (1+(character.fDamage+character.fDamage_skillup)/100) * wisp) }
+		if (skillName == "Vengeance" && elem == 3) {			result = Math.floor(phys_max * (skill.data.values[8][lvl]/100) * (1+(character.fDamage+character.fDamage_skillup)/100) * wisp) }
+		if (skillName == "Vengeance" && elem == 4) {			result = Math.floor(phys_min * (skill.data.values[9][lvl]/100) * (1+(character.cDamage+character.cDamage_skillup)/100) * wisp) }
+		if (skillName == "Vengeance" && elem == 5) {			result = Math.floor(phys_max * (skill.data.values[9][lvl]/100) * (1+(character.cDamage+character.cDamage_skillup)/100) * wisp) }
+		if (skillName == "Vengeance" && elem == 6) {			result = Math.floor(phys_min * (skill.data.values[10][lvl]/100) * (1+(character.lDamage+character.lDamage_skillup)/100) * wisp) }
+		if (skillName == "Vengeance" && elem == 7) {			result = Math.floor(phys_max * (skill.data.values[10][lvl]/100) * (1+(character.lDamage+character.lDamage_skillup)/100) * wisp) }
 	// Sorceress
 		//if (skillName == "Shiver Armor" && elem < 4 && elem > 1) { 	result *= ((1 + (character.cDamage+character.cDamage_skillup)/100) * wisp) }
 		if (skillName == "Fire Ball" && elem < 2) { 			result *= ((1 + (character.fDamage+character.fDamage_skillup)/100) * wisp) }
@@ -73,8 +73,9 @@ var character_any = {
 	//	effect: array element object for the buff
 	// result: indexed array including stats affected and their values
 	// ---------------------------------
-	getBuffData : function(effect) {
-		var skill = skills[effect.skill]
+	getBuffData : function(skill) {
+		// TODO: Implement, use skills_all?
+		var id = skill.name.split(' ').join('_');
 		var lvl = character["oskill_"+skill.name.split(" ").join("_")] + character.all_skills;
 		var result = {};
 		var lycan_damage = ~~(skills[12].data.values[0][character.oskill_Lycanthropy+character.all_skills]);
@@ -85,15 +86,27 @@ var character_any = {
 		if (skillName == "Battle Command") { result.all_skills = 1; result.duration = skill.data.values[1][lvl]; }
 		if (skillName == "Shout") { result.defense_bonus = skill.data.values[0][lvl]; result.duration = skill.data.values[1][lvl]; }
 		if (skill.name == "Battle Orders") { result.max_stamina = skill.data.values[1][lvl]; result.max_life = skill.data.values[2][lvl]; result.max_mana = skill.data.values[3][lvl]; result.duration = skill.data.values[0][lvl]; }
-		if (skill.name == "Werewolf") {
-			if (document.getElementById("e"+skills[13].key) != null) { if (effects["e"+skills[13].key].enabled == 1) { disableEffect(13); } }	// disables Werebear
+		if (skill.name == "Werewolf") {	// cannot be used with Werebear
+			var sk = skills[13].name.split(' ').join('_');
+			if (document.getElementById(sk) != null) { if (effects[id].info.enabled == 1) { disableEffect(sk) } }
 			result.max_life = (15 + lycan_life); result.max_stamina = 40; result.ar_bonus = skill.data.values[1][lvl]; result.ias_skill = skill.data.values[2][lvl]; result.damage_bonus = lycan_damage; result.duration = 1040;
 		}
-		if (skill.name == "Werebear") {
-			if (document.getElementById("e"+skills[11].key) != null) { if (effects["e"+skills[11].key].enabled == 1) { disableEffect(11); } }	// disables Werewolf
+		if (skill.name == "Werebear") {	// cannot be used with Werewolf
+			var sk = skills[11].name.split(' ').join('_');
+			if (document.getElementById(sk) != null) { if (effects[id].info.enabled == 1) { disableEffect(sk) } }
 			result.max_life = (25 + lycan_life); result.damage_bonus = skill.data.values[1][lvl] + lycan_damage; result.defense_bonus = skill.data.values[2][lvl]; result.duration = 1040;
 		}
-		if (skill.name == "Feral Rage") { result.velocity = skill.data.values[1][lvl]; result.life_leech = skill.data.values[3][lvl]; result.duration = 20; }
+		if (skill.name == "Feral Rage") {	// only useable with Werewolf
+			var valid = 0;
+			var sk = skills[11].name.split(' ').join('_');
+			if (document.getElementById(sk) != null) { if (effects[sk].info.enabled == 1) {
+				valid = 1
+				result.velocity = skill.data.values[1][lvl]; result.life_leech = skill.data.values[3][lvl]; result.duration = 20;
+			} }
+			if (valid == 0) {
+				result.velocity = 0; result.life_leech = 0; result.duration = 0;
+			}
+		}
 		if (skill.name == "Shiver Armor") { result.defense_bonus = skill.data.values[1][lvl]; result.duration = skill.data.values[0][lvl]; }
 		if (skillName == "Enflame") {	// TODO: Make always-active?
 			result.fDamage_min = skill.data.values[1][lvl] * (1 + (~~skills[30].data.values[1][skills[30].level+skills[30].extra_levels])/100);
@@ -151,7 +164,7 @@ var character_any = {
 		ele_max += Math.floor(fDamage_max + cDamage_max + lDamage_max + pDamage_max);
 		phys_min = Math.floor((phys_min + damage_min) * (phys_mult + (weapon_damage-100+damage_bonus)/100));
 		phys_max = Math.floor((phys_max + damage_max) * (phys_mult + (weapon_damage-100+damage_bonus)/100));
-		if (spell != 2) { skillMin = Math.floor(mag_min+mDamage_min+ele_min+phys_min); skillMax = Math.floor(mag_max+mDamage_max+ele_max+phys_max); }
+		if (spell != 2) { skillMin = ~~Math.floor(mag_min+mDamage_min+ele_min+phys_min); skillMax = ~~Math.floor(mag_max+mDamage_max+ele_max+phys_max); }
 		if (spell == 0) { skillAr = Math.floor(ar*(1+ar_bonus/100)); }
 		
 		var output = ": " + skillMin + "-" + skillMax + " {"+Math.ceil((skillMin+skillMax)/2)+"}";

@@ -74,11 +74,10 @@ var character_paladin = {class_name:"Paladin", strength:25, dexterity:20, vitali
 	//	effect: array element object for the buff
 	// result: indexed array including stats affected and their values
 	// ---------------------------------
-	getBuffData : function(effect) {
-		var skill = skills[effect.skill]
+	getBuffData : function(skill) {
 		var lvl = skill.level + skill.extra_levels;
 		var result = {};
-		if (skill.name != "Holy Shield") { disableAuras(skill) }
+		if (skill.i < 20) { disableAuras(skill) }
 		
 	    // Defensive Auras	
 		if (skill.name == "Prayer") { result.life_regen = 1; result.life_replenish = skill.data.values[0][lvl]; }
@@ -189,9 +188,11 @@ var character_paladin = {class_name:"Paladin", strength:25, dexterity:20, vitali
 //	skill: skill object for the specified aura
 // ---------------------------------
 function disableAuras(skill) {
+	var id = skill.name.split(' ').join('_');
 	for (let s = 0; s < 20; s++) {
-		if (skill.i != s && document.getElementById("e"+skills[s].key) != null) {
-			disableEffect(s)
+		var sk = skills[s].name.split(' ').join('_');
+		if (document.getElementById(sk) != null && sk != id && effects[id].info.enabled == 1 && effects[sk].info.enabled == 1) {
+			disableEffect(sk)
 		}
 	}
 };

@@ -64,8 +64,7 @@ var character_amazon = {class_name:"Amazon", strength:20, dexterity:25, vitality
 	//	effect: array element object for the buff
 	// result: indexed array including stats affected and their values
 	// ---------------------------------
-	getBuffData : function(effect) {
-		var skill = skills[effect.skill]
+	getBuffData : function(skill) {
 		var lvl = skill.level + skill.extra_levels;
 		var result = {};
 		

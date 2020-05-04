@@ -61,8 +61,7 @@ var character_necromancer = {class_name:"Necromancer", strength:15, dexterity:25
 	//	effect: array element object for the buff
 	// result: indexed array including stats affected and their values
 	// ---------------------------------
-	getBuffData : function(effect) {
-		var skill = skills[effect.skill];
+	getBuffData : function(skill) {
 		var lvl = skill.level + skill.extra_levels;
 		var result = {};
 		
@@ -156,10 +155,12 @@ var character_necromancer = {class_name:"Necromancer", strength:15, dexterity:25
 //	skill: skill object for the specified golem
 // ---------------------------------
 function disableGolems(skill) {
+	var id = skill.name.split(' ').join('_');
 	var golems = [3,6,8,9];
 	for (let g = 0; g < golems.length; g++) {
-		if (skill.i != golems[g] && document.getElementById("e"+skills[golems[g]].key) != null) {
-			disableEffect(golems[g])
+		var sk = skills[golems[g]].name.split(' ').join('_');
+		if (document.getElementById(sk) != null && sk != id && effects[id].info.enabled == 1 && effects[sk].info.enabled == 1) {
+			disableEffect(sk)
 		}
 	}
 };

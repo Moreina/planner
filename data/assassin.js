@@ -60,8 +60,10 @@ var character_assassin = {class_name:"Assassin", strength:20, dexterity:20, vita
 	//	effect: array element object for the buff
 	// result: indexed array including stats affected and their values
 	// ---------------------------------
-	getBuffData : function(effect) {
-		var skill = skills[effect.skill];
+//	getBuffData : function(effect) {
+//		var skill = skills[effect.skill];
+	getBuffData : function(skill) {
+		var id = skill.name.split(' ').join('_');
 		var lvl = skill.level + skill.extra_levels;
 		var result = {};
 		var charges = 5;
@@ -70,18 +72,20 @@ var character_assassin = {class_name:"Assassin", strength:20, dexterity:20, vita
 		if (skill.name == "Fists of Thunder") { if (equipped.weapon.type == "claw" || equipped.weapon.type == "dagger") { result.charge_thunder = charges; result.lDamage_min = charges * skill.data.values[0][lvl]; result.lDamage_max = charges * skill.data.values[1][lvl]; result.duration = skill.data.values[2][lvl]; } }	// consider auto-disabling
 		if (skill.name == "Fists of Ice") { if (equipped.weapon.type == "claw" || equipped.weapon.type == "dagger") { result.charge_ice = charges; result.cDamage_min = charges * skill.data.values[0][lvl]; result.cDamage_max = charges * skill.data.values[1][lvl]; result.duration = skill.data.values[2][lvl]; } }		// consider auto-disabling
 		if (skill.name == "Burst of Speed") {
-			if (document.getElementById("e"+skills[15].key) != null) { if (effects["e"+skills[15].key].enabled == 1) { disableEffect(15) } }	// disables Fade
+			var sk = skills[15].name.split(' ').join('_');
+			if (document.getElementById(sk) != null && effects[id].info.enabled == 1) { disableEffect(sk) }	// disables Fade
 			result.ias_skill = skill.data.values[0][lvl]; result.velocity = skill.data.values[1][lvl]; result.duration = skill.data.values[2][lvl];
 		}
 		if (skill.name == "Fade") {
-			if (document.getElementById("e"+skills[11].key) != null) { if (effects["e"+skills[11].key].enabled == 1) { disableEffect(11) } }	// disables Burst of Speed
+			var sk = skills[11].name.split(' ').join('_');
+			if (document.getElementById(sk) != null && effects[id].info.enabled == 1) { disableEffect(sk) }	// disables Burst of Speed
 			result.curse_reduction = skill.data.values[0][lvl]; result.all_res = skill.data.values[1][lvl]; result.pdr = skill.data.values[2][lvl]; result.duration = skill.data.values[3][lvl];
 		}
 		if (skill.name == "Venom") { result.pDamage_min = skill.data.values[1][lvl]; result.pDamage_max = skill.data.values[2][lvl]; result.pDamage_duration = 0.4; result.pDamage_duration_override = 0.4; result.duration = skill.data.values[0][lvl]; }
 		if (skill.name == "Cloak of Shadows") { result.defense_bonus = skill.data.values[0][lvl]; result.enemy_defense = skill.data.values[1][lvl]; result.duration = 8; }	// debuffs: Cloak of Shadows?
 		// No stat buffs:
-		if (skill.name == "Shadow Warrior") { if (document.getElementById("e"+skills[19].key) != null) { if (effects["e"+skills[19].key].enabled == 1) { disableEffect(19) } } }
-		if (skill.name == "Shadow Master") { if (document.getElementById("e"+skills[16].key) != null) { if (effects["e"+skills[16].key].enabled == 1) { disableEffect(16) } } }
+		if (skill.name == "Shadow Warrior") { var sk = skills[19].name.split(' ').join('_'); if (document.getElementById(sk) != null && effects[id].info.enabled == 1) { disableEffect(sk) } }
+		if (skill.name == "Shadow Master") { var sk = skills[16].name.split(' ').join('_'); if (document.getElementById(sk) != null && effects[id].info.enabled == 1) { disableEffect(sk) } }
 		if (skill.name == "Blade Shield") { result.duration = skill.data.values[1][lvl]; }
 		
 	return result	

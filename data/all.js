@@ -35,19 +35,15 @@ var inv = [
 {x:1,y:1,empty:1,id:"h14"},{x:1,y:1,empty:1,id:"h24"},{x:1,y:1,empty:1,id:"h34"},{x:1,y:1,empty:1,id:"h44"},{x:1,y:1,empty:1,id:"h54"},{x:1,y:1,empty:1,id:"h64"},{x:1,y:1,empty:1,id:"h74"},{x:1,y:1,empty:1,id:"h84"},{x:1,y:1,empty:1,id:"h94"},{x:1,y:1,empty:1,id:"h04"}
 ];
 
-// updateAll - updates everything
+// update - Updates everything
 // ---------------------------------
-function updateAll() {
-	// TODO: Implement. Use parameter(s) if needed updates are known?
-	
-	// character level changed
-		// update mercenary
-		mercenary.level = Math.max(1,character.level-1)
-		if (mercenary.base_aura != "") {
-			removeAura(mercenary.base_aura)
-			mercenary.base_aura_level = getMercenaryAuraLevel(mercenary.level)
-			addAura(mercenary.base_aura, mercenary.base_aura_level, "mercenary")
-		}
+function update() {
+	calculateSkillAmounts()
+	updateStats()
+	checkRequirements()
+	updateSkills()
+	if (selectedSkill[0] != " ­ ­ ­ ­ Skill 1") { checkSkill(selectedSkill[0], 1) }
+	if (selectedSkill[1] != " ­ ­ ­ ­ Skill 2") { checkSkill(selectedSkill[1], 2) }
 }
 
 // loadEquipment - Loads equipment/charm info to the appropriate dropdowns
@@ -144,7 +140,7 @@ function setMercenary(merc) {
 	if (document.getElementById("dropdown_merc_armor").innerHTML != "") { equipMerc('armor', 'armor'); }
 	if (document.getElementById("dropdown_merc_weapon").innerHTML != "") { equipMerc('weapon', 'weapon'); }
 	if (document.getElementById("dropdown_merc_offhand").innerHTML != "") { equipMerc('offhand', 'offhand'); }
-	if (mercenary.base_aura != "") { removeAura(mercenary.base_aura); mercenary.base_aura = ""; }
+	if (mercenary.base_aura != "") { removeEffect(mercenary.base_aura.split(' ').join('_')); mercenary.base_aura = ""; }
 	if (merc == "­ ­ ­ ­ Mercenary") {
 		for (let i = 0; i < mercEquipmentTypes.length; i++) { loadItems(mercEquipmentTypes[i], mercEquipmentDropdowns[i], "clear") }
 		document.getElementById("dropdown_mercenary").selectedIndex = 0;
@@ -160,7 +156,7 @@ function setMercenary(merc) {
 				mercenary.level = Math.max(1,character.level-1)
 				mercenary.base_aura_level = getMercenaryAuraLevel(mercenary.level)
 				mercenary.base_aura = mercenaries[m].aura
-				addAura(mercenary.base_aura, mercenary.base_aura_level, "mercenary")
+				addEffect("aura",mercenary.base_aura,mercenary.base_aura_level,"mercenary")
 			} }
 		}
 	}
@@ -207,10 +203,9 @@ function startup(choice) {
 	clearIconSources()
 	resetSkills()
 	resetEquipment()
-	resetMisc()
+	resetEffects()
 	calculateSkillAmounts()
 	updateSkills()
-	updateEffectList()
 	document.getElementById("quests").checked = 0
 	document.getElementById("running").checked = 0
 	document.getElementById("difficulty3").checked = 1
@@ -301,13 +296,8 @@ function changeLevel(input) {
 		character.life += character.levelup_life*levels
 		character.mana += character.levelup_mana*levels
 	}
-	updateAll()
-	updateEffectList()
-	calculateSkillAmounts()
-	updateStats()
-	updateSkills()
-	if (selectedSkill[0] != " ­ ­ ­ ­ Skill 1") { checkSkill(selectedSkill[0], 1) }
-	if (selectedSkill[1] != " ­ ­ ­ ­ Skill 2") { checkSkill(selectedSkill[1], 2) }
+	updateMercenary()
+	update()
 }
 
 // reloadOffhandCorruptions - reloads corruption options for offhands (when the selected item changes types)
@@ -371,13 +361,7 @@ function corrupt(group, val) {
 		if (val == "+ Sockets") { adjustCorruptionSockets(group) }
 		if (group == "offhand") { if (equipped[group].type == "shield" || equipped[group].type == "quiver") { if (equipped[group].type != corruptsEquipped[group].base) { corrupt(group, group) } } }
 	}
-	calculateSkillAmounts()
-	updateEffectList()
-	updateStats()
-	checkRequirements()
-	updateSkills()
-	if (selectedSkill[0] != " ­ ­ ­ ­ Skill 1") { checkSkill(selectedSkill[0], 1) }
-	if (selectedSkill[1] != " ­ ­ ­ ­ Skill 2") { checkSkill(selectedSkill[1], 2) }
+	update()
 }
 
 // mercEquip - Equips or unequips a mercenary item
@@ -388,7 +372,7 @@ function equipMerc(group, val) {
 	for (old_affix in mercEquipped[group]) {
 		mercenary[old_affix] -= mercEquipped[group][old_affix]
 		if (old_affix == "aura") {
-			removeAura(mercEquipped[group][old_affix])
+			removeEffect(old_affix.split(' ').join('_'))
 		}
 		if (old_affix != "set_bonuses") { mercEquipped[group][old_affix] = unequipped[old_affix] }
 	}
@@ -406,26 +390,31 @@ function equipMerc(group, val) {
 						var reqEth = 0;
 						if (typeof(equipment[group][item]["ethereal"]) != 'undefined') { if (equipment[group][item]["ethereal"] == 1) { multEth = 1.5; reqEth = 10; } }
 						if (affix == "base_defense") { if (typeof(equipment[group][item]["e_def"]) != 'undefined') { multED += (equipment[group][item]["e_def"]/100) } }
-						if (affix == "base_damage_min" || affix == "base_damage_max") { if (typeof(equipment[group][item]["e_damage"]) != 'undefined') { multED += (equipment[group][item]["e_damage"]/100) } }
 						if (affix == "req_strength" || affix == "req_dexterity") { if (typeof(equipment[group][item]["req"]) != 'undefined') { multReq += (equipment[group][item]["req"]/100) } }
 						
 						if (typeof(mercEquipped[group][affix]) == 'undefined') { mercEquipped[group][affix] = 0 }	// undefined (new) affixes get initialized to zero
+						
 						if (affix == "base_damage_min" || affix == "base_damage_max" || affix == "base_defense") {
 							mercEquipped[group][affix] = Math.ceil(multEth*multED*bases[base][affix])
 							mercenary[affix] += Math.ceil(multEth*multED*bases[base][affix])
 						}
 						if (affix == "req_strength" || affix == "req_dexterity") {
 							mercEquipped[group][affix] += Math.ceil(multReq*bases[base][affix] - reqEth)
-							mercenary[affix] += Math.ceil(multReq*bases[base][affix] - reqEth)
+						}
+						else {
+							equipped[group][affix] = bases[base][affix]
+							character[affix] += bases[base][affix]
 						}
 					} } }
 				} }
 				// add regular affixes
 				for (affix in equipment[group][item]) {
+					if (typeof(mercEquipped[group][affix]) == 'undefined') { mercEquipped[group][affix] = unequipped[affix] }
+					if (typeof(mercenary[affix]) == 'undefined') { mercenary[affix] = unequipped[affix] }
 					if (affix == "aura" || affix == "name" || affix == "type" || affix == "base" || affix == "only" || affix == "not" || affix == "img") {
 						if (affix == "aura" && equipment[group][item][affix] != mercenary.base_aura) {
 							mercEquipped[group][affix] = equipment[group][item][affix]
-							addAura(equipment[group][item][affix], equipment[group][item].aura_lvl, "mercenary")
+							addEffect("aura",equipment[group][item][affix],equipment[group][item].aura_lvl,"mercenary")
 						}
 					} else {
 						mercEquipped[group][affix] = equipment[group][item][affix]
@@ -436,6 +425,7 @@ function equipMerc(group, val) {
 		}
 	}
 	updateStats()
+	updateAllEffects()
 }
 	
 // equip - Equips an item by adding its stats to the character, or unequips it if it's already equipped			// TODO: consider renaming... switchItem()?  Also, split into multiple smaller functions
@@ -468,20 +458,19 @@ function equip(group, val) {
 	if (set_bonuses != "") { set = set_bonuses[0]; set_before = character[set]; }
 	if (old_set_bonuses != "") { old_set = old_set_bonuses[0]; old_set_before = character[old_set]; }
 	
-	// remove effects
-	for (old_affix in equipped[group]) {			// old_affix isn't used...?
-		for (let s = 0; s < skills.length; s++) {
-			if (skills[s].level == 0 && skills[s].force_levels > 0) {
-				disableEffect(s)
-			}
+/*	// remove effects
+	for (let s = 0; s < skills.length; s++) {
+		if (skills[s].level == 0 && skills[s].force_levels > 0) {
+			// disableEffect(getId(skills[s].name))?
 		}
 	}
+*/
 	// if replacing an item, previous item's affixes are removed from character
 	for (old_affix in equipped[group]) {
 		// TODO: delete buff effect if oskill removed
 		character[old_affix] -= equipped[group][old_affix]
 		if (old_affix == "aura") {
-			removeAura(equipped[group][old_affix])
+			removeEffect(equipped[group][old_affix].split(' ').join('_'))
 		}
 		if (old_affix != "set_bonuses" && old_affix != "aura" && old_affix != "aura_lvl") { equipped[group][old_affix] = unequipped[old_affix] }
 	}
@@ -563,10 +552,8 @@ function equip(group, val) {
 				if (affix != "damage_vs_undead") { equipped[group][affix] = equipment[src_group][item][affix] } else { equipped[group][affix] += equipment[src_group][item][affix] }
 				if (affix == "aura" || affix == "name" || affix == "type" || affix == "base" || affix == "only" || affix == "not" || affix == "img") {
 					if (affix == "aura") {
-			//			equipped[group].aura_lvl = equipment[src_group][item].aura_lvl	// redundant?
 						auraName = equipment[src_group][item][affix]
 						auraLevel = equipment[src_group][item].aura_lvl
-						//addAura(equipment[src_group][item][affix], equipment[src_group][item].aura_lvl, group)	// moved to end of function
 					}
 				} else if (affix == "sup") {
 						equipped[group]["e_damage"] += equipment[src_group][item][affix]
@@ -584,7 +571,7 @@ function equip(group, val) {
 						} else { if (oskill_info.native_class != "none") {
 							var skill = skills_all[oskill_info.native_class][oskill_info.i];
 							if (typeof(skill.effect) != 'undefined') { if (skill.effect > 2) {
-								if (character[affix] == 0 && typeof(effects["e"+skill.key]) == 'undefined') {
+								if (character[affix] == 0 && document.getElementById(getId(skill.name)) == null) {
 									// TODO: create new buff effect for oskill
 								}
 							} }
@@ -640,11 +627,6 @@ function equip(group, val) {
 			else if (itemType == "claw" && equipped.weapon.type != "claw") { equip('weapon', 'none') }
 			else if (src_group == "weapon") {
 				// TODO: Offhand attacks are separate
-				for (affix in equipped.offhand) {
-					if (affix == "damage_min" || affix == "damage_max" /*|| ...many affixes*/) {
-						// TODO: prevent offhand attack stats from affecting mainhand attacks
-					}
-				}
 			}
 		} else if (group == "weapon") {
 			if (equipped.offhand.type == "quiver" && itemType != "bow" && itemType != "crossbow") { equip('offhand', 'none') }
@@ -674,7 +656,7 @@ function equip(group, val) {
 		if (equipped[group].type == "shield") { offhandType = "shield" } else if (equipped[group].name == "none") { offhandType = "none" }
 	}
 	else if (group == "weapon") {
-		if (equipped.offhand.type != "quiver" && twoHanded == 1 && (itemType != "sword" || character.class_name != "Barbarian") && corruptsEquipped.offhand.name != "none") { reloadOffhandCorruptions("shield"); document.getElementById("p4").innerHTML = "reloading: "+offhandType; }
+		if (equipped.offhand.type != "quiver" && twoHanded == 1 && (itemType != "sword" || character.class_name != "Barbarian") && corruptsEquipped.offhand.name != "none") { reloadOffhandCorruptions("shield"); }
 	}
 	if (val == group || val == "none") { document.getElementById(("dropdown_"+group)).selectedIndex = 0; }
 	// set inventory image
@@ -688,17 +670,11 @@ function equip(group, val) {
 		document.getElementById(group+"_image").src = "./images/items/none.png"
 	}
 	
-	if (auraName != "" && auraLevel != "") { addAura(auraName, auraLevel, group); }		// TODO: Why does this break things if called earlier? (item image wasn't appearing)
-	// update
-	calculateSkillAmounts()
-	updateEffectList()
-	
-	for (let s = 0; s < skills.length; s++) { modifyEffect(skills[s]) }
-	updateStats()
-	checkRequirements()
-	updateSkills()
-	if (selectedSkill[0] != " ­ ­ ­ ­ Skill 1") { checkSkill(selectedSkill[0], 1) }
-	if (selectedSkill[1] != " ­ ­ ­ ­ Skill 2") { checkSkill(selectedSkill[1], 2) }
+	if (auraName != "" && auraLevel != "") {		// TODO: Why does this break things if called earlier? (item image wasn't appearing)
+		addEffect("aura",auraName,auraLevel,group)
+	}
+	update()
+	updateAllEffects()
 }
 
 // checkWield - Adjust base damage for two-handed swords (dependent on whether wielded with 1 or 2 hands)
@@ -724,86 +700,6 @@ function checkWield(group, hands_used) {
 			character.base_damage_max += max_alt
 		}
 }
-
-// addAura - Adds an aura of the specified level to the character
-//	name: aura name
-//	lvl: aura level
-//	source: item type which the aura is granted by, or other source
-// ---------------------------------
-function addAura(name, lvl, source) {
-	// TODO: Auras need unique IDs so they don't override eachother
-	if (document.getElementById(name) == null && lvl > 0) {
-		var newEffect = document.createElement("img")
-		var effectIcon = "./images/effects/dark/"+name+" dark.png"
-		
-		var eClass = document.createAttribute("class");	eClass.value = "effect";	newEffect.setAttributeNode(eClass);
-		var eId = document.createAttribute("id");	eId.value = name;		newEffect.setAttributeNode(eId);	// should the name be codified, without spaces?
-		var eSrc = document.createAttribute("src");	eSrc.value = effectIcon;	newEffect.setAttributeNode(eSrc);
-		
-		var eHoverOn = document.createAttribute("onmouseover");		eHoverOn.value = "hoverAura("+name+")";		newEffect.setAttributeNode(eHoverOn);
-		var eHoverOff = document.createAttribute("onmouseout");		eHoverOff.value = "auraOut("+name+")";		newEffect.setAttributeNode(eHoverOff);
-		var eToggle = document.createAttribute("onclick");		eToggle.value = "toggleAura("+name+")";		newEffect.setAttributeNode(eToggle);
-		var eRemove = document.createAttribute("oncontextmenu");	eRemove.value = "removeAura("+name+")";		newEffect.setAttributeNode(eRemove);
-		
-		var effectGUI = document.getElementById("side");
-		effectGUI.appendChild(newEffect);
-		
-		if (typeof(effects[name]) == 'undefined') { effects[name] = {} }
-		var data = getAuraData(name, lvl, source);
-		for (affix in data) { effects[name][affix] = data[affix] }
-		effects[name]["enabled"] = 0
-		toggleAura(name) 	// settings.autocast ignored
-	}
-	calculateSkillAmounts()
-	updateStats()
-}
-
-// removeAura - Removes an aura from the character
-//	name: aura name
-// ---------------------------------
-function removeAura(name) {
-	// TODO: 'Removing' an aura shouldn't eliminate the 'aura effect' if there's another source for the same aura (i.e. when Last Wish is wielded AND a barbarian mercenary is hired)
-	if (typeof(effects[name]) != 'undefined') {
-		if (document.getElementById(name) != null) {
-//			for (affix in effects[name]) { effects[name][affix] = 0 }
-			if (effects[name].enabled == 1) { toggleAura(name) }
-			document.getElementById(name).remove();
-		}
-	}
-}
-
-// toggleAura - Enable or disable an aura without removing it from the character
-//	name: aura name
-// ---------------------------------
-function toggleAura(name) {
-	if (effects[name].enabled == 1) {
-		for (affix in effects[name]) {
-			character[affix] -= effects[name][affix]
-		}
-		effects[name].enabled = 0
-		document.getElementById(name).src = "./images/effects/dark/"+name+" dark.png"
-	} else {
-		for (affix in effects[name]) {
-			character[affix] += effects[name][affix]
-		}
-		effects[name]["enabled"] = 1
-		document.getElementById(name).src = "./images/effects/"+name+".png"
-	}
-	calculateSkillAmounts()
-	updateStats()
-	if (selectedSkill[0] != " ­ ­ ­ ­ Skill 1") { checkSkill(selectedSkill[0], 1) }
-	if (selectedSkill[1] != " ­ ­ ­ ­ Skill 2") { checkSkill(selectedSkill[1], 2) }
-}
-
-// hoverAura - display aura info on mouseover
-//	name: aura name
-// ---------------------------------
-function hoverAura(name) {}	// TODO: implement
-
-// auraOut - hide aura mouseover info
-//	name: aura name
-// ---------------------------------
-function auraOut(name) {}	// TODO: implement
 
 // resetSkills - Resets functionality for skills
 // ---------------------------------
@@ -881,7 +777,7 @@ function addCharm(val) {
 		if (val == "+20 skills") { charmHeight = "29"; charmImage = charm_img.prefix+"debug_II.png"; charm_y = 1; }
 		else if (val == "+1 skill") { charmHeight = "29"; charmImage = charm_img.prefix+"debug_D.png"; charm_y = 1; }
 		else if (val == "+1 (each) skill") { charmHeight = "29"; charmImage = charm_img.prefix+"debug_P.png"; charm_y = 1;
-			if (autoCast == 1) { toggleAutocast("autocast"); document.getElementById("autocast").checked = 0; }	// disable autocast to prevent Paladin auras from all being enabled
+			if (autoCast == 1) { toggleAutocast("autocast"); document.getElementById("autocast").checked = 0; }
 		}
 		else if (val == "everything") { charmHeight = "29"; charmImage = charm_img.prefix+"debug_face.png"; charm_y = 1; }
 		else { charmHeight = "29"; charmImage = charm_img.prefix+"debug_skull.png"; charm_y = 1; }
@@ -940,31 +836,30 @@ function addCharm(val) {
 	}
 	document.getElementById("dropdown_charms").selectedIndex = 0
 	// update
-	updateEffectList()
-	calculateSkillAmounts()
-	for (let s = 0; s < skills.length; s++) { modifyEffect(skills[s]) }
-	updateStats()
-	updateSkills()
-	if (selectedSkill[0] != " ­ ­ ­ ­ Skill 1") { checkSkill(selectedSkill[0], 1) }
-	if (selectedSkill[1] != " ­ ­ ­ ­ Skill 2") { checkSkill(selectedSkill[1], 2) }
+//	calculateSkillAmounts()
+//	updateStats()
+//	updateSkills()
+//	if (selectedSkill[0] != " ­ ­ ­ ­ Skill 1") { checkSkill(selectedSkill[0], 1) }
+//	if (selectedSkill[1] != " ­ ­ ­ ­ Skill 2") { checkSkill(selectedSkill[1], 2) }
+	updateAllEffects()
 	if (settings.autocast != autoCast) { toggleAutocast("autocast"); settings.autocast = 1; document.getElementById("autocast").checked = 1; }
-	}
+}
 
 // addSocketable - Adds a jewel, rune, or gem to the inventory
 //	val: the name of the socketable item
 // ---------------------------------
 function addSocketable(val) {
+	// TODO: Reduce duplicated code from addCharm()?
 	var prefix = "./images/items/socketables/";
-	var jewels = ["Jewel_blue.gif","Jewel_green.gif","Jewel_peach.gif","Jewel_purple.gif","Jewel_red.gif","Jewel_white.gif",];
+	var jewels = ["Jewel_blue.png","Jewel_green.png","Jewel_peach.png","Jewel_purple.png","Jewel_red.png","Jewel_white.png",];
 	var itemImage = "";
 	var nameVal = val;
 	var item = "";
 	for (sock in socketables) { if (socketables[sock].name == val) { item = socketables[sock] } }
 	var r = Math.floor((Math.random() * 6));
 	if (item.type == "jewel") { itemImage = prefix + "jewel/" + jewels[r] }
-	else if (item.type == "rune") { itemImage = prefix + "rune/" + item.name.split(' ').join('_') + ".png" }
-	else if (item.type == "gem") { itemImage = prefix + "gem/" + item.name.split(' ').join('_') + ".gif" }
-	else if (item.name == "Standard of Heroes") { itemImage = prefix + "Standard of Heroes.png" }
+	else if (item.type == "rune" || item.type == "gem") { itemImage = prefix + item.type+"/" + item.name.split(' ').join('_') + ".png" }
+	else if (item.type == "other") { itemImage = prefix + item.name+".png" }
 	else { itemImage = prefix + "debug_plus.png" }
 	
 	var append = "_" + Math.floor((Math.random() * 999999) + 1);	// generate "unique" ID for item
@@ -996,115 +891,268 @@ function addSocketable(val) {
 	document.getElementById("dropdown_socketables").selectedIndex = 0
 }
 
-// addMisc - Adds miscellaneous effect
-//	val: name of the chosen effect
+// addEffect - 
+//	origin: what kind of source the effect has ("skill", "aura", "misc")
+//	name: name of the chosen effect
+//	num: index, or aura level
+//	other: "mercenary" for auras
 // ---------------------------------
-function addMisc(val) {
-	document.getElementById("dropdown_misc").selectedIndex = 0
-	for (let m = 1; m < non_items.length; m++) {
-		if (val == non_items[m].name) {
-			if (typeof(effects[non_items[m].effect]) == 'undefined') { effects[non_items[m].effect] = {} }
-			initiateMiscEffect(non_items[m].effect, m)
-			// update
-			updateEffectList()
-			calculateSkillAmounts()
-			//for (let s = 0; s < skills.length; s++) { modifyEffect(skills[s]) }
-			updateStats()
-			updateSkills()
-			if (selectedSkill[0] != " ­ ­ ­ ­ Skill 1") { checkSkill(selectedSkill[0], 1) }
-			if (selectedSkill[1] != " ­ ­ ­ ­ Skill 2") { checkSkill(selectedSkill[1], 2) }
+function addEffect(origin, name, num, other) {
+	if (origin == "misc") { name = non_items[num].effect; document.getElementById("dropdown_misc").selectedIndex = 0; }
+	var id = name.split(' ').join('_');
+	if (document.getElementById(id) == null) { initializeEffect(origin,name,num,other) }
+	else { trackDuplicateEffects(name) }
+	updateAllEffects()
+}
+
+// initializeEffect - 
+//	origin: what kind of source the effect has ("skill", "aura", "misc")
+//	name: name of the chosen effect
+//	num: index, or aura level
+//	other: "mercenary" for auras
+// ---------------------------------
+function initializeEffect(origin, name, num, other) {
+	var prefix = "./images/effects/";
+	var fileType = ".png";
+	if (origin == "misc") {fileType = ".gif"}
+	if (origin == "skill") { prefix = "./images/skills/"+character.class_name.toLowerCase()+"/"; }
+	var iconOff = prefix+"dark/"+name+" dark.png";
+	var iconOn = prefix+name+fileType;
+	var id = name.split(' ').join('_');
+	
+	var newEffect = document.createElement("img")
+	var eClass = document.createAttribute("class");			eClass.value = "effect";			newEffect.setAttributeNode(eClass);
+	var eId = document.createAttribute("id");			eId.value = id;					newEffect.setAttributeNode(eId);
+	var eSrc = document.createAttribute("src");			eSrc.value = iconOff;				newEffect.setAttributeNode(eSrc);
+	var eHoverOn = document.createAttribute("onmouseover");		eHoverOn.value = "hoverEffectOn(this.id)";	newEffect.setAttributeNode(eHoverOn);
+	var eHoverOff = document.createAttribute("onmouseout");		eHoverOff.value = "hoverEffectOff(this.id)";	newEffect.setAttributeNode(eHoverOff);
+	var eToggle = document.createAttribute("onclick");		eToggle.value = "toggleEffect(this.id)";	newEffect.setAttributeNode(eToggle);
+	var eRemove = document.createAttribute("oncontextmenu");	eRemove.value = "removeEffect(this.id,1)";	newEffect.setAttributeNode(eRemove);
+	var effectGUI = document.getElementById("side");
+	effectGUI.appendChild(newEffect);
+	
+	if (typeof(effects[id]) == 'undefined') { effects[id] = {info:{}} }
+	
+	setEffectData(origin,name,num,other)
+	effects[id].info["enabled"] = 0
+	effects[id].info["imageOff"] = iconOff
+	effects[id].info["imageOn"] = iconOn
+	effects[id].info["origin"] = origin
+	effects[id].info["index"] = num
+	effects[id].info["other"] = other
+	
+	if (settings.autocast == 1) { toggleEffect(id) }	// TODO: should also toggle-on if effect is always-active
+}
+
+// setEffectData - 
+//	origin: what kind of source the effect has ("skill", "aura", "misc")
+//	name: name of the chosen effect
+//	num: index, or aura level
+//	other: "mercenary" for auras
+// ---------------------------------
+function setEffectData(origin, name, num, other) {
+	var id = name.split(' ').join('_');
+	var data = {};
+	if (origin == "aura") { data = getAuraData(name,num,other) }
+	else if (origin == "skill") { data = character.getBuffData(skills[num]) }
+	else if (origin == "misc") { data = getMiscData(name,num); }
+	for (affix in data) { effects[id][affix] = data[affix] }
+}
+
+// removeEffect - 
+//	id: the effect's id
+//	direct: whether the effect icon was clicked directly (1 or null)
+// ---------------------------------
+function removeEffect(id, direct) {
+	if (document.getElementById(id) != null) {
+		var halt = 0;
+		if (direct != null && effects[id].info.origin != "misc") { halt = 1 }
+		if (effects[id].info.origin == "skill") {
+			halt = 1;
+			var skill = skills[effects[id].info.index];
+			if (typeof(skill.effect) != 'undefined') { if (skill.effect > 2) { if (skill.level == 0 && skill.force_levels == 0) { halt = 0 } } }
+		}
+		if (effects[id].info.enabled == 1) { disableEffect(id) }
+		update()
+		if (halt == 0) {
+			document.getElementById(id).remove();
+			effects[id] = {info:{}}
+			updateAllEffects()
 		}
 	}
 }
 
-// initiateMiscEffect - Handles adding of miscellaneous effects
-//	name: name of the effect
-//	i: array index for the effect
+// toggleEffect - 
+//	id: the effect's id
 // ---------------------------------
-function initiateMiscEffect(name, i) {
-	if (document.getElementById(name) == null) {
-		var newEffect = document.createElement("img")
-		var effectIcon = "./images/misc/dark/"+name+".png";
-		
-		var eClass = document.createAttribute("class");	eClass.value = "effect";	newEffect.setAttributeNode(eClass);
-		var eId = document.createAttribute("id");	eId.value = name;		newEffect.setAttributeNode(eId);
-		var eSrc = document.createAttribute("src");	eSrc.value = effectIcon;	newEffect.setAttributeNode(eSrc);
-		
-		var eToggle = document.createAttribute("onclick");		eToggle.value = "toggleMiscEffect("+name+", "+i+")";	newEffect.setAttributeNode(eToggle);
-		var eRemove = document.createAttribute("oncontextmenu");	eRemove.value = "removeMiscEffect("+name+", "+i+")";	newEffect.setAttributeNode(eRemove);
-		
-		var effectGUI = document.getElementById("side");
-		effectGUI.appendChild(newEffect);
-		
-		if (typeof(effects[name]) == 'undefined') { effects[name] = {} }
-		effects[name]["enabled"] = 0
-		if (settings.autocast == 1) {
-			toggleMiscEffect(name, i)
-		}
-	}
-}
-
-// removeMiscEffect - Removes miscellaneous effect
-//	name: name of the effect
-//	i: array index for the effect
-// ---------------------------------
-function removeMiscEffect(name, i) {
-	if (i > 0) { name = non_items[i].effect } else { i = non_items[i].i }
-	if (typeof(effects[name]) != 'undefined') {
-		if (document.getElementById(name) != null) { document.getElementById(name).remove(); }
-		for (affix in effects[name]) {
-			character[affix] -= effects[name][affix]
-			effects[name][affix] = 0
-		}
-		// update
-		updateEffectList()
-		calculateSkillAmounts()
-		//for (let s = 0; s < skills.length; s++) { modifyEffect(skills[s]) }
-		updateStats()
-		updateSkills()
-		if (selectedSkill[0] != " ­ ­ ­ ­ Skill 1") { checkSkill(selectedSkill[0], 1) }
-		if (selectedSkill[1] != " ­ ­ ­ ­ Skill 2") { checkSkill(selectedSkill[1], 2) }
-	}
-}
-
-// toggleMiscEffect - Enables or disables miscellaneous effects without removing them from the character
-//	name: name of the effect
-//	i: array index for the effect
-// ---------------------------------
-function toggleMiscEffect(name, i) {
-	if (i > 0) { name = non_items[i].effect } else { i = non_items[i].i }
-	if (effects[name]["enabled"] == 1) {
-		for (affix in effects[name]) {
-			character[affix] -= effects[name][affix]
-			effects[name][affix] = 0
-		}
-		effects[name]["enabled"] = 0
-		document.getElementById(name).src = "./images/misc/dark/"+name+".png"
+function toggleEffect(id) {
+	if (effects[id].info.enabled == 1) {
+		disableEffect(id)
 	} else {
-		for (affix in non_items[i]) {
-			if (affix != "enabled" && affix != "name" && affix != "duration" && affix != "recharge" && affix != "effect" && affix != "i") {
-				effects[name][affix] = non_items[i][affix]
-				character[affix] += non_items[i][affix]
-			}
-		}
-		effects[name]["enabled"] = 1
-		document.getElementById(name).src = "./images/misc/"+name+".gif"
+		enableEffect(id)
 	}
-	// update
-	updateEffectList()
-	calculateSkillAmounts()
-	//for (let s = 0; s < skills.length; s++) { modifyEffect(skills[s]) }
-	updateStats()
-	updateSkills()
-	if (selectedSkill[0] != " ­ ­ ­ ­ Skill 1") { checkSkill(selectedSkill[0], 1) }
-	if (selectedSkill[1] != " ­ ­ ­ ­ Skill 2") { checkSkill(selectedSkill[1], 2) }
+	updateEffect(id)
+	update()
 }
 
-// resetMisc - Removes all miscellaneous effects
+// disableEffect - 
+//	id: the effect's id
 // ---------------------------------
-function resetMisc() {
-	for (name in effects) {
-		removeMiscEffect(name, 0)
+function disableEffect(id) {
+	if (document.getElementById(id) != null && effects[id].info.enabled == 1) {
+		effects[id].info.enabled = 0
+		document.getElementById(id).src = effects[id].info.imageOff
+		for (affix in effects[id]) { if (affix != "info") { character[affix] -= effects[id][affix] } }
+		//update() or updateEffect(id)?
+	}
+}
+
+// enableEffect - 
+//	id: the effect's id
+// ---------------------------------
+function enableEffect(id) {
+	if (document.getElementById(id) != null && effects[id].info.enabled == 0) {
+		effects[id].info.enabled = 1
+		document.getElementById(id).src = effects[id].info.imageOn
+		for (affix in effects[id]) { if (affix != "info") { character[affix] += effects[id][affix] } }
+	}
+}
+
+// updateAllEffects - 
+// ---------------------------------
+function updateAllEffects() {
+	calculateSkillAmounts()
+	for (let s = 0; s < skills.length; s++) {
+		var skill = skills[s];
+		if (typeof(skill.effect) != 'undefined') { if (skill.effect > 2) {
+			var id = skill.name.split(' ').join('_');
+			if (skill.level > 0 || skill.force_levels > 0) {
+				if (document.getElementById(id) == null) { addEffect("skill",skill.name,skill.i,"") }
+				else {
+					updateEffect(id)
+				}
+			} else {
+				if (document.getElementById(id) != null) { removeEffect(id) }
+			}
+		} }
+	}
+	// TODO: Add function for mercenary main aura
+	update()
+}
+
+// updateEffect - 
+//	id: the effect's id
+// ---------------------------------
+function updateEffect(id) {
+	var origin = effects[id].info.origin;
+	var index = effects[id].info.index;
+	var other = effects[id].info.other;
+	var name = id.split('_').join(' ');
+	var active = effects[id].info.enabled;
+	var old_data = {}
+	for (affix in effects[id]) { if (affix != "info") { old_data[affix] = effects[id][affix] } }
+	
+	setEffectData(origin,name,index,other)
+	if (active == 1) {
+		for (affix in old_data) { character[affix] -= old_data[affix] }
+		effects[id].info.enabled = 0
+		enableEffect(id)
+	}
+}
+
+// trackDuplicateEffects - 
+//	id: the effect's id
+// ---------------------------------
+function trackDuplicateEffects(id) {
+	// TODO: Auras gained from items need unique IDs? They should be stored, and only one should be active at a time
+	//document.getElementById("l4").innerHTML = "duplicate effect: "+id
+}
+
+// hoverEffectOn - 
+//	id: the effect's id
+// ---------------------------------
+function hoverEffectOn(id) {}
+
+// hoverEffectOff - 
+//	id: the effect's id
+// ---------------------------------
+function hoverEffectOff(id) {}
+
+// resetEffects - Removes all effects
+// ---------------------------------
+function resetEffects() {
+	for (id in effects) { removeEffect(id) }
+}
+
+// getAuraData - gets a list of stats corresponding to the aura (excludes synergy bonuses)
+//	aura: name of the aura
+//	lvl: level of the aura (1+)
+//	source: "mercenary" or the item type which is granting the aura
+// result: indexed array of stats granted and their values
+// ---------------------------------
+function getAuraData(aura, lvl, source) {
+	var result = {};
+	var a = -1;
+	var auras = [];
+	for (let u = 0; u < 20; u++) {
+		if (skills_all["paladin"][u].name == aura) { auras = skills_all["paladin"]; a = u; }
+	}
+	for (let u = 0; u < auras_extra.length; u++) {
+		if (auras_extra[u].name == aura) { auras = auras_extra; a = u; }
+	}
+	// Defensive Auras
+	if (aura == "Prayer") { result.life_regen = 1; result.life_replenish = auras[a].values[0][lvl]; }
+	else if (aura == "Resist Fire") { result.fRes = auras[a].values[1][lvl]; result.fRes_max = auras[a].values[2][lvl]; }
+	else if (aura == "Defiance") { result.defense_bonus = auras[a].values[0][lvl]; }
+	else if (aura == "Resist Cold") { result.cRes = auras[a].values[1][lvl]; result.cRes_max = auras[a].values[2][lvl]; }
+	else if (aura == "Cleansing") { result.poison_length_reduced = auras[a].values[2][lvl]; result.curse_length_reduced = auras[a].values[2][lvl]; }
+	else if (aura == "Resist Lightning") { result.lRes = auras[a].values[1][lvl]; result.lRes_max = auras[a].values[2][lvl]; }
+	else if (aura == "Vigor") { result.velocity = auras[a].values[0][lvl]; result.max_stamina = auras[a].values[1][lvl]; result.heal_stam = auras[a].values[2][lvl]; }
+	else if (aura == "Meditation") { result.mana_regen = auras[a].values[1][lvl]; }
+	else if (aura == "Redemption") { result.recovery_per_corpse = auras[a].values[0][lvl]/100 * auras[a].values[1][lvl]; }
+	else if (aura == "Salvation") { result.fDamage = auras[a].values[0][lvl]; result.cDamage = auras[a].values[0][lvl]; result.lDamage = auras[a].values[0][lvl]; result.all_res = auras[a].values[1][lvl]; }
+	// Offensive Auras
+	else if (aura == "Might") { result.damage_bonus = auras[a].values[0][lvl]; }
+	else if (aura == "Holy Fire") { result.fDamage_min = auras[a].values[0][lvl]; result.fDamage_max = auras[a].values[1][lvl]; }
+	else if (aura == "Precision") { result.cstrike = auras[a].values[2][lvl]; result.ar_bonus = auras[a].values[3][lvl]; if (source == "mercenary") { result.pierce = auras[a].values[1][lvl] } else { result.pierce = auras[a].values[0][lvl] }}
+	else if (aura == "Blessed Aim") { result.ar_bonus = auras[a].values[2][lvl]; result.hammer_on_hit = auras[a].values[1][lvl]; }
+	else if (aura == "Concentration") { result.ar_bonus = auras[a].values[0][lvl]; result.damage_bonus = auras[a].values[1][lvl]; result.hammer_bonus = auras[a].values[2][lvl]; }
+	else if (aura == "Holy Freeze") { result.cDamage_min = auras[a].values[0][lvl]; result.cDamage_max = auras[a].values[1][lvl]; result.slow_enemies = auras[a].values[2][lvl]; }
+	else if (aura == "Holy Shock") { result.lDamage_min = auras[a].values[0][lvl]; result.lDamage_max = auras[a].values[1][lvl]; }
+	else if (aura == "Sanctuary") { result.damage_vs_undead = auras[a].values[0][lvl]; }
+	else if (aura == "Fanaticism") { result.ias_skill = auras[a].values[2][lvl]; result.ar_bonus = auras[a].values[3][lvl]; if (source == "mercenary") { result.damage_bonus = auras[a].values[0][lvl] } else { result.damage_bonus = auras[a].values[1][lvl] }}
+	else if (aura == "Conviction") { result.enemy_defense = auras[a].values[0][lvl]; result.enemy_fRes = auras[a].values[1][lvl]; result.enemy_cRes = auras[a].values[1][lvl]; result.enemy_lRes = auras[a].values[1][lvl]; result.enemy_pRes = auras[a].values[1][lvl]; }
+	// Others
+	else if (aura == "Thorns") { result.thorns_reflect = auras[a].values[0][lvl]; }
+	else if (aura == "Inner Sight") { result.enemy_defense_flat = auras[a].values[0][lvl]; }
+	//else if (aura == "Enflame") { result.fDamage_min = skill.data.values[1][lvl]; result.fDamage_max = skill.data.values[2][lvl]; result.ar_bonus = skill.data.values[3][lvl]; }
+	else if (aura == "Righteous Fire") {  }		// No buffs. Deals 45% of max life as fire damage per second in a small area.
+	else if (aura == "Lifted Spirit") { result.wisp = auras[a].values[0][lvl]; }
+	
+	return result;
+}
+
+// getMiscData - 
+//	name: name of selected misc effect
+//	index: index of the selected misc element
+// return: affixes of the misc element
+// ---------------------------------
+function getMiscData(name, index) {
+	var result = {};
+	for (affix in non_items[index]) { if (affix != "i" && affix != "name" && affix != "duration" && affix != "recharge" && affix != "effect") {
+		result[affix] = non_items[index][affix]
+	} }
+	return result
+}
+
+// updateMercenary - updates mercenary base aura
+// ---------------------------------
+function updateMercenary() {
+	mercenary.level = Math.max(1,character.level-1)
+	if (mercenary.base_aura != "") {
+		removeEffect(mercenary.base_aura.split(' ').join('_'))	// TODO: merge with effect update functions. Use disable/enable instead.
+		mercenary.base_aura_level = getMercenaryAuraLevel(mercenary.level)
+		addEffect("aura",mercenary.base_aura,mercenary.base_aura_level,"mercenary")
 	}
 }
 
@@ -1125,7 +1173,7 @@ function toggleQuests(quests) {
 		character.pRes += (30*toggle)
 		// TODO: Include merchant price discount?
 		updatePrimaryStats()
-		updateMisc()
+		updateOther()
 	}
 }
 
@@ -1149,7 +1197,7 @@ function changeDifficulty(diff) {
 		else if (diff == 3) { character[penalties[p]] = 100 }
 	}
 	updatePrimaryStats()
-	updateMisc()
+	updateOther()
 }
 
 // toggleCoupling - Changes whether adding/removing skill points can affect character level
@@ -1211,7 +1259,7 @@ function getWeaponDamage(str, dex, type, thrown) {
 
 // updateStats - Updates all stats
 // ---------------------------------
-function updateStats() { updatePrimaryStats(); updateMisc(); updateSecondaryStats(); updateTertiaryStats(); }
+function updateStats() { updatePrimaryStats(); updateOther(); updateSecondaryStats(); updateTertiaryStats(); }
 
 // updateStats - Updates stats shown by the default (original D2) stat page
 // ---------------------------------
@@ -1220,7 +1268,7 @@ function updatePrimaryStats() {
 	var strTotal = (c.strength + c.all_attributes + (c.level-1)*c.strength_per_level);
 	var dexTotal = (c.dexterity + c.all_attributes + (c.level-1)*c.dexterity_per_level);
 	var vitTotal = (c.vitality + c.all_attributes + (c.level-1)*c.vitality_per_level);
-	var energyTotal = (c.energy + c.all_attributes)*(1+c.max_energy);
+	var energyTotal = (c.energy + c.all_attributes)*(1+c.max_energy/100);
 	
 	var weaponType = equipped.weapon.type;
 	var physDamage = getWeaponDamage(strTotal,dexTotal,weaponType,0);
@@ -1298,10 +1346,8 @@ function updatePrimaryStats() {
 			if (weaponType == "club" || weaponType == "hammer") { weaponType = "mace" }
 			weaponFrames = c.weapon_frames[weaponType];
 			if (c.class_name == "Druid") {
-				var werewolf = "e"+skills[11].key;
-				var werebear = "e"+skills[13].key;
-				if (typeof(effects[werewolf]) != 'undefined') { if (effects[werewolf]["enabled"] == 1) { weaponFrames = c.wereform_frames[weaponType] } }
-				if (typeof(effects[werebear]) != 'undefined') { if (effects[werebear]["enabled"] == 1) { weaponFrames = c.wereform_frames[weaponType] } }
+				if (document.getElementById(getId(skills[11].name)) != null) { if (effects[getId(skills[11].name)].info.enabled == 1) { weaponFrames = c.wereform_frames[weaponType] } }
+				if (document.getElementById(getId(skills[13].name)) != null) { if (effects[getId(skills[13].name)].info.enabled == 1) { weaponFrames = c.wereform_frames[weaponType] } }
 			}
 			if (weaponType == "sword" || weaponType == "axe" || weaponType == "mace") { if (equipped.weapon.twoHanded == 1) { weaponFrames = weaponFrames[1]; } else { weaponFrames = weaponFrames[0]; } }
 		}
@@ -1465,9 +1511,9 @@ function updateChargeSkills() {
 	document.getElementById("cskill").innerHTML = stats
 }
 
-// updateMisc - Updates other interface elements
+// updateOther - Updates other interface elements
 // ---------------------------------
-function updateMisc() {
+function updateOther() {
 	var c = character;
 	if (c.statpoints == 0) {
 		document.getElementById("remainingstats").innerHTML = ""
@@ -1499,21 +1545,20 @@ function updateMisc() {
 // calculateSkillAmounts - Updates skill levels
 // ---------------------------------
 function calculateSkillAmounts() {
+	// TODO: move function to character files?
 	for (s = 0; s < skills.length; s++) {
 		skills[s].extra_levels = 0
 		skills[s].extra_levels += character.all_skills
 		var display = skills[s].level;
-	//	var temp = 0;
-		var skillSolo = "skill_" + skills[s].name.split(" ").join("_");
-		skills[s].force_levels = character[skillSolo]
-	//	var oskillSolo = "oskill_" + skills[s].name.split(" ").join("_");
-	//	skills[s].force_levels += character[oskillSolo]
-		var oskillSolo = "o"+skillSolo;
-		if (typeof(character[oskillSolo]) != 'undefined') { skills[s].force_levels += character[oskillSolo] }
-	//	offskills[skills[s].code] = skills[s].level + skills[s].extra_levels + skills[s].force_levels
+		var skill_id = "skill_" + getId(skills[s].name);
+		skills[s].force_levels = character[skill_id]
+		var oskill_id = "o"+skill_id;
+		if (typeof(character[oskill_id]) != 'undefined') { skills[s].force_levels += character[oskill_id] }
+		// TODO: use skills_all to store calculated offskill levels?
 		if (character.class_name == "Amazon") {
 			skills[s].extra_levels += character.skills_amazon
 			if (s < 10) { skills[s].extra_levels += character.skills_javelins
+				if (s == 2 || s == 6) { skills[s].extra_levels += character.skills_poison_all }
 			} else if (s > 19) { skills[s].extra_levels += character.skills_bows
 				if (s == 23 || s == 26 || s == 28) { skills[s].extra_levels += character.skills_fire_all }
 				if (s == 20 || s == 24 || s == 29) { skills[s].extra_levels += character.skills_cold_all }
@@ -1535,6 +1580,7 @@ function calculateSkillAmounts() {
 			}
 		} else if (character.class_name == "Druid") {
 			skills[s].extra_levels += character.skills_druid
+			if (s == 16 || s == 22) { skills[s].extra_levels += character.skills_poison_all }
 			if (s == 0 || s == 1 || s == 2 || s == 4 || s == 7 || s == 9 || s == 17) { skills[s].extra_levels += character.skills_fire_all }
 			if (s < 11) { skills[s].extra_levels += character.skills_elemental
 				if (s == 3 || s == 10) { skills[s].extra_levels += character.skills_cold_all }
@@ -1547,6 +1593,7 @@ function calculateSkillAmounts() {
 				if (s == 9 || s == 14) { skills[s].extra_levels += character.skills_fire_all }
 			} else if (s > 19) { skills[s].extra_levels += character.skills_curses
 			} else { skills[s].extra_levels += character.skills_poisonBone
+				if (s == 11 || s == 15 || s == 19) { skills[s].extra_levels += character.skills_poison_all }
 			}
 		} else if (character.class_name == "Paladin") {
 			skills[s].extra_levels += character.skills_paladin
@@ -1641,142 +1688,6 @@ function calculateSkillPassives(className) {
 	}
 }
 
-// updateEffectList - Updates all effects based on their levels
-// ---------------------------------
-function updateEffectList() { for (let s = 0; s < skills.length; s++) { updateEffect(skills[s]); } }
-
-// updateEffect - Creates or deletes effects corresponding to a skill, based on the skill's level
-//	skill: skill object in question
-// ---------------------------------
-function updateEffect(skill) {
-	// TODO: Decouple from skills & classes - effects can be gained that are not skill related, or are based on others' skills
-	if (typeof(skill.effect) != 'undefined') { if (skill.effect > 2) {
-		var eff = "e"+skill.key;
-		var effectElem = document.getElementById(eff);
-		if (skill.level > 0 || skill.force_levels > 0) {
-			if (effectElem == null) {
-				
-				var newEffect = document.createElement("img")
-				var effectIcon = "./images/skills/"+character.class_name.toLowerCase()+"/dark/"+skill.name+" dark.png";
-				
-				var eClass = document.createAttribute("class");	eClass.value = "effect";	newEffect.setAttributeNode(eClass);
-				var eId = document.createAttribute("id");	eId.value = eff;		newEffect.setAttributeNode(eId);
-				var eSrc = document.createAttribute("src");	eSrc.value = effectIcon;	newEffect.setAttributeNode(eSrc);
-				
-				var eHoverOn = document.createAttribute("onmouseover");		eHoverOn.value = "hoverEffect("+skill.i+")";	newEffect.setAttributeNode(eHoverOn);
-				var eHoverOff = document.createAttribute("onmouseout");		eHoverOff.value = "effectOut("+skill.i+")";	newEffect.setAttributeNode(eHoverOff);
-				var eEnable = document.createAttribute("onclick");		eEnable.value = "enableEffect("+skill.i+")";	newEffect.setAttributeNode(eEnable);
-				var eDisable = document.createAttribute("oncontextmenu");	eDisable.value = "disableEffect("+skill.i+")";	newEffect.setAttributeNode(eDisable);
-				
-				var effectGUI = document.getElementById("side");
-				effectGUI.appendChild(newEffect);
-				
-				effects[eff] = {}
-				effects[eff]["enabled"] = 0
-				effects[eff]["skill"] = skill.i
-
-				if (settings.autocast == 1) { enableEffect(skill.i) }
-			}
-		} else {
-			if (effectElem != null) {
-				effects[eff].enabled = 0
-				effectElem.remove();
-			}
-			if (typeof(effects[eff]) != 'undefined') { if (effects[eff]["enabled"] == 1) {
-				disableEffect(skill.i)
-			} }
-		}
-	} }
-}
-
-// hoverEffect - display effect info on mouseover
-//	s: skill effect element
-// ---------------------------------
-function hoverEffect(s) {}
-
-// effectOut - hide mouseover info
-//	s: skill effect element
-// ---------------------------------
-function effectOut(s) {}
-
-// disableEffect - 
-//	s: 
-// ---------------------------------
-function disableEffect(s) {
-	var eff = "e"+skills[s].key;
-	if (typeof(effects[eff]) != 'undefined') {
-	if (effects[eff]["enabled"] == 1) {
-		effects[eff]["enabled"] = 0
-		document.getElementById(eff).src = "./images/skills/"+character.class_name.toLowerCase()+"/dark/"+skills[s].name+" dark.png";
-		removeEffect(effects[eff])
-		// update
-		updateEffectList()
-		calculateSkillAmounts()
-		updateStats()
-		updateSkills()
-		if (selectedSkill[0] != " ­ ­ ­ ­ Skill 1") { checkSkill(selectedSkill[0], 1) }
-		if (selectedSkill[1] != " ­ ­ ­ ­ Skill 2") { checkSkill(selectedSkill[1], 2) }
-	}
-	}
-}
-
-// enableEffect - 
-//	s: 
-// ---------------------------------
-function enableEffect(s) {
-	var eff = "e"+skills[s].key;
-	if (typeof(effects[eff]) != 'undefined') {
-	if (effects[eff]["enabled"] == 0) {
-		effects[eff]["enabled"] = 1
-		document.getElementById(eff).src = "./images/skills/"+character.class_name.toLowerCase()+"/"+skills[s].name+".png";	
-		addEffect(effects[eff])
-		// update
-		updateEffectList()
-		calculateSkillAmounts()
-		updateStats()
-		updateSkills()
-		if (selectedSkill[0] != " ­ ­ ­ ­ Skill 1") { checkSkill(selectedSkill[0], 1) }
-		if (selectedSkill[1] != " ­ ­ ­ ­ Skill 2") { checkSkill(selectedSkill[1], 2) }
-	}
-	}
-}
-
-// removeEffect - 
-//	effect: the effects[] element being removed
-// ---------------------------------
-function removeEffect(effect) {
-	for (affix in effect) {
-		character[affix] -= effect[affix]
-		if (affix != "enabled" && affix != "skill") { effect[affix] = 0 }
-	}
-}
-
-// addEffect - 
-//	effect: the effects[] element being added
-// ---------------------------------
-function addEffect(effect) {
-	buffData = character.getBuffData(effect)
-	for (affix in buffData) {
-		character[affix] += buffData[affix]
-		if (effect[affix] != "enabled" && affix != "skill") { effect[affix] = buffData[affix] }
-	}
-}
-
-// modifyEffect - 
-//	skill: skill object
-// ---------------------------------
-function modifyEffect(skill) {
-	if (typeof(skill.effect) != 'undefined') { if (skill.effect > 2) {
-		updateEffect(skill);
-		if (typeof(effects["e"+skill.key]) != 'undefined') { if (effects["e"+skill.key].enabled == 1) {
-			disableEffect(skill.i);
-			updateEffect(skill);
-			enableEffect(skill.i);
-			updateEffect(skill);
-		} }
-	} }
-}
-
 // checkRequirements - Recolors stats/skills based on unmet item/skill/level requirements
 // ---------------------------------
 function checkRequirements() {
@@ -1834,13 +1745,7 @@ function addStat(event, stat) {
 		else if (stat == "btn_vitality") {	character.vitality += points;	character.vitality_added += points; }
 		else if (stat == "btn_energy") {	character.energy += points;	character.energy_added += points; }
 		character.statpoints -= points
-		// update
-		updateEffectList()
-		calculateSkillAmounts()
-		updateStats()
-		updateSkills()
-		if (selectedSkill[0] != " ­ ­ ­ ­ Skill 1") { checkSkill(selectedSkill[0], 1) }
-		if (selectedSkill[1] != " ­ ­ ­ ­ Skill 2") { checkSkill(selectedSkill[1], 2) }
+		updateAllEffects()
 	}
 }
 
@@ -1869,22 +1774,13 @@ function removeStat(event, stat) {
 		character.energy_added -= points
 	} else { points = 0 }
 	character.statpoints += points
-	// update
-	updateEffectList()
-	calculateSkillAmounts()
-	updateStats()
-	updateSkills()
-	if (selectedSkill[0] != " ­ ­ ­ ­ Skill 1") { checkSkill(selectedSkill[0], 1) }
-	if (selectedSkill[1] != " ­ ­ ­ ­ Skill 2") { checkSkill(selectedSkill[1], 2) }
+	updateAllEffects()
 }
 
 // skillUp - Raises the skill level
 //	skill: the skill to modify
 // ---------------------------------
 function skillUp(event, skill) {
-	if (typeof(skill.effect) != 'undefined') { if (skill.effect > 2) {
-		if (skill.level == 0 && skill.force_levels == 0 && typeof(effects["e"+skill.key]) == 'undefined') { enableEffect(skill.i) }
-	} }
 	var old_level = skill.level;
 	var levels = 1;
 	if (event.shiftKey) { levels = 10 }
@@ -1911,18 +1807,19 @@ function skillUp(event, skill) {
 			}
 		}
 	}
-	if (typeof(skill.effect) != 'undefined') { if (skill.effect > 2) {
-		skillHover(skill)
-		modifyEffect(skill)
-	} }
+//	if (typeof(skill.effect) != 'undefined') { if (skill.effect > 2) {
+//		skillHover(skill)
+//		modifyEffect(skill)
+//	} }
 	skillHover(skill)
     if (skill.bindable > 0 && (old_level == 0 || (old_level > 0 && skill.level == 0 && skill.force_levels == 0))) {
 	updateSkills()
     }
-	updateAll()
-	for (let s = 0; s < skills.length; s++) { modifyEffect(skills[s]) }
+	updateMercenary()
+//	for (let s = 0; s < skills.length; s++) { modifyEffect(skills[s]) }
 	if (selectedSkill[0] != " ­ ­ ­ ­ Skill 1") { checkSkill(selectedSkill[0], 1) }
 	if (selectedSkill[1] != " ­ ­ ­ ­ Skill 2") { checkSkill(selectedSkill[1], 2) }
+	updateAllEffects()
 }
 
 // skillDown - Lowers the skill level
@@ -1962,19 +1859,14 @@ function skillDown(event, skill) {
 		skill.level -= levels
 		character.skillpoints += levels
 	}
-	if (typeof(skill.effect) != 'undefined') { if (skill.effect > 2) {
-		skillHover(skill)
-		if (skill.level == 0 && skill.force_levels == 0 && typeof(effects["e"+skill.key]) != 'undefined') { if (effects["e"+skill.key].enabled == 1) { disableEffect(skill.i) } }
-		modifyEffect(skill)
-	} }
 	skillHover(skill)
     if (skill.bindable > 0 && (old_level == 0 || (old_level > 0 && skill.level == 0 && skill.force_levels == 0))) {
 	updateSkills()
     }
-	updateAll()
-	for (let s = 0; s < skills.length; s++) { modifyEffect(skills[s]) }
+	updateMercenary()
 	if (selectedSkill[0] != " ­ ­ ­ ­ Skill 1") { checkSkill(selectedSkill[0], 1) }
 	if (selectedSkill[1] != " ­ ­ ­ ­ Skill 2") { checkSkill(selectedSkill[1], 2) }
+	updateAllEffects()
 }
 
 // skillHover - Shows skill description tooltip on mouse-over
@@ -2120,7 +2012,7 @@ function checkSkill(skillName, num) {
 	var c = character;
 	var strTotal = (c.strength + c.all_attributes + (c.level-1)*c.strength_per_level);
 	var dexTotal = (c.dexterity + c.all_attributes + (c.level-1)*c.dexterity_per_level);
-	var energyTotal = Math.floor((c.energy + c.all_attributes)*(1+c.max_energy));
+	var energyTotal = Math.floor((c.energy + c.all_attributes)*(1+c.max_energy/100));
 	var weaponType = equipped.weapon.type;
 	var weaponType_offhand = "";
 	if (offhandType == "weapon") { weaponType_offhand = equipped.offhand.type }
@@ -2144,6 +2036,8 @@ function checkSkill(skillName, num) {
 	if (skillName != " ­ ­ ­ ­ Skill 1" && skillName != " ­ ­ ­ ­ Skill 2") {
 		if (native_skill == 0) { character_any.updateSelectedSkill(skillName, num, ar, physDamage[0], physDamage[1], physDamage[2], ele_min, ele_max, c.mDamage_min, c.mDamage_max, wisp); }
 		else { c.updateSelectedSkill(skill, num, ar, physDamage[0], physDamage[1], physDamage[2], ele_min, ele_max, c.mDamage_min, c.mDamage_max, wisp); }
+	} else {
+		
 	}
 	updateSkills()
 }	
@@ -2270,6 +2164,7 @@ function drag(ev) {
 //	cell: 1-40 (upper left position of item in 10x4 inventory)
 // ---------------------------------
 function drop(ev,cell) {
+	// TODO: Is any of this similar enough to addCharm() or addSocketable() to be combined?
 	ev.preventDefault();
 	var val = inv[0].onpickup;
 	var data = ev.dataTransfer.getData("text");
@@ -2305,12 +2200,12 @@ function drop(ev,cell) {
 			}
 		}
 		// update
-		updateEffectList()
 		calculateSkillAmounts()
 		updateStats()
 		updateSkills()
 		if (selectedSkill[0] != " ­ ­ ­ ­ Skill 1") { checkSkill(selectedSkill[0], 1) }
 		if (selectedSkill[1] != " ­ ­ ­ ­ Skill 2") { checkSkill(selectedSkill[1], 2) }
+		// updateAllEffects()?
 	}
 }
 
@@ -2320,7 +2215,7 @@ function trash(ev) {
 	var val = ev.target.id;
 	var name = val.split('_')[0];
 	var group = "charms"
-	if (name == "+1 (each) skill") { for (let i = 0; i < skills.length; i++) { if (skills[i].level == 0 /*&& skills[i].force_levels <= 1*/) { disableEffect(i) } } }
+//	if (name == "+1 (each) skill") { for (let i = 0; i < skills.length; i++) { if (skills[i].level == 0) { removeEffect(getId(skills[i].name)) } } }	// && skills[i].force_levels <= 1
 	for (old_affix in equipped[group][val]) {
 		character[old_affix] -= equipped[group][val][old_affix]
 		equipped[group][val][old_affix] = unequipped[old_affix]
@@ -2355,14 +2250,12 @@ function trash(ev) {
 			}
 		}
 	}
-	
-	updateEffectList()
 	calculateSkillAmounts()
-	for (let s = 0; s < skills.length; s++) { modifyEffect(skills[s]) }
 	updateStats()
 	updateSkills()
 	if (selectedSkill[0] != " ­ ­ ­ ­ Skill 1") { checkSkill(selectedSkill[0], 1) }
 	if (selectedSkill[1] != " ­ ­ ­ ­ Skill 2") { checkSkill(selectedSkill[1], 2) }
+	updateAllEffects()
 	document.getElementById("item_tooltip").innerHTML = ""
 }
 
@@ -2533,14 +2426,12 @@ function socket(event, group) {
 			}
 		} }
 		socketed[group].socketsFilled += 1
-		// update
-		updateEffectList()
 		calculateSkillAmounts()
-		for (let s = 0; s < skills.length; s++) { modifyEffect(skills[s]) }
 		updateStats()
 		updateSkills()
 		if (selectedSkill[0] != " ­ ­ ­ ­ Skill 1") { checkSkill(selectedSkill[0], 1) }
 		if (selectedSkill[1] != " ­ ­ ­ ­ Skill 2") { checkSkill(selectedSkill[1], 2) }
+		// updateAllEffects()?
 	}
 	// inventory destination
 	for (s = 1; s <= inv[0].in.length; s++) {
@@ -2630,13 +2521,12 @@ function trashSocketable(event) {
 	}
 	
 	// update
-	updateEffectList()
 	calculateSkillAmounts()
-	for (let s = 0; s < skills.length; s++) { modifyEffect(skills[s]) }
 	updateStats()
 	updateSkills()
 	if (selectedSkill[0] != " ­ ­ ­ ­ Skill 1") { checkSkill(selectedSkill[0], 1) }
 	if (selectedSkill[1] != " ­ ­ ­ ­ Skill 2") { checkSkill(selectedSkill[1], 2) }
+	// updateAllEffects()?
 	document.getElementById("item_tooltip").innerHTML = ""
 }
 
@@ -2692,7 +2582,7 @@ function inventoryRightClick(event, group) {
 //	change: what kind of change to make ("upgrade" or "downgrade")
 // ---------------------------------
 function changeBase(group, change) {
-	// TODO: Upgraded items get +5 to req_level
+	// TODO: Upgraded items should get +5 to req_level
 	// TODO: required level depends on affixes, not just base level
 	// TODO: Prevent items from being downgraded below their baseline
 	// TODO: Add special cases for quest items?
@@ -2731,16 +2621,24 @@ function changeBase(group, change) {
 	equipmentOut()
 	equipmentHover(group)
 	// update
-	updateEffectList()
 	calculateSkillAmounts()
 	updateStats()
 	updateSkills()
 	if (selectedSkill[0] != " ­ ­ ­ ­ Skill 1") { checkSkill(selectedSkill[0], 1) }
 	if (selectedSkill[1] != " ­ ­ ­ ­ Skill 2") { checkSkill(selectedSkill[1], 2) }
+	// updateAllEffects()?
 }
 
 // hoverFCR - 
 // ---------------------------------
 function hoverFCR() {
 	//document.getElementById("fcr").innerHTML = "testing"//character.fcr + Math.floor(character.level*character.fcr_per_level)
+}
+
+// getId - gets the ID for the given name (replaces spaces with underscores)
+//	name: the name to be changed
+// return: the ID for name
+// ---------------------------------
+function getId(name) {
+	return name.split(' ').join('_')
 }

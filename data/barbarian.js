@@ -45,8 +45,7 @@ var character_barbarian = {class_name:"Barbarian", strength:30, dexterity:20, vi
 	//	effect: array element object for the buff
 	// result: indexed array including stats affected and their values
 	// ---------------------------------
-	getBuffData : function(effect) {
-		var skill = skills[effect.skill];
+	getBuffData : function(skill) {
 		var lvl = skill.level + skill.extra_levels;
 		var result = {};
 		

@@ -32,7 +32,7 @@ var character_druid = {class_name:"Druid", strength:15, dexterity:20, vitality:2
 		
 		if (skill.name == "Firestorm" && elem > 0 && elem < 3) { 	result *= ((1 + (0.30*skills[1].level + 0.30*skills[4].level)) * (1+character.fDamage/100) * wisp) }
 		if (skill.name == "Flame Dash" && elem == 0) { 			result = Math.max(0.5, (8.4 - 0.4*skill.level)) }
-		if (skill.name == "Flame Dash" && elem < 3 && elem > 0) { 	result *= ((1 + 0.10*skills[1].level + 0.01*((character.energy + character.all_attributes)*(1+character.max_energy))) * (1+character.fDamage/100) * wisp) }
+		if (skill.name == "Flame Dash" && elem < 3 && elem > 0) { 	result *= ((1 + 0.10*skills[1].level + 0.01*((character.energy + character.all_attributes)*(1+character.max_energy/100))) * (1+character.fDamage/100) * wisp) }
 		if (skill.name == "Molten Boulder" && elem < 2) { 		result *= (1 + (0.20*skills[7].level)) }
 		if (skill.name == "Molten Boulder" && elem > 1 && elem < 4) { 	result *= ((1 + (0.23*skills[0].level)) * (1+character.fDamage/100) * wisp) }
 		if (skill.name == "Molten Boulder" && elem > 3 && elem < 6) { 	result *= ((1 + (0.17*skills[0].level)) * (1+character.fDamage/100) * wisp) }
@@ -57,7 +57,7 @@ var character_druid = {class_name:"Druid", strength:15, dexterity:20, vitality:2
 		if (skill.name == "Rabies" && elem > 0 && elem < 3) { result *= ((1 + (0.20*skills[22].level + 0.20*skills[27].level)) * (1+character.pDamage/100) * wisp) }
 
 		if (skill.name == "Raven" && elem < 3 && elem > 0) { result *= (1 + (0.20*skills[5].level + 0.20*skills[6].level)) }
-		if (skill.name == "Raven" && elem < 5 && elem > 2) { result *= (1 + 0.21*skills[3].level + 0.01*((character.energy + character.all_attributes)*(1+character.max_energy))) }
+		if (skill.name == "Raven" && elem < 5 && elem > 2) { result *= (1 + 0.21*skills[3].level + 0.01*((character.energy + character.all_attributes)*(1+character.max_energy/100))) }
 		if (skill.name == "Summon Spirit Wolf" && elem == 0) { result = Math.min(7, skill.level) }
 		if (skill.name == "Summon Spirit Wolf" && elem == 1) { if (skills[27].level > 0) { result = ((1 + (skills[27].data.values[6][skills[27].level+skills[27].extra_levels] / 100)) * skill.data.values[elem][character.difficulty]) } else { result = skill.data.values[elem][character.difficulty] } }
 		if (skill.name == "Summon Spirit Wolf" && elem < 4 && elem > 1) { if (skills[30].level > 0) { result *= (1 + (skills[30].data.values[5][skills[30].level+skills[30].extra_levels] / 100)) } }
@@ -78,30 +78,44 @@ var character_druid = {class_name:"Druid", strength:15, dexterity:20, vitality:2
 	//	effect: array element object for the buff
 	// result: indexed array including stats affected and their values
 	// ---------------------------------
-	getBuffData : function(effect) {
-		var skill = skills[effect.skill]
+	getBuffData : function(skill) {
+		var id = skill.name.split(' ').join('_');
 		var lvl = skill.level + skill.extra_levels;
 		var result = {};
 		var lycan_damage = ~~(skills[12].data.values[0][skills[12].level+skills[12].extra_levels]);
 		var lycan_life = ~~(skills[12].data.values[1][skills[12].level+skills[12].extra_levels]);
 		
-		if (skill.name == "Werewolf") {
-			if (document.getElementById("e"+skills[13].key) != null) { if (effects["e"+skills[13].key].enabled == 1) { disableEffect(13); } }	// disables Werebear
+		if (skill.name == "Werewolf") {	// cannot be used with Werebear
+			var sk = skills[13].name.split(' ').join('_');
+			if (document.getElementById(sk) != null) { if (effects[id].info.enabled == 1) { disableEffect(sk) } }
 			result.max_life = (15 + lycan_life); result.max_stamina = 40; result.ar_bonus = skill.data.values[1][lvl]; result.ias_skill = skill.data.values[2][lvl]; result.damage_bonus = lycan_damage; result.duration = 1040;
 		}
-		if (skill.name == "Werebear") {
-			if (document.getElementById("e"+skills[11].key) != null) { if (effects["e"+skills[11].key].enabled == 1) { disableEffect(11); } }	// disables Werewolf
+		if (skill.name == "Werebear") {	// cannot be used with Werewolf
+			var sk = skills[11].name.split(' ').join('_');
+			if (document.getElementById(sk) != null) { if (effects[id].info.enabled == 1) { disableEffect(sk) } }
 			result.max_life = (25 + lycan_life); result.damage_bonus = skill.data.values[1][lvl] + lycan_damage; result.defense_bonus = skill.data.values[2][lvl]; result.duration = 1040;
 		}
-		if (skill.name == "Feral Rage") {
-		//	if (document.getElementById("e"+skills[11].key) != null) { if (effects["e"+skills[11].key].enabled == 1) {
+		if (skill.name == "Feral Rage") {	// only useable with Werewolf
+			var valid = 0;
+			var sk = skills[11].name.split(' ').join('_');
+			if (document.getElementById(sk) != null) { if (effects[sk].info.enabled == 1) {
+				valid = 1
 				result.velocity = skill.data.values[1][lvl]; result.life_leech = skill.data.values[3][lvl]; result.duration = 20;
-		//	} }
-		//	if (document.getElementById("e"+skills[11].key) == null || effects["e"+skills[11].key].enabled != 1) { disableEffect(14); }	// only useable with Werewolf
+			} }
+			if (valid == 0) {
+				result.velocity = 0; result.life_leech = 0; result.duration = 0;
 			}
-		if (skill.name == "Maul") {
-			/*result.damage_bonus = skill.data.values[2][lvl];*/ result.duration = 20;
-		//	if (document.getElementById("e"+skills[13].key) == null || effects["e"+skills[13].key].enabled != 1) { disableEffect(15); }	// only useable with Werebear
+		}
+		if (skill.name == "Maul") {	// only useable with Werebear
+			var valid = 0;
+			var sk = skills[13].name.split(' ').join('_');
+			if (document.getElementById(sk) != null) { if (effects[sk].info.enabled == 1) {
+				valid = 1
+				result.damage_bonus = skill.data.values[2][lvl]; result.duration = 20;
+			} }
+			if (valid == 0) {
+				result.damage_bonus = 0; result.duration = 0;
+			}
 		}
 		if (skill.name == "Heart of Wolverine") { result.damage_bonus = skill.data.values[1][lvl]; result.ar_bonus = skill.data.values[2][lvl]; }
 		if (skill.name == "Oak Sage") { result.max_life = skill.data.values[1][lvl]; }
@@ -167,8 +181,10 @@ var character_druid = {class_name:"Druid", strength:15, dexterity:20, vitality:2
 		
 		if (skill.name == "Feral Rage" || skill.name == "Rabies" || skill.name == "Fury" || skill.name == "Maul" || skill.name == "Shock Wave" || skill.name == "Fire Claws" || skill.name == "Hunger") {
 			var match = 0;
-			if (document.getElementById("e"+skills[11].key) != null) { if (effects["e"+skills[11].key].enabled == 1) { if (skill.name == "Feral Rage" || skill.name == "Rabies" || skill.name == "Fury" || skill.name == "Fire Claws" || skill.name == "Hunger") { match = 1 } } }
-			if (document.getElementById("e"+skills[13].key) != null) { if (effects["e"+skills[13].key].enabled == 1) { if (skill.name == "Maul" || skill.name == "Shock Wave" || skill.name == "Fire Claws" || skill.name == "Hunger") { match = 1 } } }
+			var sk_wolf = skills[11].name.split(' ').join('_');
+			var sk_bear = skills[13].name.split(' ').join('_');
+			if (document.getElementById(sk_wolf) != null) { if (effects[sk_wolf].info.enabled == 1) { if (skill.name == "Feral Rage" || skill.name == "Rabies" || skill.name == "Fury" || skill.name == "Fire Claws" || skill.name == "Hunger") { match = 1 } } }
+			if (document.getElementById(sk_bear) != null) { if (effects[sk_bear].info.enabled == 1) { if (skill.name == "Maul" || skill.name == "Shock Wave" || skill.name == "Fire Claws" || skill.name == "Hunger") { match = 1 } } }
 			if (match == 0) { spell = 2 }
 		}
 		
