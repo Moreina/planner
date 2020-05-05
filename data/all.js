@@ -5,6 +5,7 @@ var skill_bonuses = {stamina_skillup:0, frw_skillup:0, defense_skillup:0, resist
 var base_stats = {level:1, skillpoints:0, statpoints:0, quests_completed:-1, running:-1, difficulty:3, strength_added:0, dexterity_added:0, vitality_added:0, energy_added:0, fRes_penalty:100, cRes_penalty:100, lRes_penalty:100, pRes_penalty:100, mRes_penalty:100, fRes:0, cRes:0, lRes:0, pRes:0, mRes:0, fRes_max_base:75, cRes_max_base:75, lRes_max_base:75, pRes_max_base:75, mRes_max_base:75, set_bonuses:[0,0,{},{},{},{},{}]}
 
 var effects = {};
+var duplicateEffects = {};
 var skillList = []; var skillOptions = [];
 var selectedSkill = [" ­ ­ ­ ­ Skill 1", " ­ ­ ­ ­ Skill 2"];
 
@@ -134,15 +135,15 @@ function loadMerc() {
 //	merc: selected mercenary name
 // ---------------------------------
 function setMercenary(merc) {
-	var mercEquipmentTypes = ["helm", "armor", "weapon", "offhand"];
+	var mercEquipmentGroups = ["helm", "armor", "weapon", "offhand"];
 	var mercEquipmentDropdowns = ["dropdown_merc_helm", "dropdown_merc_armor", "dropdown_merc_weapon", "dropdown_merc_offhand"];
 	if (document.getElementById("dropdown_merc_helm").innerHTML != "") { equipMerc('helm', 'helm'); }
 	if (document.getElementById("dropdown_merc_armor").innerHTML != "") { equipMerc('armor', 'armor'); }
 	if (document.getElementById("dropdown_merc_weapon").innerHTML != "") { equipMerc('weapon', 'weapon'); }
 	if (document.getElementById("dropdown_merc_offhand").innerHTML != "") { equipMerc('offhand', 'offhand'); }
-	if (mercenary.base_aura != "") { removeEffect(mercenary.base_aura.split(' ').join('_')); mercenary.base_aura = ""; }
+	if (mercenary.base_aura != "") { removeEffect(mercenary.base_aura.split(' ').join('_')+"-mercenary"); mercenary.base_aura = ""; }
 	if (merc == "­ ­ ­ ­ Mercenary") {
-		for (let i = 0; i < mercEquipmentTypes.length; i++) { loadItems(mercEquipmentTypes[i], mercEquipmentDropdowns[i], "clear") }
+		for (let i = 0; i < mercEquipmentGroups.length; i++) { loadItems(mercEquipmentGroups[i], mercEquipmentDropdowns[i], "clear") }
 		document.getElementById("dropdown_mercenary").selectedIndex = 0;
 	} else {
 		var mercType = merc;
@@ -150,7 +151,7 @@ function setMercenary(merc) {
 		if (merc == mercenaries[2].name || merc == mercenaries[3].name || merc == mercenaries[4].name) { mercType = "Desert Guard" }
 		if (merc == mercenaries[5].name || merc == mercenaries[6].name || merc == mercenaries[7].name) { mercType = "Iron Wolf" }
 		if (merc == mercenaries[8].name) { mercType = "Barb (merc)" }
-		for (let i = 0; i < mercEquipmentTypes.length; i++) { loadItems(mercEquipmentTypes[i], mercEquipmentDropdowns[i], mercType) }
+		for (let i = 0; i < mercEquipmentGroups.length; i++) { loadItems(mercEquipmentGroups[i], mercEquipmentDropdowns[i], mercType) }
 		for (let m = 1; m < mercenaries.length; m++) {
 			if (merc == mercenaries[m].name) { if (mercenary.base_aura == "") {
 				mercenary.level = Math.max(1,character.level-1)
@@ -372,7 +373,7 @@ function equipMerc(group, val) {
 	for (old_affix in mercEquipped[group]) {
 		mercenary[old_affix] -= mercEquipped[group][old_affix]
 		if (old_affix == "aura") {
-			removeEffect(old_affix.split(' ').join('_'))
+			removeEffect(old_affix.split(' ').join('_')+"-mercenary_"+group)
 		}
 		if (old_affix != "set_bonuses") { mercEquipped[group][old_affix] = unequipped[old_affix] }
 	}
@@ -414,7 +415,7 @@ function equipMerc(group, val) {
 					if (affix == "aura" || affix == "name" || affix == "type" || affix == "base" || affix == "only" || affix == "not" || affix == "img") {
 						if (affix == "aura" && equipment[group][item][affix] != mercenary.base_aura) {
 							mercEquipped[group][affix] = equipment[group][item][affix]
-							addEffect("aura",equipment[group][item][affix],equipment[group][item].aura_lvl,"mercenary")
+							addEffect("aura",equipment[group][item][affix],equipment[group][item].aura_lvl,"mercenary_"+group)
 						}
 					} else {
 						mercEquipped[group][affix] = equipment[group][item][affix]
@@ -423,6 +424,7 @@ function equipMerc(group, val) {
 				}
 			}
 		}
+		updateMercenary()
 	}
 	updateStats()
 	updateAllEffects()
@@ -470,7 +472,7 @@ function equip(group, val) {
 		// TODO: delete buff effect if oskill removed
 		character[old_affix] -= equipped[group][old_affix]
 		if (old_affix == "aura") {
-			removeEffect(equipped[group][old_affix].split(' ').join('_'))
+			removeEffect(equipped[group][old_affix].split(' ').join('_')+"-"+group)
 		}
 		if (old_affix != "set_bonuses" && old_affix != "aura" && old_affix != "aura_lvl") { equipped[group][old_affix] = unequipped[old_affix] }
 	}
@@ -900,6 +902,7 @@ function addSocketable(val) {
 function addEffect(origin, name, num, other) {
 	if (origin == "misc") { name = non_items[num].effect; document.getElementById("dropdown_misc").selectedIndex = 0; }
 	var id = name.split(' ').join('_');
+	if (other != "") { id += ("-"+other) }
 	if (document.getElementById(id) == null) { initializeEffect(origin,name,num,other) }
 	else { trackDuplicateEffects(name) }
 	updateAllEffects()
@@ -919,6 +922,7 @@ function initializeEffect(origin, name, num, other) {
 	var iconOff = prefix+"dark/"+name+" dark.png";
 	var iconOn = prefix+name+fileType;
 	var id = name.split(' ').join('_');
+	if (other != "") { id += ("-"+other) }
 	
 	var newEffect = document.createElement("img")
 	var eClass = document.createAttribute("class");			eClass.value = "effect";			newEffect.setAttributeNode(eClass);
@@ -952,6 +956,7 @@ function initializeEffect(origin, name, num, other) {
 // ---------------------------------
 function setEffectData(origin, name, num, other) {
 	var id = name.split(' ').join('_');
+	if (other != "") { id += ("-"+other) }
 	var data = {};
 	if (origin == "aura") { data = getAuraData(name,num,other) }
 	else if (origin == "skill") { data = character.getBuffData(skills[num]) }
@@ -991,8 +996,8 @@ function toggleEffect(id) {
 	} else {
 		enableEffect(id)
 	}
-	updateEffect(id)
-	update()
+	updateEffect(id)	// current effect prioritized
+	updateAllEffects()
 }
 
 // disableEffect - 
@@ -1047,7 +1052,7 @@ function updateEffect(id) {
 	var origin = effects[id].info.origin;
 	var index = effects[id].info.index;
 	var other = effects[id].info.other;
-	var name = id.split('_').join(' ');
+	var name = id.split('-')[0].split('_').join(' ');
 	var active = effects[id].info.enabled;
 	var old_data = {}
 	for (affix in effects[id]) { if (affix != "info") { old_data[affix] = effects[id][affix] } }
@@ -1091,6 +1096,7 @@ function resetEffects() {
 // result: indexed array of stats granted and their values
 // ---------------------------------
 function getAuraData(aura, lvl, source) {
+	source = source.split('_')[0]
 	var result = {};
 	var a = -1;
 	var auras = [];
@@ -1150,7 +1156,7 @@ function getMiscData(name, index) {
 function updateMercenary() {
 	mercenary.level = Math.max(1,character.level-1)
 	if (mercenary.base_aura != "") {
-		removeEffect(mercenary.base_aura.split(' ').join('_'))	// TODO: merge with effect update functions. Use disable/enable instead.
+		removeEffect(mercenary.base_aura.split(' ').join('_')+"-mercenary")	// TODO: merge with effect update functions. Use disable/enable instead.
 		mercenary.base_aura_level = getMercenaryAuraLevel(mercenary.level)
 		addEffect("aura",mercenary.base_aura,mercenary.base_aura_level,"mercenary")
 	}
