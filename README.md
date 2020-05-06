@@ -9,8 +9,8 @@ Path of Diablo Planner
 Current Known Bugs:
 * Charms can't be moved into a new space below the original space if they overlap eachother
 * Shift + Right Click in Firefox doesn't work (and still opens the default menu)
-* Auras may override eachother if multiples of the same one are added
 * Set items can be upgraded/downgraded, items can be downgraded below their baseline
+* Required level may be inaccurate for upgraded/downgraded items
 
 Info: https://github.com/Moreina/planner#planner
 
@@ -33,7 +33,6 @@ Character Skill Planner for Diablo 2: Path of Diablo
 * charm inventory
 
 ### Upcoming Plans:
-* off-class skill buffs
 * skill buffs from item-charges
 * option to 'snapshot' buffs
 * more breakpoint info

@@ -68,37 +68,35 @@ var character_any = {
 	return result
 	},
 
-	// (UNIMPLEMENTED)
 	// getBuffData - gets a list of stats corresponding to a persisting buff
-	//	effect: array element object for the buff
+	//	skill: 
 	// result: indexed array including stats affected and their values
 	// ---------------------------------
 	getBuffData : function(skill) {
-		// TODO: Implement, use skills_all?
 		var id = skill.name.split(' ').join('_');
 		var lvl = character["oskill_"+skill.name.split(" ").join("_")] + character.all_skills;
 		var result = {};
-		var lycan_damage = ~~(skills[12].data.values[0][character.oskill_Lycanthropy+character.all_skills]);
-		var lycan_life = ~~(skills[12].data.values[1][character.oskill_Lycanthropy+character.all_skills]);
+		var lycan_damage = ~~(skills_all["druid"][12].data.values[0][~~(character.oskill_Lycanthropy+character.all_skills)]);
+		var lycan_life = ~~(skills_all["druid"][12].data.values[1][~~(character.oskill_Lycanthropy+character.all_skills)]);
 		
 		if (skill.name == "Inner Sight") { result.enemy_defense_flat = skill.data.values[0][lvl]; }	// TODO: Make always-active?
 		if (skill.name == "Lethal Strike") { result.cstrike = skill.data.values[0][lvl]; }	// TODO: Make always-active
-		if (skillName == "Battle Command") { result.all_skills = 1; result.duration = skill.data.values[1][lvl]; }
-		if (skillName == "Shout") { result.defense_bonus = skill.data.values[0][lvl]; result.duration = skill.data.values[1][lvl]; }
+		if (skill.name == "Battle Command") { result.all_skills = 1; result.duration = skill.data.values[1][lvl]; }
+		if (skill.name == "Shout") { result.defense_bonus = skill.data.values[0][lvl]; result.duration = skill.data.values[1][lvl]; }
 		if (skill.name == "Battle Orders") { result.max_stamina = skill.data.values[1][lvl]; result.max_life = skill.data.values[2][lvl]; result.max_mana = skill.data.values[3][lvl]; result.duration = skill.data.values[0][lvl]; }
 		if (skill.name == "Werewolf") {	// cannot be used with Werebear
-			var sk = skills[13].name.split(' ').join('_');
+			var sk = "Werebear";
 			if (document.getElementById(sk) != null) { if (effects[id].info.enabled == 1) { disableEffect(sk) } }
 			result.max_life = (15 + lycan_life); result.max_stamina = 40; result.ar_bonus = skill.data.values[1][lvl]; result.ias_skill = skill.data.values[2][lvl]; result.damage_bonus = lycan_damage; result.duration = 1040;
 		}
 		if (skill.name == "Werebear") {	// cannot be used with Werewolf
-			var sk = skills[11].name.split(' ').join('_');
+			var sk = "Werewolf";
 			if (document.getElementById(sk) != null) { if (effects[id].info.enabled == 1) { disableEffect(sk) } }
 			result.max_life = (25 + lycan_life); result.damage_bonus = skill.data.values[1][lvl] + lycan_damage; result.defense_bonus = skill.data.values[2][lvl]; result.duration = 1040;
 		}
 		if (skill.name == "Feral Rage") {	// only useable with Werewolf
 			var valid = 0;
-			var sk = skills[11].name.split(' ').join('_');
+			var sk = "Werewolf";
 			if (document.getElementById(sk) != null) { if (effects[sk].info.enabled == 1) {
 				valid = 1
 				result.velocity = skill.data.values[1][lvl]; result.life_leech = skill.data.values[3][lvl]; result.duration = 20;
@@ -108,12 +106,11 @@ var character_any = {
 			}
 		}
 		if (skill.name == "Shiver Armor") { result.defense_bonus = skill.data.values[1][lvl]; result.duration = skill.data.values[0][lvl]; }
-		if (skillName == "Enflame") {	// TODO: Make always-active?
-			result.fDamage_min = skill.data.values[1][lvl] * (1 + (~~skills[30].data.values[1][skills[30].level+skills[30].extra_levels])/100);
-			result.fDamage_max = skill.data.values[2][lvl] * (1 + (~~skills[30].data.values[1][skills[30].level+skills[30].extra_levels])/100);
+		if (skill.name == "Enflame") {	// TODO: Make always-active?
+			result.fDamage_min = skill.data.values[1][lvl];
+			result.fDamage_max = skill.data.values[2][lvl];
 			result.ar_bonus = skill.data.values[3][lvl];
 		}
-		
 	return result
 	},
 
@@ -158,7 +155,12 @@ var character_any = {
 		else { attack = 0; spell = 2; }
 
 	//	TODO: check weapon requirements (only conflict would be a Passion bow, which grants Bash & Zeal...) & werewolf/werebear requirements
-
+		if (skillName == "Feral Rage") {
+			var match = 0;
+			if (effects["Werewolf"].info.enabled == 1) { match = 1 }
+			if (match == 0) { spell = 2 }
+		}
+		
 		if (attack == 0) { phys_min = 0; phys_max = 0; phys_mult = 1; ele_min = 0; ele_max = 0; mag_min = 0; mag_max = 0; }
 		ele_min += Math.floor(fDamage_min + cDamage_min + lDamage_min + pDamage_min);
 		ele_max += Math.floor(fDamage_max + cDamage_max + lDamage_max + pDamage_max);

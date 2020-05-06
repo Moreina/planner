@@ -460,13 +460,6 @@ function equip(group, val) {
 	if (set_bonuses != "") { set = set_bonuses[0]; set_before = character[set]; }
 	if (old_set_bonuses != "") { old_set = old_set_bonuses[0]; old_set_before = character[old_set]; }
 	
-/*	// remove effects
-	for (let s = 0; s < skills.length; s++) {
-		if (skills[s].level == 0 && skills[s].force_levels > 0) {
-			// disableEffect(getId(skills[s].name))?
-		}
-	}
-*/
 	// if replacing an item, previous item's affixes are removed from character
 	for (old_affix in equipped[group]) {
 		// TODO: delete buff effect if oskill removed
@@ -570,14 +563,7 @@ function equip(group, val) {
 					if (oskill_info != "") {
 						if (oskill_info.native_class == character.class_name.toLowerCase()) {
 							if (equipment[src_group][item][affix] > 3) { equipped[group][affix] -= (equipment[src_group][item][affix]-3) }	// oskills are capped at 3 for 'native' classes
-						} else { if (oskill_info.native_class != "none") {
-							var skill = skills_all[oskill_info.native_class][oskill_info.i];
-							if (typeof(skill.effect) != 'undefined') { if (skill.effect > 2) {
-								if (character[affix] == 0 && document.getElementById(getId(skill.name)) == null) {
-									// TODO: create new buff effect for oskill
-								}
-							} }
-						} }
+						}
 						character[affix] += equipped[group][affix]
 					} else {
 						character[affix] += equipment[src_group][item][affix]
@@ -915,14 +901,15 @@ function addEffect(origin, name, num, other) {
 //	other: "mercenary" for auras
 // ---------------------------------
 function initializeEffect(origin, name, num, other) {
+	var id = name.split(' ').join('_');
+	if (other != "") { id += ("-"+other) }
 	var prefix = "./images/effects/";
 	var fileType = ".png";
 	if (origin == "misc") {fileType = ".gif"}
 	if (origin == "skill") { prefix = "./images/skills/"+character.class_name.toLowerCase()+"/"; }
+	if (origin == "oskill") { prefix = "./images/skills/"+oskills_info["oskill_"+id].native_class+"/"; }
 	var iconOff = prefix+"dark/"+name+" dark.png";
 	var iconOn = prefix+name+fileType;
-	var id = name.split(' ').join('_');
-	if (other != "") { id += ("-"+other) }
 	
 	var newEffect = document.createElement("img")
 	var eClass = document.createAttribute("class");			eClass.value = "effect";			newEffect.setAttributeNode(eClass);
@@ -937,13 +924,13 @@ function initializeEffect(origin, name, num, other) {
 	
 	if (typeof(effects[id]) == 'undefined') { effects[id] = {info:{}} }
 	
-	setEffectData(origin,name,num,other)
 	effects[id].info["enabled"] = 0
 	effects[id].info["imageOff"] = iconOff
 	effects[id].info["imageOn"] = iconOn
 	effects[id].info["origin"] = origin
 	effects[id].info["index"] = num
 	effects[id].info["other"] = other
+	setEffectData(origin,name,num,other)
 	
 	if (settings.autocast == 1) { toggleEffect(id) }	// TODO: should also toggle-on if effect is always-active
 }
@@ -960,6 +947,7 @@ function setEffectData(origin, name, num, other) {
 	var data = {};
 	if (origin == "aura") { data = getAuraData(name,num,other) }
 	else if (origin == "skill") { data = character.getBuffData(skills[num]) }
+	else if (origin == "oskill") { data = character_any.getBuffData(skills_all[oskills_info["oskill_"+id].native_class][num]) }
 	else if (origin == "misc") { data = getMiscData(name,num); }
 	for (affix in data) { effects[id][affix] = data[affix] }
 }
@@ -1041,7 +1029,25 @@ function updateAllEffects() {
 			}
 		} }
 	}
-	// TODO: Add function for mercenary main aura
+	if (character.class_name != null) {
+	for (let o = 0; o < oskills.length; o++) {
+		var natClass = oskills_info[oskills[o]].native_class;
+		if (natClass != "none" && natClass != character.class_name.toLowerCase()) {
+			var skill = skills_all[natClass][oskills_info[oskills[o]].i]
+			if (typeof(skill.effect) != 'undefined') { if (skill.effect > 2) {
+				var id = skill.name.split(' ').join('_');
+				if (character[oskills[o]] > 0) {
+					if (document.getElementById(id) == null) { addEffect("oskill",skill.name,skill.i,"") }
+					else {
+						updateEffect(id)
+					}
+				} else {
+					if (document.getElementById(id) != null) { removeEffect(id) }
+				}
+			} }
+		}
+	}
+	}
 	update()
 }
 
