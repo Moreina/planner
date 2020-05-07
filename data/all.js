@@ -462,7 +462,6 @@ function equip(group, val) {
 	
 	// if replacing an item, previous item's affixes are removed from character
 	for (old_affix in equipped[group]) {
-		// TODO: delete buff effect if oskill removed
 		character[old_affix] -= equipped[group][old_affix]
 		if (old_affix == "aura") {
 			removeEffect(equipped[group][old_affix].split(' ').join('_')+"-"+group)
@@ -907,7 +906,7 @@ function initializeEffect(origin, name, num, other) {
 	var fileType = ".png";
 	if (origin == "misc") {fileType = ".gif"}
 	if (origin == "skill") { prefix = "./images/skills/"+character.class_name.toLowerCase()+"/"; }
-	if (origin == "oskill") { prefix = "./images/skills/"+oskills_info["oskill_"+id].native_class+"/"; }
+	//if (origin == "oskill") { prefix = "./images/skills/"+oskills_info["oskill_"+id].native_class+"/"; }
 	var iconOff = prefix+"dark/"+name+" dark.png";
 	var iconOn = prefix+name+fileType;
 	
@@ -1015,6 +1014,7 @@ function enableEffect(id) {
 // ---------------------------------
 function updateAllEffects() {
 	calculateSkillAmounts()
+	// updates skill effects
 	for (let s = 0; s < skills.length; s++) {
 		var skill = skills[s];
 		if (typeof(skill.effect) != 'undefined') { if (skill.effect > 2) {
@@ -1029,25 +1029,66 @@ function updateAllEffects() {
 			}
 		} }
 	}
+	// updates oskill effects
 	if (character.class_name != null) {
-	for (let o = 0; o < oskills.length; o++) {
-		var natClass = oskills_info[oskills[o]].native_class;
-		if (natClass != "none" && natClass != character.class_name.toLowerCase()) {
-			var skill = skills_all[natClass][oskills_info[oskills[o]].i]
-			if (typeof(skill.effect) != 'undefined') { if (skill.effect > 2) {
-				var id = skill.name.split(' ').join('_');
-				if (character[oskills[o]] > 0) {
-					if (document.getElementById(id) == null) { addEffect("oskill",skill.name,skill.i,"") }
-					else {
-						updateEffect(id)
+		for (let o = 0; o < oskills.length; o++) {
+			var natClass = oskills_info[oskills[o]].native_class;
+			if (natClass != "none" && natClass != character.class_name.toLowerCase()) {
+				var skill = skills_all[natClass][oskills_info[oskills[o]].i]
+				if (typeof(skill.effect) != 'undefined') { if (skill.effect > 2) {
+					var id = skill.name.split(' ').join('_');
+					if (character[oskills[o]] > 0) {
+						if (document.getElementById(id) == null) { addEffect("oskill",skill.name,skill.i,"") }
+						else {
+							updateEffect(id)
+						}
+					} else {
+						if (document.getElementById(id) != null) { removeEffect(id) }
 					}
-				} else {
-					if (document.getElementById(id) != null) { removeEffect(id) }
-				}
-			} }
+				} }
+			}
 		}
 	}
+	update()
+	// disables duplicate effects (non-skills)
+	for (id1 in effects) {
+		if (typeof(effects[id1].info.enabled) != 'undefined' && effects[id1].info.origin != "skill") {
+			for (id2 in effects) {
+				if (id1 != id2 && typeof(effects[id2].info.enabled) != 'undefined' && effects[id2].info.origin != "skill") {
+					var effect1 = id1.split('-')[0];
+					var effect2 = id2.split('-')[0];
+					if (effects[id1].info.enabled == 1 || effects[id2].info.enabled == 1 || effects[effect1].info.enabled == 1) {
+						if (effect1 == effect2) {
+							var magnitude1 = effects[id1].info.index;
+							var magnitude2 = effects[id2].info.index;
+							if (magnitude1 >= magnitude2) { disableEffect(id2); enableEffect(id1); }
+							else { disableEffect(id1); enableEffect(id2); }
+						}
+					}
+				}
+			}
+		}
 	}
+	// disables duplicate effects (skills)
+	for (id1 in effects) {
+		if (effects[id1].info.enabled == 1 && effects[id1].info.origin == "skill") {
+			for (id2 in effects) {
+				if (id1 != id2 && effects[id2].info.enabled == 1 && effects[id2].info.origin != "skill") {
+					if (effects[id1].info.enabled != 'undefined' && effects[id2].info.enabled != 'undefined') {
+						var effect1 = id1.split('-')[0];
+						var effect2 = id2.split('-')[0];
+						if (effect1 == effect2) {
+							var magnitude1 = skills[effects[id1].info.index].level + skills[effects[id1].info.index].extra_levels;
+							var magnitude2 = effects[id2].info.index;
+							if (magnitude1 >= magnitude2) { disableEffect(id2); enableEffect(id1); }
+							else { disableEffect(id1); enableEffect(id2); }
+						}
+					}
+				}
+			}
+		}
+	}
+	// TODO: Hide/minimize duplicate effects that are 'inferior'
 	update()
 }
 

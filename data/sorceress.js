@@ -22,7 +22,7 @@ var character_sorceress = {class_name:"Sorceress", strength:10, dexterity:25, vi
 	getSkillData : function(skill, lvl, elem) {
 		var sk = skills;
 		var c = character;
-		var result = skill.data.values[elem][lvl]
+		var result = skill.data.values[elem][lvl];
 		var wisp = (1+Math.round(c.wisp/20,0)/10);
 		
 		if (skill.name == "Ice Bolt" && elem < 2) { 			result *= ((1 + (0.25*sk[1].level + 0.25*sk[2].level + 0.25*sk[4].level)) * (1 + (c.cDamage+c.cDamage_skillup)/100) * wisp) }

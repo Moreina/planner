@@ -21,7 +21,7 @@ var character_paladin = {class_name:"Paladin", strength:25, dexterity:20, vitali
 	// result: value of the skill element at the specified level
 	// ---------------------------------
 	getSkillData : function(skill, lvl, elem) {
-		var result = skill.data.values[elem][lvl]
+		var result = skill.data.values[elem][lvl];
 		var wisp = (1+Math.round(character.wisp/20,0)/10);
 		
 		if (skill.name == "Resist Fire" && elem == 0) { 	result = Math.floor(skill.level/4); character.fRes_skillup = result; }

@@ -37,7 +37,6 @@ var unequipped = {name:"none", strength:0, dexterity:0, vitality:0, energy:0, li
 /* oskills  sorceress	*/	oskill_Shiver_Armor:0, oskill_Cold_Mastery:0, oskill_Hydra:0, oskill_Fire_Ball:0, oskill_Fire_Wall:0, oskill_Meteor:0, oskill_Fire_Mastery:0, oskill_Enflame:0,	// Medusa's Gaze, Bing Sz Wang, Dragonscale, Trang-Oul's Set, Lava Gout
 // ...to confirm:
 //	oskill_Guided_Arrow (Widowmaker)
-//	oskill_Two_Handed_Weapon_Mastery / oskill_Edged_Weapon_Mastery (The Grandfather)
 };
 
 var oskills = ["oskill_Warp","oskill_Ball_Lightning","oskill_Inner_Sight","oskill_Lethal_Strike","oskill_Valkyrie","oskill_Magic_Arrow","oskill_Guided_Arrow","oskill_Multiple_Shot","oskill_Battle_Command","oskill_Battle_Orders","oskill_Battle_Cry","oskill_Bash","oskill_Edged_Weapon_Mastery","oskill_Arctic_Blast","oskill_Lycanthropy","oskill_Werebear","oskill_Werewolf","oskill_Feral_Rage","oskill_Flame_Dash","oskill_Summon_Dire_Wolf","oskill_Desecrate","oskill_Zeal","oskill_Vengeance","oskill_Shiver_Armor","oskill_Cold_Mastery","oskill_Hydra","oskill_Fire_Ball","oskill_Fire_Wall","oskill_Meteor","oskill_Fire_Mastery","oskill_Enflame"];
@@ -68,7 +67,7 @@ var cskills = [
 ];
 var ctcs = [
 	// possible ctc effects (copied from wiki):
-	"Fire Bolt","Charged Bolt","Ice Bolt","Frost Nova","Nova","Lightning Surge","Hydra","Amplify Damage",
+	"Fire Bolt","Charged Bolt","Ice Bolt","Frost Nova","Nova","Lightning Surge","Hydra","Amplify Damage",	// wiki is incomplete
 ];
 
 var non_items = [
@@ -872,13 +871,15 @@ var equipment = {
 {only:"paladin", name:"Alma Negra", req_level:77, e_def:210, cdr:30, skills_paladin:2, ibc:20, fbr:30, damage_bonus:75, ar_bonus:75, mDamage_reduced:9, type:"shield", base:"Sacred Rondache", pod_changes:1, img:""},
 {only:"paladin", name:"Dragonscale", req_level:80, e_def:200, fDamage_min:211, fDamage_max:371, fDamage:15, oskill_Hydra:10, fRes_max:5, strength:25, fAbsorb:20, type:"shield", base:"Zakarum Shield", img:""},
 {only:"paladin", set_Gris:1, name:"Griswold's Honor", req_level:68, defense:108, fbr:65, ibc:20, all_res:45, sockets:3, type:"shield", base:"Vortex Shield", rarity:"set", set_bonuses:["set_Gris",{},{},{},{}], img:"Griswold's_Honor"},
+{only:"paladin", rarity:"rw", name:"Exile ­ ­ - ­ ­ Sacred Targe", req_level:57, fbr:30, freezes_target:1, e_def:260, life_replenish:7, cRes_max:5, fRes_max:5, mf:25, skills_offensive:2, all_res:45, autorepair:1, ethereal:1, type:"shield", base:"Sacred Targe", aura:"Defiance", aura_lvl:16, ctc:[[15,5,"Life Tap","on striking"]]},
 {only:"paladin", rarity:"rw", name:"Spirit ­ ­ - ­ ­ Sacred Targe", req_level:47, defense:158, all_skills:2, fcr:35, fhr:55, vitality:22, mana:112, cRes:35, lRes:35, pRes:35, missile_defense:250, thorns:14, mAbsorb_flat:8, all_res:45, type:"shield", base:"Sacred Targe"},
-{only:"paladin", rarity:"rw", name:"Phoenix ­ ­ - ­ ­ Sacred Targe", req_level:65, defense:158, damage_bonus:400, enemy_fRes:-28, missile_defense:400, fAbsorb_flat:21, life:50, lRes_max:5, fRes_max:10, aura:"Redemption", aura_lvl:10, all_res:45, type:"shield", base:"Sacred Targe", pod_changes:1, ctc:[[100,40,"Blaze","on level-up"],[40,22,"Fire Ball","on striking"]]},
 {not:["paladin"], rarity:"rw", name:"Spirit ­ ­ - ­ ­ Monarch", req_level:54, defense:148, all_skills:2, fcr:35, fhr:55, vitality:22, mana:112, cRes:35, lRes:35, pRes:35, missile_defense:250, thorns:14, mAbsorb_flat:8, type:"shield", base:"Monarch"},
+{only:"paladin", rarity:"rw", name:"Phoenix ­ ­ - ­ ­ Sacred Targe", req_level:65, defense:158, damage_bonus:400, enemy_fRes:-28, missile_defense:400, fAbsorb_flat:21, life:50, lRes_max:5, fRes_max:10, aura:"Redemption", aura_lvl:10, all_res:45, type:"shield", base:"Sacred Targe", pod_changes:1, ctc:[[100,40,"Blaze","on level-up"],[40,22,"Fire Ball","on striking"]]},
 {not:["paladin"], rarity:"rw", name:"Phoenix ­ ­ - ­ ­ Monarch", req_level:65, defense:148, damage_bonus:400, enemy_fRes:-28, missile_defense:400, fAbsorb_flat:21, life:50, lRes_max:5, fRes_max:10, aura:"Redemption", aura_lvl:10, type:"shield", base:"Monarch", pod_changes:1, ctc:[[100,40,"Blaze","on level-up"],[40,22,"Fire Ball","on striking"]]},
 {only:"paladin", rarity:"rw", name:"Dream ­ ­ - ­ ­ Sacred Targe", req_level:65, e_def:30, defense:220, fhr:30, vitality:10, mana_per_level:0.625, all_res:65, mf:25, max_life:5, type:"shield", base:"Sacred Targe", pod_changes:1, aura:"Holy Shock", aura_lvl:15, ctc:[[10,15,"Confuse","when struck"]]},
+{not:["paladin"], rarity:"rw", name:"Dream ­ ­ - ­ ­ Troll Nest", req_level:65, e_def:30, defense:220, fhr:30, vitality:10, mana_per_level:0.625, all_res:20, mf:25, max_life:5, type:"shield", base:"Troll Nest", pod_changes:1, aura:"Holy Shock", aura_lvl:15, ctc:[[10,15,"Confuse","when struck"]]},
 {only:"paladin", rarity:"rw", name:"Dragon ­ ­ - ­ ­ Sacred Targe", req_level:61, defense:360, missile_defense:230, all_attributes:5, strength_per_level:0.375, lRes_max:5, damage_reduced:7, mana:50, all_res:45, type:"shield", base:"Sacred Targe", aura:"Holy Fire", aura_lvl:14, ctc:[[20,18,"Venom","when struck"],[12,15,"Hydra","on striking"]]},
-{only:"paladin", rarity:"rw", name:"Exile ­ ­ - ­ ­ Sacred Targe", req_level:57, fbr:30, freezes_target:1, e_def:260, life_replenish:7, cRes_max:5, fRes_max:5, mf:25, skills_offensive:2, all_res:45, autorepair:1, ethereal:1, type:"shield", base:"Sacred Targe", aura:"Defiance", aura_lvl:16, ctc:[[15,5,"Life Tap","on striking"]]},
+{not:["paladin"], rarity:"rw", name:"Dragon ­ ­ - ­ ­ Troll Nest", req_level:61, defense:360, missile_defense:230, all_attributes:5, strength_per_level:0.375, lRes_max:5, damage_reduced:7, mana:50, type:"shield", base:"Troll Nest", aura:"Holy Fire", aura_lvl:14, ctc:[[20,18,"Venom","when struck"],[12,15,"Hydra","on striking"]]},
 {only:"paladin", rarity:"rw", name:"Sanctuary ­ ­ - ­ ­ Sacred Targe", req_level:49, fhr:20, fbr:20, ibc:20, e_def:160, missile_defense:250, dexterity:20, all_res:115, mDamage_reduced:7, type:"shield", base:"Sacred Targe", cskill:[[12,"Slow Missiles",60]]},	// TODO: check if this still has Slow Missile charges?
 {not:["paladin"], rarity:"rw", name:"Sanctuary ­ ­ - ­ ­ Troll Nest", req_level:49, fhr:20, fbr:20, ibc:20, e_def:160, missile_defense:250, dexterity:20, all_res:70, mDamage_reduced:7, type:"shield", base:"Troll Nest", cskill:[[12,"Slow Missiles",60]]},		// TODO: check if this still has Slow Missile charges?
 {only:"paladin", rarity:"rw", name:"Splendor ­ ­ - ­ ­ Gilded Shield", req_level:38, all_skills:1, fcr:10, fbr:20, e_def:100, energy:10, mana_regen:15, gf:50, mf:20, light_radius:3, type:"shield", all_res:45, base:"Gilded Shield"},
