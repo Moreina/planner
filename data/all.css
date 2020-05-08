@@ -241,6 +241,14 @@ position:absolute;
   z-index: 6;
   }
   
+.hide {
+  width: 36px;
+  height: 0px;
+  visibility: hidden;
+  display: block;
+  z-index: 6;
+  }
+  
 .flex-box {
   display: -webkit-box;  /* OLD - iOS 6-, Safari 3.1-6, BB7 */
   display: -ms-flexbox;  /* TWEENER - IE 10 */

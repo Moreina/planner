@@ -413,7 +413,7 @@ function equipMerc(group, val) {
 					if (typeof(mercEquipped[group][affix]) == 'undefined') { mercEquipped[group][affix] = unequipped[affix] }
 					if (typeof(mercenary[affix]) == 'undefined') { mercenary[affix] = unequipped[affix] }
 					if (affix == "aura" || affix == "name" || affix == "type" || affix == "base" || affix == "only" || affix == "not" || affix == "img") {
-						if (affix == "aura" && equipment[group][item][affix] != mercenary.base_aura) {
+						if (affix == "aura" && equipment[group][item][affix] != mercenary.base_aura) {	// TODO: Allow merc auras from items that are identical to their base aura?
 							mercEquipped[group][affix] = equipment[group][item][affix]
 							addEffect("aura",equipment[group][item][affix],equipment[group][item].aura_lvl,"mercenary_"+group)
 						}
@@ -612,9 +612,6 @@ function equip(group, val) {
 			if (itemType == "quiver" && equipped.weapon.type != "bow" && equipped.weapon.type != "crossbow") { equip('weapon', 'none') }
 			else if (itemType != "quiver" && equipped.weapon.twoHanded == 1 && (equipped.weapon.type != "sword" || character.class_name != "Barbarian")) { equip('weapon', 'none') }
 			else if (itemType == "claw" && equipped.weapon.type != "claw") { equip('weapon', 'none') }
-			else if (src_group == "weapon") {
-				// TODO: Offhand attacks are separate
-			}
 		} else if (group == "weapon") {
 			if (equipped.offhand.type == "quiver" && itemType != "bow" && itemType != "crossbow") { equip('offhand', 'none') }
 			else if (equipped.offhand.type != "quiver" && twoHanded == 1 && (itemType != "sword" || character.class_name != "Barbarian")) { equip('offhand', 'none'); }
@@ -923,12 +920,12 @@ function initializeEffect(origin, name, num, other) {
 	
 	if (typeof(effects[id]) == 'undefined') { effects[id] = {info:{}} }
 	
-	effects[id].info["enabled"] = 0
-	effects[id].info["imageOff"] = iconOff
-	effects[id].info["imageOn"] = iconOn
-	effects[id].info["origin"] = origin
-	effects[id].info["index"] = num
-	effects[id].info["other"] = other
+	effects[id].info.enabled = 0
+	effects[id].info.imageOff = iconOff
+	effects[id].info.imageOn = iconOn
+	effects[id].info.origin = origin
+	effects[id].info.index = num
+	effects[id].info.other = other
 	setEffectData(origin,name,num,other)
 	
 	if (settings.autocast == 1) { toggleEffect(id) }	// TODO: should also toggle-on if effect is always-active
@@ -957,6 +954,9 @@ function setEffectData(origin, name, num, other) {
 // ---------------------------------
 function removeEffect(id, direct) {
 	if (document.getElementById(id) != null) {
+		var on = effects[id].info.enabled;
+		var secondary = "";
+		if (on == 1) { if (typeof(effects[id].info.secondary) != 'undefined') { secondary = effects[id].info.secondary } }
 		var halt = 0;
 		if (direct != null && effects[id].info.origin != "misc") { halt = 1 }
 		if (effects[id].info.origin == "skill") {
@@ -969,6 +969,7 @@ function removeEffect(id, direct) {
 		if (halt == 0) {
 			document.getElementById(id).remove();
 			effects[id] = {info:{}}
+			if (on == 1 && secondary != "") { enableEffect(secondary); }
 			updateAllEffects()
 		}
 	}
@@ -1049,46 +1050,60 @@ function updateAllEffects() {
 			}
 		}
 	}
-	update()
+	update()	// needed?
 	// disables duplicate effects (non-skills)
+	for (id in effects) { if (document.getElementById(id) != null) { if (document.getElementById(id).getAttribute("class") == "hide") { document.getElementById(id).setAttribute("class","effect") } } }
+	var checkedEffects = {};
+	for (id in effects) { checkedEffects[id] = 0 }
 	for (id1 in effects) {
 		if (typeof(effects[id1].info.enabled) != 'undefined' && effects[id1].info.origin != "skill") {
 			for (id2 in effects) {
-				if (id1 != id2 && typeof(effects[id2].info.enabled) != 'undefined' && effects[id2].info.origin != "skill") {
+				if (id1 != id2 && checkedEffects[id2] != 1 && typeof(effects[id2].info.enabled) != 'undefined' && effects[id2].info.origin != "skill") {
 					var effect1 = id1.split('-')[0];
 					var effect2 = id2.split('-')[0];
-					if (effects[id1].info.enabled == 1 || effects[id2].info.enabled == 1 || effects[effect1].info.enabled == 1) {
-						if (effect1 == effect2) {
+					var skillEnabled = 0;
+					if (typeof(effects[effect1]) != 'undefined') { if ((effects[effect1].info.enabled) != 'undefined') { if (effects[effect1].info.enabled == 1) { skillEnabled = 1; } } }
+					if (effect1 == effect2) {
+						if (document.getElementById(id1).getAttribute("class") != "hide" && document.getElementById(id2).getAttribute("class") != "hide") {
 							var magnitude1 = effects[id1].info.index;
 							var magnitude2 = effects[id2].info.index;
-							if (magnitude1 >= magnitude2) { disableEffect(id2); enableEffect(id1); }
-							else { disableEffect(id1); enableEffect(id2); }
+							if (magnitude1 > magnitude2) {
+								document.getElementById(id2).setAttribute("class","hide");
+								document.getElementById(id1).setAttribute("class","effect");
+								effects[id1].info.secondary = id2;
+							}
+							else {
+								document.getElementById(id1).setAttribute("class","hide");
+								document.getElementById(id2).setAttribute("class","effect");
+								effects[id2].info.secondary = id1;
+							}
 						}
 					}
 				}
 			}
 		}
+		checkedEffects[id1] = 1
 	}
+	for (id in effects) { if (typeof(effects[id].info.enabled) != 'undefined') { if (document.getElementById(id).getAttribute("class") == "hide") { disableEffect(id) } } }
 	// disables duplicate effects (skills)
-	for (id1 in effects) {
-		if (effects[id1].info.enabled == 1 && effects[id1].info.origin == "skill") {
+	if (character.class_name == "Paladin") { for (id1 in effects) {
+		if (typeof(effects[id1].info.enabled) != 'undefined' && effects[id1].info.enabled == 1 && effects[id1].info.origin == "skill") {
 			for (id2 in effects) {
-				if (id1 != id2 && effects[id2].info.enabled == 1 && effects[id2].info.origin != "skill") {
-					if (effects[id1].info.enabled != 'undefined' && effects[id2].info.enabled != 'undefined') {
-						var effect1 = id1.split('-')[0];
-						var effect2 = id2.split('-')[0];
-						if (effect1 == effect2) {
-							var magnitude1 = skills[effects[id1].info.index].level + skills[effects[id1].info.index].extra_levels;
-							var magnitude2 = effects[id2].info.index;
-							if (magnitude1 >= magnitude2) { disableEffect(id2); enableEffect(id1); }
-							else { disableEffect(id1); enableEffect(id2); }
-						}
+				if (typeof(effects[id2].info.enabled) != 'undefined' && id1 != id2 && effects[id2].info.enabled == 1 && effects[id2].info.origin != "skill" && document.getElementById(id2).getAttribute("class") != "hide") {
+					var effect1 = id1.split('-')[0];
+					var effect2 = id2.split('-')[0];
+					if (effect1 == effect2) {
+						effects[id1].info.secondary = id2;
+						var magnitude1 = skills[effects[id1].info.index].level + skills[effects[id1].info.index].extra_levels;
+						var magnitude2 = effects[id2].info.index;
+						if (magnitude1 >= magnitude2) { disableEffect(id2); enableEffect(id1); }
+						else { disableEffect(id1); enableEffect(id2); }
 					}
 				}
 			}
 		}
-	}
-	// TODO: Hide/minimize duplicate effects that are 'inferior'
+		update()	// needed?
+	} }
 	update()
 }
 
@@ -1133,7 +1148,7 @@ function hoverEffectOff(id) {}
 // resetEffects - Removes all effects
 // ---------------------------------
 function resetEffects() {
-	for (id in effects) { removeEffect(id) }
+	for (id in effects) { if (document.getElementById(id) != null) { removeEffect(id) } }
 }
 
 // getAuraData - gets a list of stats corresponding to the aura (excludes synergy bonuses)
