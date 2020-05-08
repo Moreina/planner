@@ -6,7 +6,7 @@ Path of Diablo Planner
 * Shift and ctrl modify the amount added or removed
 * Upgrading can be done by ctrl-clicking the equipped item (ctrl + right-click to downgrade)
 
-Current Known Bugs:
+Current Known Issues:
 * Charms can't be moved into a new space below the original space if they overlap eachother
 * Shift + Right Click in Firefox doesn't work (and still opens the default menu)
 * Set items can be upgraded/downgraded, items can be downgraded below their baseline
@@ -41,13 +41,13 @@ Character Skill Planner for Diablo 2: Path of Diablo
 
 ### Longterm Goals:
 * character saving/sharing
+* item description tooltips
 * full GUI inventory/stash
 * custom item creation & editing
-* item description tooltips
+* custom item-pool saving
 * options for individual quests
 * option for strict character validation (prevent invalid character states instead of just making text red)
 * character importing
-* custom item-pool saving
 * monster stat calculations
 * debuff tracking
 * party tracking/planning
@@ -62,7 +62,7 @@ Character Skill Planner for Diablo 2: Path of Diablo
 
 [Planner Wiki](https://github.com/Moreina/planner/wiki)
 
-If you'd like to to help develop, or just have an idea for a different design/implementation, let's chat. This project will likely be made open-source at some point, but if you want to contribute directly before that point, don't be shy. Any improvements are welcome.
+This project will likely be made open-source at some point, but if you want to contribute directly before that point, any improvements would be welcome.
 For anyone curious about the program code, the files can be edited with any text editor (I use Notepad++):
 * **index.html**
   * Handles page layout
