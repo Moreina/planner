@@ -643,6 +643,7 @@ function equip(group, val) {
 		}
 	}
 	// remove incompatible corruptions
+	// TODO: Fix offhand corruptions for Barbarians wielding 2-handed swords
 	if (equipped[group].ethereal > 0 || equipped[group].sockets > 0 || equipped[group].rarity == "rw" || equipped[group].rarity == "common" || (group == "offhand" && (equipped[group].type == "shield" || equipped[group].type == "quiver") && equipped[group].type != corruptsEquipped[group].base)) { corrupt(group, group) }
 	if (corruptsEquipped[group].name == "+ Sockets") { adjustCorruptionSockets(group) }
 	if (group == "offhand") {
@@ -917,7 +918,7 @@ function initializeEffect(origin, name, num, other) {
 	var fileType = ".png";
 	if (origin == "misc") {fileType = ".gif"}
 	if (origin == "skill") { prefix = "./images/skills/"+character.class_name.toLowerCase()+"/"; }
-	//if (origin == "oskill") { prefix = "./images/skills/"+oskills_info["oskill_"+id].native_class+"/"; }
+	if (origin == "oskill") { prefix = "./images/skills/"+oskills_info["oskill_"+id].native_class+"/"; }
 	var iconOff = prefix+"dark/"+name+" dark.png";
 	var iconOn = prefix+name+fileType;
 	
@@ -1208,7 +1209,7 @@ function getAuraData(aura, lvl, source) {
 	else if (aura == "Thorns") { result.thorns_reflect = auras[a].values[0][lvl]; }
 	else if (aura == "Inner Sight") { result.enemy_defense_flat = auras[a].values[0][lvl]; }
 	//else if (aura == "Enflame") { result.fDamage_min = skill.data.values[1][lvl]; result.fDamage_max = skill.data.values[2][lvl]; result.ar_bonus = skill.data.values[3][lvl]; }
-	else if (aura == "Righteous Fire") {  }		// No buffs. Deals 45% of max life as fire damage per second in a small area.
+	else if (aura == "Righteous Fire") { result.flamme = auras[a].values[0][lvl]; }		// No buffs. Deals 45% of max life as fire damage per second in a small area.
 	else if (aura == "Lifted Spirit") { result.wisp = auras[a].values[0][lvl]; }
 	
 	return result;
@@ -1393,7 +1394,8 @@ function updatePrimaryStats() {
 	else { document.getElementById("defense").style.color = "gray" }
 	document.getElementById("ar").innerHTML = Math.floor(ar)
 	document.getElementById("stamina").innerHTML = Math.floor((c.stamina + (c.level-1)*c.stamina_per_level + stamina_addon) * (1+c.stamina_skillup/100) * (1+c.max_stamina/100))
-	document.getElementById("life").innerHTML = Math.floor((c.life + (c.level-1)*c.life_per_level + life_addon) * (1 + c.max_life/100))
+	var lifeTotal = Math.floor((c.life + (c.level-1)*c.life_per_level + life_addon) * (1 + c.max_life/100));
+	document.getElementById("life").innerHTML = lifeTotal
 	document.getElementById("mana").innerHTML = Math.floor((c.mana + (c.level-1)*c.mana_per_level + mana_addon) * (1 + c.max_mana/100))
 	document.getElementById("level").innerHTML = c.level
 	document.getElementById("class_name").innerHTML = c.class_name
@@ -1425,6 +1427,7 @@ function updatePrimaryStats() {
 		var frames_per_attack = Math.ceil((weaponFrames*256)/Math.floor(256 * (100 + c.ias_skill + eIAS - c.baseSpeed) / 100));
 		document.getElementById("ias").innerHTML += " ("+frames_per_attack+" fpa)"
 	}
+	if (c.flamme > 0) { document.getElementById("flamme").innerHTML = "Righteous Fire deals "+Math.floor((c.flamme/100*lifeTotal)*(1+(c.fDamage+c.fDamage_skillup)/100)*wisp)+" damage per second<br>" } else { document.getElementById("flamme").innerHTML = "" }
 }
 
 // updateSecondaryStats - Updates stats shown on the secondary (Path of Diablo) stat page
