@@ -142,7 +142,7 @@ function setMercenary(merc) {
 	if (document.getElementById("dropdown_merc_weapon").innerHTML != "") { equipMerc('weapon', 'weapon'); }
 	if (document.getElementById("dropdown_merc_offhand").innerHTML != "") { equipMerc('offhand', 'offhand'); }
 	if (mercenary.base_aura != "") { removeEffect(mercenary.base_aura.split(' ').join('_')+"-mercenary"); mercenary.base_aura = ""; }
-	if (merc == "­ ­ ­ ­ Mercenary") {
+	if (merc == "none" || merc == "­ ­ ­ ­ Mercenary") {
 		for (let i = 0; i < mercEquipmentGroups.length; i++) { loadItems(mercEquipmentGroups[i], mercEquipmentDropdowns[i], "clear") }
 		document.getElementById("dropdown_mercenary").selectedIndex = 0;
 	} else {
@@ -162,6 +162,17 @@ function setMercenary(merc) {
 		}
 	}
 	mercenary.name = merc
+}
+
+// updateMercenary - updates mercenary base aura
+// ---------------------------------
+function updateMercenary() {
+	mercenary.level = Math.max(1,character.level-1)
+	if (mercenary.base_aura != "") {
+		removeEffect(mercenary.base_aura.split(' ').join('_')+"-mercenary")	// TODO: merge with effect update functions. Use disable/enable instead.
+		mercenary.base_aura_level = getMercenaryAuraLevel(mercenary.level)
+		addEffect("aura",mercenary.base_aura,mercenary.base_aura_level,"mercenary")
+	}
 }
 
 // getMercenaryAuraLevel - Get mercenary aura level
@@ -199,7 +210,7 @@ function loadCorruptions() {
 //	choice: name of new character class
 // ---------------------------------
 function startup(choice) {
-	setMercenary("­ ­ ­ ­ Mercenary")
+	setMercenary("none")
 	loadEquipment(choice)
 	clearIconSources()
 	resetSkills()
@@ -371,12 +382,15 @@ function corrupt(group, val) {
 // ---------------------------------
 function equipMerc(group, val) {
 	for (old_affix in mercEquipped[group]) {
-		mercenary[old_affix] -= mercEquipped[group][old_affix]
-		if (old_affix == "aura") {
-			removeEffect(old_affix.split(' ').join('_')+"-mercenary_"+group)
+		if (old_affix == "aura" || old_affix == "aura_lvl" || old_affix == "name" || old_affix == "type" || old_affix == "base" || old_affix == "only" || old_affix == "not" || old_affix == "img") {
+			if (old_affix == "aura") {
+				removeEffect(mercEquipped[group][old_affix].split(' ').join('_')+"-mercenary_"+group)
+			}
+		} else {
+			mercenary[old_affix] -= mercEquipped[group][old_affix]
 		}
-		if (old_affix != "set_bonuses") { mercEquipped[group][old_affix] = unequipped[old_affix] }
 	}
+	mercEquipped[group] = {name:"none"}
 	if (group == val) { document.getElementById(("dropdown_merc_"+group)).selectedIndex = 0 }
 	else {
 		for (item in equipment[group]) {
@@ -403,8 +417,8 @@ function equipMerc(group, val) {
 							mercEquipped[group][affix] += Math.ceil(multReq*bases[base][affix] - reqEth)
 						}
 						else {
-							equipped[group][affix] = bases[base][affix]
-							character[affix] += bases[base][affix]
+							mercEquipped[group][affix] = bases[base][affix]
+							mercenary[affix] += bases[base][affix]
 						}
 					} } }
 				} }
@@ -1211,17 +1225,6 @@ function getMiscData(name, index) {
 		result[affix] = non_items[index][affix]
 	} }
 	return result
-}
-
-// updateMercenary - updates mercenary base aura
-// ---------------------------------
-function updateMercenary() {
-	mercenary.level = Math.max(1,character.level-1)
-	if (mercenary.base_aura != "") {
-		removeEffect(mercenary.base_aura.split(' ').join('_')+"-mercenary")	// TODO: merge with effect update functions. Use disable/enable instead.
-		mercenary.base_aura_level = getMercenaryAuraLevel(mercenary.level)
-		addEffect("aura",mercenary.base_aura,mercenary.base_aura_level,"mercenary")
-	}
 }
 
 // toggleQuests - Toggles the completion of all quests and their rewards
