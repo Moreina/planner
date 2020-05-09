@@ -545,8 +545,7 @@ function equip(group, val) {
 						character[affix] += Math.ceil(multEth*multED*bases[base][affix])
 					}
 					else if (affix == "req_strength" || affix == "req_dexterity") {
-						equipped[group][affix] += Math.ceil(multReq*bases[base][affix] - reqEth)
-						//character[affix] += Math.ceil(multReq*bases[base][affix] - reqEth)	// not used
+						equipped[group][affix] = Math.ceil(multReq*bases[base][affix] - reqEth)
 					}
 					else {
 						equipped[group][affix] = bases[base][affix]
@@ -566,6 +565,8 @@ function equip(group, val) {
 				} else if (affix == "sup") {
 						equipped[group]["e_damage"] += equipment[src_group][item][affix]
 						character["e_damage"] += equipment[src_group][item][affix]
+				} else if (affix == "req_strength" || affix == "req_dexterity") {
+					if (equipment[src_group][item][affix] > equipped[group][affix]) { equipped[group][affix] = equipment[src_group][item][affix] }
 				} else {
 					var oskill_info = "";
 					for (let o = 0; o < oskills.length; o++) {
