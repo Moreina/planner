@@ -534,7 +534,7 @@ function corrupt(group, val) {
 		character[old_affix] -= corruptsEquipped[group][old_affix]
 		corruptsEquipped[group][old_affix] = unequipped[old_affix]
 	}
-	if (val == "­ ­ ­ ­ Corruption" || val == "none" || val == group || equipped[group].ethereal > 0 || equipped[group].sockets > 0 || equipped[group].rarity == "rw" || equipped[group].rarity == "common" || (group == "offhand" && equipped[group].type != "quiver" && equipped.weapon.twoHanded == 1)) { document.getElementById("corruptions_"+group).selectedIndex = 0 }
+	if (val == "­ ­ ­ ­ Corruption" || val == "none" || val == group || equipped[group].ethereal > 0 || equipped[group].sockets > 0 || equipped[group].rarity == "rw" || equipped[group].rarity == "common" || (group == "offhand" && equipped[group].type != "quiver" && equipped.weapon.twoHanded == 1 && (equipped.weapon.type != "sword" || character.class_name != "Barbarian"))) { document.getElementById("corruptions_"+group).selectedIndex = 0 }
 	else {
 		for (outcome in corruptions[group]) {
 			if (corruptions[group][outcome].name == val && (group != "offhand" || (offhandType == corruptions[group][outcome].base || offhandType == "none"))) {
@@ -543,12 +543,11 @@ function corrupt(group, val) {
 					if (affix != "name" && affix != "base") {
 						character[affix] += corruptions[group][outcome][affix]
 					}
-					//if (affix == e_def) { corruptsEquipped[group].defense = equipped[group].defense * (1+corruptsEquipped[group][affix]) - equipped[group].defense; character.defense += corruptsEquipped.defense; }
+					//if (affix == e_def) { corruptsEquipped[group].defense = equipped[group].defense * (1+corruptsEquipped[group][affix]) - equipped[group].defense; character.defense += corruptsEquipped.defense; }	// TODO: implement enhanced defense corruptions
 				}
 			}
 		}
 		if (val == "+ Sockets") { adjustCorruptionSockets(group) }
-		if (group == "offhand") { if (equipped[group].type == "shield" || equipped[group].type == "quiver") { if (equipped[group].type != corruptsEquipped[group].base) { corrupt(group, group) } } }
 	}
 	update()
 }
@@ -573,46 +572,58 @@ function equipMerc(group, val) {
 		for (item in equipment[group]) {
 			if (equipment[group][item].name == val) {
 				// add affixes from base item
-				if (typeof(equipment[group][item]["base"]) != 'undefined') { if (equipment[group][item]["base"] != "") {
-					var base = equipment[group][item].base; base = base.split(' ').join('_'); base = base.split('-').join('_'); base = base.split("'s").join("s");	// spaces, hypens, and apostrophes converted to match named entry in bases{}
-					if (typeof(bases[base]) != 'undefined') { for (affix in bases[base]) { if (affix == "base_damage_min" || affix == "base_damage_max" || affix == "base_defense" || affix == "req_strength" || affix == "req_dexterity") {
-						var multEth = 1;
-						var multED = 1;
-						var multReq = 1;
-						var reqEth = 0;
-						if (typeof(equipment[group][item]["ethereal"]) != 'undefined') { if (equipment[group][item]["ethereal"] == 1) { multEth = 1.5; reqEth = 10; } }
-						if (affix == "base_defense") { if (typeof(equipment[group][item]["e_def"]) != 'undefined') { multED += (equipment[group][item]["e_def"]/100) } }
-						if (affix == "req_strength" || affix == "req_dexterity") { if (typeof(equipment[group][item]["req"]) != 'undefined') { multReq += (equipment[group][item]["req"]/100) } }
-						
-						if (typeof(mercEquipped[group][affix]) == 'undefined') { mercEquipped[group][affix] = 0 }	// undefined (new) affixes get initialized to zero
-						
-						if (affix == "base_damage_min" || affix == "base_damage_max" || affix == "base_defense") {
-							mercEquipped[group][affix] = Math.ceil(multEth*multED*bases[base][affix])
-							mercenary[affix] += Math.ceil(multEth*multED*bases[base][affix])
+				if (typeof(equipment[group][item]["base"]) != 'undefined') {	// TODO: Combine with duplicate code from equip()
+					var base = getBaseId(equipment[group][item].base);
+					var multEth = 1;
+					var multED = 1;
+					var multReq = 1;
+					var reqEth = 0;
+					if (typeof(equipment[group][item]["ethereal"]) != 'undefined') { if (equipment[group][item]["ethereal"] == 1) { multEth = 1.5; reqEth = 10; } }
+					if (typeof(equipment[group][item]["e_def"]) != 'undefined') { multED += (equipment[group][item]["e_def"]/100) }
+					if (typeof(equipment[group][item]["req"]) != 'undefined') { multReq += (equipment[group][item]["req"]/100) }
+					for (affix in bases[base]) {
+						if (affix != "group" && affix != "type" && affix != "upgrade" && affix != "downgrade" && affix != "subtype" && affix != "only" && affix != "def_low" && affix != "def_high" && affix != "durability" && affix != "range" && affix != "twoHands") {
+							if (typeof(mercEquipped[group][affix]) == 'undefined') { mercEquipped[group][affix] = unequipped[affix] }	// undefined (new) affixes get initialized to zero
+							if (affix == "base_defense") {
+								mercEquipped[group][affix] = Math.ceil(multEth*multED*bases[base][affix])
+								mercenary[affix] += Math.ceil(multEth*multED*bases[base][affix])
+							} else if (affix == "base_damage_min" || affix == "base_damage_max") {
+								mercEquipped[group][affix] = Math.ceil(multEth*bases[base][affix])
+								mercenary[affix] += Math.ceil(multEth*bases[base][affix])
+							} else if (affix == "req_strength" || affix == "req_dexterity") {
+								mercEquipped[group][affix] = Math.max(0,Math.ceil(multReq*bases[base][affix] - reqEth))
+							} else {
+								mercEquipped[group][affix] = bases[base][affix]
+								mercenary[affix] += bases[base][affix]
+							}
 						}
-						if (affix == "req_strength" || affix == "req_dexterity") {
-							mercEquipped[group][affix] += Math.ceil(multReq*bases[base][affix] - reqEth)
-						}
-						else {
-							mercEquipped[group][affix] = bases[base][affix]
-							mercenary[affix] += bases[base][affix]
-						}
-					} } }
-				} }
+					}
+				}
 				// add regular affixes
 				for (affix in equipment[group][item]) {
 					if (typeof(mercEquipped[group][affix]) == 'undefined') { mercEquipped[group][affix] = unequipped[affix] }
-					if (typeof(mercenary[affix]) == 'undefined') { mercenary[affix] = unequipped[affix] }
-					if (affix == "aura" || affix == "name" || affix == "type" || affix == "base" || affix == "only" || affix == "not" || affix == "img") {
-						if (affix == "aura" && equipment[group][item][affix] != mercenary.base_aura) {	// TODO: Allow merc auras from items that are identical to their base aura?
+					if (affix == "damage_vs_undead") {
+						mercEquipped[group][affix] += equipment[group][item][affix]
+						mercenary[affix] += equipment[group][item][affix]
+					} else if (affix == "name" || affix == "type" || affix == "base" || affix == "only" || affix == "not" || affix == "img" || affix == "rarity" || affix == "req" || affix == "ethereal" || affix == "indestructible" || affix == "autorepair" || affix == "autoreplenish" || affix == "stack_size" || affix == "set_bonuses" || affix == "pod_changes" || affix == "aura_lvl" || affix == "twoHanded" || affix == "sockets" || affix == "e_def" || affix == "ctc" || affix == "cskill" || affix == "aura" || affix == "req_strength" || affix == "req_dexterity") {
+						if (affix == "req_strength" || affix == "req_dexterity") {
+							if (equipment[group][item][affix] > mercEquipped[group][affix]) { mercEquipped[group][affix] = equipment[group][item][affix] }
+						} else {
 							mercEquipped[group][affix] = equipment[group][item][affix]
-							addEffect("aura",equipment[group][item][affix],equipment[group][item].aura_lvl,"mercenary_"+group)
+							if (affix == "aura" && equipment[group][item][affix] != mercenary.base_aura) { addEffect("aura",equipment[group][item][affix],equipment[group][item].aura_lvl,"mercenary_"+group) }
 						}
 					} else {
-						mercEquipped[group][affix] = equipment[group][item][affix]
-						mercenary[affix] += mercEquipped[group][affix]
+						if (affix == "sup" || affix == "e_damage") {
+							if (affix == "sup") { mercEquipped[group][affix] = equipment[group][item][affix] }
+							mercEquipped[group]["e_damage"] += equipment[group][item][affix]
+							mercenary["e_damage"] += equipment[group][item][affix]
+						} else {
+							mercEquipped[group][affix] = equipment[group][item][affix]
+							mercenary[affix] += equipment[group][item][affix]
+						}
 					}
 				}
+				// TODO: implement set bonuses
 			}
 		}
 		updateMercenary()
@@ -644,7 +655,7 @@ function equip(group, val) {
 	if (found == 0 && group == "offhand") { src_group = "weapon" }
 	var itemType = "";
 	var twoHanded = 0;
-	for (item in equipment[src_group]) { if (equipment[src_group][item].name == val) { twoHanded = equipment[src_group][item].twoHanded; if (typeof(equipment[src_group][item].type) != 'undefined') { itemType = equipment[src_group][item].type } } }
+	for (item in equipment[src_group]) { if (equipment[src_group][item].name == val) { twoHanded = ~~equipment[src_group][item].twoHanded; if (typeof(equipment[src_group][item].type) != 'undefined') { itemType = equipment[src_group][item].type } } }
 	
 	for (old_affix in equipped[group]) { if (old_affix == "set_bonuses") { old_set_bonuses = equipped[group].set_bonuses } }
 	for (item in equipment[src_group]) { if (equipment[src_group][item].name == val) { if (typeof(equipment[src_group][item].set_bonuses) != 'undefined') { set_bonuses = equipment[src_group][item].set_bonuses } } }
@@ -652,13 +663,11 @@ function equip(group, val) {
 	if (old_set_bonuses != "") { old_set = old_set_bonuses[0]; old_set_before = character[old_set]; }
 	
 	// if replacing an item, previous item's affixes are removed from character
-	for (old_affix in equipped[group]) { if (typeof(character[old_affix]) != 'undefined') {
-		character[old_affix] -= equipped[group][old_affix]
-		if (old_affix == "aura") {
-			removeEffect(equipped[group][old_affix].split(' ').join('_')+"-"+group)
-		}
-		if (old_affix != "set_bonuses" && old_affix != "aura" && old_affix != "aura_lvl") { equipped[group][old_affix] = unequipped[old_affix] }
-	} }
+	for (old_affix in equipped[group]) {
+		if (typeof(character[old_affix]) != 'undefined') { character[old_affix] -= equipped[group][old_affix] }
+		if (old_affix == "aura") { removeEffect(equipped[group][old_affix].split(' ').join('_')+"-"+group) }
+		if (old_affix != "set_bonuses") { equipped[group][old_affix] = unequipped[old_affix] }
+	}
 	// remove set bonuses from previous item
 	if (old_set_bonuses != "") {
 		old_set_after = character[old_set];
@@ -732,20 +741,21 @@ function equip(group, val) {
 				if (affix == "damage_vs_undead") {									// damage_vs_undead is the only additive affix included in both bases[] (automods) and equipment[] (regular affixes)
 					equipped[group][affix] += equipment[src_group][item][affix]
 					character[affix] += equipment[src_group][item][affix]
-				} else if (affix == "name" || affix == "type" || affix == "base" || affix == "only" || affix == "not" || affix == "img" || affix == "rarity" || affix == "size" || affix == "req" || affix == "ethereal" || affix == "indestructible" || affix == "autorepair" || affix == "autoreplenish" || affix == "stack_size" || affix == "set_bonuses" || affix == "pod_changes" || affix == "aura_lvl" || affix == "twoHanded" || affix == "sockets" || affix == "e_def" || affix == "ctc" || affix == "cskill") {	// no need to add these as character affixes
+				} else if (affix == "name" || affix == "type" || affix == "base" || affix == "only" || affix == "not" || affix == "img" || affix == "rarity" || affix == "req" || affix == "ethereal" || affix == "indestructible" || affix == "autorepair" || affix == "autoreplenish" || affix == "stack_size" || affix == "set_bonuses" || affix == "pod_changes" || affix == "aura_lvl" || affix == "twoHanded" || affix == "sockets" || affix == "e_def" || affix == "ctc" || affix == "cskill" || affix == "aura" || affix == "req_strength" || affix == "req_dexterity") {	// no need to add these as character affixes
 					equipped[group][affix] = equipment[src_group][item][affix]
+					if (affix == "req_strength" || affix == "req_dexterity") {
+						if (equipment[src_group][item][affix] > equipped[group][affix]) { equipped[group][affix] = equipment[src_group][item][affix] }	// these affixes aren't additive (only the largest matters)
+					} else {
+						equipped[group][affix] = equipment[src_group][item][affix]
+						if (affix == "aura") { auraName = equipment[src_group][item][affix]; auraLevel = equipment[src_group][item].aura_lvl; }
+					}
 				} else {
-					equipped[group][affix] = equipment[src_group][item][affix]
-					if (affix == "aura") {
-						auraName = equipment[src_group][item][affix]
-						auraLevel = equipment[src_group][item].aura_lvl
-					} else if ((affix == "sup" || affix == "e_damage") && src_group == "weapon") {
+					if ((affix == "sup" || affix == "e_damage") && src_group == "weapon") {
 						if (affix == "sup") { equipped[group][affix] = equipment[src_group][item][affix] }
 						equipped[group]["e_damage"] += equipment[src_group][item][affix]
 						character["e_damage"] += equipment[src_group][item][affix]
-					} else if (affix == "req_strength" || affix == "req_dexterity") {
-						if (equipment[src_group][item][affix] > equipped[group][affix]) { equipped[group][affix] = equipment[src_group][item][affix] }
 					} else {
+						equipped[group][affix] = equipment[src_group][item][affix]
 						var oskill_info = "";
 						for (let o = 0; o < oskills.length; o++) { if (affix == oskills[o]) { oskill_info = oskills_info[oskills[o]] } }
 						if (oskill_info != "") {
@@ -817,7 +827,6 @@ function equip(group, val) {
 		}
 	}
 	// remove incompatible corruptions
-	// TODO: Fix offhand corruptions for Barbarians wielding 2-handed swords
 	if (equipped[group].ethereal > 0 || equipped[group].sockets > 0 || equipped[group].rarity == "rw" || equipped[group].rarity == "common" || (group == "offhand" && (equipped[group].type == "shield" || equipped[group].type == "quiver") && equipped[group].type != corruptsEquipped[group].base)) { corrupt(group, group) }
 	if (corruptsEquipped[group].name == "+ Sockets") { adjustCorruptionSockets(group) }
 	if (group == "offhand") {
@@ -1586,8 +1595,7 @@ function updatePrimaryStats() {
 	
 	var ias = c.ias + c.ias_skill + Math.floor(dexTotal/8)*c.ias_per_8_dexterity;
 	if (offhandType == "weapon" && typeof(equipped.offhand.ias) != 'undefined') { ias -= equipped.offhand.ias }
-	if (ias != 0) { ias += "%" }
-	document.getElementById("ias").innerHTML = ias
+	document.getElementById("ias").innerHTML = ias; if (ias > 0) { document.getElementById("ias").innerHTML += "%" }
 	if (equipped.weapon.type != "") {
 		var eIAS = Math.floor(120*ias/(120+ias));
 		var weaponFrames = 0;
@@ -1726,7 +1734,7 @@ function updateTertiaryStats() {
 	else { document.getElementById("cbf").innerHTML = "" }
 	if (c.knockback > 0) { document.getElementById("knockback").innerHTML = "Knockback<br>" } else { document.getElementById("knockback").innerHTML = "" }
 	if (c.melee_splash > 0) { document.getElementById("melee_splash").innerHTML = "Melee Attacks deal Splash Damage<br>" } else { document.getElementById("melee_splash").innerHTML = "" }
-	if (c.slow_target > 0 || c.slow_enemies > 0) { document.getElementById("slow_target").innerHTML = "Targets Slowed " + (c.slow_target + c.slow_enemies)+"%<br>" } else { document.getElementById("slow_target").innerHTML = "" }
+	if (c.slows_target > 0 || c.slow_enemies > 0) { document.getElementById("slow_target").innerHTML = "Targets Slowed " + (c.slows_target + c.slow_enemies)+"%<br>" } else { document.getElementById("slow_target").innerHTML = "" }
 	if (c.freezes_target > 1) { document.getElementById("freezes_target").innerHTML = "Freezes Target +" + c.freezes_target + "<br>" }
 	else if (c.freezes_target > 0) { document.getElementById("freezes_target").innerHTML = "Freezes Target<br>" }
 	else { document.getElementById("freezes_target").innerHTML = "" }

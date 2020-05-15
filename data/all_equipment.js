@@ -250,13 +250,13 @@ var equipment = {
 {name:"Que-Hegan's Wisdom", req_level:51, e_def:160, all_skills:1, mana_per_kill:3, fcr:20, fhr:20, mDamage_reduced:10, energy:15, base:"Mage Plate", img:""},
 {name:"Black Hades", req_level:53, e_def:200, damage_vs_demons:60, ar_vs_demons:250, half_freeze:1, light_radius:-2, sockets:3, base:"Chaos Armor", img:""},
 {name:"Corpsemourn", req_level:55, e_def:180, fDamage_min:12, fDamage_max:36, strength:8, vitality:10, cRes:35, bonus_corpse_explosion:5, base:"Ornate Plate", pod_changes:1, img:"Corpsemourn", cskill:[[5,"Desecrate",50]]},
-{name:"Ormus' Robes", req_level:75, defense:20, fcr:20, cDamage:15, fDamage:15, lDamage:15, mana_regen:15, skill_frozen_orb:3, base:"Dusk Shroud", img:"Ormus'_Robes"},	// TODO: many possible skills
 {name:"The Gladiator's Bane", req_level:85, defense:50, e_def:200, cbf:1, fhr:30, poison_length_reduced:50, thorns:20, damage_reduced:20, mDamage_reduced:20, base:"Wire Fleece", img:"The_Gladiator's_Bane"},
 {name:"Arkaine's Valor", req_level:85, e_def:180, all_skills:2, fhr:30, damage_reduced:15, vitality_per_level:0.5, base:"Balrog Skin", img:"Arkaine's_Valor"},
 {name:"Leviathan", req_level:65, defense:150, e_def:200, indestructible:1, strength:50, pdr:25, ethereal:0, base:"Kraken Shell", img:"Leviathan"},
 {name:"Steel Carapace", req_level:66, e_def:220, mana_regen:15, fhr:20, cRes:60, damage_reduced:14, autorepair:1, base:"Shadow Plate", img:"Steel_Carapace", ctc:[[8,6,"Iron Maiden","when struck"]]},
 {name:"Templar's Might", req_level:74, e_def:220, missile_defense:300, strength:15, vitality:15, fhr:20, stamina:50, skills_offensive:2, base:"Sacred Armor", img:"Templar's_Might"},
 {name:"Tyrael's Might", req_level:84, e_def:150, frw:20, damage_vs_demons:100, strength:30, all_res:30, cbf:1, cdr:10, peace:1, req:-100, ethereal:0, base:"Sacred Armor", pod_changes:1, img:"Tyrael's_Might"},
+{not:["sorceress"], name:"Ormus' Robes", req_level:75, defense:20, fcr:20, cDamage:15, fDamage:15, lDamage:15, mana_regen:15, skill_hydra:3, base:"Dusk Shroud", img:"Ormus'_Robes"},
 {set_IK:1, name:"Immortal King's Soul Cage", req_level:76, defense:400, pRes:50, skills_combat_barbarian:2, base:"Sacred Armor", rarity:"set", set_bonuses:["set_IK",{},{fhr:25},{cRes:40},{fRes:40},{lRes:40},{defense:300}], img:"Immortal_King's_Soul_Cage"},	// +50% Enhanced Defense ~= 300 defense (set bonus for 6 items)
 {set_TR:1, name:"Tal Rasha's Guardianship", req_level:71, defense:400, mDamage_reduced:15, cRes:40, lRes:40, fRes:40, mf:88, req:-60, base:"Lacquered Plate", rarity:"set", set_bonuses:["set_TR",0,{fcr:10},{},{},{}], img:"Rattlecage"},
 {set_Mav:1, name:"M'avina's Embrace", req_level:70, defense:350, defense_per_level:4, skills_passives:2, req:-30, base:"Kraken Shell", rarity:"set", set_bonuses:["set_Mav",{},{},{fhr:30},{},{}], pod_changes:1, img:"M'avina's_Embrace", radius_FreezingArrow:40},
@@ -280,6 +280,37 @@ var equipment = {
 {set_Sigon:1, name:"Sigon's Shelter", req_level:6, e_def:25, e_def:25, lRes:30, base:"Gothic Plate", rarity:"set", set_bonuses:["set_Sigon",{},{thorns:20},{},{},{},{}], img:"Sigon's_Shelter"},
 {set_Berserker:1, name:"Berserker's Hauberk", req_level:3, skills_barbarian:1, mDamage_reduced:2, base:"Splint Mail", rarity:"set", set_bonuses:["set_Berserker",{},{defense_per_level:3},{}], img:"Berserker's_Hauberk"},
 {set_Arctic:1, name:"Arctic Furs", req_level:2, e_def:325, all_res:10, base:"Quilted Armor", rarity:"set", set_bonuses:["set_Arctic",{},{defense_per_level:3},{cRes:15},{}], img:"Arctic_Furs"},
+{only:"sorceress", name:"Ormus' Robes (Ice Bolt)", req_level:75, defense:20, fcr:20, cDamage:15, fDamage:15, lDamage:15, mana_regen:15, skill_Ice_Bolt:3, base:"Dusk Shroud", img:"Ormus'_Robes"},
+{only:"sorceress", name:"Ormus' Robes (Frigerate)", req_level:75, defense:20, fcr:20, cDamage:15, fDamage:15, lDamage:15, mana_regen:15, skill_Frigerate:3, base:"Dusk Shroud", img:"Ormus'_Robes"},
+{only:"sorceress", name:"Ormus' Robes (Frost Nova)", req_level:75, defense:20, fcr:20, cDamage:15, fDamage:15, lDamage:15, mana_regen:15, skill_Frost_Nova:3, base:"Dusk Shroud", img:"Ormus'_Robes"},
+{only:"sorceress", name:"Ormus' Robes (Ice Blast)", req_level:75, defense:20, fcr:20, cDamage:15, fDamage:15, lDamage:15, mana_regen:15, skill_Ice_Blast:3, base:"Dusk Shroud", img:"Ormus'_Robes"},
+{only:"sorceress", name:"Ormus' Robes (Shiver Armor)", req_level:75, defense:20, fcr:20, cDamage:15, fDamage:15, lDamage:15, mana_regen:15, skill_Shiver_Armor:3, base:"Dusk Shroud", img:"Ormus'_Robes"},
+{only:"sorceress", name:"Ormus' Robes (Glacial Spike)", req_level:75, defense:20, fcr:20, cDamage:15, fDamage:15, lDamage:15, mana_regen:15, skill_Glacial_Spike:3, base:"Dusk Shroud", img:"Ormus'_Robes"},
+{only:"sorceress", name:"Ormus' Robes (Blizzard)", req_level:75, defense:20, fcr:20, cDamage:15, fDamage:15, lDamage:15, mana_regen:15, skill_Blizzard:3, base:"Dusk Shroud", img:"Ormus'_Robes"},
+{only:"sorceress", name:"Ormus' Robes (Freezing Pulse)", req_level:75, defense:20, fcr:20, cDamage:15, fDamage:15, lDamage:15, mana_regen:15, skill_Freezing_Pulse:3, base:"Dusk Shroud", img:"Ormus'_Robes"},
+{only:"sorceress", name:"Ormus' Robes (Chilling Armor)", req_level:75, defense:20, fcr:20, cDamage:15, fDamage:15, lDamage:15, mana_regen:15, skill_Chilling_Armor:3, base:"Dusk Shroud", img:"Ormus'_Robes"},
+{only:"sorceress", name:"Ormus' Robes (Frozen Orb)", req_level:75, defense:20, fcr:20, cDamage:15, fDamage:15, lDamage:15, mana_regen:15, skill_Frozen_Orb:3, base:"Dusk Shroud", img:"Ormus'_Robes"},
+{only:"sorceress", name:"Ormus' Robes (Cold Mastery)", req_level:75, defense:20, fcr:20, cDamage:15, fDamage:15, lDamage:15, mana_regen:15, skill_Cold_Mastery:3, base:"Dusk Shroud", img:"Ormus'_Robes"},
+{only:"sorceress", name:"Ormus' Robes (Charged Bolt)", req_level:75, defense:20, fcr:20, cDamage:15, fDamage:15, lDamage:15, mana_regen:15, skill_Charged_Bolt:3, base:"Dusk Shroud", img:"Ormus'_Robes"},
+{only:"sorceress", name:"Ormus' Robes (Static Field)", req_level:75, defense:20, fcr:20, cDamage:15, fDamage:15, lDamage:15, mana_regen:15, skill_Static_Field:3, base:"Dusk Shroud", img:"Ormus'_Robes"},
+{only:"sorceress", name:"Ormus' Robes (Telekinesis)", req_level:75, defense:20, fcr:20, cDamage:15, fDamage:15, lDamage:15, mana_regen:15, skill_Telekinesis:3, base:"Dusk Shroud", img:"Ormus'_Robes"},
+{only:"sorceress", name:"Ormus' Robes (Nova)", req_level:75, defense:20, fcr:20, cDamage:15, fDamage:15, lDamage:15, mana_regen:15, skill_Nova:3, base:"Dusk Shroud", img:"Ormus'_Robes"},
+{only:"sorceress", name:"Ormus' Robes (Lightning Surge)", req_level:75, defense:20, fcr:20, cDamage:15, fDamage:15, lDamage:15, mana_regen:15, skill_Lightning_Surge:3, base:"Dusk Shroud", img:"Ormus'_Robes"},
+{only:"sorceress", name:"Ormus' Robes (Chain Lightning)", req_level:75, defense:20, fcr:20, cDamage:15, fDamage:15, lDamage:15, mana_regen:15, skill_Chain_Lightning:3, base:"Dusk Shroud", img:"Ormus'_Robes"},
+{only:"sorceress", name:"Ormus' Robes (Teleport)", req_level:75, defense:20, fcr:20, cDamage:15, fDamage:15, lDamage:15, mana_regen:15, skill_Teleport:3, base:"Dusk Shroud", img:"Ormus'_Robes"},
+{only:"sorceress", name:"Ormus' Robes (Discharge)", req_level:75, defense:20, fcr:20, cDamage:15, fDamage:15, lDamage:15, mana_regen:15, skill_Discharge:3, base:"Dusk Shroud", img:"Ormus'_Robes"},
+{only:"sorceress", name:"Ormus' Robes (Energy Shield)", req_level:75, defense:20, fcr:20, cDamage:15, fDamage:15, lDamage:15, mana_regen:15, skill_Energy_Shield:3, base:"Dusk Shroud", img:"Ormus'_Robes"},
+{only:"sorceress", name:"Ormus' Robes (Lightning Mastery)", req_level:75, defense:20, fcr:20, cDamage:15, fDamage:15, lDamage:15, mana_regen:15, skill_Lightning_Mastery:3, base:"Dusk Shroud", img:"Ormus'_Robes"},
+{only:"sorceress", name:"Ormus' Robes (Fire Bolt)", req_level:75, defense:20, fcr:20, cDamage:15, fDamage:15, lDamage:15, mana_regen:15, skill_Fire_Bolt:3, base:"Dusk Shroud", img:"Ormus'_Robes"},
+{only:"sorceress", name:"Ormus' Robes (Warmth)", req_level:75, defense:20, fcr:20, cDamage:15, fDamage:15, lDamage:15, mana_regen:15, skill_Warmth:3, base:"Dusk Shroud", img:"Ormus'_Robes"},
+{only:"sorceress", name:"Ormus' Robes (Blaze)", req_level:75, defense:20, fcr:20, cDamage:15, fDamage:15, lDamage:15, mana_regen:15, skill_Blaze:3, base:"Dusk Shroud", img:"Ormus'_Robes"},
+{only:"sorceress", name:"Ormus' Robes (Immolate)", req_level:75, defense:20, fcr:20, cDamage:15, fDamage:15, lDamage:15, mana_regen:15, skill_Immolate:3, base:"Dusk Shroud", img:"Ormus'_Robes"},
+{only:"sorceress", name:"Ormus' Robes (Fire Ball)", req_level:75, defense:20, fcr:20, cDamage:15, fDamage:15, lDamage:15, mana_regen:15, skill_Fire_Ball:3, base:"Dusk Shroud", img:"Ormus'_Robes"},
+{only:"sorceress", name:"Ormus' Robes (Fire Wall)", req_level:75, defense:20, fcr:20, cDamage:15, fDamage:15, lDamage:15, mana_regen:15, skill_Fire_Wall:3, base:"Dusk Shroud", img:"Ormus'_Robes"},
+{only:"sorceress", name:"Ormus' Robes (Enflame)", req_level:75, defense:20, fcr:20, cDamage:15, fDamage:15, lDamage:15, mana_regen:15, skill_Enflame:3, base:"Dusk Shroud", img:"Ormus'_Robes"},
+{only:"sorceress", name:"Ormus' Robes (Meteor)", req_level:75, defense:20, fcr:20, cDamage:15, fDamage:15, lDamage:15, mana_regen:15, skill_Meteor:3, base:"Dusk Shroud", img:"Ormus'_Robes"},
+{only:"sorceress", name:"Ormus' Robes (Hydra)", req_level:75, defense:20, fcr:20, cDamage:15, fDamage:15, lDamage:15, mana_regen:15, skill_Hydra:3, base:"Dusk Shroud", img:"Ormus'_Robes"},
+{only:"sorceress", name:"Ormus' Robes (Fire Mastery)", req_level:75, defense:20, fcr:20, cDamage:15, fDamage:15, lDamage:15, mana_regen:15, skill_Fire_Mastery:3, base:"Dusk Shroud", img:"Ormus'_Robes"},
 	],
     gloves: [
 {name:"Gloves"},
@@ -447,6 +478,7 @@ var equipment = {
 {rarity:"rare", name:"Emperor's Ring", req_level:95, all_res:11, lRes:30, mana:90, life_leech:8, mana_leech:6, fcr:10},
 {rarity:"craft", name:"Blood Ring", req_level:65, life_leech:11, life:20, strength:25, ar:120, all_res:11, fcr:10, mana_leech:5},
 {rarity:"craft", name:"Caster Ring", req_level:65, mana_regen:10, mana:110, energy:20, all_res:11, fcr:10, strength:20, life:40},
+{rarity:"magic", name:"Fortuitous Ring of Fortune", req_level:31, mf:40},
 	],
     ring2: [],	// Automatically copied from ring1
     weapon: [		// TODO: Add a "rank" parameter to allow weapons to be displayed in different orders per class, without needing to duplicate entries using "only" and "not"
@@ -1102,7 +1134,7 @@ var socketables = [
 {name:"Ko Rune", type:"rune", rarity:"craft", req_level:39, weapon:{dexterity:10}, armor:{dexterity:10}},
 {name:"Fal Rune", type:"rune", rarity:"craft", req_level:41, weapon:{strength:10}, armor:{strength:10}},
 {name:"Lem Rune", type:"rune", rarity:"craft", req_level:43, weapon:{gf:75}, armor:{gf:50}},
-{name:"Pul Rune", type:"rune", rarity:"craft", req_level:45, weapon:{damage_vs_demons:75,ar_vs_demons:100}, armor:{e_def:30}},	// TODO: e_def
+{name:"Pul Rune", type:"rune", rarity:"craft", req_level:45, weapon:{damage_vs_demons:75,ar_vs_demons:100}, armor:{defense_bonus:30}},	// TODO: Implement (e_def, apply only to defense for socketed item)
 {name:"Um Rune", type:"rune", rarity:"craft", req_level:47, weapon:{owounds:25}, armor:{all_res:15}, shield:{all_res:22}},
 {name:"Mal Rune", type:"rune", rarity:"craft", req_level:49, weapon:{pmh:1}, armor:{mDamage_reduced:7}},
 {name:"Ist Rune", type:"rune", rarity:"craft", req_level:51, weapon:{mf:30}, armor:{mf:25}},
@@ -1163,7 +1195,7 @@ var corruptions = {	// Note: non-socket corruptions include +1 socket if possibl
 		{name:"+ Strength", strength:10, sockets:1},
 		{name:"+ Energy", energy:10, sockets:1},
 		{name:"+ Life", life:15, sockets:1},
-		{name:"+ Enhanced Defense", defense_bonus:25, sockets:1},	// TODO: Implement (e_def, apply to helm defense only)
+		{name:"+ Enhanced Defense", defense_bonus:25, sockets:1},	// TODO: Implement (e_def, apply only to helm defense)
 	],
 	armor: [
 		{name:"Armor"},
@@ -1172,7 +1204,7 @@ var corruptions = {	// Note: non-socket corruptions include +1 socket if possibl
 		{name:"+ Increased Attack Speed", ias:10, sockets:1},
 		{name:"+ Attack Rating", ar_bonus:20, sockets:1},
 		{name:"+ Max Life", max_life:2, sockets:1},
-		{name:"+ Enhanced Defense", defense_bonus:20, sockets:1},	// TODO: Implement (e_def, apply to body armor defense only)
+		{name:"+ Enhanced Defense", defense_bonus:20, sockets:1},	// TODO: Implement (e_def, apply only to body armor defense)
 	],
 	gloves: [
 		{name:"Gloves"},
@@ -1805,4 +1837,11 @@ var bases = {	// Note: damage_vs_undead:50 is included for blunt weapons, but ot
 	Maiden_Javelin:{group:"weapon", type:"javelin", base_damage_min:8, base_damage_max:14, req_level:17, req_strength:33, req_dexterity:47, durability:6, baseSpeed:-10, range:2, throw_min:6, throw_max:22, upgrade:"Ceremonial Javelin", only:"amazon"},
 	Ceremonial_Javelin:{group:"weapon", type:"javelin", base_damage_min:18, base_damage_max:35, req_level:26, req_strength:25, req_dexterity:109, durability:6, baseSpeed:-10, range:2, throw_min:18, throw_max:54, upgrade:"Matriarchal Javelin", downgrade:"Maiden Javelin", only:"amazon"},
 	Matriarchal_Javelin:{group:"weapon", type:"javelin", base_damage_min:30, base_damage_max:54, req_level:48, req_strength:107, req_dexterity:151, durability:6, baseSpeed:-10, range:2, throw_min:35, throw_max:66, downgrade:"Ceremonial Javelin", only:"amazon"},
+	// other? (unneeded with current implementation)
+	//Arrows:{group:"offhand", type:"quiver"},
+	//Bolts:{group:"offhand", type:"quiver"},
+	//Amulet:{group:"amulet", type:"amulet"},
+	//Ring:{group:"ring", type:"ring"},
+	//Special:{group:"weapon", type:"axe", base_damage_min:3, base_damage_max:6, durability:28, baseSpeed:0, range:0, max_sockets:2, upgrade:"Special2"},								// Hand Axe?	// TODO: verify upgrade stats for all quest items
+	//Special2:{group:"weapon", type:"axe", base_damage_min:10, base_damage_max:21, req_level:19, req_strength:25, req_dexterity:25, durability:28, baseSpeed:0, range:0, max_sockets:2, downgrade:"Special"},	// Hatchet?
 };
