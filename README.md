@@ -9,8 +9,17 @@ Path of Diablo Planner
 Current Known Issues:
 * Charms can't be moved into a new space below the original space if they overlap eachother
 * Shift + Right Click in Firefox doesn't work (and still opens the default menu)
-* Set items can be upgraded/downgraded, items can be downgraded below their baseline
-* Required level may be inaccurate for upgraded/downgraded items
+* Enhanced Defense from corruptions (Helm/Body) or Pul Rune is applied to all armor instead of just that item
+* Upgrading/Downgrading:
+	* Any item can be upgraded/downgraded (instead of just rare/unique)
+	* Unique items can be downgraded below their baseline
+	* Required level/strength/dexterity may be inaccurate for upgraded/downgraded items
+	* Unimplemented: upgrading/downgrading for quest weapons
+* Unimplemented: mercenaries (everything except their auras)
+* Unimplemented: offhand attacks
+* Unimplemented: skill buffs from item-charges
+* Unimplemented: option to 'snapshot' buffs
+* Unimplemented: breakpoint info for FCR, FBR, FHR
 
 Info: https://github.com/Moreina/planner#planner
 
