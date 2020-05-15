@@ -82,8 +82,8 @@ var character_druid = {class_name:"Druid", strength:15, dexterity:20, vitality:2
 		var id = skill.name.split(' ').join('_');
 		var lvl = skill.level + skill.extra_levels;
 		var result = {};
-		var lycan_damage = ~~(skills[12].data.values[0][skills[12].level+skills[12].extra_levels]);
-		var lycan_life = ~~(skills[12].data.values[1][skills[12].level+skills[12].extra_levels]);
+		var lycan_damage = Math.min(1,(skills[12].level+skills[12].force_levels))*~~(skills[12].data.values[0][skills[12].level+skills[12].extra_levels]);
+		var lycan_life = Math.min(1,(skills[12].level+skills[12].force_levels))*~~(skills[12].data.values[1][skills[12].level+skills[12].extra_levels]);
 		
 		if (skill.name == "Werewolf") {	// cannot be used with Werebear
 			var sk = skills[13].name.split(' ').join('_');

@@ -64,7 +64,8 @@ var character_any = {
 		if (skillName == "Meteor" && elem < 2) { 			result *= ((1 + (character.fDamage+character.fDamage_skillup)/100) * wisp) }
 		if (skillName == "Meteor" && elem < 4 && elem > 1) { 		result *= ((1 + (character.fDamage+character.fDamage_skillup)/100) * wisp) }
 		if (skillName == "Hydra" && elem < 3 && elem > 0) { 		result *= ((1 + (character.fDamage+character.fDamage_skillup)/100) * wisp) }
-
+		
+		// TODO: Does wisp need to be added to other effects here? For example, where is it being added to Enflame, if not here?
 	return result
 	},
 

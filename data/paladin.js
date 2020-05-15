@@ -28,9 +28,9 @@ var character_paladin = {class_name:"Paladin", strength:25, dexterity:20, vitali
 		if (skill.name == "Resist Cold" && elem == 0) { 	result = Math.floor(skill.level/4); character.cRes_skillup = result; }
 		if (skill.name == "Resist Lightning" && elem == 0) { 	result = Math.floor(skill.level/4); character.lRes_skillup = result; }
 		if (skill.name == "Prayer" && elem == 1) { 		result = ((Math.floor((character.life + (character.level-1)*character.life_per_level + (((character.vitality + character.all_attributes + (character.level-1)*character.vitality_per_level)-character.starting_vitality)*character.life_per_vitality)) * (1 + character.max_life/100)))*0.01 + skill.data.values[0][lvl]) }
-		if (skill.name == "Cleansing" && elem == 0) {		result = ~~skills[0].data.values[0][skills[0].level+skills[0].extra_levels] }
+		if (skill.name == "Cleansing" && elem == 0) {		result = Math.min(1,(skills[0].level+skills[0].force_levels))*~~skills[0].data.values[0][skills[0].level+skills[0].extra_levels] }
 		if (skill.name == "Cleansing" && elem == 1) {		result = Math.floor(skill.level/2); character.pRes_skillup = result; }
-		if (skill.name == "Meditation" && elem == 0) {		result = ~~skills[0].data.values[0][skills[0].level+skills[0].extra_levels] }
+		if (skill.name == "Meditation" && elem == 0) {		result = Math.min(1,(skills[0].level+skills[0].force_levels))*~~skills[0].data.values[0][skills[0].level+skills[0].extra_levels] }
 		if (skill.name == "Blessed Aim" && elem == 0) { 	result = (5*skill.level); character.ar_skillup = result; }
 		if (skill.name == "Holy Fire" && elem < 4) { 		result *= ((1+(0.04*skills[1].level + 0.06*skills[9].level)) * (1+character.fDamage/100) * wisp) }
 		if (skill.name == "Holy Freeze" && elem < 4) { 		result *= ((1+(0.04*skills[3].level + 0.06*skills[9].level)) * (1+character.cDamage/100) * wisp) }
@@ -85,13 +85,13 @@ var character_paladin = {class_name:"Paladin", strength:25, dexterity:20, vitali
 		if (skill.name == "Defiance") { result.defense_bonus = skill.data.values[0][lvl]; }
 		if (skill.name == "Resist Cold") { result.cRes = skill.data.values[1][lvl]; result.cRes_max = skill.data.values[2][lvl]; }
 		if (skill.name == "Cleansing") {
-			result.life_replenish = ~~(skills[0].data.values[0][skills[0].level+skills[0].extra_levels]);
+			result.life_replenish = Math.min(1,(skills[0].level+skills[0].force_levels))*~~(skills[0].data.values[0][skills[0].level+skills[0].extra_levels]);
 			result.poison_length_reduced = skill.data.values[2][lvl]; result.curse_length_reduced = skill.data.values[2][lvl];
 		}
 		if (skill.name == "Resist Lightning") { result.lRes = skill.data.values[1][lvl]; result.lRes_max = skill.data.values[2][lvl]; }
 		if (skill.name == "Vigor") { result.velocity = skill.data.values[0][lvl]; result.max_stamina = skill.data.values[1][lvl]; result.heal_stam = skill.data.values[2][lvl]; }
 		if (skill.name == "Meditation") {
-			result.life_replenish = ~~(skills[0].data.values[0][skills[0].level+skills[0].extra_levels]);
+			result.life_replenish = Math.min(1,(skills[0].level+skills[0].force_levels))*~~(skills[0].data.values[0][skills[0].level+skills[0].extra_levels]);
 			result.mana_regen = skill.data.values[1][lvl];
 		}
 		if (skill.name == "Redemption") { result.recovery_per_corpse = skill.data.values[0][lvl]/100 * skill.data.values[1][lvl]; }

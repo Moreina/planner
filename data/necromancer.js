@@ -38,11 +38,11 @@ var character_necromancer = {class_name:"Necromancer", strength:15, dexterity:25
 		if (skill.name == "Fire Golem" && elem < 2) {			result *= (sum_damage * wisp) }
 		if (skill.name == "Fire Golem" && elem == 2) {			result = (sum_life * diffResult + 0.01*skill.level*diffResult) }
 		if (skill.name == "Fire Golem" && elem > 3 && elem < 6) {	result *= (sum_damage * wisp) }
-		if (skill.name == "Revive" && elem == 0) {			result = (skill.data.values[elem][1] + ~~skills[0].data.values[0][skills[0].level+skills[0].extra_levels]) }
-		if (skill.name == "Revive" && elem == 1) {			result = (skill.data.values[elem][1] + ~~skills[0].data.values[1][skills[0].level+skills[0].extra_levels]) }	// wisp excluded from tooltip
+		if (skill.name == "Revive" && elem == 0) {			result = (skill.data.values[elem][1] + Math.min(1,(skills[0].level+skills[0].force_levels))*~~skills[0].data.values[0][skills[0].level+skills[0].extra_levels]) }
+		if (skill.name == "Revive" && elem == 1) {			result = (skill.data.values[elem][1] + Math.min(1,(skills[0].level+skills[0].force_levels))*~~skills[0].data.values[1][skills[0].level+skills[0].extra_levels]) }
 
-		if (skill.name == "Corpse Explosion" && elem == 0) { if (skill.level == 0) { result = (21 )}} //+ ~~bonus_corpse_explosion) } else { result += ~~bonus_corpse_explosion } }	// Corpsemourn bonus shown?
-		if (skill.name == "Corpse Explosion" && elem == 1) { if (skill.level == 0) { result = (27 )}} //+ ~~bonus_corpse_explosion) } else { result += ~~bonus_corpse_explosion } }	// Corpsemourn bonus shown?
+		if (skill.name == "Corpse Explosion" && elem == 0) { if (skill.level == 0) { result = 21} else { result += character.bonus_corpse_explosion } }
+		if (skill.name == "Corpse Explosion" && elem == 1) { if (skill.level == 0) { result = 27} else { result += character.bonus_corpse_explosion } }
 		if (skill.name == "Bone Armor" && elem == 0) { 			result += 20*skills[17].level + 20*skills[18].level }
 		if (skill.name == "Bone Wall" && elem < 1) { 			result *= (1 + (0.10*skills[13].level)) }
 		if (skill.name == "Teeth" && elem > 0 && elem < 3) { 		result *= (1 + (0.17*skills[16].level + 0.17*skills[18].level)) }

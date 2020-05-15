@@ -1,5 +1,5 @@
 
-
+fileInfo = {character:{class_name:""},skills:[]};
 character = {};
 var skill_bonuses = {stamina_skillup:0, frw_skillup:0, defense_skillup:0, resistance_skillup:0, cstrike_skillup:0, ar_skillup:0, pierce_skillup:0, fRes_skillup:0, cRes_skillup:0, lRes_skillup:0, pRes_skillup:0, edged_skillup:[0,0,0], pole_skillup:[0,0,0], blunt_skillup:[0,0,0], thrown_skillup:[0,0,0], claw_skillup:[0,0,0], mana_regen_skillup:0, cPierce_skillup:0, lPierce_skillup:0, fPierce_skillup:0, cDamage_skillup:0, lDamage_skillup:0, fDamage_skillup:0, block_skillup:0, velocity_skillup:0};
 var base_stats = {level:1, skillpoints:0, statpoints:0, quests_completed:-1, running:-1, difficulty:3, strength_added:0, dexterity_added:0, vitality_added:0, energy_added:0, fRes_penalty:100, cRes_penalty:100, lRes_penalty:100, pRes_penalty:100, mRes_penalty:100, fRes:0, cRes:0, lRes:0, pRes:0, mRes:0, fRes_max_base:75, cRes_max_base:75, lRes_max_base:75, pRes_max_base:75, mRes_max_base:75, set_bonuses:[0,0,{},{},{},{},{}]}
@@ -45,6 +45,181 @@ function update() {
 	updateSkills()
 	if (selectedSkill[0] != " ­ ­ ­ ­ Skill 1") { checkSkill(selectedSkill[0], 1) }
 	if (selectedSkill[1] != " ­ ­ ­ ­ Skill 2") { checkSkill(selectedSkill[1], 2) }
+}
+
+// getCharacterInfo - 
+// return: 
+// ---------------------------------
+function getCharacterInfo() {
+	var not_applicable = [0,1,2,3,'getSkillData','getBuffData','updateSelectedSkill','weapon_frames','wereform_frames','edged_skillup','blunt_skillup','pole_skillup','thrown_skillup','claw_skillup','skill_layout','name','type','rarity','not','only','ctc','cskill','set_bonuses','group','size','upgrade','downgrade','aura'];	// TODO: Prevent item qualities from being added as character qualities
+	var charInfo = "{character:{";
+	for (stat in character) {
+		var halt = 0;
+		for (let i = 0; i < not_applicable.length; i++) { if (stat == not_applicable[i]) { halt = 1 } }
+		if (halt == 0 && character[stat] != 0 && character[stat] != "") { charInfo += (stat+":"+character[stat]+",") }
+	}
+	// TODO: Add ctc, cskill, 'skillup' stats
+	charInfo += "},skills:["
+//	for (let s = 0; s < skills.length; s++) { charInfo += "{level:"+skills[s].level+",extra_levels:"+skills[s].extra_levels+",force_levels:"+skills[s].force_levels+"}," }
+	for (let s = 0; s < skills.length; s++) { charInfo += "["+skills[s].level+","+skills[s].extra_levels+","+skills[s].force_levels+"]," }
+	charInfo += "],equipped:{helm:{" + getArrayText(equipped.helm)
+	charInfo += "},armor:{" + getArrayText(equipped.armor)
+	charInfo += "},gloves:{" + getArrayText(equipped.gloves)
+	charInfo += "},boots:{" + getArrayText(equipped.boots)
+	charInfo += "},belt:{" + getArrayText(equipped.belt)
+	charInfo += "},amulet:{" + getArrayText(equipped.amulet)
+	charInfo += "},ring1:{" + getArrayText(equipped.ring1)
+	charInfo += "},ring2:{" + getArrayText(equipped.ring2)
+	charInfo += "},weapon:{" + getArrayText(equipped.weapon)
+	charInfo += "},offhand:{" + getArrayText(equipped.offhand)
+	charInfo += "},charms:{"
+	for (let c = 0; c < equipped.charms.length; c++) { equipped.charms[c]+":{"+getArrayText(equipped.charms[c])+"}," }
+	charInfo += "}},mercEquipped:{helm:{" + getArrayText(mercEquipped.helm)
+	charInfo += "},armor:{" + getArrayText(mercEquipped.armor)
+	charInfo += "},weapon:{" + getArrayText(mercEquipped.weapon)
+	charInfo += "},offhand:{" + getArrayText(mercEquipped.offhand)
+	charInfo += "}},corruptsEquipped:{helm:{" + getArrayText(corruptsEquipped.helm)
+	charInfo += "},armor:{" + getArrayText(corruptsEquipped.armor)
+	charInfo += "},gloves:{" + getArrayText(corruptsEquipped.gloves)
+	charInfo += "},boots:{" + getArrayText(corruptsEquipped.boots)
+	charInfo += "},belt:{" + getArrayText(corruptsEquipped.belt)
+	charInfo += "},amulet:{" + getArrayText(corruptsEquipped.amulet)
+	charInfo += "},ring1:{" + getArrayText(corruptsEquipped.ring1)
+	charInfo += "},ring2:{" + getArrayText(corruptsEquipped.ring2)
+	charInfo += "},weapon:{" + getArrayText(corruptsEquipped.weapon)
+	charInfo += "},offhand:{" + getArrayText(corruptsEquipped.offhand)
+
+	charInfo += "}}"
+	// TODO: Add effects
+	// TODO: Add duplicateEffects
+	// TODO: Add skillList
+	// TODO: Add skillOptions
+	// TODO: Add selectedSkill
+	// TODO: Add mercenary
+	// TODO: Add offhandType
+	// TODO: Add settings (coupling, autocast)
+	// TODO: Add socketed (helm, armor, weapon, offhand)
+	// TODO: Add inv (1-40)
+	charInfo += "}"
+	return charInfo
+}
+
+// getArrayText - 
+// return: 
+// ---------------------------------
+function getArrayText(array) {
+	// TODO: Add parameter for exceptions?
+	var arrayText = "";
+	for (stat in array) {
+		if (character[stat] != 0 && character[stat] != "") {	// temporary? (stats with default values not added to reduce clutter)
+			if (stat == "not" || stat == "ctc" || stat == "cskill" || stat == "set_bonuses") {
+				// TODO: Implement
+			} else if (stat == "name" || stat == "type" || stat == "base" || stat == "img" || stat == "rarity" || stat == "only" || stat == "aura" || stat == "group" || stat == "size" || stat == "upgrade" || stat == "downgrade") {
+				arrayText += (stat+":'"+array[stat]+"',")
+			} else {
+				arrayText += (stat+":"+array[stat]+",")
+			}
+		}
+	}
+	return arrayText
+}
+
+// saveTextAsFile - 
+// ---------------------------------
+function saveTextAsFile() {
+	document.getElementById("inputTextToSave").value = getCharacterInfo().split(",}").join("}").split(",]").join("]")
+	fileInfo = getCharacterInfo().split(",}").join("}").split(",]").join("]")
+
+	var textToSave = document.getElementById("inputTextToSave").value;
+	var textToSaveAsBlob = new Blob([textToSave], {type:"text/plain"});
+	var textToSaveAsURL = window.URL.createObjectURL(textToSaveAsBlob);
+
+	var downloadLink = document.createElement("a");
+	downloadLink.download = "pod_"+character.class_name.toLowerCase();
+	downloadLink.innerHTML = "Download File";
+	downloadLink.href = textToSaveAsURL;
+	downloadLink.onclick = destroyClickedElement;
+	downloadLink.style.display = "none";
+	document.body.appendChild(downloadLink);
+
+	downloadLink.click();
+}
+
+// destroyClickedElement - 
+// ---------------------------------
+function destroyClickedElement(event) {
+	document.body.removeChild(event.target);
+}
+
+// loadFileAsText - 
+// ---------------------------------
+function loadFileAsText() {
+	var fileToLoad = document.getElementById("fileToLoad").files[0];
+	var textFromFileLoaded = "";
+	var fileReader = new FileReader();
+	fileReader.onload = function(fileLoadedEvent) {
+		textFromFileLoaded = fileLoadedEvent.target.result;
+		document.getElementById("inputTextToSave").value = fileLoadedEvent.target.result;
+		parseFile(textFromFileLoaded)
+		setCharacterInfo(fileInfo.character.class_name.toLowerCase())
+	};
+	fileReader.readAsText(fileToLoad, "UTF-8");
+}
+
+// parseFile - 
+//	file: text from file
+// ---------------------------------
+function parseFile(file) {
+	var temp = file.split("character:{")[1].split("},skills:")[0].split(",");
+	for (let i = 0; i < temp.length; i++) {
+		var split = temp[i].split(":");
+		var val = split[1];
+		if (isNaN(Number(val)) == false) { val = Number(val) }
+		fileInfo.character[split[0]] = val
+	}
+	temp = file.split("skills:[[")[1].split("]]")[0].split("],[");
+	for (let s = 0; s < temp.length; s++) {
+		//temp[s] = "["+temp[s]+"]"
+		if (typeof(fileInfo.skills[s]) == 'undefined') { fileInfo.skills[s] = [] }
+		fileInfo.skills[s][0] = temp[s][0]
+		fileInfo.skills[s][1] = temp[s][1]
+		fileInfo.skills[s][2] = temp[s][2]
+	}
+}
+
+// setCharacterInfo - 
+// ---------------------------------
+function setCharacterInfo(className) {
+	startup(className)
+	// TODO: Add effects
+	// TODO: Add duplicateEffects
+	// TODO: Add skillList
+	// TODO: Add skillOptions
+	// TODO: Add selectedSkill
+	// TODO: Add mercenary
+	// TODO: Add offhandType
+	// TODO: Add settings (coupling, autocast)
+	// TODO: Add socketed (helm, armor, weapon, offhand)
+	// TODO: Add inv (1-40)
+	
+	// TODO: charms
+/*	for (item in info.equipped.charms) {
+		addCharm(info.equipped.charms[item].name)
+	}
+	for (group in corruptsEquipped) {
+		equip(group,info.equipped[group].name)
+		corrupt(group,info.corruptsEquipped[group].name)
+		//for (stat in info.equipped[group]) { equipped[group][stat] = info.equipped[group][stat] }
+		//for (stat in info.corruptsEquipped[group]) { corruptsEquipped[group][stat] = info.corruptsEquipped[group][stat] }
+	}
+*/	// TODO: socketed
+	// TODO: fix skill saving/loading
+	for (let s = 0; s < skills.length; s++) { skills[s].level = fileInfo.skills[s][0]; skills[s].extra_levels = fileInfo.skills[s][1]; skills[s].force_levels = fileInfo.skills[s][2]; showBaseLevels(skills[s]) }
+	for (stat in fileInfo.character) {
+		character[stat] = fileInfo.character[stat]
+	}
+//	updateStats()
+//	updateAllEffects()
 }
 
 // loadEquipment - Loads equipment/charm info to the appropriate dropdowns
@@ -365,7 +540,9 @@ function corrupt(group, val) {
 			if (corruptions[group][outcome].name == val && (group != "offhand" || (offhandType == corruptions[group][outcome].base || offhandType == "none"))) {
 				for (affix in corruptions[group][outcome]) {
 					corruptsEquipped[group][affix] = corruptions[group][outcome][affix]
-					character[affix] += corruptions[group][outcome][affix]
+					if (affix != "name" && affix != "base") {
+						character[affix] += corruptions[group][outcome][affix]
+					}
 					//if (affix == e_def) { corruptsEquipped[group].defense = equipped[group].defense * (1+corruptsEquipped[group][affix]) - equipped[group].defense; character.defense += corruptsEquipped.defense; }
 				}
 			}
@@ -450,7 +627,7 @@ function equipMerc(group, val) {
 // ---------------------------------
 function equip(group, val) {
 	var auraName = "";
-	var auraLevel = "";
+	var auraLevel = 0;
 	var old_set_bonuses = "";
 	var old_set = "";
 	var old_set_before = 0;
@@ -460,14 +637,14 @@ function equip(group, val) {
 	var set_before = 0;
 	var set_after = 0;
 	
-	// check if item was imported from a different category
+	// check if item was imported from a different category (offhand weapons)
 	var src_group = group;
 	var found = 0;
-	for (item in equipment[group]) { if (equipment[group][item].name == val) { found = 1 } }
-	if (found == 0 && group == "offhand") {
-		src_group = "weapon"
-		for (item in equipment[src_group]) { if (equipment[src_group][item].name == val) { twoHanded = equipment[src_group][item].twoHanded; if (typeof(equipment[src_group][item].type) != 'undefined') itemType = equipment[src_group][item].type } }
-	}
+	if (group == "offhand") { for (item in equipment[group]) { if (equipment[group][item].name == val) { found = 1 } } }
+	if (found == 0 && group == "offhand") { src_group = "weapon" }
+	var itemType = "";
+	var twoHanded = 0;
+	for (item in equipment[src_group]) { if (equipment[src_group][item].name == val) { twoHanded = equipment[src_group][item].twoHanded; if (typeof(equipment[src_group][item].type) != 'undefined') { itemType = equipment[src_group][item].type } } }
 	
 	for (old_affix in equipped[group]) { if (old_affix == "set_bonuses") { old_set_bonuses = equipped[group].set_bonuses } }
 	for (item in equipment[src_group]) { if (equipment[src_group][item].name == val) { if (typeof(equipment[src_group][item].set_bonuses) != 'undefined') { set_bonuses = equipment[src_group][item].set_bonuses } } }
@@ -475,13 +652,13 @@ function equip(group, val) {
 	if (old_set_bonuses != "") { old_set = old_set_bonuses[0]; old_set_before = character[old_set]; }
 	
 	// if replacing an item, previous item's affixes are removed from character
-	for (old_affix in equipped[group]) {
+	for (old_affix in equipped[group]) { if (typeof(character[old_affix]) != 'undefined') {
 		character[old_affix] -= equipped[group][old_affix]
 		if (old_affix == "aura") {
 			removeEffect(equipped[group][old_affix].split(' ').join('_')+"-"+group)
 		}
 		if (old_affix != "set_bonuses" && old_affix != "aura" && old_affix != "aura_lvl") { equipped[group][old_affix] = unequipped[old_affix] }
-	}
+	} }
 	// remove set bonuses from previous item
 	if (old_set_bonuses != "") {
 		old_set_after = character[old_set];
@@ -518,69 +695,65 @@ function equip(group, val) {
 		}
 	}
 	
-	var twoHanded = 0;
-	var itemType = "";
-	for (item in equipment[src_group]) { if (equipment[src_group][item].name == val) { twoHanded = equipment[src_group][item].twoHanded; if (typeof(equipment[src_group][item].type) != 'undefined') itemType = equipment[src_group][item].type } }
-
 	// add affixes to character
 	for (item in equipment[src_group]) {
 		if (equipment[src_group][item].name == val) {
 			// add affixes from base item
-			if (typeof(equipment[src_group][item]["base"]) != 'undefined') { if (equipment[src_group][item]["base"] != "") {
-				var base = equipment[src_group][item].base; base = base.split(' ').join('_'); base = base.split('-').join('_'); base = base.split("'s").join("s");	// spaces, hyphens, and apostrophes converted to match named entry in bases{}
-				if (typeof(bases[base]) != 'undefined') { for (affix in bases[base]) { if (affix != "group" && affix != "type" && affix != "upgrade" && affix != "downgrade" && affix != "subtype" && affix != "only") {
-					var multEth = 1;
-					var multED = 1;
-					var multReq = 1;
-					var reqEth = 0;
-					
-					if (typeof(equipment[src_group][item]["ethereal"]) != 'undefined') { if (equipment[src_group][item]["ethereal"] == 1) { multEth = 1.5; reqEth = 10; } }
-					if (affix == "base_defense") { if (typeof(equipment[src_group][item]["e_def"]) != 'undefined') { multED += (equipment[src_group][item]["e_def"]/100) } }
-					else if (affix == "req_strength" || affix == "req_dexterity") { if (typeof(equipment[src_group][item]["req"]) != 'undefined') { multReq += (equipment[src_group][item]["req"]/100) } }
-					
-					if (typeof(equipped[group][affix]) == 'undefined') { equipped[group][affix] = unequipped[affix] }	// undefined (new) affixes get initialized to zero
-					
-					if (affix == "base_damage_min" || affix == "base_damage_max" || affix == "throw_min" || affix == "throw_max" || affix == "base_min_alternate" || affix == "base_max_alternate" || affix == "base_defense") {
-						equipped[group][affix] = Math.ceil(multEth*multED*bases[base][affix])
-						character[affix] += Math.ceil(multEth*multED*bases[base][affix])
+			if (typeof(equipment[src_group][item]["base"]) != 'undefined') {
+				var base = getBaseId(equipment[src_group][item].base);
+				var multEth = 1;
+				var multED = 1;
+				var multReq = 1;
+				var reqEth = 0;
+				if (typeof(equipment[src_group][item]["ethereal"]) != 'undefined') { if (equipment[src_group][item]["ethereal"] == 1) { multEth = 1.5; reqEth = 10; } }
+				if (typeof(equipment[src_group][item]["e_def"]) != 'undefined') { multED += (equipment[src_group][item]["e_def"]/100) }
+				if (typeof(equipment[src_group][item]["req"]) != 'undefined') { multReq += (equipment[src_group][item]["req"]/100) }
+				if (typeof(bases[base]) != 'undefined') { for (affix in bases[base]) {
+					if (affix != "group" && affix != "type" && affix != "upgrade" && affix != "downgrade" && affix != "subtype" && affix != "only" && affix != "def_low" && affix != "def_high" && affix != "durability" && affix != "range" && affix != "twoHands") {	// test: twoHands still unused elsewhere? okay here?
+						if (typeof(equipped[group][affix]) == 'undefined') { equipped[group][affix] = unequipped[affix] }	// undefined (new) affixes get initialized to zero
+						if (affix == "base_defense") {										// TODO: consider renaming? ...group_defense, combined_defense, item_def, etc
+							equipped[group][affix] = Math.ceil(multEth*multED*bases[base][affix])
+							character[affix] += Math.ceil(multEth*multED*bases[base][affix])
+						} else if (affix == "base_damage_min" || affix == "base_damage_max" || affix == "throw_min" || affix == "throw_max" || affix == "base_min_alternate" || affix == "base_max_alternate") {
+							equipped[group][affix] = Math.ceil(multEth*bases[base][affix])
+							character[affix] += Math.ceil(multEth*bases[base][affix])
+						} else if (affix == "req_strength" || affix == "req_dexterity") {
+							equipped[group][affix] = Math.max(0,Math.ceil(multReq*bases[base][affix] - reqEth))
+						} else {
+							equipped[group][affix] = bases[base][affix]
+							character[affix] += bases[base][affix]
+						}
 					}
-					else if (affix == "req_strength" || affix == "req_dexterity") {
-						equipped[group][affix] = Math.ceil(multReq*bases[base][affix] - reqEth)
-					}
-					else {
-						equipped[group][affix] = bases[base][affix]
-						character[affix] += bases[base][affix]
-					}
-				} } }
-			} }
+				} }
+			}
 			// add regular affixes
 			for (affix in equipment[src_group][item]) {
-				if (typeof(equipped[group][affix]) == 'undefined') { equipped[group][affix] = unequipped[affix] }
-				if (affix != "damage_vs_undead") { equipped[group][affix] = equipment[src_group][item][affix] } else { equipped[group][affix] += equipment[src_group][item][affix] }
-				if (affix == "aura" || affix == "name" || affix == "type" || affix == "base" || affix == "only" || affix == "not" || affix == "img") {
+				if (typeof(equipped[group][affix]) == 'undefined') { equipped[group][affix] = unequipped[affix] }	// initialize undefined affixes
+				if (affix == "damage_vs_undead") {									// damage_vs_undead is the only additive affix included in both bases[] (automods) and equipment[] (regular affixes)
+					equipped[group][affix] += equipment[src_group][item][affix]
+					character[affix] += equipment[src_group][item][affix]
+				} else if (affix == "name" || affix == "type" || affix == "base" || affix == "only" || affix == "not" || affix == "img" || affix == "rarity" || affix == "size" || affix == "req" || affix == "ethereal" || affix == "indestructible" || affix == "autorepair" || affix == "autoreplenish" || affix == "stack_size" || affix == "set_bonuses" || affix == "pod_changes" || affix == "aura_lvl" || affix == "twoHanded" || affix == "sockets" || affix == "e_def" || affix == "ctc" || affix == "cskill") {	// no need to add these as character affixes
+					equipped[group][affix] = equipment[src_group][item][affix]
+				} else {
+					equipped[group][affix] = equipment[src_group][item][affix]
 					if (affix == "aura") {
 						auraName = equipment[src_group][item][affix]
 						auraLevel = equipment[src_group][item].aura_lvl
-					}
-				} else if (affix == "sup") {
+					} else if ((affix == "sup" || affix == "e_damage") && src_group == "weapon") {
+						if (affix == "sup") { equipped[group][affix] = equipment[src_group][item][affix] }
 						equipped[group]["e_damage"] += equipment[src_group][item][affix]
 						character["e_damage"] += equipment[src_group][item][affix]
-				} else if (affix == "req_strength" || affix == "req_dexterity") {
-					if (equipment[src_group][item][affix] > equipped[group][affix]) { equipped[group][affix] = equipment[src_group][item][affix] }
-				} else {
-					var oskill_info = "";
-					for (let o = 0; o < oskills.length; o++) {
-						if (affix == oskills[o]) {
-							oskill_info = oskills_info[oskills[o]]
-						}
-					}
-					if (oskill_info != "") {
-						if (oskill_info.native_class == character.class_name.toLowerCase()) {
-							if (equipment[src_group][item][affix] > 3) { equipped[group][affix] -= (equipment[src_group][item][affix]-3) }	// oskills are capped at 3 for 'native' classes
-						}
-						character[affix] += equipped[group][affix]
+					} else if (affix == "req_strength" || affix == "req_dexterity") {
+						if (equipment[src_group][item][affix] > equipped[group][affix]) { equipped[group][affix] = equipment[src_group][item][affix] }
 					} else {
-						character[affix] += equipment[src_group][item][affix]
+						var oskill_info = "";
+						for (let o = 0; o < oskills.length; o++) { if (affix == oskills[o]) { oskill_info = oskills_info[oskills[o]] } }
+						if (oskill_info != "") {
+							if (oskill_info.native_class == character.class_name.toLowerCase()) { if (equipment[src_group][item][affix] > 3) { equipped[group][affix] -= (equipment[src_group][item][affix]-3) } }	// oskills are capped at 3 for 'native' classes
+							character[affix] += equipped[group][affix]
+						} else {
+							character[affix] += equipment[src_group][item][affix]
+						}
 					}
 				}
 			}
@@ -670,7 +843,7 @@ function equip(group, val) {
 		document.getElementById(group+"_image").src = "./images/items/none.png"
 	}
 	
-	if (auraName != "" && auraLevel != "") {		// TODO: Why does this break things if called earlier? (item image wasn't appearing)
+	if (auraName != "" && auraLevel != 0) {		// TODO: Why does this break things if called earlier? (item image wasn't appearing)
 		addEffect("aura",auraName,auraLevel,group)
 	}
 	update()
@@ -827,8 +1000,10 @@ function addCharm(val) {
 			for (item in equipment[ch]) {
 				if (equipment[ch][item].name == nameVal) {
 					for (affix in equipment[ch][item]) {
-						character[affix] += equipment[ch][item][affix]
 						equipped[ch][val][affix] = equipment[ch][item][affix]
+						if (affix != "name" && affix != "only" && affix != "rarity" && affix != "size" && affix != "pod_changes" && affix != "req_level") {
+							character[affix] += equipment[ch][item][affix]
+						}
 					}
 				}
 			}
@@ -1147,8 +1322,7 @@ function updateEffect(id) {
 //	id: the effect's id
 // ---------------------------------
 function trackDuplicateEffects(id) {
-	// TODO: Auras gained from items need unique IDs? They should be stored, and only one should be active at a time
-	//document.getElementById("l4").innerHTML = "duplicate effect: "+id
+	// unneeded?
 }
 
 // hoverEffectOn - 
@@ -1402,21 +1576,23 @@ function updatePrimaryStats() {
 	document.getElementById("class_name").innerHTML = c.class_name
 	document.getElementById("remainingstats").innerHTML = c.statpoints
 	document.getElementById("remainingskills").innerHTML = c.skillpoints
-	document.getElementById("fres").innerHTML = (c.fRes + c.all_res - c.fRes_penalty + c.resistance_skillup) + " / " + Math.min(RES_CAP,(c.fRes_max_base + c.fRes_max + c.fRes_skillup))
-	document.getElementById("cres").innerHTML = (c.cRes + c.all_res - c.cRes_penalty + c.resistance_skillup) + " / " + Math.min(RES_CAP,(c.cRes_max_base + c.cRes_max + c.cRes_skillup))
-	document.getElementById("lres").innerHTML = (c.lRes + c.all_res - c.lRes_penalty + c.resistance_skillup) + " / " + Math.min(RES_CAP,(c.lRes_max_base + c.lRes_max + c.lRes_skillup))
-	document.getElementById("pres").innerHTML = (c.pRes + c.all_res - c.pRes_penalty + c.resistance_skillup) + " / " + Math.min(RES_CAP,(c.pRes_max_base + c.pRes_max + c.pRes_skillup))
+	document.getElementById("fres").innerHTML = (c.fRes + c.all_res - c.fRes_penalty + c.resistance_skillup) + " / " + Math.min(RES_CAP,(c.fRes_max_base + c.fRes_max + c.fRes_skillup)) + "%"
+	document.getElementById("cres").innerHTML = (c.cRes + c.all_res - c.cRes_penalty + c.resistance_skillup) + " / " + Math.min(RES_CAP,(c.cRes_max_base + c.cRes_max + c.cRes_skillup)) + "%"
+	document.getElementById("lres").innerHTML = (c.lRes + c.all_res - c.lRes_penalty + c.resistance_skillup) + " / " + Math.min(RES_CAP,(c.lRes_max_base + c.lRes_max + c.lRes_skillup)) + "%"
+	document.getElementById("pres").innerHTML = (c.pRes + c.all_res - c.pRes_penalty + c.resistance_skillup) + " / " + Math.min(RES_CAP,(c.pRes_max_base + c.pRes_max + c.pRes_skillup)) + "%"
 	var magicRes = (c.mRes - c.mRes_penalty)+"%";
 	if (c.mDamage_reduced > 0) { magicRes += (" +"+c.mDamage_reduced) }
 	document.getElementById("mres").innerHTML = magicRes
 	
 	var ias = c.ias + c.ias_skill + Math.floor(dexTotal/8)*c.ias_per_8_dexterity;
 	if (offhandType == "weapon" && typeof(equipped.offhand.ias) != 'undefined') { ias -= equipped.offhand.ias }
-	document.getElementById("ias").innerHTML = ias+"%"
+	if (ias != 0) { ias += "%" }
+	document.getElementById("ias").innerHTML = ias
 	if (equipped.weapon.type != "") {
 		var eIAS = Math.floor(120*ias/(120+ias));
 		var weaponFrames = 0;
 		if (weaponType != "") {
+			// TODO: Check weapon speed for 'thrown' weapons - additional penalty?
 			if (weaponType == "club" || weaponType == "hammer") { weaponType = "mace" }
 			weaponFrames = c.weapon_frames[weaponType];
 			if (c.class_name == "Druid") {
@@ -1435,34 +1611,43 @@ function updatePrimaryStats() {
 // ---------------------------------
 function updateSecondaryStats() {
 	var c = character;
-	var physRes = c.pdr+"%";
-	if (c.damage_reduced > 0) { physRes += (" +"+c.damage_reduced) }
+//	var physRes = c.pdr; if (c.pdr > 0 || c.damage_reduced > 0) { physRes += "%" }
+//	if (c.damage_reduced > 0) { physRes += (" +"+c.damage_reduced) }
+//	document.getElementById("pdr").innerHTML = physRes
+
+	var physRes = ""; if (c.pdr > 0) { physRes = c.pdr+"% " }
+	if (c.damage_reduced > 0) { physRes += ("+"+c.damage_reduced) }
+	if (c.pdr == 0 && c.damage_reduced == 0) { physRes = 0 }
 	document.getElementById("pdr").innerHTML = physRes
-	var fAbs = c.fAbsorb+"%";
-	if (c.fAbsorb_flat > 0 || c.fAbsorb_flat_per_level > 0) { fAbs += (" +"+Math.floor(c.fAbsorb_flat + (c.level*c.fAbsorb_flat_per_level))) }
+
+	var fAbs = ""; if (c.fAbsorb > 0) { fAbs = c.fAbsorb+"% " }
+	if (c.fAbsorb_flat > 0 || c.fAbsorb_flat_per_level > 0) { fAbs += ("+"+Math.floor(c.fAbsorb_flat + (c.level*c.fAbsorb_flat_per_level))) }
+	if (c.fAbsorb == 0 && c.fAbsorb_flat == 0 && c.fAbsorb_flat_per_level == 0) { fAbs = 0 }
 	document.getElementById("fabsorb").innerHTML = fAbs
-	var cAbs = c.cAbsorb+"%";
-	if (c.cAbsorb_flat > 0 || c.cAbsorb_flat_per_level > 0) { cAbs += (" +"+Math.floor(c.cAbsorb_flat + (c.level*c.cAbsorb_flat_per_level))) }
+	var cAbs = ""; if (c.cAbsorb > 0) { cAbs = c.cAbsorb+"% " }
+	if (c.cAbsorb_flat > 0 || c.cAbsorb_flat_per_level > 0) { cAbs += ("+"+Math.floor(c.cAbsorb_flat + (c.level*c.cAbsorb_flat_per_level))) }
+	if (c.cAbsorb == 0 && c.cAbsorb_flat == 0 && c.cAbsorb_flat_per_level == 0) { cAbs = 0 }
 	document.getElementById("cabsorb").innerHTML = cAbs
-	var lAbs = c.lAbsorb+"%";
-	if (c.lAbsorb_flat > 0) { lAbs += (" +"+c.lAbsorb_flat) }
+	var lAbs = ""; if (c.lAbsorb > 0) { lAbs = c.lAbsorb+"% " }
+	if (c.lAbsorb_flat > 0) { lAbs += ("+"+c.lAbsorb_flat) }
+	if (c.lAbsorb == 0 && c.lAbsorb_flat == 0) { lAbs = 0 }
 	document.getElementById("labsorb").innerHTML = lAbs
 	document.getElementById("mabsorb").innerHTML = c.mAbsorb_flat
 	
-	document.getElementById("cdr").innerHTML = c.cdr
-	document.getElementById("fcr").innerHTML = c.fcr + Math.floor(c.level*c.fcr_per_level)
-	document.getElementById("fbr").innerHTML = c.fbr
-	document.getElementById("fhr").innerHTML = c.fhr
+	document.getElementById("cdr").innerHTML = c.cdr; if (c.cdr > 0) { document.getElementById("cdr").innerHTML += "%" }
+	document.getElementById("fcr").innerHTML = (c.fcr + Math.floor(c.level*c.fcr_per_level)); if (c.fcr > 0 || c.fcr_per_level > 0) { document.getElementById("fcr").innerHTML += "%" }
+	document.getElementById("fbr").innerHTML = c.fbr; if (c.fbr > 0) { document.getElementById("fbr").innerHTML += "%" }
+	document.getElementById("fhr").innerHTML = c.fhr; if (c.fhr > 0) { document.getElementById("fhr").innerHTML += "%" }
 	
 	// actual movespeed
 	var movespeed = 9;
 	var movement = (1 + (Math.floor(150*c.frw/(150+c.frw)) + c.frw_skillup + c.velocity)/100);
 	if (c.running > 0) { movespeed = round(9 * movement) } else { movespeed = round(6 * movement) }
 	document.getElementById("velocity").innerHTML = movespeed + " yds/s"
-	document.getElementById("frw").innerHTML = Math.floor(c.frw + c.frw_skillup)+"%"
+	document.getElementById("frw").innerHTML = Math.floor(c.frw + c.frw_skillup); if (c.frw > 0 || c.frw_skillup > 0) { document.getElementById("frw").innerHTML += "%" }
 	
-	document.getElementById("life_leech").innerHTML = c.life_leech
-	document.getElementById("mana_leech").innerHTML = c.mana_leech
+	document.getElementById("life_leech").innerHTML = c.life_leech; if (c.life_leech > 0) { document.getElementById("life_leech").innerHTML += "%" }
+	document.getElementById("mana_leech").innerHTML = c.mana_leech; if (c.mana_leech > 0) { document.getElementById("mana_leech").innerHTML += "%" }
 	var LPH = c.life_per_hit + "m , " + c.life_per_ranged_hit + "r";
 	if (LPH == "0m , 0r") { LPH = 0 }
 	document.getElementById("life_per_hit").innerHTML = LPH
@@ -1470,51 +1655,50 @@ function updateSecondaryStats() {
 	if (MPH == "0m , 0r") { MPH = 0 }
 	document.getElementById("mana_per_hit").innerHTML = MPH
 	
-	document.getElementById("fdamage").innerHTML = c.fDamage + c.fDamage_skillup
-	document.getElementById("cdamage").innerHTML = c.cDamage + c.cDamage_skillup
-	document.getElementById("ldamage").innerHTML = c.lDamage + c.lDamage_skillup
-	document.getElementById("pdamage").innerHTML = c.pDamage
-	document.getElementById("fpierce").innerHTML = c.fPierce + c.fPierce_skillup
-	document.getElementById("cpierce").innerHTML = c.cPierce + c.cPierce_skillup
-	document.getElementById("lpierce").innerHTML = c.lPierce + c.lPierce_skillup
-	document.getElementById("ppierce").innerHTML = c.pPierce
+	document.getElementById("fdamage").innerHTML = c.fDamage + c.fDamage_skillup; if (c.fDamage > 0 || c.fDamage_skillup > 0) { document.getElementById("fdamage").innerHTML += "%" }
+	document.getElementById("cdamage").innerHTML = c.cDamage + c.cDamage_skillup; if (c.cDamage > 0 || c.cDamage_skillup > 0) { document.getElementById("cdamage").innerHTML += "%" }
+	document.getElementById("ldamage").innerHTML = c.lDamage + c.lDamage_skillup; if (c.lDamage > 0 || c.lDamage_skillup > 0) { document.getElementById("ldamage").innerHTML += "%" }
+	document.getElementById("pdamage").innerHTML = c.pDamage; if (c.pDamage > 0) { document.getElementById("pdamage").innerHTML += "%" }
+	document.getElementById("fpierce").innerHTML = c.fPierce + c.fPierce_skillup; if (c.fPierce > 0 || c.fPierce_skillup > 0) { document.getElementById("fpierce").innerHTML += "%" }
+	document.getElementById("cpierce").innerHTML = c.cPierce + c.cPierce_skillup; if (c.cPierce > 0 || c.cPierce_skillup > 0) { document.getElementById("cpierce").innerHTML += "%" }
+	document.getElementById("lpierce").innerHTML = c.lPierce + c.lPierce_skillup; if (c.lPierce > 0 || c.lPierce_skillup > 0) { document.getElementById("lpierce").innerHTML += "%" }
+	document.getElementById("ppierce").innerHTML = c.pPierce; if (c.pPierce > 0) { document.getElementById("ppierce").innerHTML += "%" }
 	
-	document.getElementById("pierce").innerHTML = c.pierce + c.pierce_skillup
-	document.getElementById("cblow").innerHTML = c.cblow
-	document.getElementById("dstrike").innerHTML = c.dstrike + Math.floor(c.level*c.dstrike_per_level)
-	document.getElementById("cstrike").innerHTML = c.cstrike + c.cstrike_skillup
-	document.getElementById("owounds").innerHTML = c.owounds
+	document.getElementById("pierce").innerHTML = c.pierce + c.pierce_skillup; if (c.pierce > 0 || c.pierce_skillup > 0) { document.getElementById("pierce").innerHTML += "%" }
+	document.getElementById("cblow").innerHTML = c.cblow; if (c.cblow > 0) { document.getElementById("cblow").innerHTML += "%" }
+	document.getElementById("dstrike").innerHTML = c.dstrike + Math.floor(c.level*c.dstrike_per_level); if (c.dstrike > 0) { document.getElementById("dstrike").innerHTML += "%" }
+	document.getElementById("cstrike").innerHTML = c.cstrike + c.cstrike_skillup; if (c.cstrike > 0 || c.cstrike_skillup > 0) { document.getElementById("cstrike").innerHTML += "%" }
+	document.getElementById("owounds").innerHTML = c.owounds; if (c.owounds > 0) { document.getElementById("owounds").innerHTML += "%" }
 	
-	document.getElementById("mf").innerHTML = Math.floor(c.mf + c.level*c.mf_per_level)
-	document.getElementById("gf").innerHTML = c.gf
+	document.getElementById("mf").innerHTML = Math.floor(c.mf + c.level*c.mf_per_level); if (c.mf != 0 || c.mf_per_level != 0) { document.getElementById("mf").innerHTML += "%" }
+	document.getElementById("gf").innerHTML = c.gf; if (c.gf != 0) { document.getElementById("gf").innerHTML += "%" }
 	
-	document.getElementById("damage_vs_demons").innerHTML = c.damage_vs_demons
-	document.getElementById("damage_vs_undead").innerHTML = Math.floor(c.damage_vs_undead + c.level*c.damage_vs_undead_per_level)
+	document.getElementById("damage_vs_demons").innerHTML = c.damage_vs_demons; if (c.damage_vs_demons > 0) { document.getElementById("damage_vs_demons").innerHTML += "%" }
+	document.getElementById("damage_vs_undead").innerHTML = Math.floor(c.damage_vs_undead + c.level*c.damage_vs_undead_per_level); if (c.damage_vs_undead > 0 || c.damage_vs_undead_per_level > 0) { document.getElementById("damage_vs_undead").innerHTML += "%" }
 	document.getElementById("ar_vs_demons").innerHTML = c.ar_vs_demons
 	document.getElementById("ar_vs_undead").innerHTML = Math.floor(c.ar_vs_undead + c.level*c.ar_vs_undead_per_level)
 	
 	if (c.life_per_demon_kill > 0) { document.getElementById("life_per_kill").innerHTML = c.life_per_kill + " , " + c.life_per_demon_kill + " (demons)" } else { document.getElementById("life_per_kill").innerHTML = c.life_per_kill }
 	document.getElementById("mana_per_kill").innerHTML = c.mana_per_kill
 	var lifeRegen = "";
-	if (c.life_regen > 0) { lifeRegen = c.life_regen+"% " }
-	lifeRegen += ("+"+c.life_replenish)
+	if (c.life_regen > 0) { lifeRegen = c.life_regen+"% " }; if (c.life_replenish > 0) { lifeRegen += ("+"+c.life_replenish) }; if (c.life_regen == 0 && c.life_replenish == 0) { lifeRegen = 0 }
 	document.getElementById("life_regen").innerHTML = lifeRegen
 	document.getElementById("mana_regen").innerHTML = round(c.mana_regen + c.mana_regen_skillup)+"%"
 	
-	document.getElementById("damage_to_mana").innerHTML = c.damage_to_mana
+	document.getElementById("damage_to_mana").innerHTML = c.damage_to_mana; if (c.damage_to_mana > 0) { document.getElementById("damage_to_mana").innerHTML += "%" }
 	
-	document.getElementById("enemy_fres").innerHTML = c.enemy_fRes
-	document.getElementById("enemy_cres").innerHTML = c.enemy_cRes
-	document.getElementById("enemy_lres").innerHTML = c.enemy_lRes
-	document.getElementById("enemy_pres").innerHTML = c.enemy_pRes
+	document.getElementById("enemy_fres").innerHTML = c.enemy_fRes; if (c.enemy_fRes < 0) { document.getElementById("enemy_fres").innerHTML += "%" }
+	document.getElementById("enemy_cres").innerHTML = c.enemy_cRes; if (c.enemy_cRes < 0) { document.getElementById("enemy_cres").innerHTML += "%" }
+	document.getElementById("enemy_lres").innerHTML = c.enemy_lRes; if (c.enemy_lRes < 0) { document.getElementById("enemy_lres").innerHTML += "%" }
+	document.getElementById("enemy_pres").innerHTML = c.enemy_pRes; if (c.enemy_pRes < 0) { document.getElementById("enemy_pres").innerHTML += "%" }
 }
 
 // updateTertiaryStats - Updates other stats
 // ---------------------------------
 function updateTertiaryStats() {
 	var c = character;
-	document.getElementById("poison_reduction").innerHTML = "-" + Math.min(75,c.poison_length_reduced) + "%"
-	document.getElementById("curse_reduction").innerHTML = "-" + Math.min(75,c.curse_length_reduced) + "%"
+	document.getElementById("poison_reduction").innerHTML = Math.min(75,c.poison_length_reduced); if (c.poison_length_reduced > 0) { document.getElementById("poison_reduction").innerHTML += "%" }
+	document.getElementById("curse_reduction").innerHTML = Math.min(75,c.curse_length_reduced); if (c.curse_length_reduced > 0) { document.getElementById("curse_reduction").innerHTML += "%" }
 	var thorns = c.thorns_reflect;
 	if (c.thorns_reflect == 0) { thorns = Math.floor(c.thorns_lightning + c.thorns + c.level*c.thorns_per_level) } else { thorns += "%"; if (c.thorns > 0 || c.thorns_per_level > 0) { thorns += (" +"+Math.floor(c.thorns_lightning + c.thorns + c.level*c.thorns_per_level)) } }
 	document.getElementById("thorns").innerHTML = thorns
@@ -1766,7 +1950,7 @@ function calculateSkillPassives(className) {
 // checkRequirements - Recolors stats/skills based on unmet item/skill/level requirements
 // ---------------------------------
 function checkRequirements() {
-	var highest_level = 1; var highest_str = 1; var highest_dex = 1;
+	var highest_level = 1; var highest_str = 0; var highest_dex = 0;
 	for (group in equipped) {
 		if (group == "charms") { for (item in equipped[group]) {
 			if (equipped[group][item].req_level > highest_level) { highest_level = equipped[group][item].req_level }
@@ -2185,6 +2369,8 @@ function itemHover(ev, id) {
 	//		lower z-index of cell  (pushes the item above, so it can be grabbed while all its other individual cells are surfaced)
 	// then, 
 	// on mouseout: raise z-level of cell 
+	//
+	// ...this should fix the bug that prevents charms from being moved into an overlapping space below themselves (or to the right for future items wider than 1 space)
 	
 }
 
@@ -2336,16 +2522,16 @@ function trash(ev) {
 
 // getItemImage - gets the image filename for the specified item
 //	group: item's group
-//	base_name: item base
-//	source: specified file name, if it has one
+//	base_name: item base (use "" if none)
+//	source: specified file name, if it has one (use "" if none)
 // return: filename of item's image
 // ---------------------------------
 function getItemImage(group, base_name, source) {
 	var prefix = "./images/items/"
 	var filename = source
-	var base = base_name.split(' ').join('_'); base = base.split('-').join('_'); base = base.split("s'").join("s"); base = base.split("'s").join("s");
+	var base = getBaseId(base_name);
 	if (base_name != "") {
-		if (base_name == "Bolts") { prefix += group + "/" }
+		if (base_name == "Bolts") { prefix += group + "/" }	// only bolts have explicit bases so far (other quivers are assumed to be arrows) ...but importantly, neither are included in bases[]
 		else {
 			prefix += (bases[base].group + "/")
 			if (bases[base].group == "weapon") {
@@ -2362,7 +2548,7 @@ function getItemImage(group, base_name, source) {
 			} else {
 				if (typeof(bases[base].downgrade) != 'undefined') {
 					filename = bases[base].downgrade
-					base = bases[base].downgrade.split(' ').join('_'); base = base.split('-').join('_'); base = base.split("'s").join("s"); base = base.split("s'").join("s");
+					base = getBaseId(bases[base].downgrade)
 					if (typeof(bases[base].downgrade) != 'undefined') {
 						filename = bases[base].downgrade
 					}
@@ -2392,7 +2578,7 @@ function getItemImage(group, base_name, source) {
 			}
 		}
 	}
-	filename = prefix + filename.split(' ').join('_') + ".png"
+	filename = prefix + filename.split(" ").join("_") + ".png"
 	return filename
 }
 
@@ -2409,6 +2595,7 @@ function socketableSelect(ev) {
 //	group: equipment group name
 // ---------------------------------
 function equipmentHover(group) {
+	// TODO: Turn into actual hover-text, instead of using a premade empty area
 	var selected = equipped[group].name;
 	if (selected != "none" && equipped[group].rarity == "rw") {
 		selected = selected.split(" ­ ­ - ­ ­ ")[0]+ " ­ ­ - ­ ­ " + equipped[group].base
@@ -2416,7 +2603,7 @@ function equipmentHover(group) {
 	if (selected != "none" && (group == "helm" || group == "armor" || group == "weapon" || (group == "offhand" && equipped[group].type != "quiver"))) {
 		var sockets = ~~corruptsEquipped[group].sockets + ~~equipped[group].sockets;
 		var base = "";
-		if (typeof(equipped[group].base) != 'undefined') { equipped[group].base.split(' ').join('_'); base = base.split('-').join('_'); base = base.split("s'").join("s"); base = base.split("'s").join("s"); }
+		if (typeof(equipped[group].base) != 'undefined') { base = getBaseId(equipped[group].base) }
 		if (base == "") { sockets = Math.min(sockets,equipped[group].max_sockets) }
 		else { sockets = Math.min(sockets,bases[base].max_sockets) }
 		if (socketed[group].sockets > 0 || equipped[group].sockets > 0) { selected += " ["+sockets+"]" }
@@ -2634,6 +2821,8 @@ function inventoryLeftClick(event, group) {
 	if (mod > 0) {
 		// TODO: Limit to unique/rare/craft/rw (i.e. not sets)
 		if (typeof(equipped[group].base) != 'undefined') { changeBase(group, "upgrade") }
+	} else {
+		// TODO: simulate click() on appropriate equipment dropdown menu?
 	}
 }
 
@@ -2662,11 +2851,11 @@ function changeBase(group, change) {
 	// TODO: Prevent items from being downgraded below their baseline
 	// TODO: Add special cases for quest items?
 	var base_name = equipped[group].base;
-	var base = base_name.split(' ').join('_'); base = base.split('-').join('_'); base = base.split("s'").join("s"); base = base.split("'s").join("s");
+	var base = getBaseId(base_name);
 	if (typeof(bases[base][change]) != 'undefined') {
 		base = bases[base][change];
 		equipped[group].base = base;
-		base = base.split(' ').join('_'); base = base.split('-').join('_'); base = base.split("s'").join("s"); base = base.split("'s").join("s");
+		base = getBaseId(base)
 		// TODO: Reduce duplicated code - very similar to equip()
 		for (affix in bases[base]) { if (affix != "group" && affix != "type" && affix != "upgrade" && affix != "downgrade" && affix != "subtype" && affix != "only") {
 			var multEth = 1;
@@ -2710,10 +2899,18 @@ function hoverFCR() {
 	//document.getElementById("fcr").innerHTML = "testing"//character.fcr + Math.floor(character.level*character.fcr_per_level)
 }
 
-// getId - gets the ID for the given name (replaces spaces with underscores)
+// getId - gets the ID for the given name
 //	name: the name to be changed
-// return: the ID for name
+// return: the ID for name (name with spaces replaced with underscores)
 // ---------------------------------
 function getId(name) {
-	return name.split(' ').join('_')
+	return name.split(' ').join('_');
+}
+
+// getBaseId - gets the base ID for the given base
+//	base_name: the item's base name
+// return: the base ID (base with spaces, hyphens, and apostrophes removed)
+// ---------------------------------
+function getBaseId(base_name) {
+	return base_name.split(" ").join("_").split("-").join("_").split("s'").join("s").split("'s").join("s");
 }

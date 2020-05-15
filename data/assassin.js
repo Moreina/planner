@@ -68,7 +68,7 @@ var character_assassin = {class_name:"Assassin", strength:20, dexterity:20, vita
 		var result = {};
 		var charges = 5;
 		
-		if (skill.name == "Fists of Ember") { if (equipped.weapon.type == "claw" || equipped.weapon.type == "dagger") { result.charge_ember = charges; result.fDamage_min = charges * skill.data.values[0][lvl]; result.fDamage_max = charges * skill.data.values[0][lvl]; result.duration = skill.data.values[1][lvl]; } }	// Consider automatically disabling whenever conditions aren't met? Would need to update effects after equip() ...	} else { disableEffect(1) }
+		if (skill.name == "Fists of Ember") { if (equipped.weapon.type == "claw" || equipped.weapon.type == "dagger") { result.charge_ember = charges; result.fDamage_min = charges * skill.data.values[0][lvl]; result.fDamage_max = charges * skill.data.values[0][lvl]; result.duration = skill.data.values[1][lvl]; } }	// Consider automatically disabling whenever conditions aren't met? Would need to update effects after equip()
 		if (skill.name == "Fists of Thunder") { if (equipped.weapon.type == "claw" || equipped.weapon.type == "dagger") { result.charge_thunder = charges; result.lDamage_min = charges * skill.data.values[0][lvl]; result.lDamage_max = charges * skill.data.values[1][lvl]; result.duration = skill.data.values[2][lvl]; } }	// consider auto-disabling
 		if (skill.name == "Fists of Ice") { if (equipped.weapon.type == "claw" || equipped.weapon.type == "dagger") { result.charge_ice = charges; result.cDamage_min = charges * skill.data.values[0][lvl]; result.cDamage_max = charges * skill.data.values[1][lvl]; result.duration = skill.data.values[2][lvl]; } }		// consider auto-disabling
 		if (skill.name == "Burst of Speed") {
