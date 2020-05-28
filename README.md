@@ -26,6 +26,8 @@ Info: https://github.com/Moreina/planner#planner
 Text below this is formatted for the github info page
 ------------------------------------------>
 
+This project has been relocated: https://github.com/BetweenWalls/planner
+
 # [Planner](https://moreina.github.io/planner/)
 
 Character Skill Planner for Diablo 2: Path of Diablo
