@@ -487,17 +487,21 @@
 //
 // ---------------------------------
 function initial_load() {
-	skills_all = {amazon:skills_amazon, assassin:skills_assassin, barbarian:skills_barbarian, druid:skills_druid, necromancer:skills_necromancer, paladin:skills_paladin, sorceress:skills_sorceress}
-	character_all = {amazon:character_amazon, assassin:character_assassin, barbarian:character_barbarian, druid:character_druid, necromancer:character_necromancer, paladin:character_paladin, sorceress:character_sorceress}
-	
-	// select random class
-	var random = Math.floor(Math.random() * 7);
-	var classes = ["amazon","assassin","barbarian","druid","necromancer","paladin","sorceress"]
-	var initial_class = classes[random];
-	skills = skills_all[initial_class]
-	equipment.ring2 = equipment.ring1
-	corruptions.ring2 = corruptions.ring1
-	startup(initial_class)
+	if (location.href == 'https://moreina.github.io/planner/') {
+		location.href='https://betweenwalls.github.io/planner/'
+	} else {
+		skills_all = {amazon:skills_amazon, assassin:skills_assassin, barbarian:skills_barbarian, druid:skills_druid, necromancer:skills_necromancer, paladin:skills_paladin, sorceress:skills_sorceress}
+		character_all = {amazon:character_amazon, assassin:character_assassin, barbarian:character_barbarian, druid:character_druid, necromancer:character_necromancer, paladin:character_paladin, sorceress:character_sorceress}
+
+		// select random class
+		var random = Math.floor(Math.random() * 7);
+		var classes = ["amazon","assassin","barbarian","druid","necromancer","paladin","sorceress"]
+		var initial_class = classes[random];
+		skills = skills_all[initial_class]
+		equipment.ring2 = equipment.ring1
+		corruptions.ring2 = corruptions.ring1
+		startup(initial_class)
+	}
 }
 
 </script>
